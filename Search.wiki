@@ -1,4 +1,5 @@
 #summary Searching in BPBible
+#labels Featured
 
 = Introduction =
 
