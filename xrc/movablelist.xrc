@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="cp1252"?>
+<resource>
+  <object class="wxToolBar" name="button_bar">
+    <object class="tool" name="tool_top">
+      <bitmap>..\graphics\bullet_arrow_top.png</bitmap>
+      <tooltip>Move this item to the top</tooltip>
+    </object>
+    <object class="tool" name="tool_up">
+      <bitmap>..\graphics\bullet_arrow_up.png</bitmap>
+      <tooltip>Move this item up</tooltip>
+    </object>
+    <object class="tool" name="tool_down">
+      <bitmap>..\graphics\bullet_arrow_down.png</bitmap>
+    </object>
+    <object class="tool" name="tool_bottom">
+      <bitmap>..\graphics\bullet_arrow_bottom.png</bitmap>
+    </object>
+    <bitmapsize>16</bitmapsize>
+    <dontattachtoframe>1</dontattachtoframe>
+    <style>wxTB_FLAT|wxTB_VERTICAL|wxTB_TEXT</style>
+    <object class="separator"/>
+    <object class="tool" name="tool_add">
+      <bitmap>..\graphics\application_form_add.png</bitmap>
+    </object>
+    <object class="tool" name="tool_edit">
+      <bitmap>..\graphics\application_form_edit.png</bitmap>
+    </object>
+    <object class="tool" name="tool_delete">
+      <bitmap>..\graphics\application_form_delete.png</bitmap>
+    </object>
+  </object>
+  <object class="wxPanel" name="panel">
+    <object class="wxBoxSizer">
+      <orient>wxVERTICAL</orient>
+      <object class="sizeritem">
+        <object class="wxBoxSizer">
+          <orient>wxHORIZONTAL</orient>
+          <object class="spacer">
+            <size>0,0</size>
+            <option>1</option>
+            <flag>wxGROW</flag>
+          </object>
+          <object class="sizeritem">
+            <object class="wxButton" name="move_up">
+              <label>Move up</label>
+            </object>
+            <flag>wxGROW|wxALL</flag>
+            <option>0</option>
+            <border>2</border>
+          </object>
+          <object class="spacer">
+            <size>10,0</size>
+            <option>0</option>
+            <flag>wxGROW</flag>
+          </object>
+          <object class="sizeritem">
+            <object class="wxButton" name="move_down">
+              <label>Move down</label>
+            </object>
+            <flag>wxGROW|wxALL</flag>
+            <option>0</option>
+            <border>2</border>
+          </object>
+          <object class="spacer">
+            <size>0,0</size>
+            <option>1</option>
+            <flag>wxGROW</flag>
+          </object>
+        </object>
+        <flag>wxGROW|wxALL</flag>
+      </object>
+      <object class="spacer">
+        <size>0,6</size>
+        <option>0</option>
+      </object>
+      <object class="sizeritem">
+        <object class="wxBoxSizer">
+          <orient>wxHORIZONTAL</orient>
+          <object class="sizeritem">
+            <object class="wxButton" name="gui_copy">
+              <label>Copy</label>
+            </object>
+            <flag>wxGROW|wxALL</flag>
+            <option>1</option>
+            <border>2</border>
+          </object>
+          <object class="sizeritem">
+            <object class="wxButton" name="gui_rename">
+              <label>Rename</label>
+            </object>
+            <flag>wxGROW|wxALL</flag>
+            <option>1</option>
+            <border>2</border>
+          </object>
+          <object class="sizeritem">
+            <object class="wxButton" name="gui_remove">
+              <label>Remove</label>
+            </object>
+            <flag>wxGROW|wxALL</flag>
+            <option>1</option>
+            <border>2</border>
+          </object>
+        </object>
+        <flag>wxGROW|wxALL</flag>
+      </object>
+    </object>
+  </object>
+  <object class="wxPanel" name="MovableListPanel">
+    <object class="wxBoxSizer">
+      <orient>wxVERTICAL</orient>
+      <object class="sizeritem">
+        <object class="wxBoxSizer">
+          <orient>wxHORIZONTAL</orient>
+          <object class="sizeritem">
+            <object class="wxListBox" name="gui_templates">
+              <style></style>
+              <content/>
+            </object>
+            <option>1</option>
+            <flag>wxGROW|wxALL</flag>
+            <border>6</border>
+            <minsize>100,1</minsize>
+          </object>
+          <object class="sizeritem">
+            <object class="wxPanel">
+              <object class="wxBoxSizer">
+                <orient>wxVERTICAL</orient>
+                <object class="sizeritem">
+                  <object class="wxBitmapButton" name="move_top">
+                    <bitmap>..\graphics\bullet_arrow_top.png</bitmap>
+                    <tooltip>Move item to top</tooltip>
+                  </object>
+                </object>
+                <object class="sizeritem">
+                  <object class="wxBitmapButton" name="move_up">
+                    <bitmap>..\graphics\bullet_arrow_up.png</bitmap>
+                    <tooltip>Move item up</tooltip>
+                  </object>
+                </object>
+                <object class="sizeritem">
+                  <object class="wxBitmapButton" name="move_down">
+                    <bitmap>..\graphics\bullet_arrow_down.png</bitmap>
+                    <tooltip>Move item down</tooltip>
+                  </object>
+                </object>
+                <object class="sizeritem">
+                  <object class="wxBitmapButton" name="move_bottom">
+                    <bitmap>..\graphics\bullet_arrow_bottom.png</bitmap>
+                    <tooltip>Move item to bottom</tooltip>
+                  </object>
+                </object>
+                <object class="spacer">
+                  <size>0,5</size>
+                </object>
+                <object class="sizeritem">
+                  <object class="wxBitmapButton" name="gui_add">
+                    <bitmap>..\graphics\application_form_add.png</bitmap>
+                    <tooltip>Add a new item</tooltip>
+                  </object>
+                </object>
+                <object class="sizeritem">
+                  <object class="wxBitmapButton" name="gui_edit">
+                    <bitmap>..\graphics\application_form_edit.png</bitmap>
+                    <tooltip>Edit this item</tooltip>
+                  </object>
+                </object>
+                <object class="sizeritem">
+                  <object class="wxBitmapButton" name="gui_remove">
+                    <bitmap>..\graphics\application_form_delete.png</bitmap>
+                    <tooltip>Remove this item</tooltip>
+                  </object>
+                </object>
+              </object>
+            </object>
+            <flag>wxTOP|wxBOTTOM|wxGROW</flag>
+            <border>5</border>
+          </object>
+        </object>
+        <option>1</option>
+        <flag>wxGROW</flag>
+      </object>
+    </object>
+  </object>
+</resource>

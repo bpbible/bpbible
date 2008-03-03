@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<resource>
+  <object class="wxFrame" name="HtmlIde">
+    <object class="wxBoxSizer">
+      <orient>wxVERTICAL</orient>
+      <object class="sizeritem">
+        <object class="wxSplitterWindow">
+          <object class="wxPanel">
+            <object class="wxBoxSizer">
+              <orient>wxVERTICAL</orient>
+              <object class="sizeritem">
+                <object class="wxTextCtrl" name="html_src">
+                  <style>wxTE_AUTO_SCROLL|wxTE_PROCESS_ENTER|wxTE_MULTILINE</style>
+                  <XRCED>
+                    <assign_var>1</assign_var>
+                  </XRCED>
+                </object>
+                <option>1</option>
+                <flag>wxGROW</flag>
+                <minsize>200,300</minsize>
+              </object>
+              <object class="sizeritem">
+                <object class="wxButton" name="gui_go">
+                  <label>Go</label>
+                  <XRCED>
+                    <assign_var>1</assign_var>
+                  </XRCED>
+                </object>
+              </object>
+            </object>
+          </object>
+          <object class="wxHtmlWindow" name="html_window" subclass="displayframe.DisplayFrameXRC">
+            <XRCED>
+              <assign_var>1</assign_var>
+            </XRCED>
+          </object>
+          <size>640,480</size>
+          <orientation>vertical</orientation>
+          <minsize>30</minsize>
+          <XRCED>
+            <assign_var>1</assign_var>
+          </XRCED>
+        </object>
+        <option>1</option>
+        <flag>wxGROW</flag>
+      </object>
+    </object>
+    <size>640,480</size>
+  </object>
+</resource>

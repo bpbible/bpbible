@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="cp1252"?>
+<resource>
+  <!--%import xrced_stc-->
+  <object class="wxDialog" name="CopyVerseDialog">
+    <title>Copy verses</title>
+    <object class="wxBoxSizer">
+      <orient>wxVERTICAL</orient>
+      <object class="sizeritem">
+        <object class="wxPanel">
+          <object class="wxBoxSizer">
+            <orient>wxVERTICAL</orient>
+            <object class="sizeritem">
+              <object class="wxFlexGridSizer">
+                <object class="sizeritem">
+                  <object class="wxStaticText">
+                    <label>&amp;Reference</label>
+                  </object>
+                </object>
+                <object class="sizeritem">
+                  <object class="wxTextCtrl" name="reference"/>
+                  <flag>wxGROW</flag>
+                </object>
+                <object class="sizeritem">
+                  <object class="wxStaticText">
+                    <label>&amp;Template</label>
+                  </object>
+                </object>
+                <object class="sizeritem">
+                  <object class="wxChoice" name="gui_template_list">
+                    <content/>
+                  </object>
+                  <flag>wxGROW</flag>
+                </object>
+                <cols>2</cols>
+                <rows>2</rows>
+                <vgap>6</vgap>
+                <hgap>6</hgap>
+                <growablecols>1</growablecols>
+              </object>
+              <flag>wxALL|wxGROW</flag>
+              <border>6</border>
+            </object>
+            <object class="sizeritem">
+              <object class="wxCollapsiblePane" name="collapsible_panel">
+                <object class="panewindow" name="tp_holder">
+                  
+                  <object class="wxBoxSizer">
+                    
+                    <!--<label>Template</label>-->
+                    
+                    <orient>wxVERTICAL</orient>
+                    
+                    <object class="sizeritem">
+                      
+                      <object class="wxPanel" name="tp_holder">
+                        
+                        <object class="wxBoxSizer">
+                          
+                          <orient>wxVERTICAL</orient>
+                        </object>
+                        
+                        <style>wxWANTS_CHARS</style>
+                      </object>
+                      
+                      <option>1</option>
+                      
+                      <flag>wxGROW|wxALL</flag>
+                    </object>
+                    
+                    <object class="sizeritem">
+                      
+                      <object class="wxBoxSizer">
+                        
+                        <orient>wxHORIZONTAL</orient>
+                        
+                        <object class="sizeritem">
+                          
+                          <object class="wxButton" name="gui_save_template">
+                            
+                            <label>&amp;Save template</label>
+                          </object>
+                          
+                          <flag>wxALL</flag>
+                          
+                          <border>4</border>
+                        </object>
+                        
+                        <object class="sizeritem">
+                          
+                          <object class="wxButton" name="gui_load_template">
+                            
+                            <label>&amp;Load Template</label>
+                          </object>
+                          
+                          <flag>wxALL</flag>
+                          
+                          <border>4</border>
+                        </object>
+                      </object>
+                      
+                      <flag>wxGROW</flag>
+                    </object>
+                  </object>
+                  
+                  <flag>wxALL|wxGROW</flag>
+                  
+                  <border>5</border>
+                </object>
+                <label>Edit Template...</label>
+                <!-- this gets overwritten <collapsed>1</collapsed> -->
+                <collapsed>1</collapsed>
+              </object>
+              <flag>wxGROW</flag>
+            </object>
+            <object class="sizeritem">
+              <object class="wxStaticBoxSizer">
+                <label>Preview</label>
+                <orient>wxVERTICAL</orient>
+                <object class="sizeritem">
+                  <object class="wxHtmlWindow" name="preview">
+                    <style>wxSIMPLE_BORDER</style>
+                    <borders>1</borders>
+                  </object>
+                  <option>2</option>
+                  <flag>wxALL|wxGROW</flag>
+                  <border>4</border>
+                  <minsize>200,100</minsize>
+                </object>
+              </object>
+              <option>2</option>
+              <flag>wxALL|wxGROW</flag>
+              <border>4</border>
+            </object>
+          </object>
+          <style></style>
+        </object>
+        <option>1</option>
+        <flag>wxGROW</flag>
+        <border>3</border>
+      </object>
+      <object class="sizeritem">
+        <object class="wxStdDialogButtonSizer">
+          <object class="button">
+            <object class="wxButton" name="wxID_OK">
+              <default>1</default>
+            </object>
+          </object>
+          <object class="button">
+            <object class="wxButton" name="wxID_CANCEL">
+              <label></label>
+              <label>&amp;Cancel</label>
+            </object>
+          </object>
+        </object>
+        <flag>wxTOP|wxBOTTOM|wxGROW</flag>
+        <border>10</border>
+      </object>
+    </object>
+    <style>wxCAPTION|wxSYSTEM_MENU|wxRESIZE_BORDER|wxCLOSE_BOX</style>
+  </object>
+</resource>

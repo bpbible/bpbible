@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="cp1252"?>
+<resource>
+  <object class="wxDialog" name="TemplateManager">
+    <title>Template Manager</title>
+    <object class="wxBoxSizer">
+      <orient>wxVERTICAL</orient>
+      <object class="sizeritem">
+        <object class="wxBoxSizer">
+          <orient>wxHORIZONTAL</orient>
+          <object class="sizeritem">
+            <object class="wxBoxSizer">
+              <orient>wxVERTICAL</orient>
+              <object class="sizeritem">
+                <object class="wxPanel" name="movable_list_holder">
+                  <object class="wxBoxSizer">
+                    <orient>wxVERTICAL</orient>
+                  </object>
+                </object>
+                <option>2</option>
+                <flag>wxALL|wxGROW</flag>
+              </object>
+              <object class="sizeritem">
+                <object class="wxStaticBoxSizer">
+                  <label>Preview</label>
+                  <orient>wxVERTICAL</orient>
+                  <object class="sizeritem">
+                    <object class="wxHtmlWindow" name="gui_preview" subclass="displayframe.DisplayFrameXRC">
+                      <style>wxSIMPLE_BORDER</style>
+                      <borders>1</borders>
+                    </object>
+                    <option>2</option>
+                    <flag>wxALL|wxGROW</flag>
+                    <border>4</border>
+                    <minsize>200,100</minsize>
+                  </object>
+                </object>
+                <option>3</option>
+                <flag>wxALL|wxGROW</flag>
+                <border>4</border>
+              </object>
+            </object>
+            <flag>wxGROW|wxALL</flag>
+            <option>0</option>
+          </object>
+          <object class="sizeritem">
+            <object class="wxStaticLine">
+              <style>wxLI_VERTICAL</style>
+            </object>
+            <flag>wxGROW|wxALL</flag>
+            <option>0</option>
+          </object>
+          <object class="sizeritem">
+            <object class="wxBoxSizer">
+              <orient>wxVERTICAL</orient>
+              <object class="sizeritem">
+                <object class="wxPanel" name="tp_holder">
+                  <object class="wxBoxSizer">
+                    <orient>wxVERTICAL</orient>
+                  </object>
+                </object>
+                <flag>wxGROW|wxALL</flag>
+                <option>0</option>
+              </object>
+            </object>
+            <flag>wxGROW|wxALL</flag>
+            <option>0</option>
+          </object>
+        </object>
+        <flag>wxGROW|wxALL</flag>
+        <option>0</option>
+      </object>
+      <object class="sizeritem">
+        <object class="wxStaticLine"/>
+        <flag>wxGROW|wxALL</flag>
+        <option>0</option>
+      </object>
+      <object class="sizeritem">
+        <object class="wxStdDialogButtonSizer">
+          <object class="button">
+            <object class="wxButton" name="wxID_OK">
+              <label></label>
+              <label>&amp;Ok</label>
+            </object>
+            <flag>wxGROW|wxALL</flag>
+            <option>0</option>
+          </object>
+          <object class="button">
+            <object class="wxButton" name="wxID_CANCEL">
+              <label></label>
+              <label>&amp;Cancel</label>
+            </object>
+            <flag>wxGROW|wxALL</flag>
+            <option>0</option>
+          </object>
+        </object>
+        <flag>wxGROW|wxALL</flag>
+        <option>0</option>
+        <border>5</border>
+      </object>
+    </object>
+    <style>wxDEFAULT_DIALOG_STYLE|wxWS_EX_VALIDATE_RECURSIVELY</style>
+  </object>
+  <!--%import xrced_stc-->
+  <object class="wxPanel" name="TemplatePanel">
+    <object class="wxBoxSizer">
+      <orient>wxVERTICAL</orient>
+      <object class="sizeritem">
+        <object class="wxBoxSizer">
+          <orient>wxVERTICAL</orient>
+          <object class="sizeritem">
+            <object class="wxStaticText">
+              <label>&amp;Header</label>
+            </object>
+            <flag>wxGROW|wxALL</flag>
+            <border>4</border>
+          </object>
+          <object class="sizeritem">
+            <object class="StyledTextCtrl" name="header">
+              <value></value>
+            </object>
+            <option>1</option>
+            <flag>wxALL|wxGROW</flag>
+            <border>4</border>
+            <minsize>200,75</minsize>
+          </object>
+        </object>
+        <option>1</option>
+        <flag>wxGROW</flag>
+      </object>
+      <object class="sizeritem">
+        <object class="wxBoxSizer">
+          <orient>wxVERTICAL</orient>
+          <object class="sizeritem">
+            <object class="wxStaticText">
+              <label>&amp;Body</label>
+            </object>
+            <flag>wxGROW|wxALL</flag>
+            <border>4</border>
+          </object>
+          <object class="sizeritem">
+            <object class="StyledTextCtrl" name="body">
+              <size>200,100</size>
+              <value>$$text </value>
+            </object>
+            <option>1</option>
+            <flag>wxALL|wxGROW</flag>
+            <border>4</border>
+            <minsize>200,75</minsize>
+          </object>
+        </object>
+        <option>1</option>
+        <flag>wxGROW</flag>
+      </object>
+      <object class="sizeritem">
+        <object class="wxBoxSizer">
+          <orient>wxVERTICAL</orient>
+          <object class="sizeritem">
+            <object class="wxStaticText">
+              <label>&amp;Footer</label>
+            </object>
+            <flag>wxGROW|wxALL</flag>
+            <border>4</border>
+          </object>
+          <object class="sizeritem">
+            <object class="StyledTextCtrl" name="footer">
+              <size>200,100</size>
+              <value>\n$$range ($$version)</value>
+            </object>
+            <option>1</option>
+            <flag>wxGROW|wxALL</flag>
+            <border>4</border>
+            <minsize>200,75</minsize>
+          </object>
+        </object>
+        <option>1</option>
+        <flag>wxGROW</flag>
+      </object>
+      <object class="sizeritem">
+        <object class="wxBoxSizer">
+          <orient>wxVERTICAL</orient>
+          <object class="sizeritem">
+            <object class="wxStaticText">
+              <label>&amp;Headings</label>
+            </object>
+            <flag>wxGROW|wxALL</flag>
+            <border>4</border>
+          </object>
+          <object class="sizeritem">
+            <object class="StyledTextCtrl" name="headings">
+              <size>200,100</size>
+              <value>&lt;h5&gt;$$heading&lt;/h5&gt;</value>
+            </object>
+            <option>1</option>
+            <flag>wxALL|wxGROW</flag>
+            <border>4</border>
+            <minsize>200,75</minsize>
+          </object>
+        </object>
+        <option>1</option>
+        <flag>wxGROW</flag>
+      </object>
+      <object class="sizeritem">
+        <object class="wxStaticText" name="instructions">
+          <label>Use $$text for the text of a verse, $$versenum for the\nverse number and $$reference for the reference</label>
+          <font>
+            <size>10</size>
+            <family>swiss</family>
+            <style>normal</style>
+            <weight>normal</weight>
+            <underlined>0</underlined>
+            <face>Tahoma</face>
+            <encoding>WINDOWS-1252</encoding>
+          </font>
+        </object>
+        <flag>wxALL</flag>
+        <border>4</border>
+      </object>
+    </object>
+  </object>
+</resource>
