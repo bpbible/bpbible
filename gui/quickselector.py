@@ -1,24 +1,25 @@
 import wx
 import string
 from util import osutils
-
-radius = 10
-opacity = 0.7
-back = "black"
+from util.debug import dprint, WARNING
 
 theme = "black"
 themes = dict(
 	black=(10, 0.7, "black", "white"), 
+	white=(10, 0.7, "white", "black"), 
+	
 	black_yellow=(10, 0.85, "black", "yellow"), 
 	black_green=(10, 0.85, "black", "green"), 
-	
 	
 	grey=(5, 1, "grey", "white"),
 	red=(30, .7, "red", "black"),#(153, 102, 0)),
 )
 
-radius, opacity, back_colour, text_colour = themes[theme]
+def set_theme(theme):
+	global radius, opacity, back_colour, text_colour
+	radius, opacity, back_colour, text_colour = themes[theme]
 
+set_theme(theme)
 class Line(wx.Window):
 	def __init__(self, *args, **kwargs):
 		super(Line, self).__init__(*args, **kwargs)
@@ -144,13 +145,18 @@ class TextPanel(wx.PyPanel):
 		return (150, self.height)
 
 
-quick_selector_class = wx.MiniFrame
+if osutils.is_gtk():
+	# under wxGTK, the miniframe has a border around it which we don't want
+	quick_selector_class = wx.Frame
+else:
+	quick_selector_class = wx.MiniFrame
+
 class QuickSelector(quick_selector_class):
 	def __init__(self, parent, size=wx.DefaultSize, title="", style=0):
 		super(QuickSelector, self).__init__(parent, size=size, 
 			style=style|
                            wx.FRAME_SHAPED
-                         | wx.SIMPLE_BORDER
+                         | wx.NO_BORDER
                          | wx.FRAME_NO_TASKBAR
                          #| wx.STAY_ON_TOP
 			#wx.NO_BORDER|wx.FRAME_SHAPED|wx.FRAME_NO_TASKBAR)
@@ -158,6 +164,7 @@ class QuickSelector(quick_selector_class):
 		
 		if not self.SetTransparent(opacity * 255):
 			dprint(WARNING, "Transparency not supported")
+			set_theme("white")
 
 		self.SetBackgroundColour(back_colour)
 		
