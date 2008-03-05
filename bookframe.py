@@ -333,12 +333,13 @@ class LinkedFrame(VerseKeyedFrame):
 			self.SetReference(event.ref)
 
 		elif event.settings_changed:
-			# BUG: unknown member refresh
 			self.refresh()
 
 	def get_window(self):
 		return self.panel
 
+	def refresh(self):
+		self.SetReference(self.reference)
 
 class CommentaryFrame(LinkedFrame):
 	title = "Commentary"
