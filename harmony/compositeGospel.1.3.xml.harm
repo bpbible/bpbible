@@ -1,0 +1,364 @@
+Settings
+/name: Composite Gospel Index
+/description: <center><b>Composite Gospel Index</b> from <a href="http://www.semanticbible.com">www.semanticbible.com</a><br>
+Version 1.3</center>
+/books: Matthew | Mark | Luke | John
+/pattern: Pericope | ([0-9]+):
+
+Harmony
+1: Jesus is the Word||||John 1:1-5
+2: God became a human being||||John 1:10-18
+3: Jesus' ancestry back to Adam|||Luke 3:23-38|
+4: Jesus' ancestry from Abraham|Matthew 1:1-17|||
+5: Luke's purpose in writing|||Luke 1:1-4|
+6: The angel Gabriel promises the birth of John to Zechariah|||Luke 1:5-25|
+7: The angel Gabriel promises the birth of Jesus to Mary|||Luke 1:26-38|
+8: Mary visits Elizabeth|||Luke 1:39-56|
+9: John the Baptist is born|||Luke 1:57-80|
+10: An angel appears to Joseph|Matthew 1:18-25|||
+11: Jesus is born in Bethlehem|||Luke 2:1-7|
+12: Shepherds visit Jesus|||Luke 2:8-20|
+13: Wise men visit from eastern lands|Matthew 2:1-12|||
+14: Mary and Joseph bring Jesus to the temple|||Luke 2:21-38|
+15: Joseph takes his family to Egypt|Matthew 2:13-18|||
+16: Joseph returns with his family to Nazareth|Matthew 2:19-23|||
+17: Jesus grows up in Nazareth|||Luke 2:39-40|
+18: Jesus speaks with religious teachers in the temple|||Luke 2:41-52|
+19: John the Baptist comes as a witness to the light||||John 1:6-9
+20: John the Baptist prepares the way for Jesus|Matthew 3:1-6|Mark 1:1-6|Luke 3:1-6|
+21: John the Baptist calls for repentence|Matthew 3:7-10||Luke 3:7-9|
+22: John the Baptist tells people how to show their repentence|||Luke 3:10-14|
+23: John the Baptist tells about the Christ|Matthew 3:11-12|Mark 1:7-8|Luke 3:15-18|
+24: John baptizes Jesus|Matthew 3:13-17|Mark 1:9-11|Luke 3:21-22|
+25: Satan tempts Jesus in the desert|Matthew 4:1-11|Mark 1:12-13|Luke 4:1-13|
+26: John the Baptist declares his mission||||John 1:19-28
+27: John the Baptist proclaims Jesus as the Messiah||||John 1:29-34
+28: The first disciples follow Jesus||||John 1:35-51
+29: Jesus turns water into wine||||John 2:1-11
+30: Jesus stays in Capernaum||||John 2:12
+31: Jesus clears the temple||||John 2:13-22
+32: Jesus does not trust himself to people||||John 2:23-25
+33: Nicodemus visits Jesus at night||||John 3:1-21
+34: Jesus and his disciples baptize in Judea||||John 3:22
+35: John the Baptist accepts Jesus' growing popularity||||John 3:23-36
+36: Jesus leaves Judea for Galilee||||John 4:1-3
+37: Jesus talks to a Samaritan woman at the well||||John 4:4-26
+38: Jesus tells about the spiritual harvest||||John 4:27-38
+39: Many Samaritans believe in Jesus||||John 4:39-42
+40: Herod puts John in prison|||Luke 3:19-20|
+41: Jesus preaches in Galilee|Matthew 4:12-17|Mark 1:14-15|Luke 4:14-15|John 4:43-45
+42: Jesus heals a royal official's son||||John 4:46-54
+43: Jesus is rejected at Nazareth|||Luke 4:16-30|
+44: Jesus calls four fishermen to follow him|Matthew 4:18-22|Mark 1:16-20||
+45: Jesus teaches with authority||Mark 1:21-28|Luke 4:31-37|
+46: Jesus heals Peter's mother-in-law and many others in Capernaum|Matthew 8:14-17|Mark 1:29-34|Luke 4:38-41|
+47: Jesus goes out alone to pray||Mark 1:35-38|Luke 4:42-43|
+48: Jesus preaches throughout Galilee|Matthew 4:23-25|Mark 1:39|Luke 4:44|
+49: Jesus provides a miraculous catch of fish|||Luke 5:1-11|
+50: Jesus heals a man with leprosy|Matthew 8:1-4|Mark 1:40-45|Luke 5:12-16|
+51: Jesus heals a paralyzed man|Matthew 9:1-8|Mark 2:1-12|Luke 5:17-26|
+52: Jesus calls a tax collector to follow him|Matthew 9:9-13|Mark 2:13-17|Luke 5:27-32|
+53: The religious leaders ask Jesus about fasting|Matthew 9:14-17|Mark 2:18-22|Luke 5:33-39|
+54: Jesus heals a lame man by the pool of Bethesda||||John 5:1-18
+55: Jesus claims to be God's Son||||John 5:19-30
+56: Jesus supports his claim to be God's Son||||John 5:31-47
+57: The disciples pick wheat on the Sabbath|Matthew 12:1-8|Mark 2:23-28|Luke 6:1-5|
+58: Jesus heals a man's hand on the Sabbath|Matthew 12:9-14|Mark 3:1-6|Luke 6:6-11|
+59: Large crowds follow Jesus|Matthew 12:15-21|Mark 3:7-12||
+60: Jesus selects the twelve disciples||Mark 3:13-19|Luke 6:12-16|
+61: Jesus gives the Beatitudes|Matthew 5:1-12||Luke 6:17-23|
+62: Jesus warns against temporary comfort|||Luke 6:24-26|
+63: Jesus teaches about salt|Matthew 5:13|||
+64: Jesus teaches about light|Matthew 5:14-16||Luke 11:33|
+65: Jesus teaches about fulfilling the law|Matthew 5:17-20|||
+66: Jesus teaches about anger|Matthew 5:21-26|||
+67: Jesus teaches about lust|Matthew 5:27-30|||
+68: Jesus teaches about divorce|Matthew 5:31-32|||
+69: Jesus teaches about oaths|Matthew 5:33-37|||
+70: Jesus teaches about retaliation|Matthew 5:38-42|||
+71: Jesus teaches about loving enemies|Matthew 5:43-48||Luke 6:27-36|
+72: Jesus teaches about giving to the needy|Matthew 6:1-4|||
+73: Jesus teaches about prayer|Matthew 6:5-15|||
+74: Jesus teaches about fasting|Matthew 6:16-18|||
+75: Jesus teaches about treasure|Matthew 6:19-21||Luke 12:33-34|
+76: Jesus teaches about having a sound eye|Matthew 6:22-23||Luke 11:34-36|
+77: Jesus teaches about serving two masters|Matthew 6:24||Luke 16:13|
+78: Jesus teaches about worry|Matthew 6:25-34||Luke 12:22-32|
+79: Jesus teaches about criticizing others|Matthew 7:1-5||Luke 6:37-42|
+80: Jesus teaches about profaning holy things|Matthew 7:6|||
+81: Jesus teaches about asking, seeking, knocking|Matthew 7:7-11||Luke 11:9-13|
+82: Jesus sums up the Law|Matthew 7:12|||
+83: Jesus teaches about the narrow road to life|Matthew 7:13-14|||
+84: Jesus teaches about the fruit of people's lives|Matthew 7:15-20||Luke 6:43-45|
+85: Jesus teaches about putting his words into practice|Matthew 7:21-27||Luke 6:46-49|
+86: The crowds are astonished at Jesus' teaching|Matthew 7:28-29|||
+87: A Roman centurion shows great faith|Matthew 8:5-13||Luke 7:1-10|
+88: Jesus raises a widow's son from the dead|||Luke 7:11-17|
+89: Jesus eases John the Baptist's doubts|Matthew 11:1-6||Luke 7:18-23|
+90: Jesus teaches about John the Baptist|Matthew 11:7-19||Luke 7:24-35|
+91: A sinful woman anoints Jesus' feet|||Luke 7:36-50|
+92: Women accompany Jesus and the disciples|||Luke 8:1-3|
+93: Jesus describes his true family|Matthew 12:46-50|Mark 3:31-35|Luke 8:19-21|
+94: Jesus tells the parable of the four soils|Matthew 13:1-9|Mark 4:1-9|Luke 8:4-8|
+95: Jesus explains why he speaks in parables|Matthew 13:10-17|Mark 4:10-12|Luke 8:9-10|
+96: Jesus explains the parable of the four soils|Matthew 13:18-23|Mark 4:13-20|Luke 8:11-15|
+97: Jesus teaches people to consider carefully what they hear||Mark 4:21-25|Luke 8:16-18|
+98: Jesus tells the parable of the growing seed||Mark 4:26-29||
+99: Jesus tells the parable of the weeds|Matthew 13:24-30|||
+100: Jesus tells the parable of the mustard seed|Matthew 13:31-32|Mark 4:30-32|Luke 13:18-19|
+101: Jesus tells the parable of the yeast|Matthew 13:33||Luke 13:20-21|
+102: Jesus uses many parables in his teaching|Matthew 13:34-35|Mark 4:33-34||
+103: Jesus explains the parable of the weeds|Matthew 13:36-43|||
+104: Jesus tells the parable of hidden treasure|Matthew 13:44|||
+105: Jesus tells the parable of the pearl merchant|Matthew 13:45-46|||
+106: Jesus tells the parable of the fishing net|Matthew 13:47-50|||
+107: Jesus teaches about new and old treasure|Matthew 13:51-52|||
+108: Jesus calms the storm|Matthew 8:23-27|Mark 4:35-41|Luke 8:22-25|
+109: Jesus sends demons into a herd of pigs|Matthew 8:28-32|Mark 5:1-13|Luke 8:26-33|
+110: The Gerasenes ask Jesus to leave|Matthew 8:33-34|Mark 5:14-20|Luke 8:34-39|
+111: A synagogue ruler asks Jesus to help his daughter|Matthew 9:18-19|Mark 5:21-24|Luke 8:40-42|
+112: Jesus heals a bleeding woman|Matthew 9:20-22|Mark 5:25-34|Luke 8:43-48|
+113: Jesus restores the daughter of a synagogue rule to life|Matthew 9:23-26|Mark 5:35-43|Luke 8:49-56|
+114: Jesus heals two blind men|Matthew 9:27-31|||
+115: Jesus heals a mute demoniac|Matthew 9:32-34|||
+116: The people of Nazareth refuse to believe in Jesus|Matthew 13:53-58|Mark 6:1-6||
+117: Jesus tells the disciples to pray for workers|Matthew 9:35-38|||
+118: Jesus sends out the twelve disciples|Matthew 10:1-16|Mark 6:7-13|Luke 9:1-6|
+119: Jesus prepares the disciples for persecution|Matthew 10:17-42|||
+120: Herod wonders if John the Baptist has been raised from the dead|Matthew 14:1-2|Mark 6:14-16|Luke 9:7-9|
+121: Herod kills John the Baptist|Matthew 14:3-12|Mark 6:17-29||
+122: Jesus feeds five thousand|Matthew 14:13-21|Mark 6:30-44|Luke 9:10-17|John 6:1-15
+123: Jesus walks on water|Matthew 14:22-33|Mark 6:45-52||John 6:16-21
+124: Jesus heals all who touch him|Matthew 14:34-36|Mark 6:53-56||
+125: Jesus proclaims he is the true bread from heaven||||John 6:22-40
+126: The Jews disagree that Jesus is from heaven||||John 6:41-59
+127: Many disciples desert Jesus||||John 6:60-71
+128: The religious leaders criticize Jesus about ceremonial washing|Matthew 15:1-9|Mark 7:1-13||
+129: Jesus teaches the crowd about the source of uncleanness|Matthew 15:10-11|Mark 7:14-16||
+130: Jesus teaches the disciples about the source of uncleanness|Matthew 15:12-20|Mark 7:17-23||
+131: Jesus sends a demon out of a girl|Matthew 15:21-28|Mark 7:24-30||
+132: Jesus heals a deaf man||Mark 7:31-37||
+133: The crowd marvels at Jesus' healings|Matthew 15:29-31|||
+134: Jesus feeds four thousand|Matthew 15:32-39|Mark 8:1-10||
+135: The religious leaders ask for a sign from heaven|Matthew 16:1-4|Mark 8:11-13||
+136: Jesus warns against wrong teaching|Matthew 16:5-12|Mark 8:14-21||
+137: Jesus restores sight to a blind man||Mark 8:22-26||
+138: Peter declares Jesus is the Messiah|Matthew 16:13-20|Mark 8:27-30|Luke 9:18-21|
+139: Jesus predicts his death the first time|Matthew 16:21-23|Mark 8:31-33|Luke 9:22|
+140: Jesus calls his disciples to deny themselves|Matthew 16:24-28|Mark 8:34-9:1|Luke 9:23-27|
+141: Jesus is transfigured on the mountain|Matthew 17:1-9|Mark 9:2-10|Luke 9:28-36|
+142: The disciples ask about the coming of Elijah|Matthew 17:10-13|Mark 9:11-13||
+143: Jesus heals a demon-possessed boy|Matthew 17:14-18|Mark 9:14-27|Luke 9:37-42|
+144: The disciples ask why they couldn't heal the demon-possessed boy|Matthew 17:19-21|Mark 9:28-29||
+145: Jesus predicts his death the second time|Matthew 17:22-23|Mark 9:30-32|Luke 9:43-45|
+146: Peter finds the coin in the fish's mouth|Matthew 17:24-27|||
+147: Jesus teaches about being the least of all|Matthew 18:1-5|Mark 9:33-37|Luke 9:46-48|
+148: Jesus warns against forbidding others to work in his name||Mark 9:38-41|Luke 9:49-50|
+149: Jesus warns against temptations to sin|Matthew 18:6-9|Mark 9:42-50|Luke 17:1-2|
+150: Jesus warns against looking down on others|Matthew 18:10-14|||
+151: Jesus teaches how to treat a believer who sins|Matthew 18:15-18|||
+152: Jesus teaches about the power of agreeing in prayer|Matthew 18:19-20|||
+153: Jesus teaches about forgiving others|Matthew 18:21-22||Luke 17:3-4|
+154: Jesus tells the parable of the unforgiving debtor|Matthew 18:23-35|||
+155: Jesus sends out seventy-two messengers|||Luke 10:1-12|
+156: Jesus warns cities that have not repented|Matthew 11:20-24||Luke 10:13-15|
+157: Jesus teaches about people's response to his messengers|||Luke 10:16|
+158: The seventy-two messengers return|||Luke 10:17-20|
+159: Jesus praises the Father for revealing His truth|Matthew 11:25-27||Luke 10:21-22|
+160: Jesus promises rest for the soul|Matthew 11:28-30|||
+161: Jesus teaches the disciples that they are blessed for what they see|||Luke 10:23-24|
+162: A lawyer asks Jesus about eternal life|||Luke 10:25-28|
+163: Jesus tells the parable of the Good Samaritan|||Luke 10:29-37|
+164: Jesus visits Mary and Martha|||Luke 10:38-42|
+165: Jesus teaches his disciples how to pray|||Luke 11:1-4|
+166: Jesus tells about the friend who asks for help at midnight|||Luke 11:5-8|
+167: Jesus answers accusers about how he drives out demons|Matthew 12:22-30|Mark 3:20-27|Luke 11:14-23|
+168: Jesus warns against blaspheming the Holy Spirit|Matthew 12:31-32|Mark 3:28-30||
+169: Jesus warns the religious leaders about their words and their hearts|Matthew 12:33-37|||
+170: Jesus warns about demons returning|Matthew 12:43-45||Luke 11:24-26|
+171: Jesus tells a woman about obeying God's word|||Luke 11:27-28|
+172: Jesus warns against unbelief|Matthew 12:38-42||Luke 11:29-32|
+173: Jesus criticizes the religious leaders|||Luke 11:37-54|
+174: Jesus teaches about acknowledging him before others|||Luke 12:1-12|
+175: Jesus tells the parable of the rich fool|||Luke 12:13-21|
+176: Jesus warns about coming division|||Luke 12:49-53|
+177: Jesus warns about the future crisis|||Luke 12:54-56|
+178: Jesus teaches about reconciliation|||Luke 12:57-59|
+179: Jesus calls people to repent|||Luke 13:1-5|
+180: Jesus tells the parable of the fruitless tree|||Luke 13:6-9|
+181: Jesus heals a crippled woman|||Luke 13:10-17|
+182: Jesus' brothers ridicule him||||John 7:1-9
+183: Jesus is rejected at a Samaritan village|||Luke 9:51-56|
+184: Jesus teaches about the cost of following him|Matthew 8:18-22||Luke 9:57-62|
+185: Jesus travels to Jerusalem in secret||||John 7:10-13
+186: Jesus teaches openly at the temple||||John 7:14-31
+187: The religious leaders attempt to arrest Jesus||||John 7:32-36
+188: Jesus teaches about living water||||John 7:37-39
+189: The people are divided over Jesus||||John 7:40-44
+190: The religious leaders refuse to believe in Jesus||||John 7:45-52
+191: Jesus forgives an adulterous woman||||John 7:53-8:11
+192: Jesus is the light of the world||||John 8:12-20
+193: Jesus warns of coming judgment||||John 8:21-30
+194: Jesus speaks about true freedom||||John 8:31-36
+195: Jesus speaks about God's true children||||John 8:37-47
+196: Jesus declares that he is eternal||||John 8:48-59
+197: Jesus heals a man who was born blind||||John 9:1-12
+198: The religious leaders question the blind man||||John 9:13-34
+199: Jesus teaches about spiritual blindness||||John 9:35-41
+200: Jesus is the Good Shepherd||||John 10:1-18
+201: The Jews are divided about Jesus||||John 10:19-21
+202: The Jews confront Jesus at the temple||||John 10:22-39
+203: Jesus goes beyond the Jordan||||John 10:40-42
+204: Jesus teaches about entering the kingdom|||Luke 13:22-30|
+205: The Pharisees warn Jesus that Herod wants to kill Him|||Luke 13:31-33|
+206: Jesus grieves over Jerusalem|Matthew 23:37-39||Luke 13:34-35|
+207: Jesus heals a man with dropsy|||Luke 14:1-6|
+208: Jesus warns against seeking honor|||Luke 14:7-14|
+209: Jesus tells the parable of the great feast|||Luke 14:15-24|
+210: Jesus teaches about the cost of being a disciple|||Luke 14:25-35|
+211: Jesus tells the parable of the lost sheep|||Luke 15:1-7|
+212: Jesus tells the parable of the lost coin|||Luke 15:8-10|
+213: Jesus tells the parable of the lost son|||Luke 15:11-32|
+214: Jesus tells the parable of the shrewd manager|||Luke 16:1-9|
+215: Jesus teaches about being faithful|||Luke 16:10-12|
+216: Jesus criticizes the Pharisees for their love of money|||Luke 16:14-15|
+217: Jesus teaches about the Law and the Kingdom|||Luke 16:16-17|
+218: Jesus tells about the rich man and the beggar|||Luke 16:19-31|
+219: Jesus teaches about faith|||Luke 17:5-6|
+220: Jesus teaches about doing your duty|||Luke 17:7-10|
+221: Lazarus becomes ill and dies||||John 11:1-16
+222: Jesus comforts Mary and Martha||||John 11:17-37
+223: Jesus raises Lazarus from the dead||||John 11:38-44
+224: Caiaphas advises the religious leaders to kill Jesus||||John 11:45-53
+225: Jesus withdraws to Ephraim||||John 11:54-57
+226: Jesus heals ten men with leprosy|||Luke 17:11-19|
+227: Jesus answers the Pharisees about the coming of the Kingdom of God|||Luke 17:20-21|
+228: Jesus teaches about the coming day of the Son of Man|||Luke 17:22-37|
+229: Jesus tells the parable of the persistent widow|||Luke 18:1-8|
+230: Jesus tells the parable of two men who prayed|||Luke 18:9-14|
+231: Jesus teaches about marriage and divorce|Matthew 19:1-9|Mark 10:1-9||
+232: Jesus teaches the disciples about celibacy|Matthew 19:10-12|||
+233: Jesus teaches the disciples about marriage and divorce||Mark 10:10-12|Luke 16:18|
+234: Jesus blesses little children|Matthew 19:13-15|Mark 10:13-16|Luke 18:15-17|
+235: Jesus speaks to a rich young ruler|Matthew 19:16-22|Mark 10:17-22|Luke 18:18-23|
+236: Jesus teaches about riches|Matthew 19:23-26|Mark 10:23-27|Luke 18:24-27|
+237: Jesus teaches about the rewards of following him|Matthew 19:27-30|Mark 10:28-31|Luke 18:28-30|
+238: Jesus tells the parable of the workers paid equally|Matthew 20:1-16|||
+239: Jesus predicts his death the third time|Matthew 20:17-19|Mark 10:32-34|Luke 18:31-34|
+240: Jesus teaches about serving others|Matthew 20:20-28|Mark 10:35-45||
+241: Jesus heals a blind beggar|Matthew 20:29-34|Mark 10:46-52|Luke 18:35-43|
+242: Jesus goes to Zacchaeus's house|||Luke 19:1-10|
+243: Jesus tells the parable of the king's ten servants|||Luke 19:11-27|
+244: A woman anoints Jesus with expensive perfume|Matthew 26:6-13|Mark 14:3-9||John 12:1-8
+245: The religious leaders plot to kill Lazarus||||John 12:9-11
+246: Jesus rides into Jerusalem on a donkey|Matthew 21:1-11|Mark 11:1-11|Luke 19:28-40|John 12:12-19
+247: Jesus weeps over Jerusalem|||Luke 19:41-44|
+248: Jesus curses a fig tree|Matthew 21:18-19|Mark 11:12-14||
+249: Jesus clears the temple again|Matthew 21:12-17|Mark 11:15-17|Luke 19:45-46|
+250: The religious leaders conspire against Jesus||Mark 11:18-19|Luke 19:47-48|
+251: Jesus explains why he must die||||John 12:20-36
+252: Most of the people do not believe in Jesus||||John 12:37-43
+253: Jesus summarizes his message||||John 12:44-50
+254: Jesus teaches about faith and prayer|Matthew 21:20-22|Mark 11:20-26||
+255: The religious leaders challenge Jesus' authority|Matthew 21:23-27|Mark 11:27-33|Luke 20:1-8|
+256: Jesus tells the parable of the two sons|Matthew 21:28-32|||
+257: Jesus tells the parable of the wicked tenants|Matthew 21:33-46|Mark 12:1-12|Luke 20:9-19|
+258: Jesus tells the parable of the wedding feast|Matthew 22:1-14|||
+259: The religious leaders question Jesus about paying taxes|Matthew 22:15-22|Mark 12:13-17|Luke 20:20-26|
+260: The religious leaders question Jesus about the resurrection|Matthew 22:23-33|Mark 12:18-27|Luke 20:27-40|
+261: The religious leaders question Jesus about the greatest commandment|Matthew 22:34-40|Mark 12:28-34||
+262: Jesus questions religious leaders about the Christ|Matthew 22:41-46|Mark 12:35-37|Luke 20:41-44|
+263: Jesus warns against the practices of the religious leaders|Matthew 23:1-12|Mark 12:38-40|Luke 20:45-47|
+264: Jesus condemns the religious leaders|Matthew 23:13-36|||
+265: A poor widow gives all she has||Mark 12:41-44|Luke 21:1-4|
+266: Jesus predicts the destruction of the Temple|Matthew 24:1-2|Mark 13:1-2|Luke 21:5-6|
+267: Jesus predicts the signs before the end|Matthew 24:3-8|Mark 13:3-8|Luke 21:7-11|
+268: Jesus predicts persecutions before the end|Matthew 24:9-14|Mark 13:9-13|Luke 21:12-19|
+269: Jesus tells about the desolating sacrilege|Matthew 24:15-22|Mark 13:14-20|Luke 21:20-24|
+270: Jesus warns about false Christs and prophets|Matthew 24:23-28|Mark 13:21-23||
+271: Jesus tells about his return|Matthew 24:29-31|Mark 13:24-27|Luke 21:25-28|
+272: Jesus tells the parable of the fig tree|Matthew 24:32-36|Mark 13:28-32|Luke 21:29-33|
+273: Jesus compares his coming to the days of Noah|Matthew 24:37-41|||
+274: Jesus tells about remaining watchful|Matthew 24:42-44|Mark 13:33-37|Luke 12:35-40|
+275: Jesus warns against not watching for his coming|||Luke 21:34-36|
+276: Jesus tells about the wise and foolish managers|Matthew 24:45-51||Luke 12:41-48|
+277: Jesus tells the parable of the ten bridesmaids|Matthew 25:1-13|||
+278: Jesus tells the parable of the loaned money|Matthew 25:14-30|||
+279: Jesus tells about the final judgment|Matthew 25:31-46|||
+280: Jesus teaches daily in the temple|||Luke 21:37-38|
+281: Jesus tells his disciples about his coming crucifixion|Matthew 26:1-2|||
+282: The religious leaders plot to kill Jesus|Matthew 26:3-5|Mark 14:1-2|Luke 22:1-2|
+283: Judas agrees to betray Jesus|Matthew 26:14-16|Mark 14:10-11|Luke 22:3-6|
+284: Disciples prepare for the Passover|Matthew 26:17-20|Mark 14:12-17|Luke 22:7-14|
+285: Jesus washes the disciples' feet||||John 13:1-11
+286: Jesus teaches the disciples after washing their feet||||John 13:12-20
+287: Jesus declares that one of the disciples will betray him|Matthew 26:21-25|Mark 14:18-21|Luke 22:21-23|John 13:21-30
+288: Jesus and the disciples have the Last Supper|Matthew 26:26-29|Mark 14:22-25|Luke 22:15-20|
+289: Jesus teaches about servanthood|||Luke 22:24-30|
+290: Jesus commands the disciples to love one another||||John 13:31-35
+291: Jesus predicts Peter's denial|||Luke 22:31-34|John 13:36-38
+292: Jesus is the way to the Father||||John 14:1-14
+293: Jesus promises the Holy Spirit||||John 14:15-31
+294: Jesus teaches about the vine and the branches||||John 15:1-17
+295: Jesus warns about the world's hatred||||John 15:18-16:4
+296: Jesus teaches about the Holy Spirit||||John 16:5-15
+297: Jesus tells the disciples their sorrow will turn to joy||||John 16:16-22
+298: Jesus teaches about using his name in prayer||||John 16:23-28
+299: Jesus predicts that the disciples will be scattered||||John 16:29-33
+300: Jesus prays for himself||||John 17:1-5
+301: Jesus prays for his disciples||||John 17:6-19
+302: Jesus prays for future believers||||John 17:20-26
+303: Jesus tells the disciples to prepare for his arrest|||Luke 22:35-38|
+304: Jesus and the disciples go to the Mount of Olives|Matthew 26:30|Mark 14:26|Luke 22:39|John 18:1
+305: Jesus again predicts Peter's denial|Matthew 26:31-35|Mark 14:27-31||
+306: Jesus agonizes in the garden|Matthew 26:36-46|Mark 14:32-42|Luke 22:40-46|
+307: Jesus is betrayed and arrested|Matthew 26:47-50|Mark 14:43-46|Luke 22:47-49|John 18:2-3
+308: Jesus identifies himself to those who have come to arrest him||||John 18:4-9
+309: Peter strikes the high priest's servant|Matthew 26:51-54|Mark 14:47|Luke 22:50-51|John 18:10-11
+310: Jesus questions why they have brought weapons to arrest him|Matthew 26:55-56|Mark 14:48-50|Luke 22:52-53|
+311: The last follower runs away naked||Mark 14:51-52||
+312: Jesus is bound and taken to Annas||||John 18:12-14
+313: Peter denies knowing Jesus a first time||||John 18:15-18
+314: Annas questions Jesus||||John 18:19-24
+315: Caiaphas questions Jesus|Matthew 26:57-68|Mark 14:53-65||
+316: Peter denies knowing Jesus|Matthew 26:69-75|Mark 14:66-72|Luke 22:54-62|John 18:25-27
+317: Jesus' captors mock him|||Luke 22:63-65|
+318: The council of religious leaders condemns Jesus|Matthew 27:1-2|Mark 15:1|Luke 22:66-23:1|John 18:28
+319: Judas kills himself|Matthew 27:3-5|||
+320: The chief priests use Judas' money to buy a field|Matthew 27:6-10|||
+321: The religious leaders accuse Jesus before Pilate|Matthew 27:11-14|Mark 15:2-5|Luke 23:2|John 18:29-32
+322: Pilate questions Jesus|||Luke 23:3|John 18:33-37
+323: Pilate answers the religious leaders|||Luke 23:4-5|
+324: Jesus stands trial before Herod|||Luke 23:6-12|
+325: Pilate answers the religious leaders a second time|Matthew 27:15-21|Mark 15:6-11|Luke 23:13-19|John 18:38-40
+326: Jesus is flogged||||John 19:1-3
+327: The crowd calls for crucifixion|Matthew 27:22|Mark 15:12-13|Luke 23:20-21|John 19:4-7
+328: Pilate questions Jesus again||||John 19:8-11
+329: Pilate hands Jesus over to be crucified|Matthew 27:23-26|Mark 15:14-15|Luke 23:22-25|John 19:12-16
+330: Roman soldiers mock Jesus|Matthew 27:27-31|Mark 15:16-20||
+331: Simon of Cyrene carries Jesus' cross|Matthew 27:32|Mark 15:21|Luke 23:26|
+332: Jesus speaks to those who follow and mourn|||Luke 23:27-32|
+333: Jesus is crucified|Matthew 27:33-37|Mark 15:22-26|Luke 23:33-34|John 19:17-27
+334: Jesus is mocked on the cross|Matthew 27:38-44|Mark 15:27-32|Luke 23:35-38|
+335: A criminal asks Jesus to remember him|||Luke 23:39-43|
+336: Jesus dies on the cross|Matthew 27:45-54|Mark 15:33-39|Luke 23:44-48|John 19:28-37
+337: Women watch the crucifixion from a distance|Matthew 27:55-56|Mark 15:40-41|Luke 23:49|
+338: Jesus is laid in the tomb|Matthew 27:57-61|Mark 15:42-47|Luke 23:50-56|John 19:38-42
+339: Guards are posted at the tomb|Matthew 27:62-66|||
+340: Some women find the tomb empty|Matthew 28:1-7|Mark 16:1-8|Luke 24:1-7|John 20:1
+341: The women tell the disciples of the empty tomb|||Luke 24:8-11|John 20:2
+342: Peter and John go to the empty tomb|||Luke 24:12|John 20:3-9
+343: Jesus appears to Mary Magdalene||Mark 16:9-11||John 20:10-18
+344: Jesus appears to the women|Matthew 28:8-10|||
+345: The religious leaders bribe the guards|Matthew 28:11-15|||
+346: Jesus appears to two believers traveling on the road||Mark 16:12-13|Luke 24:13-35|
+347: Jesus appears to the disciples behind locked doors|||Luke 24:36-43|John 20:19-23
+348: Jesus appears to the eleven disciples as they are eating||Mark 16:14-18||
+349: Jesus appears to the disciples including Thomas||||John 20:24-29
+350: John's purpose in writing||||John 20:30-31
+351: Jesus appears to the disciples while fishing||||John 21:1-14
+352: Jesus talks with Peter||||John 21:15-25
+353: Jesus appears to the disciples in Jerusalem|||Luke 24:44-49|
+354: Jesus gives the Great Commission|Matthew 28:16-20|||
+355: Jesus ascends into heaven||Mark 16:19-20|Luke 24:50-53|
+
