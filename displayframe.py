@@ -72,7 +72,8 @@ class DisplayFrame(HtmlSelectableWindow):
 	#	event.Skip()
 		
 	def MouseOut(self, event = None):
-		if(self._tooltip is not None and self.tooltip.timer.IsRunning()):
+		if(self._tooltip is not None and self.tooltip.timer is not None and 
+			self.tooltip.timer.IsRunning()):
 		
 			self.tooltip.Stop()
 		self.mouseout = True

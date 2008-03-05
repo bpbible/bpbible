@@ -241,7 +241,8 @@ class SearchPanel(xrcSearchPanel):
 		# Set properties:
 
 		# under gtk, enter in the searchkey should push button...
-		self.searchkey.Bind(wx.EVT_KEY_UP, 
+		if not osutils.is_msw():
+			self.searchkey.Bind(wx.EVT_KEY_UP, 
 			lambda event:event.KeyCode == wx.WXK_RETURN and (self.OnSearch(),) 
 				or event.Skip())
 		
