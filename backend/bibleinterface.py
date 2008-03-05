@@ -107,10 +107,11 @@ class BibleInterface(object):
 	
 	def load_paths(self, filename="sword.conf"):
 		config_parser = confparser.config()
-		#try:
-
-		f = open(filename)
-		config_parser._read(f, filename)
+		try:
+			f = open(filename)
+			config_parser._read(f, filename)
+		except EnvironmentError:
+			return ["."]
 
 		data_path = config_parser.get("Install", "DataPath")[0]
 		if config_parser.has_option("Install", "AugmentPath"):
