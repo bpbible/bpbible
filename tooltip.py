@@ -12,6 +12,7 @@ import re
 from util.configmgr import config_manager
 
 from util import osutils
+from util.debug import dprint, TOOLTIP
 
 tooltip_settings = config_manager.add_section("Tooltip")
 
@@ -258,6 +259,10 @@ class Tooltip(TooltipBaseMixin, tooltip_parent):
 		# while(p):
 		# 	q=p
 		# 	p=p.Parent
+		for item in self.Children:
+			item.Bind(wx.EVT_ENTER_WINDOW, self.MouseIn)
+			item.Bind(wx.EVT_LEAVE_WINDOW, self.MouseOut)
+		
 
 	def copy_all(self, event):
 		text = self.html.ToText()
@@ -278,6 +283,7 @@ class Tooltip(TooltipBaseMixin, tooltip_parent):
 
 		new.ShowTooltip()
 		
+		dprint(TOOLTIP, "Stop on permanent popup")
 		self.Stop()
 		
 
@@ -289,12 +295,27 @@ class Tooltip(TooltipBaseMixin, tooltip_parent):
 		#TODO: make frame and this be able to veto tooltip goaway
 		self.veto = True
 
+		# stop tooltip going away if there was just a mouseout
+		self.wants_to_go_away = False
+
 	def MouseOut(self, evt=None):
-		#reset cell
-		self.parent.lastcell = ""
-		self.Stop()
-		self.parent.veto = False
+		# unless we get unset before the next event loop, disappear next event
+		# loop. This is needed as under wxGTK, we get an out on the tooltip,
+		# then an in on the panel on the tooltip, which is a tad weird.
+
+		# Note: this assumes that MouseOut events get sent before MouseIn
+		self.wants_to_go_away = True
+		
+		def disappear():
+			if self.wants_to_go_away:
+				dprint(TOOLTIP, 
+					"Going away as mouse off and not vetoed by mousein")
+				self.parent.lastcell = ""
+				self.Stop()
+				self.parent.veto = False
 	
+		wx.CallAfter(disappear)
+
 	def Start(self):
 		self.timer = wx.CallLater(self.interval, self.ShowTooltip)
 	
