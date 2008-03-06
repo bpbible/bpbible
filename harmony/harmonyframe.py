@@ -126,11 +126,13 @@ class HarmonyFrame(xrcHarmonyFrame):
 	def harmony_changed(self, event):
 		if event:
 			sel = event.GetSelection()
+			event.Skip()
 		else:
 			sel = self.harmony_notebook.GetSelection()
 		
 		self.harmony = self.harmonies[sel]
 		self.frame = self.harmony_notebook.GetPage(sel)
+		
 		harmony_settings["last_harmony"] = self.harmony.name
 		self.set_harmony(self.harmony.name)
 
