@@ -6,7 +6,7 @@ import versetree
 
 
 from swlib.pysw import VK, VerseParsingError
-from backend.book import GetVerseStr, GetBookChapter, GetBestRange
+from swlib.pysw import GetVerseStr, GetBookChapter, GetBestRange
 from util import util
 from util.util import ReplaceUnicode
 from util.debug import *

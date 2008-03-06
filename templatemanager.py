@@ -28,7 +28,7 @@ default_templates = [
 		body="$versenumber $text "),
 	Template(name="VPL with ref", 
 		headings="<h5>$heading</h5>",
-		header="$range ($description)",
+		header="$range ($description)<br>",
 		footer="",
 		body="$reference $text<br>"),
 	Template(name="VPL with short ref", 
@@ -41,7 +41,7 @@ default_templates = [
 
 class AutoCompleteList(wx.ListCtrl):#, listmix.ListCtrlAutoWidthMixin):
 	def __init__(self, parent, style=0):
-		super(AutoCompleteList, self).__init__(parent, style)
+		super(AutoCompleteList, self).__init__(parent, style=style)
 		self.selection = None
 		self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.selected)
 		self.Bind(wx.EVT_LIST_ITEM_DESELECTED, self.deselected)
@@ -102,7 +102,7 @@ class AutoCompleteTextBox(object):#(wx.TextCtrl):
 		self.popup = wx.PopupWindow(guiconfig.mainfrm)
 		self.list = AutoCompleteList(self.popup, 
 			style=wx.LC_SINGLE_SEL | wx.LC_REPORT | 
-				wx.LC_SORT_ASCENDING | wx.LC_NO_HEADER)
+				wx.LC_SORT_ASCENDING | wx.LC_NO_HEADER|wx.SUNKEN_BORDER)
 
 		self.popup.Hide()
 		self.textbox.Bind(stc.EVT_STC_MODIFIED, self.OnText)

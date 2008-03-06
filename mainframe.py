@@ -16,7 +16,6 @@ dprint(MESSAGE, "/importing sword")
 dprint(MESSAGE, "Other imports")
 
 from backend.bibleinterface import biblemgr
-from backend.book import GetVerseStr
 from backend import filterutils
 
 
@@ -314,7 +313,7 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.aui_callbacks["Search"] = lambda toggle:wx.CallAfter(
 							self.search_panel.on_show, toggle)
 		
-		self.bible_observers += self.search_panel.RefreshUI
+		self.bible_observers += self.search_panel.refresh_ui
 
 		wx.CallAfter(lambda:self.set_search_version(biblemgr.bible.version))
 
@@ -785,7 +784,7 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.Destroy()
 
 	def set_search_version(self, version):
-		self.search_panel.SetVersion(version)
+		self.search_panel.set_version(version)
 
 	#def BibleRefEnterChar(self, event):
 	
@@ -913,7 +912,7 @@ class MainFrame(wx.Frame, AuiLayer):
 											 verse=event.ref))
 	
 	def set_bible_ref(self, ref, source, settings_changed=False):
-		self.currentverse = str(GetVerseStr(ref, self.currentverse,
+		self.currentverse = str(pysw.GetVerseStr(ref, self.currentverse,
 			raiseError=True))
 		
 		

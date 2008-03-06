@@ -1,9 +1,8 @@
 from swlib import pysw
 from swlib.pysw import SW
 import sgmllib
-import config
 import re
-from util.debug import *
+from util.debug import dprint, ERROR, WARNING
 import traceback
 from util.configmgr import config_manager
 
@@ -20,10 +19,7 @@ filter_settings.add_item("strongs_colour", "#0000ff")
 
 def me(func):
 	def ret(*args, **kwargs):
-		#me = 
 		return SW.ReturnSuccess(*func(*args, **kwargs))
-#		me.success, me.buf = func(*args, **kwargs)
-		return me
 	ret.__name__ = func.__name__
 	return ret
 
@@ -86,8 +82,11 @@ class ParserBase(sgmllib.SGMLParser, object):
 			self.success = SW.SUCCEEDED
 			return method()
 
-	def unknown_starttag(self, tag, attributes): pass
-	def unknown_endtag(self, tag): pass
+	def unknown_starttag(self, tag, attributes): 
+		pass
+
+	def unknown_endtag(self, tag): 
+		pass
 	
 	def handle_starttag(self, tag, method, attributes):
 		self.success = SW.SUCCEEDED
@@ -116,14 +115,14 @@ class ParserBase(sgmllib.SGMLParser, object):
 	
 		type, number = match.groups()
 		if type not in "HG":
-			dprint(WARNING, "Unknown lemma", lemma, "Lemmas:", lemmas)
+			dprint(WARNING, "Unknown lemma", value)
 			return
 		
 		mod = dict(H=strongshebrew, G=strongsgreek)[type]
 		modlang = dict(H="Hebrew", G="Greek")[type]
 
 		if not mod:
-			dprint(WARNING, "Mod is None for type ",type)
+			dprint(WARNING, "Mod is None for type ", type)
 			self.success = SW.INHERITED
 			return
 
@@ -134,7 +133,7 @@ class ParserBase(sgmllib.SGMLParser, object):
 		match = word_re.match(entry)
 		if not match:
 			dprint(WARNING, "Could not find strong's headword", 
-				"mod:", modname, "number:", number, "Entry:", entry)
+				"mod:", modlang, "number:", number, "Entry:", entry)
 			self.success = SW.INHERITED
 			return
 
@@ -172,24 +171,24 @@ def ellipsize(refs, last_text="", ellipsis=None):
 			ellipsis += 1
 			left_over = 0
 
-		for a in refs[:ellipsis]:
-			ref = pysw.VerseList(a, last_text).GetBestRange(True)
+		for item in refs[:ellipsis]:
+			ref = pysw.VerseList(item, last_text).GetBestRange(True)
 			last_text = ref
 			buf.append('<a href="bible:%(ref)s">%(ref)s</a>'% locals())
 		if(left_over):
 			e = "<b><a href = \"bible:?values=%d" % left_over
-			for id, a in enumerate(refs[ellipsis:]):
-				ref = pysw.VerseList(a, last_text).GetBestRange(True)
+			for idx, item in enumerate(refs[ellipsis:]):
+				ref = pysw.VerseList(item, last_text).GetBestRange(True)
 				last_text = ref
 			
-				e += "&val%d=%s" % (id, SW.URL.encode(ref).c_str())
+				e += "&val%d=%s" % (idx, SW.URL.encode(ref).c_str())
 			e+= "\">...</a></b>"
 		refs = []
 		
 	
 	# DEFAULT BEHAVIOUR
-	for a in refs:
-		ref = pysw.VerseList(a, last_text).GetBestRange(True)
+	for item in refs:
+		ref = pysw.VerseList(item, last_text).GetBestRange(True)
 		last_text = ref
 		buf.append('<a href="bible:%(ref)s">%(ref)s</a>'% locals())
 

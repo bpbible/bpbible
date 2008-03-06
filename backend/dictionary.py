@@ -1,5 +1,5 @@
 #from Sword import *
-from swlib.pysw import *
+from swlib.pysw import SW
 from backend.book import Book
 
 topics_dict = dict()
@@ -16,9 +16,9 @@ class Dictionary(Book):
 		if not self.mod:
 			return None
 		template = self.templatelist()
-		key = self.mod.getKey();
-		key.setText(ref);
-		self.mod.setKey(key);
+		key = self.mod.getKey()
+		key.setText(ref)
+		self.mod.setKey(key)
 		text = self.mod.RenderText()
 		# We have to get KeyText after RenderText, otherwise our
 		# KeyText will be wrong
@@ -32,10 +32,10 @@ class Dictionary(Book):
 		else:
 			d1["text"] = text
 
-		verses+=template.body.safe_substitute(d1)
+		verses += template.body.safe_substitute(d1)
 
 		verses += template.footer.safe_substitute(d) #dictionary name
-		return verses;
+		return verses
 	
 	def clear_cache(self, parent=None):
 		topics_dict.clear()
@@ -43,7 +43,7 @@ class Dictionary(Book):
 	def GetTopics(self):#gets topic lists
 		topics = []
 		if(self.mod):
-			name = self.mod.Name();
+			name = self.mod.Name()
 			if name in topics_dict:
 				return topics_dict[name]
 			

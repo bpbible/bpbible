@@ -1,14 +1,10 @@
-# TODO: get rid of import * below
-from swlib.pysw import *
+#from swlib.pysw import *
+from swlib.pysw import VK, SW, GetBestRange, GetVerseStr
 from util.util import PushPopList, VerseTemplate
 from util import observerlist
-from util.debug import *
+from util.debug import dprint, WARNING
 import config
 
-REG_ICASE = 1 << 1
-SWMULTI = -2
-SWPHRASE = -1
-SWREGEX = 0
 #ERR_OK = '\x00'
 
 vk = VK()
@@ -45,15 +41,16 @@ class Book(object):
 		if modname is None:
 			self.mod = None
 		else:
-			self.oldmod = self.mod
+			oldmod = self.mod
 			
 			self.mod = self.parent.mgr.getModule(modname)	
-			if(not self.mod):
-				self.mod = self.oldmod
+			if not self.mod:
+				self.mod = oldmod
 				return False
 
 		if notify:
 			self.observers(self.mod)
+
 		return True
 	
 	def ModuleExists(self, modname):
@@ -118,7 +115,7 @@ class Book(object):
 		specialref is a ref (string) which will be specially formatted 
 		according to specialtemplate"""
 		#only for bible keyed books
-		if(not self.mod):
+		if not self.mod:
 			return None
 		vk = VK()
 		if(context):
@@ -128,7 +125,7 @@ class Book(object):
 		verselist = vk.ParseVerseList(ref, self.lastverse, True)
 		self.lastverse = ref
 		rangetext = GetBestRange(verselist.getRangeText())
-		if(rangetext==""):
+		if rangetext == "":
 			return rangetext #if invalid reference, return empty string
 		
 		#verselist.SetPosition(SW_POSITION(1))
@@ -137,8 +134,8 @@ class Book(object):
 		template = self.templatelist()
 		d = dict(range = rangetext, 
 				 version = self.mod.Name(), 
-				 
 				 description = self.mod.Description())
+
 		verses = template.header.safe_substitute(d)
 		if specialref:
 			specialref = GetVerseStr(specialref)
@@ -339,33 +336,4 @@ class Commentary(Book):
 class Bible(Book):
 	type = "Biblical Texts"
 
-class Searcher(SW.Searcher):
-	def __init__(self, book, userdata = None):
-		SW.Searcher.__init__(self, book.mod)
-		self.mod = book.mod
-		self.callback = None
-		self.userdata = userdata
-		self.vk = VK()
-		self.vk.thisown=False
 
-	def PercentFunction(self, number):
-		if(self.callback):
-			continuing = self.callback(number, self.userdata)
-			if not continuing:
-				self.TerminateSearch()
-	
-	def Search(self, string, options=0, scopestr=None, case_sensitive=False):
-		self.mod.setKey(self.vk)
-
-		results = []
-		scope = None
-		if(scopestr):
-			scope = self.vk.ParseVerseList(scopestr, "", True)
-
-		verseslist = self.doSearch(string, options, 
-			(not case_sensitive)*REG_ICASE, scope)
-
-		strings = verseslist.getRangeText()
-
-		if not strings: return []
-		return strings.split("; ")

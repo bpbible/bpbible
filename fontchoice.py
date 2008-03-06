@@ -8,7 +8,7 @@ class HtmlWin(wx.html.HtmlWindow):
 	def __init__(self):
 		pre = wx.html.PreHtmlWindow()
 		self.PostCreate(pre)
-		self.Bind(wx.html.EVT_HTML_LINK_CLICKED, lambda x:x)		
+		self.Bind(wx.html.EVT_HTML_LINK_CLICKED, lambda x:x)
 	
 
 preview = """<p><h4>Hearing and Doing the Word</h4><br>

@@ -1,8 +1,6 @@
 import wx.combo
 import wx
-import sys
-from swlib.pysw import *
-from backend.book import GetVerseStr
+from swlib.pysw import GetVerseStr, BookData, VK, VerseParsingError
 from gui.treecombo import LazyTreeCombo
 		
 class VerseTree(LazyTreeCombo):
@@ -58,13 +56,13 @@ class VerseTree(LazyTreeCombo):
 				# if we fail, just use old text (assuming there is any)
 				self.currentverse = str(GetVerseStr(text, self.currentverse,
 					raiseError=True))
-			except VerseParsingError, e:
+			except VerseParsingError:
 				if not self.currentverse:
 					return self.tree.GetFirstChild(self.root)[0]
 					
 
-		vk = VK(self.currentverse)
-		book, chapter = vk.getBookName(), vk.Chapter()
+		verse_key = VK(self.currentverse)
+		book, chapter = verse_key.getBookName(), verse_key.Chapter()
 		root = self.tree.GetRootItem()
 		item, cookie = self.tree.GetFirstChild(root)
 		while item:
@@ -74,7 +72,8 @@ class VerseTree(LazyTreeCombo):
 
 		assert item, book + " not found!"
 		
-		if was_book: return item
+		if was_book: 
+			return item
 		self.tree.Expand(item)
 		
 		item2, cookie = self.tree.GetFirstChild(item)

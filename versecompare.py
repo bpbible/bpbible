@@ -5,9 +5,7 @@ import config, guiconfig
 from config import BIBLE_VERSION_PROTOCOL
 from gui.multichoice import MultiChoiceDialog
 from gui.menu import MenuItem
-from backend.book import GetBestRange
 from backend.bibleinterface import biblemgr
-from swlib.pysw import VerseParsingError
 from protocols import protocol_handler
 from util import util
 from util.configmgr import config_manager

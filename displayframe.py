@@ -11,7 +11,6 @@ import config
 
 
 from backend.bibleinterface import biblemgr
-#from util.util import *
 from util import util
 from util import osutils
 from tooltip import Tooltip, tooltip_settings
@@ -19,7 +18,7 @@ from gui import htmlbase
 from gui.menu import MenuItem, Separator
 from gui.htmlbase import HtmlSelectableWindow
 from gui import guiutil
-from util.debug import *
+from util.debug import dprint, WARNING, TOOLTIP
 from protocols import protocol_handler
 from events import LINK_CLICKED
 
@@ -99,7 +98,7 @@ class DisplayFrame(HtmlSelectableWindow):
 		if(self._tooltip is not None and self.mouseout 
 				and not self.tooltip.veto):
 			if self._tooltip.IsShown():
-				print "STOPPING TOOLTIP"
+				dprint(TOOLTIP, "STOPPING TOOLTIP")
 				self.tooltip.Stop()
 
 		return super(DisplayFrame, self).Idle(event)
@@ -112,7 +111,9 @@ class DisplayFrame(HtmlSelectableWindow):
 		return word.strip(string.whitespace + string.punctuation)
 
 	def CellClicked(self, cell, x, y, event):
-		if(self.select or event.Dragging()): return
+		if(self.select or event.Dragging()): 
+			return
+
 		if(event.ControlDown()):
 			word = cell.ConvertToText(None)
 			#word = util.ReplaceUnicode(word)
@@ -122,7 +123,8 @@ class DisplayFrame(HtmlSelectableWindow):
 			return
 
 		link = cell.GetLink()
-		if(link): self.LinkClicked(link, cell)
+		if(link): 
+			self.LinkClicked(link, cell)
 
 	def OnCellMouseEnter(self, cell, x, y):
 		if(cell.GetLink()==None):
@@ -142,26 +144,27 @@ class DisplayFrame(HtmlSelectableWindow):
 			frame.tooltip.SetText(data)
 
 
-		if not url.getHostName() == "passagestudy.jsp":
+		if url.getHostName() != "passagestudy.jsp":
 			return
 		action = url.getParameterValue("action")
 		bible = biblemgr.bible
-		dict = biblemgr.dictionary
+		dictionary = biblemgr.dictionary
 
-		if(action=="showStrongs"):
+		if action == "showStrongs":
 			type = url.getParameterValue("type") #Hebrew or greek
 			value = url.getParameterValue("value") #strongs number
-			if(not type or not value): return
+			if not type or not value: 
+				return
 			#do lookup
 			type = "Strongs"+type #as module is StrongsHebrew
-			tooltipdata = dict.GetReferenceFromMod(type, value)
+			tooltipdata = dictionary.GetReferenceFromMod(type, value)
 			if tooltipdata is None:
 				tooltipdata = ("Module %s is not installed, so you cannot view"
 				"details for this strong's number" %type)
 
 			SetText(tooltipdata)
 
-		elif(action=="showMorph"):
+		elif action=="showMorph":
 			type = url.getParameterValue("type") #Hebrew or greek
 			types = type.split(":", 1)
 			if types[0] != "robinson":
@@ -169,11 +172,12 @@ class DisplayFrame(HtmlSelectableWindow):
 					"<br>%s" % type)
 			else:
 				value = url.getParameterValue("value") #strongs number
-				if(not type or not value): return
+				if not type or not value: 
+					return
 
 				#do lookup
 				type = "Robinson" 
-				tooltipdata = dict.GetReferenceFromMod(type, value)
+				tooltipdata = dictionary.GetReferenceFromMod(type, value)
 				if tooltipdata is None:
 					tooltipdata = ("Module %s is not installed, so you cannot "
 					"view details for this morphological code" %type)
@@ -189,13 +193,14 @@ class DisplayFrame(HtmlSelectableWindow):
 				return
 			module = url.getParameterValue("module")
 			passage = url.getParameterValue("passage")
-			if(not passage): return
+			if not passage: 
+				return
 
-			if(type=="n"):
+			if type == "n":
 				data = bible.GetFootnoteData(module, passage, value, "body")
 				SetText(data)
 
-			elif(type=="x"):
+			elif type == "x":
 				#make this plain
 				template = util.VerseTemplate(header="<a href='nbible:$range'>"
 				"<b>$range</b></a><br>", 
@@ -222,8 +227,7 @@ class DisplayFrame(HtmlSelectableWindow):
 						reflist = reflist.split("; ")
 						#get refs
 						verselist = bible.GetReferencesFromMod(module, reflist)
-						for a in verselist:
-							data+=a
+						data += ''.join(verselist)
 
 					SetText(data)
 
@@ -234,13 +238,14 @@ class DisplayFrame(HtmlSelectableWindow):
 					biblemgr.bible.templatelist.pop()
 
 
-		elif(action=="showRef"):
+		elif action=="showRef":
 			type = url.getParameterValue("type") 
-			if(not type=="scripRef"):
+			if type != "scripRef":
 				dprint(WARNING, "unknown type for showRef", type, href)
 				return
 			value = url.getParameterValue("value") #passage
-			if(not value): return
+			if not value: 
+				return
 
 			module = url.getParameterValue("module")
 			#make this plain
@@ -286,16 +291,15 @@ class DisplayFrame(HtmlSelectableWindow):
 	
 	@staticmethod
 	def on_hover_bible(frame, href, url, x, y):
-		xx, yy = frame.CalcScrolledPosition(x, y) 
-		point= (xx,yy)#+self.GetCharHeight())
-		point= frame.ClientToScreen(point) #screen point
+		scrolled_values = frame.CalcScrolledPosition(x, y) 
+		screen_x, screen_y = frame.ClientToScreen(scrolled_values)
 	
-		frame.tooltip.show_bible_refs(href, url, *point)
+		frame.tooltip.show_bible_refs(href, url, screen_x, screen_y)
 
 	def show_tooltip(self, x, y):
-		xx, yy = self.CalcScrolledPosition(x, y) 
-		xx, yy = self.ClientToScreen((xx, yy)) #screen point
-		self.tooltip.set_pos(xx, yy)
+		scrolled_values = self.CalcScrolledPosition(x, y) 
+		screen_x, screen_y = self.ClientToScreen(scrolled_values)
+		self.tooltip.set_pos(screen_x, screen_y)
 		self.tooltip.is_biblical = False
 		self.tooltip.Start()
 
@@ -314,20 +318,22 @@ class DisplayFrame(HtmlSelectableWindow):
 		if host != "passagestudy.jsp":
 			return
 		action = url.getParameterValue("action")
-		if(action=="showStrongs"):
+		if action == "showStrongs":
 			type = url.getParameterValue("type") #Hebrew or greek
 			value = url.getParameterValue("value") #strongs number
-			if(not type or not value): return
+			if not type or not value: 
+				return
 			#do lookup
 			type = "Strongs"+type#as module is StrongsHebrew
 			if biblemgr.dictionary.ModuleExists(type):
 				biblemgr.dictionary.SetModule(type)
-				wx.CallAfter(guiconfig.mainfrm.UpdateDictionaryUI,value)
+				wx.CallAfter(guiconfig.mainfrm.UpdateDictionaryUI, value)
 			return
-		if(action=="showMorph"):
+		if action=="showMorph":
 			type = url.getParameterValue("type") #Hebrew or greek
 			value = url.getParameterValue("value") #strongs number
-			if(not type or not value): return
+			if not type or not value: 
+				return
 			if type.split(":")[0] != "robinson":
 				return
 
@@ -336,7 +342,7 @@ class DisplayFrame(HtmlSelectableWindow):
 			type = "Robinson" #as module is StrongsHebrew
 			if biblemgr.dictionary.ModuleExists(type):
 				biblemgr.dictionary.SetModule(type)
-				wx.CallAfter(guiconfig.mainfrm.UpdateDictionaryUI,value)
+				wx.CallAfter(guiconfig.mainfrm.UpdateDictionaryUI, value)
 
 	@staticmethod
 	def on_link_clicked_bible(frame, href, url):
@@ -373,7 +379,7 @@ class DisplayFrame(HtmlSelectableWindow):
 		event.EventObject.PopupMenu(menu, self.popup_position)
 
 	def get_popup_menu_items(self):
-		return ((self.make_search_text(), self.make_lookup_text(),Separator) + 
+		return ((self.make_search_text(), self.make_lookup_text(), Separator) + 
 			self.get_menu_items())
 
 	def _get_text(self, lookup_text):
@@ -401,7 +407,9 @@ class DisplayFrame(HtmlSelectableWindow):
 
 	def get_clicked_cell_text(self):
 		cell = self.FindCell(*self.popup_position)
-		if not cell: return None
+		if not cell: 
+			return None
+
 		return util.ReplaceUnicode(cell.ConvertToText(None))
 
 	def make_lookup_text(self):
@@ -449,9 +457,9 @@ class DisplayFrame(HtmlSelectableWindow):
 		"""Copy the selected text with links"""
 		self.OnCopy(with_links=True)
 	
-	def test_wxp(self):
-		import wx.lib.wxpTag
-		self.SetPage("3 <wxp class='CheckBox'><param label='2' /></wxp>4")
+	#def test_wxp(self):
+	#	import wx.lib.wxpTag
+	#	self.SetPage("3 <wxp class='CheckBox'><param label='2' /></wxp>4")
 
 
 

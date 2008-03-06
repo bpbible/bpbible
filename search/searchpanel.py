@@ -1,6 +1,3 @@
-#python imports
-import sys
-
 #wx imports
 import wx
 from wx import xrc
@@ -9,18 +6,16 @@ from util import osutils
 #from util.util import *
 from util import util
 from backend.bibleinterface import biblemgr
-from backend.book import GetBestRange, SWMULTI, SWPHRASE, SWREGEX, Searcher
 from xrc.search_xrc import *
 
-#from backend.bibleInterface import SEARCH_MULTIWORD, SEARCH_PHRASE, SEARCH_REGEX
 import config
 import guiconfig
 import search
 from search import REGEX, PHRASE, CASESENSITIVE, MULTIWORD, COMBINED
 from search import SearchException, SpellingException, RemoveDuplicates
-from swlib.pysw import VK
+from swlib.pysw import VK, GetBestRange, Searcher, SWMULTI, SWPHRASE, SWREGEX
 from gui import guiutil
-from util.debug import *
+from util.debug import dprint, WARNING
 from gui import virtuallist
 from events import SEARCH
 from util.configmgr import config_manager
@@ -36,7 +31,7 @@ from util.configmgr import config_manager
 #		threading.Thread.__init__(self)
 #
 #	def run(self):
-#		self.dialog.OnSearch2()
+#		self.dialog.on_search2()
 
 search_config = config_manager.add_section("Search")
 search_config.add_item("disappear_on_doubleclick", True, item_type=bool)
@@ -56,36 +51,38 @@ class SearchPanel(xrcSearchPanel):
 		
 
 		if osutils.is_gtk():
-			self.Bind(wx.EVT_WINDOW_CREATE, self.OnCreate)
+			self.Bind(wx.EVT_WINDOW_CREATE, self.on_create)
 		else:
-			wx.CallAfter(self.OnCreate)
+			wx.CallAfter(self.on_create)
 
-		self.search_results= ""
+		self.search_results = ""
 
 		self.searching = False
-		self.index=None
-		self.version=None
+		self.index = None
+		self.version = None
 		self.stop = False
 		self.ref = None
 
-		# if search panel is on screen at startup, on_show and SetVersion will
+		# if search panel is on screen at startup, on_show and set_version will
 		# both be called. Then if there is no index, it will prompt twice.
 		# This flag is false only before the end of the first call to
-		# SetVersion
+		# set_version
 		self.has_started = False
 	
-	def OnCreate(self, event=None):
+	def on_create(self, event=None):
 		self.Unbind(wx.EVT_WINDOW_CREATE)
-		wx.CallAfter(self._PostInit)
-		if event:event.Skip()
+		wx.CallAfter(self._post_init)
+		if event:
+			event.Skip()
+
 		return True
 	
-	def OnList(self, event):
+	def on_list(self, event):
 		item_text = self.verselist.GetItemText(event.m_itemIndex)
 		self.ref = str(item_text)
-		self.RefreshUI()
+		self.refresh_ui()
 	
-	def RefreshUI(self, event=None):
+	def refresh_ui(self, event=None):
 		if not self.ref or (event and not event.settings_changed):
 			self.versepreview.SetPage("")
 			return
@@ -103,7 +100,7 @@ class SearchPanel(xrcSearchPanel):
 		self.searchkey.SetValue(key)
 
 		self.show()
-		wx.CallAfter(self.OnSearch)
+		wx.CallAfter(self.on_search)
 	
 	def show(self):
 		guiconfig.mainfrm.show_panel("Search")
@@ -112,7 +109,9 @@ class SearchPanel(xrcSearchPanel):
 		if self.version is None:
 			self.genindex.Disable()
 	
-		if not toggle: return
+		if not toggle: 
+			return
+
 		panel = guiconfig.mainfrm.aui_mgr.GetPane("Search")
 		if panel.IsFloating():
 			# do resizing to force layout 
@@ -132,26 +131,26 @@ class SearchPanel(xrcSearchPanel):
 		else:
 			dprint(WARNING, "NOT FLOATING", panel)
 		
-		self.CheckForIndex()
+		self.check_for_index()
 		self.set_title()
 	
-	def SetVersion(self, version):
+	def set_version(self, version):
 		self.version = version
 
 		self.genindex.Enable(version is not None)
 		
 
 		if(guiconfig.mainfrm.is_pane_shown("Search") and self.has_started):
-			self.CheckForIndex()
+			self.check_for_index()
 
 		self.search_label.Label = "0 verses found"
 
-		wx.CallAfter(self.ClearList)
+		wx.CallAfter(self.clear_list)
 
 		self.set_title()
 		self.has_started = True
 	
-	def CheckForIndex(self):
+	def check_for_index(self):
 		if not needs_index[search_config["search_type"]]:
 			#self.genindex.SetLabel("Unindex")
 			self.search_button.Enable(biblemgr.bible.version is not None)
@@ -169,7 +168,7 @@ class SearchPanel(xrcSearchPanel):
 			return
 
 		if(self.version and search.IndexExists(self.version)):
-			d = wx.BusyInfo("Reading search index...")
+			busy_info = wx.BusyInfo("Reading search index...")
 			self.index = search.ReadIndex(self.version)
 			self.genindex.SetLabel("Unindex")
 			self.search_button.Enable()
@@ -187,23 +186,23 @@ class SearchPanel(xrcSearchPanel):
 				"Create Index?" % self.version 
 			create = wx.MessageBox(msg, "Create Index?", wx.YES_NO)
 			if create == wx.YES:
-				self.index = self.BuildIndex(self.version)
+				self.index = self.build_index(self.version)
 			else:
 				self.search_button.Disable()
 				
 			#do indexing here
 
-	def OnSelect(self, event):
+	def on_select(self, event):
 		item_text = self.verselist.GetItemText(event.m_itemIndex)
 		
 		guiconfig.mainfrm.set_bible_ref(item_text, source=SEARCH)
 		if search_config["disappear_on_doubleclick"]:
 			self.on_close()
 			
-	def _PostInit(self):
-		for id, item in enumerate(search_items):
+	def _post_init(self):
+		for idx, item in enumerate(search_items):
 			if item == search_config["search_type"]:
-				self.gui_search_type.SetSelection(id)
+				self.gui_search_type.SetSelection(idx)
 
 		self.search_button.SetLabel("&Search")
 	
@@ -212,38 +211,38 @@ class SearchPanel(xrcSearchPanel):
 				self.search_splitter.ClientSize[1]/2
 		)
 
-		f = self.search_label.Font
-		f.SetWeight(wx.FONTWEIGHT_BOLD)
-		self.search_label.Font = f
+		font = self.search_label.Font
+		font.SetWeight(wx.FONTWEIGHT_BOLD)
+		self.search_label.Font = font
 
 		# Do all init here
 		#self.Fit()
 		#self.GetContainingSizer().ContainingWindow.Fit()
 		
 		# Do binding
-		self.Bind(wx.EVT_BUTTON, self.OnSearch, self.search_button)
+		self.Bind(wx.EVT_BUTTON, self.on_search, self.search_button)
 		self.Bind(wx.EVT_BUTTON, self.on_close, id=wx.ID_CLOSE)
 		
 		self.gui_search_type.Bind(wx.EVT_CHOICE, self.on_search_type)
 
-		self.oldtestament.Bind(wx.EVT_RADIOBUTTON, self.OldTestament)
-		self.newtestament.Bind(wx.EVT_RADIOBUTTON, self.NewTestament)
-		self.wholebible.Bind(wx.EVT_RADIOBUTTON, self.WholeBible)
+		self.oldtestament.Bind(wx.EVT_RADIOBUTTON, self.old_testament)
+		self.newtestament.Bind(wx.EVT_RADIOBUTTON, self.new_testament)
+		self.wholebible.Bind(wx.EVT_RADIOBUTTON, self.whole_bible)
 		self.custom_range.Bind(wx.EVT_TEXT, self.on_custom_changed)
 		
 		
-		self.verselist.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnList)
-		self.verselist.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self.OnSelect)
-		self.range_top.Bind(wx.EVT_CHOICE, self.RangeTop)
-		self.range_bottom.Bind(wx.EVT_CHOICE, self.RangeBottom)
-		self.genindex.Bind(wx.EVT_BUTTON, self.GenerateIndex)
+		self.verselist.Bind(wx.EVT_LIST_ITEM_SELECTED, self.on_list)
+		self.verselist.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self.on_select)
+		self.range_top.Bind(wx.EVT_CHOICE, self.on_range_top)
+		self.range_bottom.Bind(wx.EVT_CHOICE, self.on_range_bottom)
+		self.genindex.Bind(wx.EVT_BUTTON, self.generate_index)
 
 		# Set properties:
 
 		# under gtk, enter in the searchkey should push button...
 		if not osutils.is_msw():
 			self.searchkey.Bind(wx.EVT_KEY_UP, 
-			lambda event:event.KeyCode == wx.WXK_RETURN and (self.OnSearch(),) 
+			lambda event:event.KeyCode == wx.WXK_RETURN and (self.on_search(),) 
 				or event.Skip())
 		
 		#SetWindowStyle(self.searchkey.GetWindowStyle() | \
@@ -268,7 +267,7 @@ class SearchPanel(xrcSearchPanel):
 	def on_close(self, event=None):
 		guiconfig.mainfrm.show_panel("Search", False)
 
-	def StopSearch(self):
+	def stop_search(self):
 		self.stop = True
 	
 	def show_progress_bar(self, toggle=True):
@@ -279,12 +278,12 @@ class SearchPanel(xrcSearchPanel):
 
 		self.genindex.Enable(self.version is not None and not toggle)
 
-	def OnSearch(self, evt = None):
+	def on_search(self, event=None):
 		#if already searching, this is magically a terminate button
 		#so if clicked, quit
 
 		if(self.searching):
-			self.StopSearch()
+			self.stop_search()
 
 		else:
 			try:
@@ -296,7 +295,7 @@ class SearchPanel(xrcSearchPanel):
 				if not key: 
 					self.search_label.Label = "0 verses found"
 
-					wx.CallAfter(self.ClearList)
+					wx.CallAfter(self.clear_list)
 					return
 
 				self.show_progress_bar()
@@ -319,7 +318,7 @@ class SearchPanel(xrcSearchPanel):
 
 				if not needs_index[search_config["search_type"]]:
 				
-					self.OnSwordSearch(key, scope, exclude, case_sensitive)
+					self.on_sword_search(key, scope, exclude, case_sensitive)
 				else:
 					if not self.index or not self.index.version == self.version:
 						wx.MessageBox("You haven't indexed the current "
@@ -328,7 +327,7 @@ class SearchPanel(xrcSearchPanel):
 						
 						return
 
-					self.OnIndexedSearch(key, scope, exclude, case_sensitive)
+					self.on_indexed_search(key, scope, exclude, case_sensitive)
 
 			finally:
 				self.show_progress_bar(False)
@@ -336,10 +335,10 @@ class SearchPanel(xrcSearchPanel):
 				self.search_button.SetLabel("&Search")
 				
 	
-	def OnIndexedSearch(self, key, scope, exclude, case_sensitive):
+	def on_indexed_search(self, key, scope, exclude, case_sensitive):
 		"""This is what does the main bit of searching."""
 		def index_callback(value):#, userdata):
-			#dprint(MESSAGE, "Callback status", *value)
+			#dprint(MESSAGE, "callback status", *value)
 			self.progressbar.SetValue(value[1])
 			#wx.SafeYield(self.search_button)
 			guiconfig.app.Yield()
@@ -379,7 +378,7 @@ class SearchPanel(xrcSearchPanel):
 					util.pluralize("word", self.numwords)
 			)
 				
-			wx.CallAfter(self.ClearList)
+			wx.CallAfter(self.clear_list)
 			return
 		
 		
@@ -395,22 +394,22 @@ class SearchPanel(xrcSearchPanel):
 					)
 			)
 			
-			wx.CallAfter(self.ClearList)
+			wx.CallAfter(self.clear_list)
 			return
 
 		self.search_results = search.RemoveDuplicates(self.search_results)
-		self.InsertResults()
+		self.insert_results()
 
-	def OnSwordSearch(self, key, scope, exclude, case_sensitive):
+	def on_sword_search(self, key, scope, exclude, case_sensitive):
 		"""This is what does the main bit of searching."""
-		def Callback(value, userdata):
+		def callback(value, userdata):
 			self.progressbar.SetValue(value)
 			guiconfig.app.Yield()
 			return not self.stop
 
-		#Create searcher, and set percent callback to Callback
+		#Create searcher, and set percent callback to callback
 		self.searcher = Searcher(biblemgr.bible)
-		self.searcher.callback = Callback
+		self.searcher.callback = callback
 
 	    # If custom range, use it
 		self.numwords = len(key.split())
@@ -429,9 +428,9 @@ class SearchPanel(xrcSearchPanel):
 					"; ".join(self.search_results), 
 					case_sensitive)
 				
-				for a in exclude_list:
-					if a in self.search_results:
-						self.search_results.remove(a)			
+				for excl in exclude_list:
+					if excl in self.search_results:
+						self.search_results.remove(excl)
 
 		self.hits = len(self.search_results)
 		if self.hits == 0:
@@ -441,7 +440,7 @@ class SearchPanel(xrcSearchPanel):
 			)
 			
 				
-			wx.CallAfter(self.ClearList)
+			wx.CallAfter(self.clear_list)
 			return
 		
 		
@@ -458,13 +457,13 @@ class SearchPanel(xrcSearchPanel):
 			)
 				
 			
-			wx.CallAfter(self.ClearList)
+			wx.CallAfter(self.clear_list)
 			return
 
 		# Update UI
-		self.InsertResults()
+		self.insert_results()
 
-	def ClearList(self):
+	def clear_list(self):
 		self.search_button.SetLabel("Search")
 		self.show_progress_bar(False)
 
@@ -472,7 +471,7 @@ class SearchPanel(xrcSearchPanel):
 		self.verselist.set_data("Reference Preview".split(), length=0)
 		
 		self.ref = None
-		self.RefreshUI()
+		self.refresh_ui()
 
 		#insert columns
 		#self.verselist.InsertColumn(0, "Reference")
@@ -485,10 +484,9 @@ class SearchPanel(xrcSearchPanel):
 		guiconfig.mainfrm.set_pane_title("Search", text)
 
 	@guiutil.frozen
-	def InsertResults(self):
+	def insert_results(self):
 		text = self.search_results
 		self.search_button.SetLabel("Search")
-		data = {}
 
 		#make this plain
 		#template = VerseTemplate(body = "$text ")
@@ -511,7 +509,7 @@ class SearchPanel(xrcSearchPanel):
 		#biblemgr.bible.templatelist.pop()
 
 		#Clear list
-		self.ClearList()
+		self.clear_list()
 		self.verselist.set_data("Reference Preview".split(), length=len(text))
 		#insert data	   
 		#for key, mydata in data.iteritems():
@@ -532,28 +530,23 @@ class SearchPanel(xrcSearchPanel):
 			)
 		)
 		self.ref = text[0]
-		self.RefreshUI()
+		self.refresh_ui()
 		
 		
 		
 		
 	def on_search_type(self, evt):
 		search_config["search_type"] = search_items[evt.GetSelection()]
-		self.CheckForIndex()
+		self.check_for_index()
 		
-
-	def OnSearchKey(self, evt = None):
-		self.OnSearch(evt)
-
-	def OldTestament(self, evt = None):
+	def old_testament(self, event = None):
 		self.range_top.SetSelection(0)
 		vk = VK()
 		num = vk.bookCount(1)
 		self.range_bottom.SetSelection(num-1)
 		self.update_boxes(self.oldtestament)
-
 		
-	def NewTestament(self, evt = None):
+	def new_testament(self, event=None):
 		vk = VK()
 		start = vk.bookCount(1)
 		self.range_top.SetSelection(start)
@@ -563,23 +556,22 @@ class SearchPanel(xrcSearchPanel):
 		self.update_boxes(self.newtestament)
 
 	   
-	def WholeBible(self, evt = None):
+	def whole_bible(self, event=None):
 		self.range_top.SetSelection(0)
 		number = self.range_bottom.GetCount()
 		self.range_bottom.SetSelection(number-1)
 		self.update_boxes(self.wholebible)
 	
-	def on_custom_changed(self, evt=None):
-		self.update_boxes(set_custom=False)
-		
+	def on_custom_changed(self, event=None):
+		self.update_boxes(set_custom=False)		
 	
-	def RangeTop(self, evt = None):
+	def on_range_top(self, event=None):
 		sel = self.range_top.GetSelection()
 		if(self.range_bottom.GetSelection() < sel):
 			self.range_bottom.SetSelection(sel)
 		self.update_boxes()
 
-	def RangeBottom(self, evt = None):
+	def on_range_bottom(self, event=None):
 		sel = self.range_bottom.GetSelection()
 		if(self.range_top.GetSelection() > sel):
 			self.range_top.SetSelection(sel)		 
@@ -595,7 +587,7 @@ class SearchPanel(xrcSearchPanel):
 				self.range_bottom.StringSelection))
 		
 
-	def GenerateIndex(self, evt=None):
+	def generate_index(self, event=None):
 		if(self.index):
 			self.index = None
 			error = search.DeleteIndex(self.version)
@@ -606,12 +598,12 @@ class SearchPanel(xrcSearchPanel):
 				self.search_button.Disable()
 				
 		else:
-			self.index = self.BuildIndex(self.version)
+			self.index = self.build_index(self.version)
 			
 			
 
-	def BuildIndex(self, version):
-		def Callback(value):
+	def build_index(self, version):
+		def callback(value):
 			self.progressbar.SetValue(value[1])
 			continuing, skip = p.Update(value[1], "Indexing %s" % value[0])
 			wx.SafeYield()
@@ -626,7 +618,7 @@ class SearchPanel(xrcSearchPanel):
 		try:
 			#create index
 			try:
-				index = search.Index(version, Callback)
+				index = search.Index(version, callback)
 			except search.Cancelled:
 				return None
 			

@@ -33,14 +33,14 @@ class GenBook(Book):
 		verses = template.header.substitute(d)
 		d1 = d
 		d1["text"] = text
-		verses+=template.body.substitute(d1)
+		verses += template.body.substitute(d1)
 
 #		verses += "<b>" + self.mod.KeyText() + "</b><br>"; #output heading
 #		verses += self.mod.RenderText(); #output text
 #		verses += "<br>(";
 #		verses += self.mod.Name();
 		verses += template.footer.substitute(d) #dictionary name
-		return verses;
+		return verses
 
 	def GetReferenceFromKey(self, ref, context = None, max_verses = 500):
 		if not self.mod:
@@ -59,14 +59,14 @@ class GenBook(Book):
 		verses = template.header.substitute(d)
 		d1 = d
 		d1["text"] = text
-		verses+=template.body.substitute(d1)
+		verses += template.body.substitute(d1)
 
 #			verses += "<b>" + self.mod.KeyText() + "</b><br>"; #output heading
 #			verses += self.mod.RenderText(); #output text
 #			verses += "<br>(";
 #			verses += self.mod.Name();
 		verses += template.footer.substitute(d) #dictionary name
-		return verses;
+		return verses
 			
 			
 	def GetKey(self):

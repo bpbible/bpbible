@@ -1,7 +1,6 @@
 from backend import filterutils
-from backend.book import *
-from swlib.pysw import SW
-import config
+from swlib.pysw import SW, GetVerseStr, GetBestRange
+from util.debug import dprint, MESSAGE
 
 class ThMLParser(filterutils.ParserBase):
 	def start_scripref(self, attributes):
@@ -41,7 +40,9 @@ class ThMLParser(filterutils.ParserBase):
 		# if we have a ref list, then we need to display the text and just
 		# pop up usual thing
 		if refList:
-			self.buf += ("<a href=\"passagestudy.jsp?action=showRef&type=scripRef&value=%s&module=%s\">")%(SW.URL.encode(refList).c_str(), "")
+			self.buf += ("<a href=\"passagestudy.jsp?action=showRef&type=scripRef&value=%s&module=%s\">") % (
+				SW.URL.encode(refList).c_str(), ""
+			)
 			self.buf += self.u.lastTextNode.c_str()
 			self.buf += "</a>"
 		else:
@@ -86,7 +87,7 @@ class ThMLParser(filterutils.ParserBase):
 class THMLRenderer(SW.RenderCallback):
 	def __init__(self):
 		super(THMLRenderer, self).__init__()
-		self.thisown=False
+		self.thisown = False
 
 	@filterutils.me
 	@filterutils.report_errors
@@ -95,7 +96,7 @@ class THMLRenderer(SW.RenderCallback):
 		if not filterutils.filter_settings["use_thml_parser"]: 
 			return "", SW.INHERITED
 	
-		p.init(token,userdata)
+		p.init(token, userdata)
 		p.feed("<%s>" % token)
 
 		return p.buf, p.success	

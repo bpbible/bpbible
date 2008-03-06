@@ -24,13 +24,12 @@
                   <label>Preview</label>
                   <orient>wxVERTICAL</orient>
                   <object class="sizeritem">
-                    <object class="wxHtmlWindow" name="gui_preview" subclass="displayframe.DisplayFrameXRC">
-                      <style>wxSIMPLE_BORDER</style>
+                    <object class="wxHtmlWindow" name="gui_preview" subclass="gui.htmlbase.HtmlBaseXRC">
                       <borders>1</borders>
                     </object>
                     <option>2</option>
                     <flag>wxALL|wxGROW</flag>
-                    <border>4</border>
+                    <border>0</border>
                     <minsize>200,100</minsize>
                   </object>
                 </object>
@@ -78,7 +77,7 @@
         <object class="wxStdDialogButtonSizer">
           <object class="button">
             <object class="wxButton" name="wxID_OK">
-              <label></label>
+              <label/>
               <label>&amp;Ok</label>
             </object>
             <flag>wxGROW|wxALL</flag>
@@ -86,7 +85,7 @@
           </object>
           <object class="button">
             <object class="wxButton" name="wxID_CANCEL">
-              <label></label>
+              <label/>
               <label>&amp;Cancel</label>
             </object>
             <flag>wxGROW|wxALL</flag>
@@ -116,7 +115,7 @@
           </object>
           <object class="sizeritem">
             <object class="StyledTextCtrl" name="header">
-              <value></value>
+              <style>wxSUNKEN_BORDER</style>
             </object>
             <option>1</option>
             <flag>wxALL|wxGROW</flag>
@@ -139,8 +138,8 @@
           </object>
           <object class="sizeritem">
             <object class="StyledTextCtrl" name="body">
-              <size>200,100</size>
               <value>$$text </value>
+              <style>wxSUNKEN_BORDER</style>
             </object>
             <option>1</option>
             <flag>wxALL|wxGROW</flag>
@@ -163,8 +162,8 @@
           </object>
           <object class="sizeritem">
             <object class="StyledTextCtrl" name="footer">
-              <size>200,100</size>
               <value>\n$$range ($$version)</value>
+              <style>wxSUNKEN_BORDER</style>
             </object>
             <option>1</option>
             <flag>wxGROW|wxALL</flag>
@@ -187,8 +186,8 @@
           </object>
           <object class="sizeritem">
             <object class="StyledTextCtrl" name="headings">
-              <size>200,100</size>
               <value>&lt;h5&gt;$$heading&lt;/h5&gt;</value>
+              <style>wxSUNKEN_BORDER</style>
             </object>
             <option>1</option>
             <flag>wxALL|wxGROW</flag>

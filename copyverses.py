@@ -13,6 +13,7 @@ from wx import stc
 from templatemanager import TemplatePanel, TemplateManager
 import  wx.lib.mixins.listctrl  as  listmix
 import guiconfig
+from gui import guiutil
 from util.configmgr import config_manager
 
 #class CopyVerseDialog(xrcCopyVerseDialog):
@@ -264,7 +265,7 @@ class CopyVerseDialog(xrcCopyVerseDialog):
 		self.ref=None
 	
 	def CopyVerses(self):
-		guiconfig.mainfrm.Copy(self.GetText())
+		guiutil.copy(self.GetText())
 
 	def GetText(self):
 		template = VerseTemplate(header=self.template_panel.header.GetText(),

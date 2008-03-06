@@ -2,6 +2,12 @@ import swlib.swordlib as SW
 import re
 from util.debug import *
 
+REG_ICASE = 1 << 1
+SWMULTI = -2
+SWPHRASE = -1
+SWREGEX = 0
+
+
 for a in dir(SW):
 	if(a[:2]=="SW"):
 			setattr(SW, a[2:], getattr(SW, a))
@@ -837,3 +843,33 @@ def VerseInRange(verse, range, context="", vklist=None):
 			return True 
 	return False
 
+class Searcher(SW.Searcher):
+	def __init__(self, book, userdata = None):
+		SW.Searcher.__init__(self, book.mod)
+		self.mod = book.mod
+		self.callback = None
+		self.userdata = userdata
+		self.vk = VK()
+		self.vk.thisown = False
+
+	def PercentFunction(self, number):
+		if(self.callback):
+			continuing = self.callback(number, self.userdata)
+			if not continuing:
+				self.TerminateSearch()
+	
+	def Search(self, string, options=0, scopestr=None, case_sensitive=False):
+		self.mod.setKey(self.vk)
+
+		scope = None
+		if(scopestr):
+			scope = self.vk.ParseVerseList(scopestr, "", True)
+
+		verseslist = self.doSearch(string, options, 
+			(not case_sensitive)*REG_ICASE, scope)
+
+		strings = verseslist.getRangeText()
+
+		if not strings: 
+			return []
+		return strings.split("; ")

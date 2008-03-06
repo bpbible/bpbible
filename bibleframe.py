@@ -2,7 +2,7 @@ import random
 
 import wx
 
-from swlib.pysw import VK
+from swlib.pysw import VK, GetVerseStr, GetBookChapter, GetBestRange
 from bookframe import VerseKeyedFrame
 from gui.htmlbase import linkiter, eq
 from util.util import ReplaceUnicode
@@ -11,8 +11,6 @@ from util.observerlist import ObserverList
 
 import config, guiconfig
 from gui.menu import MenuItem, Separator
-
-from backend.book import GetVerseStr, GetBookChapter, GetBestRange
 
 from harmony.harmonyframe import HarmonyFrame
 from gui.quickselector import QuickSelector

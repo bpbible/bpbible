@@ -1,4 +1,5 @@
 import wx
+from util.debug import dprint, WARNING
 
 class MultiChoiceDialog(wx.MultiChoiceDialog):
 	def __init__(self, *args, **kwargs):
@@ -37,7 +38,9 @@ class MultiChoiceDialog(wx.MultiChoiceDialog):
 			event.Skip()
 	
 	def select_all(self, to):
-		if not self.list_box: return
+		if not self.list_box: 
+			return
+
 		for item in range(self.list_box.Count):
 			self.list_box.Check(item, to)
 		

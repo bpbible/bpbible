@@ -1,10 +1,8 @@
 import re
 from backend import filterutils
-from backend.book import GetBestRange
-from swlib.pysw import SW
+from swlib.pysw import SW, GetBestRange
 from swlib import pysw
-import config
-from util.debug import *
+from util.debug import dprint, WARNING
 
 strongs_re = re.compile(r"strong:([HG])(\d+)")
 
@@ -20,9 +18,10 @@ class OSISParser(filterutils.ParserBase):
 			# initialize to empty so that addition below will work
 			self.refs = ""
 
-		elif(not filterutils.filter_settings["footnote_ellipsis_level"] or not self.u.BiblicalText or
-				not self.u.inXRefNote):
-			self.success=SW.INHERITED
+		elif(not filterutils.filter_settings["footnote_ellipsis_level"] 
+				or not self.u.BiblicalText
+				or not self.u.inXRefNote):
+			self.success = SW.INHERITED
 			return
 		
 		attributes = dict(attributes)
@@ -35,7 +34,8 @@ class OSISParser(filterutils.ParserBase):
 	def end_reference(self):
 		# processed already
 		
-		if not filterutils.filter_settings["footnote_ellipsis_level"] or not self.u.BiblicalText:
+		if(not filterutils.filter_settings["footnote_ellipsis_level"] 
+			or not self.u.BiblicalText):
 			self.success = SW.INHERITED
 			return
 
@@ -46,8 +46,9 @@ class OSISParser(filterutils.ParserBase):
 			ref = self.refs[:-1]
 			ref = GetBestRange(ref, context=self.u.key.getText(), abbrev=True)
 			
-			self.buf += '<a href="bible:%s">%s</a>' %(ref,
-				self.u.lastTextNode.c_str())
+			self.buf += '<a href="bible:%s">%s</a>' % (
+				ref, self.u.lastTextNode.c_str()
+			)
 		
 			return
 		
@@ -66,7 +67,7 @@ class OSISParser(filterutils.ParserBase):
 		for lemma in lemmas.split(" "):
 		
 			if not lemma.startswith("strong:"):
-				dprint(WARNING, "Could not match lemma", value)
+				dprint(WARNING, "Could not match lemma", lemma)
 				return
 			
 			headword = self.get_strongs_headword(lemma[7:])
@@ -114,10 +115,10 @@ class OSISParser(filterutils.ParserBase):
 		
 		elif(attributes["type"] in ("crossReference", "x-cross-ref") and
 				filterutils.filter_settings["footnote_ellipsis_level"]):
-			self.u.inXRefNote=True
+			self.u.inXRefNote = True
 			self.u.suspendLevel += 1
 			self.u.suspendTextPassThru = self.u.suspendLevel
-			self.refs=""
+			self.refs = ""
 		else:
 			self.success = SW.INHERITED
 
@@ -156,7 +157,7 @@ class OSISRenderer(SW.RenderCallback):
 			return "", SW.INHERITED
 	
 		# w lemma="strong:H03050" wn="008"		
-		p.init(token,u)
+		p.init(token, u)
 		p.feed("<%s>" % token)
 		return p.buf, p.success
 

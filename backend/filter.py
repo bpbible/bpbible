@@ -1,8 +1,6 @@
-import sys
-import sgmllib
 from swlib.pysw import SW
+from util.debug import dprint, ERROR
 
-import config
 from backend import thmlparser, osisparser
 
 
@@ -13,7 +11,7 @@ bm_items = []
 class MarkupInserter(SW.MarkupCallback):
 	def __init__(self, biblemgr):
 		super(MarkupInserter, self).__init__()
-		self.thisown=False
+		self.thisown = False
 		self.biblemgr = biblemgr
 
 		for item in bm_items:
@@ -37,17 +35,17 @@ class MarkupInserter(SW.MarkupCallback):
 				dprint(ERROR, "Couldn't print exception - exception raised", e2)
 	
 	def get_filter(self, module):
-		m = ord(module.Markup())
+		markup = ord(module.Markup())
 		markups = {SW.FMT_OSIS:osis, SW.FMT_THML:thml}
-		if m in markups:
-			return markups[m]
+		if markup in markups:
+			return markups[markup]
 		return None
 	
 	def get_alternate_filter(self, module):
-		m = ord(module.Markup())
+		markup = ord(module.Markup())
 		markups = {SW.FMT_OSIS:osis2, SW.FMT_THML:thml2}
-		if m in markups:
-			return markups[m]
+		if markup in markups:
+			return markups[markup]
 		return None
 	
 	
@@ -56,7 +54,7 @@ def make_thml():
 	thmlrenderer = thmlparser.THMLRenderer()
 	items.append(thmlrenderer)
 	thml = SW.PyThMLHTMLHREF(thmlrenderer)
-	thml.thisown=False
+	thml.thisown = False
 	#thmlrenderer
 	return thml
 
@@ -67,7 +65,7 @@ def make_osis():
 	
 	
 	osis = SW.PyOSISHTMLHREF(osisrenderer)
-	osis.thisown=False
+	osis.thisown = False
 	return osis
  
 osis = make_osis()

@@ -6,6 +6,7 @@ from util import util
 import guiconfig
 import re
 from util.configmgr import config_manager
+from util.debug import dprint, ERROR, MESSAGE
 
 
 html_settings = config_manager.add_section("Html")
@@ -671,4 +672,11 @@ class HtmlSelectableWindow(HtmlBase):
 		return super(HtmlSelectableWindow, self).SetPage(text, raw=raw,		
 		text_colour=text_colour, body_colour=body_colour)
 
+		
+class HtmlBaseXRC(HtmlBase):
+	def __init__(self):
+		pre = wx.html.PreHtmlWindow()
+		self.PostCreate(pre)
+		self.Bind(wx.html.EVT_HTML_LINK_CLICKED, lambda x:x)
+		self._setup()
 		

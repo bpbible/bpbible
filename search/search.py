@@ -1,11 +1,10 @@
 #import psyco
 #psyco.full()
 from backend.bibleinterface import biblemgr
-from backend.book import BookName
 from util.util import ReplaceUnicode, KillTags, VerseTemplate, remove_amps
 from util import search_utils
 from util.search_utils import *
-from swlib.pysw import SW
+from swlib.pysw import SW, BookName
 import os
 import re
 import string
