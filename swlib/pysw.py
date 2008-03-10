@@ -115,8 +115,15 @@ class VK(SW.VerseKey):#, object):
 	def __le__( self, other): return self.compare(other)<1
 	def __gt__( self, other): return self.compare(other)>0
 	def __ge__( self, other): return self.compare(other)>-1
-	def __eq__(self, other): return self.equals(other)
-	def __ne__(self, other): return not(self.equals(other))
+	def __eq__(self, other):
+		try:
+			return self.equals(other)
+		except:
+			return False
+
+	def __ne__(self, other):
+		return not self == other
+
 	# TODO: __nonzero__?
 	def __str__(self): return self.getRangeText()
 	def __repr__(self): return "VK('%s')" % self.getRangeText()
