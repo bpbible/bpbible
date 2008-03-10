@@ -61,7 +61,6 @@ class SearchPanel(xrcSearchPanel):
 		self.index = None
 		self.version = None
 		self.stop = False
-		self.ref = None
 
 		# if search panel is on screen at startup, on_show and set_version will
 		# both be called. Then if there is no index, it will prompt twice.
@@ -79,21 +78,7 @@ class SearchPanel(xrcSearchPanel):
 	
 	def on_list(self, event):
 		item_text = self.verselist.GetItemText(event.m_itemIndex)
-		self.ref = str(item_text)
-		self.refresh_ui()
-	
-	def refresh_ui(self, event=None):
-		if not self.ref or (event and not event.settings_changed):
-			self.versepreview.SetPage("")
-			return
-		data = "<p>"
-		data += biblemgr.bible.GetReference(self.ref) #bible text
-		data = data.replace("<!P>","</p><p>")
-		if not wx.USE_UNICODE:
-			#replace common values
-			data = util.ReplaceUnicode(data)
-		data += "</p>"
-		self.versepreview.SetPage(data)
+		self.versepreview.SetReference(str(item_text))
 	
 	
 	def search_and_show(self, key=""):
@@ -469,9 +454,8 @@ class SearchPanel(xrcSearchPanel):
 
 		#Clear list
 		self.verselist.set_data("Reference Preview".split(), length=0)
-		
-		self.ref = None
-		self.refresh_ui()
+
+		self.versepreview.SetReference(None)
 
 		#insert columns
 		#self.verselist.InsertColumn(0, "Reference")
@@ -529,8 +513,7 @@ class SearchPanel(xrcSearchPanel):
 				util.pluralize("hit", self.hits),
 			)
 		)
-		self.ref = text[0]
-		self.refresh_ui()
+		self.versepreview.SetReference(text[0])
 		
 		
 		

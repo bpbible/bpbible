@@ -7,7 +7,7 @@
         <option>1</option>
         <flag>wxALL|wxEXPAND</flag>
         <object class="wxPanel" name="panel_1">
-          <style></style>
+          <style/>
           <object class="wxBoxSizer">
             <orient>wxVERTICAL</orient>
             <object class="sizeritem">
@@ -304,7 +304,7 @@
                     <object class="sizeritem">
                       <object class="wxStaticText" name="search_label">
                         <label>0 verses found</label>
-                        <style></style>
+                        <style/>
                       </object>
                       <flag>wxTOP|wxGROW</flag>
                       <border>3</border>
@@ -319,7 +319,7 @@
                 <object class="wxListCtrl" name="verselist" subclass="search.searchpanel.SearchList">
                   <style>wxLC_REPORT|wxLC_SINGLE_SEL|wxLC_VIRTUAL|wxNO_BORDER</style>
                 </object>
-                <object class="wxHtmlWindow" name="versepreview" subclass="displayframe.DisplayFrameXRC"/>
+                <object class="wxHtmlWindow" name="versepreview" subclass="gui.reference_display_frame.ReferenceDisplayFrame"/>
                 <minsize>20</minsize>
                 <style>wxSP_3D|wxSP_3DSASH|wxSP_3DBORDER</style>
               </object>

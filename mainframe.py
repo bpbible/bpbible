@@ -313,7 +313,7 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.aui_callbacks["Search"] = lambda toggle:wx.CallAfter(
 							self.search_panel.on_show, toggle)
 		
-		self.bible_observers += self.search_panel.refresh_ui
+		self.bible_observers += self.search_panel.versepreview.RefreshUI
 
 		wx.CallAfter(lambda:self.set_search_version(biblemgr.bible.version))
 
