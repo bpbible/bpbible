@@ -1,31 +1,31 @@
-#import wx
-#class meta(type):
-#	def __getitem__(self, slice):
-#		if not isinstance(slice, tuple):
-#			return self([slice])
-#		return self(slice)
-
 class ObserverList(object):
-	#__metaclass__ = meta
-	def __init__(self, observers=None):
-		#super(ObserverList, self).__init__(*args, **kwargs)
+	def __init__(self, observers=[]):
 		self.on_hold = False
 		self.deferred = []
-		if observers is None:
-			self.observers = []
-		else:
-			self.observers = observers
+		self.observers = []
+		for observer in observers:
+			self.add_observer(observer)
 
 	def __call__(self, *args, **kwargs):
 		if self.on_hold:
 			self.deferred.append((args, kwargs))
 			return
 
-		for item in self.observers:
-			item(*args, **kwargs)
+		for function, initial_args in self.observers:
+			if not self._call_function(function, initial_args + args, kwargs):
+				return
+
+	def _call_function(self, function, args, kwargs):
+		function(*args, **kwargs)
+		return True
 
 	def remove(self, item):
-		self.observers.remove(item)
+		"""Removes the entry with the given callable."""
+		for index, (function, args) in enumerate(self.observers):
+			if function == item:
+				del self.observers[index]
+				return
+		raise ValueError("ObserverList.remove(x): x not in list.")
 
 	def __isub__(self, item):
 		self.remove(item)
@@ -48,28 +48,35 @@ class ObserverList(object):
 		return "ObserverList%s" % repr(self.observers)
 	
 	def __iadd__(self, item):
-		assert callable(item), "Objects in observer list must be callable"
-		self.observers.append(item)
+		self.add_observer(item)
 		return self
+
+	def add_observer(self, function, args=()):
+		"""Adds the given function as an observer to the list.
+
+		This function will be called whenever the observer list is called,
+		with the same arguments as the observer list is called with.
+
+		args: These arguments are passed to the function before the arguments
+			given when the observer list is called.
+		"""
+		assert callable(function), "Objects in observer list must be callable"
+		self.observers.append((function, args))
 	
 	def prepend(self, item):
-		self.observers.insert(0, item)
-	
-	#def defer(self, *args, **kwargs):
-	#	wx.CallAfter(self, *args, **kwargs)
+		self.observers.insert(0, (item, ()))
 
 class STOP(object): 
 	"""Empty class for stopping a stoppable observer list"""
 
 class StoppableObserverList(ObserverList):
-	def __call__(self, *args, **kwargs):
-		if self.on_hold:
-			self.deferred.append((args, kwargs))
-			return
+	"""This list adds support for a stoppable observer list.
 
-		for item in self.observers:
-			if item(*args, **kwargs) == STOP:
-				return STOP
+	If any observer returns STOP, then further observers will not be called.
+	"""
+	def _call_function(self, function, args, kwargs):
+		result = function(*args, **kwargs)
+		return result != STOP
 
 if __name__ == '__main__':
 	print "Testing ObserverList"
@@ -79,20 +86,19 @@ if __name__ == '__main__':
 	def print_(item):
 		print item
 
-	ol = ObserverList[print3]
+	ol = ObserverList([print3])
 	print repr(ol)
-	#print ol()
 
 	print "Running observer"
 	ol()
 
-	ol = ObserverList[print_]
+	ol = ObserverList([print_])
 	print repr(ol)
 
 	print "Running observer with argument 5"
 	ol(5)	
 	
-	ol = ObserverList[print_]
+	ol = ObserverList([print_])
 	print repr(ol)
 	print "Putting observers on hold"
 	ol.hold()
@@ -100,3 +106,18 @@ if __name__ == '__main__':
 	ol(5)
 	print "finishing hold"
 	ol.finish_hold()
+
+	def print_with_bound_arguments(a, b, item):
+		print a, b
+		print item
+
+	ol = ObserverList()
+	ol.add_observer(print_with_bound_arguments, args=(1, 2))
+	ol(3)
+
+	ol.add_observer(print_with_bound_arguments, (1, 3))
+	ol(4)
+	ol.remove(print_with_bound_arguments)
+	ol(5)
+	ol.remove(print_with_bound_arguments)
+	ol(6)
