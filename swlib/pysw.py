@@ -228,6 +228,13 @@ class VK(SW.VerseKey):#, object):
 		if self.Error():
 			raise IndexError, key
 		return VK(self.getText())
+
+	def __reduce__(self):
+		if self.isBoundSet():
+			args = (self.LowerBound().getText(), self.UpperBound().getText())
+		else:
+			args = self.getText()
+		return VK, (args,)
 		
 	def approxlen(self):
 		"""The approximate length of this versekey.
