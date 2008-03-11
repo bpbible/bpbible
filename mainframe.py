@@ -819,7 +819,7 @@ class MainFrame(wx.Frame, AuiLayer):
 		info.Name = "BPBible"
 		info.Version = "0.2RC1"
 		info.Description = text#, 350, wx.ClientDC(self))
-		info.WebSite = ("http://benpmorgan.googlepages.com/bpbible", 
+		info.WebSite = ("bpbible.googlecode.com", 
 						"BPBible website")
 		info.Developers = ["Ben Morgan", "SWORD library developers"]
 		info.Artists = ["Icons used are from famfamfam\n"

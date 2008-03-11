@@ -19,11 +19,11 @@ class ReferenceDisplayFrame(DisplayFrameXRC):
 		self.RefreshUI()
 
 	def RefreshUI(self, event=None):
-		if not self.passage:
+		if not self.reference:
 			self.SetPage("")
 			return
 
-		data = biblemgr.bible.GetReference(self.passage)
+		data = biblemgr.bible.GetReference(self.reference)
 		# XXX: This replace should be done for us by the backend Bible
 		# interface (or by Sword itself).
 		data = data.replace("<!P>","</p><p>")

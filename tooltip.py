@@ -212,11 +212,11 @@ class Tooltip(TooltipBaseMixin, tooltip_parent):
 		self.toolbar.BackgroundColour = self.colour
 
 		self.gui_anchor = self.toolbar.AddLabelTool(wx.ID_ANY,  
-			"Anchor", bmp("anchor.png", force_mask=True),
+			"Anchor", bmp("anchor.png", ),#force_mask=True),
 			shortHelp="Don't hide this tooltip")
 		
 		self.gui_copy = self.toolbar.AddLabelTool(wx.ID_ANY,  
-			"Copy All", bmp("page_copy.png", force_mask=True),
+			"Copy All", bmp("page_copy.png"),# force_mask=True),
 			shortHelp="Copy tooltip text (with links)")
 			
 

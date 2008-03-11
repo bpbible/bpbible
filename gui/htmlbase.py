@@ -448,7 +448,7 @@ class HtmlSelectableWindow(HtmlBase):
 		# This contains links
 		text2 = self.SelectionToText()
 		if with_links:
-			guiconfig.mainfrm.Copy(text2)
+			guiutil.copy(text2)
 			return
 
 
@@ -490,7 +490,7 @@ class HtmlSelectableWindow(HtmlBase):
 		realtext = re.sub(" +", " ", realtext)
 
 
-		guiconfig.mainfrm.Copy(realtext)
+		guiutil.copy(realtext)
 
 	#@html_source
 	def SelectAll(self):
