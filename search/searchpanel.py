@@ -159,6 +159,8 @@ class SearchPanel(xrcSearchPanel):
 			self.search_button.Enable()
 			
 		else:
+			self.search_button.Disable()
+			
 			self.index = None
 		
 			if not self.version:
@@ -172,8 +174,6 @@ class SearchPanel(xrcSearchPanel):
 			create = wx.MessageBox(msg, "Create Index?", wx.YES_NO)
 			if create == wx.YES:
 				self.index = self.build_index(self.version)
-			else:
-				self.search_button.Disable()
 				
 			#do indexing here
 
@@ -589,7 +589,7 @@ class SearchPanel(xrcSearchPanel):
 		def callback(value):
 			self.progressbar.SetValue(value[1])
 			continuing, skip = p.Update(value[1], "Indexing %s" % value[0])
-			wx.SafeYield()
+			wx.GetApp().Yield()
 			return continuing
 
 		p = wx.ProgressDialog("Indexing %s" % version, "Preparing", 
