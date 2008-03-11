@@ -55,25 +55,23 @@ class DictionarySelector(wx.Panel):
 
 
 	def on_text(self, event):
+		# unbind the selected event so that we don't go into an infinite loop
+		# TODO: check whether this is really necessary
 		self.list.Unbind(wx.EVT_LIST_ITEM_SELECTED)
 		self.list.choose_item(self.text_entry.GetValue())
 		self.list.Bind(wx.EVT_LIST_ITEM_SELECTED, self.on_list)
 		self.item_changed()
 
-
 	def on_list(self, event):
-		self.choose_item(event.GetText())
-		self.item_changed()
-
+		text = self.list.GetItemText(event.m_itemIndex)
+		self.choose_item(text)
 
 	def choose_item(self, text):
-		was_same = str(self.text_entry.GetValue()) == str(text)
+		# change the value (doesn't fire an event)
+		self.text_entry.ChangeValue(text)
 
-		self.text_entry.SetValue(text)
-		if was_same:
-			# if we try to change the text to the same thing, it doesn't fire
-			# event. So call this anyway
-			wx.CallAfter(self.on_text, None)
+		# scroll to the correct entry, and fire off an item_changed
+		wx.CallAfter(self.on_text, None)
 
 
 

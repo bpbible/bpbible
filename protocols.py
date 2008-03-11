@@ -1,5 +1,3 @@
-import webbrowser
-
 from swlib.pysw import SW
 
 from util.debug import *
@@ -39,6 +37,8 @@ class ProtocolHandler(object):
 protocol_handler = ProtocolHandler()
 
 def on_web_opened(frame, href, url):
+	import webbrowser
+
 	if hasattr(webbrowser, "open_new_tab"):
 		webbrowser.open_new_tab(href)
 	else:
