@@ -225,7 +225,7 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
 
 class TreeCombo(wx.combo.ComboCtrl):
 	def __init__(self, parent, style=wx.CB_READONLY):
-		super(TreeCombo, self).__init__(parent, style)
+		super(TreeCombo, self).__init__(parent, style=style)
 
 		self.readonly = style & wx.CB_READONLY
 		
