@@ -4,6 +4,7 @@ import wx
 
 from swlib.pysw import VK, GetVerseStr, GetBookChapter, GetBestRange
 from bookframe import VerseKeyedFrame
+from displayframe import in_both, in_menu, in_popup
 from gui.htmlbase import linkiter, eq
 from util.util import ReplaceUnicode
 from gui import guiutil
@@ -35,24 +36,26 @@ class BibleFrame(VerseKeyedFrame):
 	def get_menu_items(self):
 		items = super(BibleFrame, self).get_menu_items()
 		items = (
-			MenuItem("Harmony", self.show_harmony, accelerator="Ctrl-H"),
-			MenuItem("Random verse", self.random_verse, accelerator="Ctrl-R"),
-			MenuItem("Copy verses", guiconfig.mainfrm.on_copy_button, 
-					enabled=self.has_module, accelerator="Ctrl-H"),
+			(MenuItem("Harmony", self.show_harmony, accelerator="Ctrl-H"),
+				in_menu),
+			(MenuItem("Random verse", self.random_verse, accelerator="Ctrl-R"),
+				in_both),
+			(MenuItem("Copy verses", guiconfig.mainfrm.on_copy_button, 
+					enabled=self.has_module, accelerator="Ctrl-H"), in_both),
 			
-			MenuItem("Open sticky tooltip", self.open_sticky_tooltip, 
-					enabled=self.has_module),
+			(MenuItem("Open sticky tooltip", self.open_sticky_tooltip, 
+					enabled=self.has_module), in_popup),
 					
-			MenuItem("Compare verses", self.compare_verses, 
-					enabled=self.has_module),
+			(MenuItem("Compare verses", self.compare_verses, 
+					enabled=self.has_module), in_popup),
 					
 			
-			Separator,
-			MenuItem("Search", self.search, accelerator="Ctrl-F"),
-			Separator,
-			
+			(Separator, in_both),
+			(MenuItem("Search", self.search, accelerator="Ctrl-F"), in_menu),
+			(Separator, in_menu),
 				 
 		) + items
+
 		return items
 	
 	def get_actions(self):
@@ -60,8 +63,25 @@ class BibleFrame(VerseKeyedFrame):
 		actions.update({
 			ord("S"): self.search_quickly,
 			(ord("C"), wx.MOD_CMD|wx.MOD_SHIFT): self.copy_quickly,
+			(ord("T"), wx.MOD_SHIFT): self.tooltip_quickly,
+			
 		})
 		return actions
+	
+	def tooltip_quickly(self):
+		qs = QuickSelector(self.get_window(), 
+			title="Open sticky tooltip")
+
+		qs.pseudo_modal(self.tooltip_quickly_finished)
+		
+	def tooltip_quickly_finished(self, qs, ansa):
+		if ansa == wx.OK:
+			text = self.get_verified_multi_verses(qs.text)
+			if text:
+				self.open_tooltip(text)
+				
+		qs.Destroy()
+	
 	
 	def get_quick_selected(self):
 		text = self.GetRangeSelected()

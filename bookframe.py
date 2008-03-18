@@ -1,6 +1,7 @@
 import wx
 from wx import html
 from displayframe import DisplayFrame
+from displayframe import in_both
 from tooltip import PermanentTooltip
 import versetree
 
@@ -90,7 +91,6 @@ class BookFrame(DisplayFrame):
 		actions.update({
 			wx.WXK_F8: self.chapter_forward,
 			wx.WXK_F5: self.chapter_back,
-			ord("T"): self.tooltip_quickly,
 		})
 
 		if self.use_quickselector:
@@ -132,17 +132,17 @@ class BookFrame(DisplayFrame):
 		extras = ()
 		if self.is_hidable():
 			extras += (
-				MenuItem("Show this frame", self.toggle_frame, 
-					update_text=set_text),
-				Separator
+				(MenuItem("Show this frame", self.toggle_frame, 
+					update_text=set_text), in_both),
+				(Separator, in_both),
 			)
 		
 		items = extras + super(BookFrame, self).get_menu_items()
 		if self.shows_info:
 			items += (
-			Separator,
-			MenuItem("Information...", self.show_module_information,
-				enabled=self.has_module),
+			(Separator, in_both),
+			(MenuItem("Information...", self.show_module_information,
+				enabled=self.has_module), in_both),
 		)
 
 		return items
@@ -171,20 +171,6 @@ class BookFrame(DisplayFrame):
 			title="Go to reference")
 
 		qs.pseudo_modal(self.go_quickly_finished)
-	
-	def tooltip_quickly(self):
-		qs = QuickSelector(self.get_window(), 
-			title="Open sticky tooltip")
-
-		qs.pseudo_modal(self.tooltip_quickly_finished)
-		
-	def tooltip_quickly_finished(self, qs, ansa):
-		if ansa == wx.OK:
-			text = self.get_verified_multi_verses(qs.text)
-			if text:
-				self.open_tooltip(text)
-				
-		qs.Destroy()
 	
 	def open_tooltip(self, ref):
 		tooltip = PermanentTooltip(guiconfig.mainfrm,
