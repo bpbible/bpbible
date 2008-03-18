@@ -47,6 +47,7 @@ class xrcSearchPanel(wx.Panel):
         self.wholebible = xrc.XRCCTRL(self, "wholebible")
         self.oldtestament = xrc.XRCCTRL(self, "oldtestament")
         self.newtestament = xrc.XRCCTRL(self, "newtestament")
+        self.dummy_radio = xrc.XRCCTRL(self, "dummy_radio")
         self.range_top = xrc.XRCCTRL(self, "range_top")
         self.range_bottom = xrc.XRCCTRL(self, "range_bottom")
         self.label_2 = xrc.XRCCTRL(self, "label_2")

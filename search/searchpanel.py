@@ -229,6 +229,7 @@ class SearchPanel(xrcSearchPanel):
 			self.searchkey.Bind(wx.EVT_KEY_UP, 
 			lambda event:event.KeyCode == wx.WXK_RETURN and (self.on_search(),) 
 				or event.Skip())
+		self.searchkey.Bind(wx.EVT_COMBOBOX, self.on_search)				
 		
 		#SetWindowStyle(self.searchkey.GetWindowStyle() | \
 		#							  wx.TE_PROCESS_ENTER)
@@ -283,6 +284,19 @@ class SearchPanel(xrcSearchPanel):
 					wx.CallAfter(self.clear_list)
 					return
 
+
+				### insert the item into the combo box
+				try:
+					# if it is there already, delete it ready for insertion at the
+					# top
+					idx = self.searchkey.Strings.index(key)
+					self.searchkey.Delete(idx)
+				except ValueError:
+					# index throws ValueError if it isn't there
+					pass
+					
+				self.searchkey.Insert(key, 0)
+		
 				self.show_progress_bar()
 			    
 				if self.wholebible.Value:
@@ -561,7 +575,15 @@ class SearchPanel(xrcSearchPanel):
 		self.update_boxes()
 	
 	def update_boxes(self, radio=None, set_custom=True):
-		for item in [self.oldtestament, self.newtestament, self.wholebible]:
+		# we have a dummy radio box, which gets the selection when no radio
+		# box is selected. This is needed under wxGTK, where it seems you
+		# cannot set it a radio box's value to False
+		# The dummy radio box is hidden, of course.
+		if radio is None:
+			radio = self.dummy_radio
+
+		for item in [self.oldtestament, self.newtestament, self.wholebible,
+				self.dummy_radio]:
 			item.SetValue(item is radio)
 
 		if set_custom:

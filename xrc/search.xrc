@@ -243,6 +243,14 @@
                                             </object>
                                             <border>6</border>
                                           </object>
+                                          <object class="sizeritem">
+                                            <object class="wxRadioButton" name="dummy_radio">
+                                              <label>DUMMY</label>
+                                              <enabled>0</enabled>
+                                              <hidden>1</hidden>
+                                              <style>wxRB_SINGLE</style>
+                                            </object>
+                                          </object>
                                         </object>
                                         <border>6</border>
                                       </object>
