@@ -22,7 +22,7 @@ from backend import filterutils
 from bibleframe import BibleFrame
 from bookframe import CommentaryFrame
 from bookframe import DictionaryFrame
-from displayframe import in_menu
+from displayframe import IN_MENU
 from genbookframe import GenBookFrame
 
 from auilayer import AuiLayer
@@ -565,7 +565,7 @@ class MainFrame(wx.Frame, AuiLayer):
 			if not frame.has_menu: continue
 			#items = frame.get_menu_items()
 			items = [x for (x, where_shown) in frame.get_menu_items() 
-				if where_shown & in_menu]
+				if where_shown & IN_MENU]
 			
 			menu = self.make_menu(items)
 

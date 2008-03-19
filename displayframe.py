@@ -22,9 +22,9 @@ from util.debug import dprint, WARNING, TOOLTIP
 from protocols import protocol_handler
 from events import LINK_CLICKED
 
-in_popup = 1
-in_menu = 2
-in_both = in_popup | in_menu
+IN_POPUP = 1
+IN_MENU = 2
+IN_BOTH = IN_POPUP | IN_MENU
 
 
 class DisplayFrame(HtmlSelectableWindow):
@@ -361,15 +361,15 @@ class DisplayFrame(HtmlSelectableWindow):
 
 	def get_menu_items(self):
 		menu_items = (
-			(self.make_search_text(), in_popup),
-			(self.make_lookup_text(), in_popup),
-			(Separator, in_popup),
+			(self.make_search_text(), IN_POPUP),
+			(self.make_lookup_text(), IN_POPUP),
+			(Separator, IN_POPUP),
 		
-			(MenuItem("Select all", self.select_all), in_both),
+			(MenuItem("Select all", self.select_all), IN_BOTH),
 			(MenuItem("Copy selection (with links)", self.copy_text_with_links,
-				enabled=lambda:bool(self.m_selection)), in_both),
+				enabled=lambda:bool(self.m_selection)), IN_BOTH),
 			(MenuItem("Copy selection (without links)", self.copy_text_no_links,
-				enabled=lambda:bool(self.m_selection)), in_both),
+				enabled=lambda:bool(self.m_selection)), IN_BOTH),
 
 		)
 		return menu_items
@@ -377,13 +377,11 @@ class DisplayFrame(HtmlSelectableWindow):
 	def show_popup(self, event):
 		menu = guiconfig.mainfrm.make_menu(
 			[x for (x, where_shown) in self.get_menu_items() 
-				if where_shown & in_popup],
+				if where_shown & IN_POPUP],
 			is_popup=True)
 		
 		self.popup_position = guiutil.get_mouse_pos(self)#event.Position
 		event_object = event.EventObject
-		print self.popup_position
-		print event_object
 		
 		#if osutils.is_gtk():
 		#	self.popup_position = event_object.ScreenToClient(self.popup_position)

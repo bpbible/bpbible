@@ -1,7 +1,7 @@
 import wx
 from wx import html
 from displayframe import DisplayFrame
-from displayframe import in_both
+from displayframe import IN_BOTH
 from tooltip import PermanentTooltip
 import versetree
 
@@ -133,16 +133,16 @@ class BookFrame(DisplayFrame):
 		if self.is_hidable():
 			extras += (
 				(MenuItem("Show this frame", self.toggle_frame, 
-					update_text=set_text), in_both),
-				(Separator, in_both),
+					update_text=set_text), IN_BOTH),
+				(Separator, IN_BOTH),
 			)
 		
 		items = extras + super(BookFrame, self).get_menu_items()
 		if self.shows_info:
 			items += (
-			(Separator, in_both),
+			(Separator, IN_BOTH),
 			(MenuItem("Information...", self.show_module_information,
-				enabled=self.has_module), in_both),
+				enabled=self.has_module), IN_BOTH),
 		)
 
 		return items

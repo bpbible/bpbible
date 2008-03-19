@@ -4,7 +4,7 @@ import wx
 
 from swlib.pysw import VK, GetVerseStr, GetBookChapter, GetBestRange
 from bookframe import VerseKeyedFrame
-from displayframe import in_both, in_menu, in_popup
+from displayframe import IN_BOTH, IN_MENU, IN_POPUP
 from gui.htmlbase import linkiter, eq
 from util.util import ReplaceUnicode
 from gui import guiutil
@@ -37,22 +37,22 @@ class BibleFrame(VerseKeyedFrame):
 		items = super(BibleFrame, self).get_menu_items()
 		items = (
 			(MenuItem("Harmony", self.show_harmony, accelerator="Ctrl-H"),
-				in_menu),
+				IN_MENU),
 			(MenuItem("Random verse", self.random_verse, accelerator="Ctrl-R"),
-				in_both),
+				IN_BOTH),
 			(MenuItem("Copy verses", guiconfig.mainfrm.on_copy_button, 
-					enabled=self.has_module, accelerator="Ctrl-H"), in_both),
+					enabled=self.has_module, accelerator="Ctrl-H"), IN_BOTH),
 			
 			(MenuItem("Open sticky tooltip", self.open_sticky_tooltip, 
-					enabled=self.has_module), in_popup),
+					enabled=self.has_module), IN_POPUP),
 					
 			(MenuItem("Compare verses", self.compare_verses, 
-					enabled=self.has_module), in_popup),
+					enabled=self.has_module), IN_POPUP),
 					
 			
-			(Separator, in_both),
-			(MenuItem("Search", self.search, accelerator="Ctrl-F"), in_menu),
-			(Separator, in_menu),
+			(Separator, IN_BOTH),
+			(MenuItem("Search", self.search, accelerator="Ctrl-F"), IN_MENU),
+			(Separator, IN_MENU),
 				 
 		) + items
 
