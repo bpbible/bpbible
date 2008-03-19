@@ -448,6 +448,12 @@ class DisplayFrame(HtmlSelectableWindow):
 				text = self.get_clicked_cell_text()
 
 			text = self.strip_text(text)
+
+			# if this is a phrase, put quotes around it.
+			# In the future, it may be wise to set the type to phrase
+			if " " in text:
+				text = '"%s"' % text
+
 			guiconfig.mainfrm.search_panel.search_and_show(text)
 
 
