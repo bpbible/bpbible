@@ -3,12 +3,45 @@
 
 = Introduction =
 
-BPBible provides its own searching platform, allowing cross-verse searches.
+BPBible provides its own searching technology, allowing cross-verse searches. It also allows slower searches, using the SWORD library
 
 = Details =
 
+The different types of searches available are as follows
+
+== Indexed Searches ==
 To run the cross verse search, you will have to index the module beforehand. If you do not index it, you will be restricted to the SWORD searches, which are much slower and do not provide cross-verse searching.
 
+=== Multi Word Searches ===
+Multi Word search will search for words within a certain distance of each other (approximately the proximity). For example, searching for `God love` will find all verses where God is close to love (either before it or after it).
+
+=== Phrase searches ===
+Phrase search will search for the given phrase. For example, searching for `Son of man` will match all verses where the three words Son of man occur in a phrase.
+
+=== Regular Expression Searches ===
+Regular expression searches allow you to apply advanced pattern matching to your searches. For a guide on how to use these regular expressions, look at http://docs.python.org/lib/re-syntax.html
+
+Also, all punctuation has been removed, so searches on punctuation will not work.
+
+Example:
+`\bSon of (Man|God)\b`
+
+=== Combined ===
+Combined search is the default. This allows you to mix multi-word, phrase and regular expression searches.
+
+To use multi-word search just put the words together, like in a multi-word search.
+e.g. `God love`
+
+To search for a phrase, put double quotes around your search.
+e.g. `"Son of man"`
+
+To search for a regular expression, put forward slashes around your search.
+e.g. `/\bSon of (Man|God)\b/`
+
+These can be combined:
+`Jesus /\bSon of (Man|God)\b/ "King of Israel"`
+
+= Example =
 Example search (in ESV):
 Search Type: Combined (means you can combine Phrase, Regular Expression and
 Multiword searches)
