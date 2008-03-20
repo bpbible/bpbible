@@ -5,20 +5,33 @@
 
 BPBible provides its own searching technology, allowing cross-verse searches. It also allows slower searches, using the SWORD library
 
-= Details =
-
-The different types of searches available are as follows
-
-== Indexed Searches ==
+= Indexed Searches =
 To run the cross verse search, you will have to index the module beforehand. If you do not index it, you will be restricted to the SWORD searches, which are much slower and do not provide cross-verse searching.
 
-=== Multi Word Searches ===
+== Wild cards ==
+You can use wild cards in your multi word and phrase searches to make your searches more flexible.
+
+Wild cards allowed:
+ * `+` matches at least one letter
+ * `?` matches any letter
+ * `*` matches zero or more letters
+ * `[letters]` will match one of the letters inside the square brackets
+ * `\d` will match a single digit. This will match `1` but not `one`
+
+Wild card examples:
+ * `foot+` matches any word beginning with foot except foot
+ * `b?ll` wil match any of ball, bill, bell or bull
+ * `bapti*` matches any word starting with bapti, including baptist and baptize 
+ * `b[ai]ll` will match either ball or bill
+ * `12\d` will match 120, 121, ..., 129, but will not match 1234
+
+== Multi Word Searches ==
 Multi Word search will search for words within a certain distance of each other (approximately the proximity). For example, searching for `God love` will find all verses where God is close to love (either before it or after it).
 
-=== Phrase searches ===
+== Phrase searches ==
 Phrase search will search for the given phrase. For example, searching for `Son of man` will match all verses where the three words Son of man occur in a phrase.
 
-=== Regular Expression Searches ===
+== Regular Expression Searches ==
 Regular expression searches allow you to apply advanced pattern matching to your searches. For a guide on how to use these regular expressions, look at http://docs.python.org/lib/re-syntax.html
 
 Also, all punctuation has been removed, so searches on punctuation will not work.
@@ -26,7 +39,7 @@ Also, all punctuation has been removed, so searches on punctuation will not work
 Example:
 `\bSon of (Man|God)\b`
 
-=== Combined ===
+== Combined ==
 Combined search is the default. This allows you to mix multi-word, phrase and regular expression searches.
 
 To use multi-word search just put the words together, like in a multi-word search.
@@ -39,14 +52,27 @@ To search for a regular expression, put forward slashes around your search.
 e.g. `/\bSon of (Man|God)\b/`
 
 These can be combined:
-`Jesus /\bSon of (Man|God)\b/ "King of Israel"`
+`Jesus /\bSon of (Man|God)\b/ "said to them"` will match Jesus near one of the phrases "Son of Man" or "Son of God", as long as it is also near the phrase "said to them"
 
-= Example =
-Example search (in ESV):
-Search Type: Combined (means you can combine Phrase, Regular Expression and
-Multiword searches)
-Search Proximity: 10 (Search terms to be within approximately 10 words of each other)
-Find: "Fruit of the spirit" self-control
+== Cross Verse Searching Example ==
+Indexed search supports matches across verse boundaries. One search term can be in one verse, and another in the next.
 
-Now click search.
-This will give 1 reference, Galatians 5:22-23, as expected
+Fill in the dialog as follows:
+ * Search Type: Combined
+ * Search Proximity: 10 (Search terms to be within approximately 10 words of each other)
+ * Find: `"Fruit of the spirit" self-control`
+
+Now click Search.
+This will give 1 reference, Galatians 5:22-23, as expected.
+
+= Unindexed searches =
+It is possible to search without first indexing the Bible you are trying to search. These searches are known as SWORD searches, and are much slower, and do not search across verse boundaries. The following options are supported:
+
+== Multiword search ==
+Search for the search terms all in the same verse. The search terms will not necessarily be exact word matches, so bapt will match baptist, baptism, etc.
+
+== Phrase search ==
+Search for the phrase given phrase in each verse. The search terms will not necessarily be exact word matches, so bapt will match baptist, baptism, etc.
+
+== Regular Expression Search ==
+Will report matches to the regular expression you give. This is an advanced option.
