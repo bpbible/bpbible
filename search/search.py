@@ -38,19 +38,36 @@ def WildCard(words):
 	## translate it to glob style matching, and strip off $
 	#new_words = fnmatch.translate(words)[:-1]
 	#return new_words, (words != new_words)
-	subbed=False
 	all = "[a-zA-Z0-9]"
-	wildcards = {"*": all+"*", "?":all, "+":all+"+"}
+	wildcards = {
+		# * - 0 or more letters
+		r"\*": all+"*", 
+
+		# ? - 1 letter
+		r"\?": all, 
+
+		# + - 0 or more letters
+		r"\+": all+"+",
+
+		# [] - one of these characters
+		r"\[([^]]+)\]": r"[\1]",
+
+		# \d - a number
+		r"\\d": r"\d",
+	}
+
 	# compile re's
-	wildcards = [[re.compile(re.escape(x[0])), x[1]] 
-				  for x in wildcards.iteritems()]
+	wildcards = [(re.compile(wildcard), replace)
+				  for wildcard, replace in wildcards.iteritems()]
+
 	# if we make a substitution, we will not spellcheck
 	subbed = False
 
-	for a in wildcards:
-		results = a[0].subn(a[1], words)
-		words = results[0]
-		if results[1]: subbed = True
+	for wildcard, replace in wildcards:
+		words, was_subbed = wildcard.subn(replace, words)
+		if was_subbed: 
+			subbed = True
+
 	return words, subbed
 
 def RemoveDuplicates(vlist):
