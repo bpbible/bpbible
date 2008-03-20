@@ -41,7 +41,7 @@ class BibleFrame(VerseKeyedFrame):
 			(MenuItem("Random verse", self.random_verse, accelerator="Ctrl-R"),
 				IN_BOTH),
 			(MenuItem("Copy verses", guiconfig.mainfrm.on_copy_button, 
-					enabled=self.has_module, accelerator="Ctrl-H"), IN_BOTH),
+				enabled=self.has_module, accelerator="Ctrl-Alt-C"), IN_BOTH),
 			
 			(MenuItem("Open sticky tooltip", self.open_sticky_tooltip, 
 					enabled=self.has_module), IN_POPUP),
