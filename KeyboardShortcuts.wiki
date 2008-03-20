@@ -1,0 +1,51 @@
+#summary Keyboard shortcuts that can be used in BPBible.
+#labels Featured,User-Documentation
+
+= Introduction =
+
+Keyboard shortcuts can speed up your use of BPBible. The keyboard shortcuts are presented below. Some will require the given pane to be selected to work on that pane.
+
+
+= Everywhere =
+|| *Shortcut* || *Description*              ||
+|| Ctrl-C     || Copy text with links       ||
+|| Ctrl-H     || Open Harmony               ||
+
+
+----
+
+
+= Bible =
+|| *Shortcut* || *Description*              ||
+|| Ctrl-Alt-C || Open the copy verses dialog||
+|| Ctrl-F     || Open the search panel      ||
+|| Ctrl-R     || Open the Bible at a random verse ||
+|| Ctrl-Shift-C|| Copy the selected verses with the formatting last used for copying verses. ||
+|| F5        || Go to the previous chapter    ||
+|| F8        || Go to the next chapter        ||
+|| F9        || Go to the previous verse      ||
+|| F12       || Go to the next verse          ||
+|| g         || Open the verse quick selector ||
+|| s         || Open a search quick selector; type into here to search the Bible ||
+|| Shift-t   || Open a tooltip quick selector; this will open a sticky tooltip at the given location ||
+
+
+----
+
+= Commentary/Version comparison =
+|| *Shortcut* || *Description*               ||
+|| F5       || Go to the previous chapter    ||
+|| F8       || Go to the next chapter        ||
+|| F9       || Go to the previous verse      ||
+|| F12      || Go to the next verse          ||
+|| g        || Open the verse quick selector ||
+
+
+----
+
+
+= Dictionaries / Other books =
+|| *Shortcut* || *Description*                     ||
+|| F5         || Go to the previous topic          ||
+|| F8         || Go to the next topic              ||
+|| g          || Open the reference quick selector ||
