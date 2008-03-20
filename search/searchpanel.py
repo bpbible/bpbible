@@ -205,7 +205,7 @@ class SearchPanel(xrcSearchPanel):
 		#self.GetContainingSizer().ContainingWindow.Fit()
 		
 		# Do binding
-		self.Bind(wx.EVT_BUTTON, self.on_search, self.search_button)
+		self.Bind(wx.EVT_BUTTON, self.on_search_button, self.search_button)
 		self.Bind(wx.EVT_BUTTON, self.on_close, id=wx.ID_CLOSE)
 		
 		self.gui_search_type.Bind(wx.EVT_CHOICE, self.on_search_type)
@@ -229,8 +229,7 @@ class SearchPanel(xrcSearchPanel):
 			self.searchkey.Bind(wx.EVT_KEY_UP, 
 			lambda event:event.KeyCode == wx.WXK_RETURN and (self.on_search(),) 
 				or event.Skip())
-		self.searchkey.Bind(wx.EVT_COMBOBOX, self.on_search)				
-		
+
 		#SetWindowStyle(self.searchkey.GetWindowStyle() | \
 		#							  wx.TE_PROCESS_ENTER)
 		#self.verselist.InsertColumn(0, "Reference")
@@ -264,75 +263,84 @@ class SearchPanel(xrcSearchPanel):
 
 		self.genindex.Enable(self.version is not None and not toggle)
 
-	def on_search(self, event=None):
+	def on_search_button(self, event=None):
 		#if already searching, this is magically a terminate button
 		#so if clicked, quit
-
 		if(self.searching):
 			self.stop_search()
 
 		else:
-			try:
-				self.stop = False
-				self.searching = True
-				self.search_button.SetLabel("&Stop")
-				
-				key = str(self.searchkey.GetValue())
-				if not key: 
-					self.search_label.Label = "0 verses found"
+			self.on_search()
+	
+	def on_search(self):
+		if self.searching:
+			dprint(WARNING, 
+				"Already searching when on_search called.  Ignoring...")
+			return
 
-					wx.CallAfter(self.clear_list)
+		try:
+			self.stop = False
+			print "Starting search"
+			self.searching = True
+			self.search_button.SetLabel("&Stop")
+			
+			key = str(self.searchkey.GetValue())
+			if not key: 
+				self.search_label.Label = "0 verses found"
+
+				wx.CallAfter(self.clear_list)
+				return
+
+
+			### insert the item into the combo box
+			try:
+				# if it is there already, delete it ready for 
+				# insertion at the top
+				idx = self.searchkey.Strings.index(key)
+				self.searchkey.Delete(idx)
+			except ValueError:
+				# index throws ValueError if it isn't there
+				pass
+				
+			self.searchkey.Insert(key, 0)
+		
+			self.show_progress_bar()
+		    
+			if self.wholebible.Value:
+				scope = None
+
+			else:
+				# If custom range, use it
+				scope = str(self.custom_range.GetValue())
+			
+			excludestr = str(self.exclude.GetValue())
+			exclude = excludestr
+			if not excludestr:
+				exclude = None
+			
+			
+			case_sensitive = self.case_sensitive.GetValue()
+			
+
+			if not needs_index[search_config["search_type"]]:
+			
+				self.on_sword_search(key, scope, exclude, case_sensitive)
+			else:
+				if not self.index or not self.index.version == self.version:
+					wx.MessageBox("You haven't indexed the current "
+					"bible version, so you can't run a search on it "
+					"at the moment.", "No index")
+					
 					return
 
+				self.on_indexed_search(key, scope, exclude, case_sensitive)
 
-				### insert the item into the combo box
-				try:
-					# if it is there already, delete it ready for insertion at the
-					# top
-					idx = self.searchkey.Strings.index(key)
-					self.searchkey.Delete(idx)
-				except ValueError:
-					# index throws ValueError if it isn't there
-					pass
-					
-				self.searchkey.Insert(key, 0)
-		
-				self.show_progress_bar()
-			    
-				if self.wholebible.Value:
-					scope = None
-
-				else:
-					# If custom range, use it
-					scope = str(self.custom_range.GetValue())
-				
-				excludestr = str(self.exclude.GetValue())
-				exclude = excludestr
-				if not excludestr:
-					exclude = None
-				
-				
-				case_sensitive = self.case_sensitive.GetValue()
-				
-
-				if not needs_index[search_config["search_type"]]:
-				
-					self.on_sword_search(key, scope, exclude, case_sensitive)
-				else:
-					if not self.index or not self.index.version == self.version:
-						wx.MessageBox("You haven't indexed the current "
-						"bible version, so you can't run a search on it "
-						"at the moment.", "No index")
-						
-						return
-
-					self.on_indexed_search(key, scope, exclude, case_sensitive)
-
-			finally:
-				self.show_progress_bar(False)
-				self.searching = False
-				self.search_button.SetLabel("&Search")
-				
+		finally:
+			self.show_progress_bar(False)
+			print "Stopping search"
+			self.searching = False
+			self.search_button.SetLabel("&Search")
+			
 	
 	def on_indexed_search(self, key, scope, exclude, case_sensitive):
 		"""This is what does the main bit of searching."""
