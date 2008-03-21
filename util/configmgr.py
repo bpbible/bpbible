@@ -135,7 +135,7 @@ Harmony.last_harmony changed from None to 'Robinson'
 	import doctest
 	doctest.testmod()
 
-config_manager = ConfigManager(write_path="data.conf")
+config_manager = ConfigManager(write_path="data/data.conf")
 
 if __name__ == '__main__':
 	_test()

@@ -175,7 +175,7 @@ class BibleFrame(VerseKeyedFrame):
 		if not vk.Error():
 			data += ('<td align="LEFT" valign=CENTER>'
 					 '<a href="nbible:%(ref)s">'
-					 '<img src="%(graphics)sarrow-left.xpm">'
+					 '<img src="%(graphics)sgo-previous.png">&nbsp;'
 					 '%(ref)s</a></td>'
 			) % d()
 		else:
@@ -189,8 +189,8 @@ class BibleFrame(VerseKeyedFrame):
 		vk.chapter += 1
 		if not vk.Error():
 			data += ('<td align="RIGHT" valign=CENTER>'
-					 '<a href="nbible:%(ref)s">%(ref)s'
-					 '<img src="%(graphics)sarrow-right.xpm">'
+					 '<a href="nbible:%(ref)s">%(ref)s&nbsp;'
+					 '<img src="%(graphics)sgo-next.png">'
 					 '</a></td>'
 			) % d()
 		else:

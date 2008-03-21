@@ -2,7 +2,7 @@ import sys
 import os
 
 
-from util.debug import dprint, MESSAGE, ERROR, DEBUGGING
+from util.debug import dprint, MESSAGE, ERROR, is_debugging
 
 import wx
 from wx import xrc 
@@ -270,7 +270,9 @@ class MainFrame(wx.Frame, AuiLayer):
 		settings["dictionary"] = biblemgr.dictionary.version
 
 		settings["options"] = biblemgr.save_state()
+
 		settings["size"] = self.Size
+
 		#settings["position"] = self.Position
 		
 		settings["maximized"] = self.IsMaximized()
@@ -459,7 +461,7 @@ class MainFrame(wx.Frame, AuiLayer):
 	def move_history(self, direction):
 		history_item = self.history.go(direction)
 		self.set_bible_ref(history_item.ref, source=HISTORY)
-
+	
 	def on_html_ide(self, event):
 		ide = HtmlIde(self)
 		ide.Show()
@@ -571,7 +573,7 @@ class MainFrame(wx.Frame, AuiLayer):
 
 			self.MenuBar.Insert(2+idx, menu, frame.title)
 
-		if not DEBUGGING:
+		if not is_debugging():
 			for idx, (menu, menu_name) in enumerate(self.MenuBar.Menus):
 				if menu_name == "Debug":
 					self.MenuBar.Remove(idx)
@@ -821,7 +823,7 @@ class MainFrame(wx.Frame, AuiLayer):
 
 		info = wx.AboutDialogInfo()
 		info.Name = "BPBible"
-		info.Version = "0.2RC1"
+		info.Version = "0.2"
 		info.Description = text#, 350, wx.ClientDC(self))
 		info.WebSite = ("bpbible.googlecode.com", 
 						"BPBible website")
@@ -832,7 +834,7 @@ class MainFrame(wx.Frame, AuiLayer):
 			"http://tango.freedesktop.org/Tango_Desktop_Project"]
 
 		info.License = wordwrap("BPBible is licensed under the GPL v2. "
-			"For more details, refer to the licence file in the "
+			"For more details, refer to the LICENSE.txt file in the "
 			"application directory", 330, wx.ClientDC(self))
 
 

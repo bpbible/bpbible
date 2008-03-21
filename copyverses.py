@@ -8,6 +8,7 @@ import wx
 from xrc.copyverses_xrc import *#xrcCopyVerseDialog
 from backend.bibleinterface import biblemgr
 from util.util import VerseTemplate, unformat, Template
+from util import util
 
 from wx import stc
 from templatemanager import TemplatePanel, TemplateManager
@@ -279,7 +280,7 @@ class CopyVerseDialog(xrcCopyVerseDialog):
 		biblemgr.bible.templatelist.push(template)
 
 		data = biblemgr.bible.GetReference(str(self.reference.GetValue()))
-		data = data.replace("<br />", "\n")
+		data = util.br2nl(data)
 		data = unformat(data)
 
 		#restore

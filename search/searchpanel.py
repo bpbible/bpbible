@@ -17,6 +17,7 @@ from swlib.pysw import VK, GetBestRange, Searcher, SWMULTI, SWPHRASE, SWREGEX
 from gui import guiutil
 from util.debug import dprint, WARNING
 from gui import virtuallist
+from gui import reference_display_frame
 from events import SEARCH
 from util.configmgr import config_manager
 

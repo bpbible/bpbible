@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from util.debug import dprint, MESSAGE, WARNING, DEBUGGING
+from util.debug import dprint, MESSAGE, WARNING, is_debugging
 dprint(MESSAGE, "Importing wx")
 
 import wx
@@ -66,7 +66,7 @@ def main():
 		except ImportError, e:
 			pass
 			
-	if inspection_imported and DEBUGGING:
+	if inspection_imported and is_debugging():
 		class InspectableApp(MyApp, InspectionMixin):
 			def OnInit(self):
 				return_value = super(InspectableApp, self).OnInit()
@@ -77,7 +77,7 @@ def main():
 
 		app = InspectableApp(0)
 	else:
-		if DEBUGGING:
+		if is_debugging():
 			dprint(WARNING, "Could not load inspection")
 
 		app = MyApp(0)

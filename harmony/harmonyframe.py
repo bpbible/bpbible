@@ -18,7 +18,7 @@ from protocols import protocol_handler
 from util.configmgr import config_manager
 
 harmony_settings = config_manager.add_section("Harmony")
-harmony_settings.add_item("last_harmony", None)
+harmony_settings.add_item("last_harmony", "")
 
 
 def on_harmony_click(frame, href, url):
@@ -35,7 +35,8 @@ class HarmonyFrame(xrcHarmonyFrame):
 		self.setup()
 	
 	def status(self, msg):
-		dprint(MESSAGE, msg)
+		#dprint(MESSAGE, msg)
+		pass
 	
 	def setup(self):
 		self.harmonies = glob.glob(r"harmony/*.harm")
@@ -81,7 +82,7 @@ class HarmonyFrame(xrcHarmonyFrame):
 		self.frame.harmony = self.harmony
 		self.frame.fill_pericope_list()
 		#self.Fit()
-		self.SetSize((640, 480))
+		self.SetSize((800, 600))
 		self.SetMinSize((400, 300))
 		guiconfig.mainfrm.bible_observers += self.on_settings_change
 		#l1=sorted(ParseHarmony.pericopeintlist.items(), lambda x,y: x[0]-y[0])
@@ -231,7 +232,8 @@ class HarmonyPanel(xrcHarmonyPanel):
 		self.set_pericope(self.harmony.top)
 
 	def status(self, msg):
-		dprint(MESSAGE, msg)
+		#dprint(MESSAGE, msg)
+		pass
 
 	def on_pericope_change(self, event):
 		item = event.GetItem()
@@ -340,7 +342,7 @@ class HarmonyPanel(xrcHarmonyPanel):
 			return ""
 
 		parent = peri.parent
-		up = ("<a href='harmony:%s'><img src='%sarrow-up.xpm'></a>%s" % 	
+		up = ("<a href='harmony:%s'><img src='%sgo-up.png'>&nbsp;%s</a>" % 	
 			(parent.id, config.graphics_path, parent.name))
 
 		up = "<td align=CENTER>%s</td>" % up
@@ -351,14 +353,14 @@ class HarmonyPanel(xrcHarmonyPanel):
 		item = peri.previous
 		if item: 
 			text += ("<td align=LEFT><a href='harmony:%s'>"
-				  "<img src='%sarrow-left.xpm'></a>%s</td>" % 
+				  "<img src='%sgo-previous.png'>&nbsp;%s</a></td>" % 
 				  (item.id, config.graphics_path, item.name))
 		
 		text += up
 		item = peri.next
 		if item: 
 			text += ("<td align=RIGHT><a href='harmony:%s'>"
-				  "<img src='%sarrow-right.xpm'></a>%s</td>" % 
+				  "<img src='%sgo-next.png'>&nbsp;%s</a></td>" % 
 				  (item.id, config.graphics_path, item.name))
 		
 		return text + "</tr></table>"

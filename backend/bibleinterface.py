@@ -13,6 +13,7 @@ from backend.book import Bible, Commentary
 from backend.dictionary import Dictionary
 
 from util import util
+from util import osutils
 from util import confparser
 from util.observerlist import ObserverList
 from util.debug import dprint, MESSAGE
@@ -20,7 +21,7 @@ from backend.filter import MarkupInserter
 from backend.genbook import GenBook
 import config
 
-if hasattr(sys, "frozen"):
+if osutils.is_py2exe():
 	# py2exe may get paths wrong
 	os.chdir(os.path.dirname(sys.argv[0]))
 

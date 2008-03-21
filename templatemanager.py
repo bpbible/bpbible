@@ -26,17 +26,40 @@ default_templates = [
 		header="",
 		footer="$range ($description)",
 		body="$versenumber $text "),
-	Template(name="VPL with ref", 
+
+	Template(name="Verse per line with reference", 
 		headings="<h5>$heading</h5>",
-		header="$range ($description)<br>",
+		header="",
 		footer="",
 		body="$reference $text<br>"),
-	Template(name="VPL with short ref", 
+
+	Template(name="Verse per Line with short reference", 
 		headings="<h5>$heading</h5>",
-		header="$range ($description) ",
+		header="",
 		footer="",
-		body="<small>$bookabbrev $chapternumber:$versenumber</small> $text<br>"),		
+		body="<small>$bookabbrev $chapternumber:$versenumber</small> $text<br>"
+	),
+
+	Template(name="Verse with verse number per line", 
+		headings="<h5>$heading</h5>",
+		header="$range<br>",
+		footer="",
+		body="$versenumber $text<br>"),
+		
+	Template(name="Text with range at start", 
+		headings="<h5>$heading</h5>",
+		header="$range<br>",
+		footer="",
+		body="$text "),
+		
+	Template(name="Text with range at end", 
+		headings="<h5>$heading</h5>",
+		header="",
+		footer="$range<br>",
+		body="$versenumber $text<br>"),
+
 ]
+
 
 
 class AutoCompleteList(wx.ListCtrl):#, listmix.ListCtrlAutoWidthMixin):

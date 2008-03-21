@@ -9,6 +9,7 @@ from backend.bibleinterface import biblemgr
 from protocols import protocol_handler
 from util import util
 from util.configmgr import config_manager
+from displayframe import IN_POPUP
 
 
 verse_comparison_settings = config_manager.add_section("Verse Comparison")
@@ -28,7 +29,7 @@ protocol_handler.register_hover(BIBLE_VERSION_PROTOCOL, util.noop)
 
 
 class VerseCompareFrame(LinkedFrame):
-	title = "Verse Comparison"
+	title = "Version Comparison"
 	has_menu = False
 	shows_info = False
 
@@ -74,7 +75,8 @@ class VerseCompareFrame(LinkedFrame):
 	def get_menu_items(self):
 		actions = super(VerseCompareFrame, self).get_menu_items()
 		actions = (
-			MenuItem("Set versions to compare", self.set_versions),
+			(MenuItem("Set versions to compare", self.set_versions),
+			IN_POPUP),
 		) + actions
 		return actions
 

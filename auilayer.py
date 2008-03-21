@@ -77,7 +77,7 @@ class AuiLayer(object):
 			[self.commentarytext.get_window(), "Commentary",],
 			[self.dictionarytext.get_window(), "Dictionary"],
 			[self.genbooktext.get_window(), "Other Books"],
-			[self.verse_compare.get_window(), "Verse Comparison"],			
+			[self.verse_compare.get_window(), "Version Comparison"],			
 			[self.search_panel, "Search"],
 			[self.history_pane, "History"],
 		]
@@ -290,7 +290,7 @@ class AuiLayer(object):
 				["Float"],
 				["Dockable", False],
 			],
-			[self.verse_compare.get_window(), "Verse Comparison", ["Left"],			
+			[self.verse_compare.get_window(), "Version Comparison", ["Left"],			
 				["Hide"]
 			],
 			[self.history_pane, "History", ["Left"],
