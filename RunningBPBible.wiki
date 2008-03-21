@@ -1,0 +1,31 @@
+#summary How to run BPBible
+#labels Featured,Phase-Deploy
+
+= Introduction =
+
+There are two ways to run BPBible:
+ # Run binaries under Windows
+ # Run from source
+
+Under Windows, you probably want to run the binaries. Under Linux, you need to run from source. Once you have run it, you may want to [InstallingBooks install books].
+
+= Running binaries under Windows =
+
+To run the binaries under Windows, download the BPBible self-extracting executable. Open it, and extract it to the path of your choice. Now run bpbible.exe in the application directory.
+
+= Running from source =
+
+== Dependencies ==
+To build from source, you will need to have the following:
+ # wxPython 2.8 (preferably 2.8.7) 
+ # Python 2.5 (though older versions may work)
+ # SWORD 1.5.10 (though older versions will probably work). Note that the latest SVN version of SWORD may crash on invalid verse ranges.
+ # Windows or Linux
+
+BPBible has not been tested under Mac, so it is unlikely to work. Any help with getting it working under Mac would be appreciated.
+
+== Building the SWIG bindings ==
+If you are not using the SVN version of SWORD, download the SWIG bindings (`sword-swig-r2147.zip`). These contain a slightly modified version of the bindings from the SVN version of SWORD, which are needed. This should be compatible with SWORD 1.5.10 and earlier. Instructions on how to build are supplied in the README file.
+
+== Running BPBible ==
+Once the SWIG bindings are installed, unzip the BPBible source. From there, run `python bpbible.py`. You do not need to run setup.py, which is used for building the Windows binaries.
