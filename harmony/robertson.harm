@@ -1,6 +1,6 @@
 Settings
-/description: <center><b>Harmony of the Gosepls</b><br /> by <br /> A. T. Robertson</center>
-/name: Robertson's Harmony of the Gosepls
+/description: <center><b>Harmony of the Gospels</b><br /> by <br /> A. T. Robertson</center>
+/name: Robertson's Harmony of the Gospels
 /pattern: Part | PART ([VIX]+):
 /pattern: Subpart | ([A-Z])\. 
 /pattern: Pericope | ([0-9]+):
@@ -397,7 +397,7 @@ PART IX: THE LATER JUDEAN MINISTRY   |         |         |         |         |
      question as to eternal life,    |         |         |         |         |
      giving the parable of the Good  |         |         |         |         |
      Samaritan                       |         |         | 10:25-37|         |
-104: Jesus the gues of Martha and    |         |         |         |         |
+104: Jesus the guest of Martha and   |         |         |         |         |
      Mary                            |         |         | 10:38-42|         |
 105: Jesus again gives a model of    |         |         |         |         |
      prayer (Cf. 54) and encourages  |         |         |         |         |
