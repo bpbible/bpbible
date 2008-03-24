@@ -363,8 +363,12 @@ class PermanentTooltip(TooltipBaseMixin, pclass):
 		style=wx.DEFAULT_FRAME_STYLE & ~(wx.MINIMIZE_BOX | wx.MAXIMIZE_BOX), 
 			is_biblical=False):
 
-		super(PermanentTooltip, self).__init__(parent, title="Sticky Tooltip", 
-			style=style|wx.STAY_ON_TOP, is_biblical=is_biblical) 
+		super(PermanentTooltip, self).__init__(
+			parent, 
+			title="Sticky Tooltip", 
+			style=style|wx.STAY_ON_TOP|wx.MINIMIZE_BOX , 
+			is_biblical=is_biblical
+		) 
 
 		self.style = style
 		self.stayontop = True
