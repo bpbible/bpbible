@@ -14,6 +14,7 @@ from wx import stc
 from templatemanager import TemplatePanel, TemplateManager
 import  wx.lib.mixins.listctrl  as  listmix
 import guiconfig
+import config
 from gui import guiutil
 from util.configmgr import config_manager
 
@@ -280,6 +281,9 @@ class CopyVerseDialog(xrcCopyVerseDialog):
 		biblemgr.bible.templatelist.push(template)
 
 		data = biblemgr.bible.GetReference(str(self.reference.GetValue()))
+		if data is None:
+			data = config.MODULE_MISSING_STRING
+
 		data = util.br2nl(data)
 		data = unformat(data)
 

@@ -495,6 +495,9 @@ class TemplateManager(xrcTemplateManager):
 		biblemgr.bible.templatelist.push(self.movable_list.template)
 		data = biblemgr.bible.GetReference(PREVIEW_VERSES)
 		biblemgr.bible.templatelist.pop()
+
+		if data is None:
+			data = config.MODULE_MISSING_STRING
 		
 		self.gui_preview.SetPage(data)
 		

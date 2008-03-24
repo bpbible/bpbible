@@ -68,7 +68,7 @@ class ConfigManager(object):
 		#config_parser.readfp(
 		for section_name, section in self.sections.items():
 			config_parser.add_section(section_name)
-			for item, value in section.items.items():
+			for item in section.items:
 				type_process = {
 					str: str,
 					bool: str,
@@ -77,6 +77,11 @@ class ConfigManager(object):
 					"pickle": pickle.dumps
 				}[section.item_types[item]]
 				
+				# look it up now. If this is a lazily evaluated item, find its
+				# value before we close
+				# TODO: is this what we really want to do?
+				value = section[item]
+
 				config_parser.set(section_name, item, type_process(value))
 
 		config_parser.write(open(self["Internal"]["path"], "w"))

@@ -285,7 +285,11 @@ class MainFrame(wx.Frame, AuiLayer):
 			config_manager.save()
 		
 		except (OSError, EnvironmentError), e:
+			wx.MessageBox("OSError on saving settings\n%s" % str(e))
+
+		except Exception, e:
 			wx.MessageBox("Error on saving settings\n%s" % str(e))
+		
 		
 			
 
