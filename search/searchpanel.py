@@ -44,6 +44,13 @@ needs_index  = (1, 		  1,	     1,      1,     0,       0,        0)
 
 needs_index = dict(zip(search_items, needs_index))
 
+sword_replacement_search = {
+	COMBINED: SWMULTI,
+	MULTIWORD: SWMULTI,
+	PHRASE: SWPHRASE,
+	REGEX: SWREGEX
+}
+
 		
 class SearchPanel(xrcSearchPanel):
 	def __init__(self, parent):#, search_type=SWMULTI):
@@ -68,6 +75,7 @@ class SearchPanel(xrcSearchPanel):
 		# This flag is false only before the end of the first call to
 		# set_version
 		self.has_started = False
+		self.search_on_show = False
 	
 	def on_create(self, event=None):
 		self.Unbind(wx.EVT_WINDOW_CREATE)
@@ -85,10 +93,13 @@ class SearchPanel(xrcSearchPanel):
 	def search_and_show(self, key=""):
 		self.searchkey.SetValue(key)
 
-		self.show()
-		wx.CallAfter(self.on_search)
+		# If we call on_search from here, then it may search before asking
+		# the user about building the search index, so instead we call it
+		# from on_show after checking the index.
+		self.show(search_on_show=True)
 	
-	def show(self):
+	def show(self, search_on_show=False):
+		self.search_on_show = search_on_show
 		guiconfig.mainfrm.show_panel("Search")
 	
 	def on_show(self, toggle):
@@ -119,6 +130,10 @@ class SearchPanel(xrcSearchPanel):
 		
 		self.check_for_index()
 		self.set_title()
+
+		if self.search_on_show:
+			self.search_on_show = False
+			wx.CallAfter(self.on_search)
 	
 	def set_version(self, version):
 		self.version = version
@@ -134,9 +149,9 @@ class SearchPanel(xrcSearchPanel):
 		wx.CallAfter(self.clear_list)
 
 		self.set_title()
-		self.has_started = True
 	
 	def check_for_index(self):
+		self.set_gui_search_type(search_config["search_type"])
 		if not needs_index[search_config["search_type"]]:
 			#self.genindex.SetLabel("Unindex")
 			self.search_button.Enable(biblemgr.bible.version is not None)
@@ -160,7 +175,7 @@ class SearchPanel(xrcSearchPanel):
 			self.search_button.Enable()
 			
 		else:
-			self.search_button.Disable()
+			self.search_button.Enable()
 			
 			self.index = None
 		
@@ -171,12 +186,13 @@ class SearchPanel(xrcSearchPanel):
 			self.genindex.SetLabel("Index")
 
 			msg = "Search index does not exist for module %s. " \
+				"Indexing will make search much faster. " \
 				"Create Index?" % self.version 
 			create = wx.MessageBox(msg, "Create Index?", wx.YES_NO)
 			if create == wx.YES:
 				self.index = self.build_index(self.version)
-				
-			#do indexing here
+			else:
+				self.set_gui_search_type(self.search_type)
 
 	def on_select(self, event):
 		item_text = self.verselist.GetItemText(event.m_itemIndex)
@@ -186,9 +202,7 @@ class SearchPanel(xrcSearchPanel):
 			self.on_close()
 			
 	def _post_init(self):
-		for idx, item in enumerate(search_items):
-			if item == search_config["search_type"]:
-				self.gui_search_type.SetSelection(idx)
+		self.set_gui_search_type(search_config["search_type"])
 
 		self.search_button.SetLabel("&Search")
 	
@@ -247,6 +261,12 @@ class SearchPanel(xrcSearchPanel):
 		number = self.range_bottom.GetCount()
 		self.range_bottom.SetSelection(number-1)
 		self.update_boxes(self.wholebible)
+
+	def set_gui_search_type(self, search_type):
+		"""Sets the search type to be displayed in the GUI."""
+		for index, item in enumerate(search_items):
+			if item == search_type:
+				self.gui_search_type.SetSelection(index)
 		
 
 			
@@ -321,20 +341,8 @@ class SearchPanel(xrcSearchPanel):
 			
 			
 			case_sensitive = self.case_sensitive.GetValue()
-			
 
-			if not needs_index[search_config["search_type"]]:
-			
-				self.on_sword_search(key, scope, exclude, case_sensitive)
-			else:
-				if not self.index or not self.index.version == self.version:
-					wx.MessageBox("You haven't indexed the current "
-					"bible version, so you can't run a search on it "
-					"at the moment.", "No index")
-					
-					return
-
-				self.on_indexed_search(key, scope, exclude, case_sensitive)
+			self.perform_search(key, scope, exclude, case_sensitive)
 
 		finally:
 			self.show_progress_bar(False)
@@ -342,9 +350,16 @@ class SearchPanel(xrcSearchPanel):
 			self.searching = False
 			self.search_button.SetLabel("&Search")
 			
+
+	def perform_search(self, key, scope, exclude, case_sensitive):
+		if needs_index[self.search_type]:
+			self.on_indexed_search(key, scope, exclude, case_sensitive)
+		else:
+			self.on_sword_search(key, scope, exclude, case_sensitive)
 	
 	def on_indexed_search(self, key, scope, exclude, case_sensitive):
 		"""This is what does the main bit of searching."""
+		assert self._has_index()
 		def index_callback(value):#, userdata):
 			#dprint(MESSAGE, "callback status", *value)
 			self.progressbar.SetValue(value[1])
@@ -646,8 +661,26 @@ class SearchPanel(xrcSearchPanel):
 			self.show_progress_bar(False)
 			p.Hide()
 			p.Destroy()
-		
-		#wx.MessageBox("Not implemented")
+
+	def _has_index(self):
+		"""Does the current module have an index?
+
+		Note that this assumes that the index has been loaded correctly.
+		"""
+		return self.index and self.index.version == self.version
+
+	@property
+	def search_type(self):
+		"""Gets the type of search to be used.
+
+		This will be a Sword replacement if an indexed search is requested
+		and the module doesn't have an index.
+		Otherwise, it will be the global search type.
+		"""
+		search_type = search_config["search_type"]
+		if needs_index[search_type] and not self._has_index():
+			search_type = sword_replacement_search[search_type]
+		return search_type
 
 class SearchList(virtuallist.VirtualListCtrlXRC):
 	def __init__(self):
