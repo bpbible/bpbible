@@ -149,6 +149,7 @@ class SearchPanel(xrcSearchPanel):
 		wx.CallAfter(self.clear_list)
 
 		self.set_title()
+		self.has_started = True
 	
 	def check_for_index(self):
 		self.set_gui_search_type(search_config["search_type"])
