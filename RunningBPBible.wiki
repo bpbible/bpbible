@@ -2,7 +2,6 @@
 #labels Featured,Phase-Deploy
 
 = Introduction =
-
 There are two ways to run BPBible:
  # Run binaries under Windows
  # Run from source
@@ -10,11 +9,9 @@ There are two ways to run BPBible:
 Under Windows, you probably want to run the binaries. Under Linux, you need to run from source. Once you have run it, you may want to [InstallingBooks install books].
 
 = Running binaries under Windows =
-
-To run the binaries under Windows, download the BPBible self-extracting executable. Open it, and extract it to the path of your choice. Now run bpbible.exe in the application directory.
+To run the binaries under Windows, download the BPBible self-extracting executable (`bpbible-x.x.exe`), or the installer (`bpbible-x.x-setup.exe`). For the self-extracting executable, open it and extract it to the path of your choice. For the installer, run it and follow the prompts. Now run bpbible.exe in the application directory, or, if you used the installer, you can use the Start Menu, Desktop and Quick Launch shortcuts, if you chose to create them.
 
 = Running from source =
-
 == Dependencies ==
 To build from source, you will need to have the following:
  # wxPython 2.8 (preferably 2.8.7) 
