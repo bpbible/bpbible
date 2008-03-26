@@ -8,4 +8,4 @@ BPBible will read books as distributed by the SWORD project. This page details h
 The main download point for books is at http://www.crosswire.org/sword/modules/index.jsp.
 When you download books, make sure you download the raw zip version. 
 
-Using [http://7-zip.org 7-Zip], [http://winzip.com WinZip], or a similar program, unzip these zip files into a directory of your choice. Now go “{{{File > Set Sword Paths...}}}” and click the Add Item button (it has a green plus sign on it). Navigate to the directory you unzipped to, and click OK. It should now load the books you have downloaded.
+Using [http://7-zip.org 7-Zip], [http://winzip.com WinZip], or a similar program, unzip these zip files into a directory of your choice. Now go "`File > Set Sword Paths...`" and click the Add Item button (it has a green plus sign on it). Navigate to the directory you unzipped to, and click OK. It should now load the books you have downloaded.
