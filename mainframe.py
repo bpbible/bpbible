@@ -35,7 +35,7 @@ import versetree
 from copyverses import CopyVerseDialog
 import config
 import guiconfig
-from moduleinfo import ModuleInfo
+from module_tree import ModuleTree
 from pathmanager import PathManager
 from gui import htmlbase
 from gui import guiutil
@@ -325,9 +325,9 @@ class MainFrame(wx.Frame, AuiLayer):
 		wx.CallAfter(lambda:self.set_search_version(biblemgr.bible.version))
 
 	def create_aui_items(self):
-		self.version_tree = wx.TreeCtrl(self, 
-			style = wx.TR_HAS_BUTTONS|wx.TR_LINES_AT_ROOT|wx.TR_HIDE_ROOT
-			|wx.SUNKEN_BORDER)
+		self.version_tree = ModuleTree(self)
+		self.version_tree.on_module_choice += \
+			lambda module, book: book.SetModule(module)
 
 		self.genbooktext = GenBookFrame(self, biblemgr.genbook)
 
@@ -393,17 +393,11 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.Bind(wx.EVT_MENU, id = wx.ID_EXIT, handler = self.ExitClick)
 		self.Bind(wx.EVT_MENU, id = wx.ID_ABOUT, handler = self.AboutClick)
 		self.dictionary_list.item_changed += self.DictionaryListSelected
-		self.version_tree.Bind(wx.EVT_TREE_SEL_CHANGED, self.on_version_tree)
-		self.version_tree.Bind(wx.EVT_TREE_ITEM_GETTOOLTIP,
-				self.version_tree_tooltip)
-		self.version_tree.Bind(wx.EVT_TREE_ITEM_MENU, self.version_tree_menu)
-		
-
 
 		self.bibleref.Bind(wx.EVT_TEXT_ENTER, self.BibleRefEnter)
 		#self.BibleRef.Bind(wx.EVT_COMBOBOX, self.BibleRefEnter)
 
-		self.Bind(wx.EVT_TOOL,	self.on_copy_button, 
+		self.Bind(wx.EVT_TOOL, self.on_copy_button, 
 			self.tool_copy_verses)
 			
 		
@@ -477,7 +471,7 @@ class MainFrame(wx.Frame, AuiLayer):
 		PathManager(self).ShowModal()
 
 		# as this will have refreshed the manager, refresh everything
-		self.fill_version_tree()
+		self.version_tree.recreate()
 		self.fill_options_menu()
 
 		self.refresh_all_pages()
@@ -493,36 +487,6 @@ class MainFrame(wx.Frame, AuiLayer):
 		htmlbase.zoom(direction)
 
 		self.refresh_all_pages()
-
-	
-		
-	def version_tree_menu(self, event):
-		def make_event(module):	
-			def show_information(event):
-				ModuleInfo(self, module).ShowModal()
-
-			return show_information
-	
-		item = event.Item
-		data = self.version_tree.GetPyData(item)
-		if not data: 
-			return
-
-		menu = wx.Menu()
-		item = menu.Append(wx.ID_ANY, "Show information for module " +
-		data.Name())
-		menu.Bind(wx.EVT_MENU, make_event(data), item)
-		self.version_tree.PopupMenu(menu, event.Point)
-
-	
-
-	
-	def version_tree_tooltip(self, event):
-		item = event.Item
-		data = self.version_tree.GetPyData(item)
-		if data:
-			event.SetToolTip(data.Description())
-			
 
 	def get_menu(self, label):
 		for menu, menu_name in self.MenuBar.Menus:
@@ -758,29 +722,7 @@ class MainFrame(wx.Frame, AuiLayer):
 		
 		self.set_bible_ref(settings["bibleref"], LOADING_SETTINGS)
 		self.DictionaryListSelected()
-		self.fill_version_tree()
-
-	def fill_version_tree(self):
-		self.version_tree.DeleteAllItems()
-
-		# SET TREE UP
-		root = self.version_tree.AddRoot("Root") #root not displayed
-		self.root = root
-
-		bible = self.version_tree.AppendItem(root, "Bibles")
-		commentary = self.version_tree.AppendItem(root, "Commentaries")
-		dictionary = self.version_tree.AppendItem(root, "Dictionaries")
-		gen = self.version_tree.AppendItem(root, "Other books")
-
-		for item, tree_item in [(biblemgr.bible, bible),
-					 (biblemgr.commentary, commentary),
-					 (biblemgr.dictionary, dictionary),
-					 (biblemgr.genbook, gen),]:
-
-			strings = item.GetModules()
-			for module in strings: 
-				it1 = self.version_tree.AppendItem(tree_item, module.Name())
-				self.version_tree.SetPyData(it1, module) 
+		self.version_tree.recreate()
 
 	def MainFrameClose(self, event):
 		# unbind activation events so that we don't get these called when the
@@ -859,29 +801,6 @@ class MainFrame(wx.Frame, AuiLayer):
 		ref = str(ReplaceUnicode(self.dictionary_list.GetValue()))
 		self.UpdateDictionaryUI(ref)
 		
-
-	def on_version_tree(self, event):
-		me = event.GetItem()
-		mytext = str(self.version_tree.GetItemText(me))
-		parent = self.version_tree.GetItemParent(me)
-
-		if(parent == self.root):
-			return
-
-		parenttext = self.version_tree.GetItemText(parent)
-		if(parenttext == "Bibles"):
-			biblemgr.bible.SetModule(mytext)
-		
-		if(parenttext == "Commentaries"):
-			biblemgr.commentary.SetModule(mytext)
-
-		if(parenttext == "Other books"):
-			biblemgr.genbook.SetModule(mytext)
-				
-		if(parenttext =="Dictionaries"):
-			biblemgr.dictionary.SetModule(mytext)
-
-
 	def DictionaryListSelected(self, event=None):
 		self.UpdateDictionaryUI()
 

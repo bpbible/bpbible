@@ -2,10 +2,11 @@ import wx
 from gui import guiutil
 
 class TreeItem(object):
-	def __init__(self, text, data=None):
+	def __init__(self, text, data=None, filterable=True):
 		self._children = []
 		self._text = text
 		self.data = data
+		self.filterable = filterable
 		#if self.parent:
 		#	self.parent.children.append(self)
 	
@@ -20,9 +21,9 @@ class TreeItem(object):
 	def has_children(self):
 		return len(self.children) > 0
 	
-	def add_child(self, text, item=None, data=None):
+	def add_child(self, text, item=None, data=None, filterable=True):
 		if item is None:
-			item = TreeItem(text, data)
+			item = TreeItem(text, data, filterable)
 
 		self._children.append(item)
 		return item
@@ -54,11 +55,19 @@ class FilterableTreeCtrl(ExpansionState, wx.TreeCtrl):
 	pass
 
 class FilterableTree(wx.PyPanel):
+	blank_text = "Search"
 	def __init__(self, parent, model):
 		self.model = model
 		super(FilterableTree, self).__init__(parent)
-		self.tree = FilterableTreeCtrl(self)
+
+		self.tree = FilterableTreeCtrl(self, 
+			style=wx.TR_HAS_BUTTONS   |
+				  wx.TR_LINES_AT_ROOT |
+				  wx.TR_HIDE_ROOT  
+		)
+		
 		self.search = wx.SearchCtrl(self, style=wx.TE_PROCESS_ENTER)
+		self.search.SetDescriptiveText(self.blank_text)
 		self.search.ShowCancelButton(True)
 		self.search.Bind(wx.EVT_TEXT, lambda evt:self.filter(self.search.Value))
 		self.search.Bind(wx.EVT_SEARCHCTRL_CANCEL_BTN,
@@ -66,20 +75,21 @@ class FilterableTree(wx.PyPanel):
 
 		sizer = wx.BoxSizer(wx.VERTICAL)
 
-		sizer.Add(self.tree, 1, wx.GROW)
 		sizer.Add(self.search, 0, wx.GROW)
+		sizer.Add(self.tree, 1, wx.GROW)
+		
 		self.SetSizer(sizer)
 		self.expansion_state = None
-		
 	
 	def create(self, model=None):
 		d = guiutil.FreezeUI(self)
-		self.tree.Freeze()
 		if model is None:
 			model = self.model
 
 		self.tree.DeleteAllItems()
 		root = self.tree.AddRoot(model.text)
+		self.tree.SetPyData(root, model)
+		
 		
 		def add(parent, model_item):
 			child = self.tree.AppendItem(parent, model_item.text)
@@ -91,7 +101,6 @@ class FilterableTree(wx.PyPanel):
 		for item in model.children:
 			add(root, item)
 
-		self.tree.Thaw()
 	
 	def filter(self, text):
 		def get_filtered_items(model_item):
@@ -101,7 +110,11 @@ class FilterableTree(wx.PyPanel):
 				if ansa:
 					return_item.add_child(text=None, item=ansa)
 
-			if text not in model_item.text and not return_item.children:
+			# if we are not filterable, or the text is not in our text, and we
+			# haven't any children matching, return None
+			if (not model_item.filterable 
+				or text.upper() not in model_item.text.upper()) \
+				and not return_item.children:
 				return None
 
 			return return_item
@@ -111,13 +124,31 @@ class FilterableTree(wx.PyPanel):
 			root = self.model.null_item()
 
 		self.create(root)
-		self.tree.ExpandAll()
+		self.ExpandAll()
+	
+	def ExpandAll(self):
+		root = self.tree.GetRootItem()
+		assert root
+		item, cookie = self.tree.GetFirstChild(root)
+
+		first_child = None
+		
+		while item:
+			if first_child is None:
+				first_child = item
+			
+			self.tree.ExpandAllChildren(item)
+			item, cookie = self.tree.GetNextChild(root, cookie)			
+			
+		if first_child:
+			self.tree.ScrollTo(first_child)
+
 	
 	def clear_filter(self, evt=None):
-		expansion_state = self.tree.GetExpansionState()
+		#expansion_state = self.tree.GetExpansionState()
 		self.search.SetValue("")
 		self.create()
-		self.tree.SetExpansionState(expansion_state)
+		#self.tree.SetExpansionState(expansion_state)
 		
 	def show_item(self, item_data):
 		if self.search.Value:
