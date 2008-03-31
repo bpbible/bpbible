@@ -3,6 +3,7 @@ import wx
 import sys
 from swlib.pysw import *
 from gui.treecombo import LazyTreeCombo
+from util import util
 		
 class GenBookTree(LazyTreeCombo):
 	def __init__(self, parent, book, frame):
@@ -10,7 +11,7 @@ class GenBookTree(LazyTreeCombo):
 		self.root = self.tree.GetRootItem()
 		self.tree.Bind(wx.EVT_TREE_ITEM_EXPANDING, self.Expand)
 		#self.Bind(wx.EVT_COMBOBOX, self.OnChoice)
-		self.Bind(wx.EVT_TEXT, self.OnChoice)
+		#self.Bind(wx.EVT_TEXT, self.OnChoice)
 		
 		self.frame = frame
 		wx.CallAfter(self.SetBook, book)
@@ -53,7 +54,11 @@ class GenBookTree(LazyTreeCombo):
 		if not isinstance(data, TK):
 			return "<empty>"
 		
-		return self.get_data(item).breadcrumb()
+		#TODO: some unicoding of this
+		# Institutes uses unicode in key strings
+		return util.ReplaceUnicode(
+			self.get_data(item).breadcrumb(book=self.book)
+		)
 
 
 

@@ -10,7 +10,7 @@ class VerseTree(LazyTreeCombo):
 		self.currentverse = None
 		
 		self.tree.Bind(wx.EVT_TREE_ITEM_EXPANDING, self.Expand)
-		self.Bind(wx.EVT_TEXT, self.OnChoice)
+		#self.Bind(wx.EVT_TEXT, self.OnChoice)
 		
 		wx.CallAfter(self.setup)
 

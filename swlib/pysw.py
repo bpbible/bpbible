@@ -739,7 +739,7 @@ class TK(SW.TreeKeyIdx):
 				raise AttributeError,attr
 
 
-	def breadcrumb(self, include_home=None):
+	def breadcrumb(self, include_home=None, book=None):
 		breadcrumb = [self.getLocalName()]
 		bref = TK(self)
 		while bref.parent():
@@ -749,6 +749,10 @@ class TK(SW.TreeKeyIdx):
 			breadcrumb[-1] = include_home
 		else:
 			del breadcrumb[-1]
+
+		if book:
+			# process the key to process any utf-8
+			breadcrumb = [book.mod.RenderText(t) for t in breadcrumb]
 
 		return " > ".join(breadcrumb[::-1])
 	

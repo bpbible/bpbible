@@ -165,7 +165,20 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
 		text = self.combo.format_combo(value)
 		self.text = text
 		
-		self.GetCombo().SetValue(text)
+		combo = self.GetCombo()
+		combo.SetValueWithEvent(text, True)
+		
+		# it seems that readonly combo controls do not send an event. So we
+		# send it ourselves.
+		if combo.readonly:
+			event = wx.CommandEvent(
+				wx.wxEVT_COMMAND_TEXT_UPDATED, 
+				combo.GetId()
+			)
+
+			event.SetString(text)
+			combo.GetEventHandler().ProcessEvent(event)
+		
 		
 	def get_value(self):
 		# if we are not readonly, we may have to do some normalizing of user
@@ -291,8 +304,11 @@ class LazyTreeCombo(TreeCombo):
 		if not item: return
 
 
-		event = wx.CommandEvent(wx.wxEVT_COMMAND_COMBOBOX_SELECTED, 
-								self.GetId())
+		event = wx.CommandEvent(
+			wx.wxEVT_COMMAND_COMBOBOX_SELECTED, 
+			self.GetId()
+		)
+
 		event.SetString(self.tree.GetItemText(item))
 		self.GetEventHandler().ProcessEvent(event)
 

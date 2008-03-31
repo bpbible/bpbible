@@ -32,7 +32,10 @@ class GenBookFrame(BookFrame):
 		if self.book.mod:
 			bref = TK(ref)
 
-			breadcrumb = bref.breadcrumb(include_home=self.book.version)
+			breadcrumb = bref.breadcrumb(
+				include_home=self.book.version,
+				book=self.book
+			)
 			data = "<b>%s</b><br />" % breadcrumb.replace(">", "&gt;")
 		
 			text = self.book.GetReferenceFromKey(ref, context = context)
@@ -70,7 +73,9 @@ class GenBookFrame(BookFrame):
 
 
 	def on_genbook_change(self, event):
-		self.SetReference(self.genbooktree.tree.GetPyData(self.genbooktree.popup.value)[0])
+		self.SetReference(
+			self.genbooktree.tree.GetPyData(self.genbooktree.popup.value)[0]
+		)
 
 	def genbook_version_changed(self, newversion):
 		if newversion:
