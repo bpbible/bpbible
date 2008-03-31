@@ -488,7 +488,7 @@ class SearchPanel(xrcSearchPanel):
 		self.insert_results()
 
 	def clear_list(self):
-		self.search_button.SetLabel("Search")
+		self.search_button.SetLabel("&Search")
 		self.show_progress_bar(False)
 
 		#Clear list
@@ -509,7 +509,7 @@ class SearchPanel(xrcSearchPanel):
 	@guiutil.frozen
 	def insert_results(self):
 		text = self.search_results
-		self.search_button.SetLabel("Search")
+		self.search_button.SetLabel("&Search")
 
 		#make this plain
 		#template = VerseTemplate(body = "$text ")

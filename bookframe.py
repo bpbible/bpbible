@@ -160,8 +160,9 @@ class BookFrame(DisplayFrame):
 		p = m.get_pane_for_frame(self)
 		version = self.book.version
 		ref = self.reference
+		
 		text = "%s - %s (%s)" % (p.name, ref, version)
-		m.set_pane_title(p.name, text)		
+		m.set_pane_title(p.name, text)
 	
 	def get_window(self):
 		return self

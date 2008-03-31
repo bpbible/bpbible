@@ -412,7 +412,10 @@ class BookIndex(object):
 
 		return mylist
 
-def printx(x): print x
+def printx(x): 
+	print x
+	return True
+
 class Index(object):
 	def __init__(self, version, progress=printx, booktype=BookIndex):
 		self.version=version
@@ -442,7 +445,7 @@ class Index(object):
 		
 		
 		try:
-			biblemgr.bible.SetModule(oldmod, notify=False)
+			biblemgr.bible.SetModule(mod, notify=False)
 			mod = biblemgr.bible.mod
 
 			filter = biblemgr.markup_inserter.get_filter(mod)

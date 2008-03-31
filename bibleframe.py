@@ -377,10 +377,10 @@ class BibleFrame(VerseKeyedFrame):
 		return GetBestRange(text)
 
 	
-	def CellClicked(self, cell, x, y, event):
-		#if(self.select): return
-		if(event.ControlDown()):
-			print cell.this, self.FindVerse(cell)
+	#def CellClicked(self, cell, x, y, event):
+	#	#if(self.select): return
+	#	if(event.ControlDown()):
+	#		print cell.this, self.FindVerse(cell)
 
-		return super(BibleFrame, self).CellClicked(cell, x, y, event)
+	#	return super(BibleFrame, self).CellClicked(cell, x, y, event)
 

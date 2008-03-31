@@ -47,7 +47,7 @@ class TextPanel(wx.PyPanel):
 		w = dc.GetTextExtent("a")[0]
 		self.w = w
 		self.Caret = wx.Caret(self, (w,3))
-		#self.Caret.Show()
+		self.Caret.Show()
 	
 	def end_parent_modal(self, event):
 		self.Parent.EndModal(wx.CANCEL)
