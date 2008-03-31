@@ -40,6 +40,8 @@ class Book(object):
 		#	return False 
 		if modname is None:
 			self.mod = None
+		elif isinstance(modname, SW.Module):
+			self.mod = modname
 		else:
 			oldmod = self.mod
 			
@@ -290,7 +292,7 @@ class Book(object):
 			[SW.Buf(number)][SW.Buf(field)].c_str()
 
 		# put it through the render filter before returning it
-		return self.mod.RenderText(data)
+		return mod.RenderText(data)
 
 
 	def GetReferenceFromMod(self, modname, ref, max_verses = -1):
