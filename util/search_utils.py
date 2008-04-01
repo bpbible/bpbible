@@ -6,20 +6,21 @@ arch.search failed
 """
 import cPickle
 import os
+import config
 
 
-def WriteIndex(index, path = ""):
+def WriteIndex(index, path = config.index_path):
 	f = open("%s%s.idx"	% (path, index.version), "w")
 	cPickle.dump(index, f)
 
-def ReadIndex(version, path = ""):
+def ReadIndex(version, path = config.index_path):
 	f = open("%s%s.idx" % (path, version))
 	return cPickle.load(f)
 
-def IndexExists(version, path = ""):
+def IndexExists(version, path = config.index_path):
 	return os.path.exists("%s%s.idx" % (path, version))	
 
-def DeleteIndex(version, path=""):
+def DeleteIndex(version, path = config.index_path):
 	#try:
 	os.remove("%s%s.idx" % (path, version))
 	#except Exception, e:

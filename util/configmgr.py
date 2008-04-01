@@ -3,6 +3,7 @@ from observerlist import ObserverList
 from debug import dprint, WARNING
 import os
 import cPickle as pickle
+import config
 	
 class ConfigSection(object):
 	def __init__(self, section):
@@ -140,7 +141,7 @@ Harmony.last_harmony changed from None to 'Robinson'
 	import doctest
 	doctest.testmod()
 
-config_manager = ConfigManager(write_path="data/data.conf")
+config_manager = ConfigManager(write_path = config.data_path + "data.conf")
 
 if __name__ == '__main__':
 	_test()

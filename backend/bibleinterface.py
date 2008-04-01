@@ -107,7 +107,7 @@ class BibleInterface(object):
 		self.mgr.augmentModules(path, True)
 		self.paths.add(path)
 	
-	def load_paths(self, filename="sword.conf"):
+	def load_paths(self, filename=config.sword_paths_file):
 		config_parser = confparser.config()
 		try:
 			f = open(filename)
@@ -125,7 +125,7 @@ class BibleInterface(object):
 
 		return paths
 	
-	def write_paths(self, paths, filename="sword.conf"):
+	def write_paths(self, paths, filename=config.sword_paths_file):
 		paths = paths[::-1]
 		config_parser = confparser.config()
 		config_parser.read(filename)

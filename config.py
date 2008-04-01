@@ -1,10 +1,74 @@
 from util import util
 import os
+from util import osutils
+import sys
+import getopt
+from ConfigParser import RawConfigParser, NoSectionError, NoOptionError
 
-sword_path = None
+
+paths_file = "paths.ini"
+
+# Set defaults
 data_path = "data" + os.path.sep
 xrc_path = "xrc" + os.path.sep
 graphics_path = "graphics" + os.path.sep
+index_path = "." + os.path.sep
+sword_paths_file = "." + os.path.sep
+
+"""Attempt to override paths with settings in an INI file
+
+The file referenced by the variable paths_file should be like this:
+
+[BPBiblePaths]
+DataPath = data
+IndexPath = .
+SwordPath = .
+
+If the paths do not exist, they will be ignored.
+"""
+if os.path.isfile(paths_file):
+	try:
+		paths_file_parser = RawConfigParser()
+		paths_file_parser.read([paths_file])
+		v = paths_file_parser.get("BPBiblePaths", "DataPath")
+		if os.path.isdir(v):
+			data_path = v
+		v = paths_file_parser.get("BPBiblePaths", "IndexPath")
+		if os.path.isdir(v):
+			index_path = v
+		v = paths_file_parser.get("BPBiblePaths", "SwordPath")
+		if os.path.isdir(v):
+			sword_paths_file = v
+	except (NoSectionError, NoOptionError):
+		pass
+
+"""Attempt to override paths with command-line arguments
+
+Call BPBible like this:
+python bpbible.py --data-path=data --index-path=. --sword-path=.
+"""
+try:
+	opts, all = getopt.getopt(sys.argv[1:], "d", ["data-path=", "index-path=", "sword-path="])
+except getopt.GetoptError:
+	opts = None
+
+if opts != None:
+	for o, v in opts:
+		if o == "--data-path" and os.path.isdir(v):
+			data_path = v
+		elif o == "--index-path" and os.path.isdir(v):
+			index_path = v
+		elif o == "--sword-path" and os.path.isdir(v):
+			sword_paths_file = v
+
+if data_path[-1] != os.path.sep:
+	data_path += os.path.sep
+if index_path[-1] != os.path.sep:
+	index_path += os.path.sep
+if sword_paths_file[-1] != "/" and sword_paths_file[-1] != "\\":
+	sword_paths_file += os.path.sep
+
+sword_paths_file += "sword.conf"
 
 raw = False
 name = "BPBible"
