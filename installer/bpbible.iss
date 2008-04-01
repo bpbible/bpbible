@@ -1,12 +1,13 @@
 ; Directions for use
 ; ==================
-; 1. Download BPBible SVN (or whatever).
+; 1. Download BPBible SVN (or whatever). Run setup.py.
 ;    This should be in /installer, and the py2exe output should be in /dist
-; 2. Update the "AppVerName" and "OutputBaseFilename" line if necessary for a release.
-; 3. Update any paths that have changed for the [UninstallFiles] section - hopefully
-;    directory structure will be being cleaned up so that *.idx files aren't put in
-;    the root.  Also, hopefully the option of per-user settings will be built in,
-;    meaning that we would also need to delete some "{userappdata}\bpbible"... files.
+; 2. Update "AppVerName" and "OutputBaseFilename" if necessary.
+; 3. You may need to update any paths that have changed for the
+;    [UninstallFiles] section - an official change may be being made for
+;    the location of *.idx files and per-user setting may become (semi)
+;    standard. (%APPDATA% is {userappdata})
+; 4. Run InnoSetup and compile this file!
 
 [Setup]
 AppName=BPBible
@@ -25,7 +26,7 @@ LicenseFile=..\dist\LICENSE.txt
 InfoBeforeFile=Info.rtf
 OutputDir=.
 OutputBaseFilename=bpbible-0.2-setup
-SetupIconFile=bpbible.ico
+SetupIconFile=..\dist\graphics\bpbible.ico
 SolidCompression=yes
 Compression=lzma/ultra
 InternalCompressLevel=ultra
@@ -38,7 +39,8 @@ UninstallDisplayIcon={app}\bpbible.exe
 [Languages]
 ;Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "english"; MessagesFile: "bpbible-english.isl"
-;Removes notes about "important" information - the readme and GPL aren't "important"!
+; N.B.: MessagesFile is intentionally not comiler:Default.isl. The mod file
+; Removes the word "important" about the readme and GPL pages.
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"
@@ -47,7 +49,7 @@ Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescrip
 [Files]
 Source: "..\dist\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "uninstall.ico"; DestDir: "{app}"; Flags: ignoreversion
-;Source: "gdiplus.dll"; DestDir: "{app}"; Flags: dontcopy
+; Win2K and down
 Source: "gdiplus.dll"; DestDir: "{app}"; OnlyBelowVersion: 5.0,5.01
 
 [Dirs]
@@ -59,14 +61,6 @@ procedure CurStepChanged(CurStep: TSetupStep);
 var SWORDPath: String;
 begin
     if CurStep=ssPostInstall then begin
-        // Win2K does not include GDI+, needed by BPBible.
-        // Put it in {app} if they're using Win2K.
-//        if GetWindowsVersion<=$05000893 then begin
-//            MsgBox('You''re using Windows 200 or less.  GDI+ is not included, so I am about to install it...', mbInformation, MB_OK);
-//            ExtractTemporaryFile('gdiplus.dll');
-//            MsgBox('gdiplus.dll has been installed.', mbInformation, MB_OK);
-//        end;
-
         // Detect The SWORD Project for Windows and set the resources path to it.
         if RegQueryStringValue(HKEY_LOCAL_MACHINE, 'SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\sword.exe', 'Path', SWORDPath) then begin
             SetIniString('Install', 'DataPath', SWORDPath, ExpandConstant('{app}\sword.conf'));
@@ -90,13 +84,13 @@ Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\BPBible"; Filename
 Filename: "{app}\bpbible.exe"; Description: "{cm:LaunchProgram,BPBible}"; Flags: nowait postinstall skipifsilent
 
 [UninstallDelete]
-;If it has problems, it logs them here.
+;Error log
 Type: files; Name: "{app}\bpbible.exe.log"
+;Paths file
+Type: files; Name: "{app}\paths.ini"
 ;SWORD modules path configuration file
 Type: files; Name: "{app}\sword.conf"
-;GUI layout details
-Type: files; Name: "{app}\data\gui.conf"
-;Other data stored
+;BPBible data
 Type: files; Name: "{app}\data\data.conf"
-;Delete search indexes created by BPBible
+;Search indexes
 Type: files; Name: "{app}\*.idx"

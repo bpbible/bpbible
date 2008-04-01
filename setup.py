@@ -37,7 +37,7 @@ if(setup(
 	windows = [
 		{
 			"script":('bpbible.py'),#,'mainfrm.xrc','search.xrc'),
-			"icon_resources":[(1, "graphics/Bible-48x48.ico")],
+			"icon_resources":[(1, "graphics/bpbible.ico")],
             "other_resources": [(24,1,manifest)]			
 			
 		}
