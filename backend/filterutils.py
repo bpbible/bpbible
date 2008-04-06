@@ -192,7 +192,7 @@ def ellipsize(refs, last_text="", ellipsis=None):
 		last_text = ref
 		buf.append('<a href="bible:%(ref)s">%(ref)s</a>'% locals())
 
-	if(left_over): 
+	if ellipsis and left_over:
 		buf.append(e)
 
 
