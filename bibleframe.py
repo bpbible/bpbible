@@ -15,11 +15,12 @@ from gui.menu import MenuItem, Separator
 
 from harmony.harmonyframe import HarmonyFrame
 from gui.quickselector import QuickSelector
-from events import BIBLEFRAME, RANDOM_VERSE, VERSE_LINK_SELECTED
+from events import BIBLEFRAME, RANDOM_VERSE, VERSE_LINK_SELECTED, HEADER_BAR
 from copyverses import CopyVerseDialog
 
 from util.configmgr import config_manager
 from versecompare import VerseCompareFrame
+import header_bar
 
 
 bible_settings = config_manager.add_section("Bible")
@@ -28,11 +29,27 @@ bible_settings.add_item("verse_per_line", False, item_type=bool)
 
 class BibleFrame(VerseKeyedFrame):
 	title = "Bible"
+	html_header = False
+
+	def __init__(self, parent):
+		self.panel = wx.Panel(parent)
+		super(BibleFrame, self).__init__(self.panel)
+		self.header_bar = header_bar.HeaderBar(self.panel, "Genesis 1")
+		self.header_bar.on_click += lambda chapter: \
+			guiconfig.mainfrm.set_bible_ref(chapter, HEADER_BAR)
+		
+		sizer = wx.BoxSizer(wx.VERTICAL)
+		sizer.Add(self.header_bar, 0, wx.GROW)
+		sizer.Add(self, 1, wx.GROW)
+		self.panel.SetSizer(sizer)
 
 	def setup(self):
 		self.observers = ObserverList()
 		super(BibleFrame, self).setup()
 	
+	def get_window(self):
+		return self.panel
+
 	def get_menu_items(self):
 		items = super(BibleFrame, self).get_menu_items()
 		items = (
@@ -166,37 +183,41 @@ class BibleFrame(VerseKeyedFrame):
 		self.reference = GetVerseStr(ref)
 
 		chapter = GetBookChapter(self.reference)
-		data = '<table width="100%" VALIGN=CENTER ><tr>'
-		vk = VK(self.reference)
-		vk.chapter -= 1
-		d = lambda:{"ref":GetBookChapter(vk.text),
+		self.header_bar.set_current_chapter(chapter)
+		data = ''
+
+		if self.html_header:		
+			data += '<table width="100%" VALIGN=CENTER ><tr>'
+			vk = VK(self.reference)
+			vk.chapter -= 1
+			d = lambda:{"ref":GetBookChapter(vk.text),
 				"graphics":config.graphics_path}
 
-		if not vk.Error():
-			data += ('<td align="LEFT" valign=CENTER>'
-					 '<a href="nbible:%(ref)s">'
-					 '<img src="%(graphics)sgo-previous.png">&nbsp;'
-					 '%(ref)s</a></td>'
-			) % d()
-		else:
-			data += '<td align=LEFT>'+ '&nbsp;'*15 + '</td>'
-					
+			if not vk.Error():
+				data += ('<td align="LEFT" valign=CENTER>'
+						 '<a href="headings:%(ref)s">'
+						 '<img src="%(graphics)sgo-previous.png">&nbsp;'
+						 '%(ref)s</a></td>'
+				) % d()
+			else:
+				data += '<td align=LEFT>'+ '&nbsp;'*15 + '</td>'
+						
 
-		data += "<td align=CENTER><center>%s</center></td>" % \
-				"<h3>%s</h3>" % chapter
-		
-		vk = VK(self.reference)
-		vk.chapter += 1
-		if not vk.Error():
-			data += ('<td align="RIGHT" valign=CENTER>'
-					 '<a href="nbible:%(ref)s">%(ref)s&nbsp;'
-					 '<img src="%(graphics)sgo-next.png">'
-					 '</a></td>'
-			) % d()
-		else:
-			data += '<td align=RIGHT>'+ '&nbsp;'*15 + '</td>'
+			data += "<td align=CENTER><center>%s</center></td>" % \
+					"<h3>%s</h3>" % chapter
+			
+			vk = VK(self.reference)
+			vk.chapter += 1
+			if not vk.Error():
+				data += ('<td align="RIGHT" valign=CENTER>'
+						 '<a href="headings:%(ref)s">%(ref)s&nbsp;'
+						 '<img src="%(graphics)sgo-next.png">'
+						 '</a></td>'
+				) % d()
+			else:
+				data += '<td align=RIGHT>'+ '&nbsp;'*15 + '</td>'
 
-		data += "</tr></table>\n"
+			data += "</tr></table>\n"
 
 		chapter = self.book.GetChapter(ref, self.reference,
 			config.current_verse_template, context, raw=raw)

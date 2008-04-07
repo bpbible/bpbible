@@ -161,8 +161,9 @@ class Tooltip(TooltipBaseMixin, tooltip_parent):
 	
 	This is the specification for it:
 	Will appear after 0.5 seconds of hovering over target area
-	Will disappear after 0.5 seconds of moving off target area, provided:
-	a) it hasn't moved back over target area
+	Will disappear after 0.5 seconds of moving off target area or self, 
+	provided:
+	a) it hasn't moved back over target area or self
 	b) it's not over a child of this tooltip
 	
 	It will disappear instantaneously if:

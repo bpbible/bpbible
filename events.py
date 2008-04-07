@@ -14,8 +14,9 @@ sources = (
 	CHAPTER_MOVE,
 	HARMONY,
 	SEARCH,
-	LOADING_SETTINGS
-) = range(13)
+	LOADING_SETTINGS,
+	HEADER_BAR
+) = range(14)
 
 class BibleEvent(object):
 	def __init__(self, ref, settings_changed=False, source=None):
