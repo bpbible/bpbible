@@ -84,7 +84,11 @@ class ConfigManager(object):
 				value = section[item]
 
 				config_parser.set(section_name, item, type_process(value))
-
+		
+		directory = os.path.dirname(self["Internal"]["path"])
+		if not os.path.exists(directory):
+			os.makedirs(directory)
+		
 		config_parser.write(open(self["Internal"]["path"], "w"))
 	
 	def load(self, paths=(os.path.expanduser('~/bpbible/data.cfg'),)):
