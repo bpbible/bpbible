@@ -23,6 +23,10 @@ class TooltipBaseMixin(object):
 	def __init__(self, *args, **kwargs):
 		self.x = self.y = 0
 		self.text = None
+		self.target = None
+		self.new_target = None
+
+		
 		self.is_biblical = kwargs.pop("is_biblical", False)
 		self.references = [""]
 		
@@ -33,8 +37,6 @@ class TooltipBaseMixin(object):
 		text = re.sub("(<br[^>]*>\s*)*$", "", text)
 
 		self.text = text
-		self.html.SetPage(self.text, body_colour=self.colour,
-				text_colour=self.text_colour) #set data
 		
 		
 	
@@ -94,36 +96,43 @@ class TooltipBaseMixin(object):
 		self.set_pos(x, y)
 		self.Start()
 		
-		#self.show_tooltip(x, y)
 	def ShowTooltip(self):
-		# popup it up at mouse point
-		self.x, self.y = wx.GetMousePosition()#guiutil.get_mouse_pos(self)
-		def wh():
-			i = self.html.GetInternalRepresentation()
-			return (i.GetWidth() + tooltip_settings["border"], 
-					i.GetHeight() + tooltip_settings["border"])
-					#+self.GetCharHeight()
-			
+		"""Show the tooltip near the cursor.
+		
+		The text and target will have already been set, so we can easily get
+		at them. The sizing portion of this is quite fiddly and easily broken.
+		I've tried to get it as simple as I can."""
 
+		# set our target to what we were over at the time
+		self.target = self.new_target
+
+		# set the size
 		self.html.SetSize((400, 50))
 		
+		# and the borders
 		self.html.SetBorders(tooltip_settings["border"])
-		self.html.SetPage(self.text, body_colour=self.colour,
-				text_colour=self.text_colour) #set data
 
-		w, h = wh()
-		#self.Position = self.x, self.y
+		# and the page
+		self.html.SetPage(self.text, body_colour=self.colour,
+				text_colour=self.text_colour)
+		
+		# now we can get at the real size :)
+		i = self.html.GetInternalRepresentation()
+
+		w, h = (i.GetWidth() + tooltip_settings["border"], 
+				i.GetHeight() + tooltip_settings["border"])
+
 		self.html.SetDimensions(0, 0, w, h)
-		
-		self.container_panel.SetDimensions(0, 0, w, h)
-		
-		
+
 		#find screen width
 		screen_width = wx.SystemSettings.GetMetric(wx.SYS_SCREEN_X)
 		screen_height = wx.SystemSettings.GetMetric(wx.SYS_SCREEN_Y)
 
 		width, height = self.html.GetSize()
 
+		# pop it up at mouse point
+		self.x, self.y = wx.GetMousePosition()
+		
 		# add one so that it's not right under the cursor
 		self.x += 1
 		self.y += 1
@@ -138,19 +147,9 @@ class TooltipBaseMixin(object):
 				self.y = 0
 
 		self.MoveXY(self.x, self.y)
-
-		
-
 		self.size()
 
 		self.Show()
-		#self.Raise()
-		#self.container_panel.Raise()
-		#for item in self.tooltips:
-		#	if item.IsShown() and item != self:
-		#		item.Lower()#ShowTooltip(False)
-		
-		
 
 #TODO check how this works under (say) MAC
 tooltip_parent = wx.MiniFrame
@@ -158,7 +157,19 @@ tooltip_parent = wx.MiniFrame
 #	tooltip_parent = wx.PopupWindow
 
 class Tooltip(TooltipBaseMixin, tooltip_parent):
-	"""A tooltip with some HTML in it."""
+	"""A tooltip with some HTML in it.
+	
+	This is the specification for it:
+	Will appear after 0.5 seconds of hovering over target area
+	Will disappear after 0.5 seconds of moving off target area, provided:
+	a) it hasn't moved back over target area
+	b) it's not over a child of this tooltip
+	
+	It will disappear instantaneously if:
+	a) It is converted into a permanent tooltip
+	b) A link on it is opened
+	c) All tooltips are hidden (e.g. moving over a different window)"""
+
 	tooltips = []
 	def __init__(self, parent, style, logical_parent, html_type):
 		self.style = style
@@ -181,8 +192,10 @@ class Tooltip(TooltipBaseMixin, tooltip_parent):
 		self.SetBackgroundColour(self.colour)
 		self.container_panel.SetBackgroundColour(self.colour)
 		
+		self.interval = 500
 		self.timer = None
-
+		self.out_timer = None
+		
 		self.parent = parent
 		self.logical_parent = logical_parent
 		
@@ -191,11 +204,12 @@ class Tooltip(TooltipBaseMixin, tooltip_parent):
 		self.html = html_type(self.htmlpanel, 
 			logical_parent=logical_parent, style=html.HW_SCROLLBAR_NEVER)
 
-		self.html_type = html_type
 		self.html.parent = self
+		self.html_type = html_type
 
-		self.interval = 500
-		self.Bind(wx.EVT_ENTER_WINDOW, self.MouseIn)
+		self.Bind(wx.EVT_ENTER_WINDOW, lambda evt:(
+			wx.CallAfter(self.MouseIn)
+		))
 		self.Bind(wx.EVT_LEAVE_WINDOW, self.MouseOut)
 		
 		self.tooltips.append(self)
@@ -240,7 +254,7 @@ class Tooltip(TooltipBaseMixin, tooltip_parent):
 		self.htmloffset = (0, self.panel.GetSizeTuple()[1])
 
 
-		self.veto = True
+		self.mouse_is_over = True
 		
 		sizer = wx.BoxSizer(wx.VERTICAL)#HORIZONTAL)
 		sizer.Add(self.panel, 0, wx.ALIGN_CENTRE|wx.GROW)
@@ -259,9 +273,18 @@ class Tooltip(TooltipBaseMixin, tooltip_parent):
 		# while(p):
 		# 	q=p
 		# 	p=p.Parent
-		for item in self.Children:
-			item.Bind(wx.EVT_ENTER_WINDOW, self.MouseIn)
-			item.Bind(wx.EVT_LEAVE_WINDOW, self.MouseOut)
+		def bind_mouse_events(item):
+			for child in item.Children:
+				# callafter as under MSW, enter seems to come before leave in
+				# places
+				child.Bind(wx.EVT_ENTER_WINDOW, 
+					lambda evt:wx.CallAfter(self.MouseIn))
+				child.Bind(wx.EVT_LEAVE_WINDOW, self.MouseOut)
+				bind_mouse_events(child)
+
+		bind_mouse_events(self)
+
+
 		
 
 	def copy_all(self, event):
@@ -291,14 +314,14 @@ class Tooltip(TooltipBaseMixin, tooltip_parent):
 		#self.parent.tooltip = Tooltip(self.parent, self.style)
 		#self.parent.tooltip.html.bibleframe = self.html.bibleframe
 	
-	def MouseIn(self, evt=None):
+	def MouseIn(self, event=None):
 		#TODO: make frame and this be able to veto tooltip goaway
-		self.veto = True
+		self.mouse_is_over = True
 
 		# stop tooltip going away if there was just a mouseout
 		self.wants_to_go_away = False
 
-	def MouseOut(self, evt=None):
+	def MouseOut(self, event):
 		# unless we get unset before the next event loop, disappear next event
 		# loop. This is needed as under wxGTK, we get an out on the tooltip,
 		# then an in on the panel on the tooltip, which is a tad weird.
@@ -307,30 +330,51 @@ class Tooltip(TooltipBaseMixin, tooltip_parent):
 		self.wants_to_go_away = True
 		
 		def disappear():
-			if self.wants_to_go_away:
+			if self.wants_to_go_away and \
+				self.logical_parent.current_target != self.target:
 				dprint(TOOLTIP, 
 					"Going away as mouse off and not vetoed by mousein")
-				self.parent.lastcell = ""
+				#self.parent.lastcell = ""
 				self.Stop()
-				self.parent.veto = False
 	
-		wx.CallAfter(disappear)
+		self.mouse_is_over = False
+
+		if self.timer:
+			self.timer.Stop()
+
+		if self.out_timer:
+			self.out_timer.Stop()
+
+		self.out_timer = wx.CallLater(self.interval, disappear)
 
 	def Start(self):
+		# if we have an out timer, stop it
+		if self.out_timer:
+			self.out_timer.Stop()
+		
+		# if we have an in timer, stop it. It will be replaced by the new
+		# timer
+		if self.timer:
+			self.timer.Stop()
+		
+		# set our new target
+		self.new_target = self.logical_parent.current_target
+
+		# and start our timer
 		self.timer = wx.CallLater(self.interval, self.ShowTooltip)
 	
 	def Stop(self):
+		self.target = None
 		if self.timer:
 			self.timer.Stop()
+
+		if self.out_timer:
+			self.out_timer.Stop()
+			
 		#self.Freeze()
 		#self.Show()
 		self.Hide()
 		#self.Thaw()
-
-
-	def OnTimer(self, event):
-		self.ShowTooltip()
-		
 	
 	def size(self):
 		w, h = self.container_panel.Size
@@ -338,7 +382,6 @@ class Tooltip(TooltipBaseMixin, tooltip_parent):
 	
 		self.SetClientSize((w, h))
 		self.SetSize((w, h))
-		
 		
 		self.Fit()
 	
@@ -375,16 +418,11 @@ class PermanentTooltip(TooltipBaseMixin, pclass):
 
 		self.container_panel = wx.Panel(self)
 
-
 		# set colour
-		#self.colour=GetColours()[0]#"#FFFF00"
 		self.colour, self.text_colour = guiconfig.get_tooltip_colours()
 		self.container_panel.SetBackgroundColour(self.colour)
 		
-		
-		
 		# set icon
-		#icon = wx.Icon("Bible.ico",  wx.BITMAP_TYPE_ICO)
 		self.SetIcons(guiconfig.icons)
 		
 		# create button panel
@@ -416,21 +454,16 @@ class PermanentTooltip(TooltipBaseMixin, pclass):
 				id=self.gui_go.Id
 			)
 
-			
-			
-			
-			
-
 		self.gui_anchor = self.toolbar.AddLabelTool(wx.ID_ANY,  
 			"Stay on top",
 			wx.BitmapFromImage(wx.Image(config.graphics_path + "pushpin.gif")),
 			shortHelp="Stay on top", kind=wx.ITEM_CHECK)#Open this reference")
 
-		self.toolbar.Bind(wx.EVT_TOOL, self.ChangeStyle, id=self.gui_anchor.Id)
+		self.toolbar.Bind(wx.EVT_TOOL, self.toggle_topness, 
+			id=self.gui_anchor.Id)
+
 		self.toolbar.Bind(wx.EVT_UPDATE_UI, 
 			lambda evt:evt.Check(self.stayontop), id=self.gui_anchor.Id)
-		
-		
 			
 		self.toolbar.Realize()
 
@@ -439,30 +472,22 @@ class PermanentTooltip(TooltipBaseMixin, pclass):
 		self.buttonsizer.Add(self.toolbar, 1, wx.GROW)
 		self.buttonpanel.SetSizerAndFit(self.buttonsizer)
 
-		# make horizontal separator
-		self.line = wx.StaticLine(self.container_panel, style=wx.LI_HORIZONTAL)				
-
 		# make html
-		self.html = html_type(self.container_panel, style=html.HW_SCROLLBAR_AUTO)
+		self.html = html_type(self.container_panel, 
+			style=html.HW_SCROLLBAR_AUTO)
 		
 		# make sizer for panel
 		self.global_sizer = wx.BoxSizer(wx.VERTICAL)		
 		self.global_sizer.Add(self.buttonpanel, flag=wx.GROW)
-		self.global_sizer.Add(self.line, flag=wx.GROW)
 		self.global_sizer.Add(self.html, flag=wx.GROW, proportion=3)
 		#self.SetSizer(self.global_sizer)
 		self.container_panel.SetSizer(self.global_sizer)
-
-		
-		#self.global_sizer.SetSizeHints(self)
-		#self.Fit()
-		#self.SetTransparent(178)		
 		
 		
 		# non gui stuff
-		self.parent=parent
+		self.parent = parent
 		#self.html.parent=self		
-		self.x=self.y=0
+		self.x = self.y = 0
 		self.stayontop = True
 		self.htmloffset=(0,0)
 
@@ -508,7 +533,7 @@ class PermanentTooltip(TooltipBaseMixin, pclass):
 		except VerseParsingError, e:
 			wx.MessageBox(str(e), config.name)	
 		
-	def ChangeStyle(self, evt):
+	def toggle_topness(self, evt):
 		styles = [wx.FRAME_FLOAT_ON_PARENT, wx.STAY_ON_TOP]
 		self.stayontop = not(self.stayontop)
 		self.SetWindowStyle(self.style|styles[self.stayontop])
@@ -520,11 +545,12 @@ class PermanentTooltip(TooltipBaseMixin, pclass):
 
 	#def SetTransparent(*args):pass
 	def size(self):
+		# set the container panel to fit
+		self.container_panel.Fit()
+
+		# get the required size
 		w, h = self.container_panel.Size
 		h += self.toolbar.Size[1]
-	
+		
+		# and set our size
 		self.ClientSize = w, h
-		#self.Size = w, h
-		#
-		#
-		#self.Fit()	

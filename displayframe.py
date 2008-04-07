@@ -37,6 +37,7 @@ class DisplayFrame(HtmlSelectableWindow):
 		if not hasattr(self, "logical_parent"):
 			self.logical_parent = None
 		self._tooltip = None
+		self.current_target = None
 		self.mouseout = False
 		
 		self.Bind(wx.EVT_CONTEXT_MENU, self.show_popup)
@@ -80,6 +81,8 @@ class DisplayFrame(HtmlSelectableWindow):
 			self.tooltip.timer.IsRunning()):
 		
 			self.tooltip.Stop()
+
+		#self.current_target = None
 		self.mouseout = True
 
 
@@ -98,17 +101,6 @@ class DisplayFrame(HtmlSelectableWindow):
 
 			
 		guiconfig.mainfrm.hide_tooltips(exceptions=exceptions)
-
-	def Idle(self, event):
-		if(self._tooltip is not None and self.mouseout 
-				and not self.tooltip.veto):
-			if self._tooltip.IsShown():
-				dprint(TOOLTIP, "STOPPING TOOLTIP")
-				self.tooltip.Stop()
-
-		return super(DisplayFrame, self).Idle(event)
-
-		
 
 	def strip_text(self, word):
 		word = util.ReplaceUnicode(word)
@@ -132,12 +124,22 @@ class DisplayFrame(HtmlSelectableWindow):
 			self.LinkClicked(link, cell)
 
 	def OnCellMouseEnter(self, cell, x, y):
-		if(cell.GetLink()==None):
+		self.current_target = None
+		
+		if cell.GetLink() is None:
 			return
 
+
 		if guiconfig.mainfrm.lost_focus: return
+
 		link = cell.GetLink()
 		href = link.GetHref()
+		self.current_target = href
+
+		if self.tooltip.target == self.current_target:
+			return 
+
+		
 		protocol_handler.on_hover(self, href, x, y)
 
 	@staticmethod
@@ -310,7 +312,9 @@ class DisplayFrame(HtmlSelectableWindow):
 
 	def OnCellMouseLeave(self, cell, x, y):
 		if self._tooltip is not None:
-			self.tooltip.Stop()
+			self.tooltip.MouseOut(None)
+
+		self.current_target = None
 
 	def LinkClicked(self, link, cell):
 		href = link.GetHref()
