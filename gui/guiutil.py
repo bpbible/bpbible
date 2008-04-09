@@ -91,3 +91,14 @@ def call_after_x(loops, func, *args, **kwargs):
 	else:
 		args = (wx.CallAfter,) * (loops - 1) + (func,) + args 
 		wx.CallAfter(*args, **kwargs)
+
+def is_xp_styled():
+	"""Return whether user has xp styles on""" 
+	return True
+	# if we have ctypes in our py2exe build, we should enable this function
+	#try:
+	#	import ctypes
+	#	return ctypes.windll.uxtheme.IsAppThemed()
+	#except Exception, e:
+	#	dprint(WARNING, "Error trying to see if it is styled", e) 
+	#	return False

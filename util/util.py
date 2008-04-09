@@ -1,6 +1,7 @@
 from string import Template as str_template
 import re
 import traceback
+import sys
 
 class VerseTemplate(object):
 	"""VerseTemplate is a class which defines templates for Bible Text""" 
@@ -142,3 +143,6 @@ def get_traceback():
 
 def noop(*args, **kwargs):
 	"""Do nothing"""
+
+def is_py2exe():
+	return hasattr(sys, "frozen")	

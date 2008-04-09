@@ -226,12 +226,17 @@ class Tooltip(TooltipBaseMixin, tooltip_parent):
 
 		self.toolbar.BackgroundColour = self.colour
 
+		force_mask = False
+		
+		if osutils.is_msw() and not osutils.is_win2000():
+			force_mask = not guiutil.is_xp_styled()
+
 		self.gui_anchor = self.toolbar.AddLabelTool(wx.ID_ANY,  
-			"Anchor", bmp("anchor.png", ),#force_mask=True),
+			"Anchor", bmp("anchor.png", force_mask=force_mask),
 			shortHelp="Don't hide this tooltip")
 		
 		self.gui_copy = self.toolbar.AddLabelTool(wx.ID_ANY,  
-			"Copy All", bmp("page_copy.png"),# force_mask=True),
+			"Copy All", bmp("page_copy.png", force_mask=force_mask),
 			shortHelp="Copy tooltip text (with links)")
 			
 

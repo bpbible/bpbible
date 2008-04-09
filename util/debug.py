@@ -5,6 +5,7 @@ debug.py - basic logging facilities
 import sys
 import time
 import osutils
+import util
 
 __all__ = ["MESSAGE", "WARNING", "ERROR", "dprint", "is_debugging", "TOOLTIP"]
 MESSAGE = 0
@@ -20,7 +21,7 @@ def is_debugging():
 	This is true if we are not py2exe'd or we have -d flag.
 	TODO: work out some better way to change "py2exe'd" to "released"
 	"""
-	return not osutils.is_py2exe() or "-d" in sys.argv
+	return not util.is_py2exe() or "-d" in sys.argv
 
 def dprint(errorlevel, message, *args):
 	if errorlevel >= level:	

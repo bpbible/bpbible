@@ -1,7 +1,6 @@
 import sys
 import wx
 
-
 def is_gtk():
 	return "wxGTK" in wx.PlatformInfo
 
@@ -24,5 +23,3 @@ def is_win2000():
 	
 	return False
 
-def is_py2exe():
-	return hasattr(sys, "frozen")

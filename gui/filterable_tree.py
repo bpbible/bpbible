@@ -67,6 +67,13 @@ class FilterableTree(wx.PyPanel):
 		)
 		
 		self.search = wx.SearchCtrl(self, style=wx.TE_PROCESS_ENTER)
+
+		style = self.search.WindowStyle
+		
+		if style & wx.SIMPLE_BORDER:
+			style ^= wx.SIMPLE_BORDER
+			self.search.WindowStyle = style
+
 		self.search.SetDescriptiveText(self.blank_text)
 		self.search.ShowCancelButton(True)
 		self.search.Bind(wx.EVT_TEXT, lambda evt:self.filter(self.search.Value))

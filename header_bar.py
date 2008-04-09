@@ -126,26 +126,27 @@ class ChapterItem(wx.Panel):
 		bmp = wx.EmptyBitmap(width, height)
 		dc.SelectObject(bmp)
 		
+		dc.Background = wx.Brush(
+						wx.SystemSettings_GetColour(wx.SYS_COLOUR_3DFACE)
+					)
+
+		dc.Clear()
+
 		# set up the dc
-		dc.SetBrush(wx.Brush(self.BackgroundColour))
-		pen = wx.TRANSPARENT_PEN
-		dc.SetPen(pen)
-		
-		# do the drawing
-		dc.DrawRectangle(0, 0, width, height)
-		dc.DrawText(text, self.border, self.border)
-		
 		dc.Pen = wx.Pen(get_line_colour())
 		
-		
 		if self.is_current:
-			# draw top, left and right borders
-			dc.DrawLine(0, 0, 0, height)
-			dc.DrawLine(0, 0, width-1, 0)
-			dc.DrawLine(width-1, 0, width-1, height)
+			dc.SetBrush(wx.WHITE_BRUSH)
+			radius = self.border
+
+			# this will be clipped so we will only see the top part
+			dc.DrawRoundedRectangle(0, 0, width, height+radius, radius)
+			
 		else:
 			# draw bottom border
 			dc.DrawLine(0, height-1, width, height-1)
+			
+		dc.DrawText(text, self.border, self.border)
 			
 			
 
@@ -218,8 +219,6 @@ class HeaderBar(wx.Panel):
 		font.SetWeight(wx.FONTWEIGHT_BOLD)
 		#font.PointSize += 2
 		self.item.Font = font
-		
-		self.item.set_background_colour("White")
 		
 	def set_current_chapter(self, chapter):
 		guiutil.FreezeUI(self)
@@ -294,9 +293,6 @@ class HeaderBar(wx.Panel):
 					next_item = ChapterItem(self, next_chapter)
 					#, chapter_number)
 					next_item.set_chapter(next_chapter)
-					next_item.set_background_colour(
-						wx.SystemSettings_GetColour(wx.SYS_COLOUR_3DFACE)
-					)
 					
 
 				# Otherwise, remove the old ones from the list and move on
