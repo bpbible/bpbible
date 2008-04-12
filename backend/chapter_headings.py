@@ -16,6 +16,9 @@ def get_chapter_headings(chapter):
 	chapter must be a whole chapter reference, not a verse in the chapter
 	Returns list of (VK, heading text)
 	"""
+	if biblemgr.bible.mod is None:
+		return []
+
 	version_headings = headings_cache.setdefault(biblemgr.bible.version, {})
 	if chapter in version_headings:
 		return version_headings[chapter]
