@@ -1,5 +1,40 @@
 import wx
 from gui import guiutil
+from util import osutils
+from util.observerlist import ObserverList
+import string
+
+def GetPrevVisible(self, item):
+	"""Taken from the wxgeneric GetPrevVisible. 
+	
+	This is missing in wxGTK 2.8.*"""
+	assert item.IsOk(), "invalid tree item"
+	assert self.IsVisible(item), "this item itself should be visible"
+
+	# find out the starting point
+	prevItem = self.GetPrevSibling(item)
+	if not prevItem.IsOk():
+		prevItem = self.GetItemParent(item);
+
+	# find the first visible item after it
+	while prevItem.IsOk() and not self.IsVisible(prevItem):
+		prevItem = self.GetNext(prevItem)
+		if not prevItem.IsOk() or prevItem == item:
+			# there are no visible items before item
+			return wx.TreeItemId()
+
+	# from there we must be able to navigate until this item
+	while ( prevItem.IsOk() ):
+		nextItem = self.GetNextVisible(prevItem);
+		if not nextItem.IsOk() or nextItem == item:
+			break;
+
+		prevItem = nextItem
+
+	return prevItem
+
+if osutils.is_gtk():
+	wx.TreeCtrl.GetPrevVisible = GetPrevVisible
 
 class TreeItem(object):
 	def __init__(self, text, data=None, filterable=True):
@@ -49,10 +84,46 @@ def model_from_list(items):
 
 	return root
 
-from wx.lib.mixins.treemixin import ExpansionState
+class SearchCtrl(wx.SearchCtrl):
+	keys_to_pass_on = [wx.WXK_UP, wx.WXK_DOWN, wx.WXK_RETURN]
 
-class FilterableTreeCtrl(ExpansionState, wx.TreeCtrl):
-	pass
+	def __init__(self, parent):
+		super(SearchCtrl, self).__init__(parent, style=wx.WANTS_CHARS)
+		self.bind_source = self.find_bind_source()
+		self.bind_source.Bind(wx.EVT_KEY_DOWN, self.on_key_down)
+		style = self.WindowStyle
+		
+		if style & wx.SIMPLE_BORDER:
+			style ^= wx.SIMPLE_BORDER
+			self.WindowStyle = style
+		
+
+	def find_bind_source(self):
+		for item in self.Children:
+			if isinstance(item, wx.TextCtrl):
+				return item
+
+		return self
+	
+	def on_key_down(self, event):
+		if event.KeyCode == wx.WXK_ESCAPE:
+			evt = wx.CommandEvent(wx.EVT_SEARCHCTRL_CANCEL_BTN.typeId)
+			evt.Id = self.Id
+			self.EventHandler.ProcessEvent(evt)
+
+		else:
+			# under gtk, our tab messages get munged
+			if event.KeyCode == wx.WXK_TAB and \
+				(event.Modifiers in	(wx.MOD_SHIFT, wx.MOD_NONE)):
+				self.Navigate(event.ShiftDown())
+
+			if self.bind_source != self and \
+				event.KeyCode in self.keys_to_pass_on:
+
+				event.Id = self.Id
+				self.EventHandler.AddPendingEvent(event)
+			else:
+				event.Skip()
 
 class FilterableTree(wx.PyPanel):
 	blank_text = "Search"
@@ -60,25 +131,23 @@ class FilterableTree(wx.PyPanel):
 		self.model = model
 		super(FilterableTree, self).__init__(parent)
 
-		self.tree = FilterableTreeCtrl(self, 
+		self.tree = wx.TreeCtrl(self, 
 			style=wx.TR_HAS_BUTTONS   |
 				  wx.TR_LINES_AT_ROOT |
-				  wx.TR_HIDE_ROOT  
+				  wx.TR_HIDE_ROOT
 		)
 		
-		self.search = wx.SearchCtrl(self, style=wx.TE_PROCESS_ENTER)
-
-		style = self.search.WindowStyle
-		
-		if style & wx.SIMPLE_BORDER:
-			style ^= wx.SIMPLE_BORDER
-			self.search.WindowStyle = style
+		self.search = SearchCtrl(self)
 
 		self.search.SetDescriptiveText(self.blank_text)
 		self.search.ShowCancelButton(True)
+		
+		self.search.Bind(wx.EVT_KEY_DOWN, self.on_key_down)
 		self.search.Bind(wx.EVT_TEXT, lambda evt:self.filter(self.search.Value))
 		self.search.Bind(wx.EVT_SEARCHCTRL_CANCEL_BTN,
 			self.clear_filter)
+
+		self.on_selection = ObserverList()
 
 		sizer = wx.BoxSizer(wx.VERTICAL)
 
@@ -88,6 +157,28 @@ class FilterableTree(wx.PyPanel):
 		self.SetSizer(sizer)
 		self.expansion_state = None
 	
+	def select_without_event(self, item):
+		self.tree.Unbind(wx.EVT_TREE_SEL_CHANGED)
+		self.tree.SelectItem(item)
+		self.tree.Bind(wx.EVT_TREE_SEL_CHANGED, 
+			lambda evt:self.on_selection(evt.Item))
+		
+	def on_key_down(self, event):
+		selection = self.tree.GetSelection()
+		
+		if event.KeyCode == wx.WXK_UP:
+			prev = self.tree.GetPrevVisible(selection)
+			if prev:
+				self.select_without_event(prev)
+
+		elif event.KeyCode == wx.WXK_DOWN:
+			prev = self.tree.GetNextVisible(selection)
+			if prev:
+				self.select_without_event(prev)
+		
+		elif event.KeyCode == wx.WXK_RETURN:
+			self.on_selection(selection)
+
 	def create(self, model=None):
 		d = guiutil.FreezeUI(self)
 		if model is None:
@@ -96,7 +187,6 @@ class FilterableTree(wx.PyPanel):
 		self.tree.DeleteAllItems()
 		root = self.tree.AddRoot(model.text)
 		self.tree.SetPyData(root, model)
-		
 		
 		def add(parent, model_item):
 			child = self.tree.AppendItem(parent, model_item.text)
@@ -108,6 +198,7 @@ class FilterableTree(wx.PyPanel):
 		for item in model.children:
 			add(root, item)
 
+		self.ExpandAll()
 	
 	def filter(self, text):
 		def get_filtered_items(model_item):
@@ -131,7 +222,6 @@ class FilterableTree(wx.PyPanel):
 			root = self.model.null_item()
 
 		self.create(root)
-		self.ExpandAll()
 	
 	def ExpandAll(self):
 		root = self.tree.GetRootItem()
@@ -149,13 +239,11 @@ class FilterableTree(wx.PyPanel):
 			
 		if first_child:
 			self.tree.ScrollTo(first_child)
+			self.select_without_event(first_child)
 
-	
 	def clear_filter(self, evt=None):
-		#expansion_state = self.tree.GetExpansionState()
 		self.search.SetValue("")
 		self.create()
-		#self.tree.SetExpansionState(expansion_state)
 		
 	def show_item(self, item_data):
 		if self.search.Value:
@@ -176,7 +264,7 @@ class FilterableTree(wx.PyPanel):
 		item = FindTreeItem(self.root)
 		assert item, "Didn't find pericope in tree"
 		
-		self.tree.SelectItem(item)
+		self.select_without_event(item)
 
 if __name__ == '__main__':
 	a = wx.App(0)
@@ -195,9 +283,15 @@ if __name__ == '__main__':
 		))
 		
 	]	
+	
+	def print_(x):
+		print x
 
 	model = model_from_list(L)
 	tree = FilterableTree(f, model)
 	tree.create()
+	tree.on_selection += print_
 	f.Show()
+	tree.SetFocus()
+	
 	a.MainLoop()

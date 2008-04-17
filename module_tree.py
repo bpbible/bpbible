@@ -25,6 +25,7 @@ class ModuleTree(FilterableTree):
 		self.bound = False
 		
 		self.bind_events()
+		self.on_selection += self.on_version_tree
 		self.recreate()
 		
 	def bind_events(self):
@@ -36,7 +37,6 @@ class ModuleTree(FilterableTree):
 		self.tree.Bind(wx.EVT_TREE_DELETE_ITEM, lambda evt:(evt.Skip(),
 													self.unbind_events()))
 		
-		self.tree.Bind(wx.EVT_TREE_SEL_CHANGED, self.on_version_tree)
 		self.tree.Bind(wx.EVT_TREE_ITEM_GETTOOLTIP, self.version_tree_tooltip)
 		self.tree.Bind(wx.EVT_TREE_ITEM_MENU, self.version_tree_menu)
 	
@@ -45,7 +45,6 @@ class ModuleTree(FilterableTree):
 			return
 
 		self.bound = False
-		self.tree.Unbind(wx.EVT_TREE_SEL_CHANGED)
 		self.tree.Unbind(wx.EVT_TREE_ITEM_GETTOOLTIP)
 		self.tree.Unbind(wx.EVT_TREE_ITEM_MENU)
 		self.tree.Unbind(wx.EVT_TREE_DELETE_ITEM)
@@ -55,8 +54,7 @@ class ModuleTree(FilterableTree):
 		super(ModuleTree, self).create(model)
 		self.bind_events()
 
-	def on_version_tree(self, event):
-		item = event.GetItem()
+	def on_version_tree(self, item):
 		item_data = self.tree.GetPyData(item).data
 
 		parent = self.tree.GetItemParent(item)

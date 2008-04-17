@@ -35,29 +35,30 @@ class Book(object):
 
 	def SetModule(self, modname, notify=True):
 		"""Sets the module to modname"""
-		## if modname is the current name, don't update
-		#if(self.mod and modname==self.mod.Name()):
-		#	return False 
+		oldmod = self.mod
+
+		# No book at all
 		if modname is None:
 			self.mod = None
+
 		elif isinstance(modname, SW.Module):
 			self.mod = modname
+		
 		else:
-			oldmod = self.mod
-			
-			self.mod = self.parent.mgr.getModule(modname)	
-			if not self.mod:
-				self.mod = oldmod
+			# look up the book
+			new_mod = self.parent.mgr.getModule(modname)	
+			if not new_mod:
 				return False
-
-		if notify:
+			
+			self.mod = new_mod
+				
+		if self.mod != oldmod and notify:
 			self.observers(self.mod)
 
 		return True
 	
 	def ModuleExists(self, modname):
 		return bool(self.parent.mgr.getModule(modname))
-
 
 	@property
 	def version(self):
