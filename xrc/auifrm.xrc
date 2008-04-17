@@ -101,12 +101,21 @@
       </object>
       <object class="wxMenu" name="help">
         <label>_Help</label>
+        <object class="wxMenuItem" name="gui_website">
+          <label>BPBible Website</label>
+        </object>
+        <object class="wxMenuItem" name="gui_documentation">
+          <label>Documentation...</label>
+        </object>
+        <object class="wxMenuItem" name="gui_issues">
+          <label>Report a problem...</label>
+        </object>
+        <object class="separator"/>
         <object class="wxMenuItem" name="wxID_ABOUT">
-          <label>_About</label>
+          <label>_About...</label>
         </object>
       </object>
     </object>
-    
     <object class="wxStatusBar" name="statusbar">
       <fields>1</fields>
       <widths>-1</widths>

@@ -2,6 +2,7 @@ from swlib.pysw import SW
 
 from util.debug import *
 from util import util
+from gui import guiutil
 
 
 class ProtocolHandler(object):
@@ -37,12 +38,7 @@ class ProtocolHandler(object):
 protocol_handler = ProtocolHandler()
 
 def on_web_opened(frame, href, url):
-	import webbrowser
-
-	if hasattr(webbrowser, "open_new_tab"):
-		webbrowser.open_new_tab(href)
-	else:
-		webbrowser.open_new(href)
+	guiutil.open_web_browser(href)
 
 for item in ("http", "https", "ftp"):
 	protocol_handler.register_handler(item, on_web_opened)

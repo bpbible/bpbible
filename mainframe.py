@@ -392,6 +392,24 @@ class MainFrame(wx.Frame, AuiLayer):
 		
 		self.Bind(wx.EVT_MENU, id = wx.ID_EXIT, handler = self.ExitClick)
 		self.Bind(wx.EVT_MENU, id = wx.ID_ABOUT, handler = self.AboutClick)
+		
+		web_links = dict(
+			gui_website="http://bpbible.googlecode.com",
+			gui_documentation="http://code.google.com/p/bpbible/w/list",
+			gui_issues="http://code.google.com/p/bpbible/issues/list",
+		)
+		
+		def weblink_handler(weblink):
+			def handle_event(event):
+				guiutil.open_web_browser(weblink)
+
+			return handle_event
+		
+		for xrcid, website in web_links.items():
+			self.Bind(wx.EVT_MENU, weblink_handler(website), 
+				id=xrc.XRCID(xrcid))
+			
+			
 		self.dictionary_list.item_changed += self.DictionaryListSelected
 
 		self.bibleref.Bind(wx.EVT_TEXT_ENTER, self.BibleRefEnter)

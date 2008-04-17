@@ -102,3 +102,11 @@ def is_xp_styled():
 	#except Exception, e:
 	#	dprint(WARNING, "Error trying to see if it is styled", e) 
 	#	return False
+
+def open_web_browser(href):
+	import webbrowser
+
+	if hasattr(webbrowser, "open_new_tab"):
+		webbrowser.open_new_tab(href)
+	else:
+		webbrowser.open_new(href)
