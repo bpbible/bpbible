@@ -22,14 +22,11 @@ class ModuleTree(FilterableTree):
 		)
 		
 
-		self.bound = False
-		
-		self.bind_events()
 		self.on_selection += self.on_version_tree
 		self.recreate()
 		
 	def bind_events(self):
-		self.bound = True
+		super(ModuleTree, self).bind_events()
 		# ### Nasty hack ###
 		# It seems that whenever all items are deleted, we get called by
 		# sel_changed in a bad state, from which calling GetPyData crashes it.
@@ -41,19 +38,13 @@ class ModuleTree(FilterableTree):
 		self.tree.Bind(wx.EVT_TREE_ITEM_MENU, self.version_tree_menu)
 	
 	def unbind_events(self):
-		if not self.bound:
+		if not super(ModuleTree, self).unbind_events():
 			return
 
-		self.bound = False
 		self.tree.Unbind(wx.EVT_TREE_ITEM_GETTOOLTIP)
 		self.tree.Unbind(wx.EVT_TREE_ITEM_MENU)
 		self.tree.Unbind(wx.EVT_TREE_DELETE_ITEM)
 		
-	def create(self, model=None):
-		self.unbind_events()
-		super(ModuleTree, self).create(model)
-		self.bind_events()
-
 	def on_version_tree(self, item):
 		item_data = self.tree.GetPyData(item).data
 

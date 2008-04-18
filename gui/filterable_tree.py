@@ -131,6 +131,8 @@ class FilterableTree(wx.PyPanel):
 		self.model = model
 		super(FilterableTree, self).__init__(parent)
 
+		self.bound = False
+		
 		self.tree = wx.TreeCtrl(self, 
 			style=wx.TR_HAS_BUTTONS   |
 				  wx.TR_LINES_AT_ROOT |
@@ -156,6 +158,8 @@ class FilterableTree(wx.PyPanel):
 		
 		self.SetSizer(sizer)
 		self.expansion_state = None
+		self.bind_events()
+		
 	
 	def select_without_event(self, item):
 		self.tree.Unbind(wx.EVT_TREE_SEL_CHANGED)
@@ -180,6 +184,8 @@ class FilterableTree(wx.PyPanel):
 			self.on_selection(selection)
 
 	def create(self, model=None):
+		self.unbind_events()
+	
 		d = guiutil.FreezeUI(self)
 		if model is None:
 			model = self.model
@@ -198,7 +204,25 @@ class FilterableTree(wx.PyPanel):
 		for item in model.children:
 			add(root, item)
 
+		self.bind_events()
+		
 		self.ExpandAll()
+		
+	def bind_events(self):
+		self.bound = True
+		self.tree.Bind(wx.EVT_TREE_SEL_CHANGED, 
+			lambda evt:self.on_selection(evt.Item))
+		
+	
+	def unbind_events(self):
+		if not self.bound:
+			return False
+
+		self.tree.Unbind(wx.EVT_TREE_SEL_CHANGED)
+
+		self.bound = False
+		return True
+	
 	
 	def filter(self, text):
 		def get_filtered_items(model_item):
