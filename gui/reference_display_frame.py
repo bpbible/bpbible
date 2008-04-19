@@ -30,4 +30,4 @@ class ReferenceDisplayFrame(DisplayFrameXRC):
 		if not wx.USE_UNICODE:
 			#replace common values
 			data = ReplaceUnicode(data)
-		self.SetPage("<p>%s</p>" % data)
+		self.SetPage("%s" % data)

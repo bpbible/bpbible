@@ -127,7 +127,7 @@ class ChapterItem(wx.Panel):
 		dc.SelectObject(bmp)
 		
 		dc.Background = wx.Brush(
-						wx.SystemSettings_GetColour(wx.SYS_COLOUR_3DFACE)
+						wx.SystemSettings_GetColour(wx.SYS_COLOUR_BTNFACE)
 					)
 
 		dc.Clear()
@@ -136,7 +136,11 @@ class ChapterItem(wx.Panel):
 		dc.Pen = wx.Pen(get_line_colour())
 		
 		if self.is_current:
-			dc.SetBrush(wx.WHITE_BRUSH)
+			background, text_colour = guiconfig.get_window_colours(
+										html_style=False
+									)
+			dc.SetBrush(wx.Brush(background))
+			dc.SetTextForeground(text_colour)
 			radius = self.border
 
 			# this will be clipped so we will only see the top part
@@ -146,6 +150,10 @@ class ChapterItem(wx.Panel):
 			# draw bottom border
 			dc.DrawLine(0, height-1, width, height-1)
 			
+			dc.SetTextForeground(
+				wx.SystemSettings.GetColour(wx.SYS_COLOUR_BTNTEXT)
+			)
+
 		dc.DrawText(text, self.border, self.border)
 			
 			

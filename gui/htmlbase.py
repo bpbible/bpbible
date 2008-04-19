@@ -14,7 +14,7 @@ html_settings.add_item("font_name", "Arial")
 html_settings.add_item("base_text_size", 10, item_type=int)
 html_settings.add_item("zoom_level", 0, item_type=int)
 
-HTML_TEXT = "<body %s><div><font %s>%s</font></div></body>"
+HTML_TEXT = '<body bgcolor="%s"><div><font color="%s">%s</font></div></body>'
 
 # some magic zoom constants
 zoom_levels = {-2: 0.75, 
@@ -260,6 +260,9 @@ class HtmlBase(wx.html.HtmlWindow):
 		
 		
 	def set_page(self, text, raw=False, text_colour=None, body_colour=None):
+		"""Set the page with the given text and colour. 
+		
+		Either or neither of text_colour and body_colour can be specified"""
 		self.top_left_cell = None
 	
 		if not wx.USE_UNICODE:
@@ -269,18 +272,13 @@ class HtmlBase(wx.html.HtmlWindow):
 		#text = text.replace("</small>", "</font>")
 		text = util.htmlify_unicode(text)
 
-		colour = ""
-		if body_colour:
-			colour = " bgcolor=%s" % body_colour
+		if body_colour is None or text_colour is None:
+			body_colour, text_colour = guiconfig.get_window_colours()
 
 		self.SetStandardFonts(get_text_size(html_settings["base_text_size"]), 
 			html_settings["font_name"])
 		
-		font_tag = ""#"size=%s" % font_size
-		if text_colour is not None:
-			font_tag += ' color="%s"' % text_colour
-
-		text = HTML_TEXT % (colour, font_tag, text)
+		text = HTML_TEXT % (body_colour, text_colour, text)
 
 		if raw:
 			text = text.replace("&", "&amp;")

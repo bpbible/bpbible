@@ -92,6 +92,18 @@ class CopyVerseDialog(xrcCopyVerseDialog):
 			for a in [wx.EVT_KILL_FOCUS,]:#, stc.EVT_STC_MODIFIED]:
 				item.Bind(a, self.update)
 			item.Bind(stc.EVT_STC_MODIFIED, self.on_text_changed)
+			
+			colour, text_colour = guiconfig.get_window_colours()
+			for s in stc.STC_STYLE_DEFAULT, 0:
+				item.StyleSetBackground(s, colour)
+				item.StyleSetForeground(s, text_colour)
+			
+			item.SetCaretForeground(text_colour)
+			
+
+
+			
+			
 
 		self.Bind(wx.EVT_CLOSE, self.OnClose)
 		self.wxID_CANCEL.Bind(wx.EVT_BUTTON, 

@@ -87,6 +87,7 @@ title_str = "%(verse)s - %(name)s"
 # settings
 #search_disappear_on_doubleclick = True
 verse_per_line = False
+use_system_inactive_caption_colour = False
 #
 #use_osis_parser = True
 #use_thml_parser = True

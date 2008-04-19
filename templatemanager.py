@@ -475,17 +475,22 @@ class TemplateManager(xrcTemplateManager):
 			# make it a disabled field if necessary
 			item.SetReadOnly(not enabled)
 
-
 			# give it the right colour
 			if enabled:
-				colour = "white"
+				colour, text_colour = guiconfig.get_window_colours()
+			
 			
 			else:
-				va = wx.Panel.GetClassDefaultAttributes()
-				colour = va.colBg
+				colour = wx.SystemSettings.GetColour(wx.SYS_COLOUR_BTNFACE)
+				text_colour = wx.SystemSettings.GetColour(
+								wx.SYS_COLOUR_GRAYTEXT
+							)
 
-			item.StyleSetBackground(stc.STC_STYLE_DEFAULT, colour)
-			item.StyleSetBackground(0, colour)
+			for s in stc.STC_STYLE_DEFAULT, 0:
+				item.StyleSetBackground(s, colour)
+				item.StyleSetForeground(s, text_colour)
+
+			item.SetCaretForeground(text_colour)
 
 		self.update_preview()
 			

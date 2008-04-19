@@ -3,9 +3,61 @@ import re
 import wx
 from wx import aui
 import guiconfig
+import config
 from gui import guiutil
 from util import util
 from util.configmgr import config_manager
+
+# the following three functions borrowed from wxAUI in dockart.cpp
+
+# wxAuiBlendColour is used by wxAuiStepColour
+def wxAuiBlendColour(fg, bg, alpha):
+	result = bg + (alpha * (fg - bg))
+	result = max(result, 0)
+	result = min(result, 255)
+	return result
+
+# wxAuiStepColour() it a utility function that simply darkens
+# or lightens a color, based on the specified percentage
+# ialpha of 0 would be completely black, 100 completely white
+# an ialpha of 100 returns the same colour
+def wxAuiStepColour(c, ialpha):
+	if ialpha == 100:
+		return c
+		
+	r, g, b = c.Red(), c.Green(), c.Blue()
+	
+	# ialpha is 0..200 where 0 is completely black
+	# and 200 is completely white and 100 is the same
+	# convert that to normal alpha 0.0 - 1.0
+	ialpha = min(ialpha, 200);
+	ialpha = max(ialpha, 0);
+	alpha = (ialpha - 100.0)/100.0
+	
+	if (ialpha > 100):
+		# blend with white
+		bg = 255.0;
+		alpha = 1.0 - alpha#  // 0 = transparent fg; 1 = opaque fg
+	else:
+		# blend with black
+		bg = 0.0
+		alpha = 1.0 + alpha#  // 0 = transparent fg; 1 = opaque fg
+	
+	r = wxAuiBlendColour(r, bg, alpha)
+	g = wxAuiBlendColour(g, bg, alpha)
+	b = wxAuiBlendColour(b, bg, alpha)
+	
+	return r, g, b
+
+def wxAuiLightContrastColour(c):
+	amount = 120
+
+	# if the color is especially dark, then
+	# make the contrast even lighter
+	if c.Red() < 128 and c.Green() < 128 and c.Blue() < 128:
+		amount = 160
+
+	return wxAuiStepColour(c, amount)
 
 class DockArt(wx.aui.PyAuiDockArt):
 	"""DockArt: tracks the sections which when right clicked, bring up a
@@ -68,6 +120,39 @@ class AuiLayer(object):
 		except AttributeError:
 			# no constructor defined previous to wx 2.8.4.0, so can't override
 			pass
+
+		if not config.use_system_inactive_caption_colour:
+			return
+
+		# now set the inactive caption colour
+		# wxAUI arguably should do this itself
+		# on high contrast black, you couldn't see the inactive captions at
+		# all
+		prov = self.aui_mgr.GetArtProvider()
+		prov.SetMetric(aui.AUI_DOCKART_GRADIENT_TYPE, 
+					   aui.AUI_GRADIENT_HORIZONTAL)
+
+		inactive_caption_colour = wx.SystemSettings.GetColour(
+			wx.SYS_COLOUR_INACTIVECAPTION
+		)
+		
+		inactive_caption_gradient_colour = wxAuiLightContrastColour(
+			inactive_caption_colour
+		)
+		
+		inactive_caption_text_colour = wx.SystemSettings.GetColour(
+			wx.SYS_COLOUR_INACTIVECAPTIONTEXT
+		)
+		
+		for setting, colour in (
+			(aui.AUI_DOCKART_INACTIVE_CAPTION_COLOUR, inactive_caption_colour),
+			(aui.AUI_DOCKART_INACTIVE_CAPTION_GRADIENT_COLOUR,
+				inactive_caption_gradient_colour),
+			(aui.AUI_DOCKART_INACTIVE_CAPTION_TEXT_COLOUR,
+				inactive_caption_text_colour)
+			):
+
+			prov.SetColour(setting, colour)
 	
 	def set_aui_items_up(self):
 		self.ToolBar = None#self.main_toolbar
