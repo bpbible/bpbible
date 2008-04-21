@@ -9,11 +9,11 @@ from ConfigParser import RawConfigParser, NoSectionError, NoOptionError
 paths_file = "paths.ini"
 
 # Set defaults
-data_path = "data" + os.path.sep
-xrc_path = "xrc" + os.path.sep
-graphics_path = "graphics" + os.path.sep
-index_path = "." + os.path.sep
-sword_paths_file = "." + os.path.sep
+data_path = "data/"
+xrc_path = "xrc/"
+graphics_path = "graphics/"
+index_path = "./"
+sword_paths_file = "./"
 
 """Attempt to override paths with settings in an INI file
 
@@ -61,12 +61,12 @@ if opts != None:
 		elif o == "--sword-path" and os.path.isdir(v):
 			sword_paths_file = v
 
-if data_path[-1] != os.path.sep:
-	data_path += os.path.sep
-if index_path[-1] != os.path.sep:
-	index_path += os.path.sep
-if sword_paths_file[-1] != "/" and sword_paths_file[-1] != "\\":
-	sword_paths_file += os.path.sep
+if data_path[-1] not in "\\/":
+	data_path += "/"
+if index_path[-1] not in "\\/":
+	index_path += "/"
+if sword_paths_file[-1] not in "\\/" and sword_paths_file[-1] not in "\\/":
+	sword_paths_file += "/"
 
 sword_paths_file += "sword.conf"
 
