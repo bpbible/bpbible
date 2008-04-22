@@ -9,7 +9,7 @@ from ConfigParser import RawConfigParser, NoSectionError, NoOptionError
 paths_file = "paths.ini"
 
 # Set defaults
-data_path = "data" + os.path.sep
+data_path = "data/"
 xrc_path = "xrc" + os.path.sep
 graphics_path = "graphics" + os.path.sep
 index_path = "." + os.path.sep

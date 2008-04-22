@@ -52,6 +52,7 @@ from events import BibleEvent, SETTINGS_CHANGED, BIBLE_REF_ENTER, HISTORY
 from events import LOADING_SETTINGS
 from history import History, HistoryTree
 from util.configmgr import config_manager
+from install_manager.install_drop_target import ModuleDropTarget
 
 settings = config_manager.add_section("BPBible")
 
@@ -145,6 +146,8 @@ class MainFrame(wx.Frame, AuiLayer):
 		wx.CallAfter(dprint, MESSAGE, "Constructed")
 		wx.CallAfter(override_end)	
 		dprint(MESSAGE, "Done first round of setting up")
+		self.drop_target = ModuleDropTarget(self)
+		self.SetDropTarget(self.drop_target)
 		#guiutil.call_after_x(100, self.bibletext.scroll_to_current)
 		
 		# after three goes round the event loop, set timer for 100ms to scroll
@@ -286,6 +289,7 @@ class MainFrame(wx.Frame, AuiLayer):
 		
 		except (OSError, EnvironmentError), e:
 			wx.MessageBox("OSError on saving settings\n%s" % str(e))
+			raise
 
 		except Exception, e:
 			wx.MessageBox("Error on saving settings\n%s" % str(e))

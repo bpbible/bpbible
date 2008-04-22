@@ -4,14 +4,10 @@
 import os
 import shutil
 import tarfile
-import zipfile
 import Sword
 from pyftptransport import PyFTPTransport
 from swlib.installsource import InstallSource
 from util.debug import dprint, WARNING
-
-class InvalidModuleException(Exception):
-	pass
 
 try:
   WindowsError
@@ -643,89 +639,6 @@ class InstallMgr(object):
 
 		return retVal
 
-	def install_zip(self, dest_path, zip_path):
-		zip_file = self.open_zipfile(zip_path)
-		self.extract_zipfile(zip_file, dest_path)
-		
-	def open_zipfile(self, zip_path):
-		zip_file = zipfile.ZipFile(zip_path)
-		file_list = zip_file.filelist
-		module_name = None
-
-		for item in filelist:
-			if os.path.dirname(item) == "mods.d" and item.endswith(".conf"):
-				# we found a .conf file in the mods.d directory
-				# this is the only check currently done
-				return zip_file
-				
-		raise InvalidModuleException("File does not appear to be a valid book")
-
-	
-	def extract_zipfile(self, zip_file, dest=""):
-		"""Extract a zip file.
-
-		Rawzip layout looks like this
-		modules/
-			comments/
-				rawfiles/
-					personal/
-						ot
-						nt
-						ot.vss
-						nt.vss
-		mods.d/
-			personal.conf
-		
-		
-		This doesn't bother about setting time stamps at all."""
-		
-		for item in zip_file.filelist:
-			# don't bother about directories
-			if item.endswith("/"):
-				continue
-
-			directory = os.path.dirname(item)
-			absolute_directory = dest + directory
-			
-			if not os.path.exists(absolute_directory):
-				os.makedirs(absolute_directory)
-
-			outfile = open(dest + item, "wb")
-			outfile.write(zf.read(item))
-			outfile.close()
-	
-	def find_zip_locations(self, url):
-		# If a location worked for us before, use it again
-		if url in self.found_locations:
-			return [self.found_locations[url]]
-	
-		# places to look
-		# ftp://ftp.crosswire.org/pub/sword/raw/ -> 
-		# ftp://ftp.crosswire.org/pub/sword/packages/rawzip/
-		paths_to_look = []
-	
-		url = removeTrailingSlash(url)
-		last_directory_idx = url.rfind("/")
-
-		if last_directory_idx != -1:
-			last_directory = url[last_directory_idx + 1:]
-			if last_directory.endswith("raw"):
-				qualifier = last_directory[:-3]
-				paths_to_look.append("../%spackages/rawzip" % qualifier)
-
-		# kleinpaste style
-		paths_to_look.append("zip")
-
-		# bible.org style
-		paths_to_look.append("packages/rawzip")
-
-		return paths_to_look
-	
-	def download_zip_module(self, install_source, module):
-		url = "ftp://" + install_source.source
-	
-		for item in self.find_zip_locations(url):
-			print item
 
 
 	
