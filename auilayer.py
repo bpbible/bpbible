@@ -121,14 +121,21 @@ class AuiLayer(object):
 			# no constructor defined previous to wx 2.8.4.0, so can't override
 			pass
 
-		if not config.use_system_inactive_caption_colour:
-			return
 
 		# now set the inactive caption colour
 		# wxAUI arguably should do this itself
 		# on high contrast black, you couldn't see the inactive captions at
 		# all
 		prov = self.aui_mgr.GetArtProvider()
+
+		# wxAUI darkens the gripper colour if it is too light. However, this
+		# looks ugly next to a toolbar.
+		prov.SetColour(wx.aui.AUI_DOCKART_GRIPPER_COLOUR,
+			wx.SystemSettings.GetColour(wx.SYS_COLOUR_3DFACE))
+
+		if not config.use_system_inactive_caption_colour:
+			return
+		
 		prov.SetMetric(aui.AUI_DOCKART_GRADIENT_TYPE, 
 					   aui.AUI_GRADIENT_HORIZONTAL)
 

@@ -332,10 +332,6 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.genbooktext = GenBookFrame(self, biblemgr.genbook)
 
 		self.bibletext = BibleFrame(self)
-		self.bibletext.SetPage("""\
-		There seems to have been a problem loading. Check console for more 
-		details, or try to go to <a href="bible:Gen1:1">Genesis 1:1</a>""")
-
 		self.bibletext.SetBook(biblemgr.bible)
 
 		# set a watch on the bibletext to update the reference in text box
