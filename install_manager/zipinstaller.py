@@ -7,6 +7,9 @@ ZIPFILE_TMP = "zipfile.tmp"
 class InvalidModuleException(Exception):
 	pass
 
+class BadMetadata(Exception):
+	pass
+
 class ZipInstaller(object):
 	def __init__(self, zip_path):
 		self.zip_path = zip_path
@@ -23,7 +26,8 @@ class ZipInstaller(object):
 		sections = item.getSections()
 		it = sections.begin()
 		if it == sections.end():
-			raise InvalidModuleException("Cannot read module metadata")
+			raise BadMetadata("Cannot read book metadata in file %s" %
+				self.zip_file)
 		
 		name, section = it.value()
 		name = name.c_str()
@@ -99,3 +103,5 @@ class ZipInstaller(object):
 		key, value = it.value()
 		return value.c_str()
 
+	def getConfigMap(self):
+		return self.config_section

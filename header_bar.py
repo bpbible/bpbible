@@ -324,6 +324,7 @@ class HeaderBar(wx.Panel):
 
 		# and update our list of items
 		self.items = new_items
+		self.Update()
 		
 	def position_item(self, next_item, last_item, is_left):
 		"""Positions an item based on the previous one and the direction

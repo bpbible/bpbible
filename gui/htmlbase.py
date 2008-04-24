@@ -1,5 +1,6 @@
 import wx
 import wx.html
+import wx.lib.wxpTag
 from wx import html
 from gui import guiutil
 from util import util
