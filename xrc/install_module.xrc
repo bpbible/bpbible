@@ -41,8 +41,12 @@
         <border>6</border>
       </object>
       
+      
       <object class="sizeritem">
-        <object class="wxHtmlWindow" name="modules_info" subclass="displayframe.DisplayFrameXRC">
+        <object class="wxPanel" name="modules_info">
+          <object class="wxBoxSizer">
+            <orient>wxVERTICAL</orient>
+          </object>
           <style>wxSUNKEN_BORDER</style>
         </object>
         <option>1</option>
@@ -63,6 +67,7 @@
         <border>6</border>
       </object>
     </object>
+    <object class="wxPanel"/>
     <title>Book Installation</title>
     <style>wxDEFAULT_DIALOG_STYLE</style>
   </object>
