@@ -855,6 +855,15 @@ class MainFrame(wx.Frame, AuiLayer):
 											 verse=event.ref))
 	
 	def set_bible_ref(self, ref, source, settings_changed=False):
+		"""Sets the current Bible reference to the given reference.
+
+		This will trigger a Bible reference update event.
+
+		ref: The new reference (as a string).
+		source: The source of the change in Bible reference.
+			The possible sources are defined in events.py.
+		settings_changed: This is true if the settings have been changed.
+		"""
 		self.currentverse = str(pysw.GetVerseStr(ref, self.currentverse,
 			raiseError=True))
 		
