@@ -1,5 +1,5 @@
 #summary Searching in BPBible
-#labels Featured
+#labels Featured,User-Documentation
 
 = Introduction =
 
@@ -53,6 +53,11 @@ e.g. `/\bSon of (Man|God)\b/`
 
 These can be combined:
 `Jesus /\bSon of (Man|God)\b/ "said to them"` will match Jesus near one of the phrases "Son of Man" or "Son of God", as long as it is also near the phrase "said to them"
+
+To exclude certain words, phrases or regular expressions, put a `-` in front of them.
+For example, `grace -mercy` will find verses that have grace in, but don't have mercy.
+
+`Jesus -/\bSon of (Man|God)\b/` will find verses which have Jesus in, but don't have "Son of Man" or "Son of God" in them.
 
 == Cross Verse Searching Example ==
 Indexed search supports matches across verse boundaries. One search term can be in one verse, and another in the next.
