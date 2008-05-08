@@ -14,7 +14,7 @@ def split_source_directory(url):
 			path = path[1:]
 			return netloc, path
 	
-	assert False, "Couldn't match url %s" % url
+	return None
 
 class InstallSource(object):
 	def __init__(self, type="FTP", confEnt=None):
@@ -33,7 +33,7 @@ class InstallSource(object):
 
 	
 	def getConfEnt(self):
-		return "|".join(self.caption, self.source, self.directory)
+		return "|".join((self.caption, self.source, self.directory))
 	
 	def flush(self):
 		self.mgr = None
@@ -46,7 +46,9 @@ class InstallSource(object):
 		return self.mgr
 
 	def set_url(self, url):
-		self.source, self.directory = split_source_directory(url)
+		sd = split_source_directory(url)
+		if sd is not None:
+			self.source, self.directory = sd
 
 	def get_url(self):
 		return self.source + "/" + self.directory

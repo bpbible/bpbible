@@ -1,6 +1,7 @@
 import swlib.swordlib as SW
 import re
 from util.debug import *
+from util.unicode import to_str, to_unicode
 
 REG_ICASE = 1 << 1
 SWMULTI = -2
@@ -85,13 +86,14 @@ class VK(SW.VerseKey):#, object):
 	"""
 
 	def __init__(self, key=()):
-		if isinstance(key, str):
+		if isinstance(key, basestring):
 			#if not KeyExists(key):
 			#	raise VerseParsingError, key
-			SW.VerseKey.__init__(self, key)
+			SW.VerseKey.__init__(self, to_str(key))
 			if self.Error():
 				raise VerseParsingError, key
 			return
+			
 		if isinstance(key, SW.Key):
 			SW.VerseKey.__init__(self, key)
 			return
@@ -125,8 +127,8 @@ class VK(SW.VerseKey):#, object):
 		return not self == other
 
 	# TODO: __nonzero__?
-	def __str__(self): return self.getRangeText()
-	def __repr__(self): return "VK('%s')" % self.getRangeText()
+	def __str__(self): return to_unicode(self.getRangeText())
+	def __repr__(self): return "VK('%s')" % to_unicode(self.getRangeText())
 
 	def __iadd__(self, amount): 
 		if amount < 0:
@@ -139,15 +141,15 @@ class VK(SW.VerseKey):#, object):
 		return self
 	
 	def get_text(self):
-		return str(self)
+		return self.__str__()
 	
 	def set_text(self, value):
-		if(isinstance(value, str)):
+		if(isinstance(value, basestring)):
 			if not KeyExists(value):
 				raise VerseParsingError, value
 			self.ClearBounds()
 				
-			self.setText(value)
+			self.setText(to_str(value))
 		else:
 			top, bottom=value
 			if not KeyExists(top):
@@ -163,7 +165,7 @@ class VK(SW.VerseKey):#, object):
 	text = property(get_text, set_text)
 	
 	def set_text_checked(self, value):
-		assert isinstance(value, str)
+		assert isinstance(value, basestring)
 		an = self.AutoNormalize(0)
 		try:
 			self.setText(value)
@@ -353,7 +355,9 @@ class VerseList(list):
 			list.__init__(self, args2)
 			return
 
-		if(isinstance(args, str)):
+		if isinstance(args, basestring):
+			args = to_str(args)
+			context = to_str(context)
 			s = args
 			if not raiseError:
 				args = vk.ParseVerseList(args, context, expand)
@@ -470,7 +474,7 @@ class VerseList(list):
 		return list.__setitem__(self, name, self.keyallowed(value))
 	
 	def getRangeText(self):	
-		return "; ".join(map(str, self))
+		return "; ".join(item.text for item in self)
 
 	def VerseInRange(self, verse):#, range, context="", vklist=None):
 		#if not(vklist): #lastrange and range==lastrange):
@@ -709,11 +713,12 @@ class TK(SW.TreeKeyIdx):
 				yield TK(tk)
 				while(tk.nextSibling()):
 					yield TK(tk)
+
 	def __repr__(self):
-		return "<TK("+self.getText()+")>"
+		return "<TK(%s)>" % to_unicode(self.getText())
 	
 	def __str__(self):
-		return self.getLocalName()
+		return to_unicode(self.getLocalName())
 	
 	def __getitem__(self, key):
 		return [a for a in self][key]
@@ -753,6 +758,8 @@ class TK(SW.TreeKeyIdx):
 		if book:
 			# process the key to process any utf-8
 			breadcrumb = [book.mod.RenderText(t) for t in breadcrumb]
+		else:
+			breadcrumb = [to_unicode(t) for t in breadcrumb]
 
 		return " > ".join(breadcrumb[::-1])
 	
@@ -763,9 +770,9 @@ def _test():
 
 
 # -- Utility functions
-def GetVerseTuple(string, context = ""):
+def GetVerseTuple(string, context=""):
 	#TODO check valid
-	text = vk.ParseVerseList(str(string), context, True).getText()
+	text = vk.ParseVerseList(to_str(string), to_str(context), True).getText()
 	# Normalize result
 	vk.setText(text)
 	return (vk.NewIndex(), vk.getText())
@@ -782,7 +789,7 @@ def GetVerseStr(verse, context = "", raiseError=False):
 	# Parse List (This is for context)
 	verse_split = verse.split(";")[0].split(",")[0]
 
-	vklist = VerseList(str(verse_split), context, expand=False,
+	vklist = VerseList(verse_split, context, expand=False,
 		raiseError=raiseError)
 	if not vklist: 
 		if raiseError:
@@ -797,7 +804,7 @@ def GetVerseStr(verse, context = "", raiseError=False):
 	return vk[0].text
 
 def GetBookChapter(string, context = ""):
-	chapter = vk.ParseVerseList(str(string), context, True).getText()
+	chapter = vk.ParseVerseList(to_str(string), to_str(context), True).getText()
 	index = chapter.find(":")
 	
 	if index != -1:
@@ -819,7 +826,7 @@ def GetShortText(text):
 	return "-".join(ret)
 
 def GetVKs(range, context=""):
-	lk=vk.ParseVerseList(str(range), context, True)
+	lk=vk.ParseVerseList(to_str(range), to_str(context), True)
 	l=[]
 	l2=[]
 	while lk.Error()=='\x00':
@@ -881,7 +888,7 @@ class Searcher(SW.Searcher):
 
 		scope = None
 		if(scopestr):
-			scope = self.vk.ParseVerseList(scopestr, "", True)
+			scope = self.vk.ParseVerseList(to_str(scopestr), "", True)
 
 		verseslist = self.doSearch(string, options, 
 			(not case_sensitive)*REG_ICASE, scope)

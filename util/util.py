@@ -87,7 +87,9 @@ def ReplaceUnicode(data):
 
 	for item, replacement in replacements.items():
 		data = data.replace("&#%d;" % item, replacement)
-		data = data.replace(unichr(item), replacement)
+
+		# hmm. Using unicode replace on non-ascii str's text doesn't work
+		# data = data.replace(unichr(item), replacement)
 
 	return data
 
@@ -125,9 +127,6 @@ def nl2br(data):
 def br2nl(data):
 	return re.sub("<br[^>]*>", "\n", data)
 	
-def unformat(data):
-	return KillTags(ReplaceUnicode(data))
-
 def interact(interaction_locals):
 	import code
 	code.InteractiveConsole(locals=interaction_locals).interact()
