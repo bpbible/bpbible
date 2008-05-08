@@ -285,13 +285,13 @@ class LazyTreeCombo(TreeCombo):
 		self.Bind(wx.EVT_TEXT, self.OnChoice)
 
 	def AddItems(self, item):
-		tk, hasExpanded = self.tree.GetPyData(item)
+		data, hasExpanded = self.tree.GetPyData(item)
 		if hasExpanded: return
-		self.tree.SetPyData(item, (tk, True))
-		for a in tk:
-			node = self.tree.AppendItem(item, str(a))
+		self.tree.SetPyData(item, (data, True))
+		for child in data:
+			node = self.tree.AppendItem(item, unicode(child))
 			# set data to key, hasexpanded
-			self.tree.SetPyData(node, (a, False))
+			self.tree.SetPyData(node, (child, False))
 			if(self.has_children(node)):
 				self.tree.SetItemHasChildren(node)
 

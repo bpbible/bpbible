@@ -1,6 +1,5 @@
 from util import util
 import os
-from util import osutils
 import sys
 import getopt
 from ConfigParser import RawConfigParser, NoSectionError, NoOptionError

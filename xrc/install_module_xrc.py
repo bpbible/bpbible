@@ -39,6 +39,7 @@ class xrcModuleInstallDialog(wx.Dialog):
         self.gui_warning_panel = xrc.XRCCTRL(self, "gui_warning_panel")
         self.static_text = xrc.XRCCTRL(self, "static_text")
         self.modules_info = xrc.XRCCTRL(self, "modules_info")
+        self.destination = xrc.XRCCTRL(self, "destination")
         self.wxID_OK = xrc.XRCCTRL(self, "wxID_OK")
         self.wxID_CANCEL = xrc.XRCCTRL(self, "wxID_CANCEL")
 

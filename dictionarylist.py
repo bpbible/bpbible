@@ -20,9 +20,11 @@ class DictionaryList(VirtualListBox):
 			b = wx.BusyInfo("Getting dictionary topic list...")
 			if not _disabled:
 				self.topics = book.GetTopics()
+				self._upper_topics = self.topics.upper
+				
 			else:
 				self.topics = ["DISABLED"]
-			self._topics = [s.upper() for s in self.topics]
+				self._upper_topics = self.topics
 
 			self.set_data(self.topics)
 
@@ -30,9 +32,11 @@ class DictionaryList(VirtualListBox):
 		wx.CallAfter(set_book)
 
 	def choose_item(self, text):
-		text = self.book.snap_text(text)
 		# get what sword thinks the key should be
-		idx = bisect.bisect_left(self._topics, text)
+		text = self.book.snap_text(text)
+
+		# then look it up in the list
+		idx = bisect.bisect_left(self._upper_topics, unicode(text))
 
 		idx = min(len(self.topics)-1, idx)
 		self.EnsureVisible(idx)
@@ -58,7 +62,7 @@ class DictionarySelector(wx.Panel):
 		# unbind the selected event so that we don't go into an infinite loop
 		# TODO: check whether this is really necessary
 		self.list.Unbind(wx.EVT_LIST_ITEM_SELECTED)
-		self.list.choose_item(self.text_entry.GetValue())
+		self.list.choose_item(self.text_entry.GetValue().upper())
 		self.list.Bind(wx.EVT_LIST_ITEM_SELECTED, self.on_list)
 		self.item_changed()
 

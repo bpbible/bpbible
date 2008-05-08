@@ -76,7 +76,7 @@
         </object>
       </object>
       <object class="wxMenu" name="options">
-        <label>_Options</label>
+        <label>Bible _Options</label>
       </object>
       <object class="wxMenu" name="windows">
         <label>Windows</label>

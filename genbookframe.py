@@ -27,7 +27,7 @@ class GenBookFrame(BookFrame):
 		
 		
 	
-	def SetReference(self, ref, context = None):
+	def SetReference(self, ref, context=None):
 		self.reference = ref
 		if self.book.mod:
 			bref = TK(ref)

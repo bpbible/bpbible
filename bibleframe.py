@@ -232,9 +232,8 @@ class BibleFrame(VerseKeyedFrame):
 			data += chapter
 
 			data = data.replace("<!P>","</p><p>")
-			if not wx.USE_UNICODE:
-				#replace common values
-				data = ReplaceUnicode(data)
+			#replace common values
+			data = ReplaceUnicode(data)
 
 			self.SetPage(data, raw=raw)
 

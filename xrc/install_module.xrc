@@ -37,11 +37,9 @@
           </object>
         </object>
         <option>0</option>
-        <flag>wxALL|wxGROW</flag>
+        <flag>wxTOP|wxLEFT|wxRIGHT|wxGROW</flag>
         <border>6</border>
       </object>
-      
-      
       <object class="sizeritem">
         <object class="wxPanel" name="modules_info">
           <object class="wxBoxSizer">
@@ -50,6 +48,28 @@
           <style>wxSUNKEN_BORDER</style>
         </object>
         <option>1</option>
+        <flag>wxALL|wxGROW</flag>
+        <border>6</border>
+      </object>
+      <object class="sizeritem">
+        <object class="wxPanel">
+          <object class="wxBoxSizer">
+            <object class="sizeritem">
+              <object class="wxStaticText">
+                <label>Install to:</label>
+              </object>
+              <flag>wxALIGN_CENTRE_VERTICAL</flag>
+            </object>
+            <object class="sizeritem">
+              <object class="wxChoice" name="destination"/>
+              <option>1</option>
+              <flag>wxLEFT|wxGROW</flag>
+              <border>6</border>
+            </object>
+            <orient>wxHORIZONTAL</orient>
+          </object>
+        </object>
+        <option>0</option>
         <flag>wxALL|wxGROW</flag>
         <border>6</border>
       </object>
@@ -67,7 +87,6 @@
         <border>6</border>
       </object>
     </object>
-    <object class="wxPanel"/>
     <title>Book Installation</title>
     <style>wxDEFAULT_DIALOG_STYLE</style>
   </object>

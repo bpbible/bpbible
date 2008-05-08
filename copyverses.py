@@ -7,7 +7,7 @@ import wx
 
 from xrc.copyverses_xrc import *#xrcCopyVerseDialog
 from backend.bibleinterface import biblemgr
-from util.util import VerseTemplate, unformat, Template
+from util.util import VerseTemplate, Template
 from util import util
 
 from wx import stc
@@ -297,7 +297,7 @@ class CopyVerseDialog(xrcCopyVerseDialog):
 			data = config.MODULE_MISSING_STRING
 
 		data = util.br2nl(data)
-		data = unformat(data)
+		data = util.KillTags(data)
 
 		#restore
 		biblemgr.restore_state()

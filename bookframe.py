@@ -11,6 +11,7 @@ from swlib.pysw import GetVerseStr, GetBookChapter, GetBestRange
 from util import util
 from util.util import ReplaceUnicode
 from util.debug import *
+from util.unicode import to_str, to_unicode
 from gui import guiutil
 import config
 import guiconfig
@@ -74,9 +75,9 @@ class BookFrame(DisplayFrame):
 		else:
 			data = text
 			data = data.replace("<!P>","</p><p>")
-			if True:#:wx.USE_UNICODE:
-				#replace common values
-				data = ReplaceUnicode(data)
+			#replace common values
+			data = ReplaceUnicode(data)
+
 		self.SetPage(data, raw=raw)
 		self.update_title()
 		
@@ -385,12 +386,12 @@ class DictionaryFrame(BookFrame):
 
 		key = mod.getKey()
 		key.Persist(1)
-		key.setText(self.reference)
+		key.setText(to_str(self.reference, mod))
 		mod.setKey(key)
 		#while(not ord(self.mod.Error())):
 		#		topics.append(self.mod.getKeyText());
 		mod.increment(amount);
-		ref = mod.getKeyText()
+		ref = to_unicode(mod.getKeyText(), mod)
 		self.notify(ref, source=CHAPTER_MOVE)
 	
 	def update_title(self, shown=None):
@@ -398,7 +399,7 @@ class DictionaryFrame(BookFrame):
 		p = m.get_pane_for_frame(self)
 		version = self.book.version
 		ref = self.reference
-		text = "%s - %s (%s)" % (p.name, self.book.snap_text(ref), version)
+		text = u"%s - %s (%s)" % (p.name, self.book.snap_text(ref), version)
 		m.set_pane_title(p.name, text)
 	
 	def get_window(self):

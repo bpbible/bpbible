@@ -3,6 +3,7 @@ from wx import html
 import re
 
 import displayframe
+from util.unicode import to_unicode_2
 
 def process(info):
 	if not info: return ""
@@ -17,6 +18,14 @@ def process(info):
 	info = re.sub(r"\\u(\d+)\?", uniconvert, info)
 	return info
 
+def try_unicode(text, mod):
+	try:
+		return to_unicode_2(text, mod)
+	except UnicodeDecodeError:
+		# ESV doesn't properly utf-8 copyright symbol in its about
+		# so if we can't convert it to unicode, leave it as it is
+		return text
+
 class ModuleInfo(wx.Dialog):
 	def __init__(self, parent, module):
 		super(ModuleInfo, self).__init__(parent, title="Module Information", 
@@ -24,12 +33,17 @@ class ModuleInfo(wx.Dialog):
 
 		self.module = module
 		panel = wx.Panel(self)
+
 		fields = (
-			("Name", process(module.Name()), -1), 
-			("Description", process(module.Description()), 75),
-			("About", process(module.getConfigEntry("About")), 115), 
-			("License", 
-				process(module.getConfigEntry("DistributionLicense")),75)
+			("Name", process(try_unicode(module.Name(), module)), -1), 
+			("Description", 
+				process(try_unicode(module.Description(), module)), 75),
+			("About", process(
+				try_unicode(module.getConfigEntry("About"), module)), 115), 
+			("License", process(try_unicode(
+						module.getConfigEntry("DistributionLicense"), 
+						module
+					)), 75)
 		)
 
 		self.add_fields(fields, panel)
@@ -96,7 +110,7 @@ class ModuleInfo(wx.Dialog):
 		
 		
 		gs.AddGrowableRow(len(fields), 75)
-		gs.Add(self.variable_choice, 0, wx.GROW|wx.TOP, 3)
+		gs.Add(self.variable_choice, 0, wx.TOP, 3)
 		gs.Add(self.variable_field, 1, flag=wx.GROW)
 		
 		self.variable_field.SetSize((250, 75))

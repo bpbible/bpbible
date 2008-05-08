@@ -1,7 +1,6 @@
 import wx
 from wx.lib.mixins.listctrl import ListCtrlAutoWidthMixin
 
-
 class VirtualListCtrl(wx.ListCtrl, ListCtrlAutoWidthMixin):
 	def __init__(self, parent, style):
 		super(VirtualListCtrl, self).__init__(parent,
@@ -36,8 +35,10 @@ class VirtualListCtrl(wx.ListCtrl, ListCtrlAutoWidthMixin):
 			self.SetItemCount(length)
 		else:
 			self.data = data
-		
-			self.SetItemCount(len(self.data))
+			if length is not None:
+				self.SetItemCount(length)
+			else:
+				self.SetItemCount(len(self.data))
 
 		self._doResize()
 
@@ -70,8 +71,11 @@ class VirtualListBox(VirtualListCtrl):
 		else:
 			self.RefreshItems(start, end)
 	
+	def get_data(self, item, column):
+		return self.data[item]
+	
 	def set_data(self, data):
-		super(VirtualListBox, self).set_data("0", [(item,) for item in data])
+		super(VirtualListBox, self).set_data("0", data, length=len(data))
 
 	#def on_size(self, event):
 	#	self.SetColumnWidth(0, self.ClientSize[0])
