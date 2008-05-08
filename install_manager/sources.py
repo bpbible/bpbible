@@ -1,5 +1,5 @@
 import wx
-from xrc.installmgr_sources_xrc import xrcSourcesDialog
+from xrc.installmgr_sources_xrc import xrcSourcesPanel
 from gui.guiutil import bmp
 from util.observerlist import ObserverList
 from swlib.installsource import InstallSource
@@ -56,9 +56,9 @@ class SourcesModel(object):
 	def save(self):
 		print [item.getConfEnt() for item in self.sources]
 	
-class SourcesDialog(xrcSourcesDialog):
+class SourcesPanel(xrcSourcesPanel):
 	def __init__(self, parent):
-		super(SourcesDialog, self).__init__(parent)
+		super(SourcesPanel, self).__init__(parent)
 		self.sources = SourcesModel()
 
 		self.toolbar = wx.ToolBar(self.toolbar_panel, 
@@ -84,8 +84,6 @@ class SourcesDialog(xrcSourcesDialog):
 			self.gui_remove
 		)
 
-		self.Bind(wx.EVT_CLOSE, lambda evt: (self.sources.save(), evt.Skip()))
-
 		self.source_name.Bind(wx.EVT_TEXT, self.change_item_caption)
 
 		self.source_location.Bind(wx.EVT_TEXT, 
@@ -101,8 +99,9 @@ class SourcesDialog(xrcSourcesDialog):
 		self.toolbar.MinSize = self.toolbar.Size
 		sizer = wx.BoxSizer(wx.HORIZONTAL)
 		sizer.Add(self.toolbar, 1, wx.GROW)
-		self.toolbar_panel.SetSizer(sizer)
+		self.toolbar_panel.SetSizerAndFit(sizer)
 		self.SetSize((550, 320))
+		self.Layout()
 		self.update_ui()
 
 		self.sources.on_change_item += self.on_change_item
@@ -147,8 +146,12 @@ class SourcesDialog(xrcSourcesDialog):
 	def update_ui(self):
 		has_selection = self.sources_list.GetSelection() != wx.NOT_FOUND
 		self.properties_panel.Enable(has_selection)
-
+	
 if __name__ == '__main__':
 	a = wx.App(0)
-	f = SourcesDialog(None)
+	f = wx.Dialog(None)
+	p = SourcesPanel(f)
+	s = wx.BoxSizer(wx.HORIZONTAL)
+	s.Add(p, 1, wx.GROW)
+	f.SetSizerAndFit(s)
 	f.ShowModal()

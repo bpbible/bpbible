@@ -1,9 +1,11 @@
 import os
 import zipfile
 from swlib.pysw import SW
-from util.debug import dprint, WARNING
+from util.debug import dprint, WARNING, INSTALL_ZIP
+from cStringIO import StringIO
 
 ZIPFILE_TMP = "zipfile.tmp"
+
 class InvalidModuleException(Exception):
 	pass
 
@@ -40,22 +42,20 @@ class ZipInstaller(object):
 		
 		os.remove(ZIPFILE_TMP)
 		return name, section
-
+		
 	def open_zipfile(self, zip_path):
-		zip_file = zipfile.ZipFile(zip_path)
+		zip_file = self.read_zipfile(zip_path)
 		file_list = zip_file.filelist
 		module_name = None
 
 		for zip_info in file_list:
-			item = zip_info.filename
-			if os.path.dirname(item) == "mods.d" and item.endswith(".conf"):
-				# we found a .conf file in the mods.d directory
-				# this is the only check currently done
-				return zip_file, item
+			dprint(INSTALL_ZIP, "Has file %s" % zip_info.filename)
+			if self.is_conf(zip_info):
+				return zip_file, zip_info.filename
 	
 		raise InvalidModuleException("File does not appear to be a valid book")
-
-	def extract_zipfile(self, zip_file, dest=""):
+	
+	def extract_zipfile(self, dest="", progress=lambda percent, string:None):
 		"""Extract a zip file.
 
 		Rawzip layout looks like this
@@ -73,20 +73,47 @@ class ZipInstaller(object):
 		
 		This doesn't bother about setting time stamps at all."""
 		
-		for item in self.zip_file.filelist:
+		length = len(self.zip_file.filelist)
+
+		for idx, zipinfo in enumerate(self.zip_file.filelist):
 			# don't bother about directories
+			item = zipinfo.filename
+			progress((idx*100)/length, "Extracting %s" % item)
+			dprint(INSTALL_ZIP, "Extracting %s" % item)
+			
+
 			if item.endswith("/"):
 				continue
 
-			directory = os.path.dirname(item)
-			absolute_directory = dest + directory
+			filename = self.get_extracted_path(item)
+			dprint(INSTALL_ZIP, "Extract to: %s" % filename)
+
+			directory = os.path.dirname(filename)
+			absolute_directory = os.path.join(dest, directory)
 			
 			if not os.path.exists(absolute_directory):
 				os.makedirs(absolute_directory)
 
-			outfile = open(dest + item, "wb")
+			outfile = open(os.path.join(dest, filename), "wb")
 			outfile.write(self.zip_file.read(item))
 			outfile.close()
+
+	# These three functions are overridden to support Windows and Mac zips
+	def read_zipfile(self, zip_path):
+		return zipfile.ZipFile(zip_path)
+	
+	def is_conf(self, zip_info):
+		item = zip_info.filename
+		# we found a .conf file in the mods.d directory
+		# this is the only check currently done to check whether this is a
+		# valid module
+		
+		return os.path.dirname(item) == "mods.d" and item.endswith(".conf")
+	
+	def get_extracted_path(self, item):
+		# for raw zips, the extract path is the path in the zip file
+		return item
+		
 
 	# SWModule compatibility functions
 	def Name(self):
@@ -105,3 +132,89 @@ class ZipInstaller(object):
 
 	def getConfigMap(self):
 		return self.config_section
+
+class MacZipInstaller(ZipInstaller):
+	def is_conf(self, zip_info):
+		item = zip_info.filename
+		dirname = os.path.dirname(item)
+
+		# personal would be Personal.swd\mods.d\personal.conf
+		
+		# we found a .conf file in the mods.d directory
+		# this is the only check currently done to check whether this is a
+		# valid module
+		
+		return ".swd/mods.d" in dirname and item.endswith(".conf")
+
+	def get_extracted_path(self, item):
+		segments = []
+		head = item
+
+		# for Mac zips, chew off the starting *.swd
+		while True:
+			head, tail = os.path.split(head)
+			segments.insert(0, tail)
+			if not head:
+				break
+		
+		if segments[0].endswith(".swd"):
+			item = os.path.join(*segments[1:])
+
+		return item
+
+	
+class WindowsZipInstaller(ZipInstaller):
+	def read_zipfile(self, zip_path):
+		zip = zipfile.ZipFile(zip_path)
+		for item in zip.filelist:
+			if item.filename == "data.zip":
+				stringio = StringIO(zip.read(item.filename))
+				return zipfile.ZipFile(stringio)
+
+		raise InvalidModuleException(
+			"File does not appear to be a valid Windows style book"
+		)
+	
+	def is_conf(self, zip_info):
+		item = zip_info.filename
+		
+		# we found a .conf file in the newmods directory
+		# this is the only check currently done to check whether this is a
+		# valid module
+		return os.path.dirname(item) == "newmods" and item.endswith(".conf")
+		
+	def get_extracted_path(self, item):
+		segments = []
+		head = item
+
+		# for Windows zips, change all starting newmods into mods.d
+		while True:
+			head, tail = os.path.split(head)
+			segments.insert(0, tail)
+			if not head:
+				break
+		
+		if segments[0] == "newmods":
+			segments[0] = "mods.d"
+		
+		item = os.path.join(*segments[1:])
+
+		return item
+		
+		
+
+zip_installers = ZipInstaller, MacZipInstaller, WindowsZipInstaller
+
+def find_zip_installer(filename):
+	for zip_installer in zip_installers:
+		dprint(INSTALL_ZIP, "Trying to load with", zip_installer)	
+		try:
+			return zip_installer(filename)
+		except InvalidModuleException, e:
+			# it might not be this type of installer...
+			dprint(INSTALL_ZIP, "Exception thrown", e)
+	
+	dprint(INSTALL_ZIP, "Could not find handler for %s" % filename)
+	raise InvalidModuleException("File does not appear to be a valid book")
+	
+			

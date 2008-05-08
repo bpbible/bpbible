@@ -1,11 +1,14 @@
 import wx
 from xrc.install_module_xrc import xrcModuleInstallDialog, xrcModuleInfoPanel
 from moduleinfo import ModuleInfo
+from backend.bibleinterface import biblemgr
+from util.unicode import to_unicode_2
 
 INSTALL_QUERY_SINGLE = "Are you sure you want to install the following book?"
 INSTALL_QUERY_MANY = "Are you sure you want to install the following books?"
 
 def chop_text(dc, text, max_size):
+	print `text`
 	# first check if the text fits with no problems
 	x, y = dc.GetTextExtent(text)
 	if x <= max_size:
@@ -13,8 +16,7 @@ def chop_text(dc, text, max_size):
 		
 	last_good_length = 0
 	for i in range(len(text)):
-		s = text[:i]
-		s += "..."
+		s = text[:i] + "..."
 		
 		x, y = dc.GetTextExtent(s)
 		if (x > max_size):
@@ -22,12 +24,11 @@ def chop_text(dc, text, max_size):
 		
 		last_good_length = i
 
-	ret = text[:last_good_length]
-	ret += "..."
+	ret = text[:last_good_length] + "..."
 	return ret
 
 class ModuleInstallDialog(xrcModuleInstallDialog):
-	def __init__(self, parent, modules):	
+	def __init__(self, parent, modules):
 		self.modules = modules
 		super(ModuleInstallDialog, self).__init__(parent)
 		if len(modules) == 1:
@@ -40,15 +41,46 @@ class ModuleInstallDialog(xrcModuleInstallDialog):
 		
 		self.SetSizerAndFit(self.Sizer)
 		self.Size = 400, 300
+		self.dest_dir = ""
+		self.old_selection = 0
+		self.destination.Items = biblemgr.paths + ["Other..."]
+		self.destination.Selection = 0
+		self.on_destination_choice(None)
+		self.destination.Bind(wx.EVT_CHOICE, self.on_destination_choice)
 	
+	def on_destination_choice(self, event):
+		last_item = self.destination.Count - 1
+		selection = self.destination.Selection
+		if selection == last_item:
+			dlg = wx.DirDialog(self, "Choose a directory:",
+				  style=wx.DD_DEFAULT_STYLE|wx.DD_DIR_MUST_EXIST, 
+				  defaultPath=self.dest_dir)
+			
+			# If the user selects OK, then we process the dialog's data.
+			# This is done by getting the path data from the dialog - BEFORE
+			# we destroy it. 
+			ansa = dlg.ShowModal() 
+			if ansa == wx.ID_OK:
+				self.dest_dir = dlg.Path
+				new_item = self.destination.Insert(self.dest_dir, last_item)
+				self.destination.Selection = new_item
+				
+			else:
+				# If cancelled, set selection back and don't process any more
+				self.destination.Selection = self.old_selection
+				return
+		else:
+			self.dest_dir = self.destination.StringSelection
 
+		self.old_selection = selection
+		return
+			
 class VListCtrl(wx.VListBox):
 	def __init__(self, parent, items):
 		super(VListCtrl, self).__init__(parent)
 		self.base = self.GetTextExtent("ABCDEFHXfgkj")[1]
 		
 		self.focus_item = wx.Window(self, size=(0, 0))
-		self.focus_item.Bind(wx.EVT_KEY_DOWN, self.on_key_down)
 		self.focus_item.Bind(wx.EVT_SET_FOCUS, self.on_focus)
 		
 		#self.button_panel = wx.Panel(self, style=wx.TRANSPARENT_WINDOW)
@@ -56,7 +88,7 @@ class VListCtrl(wx.VListBox):
 		self.info_button.Bind(wx.EVT_BUTTON, self.on_info_button)
 		
 		
-		#self.uninstall_button = wx.Button(self, label="Uninstall")
+		self.uninstall_button = wx.Button(self, label="Uninstall")
 		
 		self.buttons = self.uninstall_button, self.info_button
 		self.Bind(wx.EVT_SIZE, self.on_size)
@@ -76,9 +108,14 @@ class VListCtrl(wx.VListBox):
 		self.modules = items
 		
 		self.SetItemCount(len(items))
-		self.SetSelection(0)
+		if items:
+			self.SetSelection(0)
+			self.ScrollToLine(0)
+		else:
+			for button in self.buttons:
+				button.Hide()
+
 		self.layout_buttons()
-		
 		
 		self.Bind(wx.EVT_LISTBOX, self.on_selected)
 	
@@ -102,24 +139,6 @@ class VListCtrl(wx.VListBox):
 	def on_focus(self, event):
 		self.SetFocusIgnoringChildren()
 
-	def on_key_down(self, event):
-		event.EventItem = self
-		event.Skip()
-		#if event.KeyCode == wx.WXK_UP:
-		#	new_selection = self.Selection - 1
-
-		#elif event.KeyCode == wx.WXK_DOWN:
-		#	new_selection = self.Selection + 1
-		#else:
-		#	event.Skip()
-		#	return
-		#
-		#if 0 <= new_selection < len(self.items):
-		#	self.Selection = new_selection
-		#	self.RefreshAll()
-		#	self.Update()
-		
-		
 	def OnMeasureItem(self, item):
 		if self.IsCurrent(item):
 			return self.base * 2 + 6 + self.buttons[0].Size[1] + 12 + 6
@@ -127,11 +146,11 @@ class VListCtrl(wx.VListBox):
 		return self.base * 2 + 6 + 6 + 6
 	
 	def on_selected(self, event):
-		print "Skipping"
 		event.Skip()
 		self.Freeze()
 		for item in self.buttons:
 			item.Hide()		
+
 		self.RefreshAll()
 		self.Thaw()
 
@@ -176,12 +195,13 @@ class VListCtrl(wx.VListBox):
 		if version:
 			dc.DrawText(version, rect.X + 6 + w + 12, rect.Y + 6)
 		
-		description = self.modules[n].Description()
+		module = self.modules[n]
+		
+		description = to_unicode_2(module.Description(), module)
+		
 		description = chop_text(dc, description, rect.Width - 12)
 		dc.DrawText(description, 
 			rect.X + 6, rect.Y + 6 + self.base + 6, )
-		
-		
 
 	def OnDrawBackground(self, dc, rect, n):
 		if self.IsCurrent(n):
@@ -198,8 +218,6 @@ class VListCtrl(wx.VListBox):
 			dc.Pen = wx.TRANSPARENT_PEN
 			dc.DrawRectangle(*rect)
 
-
-	
 	def OnDrawSeparator(self, dc, rect, n):
 		dc.Pen = wx.Pen((192, 192, 192))
 
@@ -214,18 +232,11 @@ class VListCtrl(wx.VListBox):
 		
 		rect.Height -= 1
 	
-	def SetFocus(self):
-		print "TTEST"
-		
-
-
 def main():	
 	app = wx.App(0)
-	from swlib.pysw import SW
-	mgr = SW.Mgr("\Sword")
 	#mods = "KJV ESV".split() * 5
 	#mods = [mgr.getModule(mod) for mod in mods]
-	mods = mgr.getModules().values()
+	mods = biblemgr.get_modules().values()
 	ModuleInstallDialog(None, mods).ShowModal()
 
 if __name__ == '__main__':

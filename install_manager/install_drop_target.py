@@ -2,6 +2,7 @@ import wx
 from moduleinfo import ModuleInfo
 from install_manager.install_module import ModuleInstallDialog
 from install_manager import zipinstaller
+import traceback
 
 class ModuleDropTarget(wx.FileDropTarget):
 	def __init__(self, window):
@@ -21,8 +22,8 @@ class ModuleDropTarget(wx.FileDropTarget):
 				if not filename.endswith(".zip"):
 					raise zipinstaller.InvalidModuleException(filename)
 
-				modules.append(zipinstaller.ZipInstaller(filename))
-			
+				modules.append(zipinstaller.find_zip_installer(filename))
+
 			except zipinstaller.InvalidModuleException:
 				bad_files.append(filename)
 
@@ -39,6 +40,39 @@ class ModuleDropTarget(wx.FileDropTarget):
 			wx.MessageBox(message, "Error")
 
 		else:
-			ModuleInstallDialog(self.window, modules).ShowModal()
+			try:
+				dlg = ModuleInstallDialog(self.window, modules)
+				ansa = dlg.ShowModal()
+				if ansa == wx.ID_OK:
+					self.install_modules(modules, dlg.dest_dir)
+
+				dlg.Destroy()
+			except Exception, e:
+				wx.MessageBox(
+					("An error occurred while installing modules."
+					"Please make sure that the directory exists, and that you "
+					"have permission to write to the directory.\n"
+					"The error given was:\n%s") % traceback.format_exc(), 
+					"Error installing modules")
 				
+	def install_modules(self, modules, dest_dir):
+		def callback(progress, text):
+			print progress, text
+			continuing, skip = p.Update(progress, text)
+			wx.GetApp().Yield()
 	
+		for module in modules:
+			p = wx.ProgressDialog("Extracting %s" % module.Description(),
+				"Preparing", style=wx.PD_APP_MODAL)
+
+			# make it nice and long so that the status text will fit in
+			p.Size = (640, -1)
+
+			p.Show()
+
+			try:
+				module.extract_zipfile(dest_dir, callback)
+				
+			finally:
+				p.Hide()
+				p.Destroy()			
