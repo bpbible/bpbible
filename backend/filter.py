@@ -2,20 +2,19 @@ from swlib.pysw import SW
 from util.debug import dprint, ERROR
 
 from backend import thmlparser, osisparser
+from backend import filterutils
 
 
 # keep a list of all our items so they don't get GC'ed
 items = []
 
-bm_items = []
 class MarkupInserter(SW.MarkupCallback):
 	def __init__(self, biblemgr):
 		super(MarkupInserter, self).__init__()
 		self.thisown = False
 		self.biblemgr = biblemgr
 
-		for item in bm_items:
-			item.set_biblemgr(biblemgr)
+		filterutils.register_biblemgr(biblemgr)
 		items.append(self)
 	
 	def run(self, module):
@@ -61,8 +60,6 @@ def make_thml():
 def make_osis():
 	osisrenderer = osisparser.OSISRenderer()
 	items.append(osisrenderer)
-	bm_items.append(osisrenderer)
-	
 	
 	osis = SW.PyOSISHTMLHREF(osisrenderer)
 	osis.thisown = False

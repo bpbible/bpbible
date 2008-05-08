@@ -126,7 +126,7 @@ class OSISParser(filterutils.ParserBase):
 		ellipsis = int(filterutils.filter_settings["footnote_ellipsis_level"])
 	
 		if(self.u.inXRefNote and ellipsis):
-			refs = str(pysw.VerseList(self.refs)).split(";")
+			refs = pysw.VerseList(self.refs).GetBestRange().split(";")
 
 			self.buf += filterutils.ellipsize(refs, self.u.key.getText(),
 					ellipsis)
@@ -140,6 +140,7 @@ class OSISParser(filterutils.ParserBase):
 			# after a note, it prints out contents of note uppercase
 			self.u.lastSuspendSegment.size(0)
 			return
+
 		self.success = SW.INHERITED	
 	
 		

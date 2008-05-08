@@ -3,6 +3,8 @@ from swlib.pysw import VK, SW, GetBestRange, GetVerseStr
 from util.util import PushPopList, VerseTemplate
 from util import observerlist
 from util.debug import dprint, WARNING
+from util.unicode import to_str, to_unicode
+
 import config
 
 #ERR_OK = '\x00'
@@ -21,7 +23,6 @@ class Book(object):
 		self.template = VerseTemplate(body = "$text")
 		self.templatelist = PushPopList(self.template)
 		self.vk = VK()
-		self.lastverse = ""
 		self.headings = False
 		if self.ModuleExists(version):
 			self.SetModule(version)
@@ -46,7 +47,7 @@ class Book(object):
 		
 		else:
 			# look up the book
-			new_mod = self.parent.mgr.getModule(modname)	
+			new_mod = self.parent.get_module(modname)	
 			if not new_mod:
 				return False
 			
@@ -58,7 +59,7 @@ class Book(object):
 		return True
 	
 	def ModuleExists(self, modname):
-		return bool(self.parent.mgr.getModule(modname))
+		return bool(self.parent.get_module(modname))
 
 	@property
 	def version(self):
@@ -68,19 +69,12 @@ class Book(object):
 		#return "<No module>"
 
 	def GetModuleList(self):
-		versionlist = []
-		for i in self.parent.mgr.getModules().values():
-			if(i.Type()==self.type or type==None):
-				modname = i.Name() #get name
-				versionlist.append(modname)
-		return versionlist	
+		return [name for name, mod in self.parent.get_modules().iteritems()
+				if mod.Type() == self.type or self.type is None]
 	
 	def GetModules(self):
-		versionlist = []
-		for i in self.parent.mgr.getModules().values():
-			if(i.Type()==self.type or type==None):
-				versionlist.append(i)
-		return versionlist
+		return [mod for name, mod in self.parent.get_modules().iteritems()
+				if mod.Type() == self.type or self.type == None]
 	
 	@staticmethod
 	def get_template_options():
@@ -111,8 +105,8 @@ class Book(object):
 					header=items, footer=items)
 
 	
-	def GetReference(self, ref, specialref=None, 
-			specialtemplate=None, context=None, max_verses=176, raw=False):
+	def GetReference(self, ref, specialref="", 
+			specialtemplate=None, context="", max_verses=176, raw=False):
 		"""GetReference gets a reference from a Book.
 		
 		specialref is a ref (string) which will be specially formatted 
@@ -121,12 +115,12 @@ class Book(object):
 		if not self.mod:
 			return None
 		vk = VK()
-		if(context):
-			self.lastverse = context
+		if context:
+			lastverse = context
 		else:
-			self.lastverse = ""
-		verselist = vk.ParseVerseList(ref, self.lastverse, True)
-		self.lastverse = ref
+			lastverse = ""
+	
+		verselist = vk.ParseVerseList(to_str(ref), to_str(lastverse), True)
 		rangetext = GetBestRange(verselist.getRangeText())
 		if rangetext == "":
 			return rangetext #if invalid reference, return empty string
@@ -135,9 +129,10 @@ class Book(object):
 		#verselist.Persist()
 		self.mod.SetKey(verselist)
 		template = self.templatelist()
-		d = dict(range = rangetext, 
-				 version = self.mod.Name(), 
-				 description = self.mod.Description())
+		description = self.mod.RenderText(self.mod.Description())
+		d = dict(range=rangetext, 
+				 version=self.mod.Name(), 
+				 description=description)
 
 		verses = template.header.safe_substitute(d)
 		if specialref:
@@ -233,27 +228,7 @@ class Book(object):
 
 		return headings
 				
-
-	def Search(self, string, options = 0, scopestr = None):
-		if not self.mod:
-			return []
-		results = []
-		scope = None
-			   
-		if(scopestr):
-			scope = self.vk.ParseVerseList(scopestr, "", True)
-		verseslist = self.mod.doSearch(string, options, REG_ICASE, scope)
-		strings = verseslist.getRangeText()
-		return strings
-		verseslist.Persist(1)
-		self.mod.SetKey(verseslist)
-		while(not ord(verseslist.Error())):
-			results.append(self.mod.KeyText())
-			verseslist.increment(1)
-		return results
-
-
-	def GetReferences(self, ref, context = None, max_verses = -1):
+	def GetReferences(self, ref, context="", max_verses = -1):
 		"""Gets a list of references.
 		
 		In: ref - list of references
@@ -270,7 +245,7 @@ class Book(object):
 		lastref = context
 		for j in ref:
 			#get text
-			results.append(self.GetReference(j, context = lastref, \
+			results.append(self.GetReference(j, context=lastref, 
 							max_verses = max_verses))
 			# set context for next ref
 			lastref = GetVerseStr(j, lastref)
@@ -281,7 +256,7 @@ class Book(object):
 		if mod != self.mod:
 			if not self.ModuleExists(mod):
 				return None
-			mod = self.parent.GetModule(mod)
+			mod = self.parent.get_module(mod)
 
 		else:
 			mod = self.mod
@@ -310,7 +285,7 @@ class Book(object):
 		return verses
 
 
-	def GetReferencesFromMod(self, modname, ref, context=None, max_verses=-1):
+	def GetReferencesFromMod(self, modname, ref, context="", max_verses=-1):
 		oldmod = self.version
 		try:
 			self.SetModule(modname, notify=False)
@@ -321,10 +296,10 @@ class Book(object):
 		
 		return verses
 
-	def GetChapter(self, ref, specialref = None, specialtemplate = None, 
-			context = None, raw=False):
+	def GetChapter(self, ref, specialref="", specialtemplate = None, 
+			context="", raw=False):
 		#vk = self.mod.getKey()
-		self.vk.setText(ref)
+		self.vk.setText(to_str(ref, self.mod))
 		#get first ref
 		text = self.vk.getText()
 		index = text.find(":")
@@ -332,7 +307,7 @@ class Book(object):
 			text = text[:index]
 		return self.GetReference(text, specialref, specialtemplate, context,
 				raw=raw)
-
+				
 class Commentary(Book):
 	type = "Commentaries"
 

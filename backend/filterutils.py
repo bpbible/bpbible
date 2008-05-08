@@ -61,6 +61,7 @@ word_re = re.compile(r" \d+ +([^ ]+)")
 
 strongsgreek = strongshebrew = None
 strongs_cache = {}
+registered = False
 
 
 class ParserBase(sgmllib.SGMLParser, object):
@@ -92,17 +93,6 @@ class ParserBase(sgmllib.SGMLParser, object):
 		self.success = SW.SUCCEEDED
 		method(attributes)
 
-	
-	def clear_cache(self, biblemgr=None):
-		global strongsgreek, strongshebrew, strongs_cache
-		strongsgreek = None
-		strongshebrew = None
-		strongs_cache = {}
-	
-	def setup(self, biblemgr=None):
-		global strongsgreek, strongshebrew
-		strongsgreek = self.biblemgr.GetModule("StrongsGreek")
-		strongshebrew = self.biblemgr.GetModule("StrongsHebrew")
 	
 	def get_strongs_headword(self, value):
 		if value in strongs_cache:
@@ -145,9 +135,27 @@ class ParserBase(sgmllib.SGMLParser, object):
 		
 	def set_biblemgr(self, biblemgr):
 		self.biblemgr = biblemgr
-		self.biblemgr.on_before_reload += self.clear_cache
-		self.biblemgr.on_after_reload += self.setup
-		#self.setup()
+
+def clear_cache(biblemgr=None):
+	global strongsgreek, strongshebrew, strongs_cache
+	strongsgreek = None
+	strongshebrew = None
+	strongs_cache = {}
+	
+def setup(biblemgr):
+	global strongsgreek, strongshebrew
+	strongsgreek = biblemgr.get_module("StrongsGreek")
+	strongshebrew = biblemgr.get_module("StrongsHebrew")
+
+def register_biblemgr(biblemgr):
+	global registered
+	if registered:
+		return
+	
+	biblemgr.on_before_reload += clear_cache
+	biblemgr.on_after_reload += setup
+	registered = True
+#self.setup()
 
 		
 
