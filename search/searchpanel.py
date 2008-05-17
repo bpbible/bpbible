@@ -3,6 +3,7 @@ import wx
 from wx import xrc
 
 from util import osutils
+from util.unicode import to_unicode
 #from util.util import *
 from util import util
 from backend.bibleinterface import biblemgr
@@ -87,7 +88,7 @@ class SearchPanel(xrcSearchPanel):
 	
 	def on_list(self, event):
 		item_text = self.verselist.GetItemText(event.m_itemIndex)
-		self.versepreview.SetReference(str(item_text))
+		self.versepreview.SetReference(item_text)
 	
 	
 	def search_and_show(self, key=""):
@@ -306,7 +307,7 @@ class SearchPanel(xrcSearchPanel):
 			self.searching = True
 			self.search_button.SetLabel("&Stop")
 			
-			key = str(self.searchkey.GetValue())
+			key = self.searchkey.GetValue()
 			if not key: 
 				self.search_label.Label = "0 verses found"
 
@@ -333,9 +334,9 @@ class SearchPanel(xrcSearchPanel):
 
 			else:
 				# If custom range, use it
-				scope = str(self.custom_range.GetValue())
+				scope = self.custom_range.GetValue()
 			
-			excludestr = str(self.exclude.GetValue())
+			excludestr = self.exclude.GetValue()
 			exclude = excludestr
 			if not excludestr:
 				exclude = None
@@ -382,12 +383,12 @@ class SearchPanel(xrcSearchPanel):
 			proximity=proximity)
 
 		except SearchException, myexcept:
-			wx.MessageBox(str(myexcept), "Error in search")
+			wx.MessageBox(unicode(myexcept), "Error in search")
 			succeeded = False
 
 		except SpellingException, spell:
 			wx.MessageBox("The following words were not found in the module:"
-				"\n%s" % str(spell), "Unknown word")
+				"\n%s" % unicode(spell), "Unknown word")
 			
 			succeeded = False
 
@@ -446,7 +447,8 @@ class SearchPanel(xrcSearchPanel):
 
 	    # If custom range, use it
 		self.numwords = len(key.split())
-		self.search_results = self.searcher.Search(key, 
+		self.search_results = self.searcher.Search(
+            to_str(key, biblemgr.bible.mod),
 			search_config["search_type"], scope, case_sensitive)
 
 		# If we need to exclude, do another search through the scope 
@@ -456,7 +458,8 @@ class SearchPanel(xrcSearchPanel):
 				if not self.search_results: # or self.stop:
 					break
 
-				exclude_list = self.searcher.Search(string, 
+				exclude_list = self.searcher.Search(
+                    to_str(string, biblemgr.bible.mod),
 					search_config["search_type"],
 					"; ".join(self.search_results), 
 					case_sensitive)

@@ -59,12 +59,12 @@ def WildCard(words):
 		# "son of (three, God, test)" -man returns 24
 		# "son of (three, God)" -man returns 26
 		# this is to do with search string length, I think
-		r"\(([^)]+)\)": lambda x:r"(%s)" % re.sub(',\s*', '|', x.group(1))
+		r"\(([^)]+)\)": lambda x:r"(%s)" % r[',\s*'].sub('|', x.group(1))
 		
 	}
 
 	# compile re's
-	wildcards = [(re.compile(wildcard), replace)
+	wildcards = [(re.compile(wildcard, flags=re.UNICODE), replace)
 				  for wildcard, replace in wildcards.iteritems()]
 
 	# if we make a substitution, we will not run the spellcheck
@@ -148,8 +148,6 @@ class BookIndex(object):
 		vk.thisown = False
 
 		while vk.Error() == '\x00':
-			vk.increment(1)
-			
 			# TODO: do tests to make sure striptext works as expected
 			# (with respect to whitespace, uppercase, etc)
 			content = to_unicode(mod.StripText(), mod)
@@ -187,6 +185,8 @@ class BookIndex(object):
 					self.index[-1][2], len(content)))
 
 				verses.append(content)
+			
+			vk.increment(1)
 
 		self.text = "".join(verses)
 
@@ -195,7 +195,7 @@ class BookIndex(object):
 		"""Like regex, but returns matched text as well"""
 		mylist = []
 		
-		flags = re.IGNORECASE * (not case_sensitive)
+		flags = re.IGNORECASE * (not case_sensitive) | re.UNICODE
 
 		comp = re.compile(phrase, flags)
 		for a in comp.finditer(self.text):			
@@ -206,7 +206,7 @@ class BookIndex(object):
 	def RegexSearch(self, phrase, case_sensitive=False):
 		mylist = []
 		
-		flags = re.IGNORECASE * (not case_sensitive)
+		flags = re.IGNORECASE * (not case_sensitive) | re.UNICODE
 		
 
 		comp = re.compile(phrase, flags)
@@ -696,7 +696,7 @@ class Index(object):
 			excludes, progress, regexes, excl_regexes):
 
 		results = []
-		flags = re.IGNORECASE * (not case_sensitive)
+		flags = re.IGNORECASE * (not case_sensitive) | re.UNICODE
 
 		badwords = []
 		wordlist = []
@@ -854,19 +854,32 @@ class Index(object):
 		search_utils.WriteIndex(self)
 		
 
-re_list = ("(?<=[0-9]),(?=[0-9])", "(?<=[a-zA-Z])'(?=[a-zA-Z])",
-		"(?<=[a-zA-Z])-(?=[a-zA-Z])", " +")
-l = "((?<=[0-9]),(?=[0-9])|(?<=[a-zA-Z])'(?=[a-zA-Z])|(?<=[a-zA-Z])-(?=[a-zA-Z]))"
+# pre compile our regular expressions
+re_list = (
+	"(?<=\d),(?=\d)", 
+	"(?<=\w)'(?=\w)",
+	"(?<=\w)-(?=\w)", 
+	" +", 
+	r"[^\w ]",
+	"(?<!\d),",
+	",(?!\d)",
+	"(?<!\w)'",
+	"'(?!\w)",
+	"(?<!\w)-",
+	"-(?!\w)",
+	',\s*'	
+)
+l = "((?<=\d),(?=\d)|(?<=\w)'(?=\w)|(?<=\w)-(?=\w))"
 
 r = {}
 for a in re_list:
-	r[a] = re.compile(a)
+	r[a] = re.compile(a, flags=re.UNICODE)
 
-r["l"]=re.compile(l)
-r["p"]=re.compile("[%s]" % re.escape(string.punctuation))
+r["l"]=re.compile(l, flags=re.UNICODE)
+r["p"]=re.compile("[%s]" % re.escape(string.punctuation), flags=re.UNICODE)
 r["punctuation_2"]=re.compile("[%s]" % re.escape(
 	''.join(x for x in string.punctuation if x not in "',-")
-))
+), flags=re.UNICODE)
 
 
 
@@ -875,34 +888,38 @@ def removeformatting(mystr):
 
 	# remove commas in numbers
 	# Example "123,456" -> "123456"
-	ret = r["(?<=[0-9]),(?=[0-9])"].sub("", ret)
+	#TODO: some locales may have 2.345.345 instead of 2,345,345
+	ret = r["(?<=\d),(?=\d)"].sub("", ret)
 	
 	# remove apostrophes in words
-	ret = r["(?<=[a-zA-Z])'(?=[a-zA-Z])"].sub("", ret)
+	ret = r["(?<=\w)'(?=\w)"].sub("", ret)
 
 	#remove hyphenation
-	ret = r["(?<=[a-zA-Z])-(?=[a-zA-Z])"].sub("", ret)
+	ret = r["(?<=\w)-(?=\w)"].sub("", ret)
 	
 	#TODO: replace symbols with nothing?
 	#for a in string.punctuation:
-	ret = r["p"].sub(" ", ret)
+	#ret = r["p"].sub(" ", ret)
+	ret = r["[^\w ]"].sub(" ", ret)
 	ret = r[" +"].sub(" ", ret)
 	ret = ret.strip()
 	return ret
 
 def removeformatting2(mystr):
+	"""Remove some formatting, but leave enough data in place to display an
+	intelligent output to user with spell checking."""
 	ret = mystr
 	#TODO: replace symbols with nothing?
-	ret = re.sub("(?<![0-9]),", " ", ret)
-	ret = re.sub(",(?![0-9])", " ", ret)
+	ret = r["(?<!\d),"].sub(" ", ret)
+	ret = r[",(?!\d)"].sub(" ", ret)
 	
 	# remove apostrophes not in words
-	ret = re.sub("(?<![a-zA-Z])'", " ", ret)
-	ret = re.sub("'(?![a-zA-Z])", " ", ret)
+	ret = r["(?<!\w)'"].sub(" ", ret)
+	ret = r["'(?!\w)"].sub(" ", ret)
 
 	#don't remove hyphenation, but all other dashes
-	ret = re.sub("(?<![a-zA-Z])-", " ", ret)
-	ret = re.sub("-(?![a-zA-Z])", " ", ret)
+	ret = r["(?<!\w)-"].sub(" ", ret)
+	ret = r["-(?!\w)"].sub(" ", ret)
 	
 	ret = r["punctuation_2"].sub(" ", ret)
 	ret = r[" +"].sub(" ", ret)
