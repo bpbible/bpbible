@@ -6,7 +6,7 @@ from swlib.pysw import VK, GetVerseStr, GetBookChapter, GetBestRange
 from bookframe import VerseKeyedFrame
 from displayframe import IN_BOTH, IN_MENU, IN_POPUP
 from gui.htmlbase import linkiter, eq
-from util.util import ReplaceUnicode
+#from util.util import ReplaceUnicode
 from gui import guiutil
 from util.observerlist import ObserverList
 
@@ -125,8 +125,12 @@ class BibleFrame(VerseKeyedFrame):
 			
 	
 	def copy_quickly(self):
+		d = wx.BusyInfo("Copying selected verses...")
+		wx.Yield()
+	
 		text = self.get_quick_selected()
-		
+		wx.Yield()
+
 		cvd = CopyVerseDialog(self)
 		cvd.copy_verses(text)
 		cvd.Destroy()	
@@ -233,7 +237,7 @@ class BibleFrame(VerseKeyedFrame):
 
 			data = data.replace("<!P>","</p><p>")
 			#replace common values
-			data = ReplaceUnicode(data)
+			#data = ReplaceUnicode(data)
 
 			self.SetPage(data, raw=raw)
 
@@ -337,9 +341,9 @@ class BibleFrame(VerseKeyedFrame):
 			return
 		super(BibleFrame, self).LinkClicked(link, cell)
 	
-	def FindVerse(self, cell):
+	def FindVerse(self, cell, start_cell):
 		assert cell.IsTerminalCell()
-		i = linkiter(self.GetInternalRepresentation().GetFirstChild(), cell)
+		i = linkiter(start_cell, cell)
 
 		prev = i.m_pos
 		verse = None
@@ -381,11 +385,13 @@ class BibleFrame(VerseKeyedFrame):
 		if not self.m_selection:
 			return
 
-		self.first = self.m_selection.GetFromCell()
-		self.last = self.m_selection.GetToCell()
+		from_cell = self.m_selection.GetFromCell()
+		to_cell = self.m_selection.GetToCell()
 
-		first = self.FindVerse(self.first)
-		last = self.FindVerse(self.last)
+		start_cell = self.GetInternalRepresentation().GetFirstChild()
+		first = self.FindVerse(from_cell, start_cell=start_cell)
+		
+		last = self.FindVerse(to_cell, start_cell=start_cell)
 
 		if not first:
 			first = GetVerseStr("1", self.reference)
@@ -394,6 +400,7 @@ class BibleFrame(VerseKeyedFrame):
 			return ""
 
 		text = first + " - " + last
+		print text
 		return GetBestRange(text)
 
 	

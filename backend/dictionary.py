@@ -1,8 +1,9 @@
 #from Sword import *
-from swlib.pysw import SW
+from swlib.pysw import SW, TOP
 from backend.book import Book
 from util.unicode import to_str, to_unicode
 from util.debug import dprint, WARNING
+import re
 
 topics_dict = dict()
 
@@ -23,12 +24,8 @@ class LazyTopicList(object):
 	"""Implement a lazy topic list. This precomputes its length, and caches
 	any topics found"""
 	def __init__(self, module):
-		self.mod = SW.LD.castTo(module)
-		if not self.mod:
-			dprint("WARNING", "Dictionary wasn't a SWLD!!!")
-			entry_items = {}
-		else:
-			entry_items = self.entry_sizes
+		self.mod = module
+
 
 		self.cardinality = 0
 		self.entry_size = 0
@@ -36,18 +33,16 @@ class LazyTopicList(object):
 
 		success = False
 		try:
-			success = self.read_entry_count(entry_items)
+			success = self.read_entry_count()
 		except Exception, e:
 			dprint(WARNING, "Exception trying to read entry count", e)
 
 		if not success:
 			# Work this out the slow way
 			topics = []
-			pos = SW.SW_POSITION(1)
-			
-			self.mod.setPosition(pos)
+			self.mod.setPosition(TOP)
 
-			while(not ord(self.mod.Error())):
+			while not ord(self.mod.Error()):
 				try:
 					topics.append(
 						to_unicode(self.mod.getKeyText(), self.mod)
@@ -59,12 +54,19 @@ class LazyTopicList(object):
 			self.topics = topics
 		
 
-	def read_entry_count(self, entry_items):
+	def read_entry_count(self):
+		swld = SW.LD.castTo(self.mod)
+		if not swld:
+			dprint("WARNING", "Dictionary wasn't a SWLD!!!")
+			entry_items = {}
+		else:
+			entry_items = self.entry_sizes
+	
 		for ld_class, value in entry_items.items():
-			mod = ld_class.castTo(self.mod)
+			mod = ld_class.castTo(swld)
 			if not mod:
 				continue
-			
+		
 			p = "%s%s.idx" % (
 				mod.getConfigEntry("PrefixPath"),
 				mod.getConfigEntry("DataPath"))
@@ -95,11 +97,14 @@ class LazyTopicList(object):
 				xrange(item - self.GRAB_AROUND, item + self.GRAB_AROUND + 1)
 				if 0 <= x < self.cardinality]
 		
-			self.mod.setPosition(SW.SW_POSITION(1))
+			self.mod.setPosition(TOP)
 
 			# go to first item we need to
 			first = myrange.pop(0)
-			self.mod += first
+
+			# ###Important### don't use += on modules, as it changes the
+			# variable (*and* it's thisown flag). Use increment instead.
+			self.mod.increment(first)
 			self.topics[first] = to_unicode(
 				self.mod.getKeyText(), self.mod
 			)
@@ -107,7 +112,7 @@ class LazyTopicList(object):
 
 			# and then any additional ones
 			for additional_item in myrange:
-				self.mod += 1
+				self.mod.increment(1)
 				self.topics[additional_item] = to_unicode(
 					self.mod.getKeyText(), self.mod
 				)
@@ -137,18 +142,22 @@ class Dictionary(Book):
 	def GetReference(self, ref, context = None, max_verses = 500, raw=False):
 		if not self.mod:
 			return None
+
+		render_text = self.get_rendertext()
+		
 		template = self.templatelist()
 		key = self.mod.getKey()
 		key.setText(to_str(ref, self.mod))
 		self.mod.setKey(key)
 		# We have to get KeyText after RenderText, otherwise our
 		# KeyText will be wrong
-		text = self.mod.RenderText()
+		
+		text = render_text()
 		
 		d = dict(
 			# render text so that we convert utf-8 into html
-			range=self.mod.RenderText(self.mod.KeyText()), 
-			description=self.mod.RenderText(self.mod.Description()),
+			range=to_unicode(self.mod.KeyText(), self.mod),
+			description=to_unicode(self.mod.Description(), self.mod),
 			version=self.mod.Name(),
 		)
 
@@ -168,15 +177,15 @@ class Dictionary(Book):
 		topics_dict.clear()
 			
 	def GetTopics(self):#gets topic lists
-		topics = []
-		if(self.mod):
-			name = self.mod.Name()
-			if name in topics_dict:
-				return topics_dict[name]
-			
-			topics = LazyTopicList(self.mod)
-		else:
+		if not self.mod:
 			return []
+		
+		# cache the topic lists
+		name = self.mod.Name()
+		if name in topics_dict:
+			return topics_dict[name]
+		
+		topics = LazyTopicList(self.mod)
 		topics_dict[name] = topics
 		return topics
 	

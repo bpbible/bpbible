@@ -1,8 +1,10 @@
 import wx
+from backend.bibleinterface import biblemgr
 from moduleinfo import ModuleInfo
 from install_manager.install_module import ModuleInstallDialog
 from install_manager import zipinstaller
 import traceback
+from util.unicode import to_unicode, to_str
 
 class ModuleDropTarget(wx.FileDropTarget):
 	def __init__(self, window):
@@ -62,7 +64,8 @@ class ModuleDropTarget(wx.FileDropTarget):
 			wx.GetApp().Yield()
 	
 		for module in modules:
-			p = wx.ProgressDialog("Extracting %s" % module.Description(),
+			p = wx.ProgressDialog(
+				"Extracting %s" % to_unicode(module.Description(), module),
 				"Preparing", style=wx.PD_APP_MODAL)
 
 			# make it nice and long so that the status text will fit in
@@ -76,3 +79,5 @@ class ModuleDropTarget(wx.FileDropTarget):
 			finally:
 				p.Hide()
 				p.Destroy()			
+		
+		biblemgr.set_new_paths(path_changed=to_str(dest_dir))

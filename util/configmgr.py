@@ -57,7 +57,8 @@ class ConfigManager(object):
 		
 	
 	def add_section(self, section):
-		self.sections[section] = ConfigSection(section)
+		if section not in self.sections:
+			self.sections[section] = ConfigSection(section)
 		return self.sections[section]
 	
 	def __getitem__(self, item):

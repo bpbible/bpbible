@@ -3,6 +3,7 @@ from swlib.pysw import TK
 from bookframe import BookFrame
 import genbooktree
 from backend.bibleinterface import biblemgr
+from util import util
 
 
 import config
@@ -34,8 +35,9 @@ class GenBookFrame(BookFrame):
 
 			breadcrumb = bref.breadcrumb(
 				include_home=self.book.version,
-				book=self.book
 			)
+
+			breadcrumb = util.htmlify_unicode(breadcrumb)
 			data = "<b>%s</b><br />" % breadcrumb.replace(">", "&gt;")
 		
 			text = self.book.GetReferenceFromKey(ref, context = context)
@@ -79,7 +81,7 @@ class GenBookFrame(BookFrame):
 
 	def genbook_version_changed(self, newversion):
 		if newversion:
-			key = TK(newversion.getKey())
+			key = TK(newversion.getKey(), newversion)
 			key.root()
 			self.SetReference(key)
 		else:

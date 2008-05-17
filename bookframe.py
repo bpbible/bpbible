@@ -10,7 +10,6 @@ from swlib.pysw import VK, VerseParsingError
 from swlib.pysw import GetVerseStr, GetBookChapter, GetBestRange
 from util import util
 from util.util import ReplaceUnicode
-from util.debug import *
 from util.unicode import to_str, to_unicode
 from gui import guiutil
 import config
@@ -48,7 +47,7 @@ class BookFrame(DisplayFrame):
 
 	def get_verified_one_verse(self, ref):
 		try:
-			ref = str(GetVerseStr(ref, self.reference, raiseError=True))
+			ref = GetVerseStr(ref, self.reference, raiseError=True)
 			return ref
 		
 		except VerseParsingError, e:
@@ -56,7 +55,7 @@ class BookFrame(DisplayFrame):
 		
 	def get_verified_multi_verses(self, ref):
 		try:
-			ref = str(GetBestRange(ref, self.reference, raiseError=True))
+			ref = (GetBestRange(ref, self.reference, raiseError=True))
 			return ref
 		
 		except VerseParsingError, e:
@@ -76,7 +75,7 @@ class BookFrame(DisplayFrame):
 			data = text
 			data = data.replace("<!P>","</p><p>")
 			#replace common values
-			data = ReplaceUnicode(data)
+			#data = ReplaceUnicode(data)
 
 		self.SetPage(data, raw=raw)
 		self.update_title()
@@ -291,7 +290,7 @@ class LinkedFrame(VerseKeyedFrame):
 	def set_ref(self, event):
 		ref = self.gui_reference.Value
 		if not ref: return
-		ref = self.get_verified(str(ref))
+		ref = self.get_verified(ref)
 		if not ref: return
 		self.SetReference(ref)
 	

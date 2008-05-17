@@ -264,6 +264,16 @@ class MainFrame(wx.Frame, AuiLayer):
 		if settings["maximized"]:
 			self.Maximize(True)
 				
+		def set_mod(book, mod_name):
+			if book.ModuleExists(mod_name):
+				book.SetModule(mod_name, notify=False)
+
+		set_mod(biblemgr.bible, settings["bible"])
+		set_mod(biblemgr.dictionary, settings["dictionary"])
+		set_mod(biblemgr.commentary, settings["commentary"])
+		
+		
+				
 	def save_data(self):
 		settings["layout"] = self.save_layout()
 		settings["bibleref"] = self.currentverse
@@ -301,9 +311,11 @@ class MainFrame(wx.Frame, AuiLayer):
 		# use a text control to do it
 		# TODO: check if this is still true
 		if ( wx.TheClipboard.Open() ):
-			txt = text
+			if osutils.is_gtk():
+				wx.TheClipboard.UsePrimarySelection(False)
+		
 			tdo = wx.TextDataObject()
-			tdo.SetText(txt)
+			tdo.SetText(text)
 			wx.TheClipboard.SetData(tdo)
 			wx.TheClipboard.Close()
 
@@ -736,14 +748,6 @@ class MainFrame(wx.Frame, AuiLayer):
 			name = self.get_pane_for_frame(frame).name 
 			self.aui_callbacks[name] = frame.update_title
 
-		def set_mod(book, mod_name):
-			if book.ModuleExists(mod_name):
-				book.SetModule(mod_name, notify=False)
-
-		set_mod(biblemgr.bible, settings["bible"])
-		set_mod(biblemgr.dictionary, settings["dictionary"])
-		set_mod(biblemgr.commentary, settings["commentary"])
-		
 		self.set_bible_ref(settings["bibleref"], LOADING_SETTINGS)
 		self.DictionaryListSelected()
 		self.version_tree.recreate()

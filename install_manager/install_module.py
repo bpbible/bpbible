@@ -236,7 +236,7 @@ def main():
 	app = wx.App(0)
 	#mods = "KJV ESV".split() * 5
 	#mods = [mgr.getModule(mod) for mod in mods]
-	mods = biblemgr.get_modules().values()
+	mods = biblemgr.modules.values()
 	ModuleInstallDialog(None, mods).ShowModal()
 
 if __name__ == '__main__':

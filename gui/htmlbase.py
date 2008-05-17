@@ -401,8 +401,8 @@ class HtmlSelectableWindow(HtmlBase):
 		if not self.m_selection:
 			return
 
-		self.first = self.m_selection.GetFromCell()
-		self.last = self.m_selection.GetToCell()
+		from_cell = self.m_selection.GetFromCell()
+		to_cell = self.m_selection.GetToCell()
 
 		#the text without links
 		text=""
@@ -413,7 +413,7 @@ class HtmlSelectableWindow(HtmlBase):
 		#the differences between text and faketext
 		dels = []
 
-		i = linkiter(self.first, self.last)
+		i = linkiter(from_cell, to_cell)
 
 		prev = i.m_pos
 		while (i):

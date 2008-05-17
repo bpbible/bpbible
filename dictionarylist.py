@@ -29,7 +29,7 @@ class DictionaryList(VirtualListBox):
 			self.set_data(self.topics)
 
 
-		wx.CallAfter(set_book)
+		set_book()#wx.CallAfter(set_book)
 
 	def choose_item(self, text):
 		# get what sword thinks the key should be
@@ -45,8 +45,9 @@ class DictionaryList(VirtualListBox):
 class DictionarySelector(wx.Panel):
 	def __init__(self, parent, book):
 		super(DictionarySelector, self).__init__(parent)
-		self.list = DictionaryList(self, book)
 		self.text_entry = wx.TextCtrl(self, style=wx.TE_PROCESS_ENTER)
+		self.list = DictionaryList(self, book)
+		
 		sizer = wx.BoxSizer(wx.VERTICAL)
 		sizer.Add(self.text_entry, 0, wx.GROW)
 		sizer.Add(self.list, 1, wx.GROW)

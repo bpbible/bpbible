@@ -27,7 +27,7 @@ class ReferenceDisplayFrame(DisplayFrameXRC):
 		# XXX: This replace should be done for us by the backend Bible
 		# interface (or by Sword itself).
 		data = data.replace("<!P>","</p><p>")
-		if not wx.USE_UNICODE:
-			#replace common values
-			data = ReplaceUnicode(data)
+		#if not wx.USE_UNICODE:
+		#	#replace common values
+		#	data = ReplaceUnicode(data)
 		self.SetPage("%s" % data)

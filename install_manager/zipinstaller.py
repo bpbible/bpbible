@@ -133,6 +133,23 @@ class ZipInstaller(object):
 	def getConfigMap(self):
 		return self.config_section
 
+	def Encoding(self):
+		mapping = {
+			None:chr(SW.ENC_LATIN1),
+			"UTF-8":chr(SW.ENC_UTF8),
+			"Latin-1":chr(SW.ENC_LATIN1)
+		}
+		
+		enc = self.getConfigEntry("Encoding")
+		if enc in mapping:
+			return mapping[enc]
+
+		dprint(WARNING, 
+			"Invalid encoding '%s' in module %s" % (enc,self.name)
+		)
+		return chr(SW.ENC_LATIN1)
+	
+
 class MacZipInstaller(ZipInstaller):
 	def is_conf(self, zip_info):
 		item = zip_info.filename

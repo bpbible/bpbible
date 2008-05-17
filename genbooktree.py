@@ -27,7 +27,7 @@ class GenBookTree(LazyTreeCombo):
 			self.tree.SetPyData(self.root, (["<empty>"], False))
 
 		else:
-			self.tk = TK(book.mod.getKey())
+			self.tk = TK(book.mod.getKey(), book.mod)
 			self.tree.SetPyData(self.root, (TK(self.tk), False))
 			self.tk.root()
 		self.AddItems(self.root)

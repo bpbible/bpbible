@@ -11,11 +11,12 @@ from swlib.pysw import SW
 
 from backend.book import Bible, Commentary
 from backend.dictionary import Dictionary
+import backend.stringmgr
 
 from util import util
 from util import confparser
 from util.observerlist import ObserverList
-from util.debug import dprint, MESSAGE
+from util.debug import dprint, MESSAGE, WARNING
 from backend.filter import MarkupInserter
 from backend.genbook import GenBook
 import config
@@ -31,16 +32,17 @@ class BibleInterface(object):
 
 		self.on_before_reload = ObserverList()
 		self.on_after_reload = ObserverList()
-		self.mgrs = {}
-		
-		
-		
+		self.reloading = False
+
+		self.mgrs = []
 		self.paths = []
 		
 		dprint(MESSAGE, "Creating manager")
-		self.on_before_reload(self)		
+
 		self.make_managers()
-		self.on_after_reload(self)		
+		
+		# call on after reload in case
+		self.on_after_reload(self)
 		
 
 		dprint(MESSAGE, "/Creating manager")
@@ -56,7 +58,7 @@ class BibleInterface(object):
 	
 	def init_options(self):
 		for option, values in self.get_options():
-			for mgr in self.mgrs.values():
+			for path, mgr in self.mgrs:
 				option_value = mgr.getGlobalOption(option)
 
 				# if NULL is ever a valid value for this, 
@@ -79,7 +81,7 @@ class BibleInterface(object):
 		if type(value) == bool:
 			processed_value = {True:"On", False:"Off"}[value]
 
-		for mgr in self.mgrs.values():
+		for path, mgr in self.mgrs:
 			mgr.setGlobalOption(str(option), str(processed_value))
 
 		self.options[option] = processed_value
@@ -104,25 +106,20 @@ class BibleInterface(object):
 		return dict(self.options)
 	
 	def get_module(self, mod):
-		for mgr in reversed(self.mgrs.values()):
-			ansa = mgr.getModule(mod)
-			if ansa:
-				return ansa
+		return self.modules.get(mod)
 	
-	def get_modules(self):
-		modules = {}
-		for mgr in self.mgrs.values():
-			modules.update((name.c_str(), mod) 
+	def _get_modules(self):
+		self.modules = {}
+		for path, mgr in self.mgrs:
+			self.modules.update((name.c_str(), mod) 
 				for name, mod in mgr.getModules().iteritems()
 			)
 				
-		return modules
-
 	def get_options(self):
 		option_names = []
 		options = {}
 
-		for mgr in self.mgrs.values():
+		for path, mgr in self.mgrs:
 			# I'm not sure if one SWMgr can include 3 options for a
 			# value, and another two. (for example)
 			# if so, we choose the last one
@@ -142,7 +139,7 @@ class BibleInterface(object):
 		return [(option, options[option]) for option in option_names]
 	
 	def get_tip(self, option):
-		for mgr in reversed(self.mgrs.values()):
+		for path, mgr in reversed(self.mgrs):
 			tip = mgr.getGlobalOptionTip(option)
 			if tip:
 				return tip
@@ -180,7 +177,8 @@ class BibleInterface(object):
 
 		config_parser.write(open(filename, "w"))
 	
-	def set_new_paths(self, paths):
+	def set_new_paths(self, paths=None, path_changed=None):
+		self.reloading = True
 		bible       = self.bible.version
 		dictionary  = self.dictionary.version
 		commentary  = self.commentary.version
@@ -193,11 +191,12 @@ class BibleInterface(object):
 			(self.genbook, genbook)
 		]
 
-		self.mgrs.clear()
-		self.write_paths(paths)
+		if path_changed is None:
+			self.mgrs = []
+			self.write_paths(paths)
 
-		self.on_before_reload(self)		
-		self.make_managers()
+		self.on_before_reload(self)
+		self.make_managers(path_changed)
 
 		for item, module in items:
 			# put the items on hold so that they don't fire until all modules
@@ -226,11 +225,14 @@ class BibleInterface(object):
 		for item, module in items:
 			item.observers.finish_hold()
 		
+		self.reloading = False
+		
 		# do the on_after_reload *after* the hold finishing so that the
 		# genbook can work out its treekey stuff before it is refreshed
 		self.on_after_reload(self)
+		
 			
-	def make_managers(self):
+	def make_managers(self, path_changed=None):
 		#if hasattr(self, "dictionary"):
 		#	self.dictionary.clear_cache()
 		# turn off logging
@@ -238,13 +240,21 @@ class BibleInterface(object):
 		log_level = system_log.getLogLevel()
 		system_log.setLogLevel(0)
 		try:
-			paths = self.load_paths()[::-1]
-	
-			for item in paths:
-				self.mgrs[item] = self.make_manager(item)
+			if path_changed is None:
+				paths = self.load_paths()[::-1]
+				for item in paths:
+					self.mgrs.append([item, self.make_manager(item)])
 			
-			self.paths = paths
-			
+				self.paths = paths
+			else:
+				for item in self.mgrs:
+					if item[0] != path_changed:
+						continue
+
+					item[1] = self.make_manager(item[0])
+
+			self._get_modules()
+
 		finally:
 			# reset it to what it was
 			system_log.setLogLevel(log_level)	

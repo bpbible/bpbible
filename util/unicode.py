@@ -1,25 +1,38 @@
 import swlib.swordlib as SW
 from debug import dprint, WARNING
+from util import get_traceback
 
 def to_unicode(text, mod=None):
-	encoding = "utf8"
-	if mod and ord(mod.Encoding()) == SW.ENC_LATIN1:
+	if mod is None:
+		#dprint(WARNING, "mod is None in to_unicode")
+		#get_traceback()
+		encoding = "utf8"
+	else:
 		encoding = "cp1252"
+	
+		if ord(mod.Encoding()) == SW.ENC_UTF8:
+			encoding = "utf8"
 	
 	return text.decode(encoding, "replace")
 
 def to_str(text, mod=None):
-	encoding = "utf8"
-	if mod and ord(mod.Encoding()) == SW.ENC_LATIN1:
+	if mod is None:
+		encoding = "utf8"
+	else:
 		encoding = "cp1252"
+	
+		if ord(mod.Encoding()) == SW.ENC_UTF8:
+			encoding = "utf8"
+
 	
 	return text.encode(encoding, "replace")
 
 def get_module_encoding(module):
-	encoding = "UTF-8"
-	if module.getConfigEntry("Encoding") == "Latin-1":
-		encoding = "cp1252"
+	encoding = "cp1252"
 	
+	if ord(module.Encoding()) == SW.ENC_UTF8:
+		encoding = "utf8"
+
 	return encoding
 
 def to_unicode_2(text, module):

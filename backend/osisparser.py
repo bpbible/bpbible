@@ -110,22 +110,24 @@ class OSISParser(filterutils.ParserBase):
 		
 	def start_note(self, attributes):
 		attributes = dict(attributes)
+		
+		self.refs = ""
+		self.u.inXRefNote = True
+		
 		if("type" not in attributes):
 			self.success = SW.INHERITED
 		
 		elif(attributes["type"] in ("crossReference", "x-cross-ref") and
 				filterutils.filter_settings["footnote_ellipsis_level"]):
-			self.u.inXRefNote = True
 			self.u.suspendLevel += 1
 			self.u.suspendTextPassThru = self.u.suspendLevel
-			self.refs = ""
 		else:
 			self.success = SW.INHERITED
 
 	def end_note(self):
 		ellipsis = int(filterutils.filter_settings["footnote_ellipsis_level"])
 	
-		if(self.u.inXRefNote and ellipsis):
+		if(self.refs and ellipsis):
 			refs = pysw.VerseList(self.refs).GetBestRange().split(";")
 
 			self.buf += filterutils.ellipsize(refs, self.u.key.getText(),

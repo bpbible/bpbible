@@ -1,4 +1,5 @@
 #from swlib.pysw import *
+import re
 from swlib.pysw import VK, SW, GetBestRange, GetVerseStr
 from util.util import PushPopList, VerseTemplate
 from util import observerlist
@@ -59,7 +60,7 @@ class Book(object):
 		return True
 	
 	def ModuleExists(self, modname):
-		return bool(self.parent.get_module(modname))
+		return modname in self.GetModuleList()
 
 	@property
 	def version(self):
@@ -69,11 +70,11 @@ class Book(object):
 		#return "<No module>"
 
 	def GetModuleList(self):
-		return [name for name, mod in self.parent.get_modules().iteritems()
+		return [name for name, mod in self.parent.modules.iteritems()
 				if mod.Type() == self.type or self.type is None]
 	
 	def GetModules(self):
-		return [mod for name, mod in self.parent.get_modules().iteritems()
+		return [mod for name, mod in self.parent.modules.iteritems()
 				if mod.Type() == self.type or self.type == None]
 	
 	@staticmethod
@@ -129,7 +130,7 @@ class Book(object):
 		#verselist.Persist()
 		self.mod.SetKey(verselist)
 		template = self.templatelist()
-		description = self.mod.RenderText(self.mod.Description())
+		description = to_unicode(self.mod.Description(), self.mod)
 		d = dict(range=rangetext, 
 				 version=self.mod.Name(), 
 				 description=description)
@@ -141,6 +142,10 @@ class Book(object):
 		verses_left = max_verses
 
 		ERR_OK = chr(0)
+		render_text = self.get_rendertext()
+
+				
+
 		while verselist.Error() == ERR_OK:
 			if verses_left == 0:
 				verses += config.MAX_VERSES_EXCEEDED % max_verses
@@ -158,7 +163,7 @@ class Book(object):
 
 
 			if not raw:
-				text = self.mod.RenderText()
+				text = render_text()
 			else:
 				text = self.mod.getRawEntry()
  
@@ -307,6 +312,20 @@ class Book(object):
 			text = text[:index]
 		return self.GetReference(text, specialref, specialtemplate, context,
 				raw=raw)
+
+	def get_rendertext(self):
+		"""Return the text render function.
+
+		This makes sure that plaintext modules render whitespace properly"""
+		render_text = self.mod.RenderText
+
+		if self.mod.getConfigEntry("SourceType") in (None, "Plaintext"):
+			def render_text(*args):
+				text = self.mod.RenderText(*args)
+				text = text.replace("\n", "<br />")
+				return re.sub(" ( +)", lambda x:"&nbsp;"*len(x.group(1)), text)
+
+		return render_text
 				
 class Commentary(Book):
 	type = "Commentaries"

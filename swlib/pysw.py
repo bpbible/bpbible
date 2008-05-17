@@ -8,6 +8,18 @@ SWMULTI = -2
 SWPHRASE = -1
 SWREGEX = 0
 
+POS_TOP = 1
+POS_BOTTOM = 2
+POS_MAXVERSE = 3
+POS_MAXCHAPTER = 4
+POS_MAXBOOK = 5
+
+TOP = SW.SW_POSITION(POS_TOP)
+BOTTOM = SW.SW_POSITION(POS_BOTTOM)
+MAXVERSE = SW.SW_POSITION(POS_MAXVERSE)
+MAXCHAPTER = SW.SW_POSITION(POS_MAXCHAPTER)
+MAXBOOK = SW.SW_POSITION(POS_MAXBOOK)
+
 
 for a in dir(SW):
 	if(a[:2]=="SW"):
@@ -176,7 +188,7 @@ class VK(SW.VerseKey):#, object):
 
 	def __len__(self):
 		if self.isBoundSet():
-			self.setText(self.LowerBound().getText())
+			self.setPosition(TOP)
 			length=0
 			while not self.Error():
 				length+=1
@@ -213,7 +225,7 @@ class VK(SW.VerseKey):#, object):
 		if(not self.isBoundSet()):
 			yield self
 			raise StopIteration
-		self.setText(self.LowerBound().getText())
+		self.setPosition(TOP)
 		while not self.Error():
 			yield VK(self.getText())
 			self+=1
@@ -224,14 +236,14 @@ class VK(SW.VerseKey):#, object):
 				return self
 			raise IndexError, key
 		if key < 0:
-			self.setText(self.UpperBound().getText())
+			self.setPosition(BOTTOM)
 			for a in range(-key-1):
 				self-=1
 			if self.Error():
 				raise IndexError, key
 			return VK(self.getText())
 
-		self.setText(self.LowerBound().getText())
+		self.setPosition(TOP)
 		for a in range(key):
 			self+=1#key
 		if self.Error():
@@ -508,6 +520,8 @@ class VerseList(list):
 		'Gen 3:3-5'
 		>>> pysw.VerseList("Gen 3-Matt 5").GetBestRange(short=True)
 		'Gen 3-Matt 5'
+		>>> pysw.VerseList("Psa 58:0-1").GetBestRange() # a bit of a dodgy case
+		'Psalms 57:11-58:1'
 		"""
 		
 		def getdetails(versekey):
@@ -683,7 +697,7 @@ for a in books:
 class TK(SW.TreeKeyIdx):
 	"""A tree key. As this is module specific, create it from an existing tree
 	key retrieved from the module"""
-	def __init__(self, tk):
+	def __init__(self, tk, module=None):
 		tk2 = SW.TreeKey.castTo(tk.clone())
 		tk2 = SW.TreeKeyIdx.castTo(tk2)
 		tk2.thisown = False
@@ -694,6 +708,10 @@ class TK(SW.TreeKeyIdx):
 		self.this = tk2.this
 		#SW.TreeKeyIdx.__init__(self, tk2)
 		self.tk = self
+		self.module = module
+		if module is None and hasattr(tk, "module"):
+			self.module = tk.module
+		
 		#self.this = tk2
 		
 		#assert tk2, "tk must be a treekey"
@@ -708,17 +726,17 @@ class TK(SW.TreeKeyIdx):
 #			raise Exception, "tk must be a treekey"
 	
 	def __iter__(self):
-			tk = TK(self.tk)
-			if(tk.firstChild()):
+		tk = TK(self.tk)
+		if(tk.firstChild()):
+			yield TK(tk)
+			while(tk.nextSibling()):
 				yield TK(tk)
-				while(tk.nextSibling()):
-					yield TK(tk)
 
 	def __repr__(self):
-		return "<TK(%s)>" % to_unicode(self.getText())
+		return "<TK(%s)>" % to_unicode(self.getText(), self.module)
 	
 	def __str__(self):
-		return to_unicode(self.getLocalName())
+		return to_unicode(self.getLocalName(), self.module)
 	
 	def __getitem__(self, key):
 		return [a for a in self][key]
@@ -744,24 +762,18 @@ class TK(SW.TreeKeyIdx):
 				raise AttributeError,attr
 
 
-	def breadcrumb(self, include_home=None, book=None):
-		breadcrumb = [self.getLocalName()]
+	def breadcrumb(self, include_home=None):
+		breadcrumb = [unicode(self)]
 		bref = TK(self)
 		while bref.parent():
-			breadcrumb.append(bref.getLocalName())
+			breadcrumb.append(unicode(bref))
 
 		if include_home:
 			breadcrumb[-1] = include_home
 		else:
 			del breadcrumb[-1]
 
-		if book:
-			# process the key to process any utf-8
-			breadcrumb = [book.mod.RenderText(t) for t in breadcrumb]
-		else:
-			breadcrumb = [to_unicode(t) for t in breadcrumb]
-
-		return " > ".join(breadcrumb[::-1])
+		return u" > ".join(breadcrumb[::-1])
 	
 def _test():
 	import doctest
@@ -832,21 +844,21 @@ def GetVKs(range, context=""):
 	while lk.Error()=='\x00':
 		l.append(lk.GetElement(len(l)))
 
-	for a in l:
-		if(not a):
+	for key in l:
+		if not key:
 			continue
-		v=VK.castTo(a)
-		if not v:
+		
+		vk = VK.castTo(key)
+
+		if not vk:
 			#1 verse only
-			v=[VK(a.getText())]
+			v=[VK(key.getText())]
 		else:
 			#range
-			v=[VK(v.LowerBound()), \
-				VK(v.UpperBound())]
-		l3=[]
-		for b in v:
-			l3.append(b)#getdetails(b))
-		l2.append(l3)
+			v=[VK(vk.LowerBound()), VK(vk.UpperBound())]
+
+		l2.append(v)
+
 	return l2
 
 

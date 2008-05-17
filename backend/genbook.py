@@ -74,7 +74,7 @@ class GenBook(Book):
 			return None
 		mod_tk = SW.TreeKey.castTo(self.mod.getKey())
 		mod_tk.root()
-		tk = TK(mod_tk)
+		tk = TK(mod_tk, self.mod)
 		return tk
 	
 	def GetTopicsTree(self):#gets topic lists
@@ -82,7 +82,7 @@ class GenBook(Book):
 			return None
 		mod_tk = SW.TreeKey.castTo(self.mod.getKey())
 		mod_tk.root()
-		tk = TK(mod_tk)
+		tk = TK(mod_tk, self.mod)
 		root = TreeNode(None, None)
 
 		def AddTopic(parent, tk):
