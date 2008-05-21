@@ -16,7 +16,7 @@ import config
 import guiconfig
 from moduleinfo import ModuleInfo
 from gui.menu import MenuItem, Separator
-from dictionarylist import DictionarySelector
+from dictionarylist import DictionarySelector, mmdd_to_date
 from gui.quickselector import QuickSelector
 
 from events import SETTINGS_CHANGED, CHAPTER_MOVE, VERSE_MOVE, QUICK_SELECTOR
@@ -398,7 +398,13 @@ class DictionaryFrame(BookFrame):
 		p = m.get_pane_for_frame(self)
 		version = self.book.version
 		ref = self.reference
-		text = u"%s - %s (%s)" % (p.name, self.book.snap_text(ref), version)
+		
+		ref = self.book.snap_text(ref)
+
+		if self.book.has_feature("DailyDevotion"):
+			ref = mmdd_to_date(ref)
+		
+		text = u"%s - %s (%s)" % (p.name, ref, version)
 		m.set_pane_title(p.name, text)
 	
 	def get_window(self):
@@ -408,6 +414,32 @@ class DictionaryFrame(BookFrame):
 	def notify(self, ref, source=None):
 		guiconfig.mainfrm.UpdateDictionaryUI(ref)
 		
+
+	@guiutil.frozen
+	def SetReference(self, ref, context=None, raw=None):
+		if raw is None:
+			raw = config.raw
+
+		self.reference = ref
+		
+		snapped_ref = self.book.snap_text(ref)
+
+		if self.book.has_feature("DailyDevotion"):
+			snapped_ref = mmdd_to_date(snapped_ref)
+		
+		text = "<b>%s</b>" % snapped_ref
+
+		text += self.book.GetReference(ref, context=context, raw=raw)#bible text
+		if text is None:
+			data = config.MODULE_MISSING_STRING
+		else:
+			data = text
+			data = data.replace("<!P>","</p><p>")
+			#replace common values
+			#data = ReplaceUnicode(data)
+
+		self.SetPage(data, raw=raw)
+		self.update_title()
 
 #xrc_classes = [DictionaryFrame, CommentaryFrame, BookFrame, BibleFrame]
 #

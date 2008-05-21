@@ -12,14 +12,14 @@ from configmgr import config_manager
 
 
 search_config = config_manager.add_section("Search")
-search_config.add_item("zip_indexes", True, item_type=bool)
+search_config.add_item("zip_indexes", False, item_type=bool)
 
 def WriteIndex(index, path = config.index_path):
 	if search_config["zip_indexes"]:
 		f = gzip.GzipFile("%s%s.idxz" % (path, index.version), "w",
 				compresslevel=5)
 	else:
-		f = open("%s%s.idx" % (path, index.version), "w")
+		f = open("%s%s.idx" % (path, index.version), "wb")
 
 	cPickle.dump(index, f)
 
@@ -27,7 +27,7 @@ def ReadIndex(version, path = config.index_path):
 	if os.path.exists("%s%s.idxz" % (path, version)):
 		f = gzip.GzipFile("%s%s.idxz" % (path, version))
 	else:
-		f = open("%s%s.idx" % (path, version))
+		f = open("%s%s.idx" % (path, version), "rb")
 	
 	return cPickle.load(f)
 

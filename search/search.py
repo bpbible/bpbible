@@ -259,7 +259,7 @@ class BookIndex(object):
 		return None
 
 	def MultiSearch(self, wordlist, proximity, case_sensitive=False, \
-	average_word=0, minimum_average=5, ignore_minimum=False, excludes=None, 
+	average_word=0, minimum_average=5, ignore_minimum=False, excludes=(), 
 	try_all=False):
 
 		# t is shorter to use than self.text
@@ -285,8 +285,6 @@ class BookIndex(object):
 		
 		
 		wordlist = [word for word, length in wordlist]
-
-
 		
 		relist = []
 		if(not try_all):

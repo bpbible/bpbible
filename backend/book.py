@@ -18,9 +18,6 @@ class Book(object):
 		self.parent = parent
 		self.mod = None
 		self.observers = observerlist.ObserverList()
-
-
-			
 		self.template = VerseTemplate(body = "$text")
 		self.templatelist = PushPopList(self.template)
 		self.vk = VK()
@@ -54,6 +51,8 @@ class Book(object):
 			
 			self.mod = new_mod
 				
+		self.features = None
+		
 		if self.mod != oldmod and notify:
 			self.observers(self.mod)
 
@@ -326,6 +325,27 @@ class Book(object):
 				return re.sub(" ( +)", lambda x:"&nbsp;"*len(x.group(1)), text)
 
 		return render_text
+	
+	def has_feature(self, feature):
+		if not self.mod:
+			return False
+		
+		if self.features is None:
+			self.features = []
+			mod = self.mod
+		
+			map = mod.getConfigMap()
+			feature_buf = SW.Buf("Feature")
+			featureBegin = map.lower_bound(feature_buf)
+			featureEnd = map.upper_bound(feature_buf)
+			while featureBegin != featureEnd:
+				v = featureBegin.value()
+				self.features.append(v[1].c_str())
+
+				featureBegin += 1
+
+		return feature in self.features
+		
 				
 class Commentary(Book):
 	type = "Commentaries"

@@ -272,11 +272,9 @@ class BibleInterface(object):
 		mgr = SW.Mgr(path, True, markup, False, False)
 	
 		return mgr
-		
-	
 
 biblemgr = BibleInterface("ESV", "TSK", "ISBE") 
 
-biblemgr.dictionary.templatelist.push(config.other_template)
+biblemgr.dictionary.templatelist.push(config.dictionary_template)
 biblemgr.commentary.templatelist.push(config.other_template)
 biblemgr.bible.templatelist.push(config.bible_template)

@@ -101,7 +101,7 @@ use_system_inactive_caption_colour = False
 
 # templates
 def make_template(verse_per_line):
-	global bible_template, other_template
+	global bible_template, other_template, dictionary_template
 	global current_verse_template, verse_compare_template
 	br = "<br>" * verse_per_line
 	body = (
@@ -115,6 +115,10 @@ def make_template(verse_per_line):
 	other_template = util.VerseTemplate(
 		body="<b>$range</b><br>$text<p>($description)</p> \n"
 	)
+	dictionary_template = util.VerseTemplate(
+		body="<br>$text<p>($description)</p> \n"
+	)
+	
 
 	body = ("<a href = '#current' target='$versenumber'><a name='$versenumber'>"
 			"<small><sup>$versenumber</sup></small></a></a> "
