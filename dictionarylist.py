@@ -1,7 +1,7 @@
 import bisect
 
 import wx
-import wx.lib.buttons as buttons
+#import wx.lib.buttons as buttons
 import wx.calendar
 
 from backend.bibleinterface import biblemgr
@@ -58,7 +58,7 @@ class DictionaryList(VirtualListBox):
 leap_year_default_date = wx.DateTime()
 leap_year_default_date.ParseDate("1 Jan 2008")
 
-def date_to_mmdd(date):
+def date_to_mmdd(date, return_formatted=True):
 	# tack the following bits on the end to see if they help give us dates
 	# the second is February -> February 1
 	# the third is 29 February -> 29 February 2008
@@ -72,7 +72,9 @@ def date_to_mmdd(date):
 		for addition in additions:
 			ansa = dt.ParseDate(date + addition)
 			if ansa != -1:
-				return dt.Format("%m.%d")
+				if return_formatted:
+					return dt.Format("%m.%d")
+				return dt
 		
 	finally:
 		# now turn it on again	
@@ -93,12 +95,11 @@ class TextEntry(wx.Panel):
 	def __init__(self, parent):
 		super(TextEntry, self).__init__(parent)
 		self.text = wx.TextCtrl(self, style=wx.TE_PROCESS_ENTER)
-		self.is_calendar = True
 		
 		
 		self.calendar_pic = bmp("calendar_view_day.png")
 
-		self.calendar = buttons.GenBitmapButton(
+		self.calendar = wx.BitmapButton(
 			self, 
 			bitmap=self.calendar_pic
 		)
@@ -118,6 +119,8 @@ class TextEntry(wx.Panel):
 		)
 		
 		self.SetSizer(sizer)
+		self.show_calendar(False)
+		
 	
 	def show_popup(self, event):
 		def on_cal_changed(event):
@@ -129,22 +132,39 @@ class TextEntry(wx.Panel):
 		win = wx.PopupTransientWindow(self,
 								 wx.NO_BORDER)
 
-		cal = wx.calendar.CalendarCtrl(win, -1, 
-			wx.DateTime_Now(), pos = (0,0),
-			style = wx.calendar.CAL_SHOW_HOLIDAYS
-				 | wx.calendar.CAL_SUNDAY_FIRST
-				 | wx.calendar.CAL_SEQUENTIAL_MONTH_SELECTION
-				 | wx.RAISED_BORDER
+		now_date = date_to_mmdd(self.text.Value, return_formatted=False)
+
+		if now_date is None:
+			now_date = wx.DateTime_Now()		
+		
+		panel = wx.Panel(win)#, style=wx.RAISED_BORDER)
+		
+		cal = wx.calendar.CalendarCtrl(panel, -1, now_date, pos=(1,1),
+			style = wx.calendar.CAL_SUNDAY_FIRST|wx.RAISED_BORDER
 		)
+		panel.ClientSize = cal.Size + (1,1)
 		cal.Bind(wx.calendar.EVT_CALENDAR_SEL_CHANGED, on_cal_changed)
 		cal.Bind(wx.calendar.EVT_CALENDAR, on_cal)
 		
+		# hide the spin control
+		size_combo = 0
+		for child in panel.Children:
+			if isinstance(child, wx.SpinCtrl):
+				child.Hide()
+
+				# we will shorten ourselves by this amount
+				size_combo = child.Size[1] + 6
+		
+		# make combo fill up rest of space
+		for child in panel.Children:
+			if isinstance(child, wx.ComboBox):
+				child.Size = cal.Size[0], -1
 
 		# Show the popup right below or above the button
 		# depending on available screen space...
 		btn = event.GetEventObject()
 		pos = btn.ClientToScreen((0, btn.Size[1]))
-		win.Size = cal.GetSize()
+		win.Size = panel.GetSize() - (0, size_combo)
 		win.Position(pos, (0, 0))#win.Size[1]))
 
 		win.Popup()
@@ -216,8 +236,7 @@ class DictionarySelector(wx.Panel):
 	SetValue = choose_item
 
 	def set_book(self, book):
-		old_book = self.list.book
-		was_devotion = old_book and old_book.has_feature("DailyDevotion")		
+		was_devotion = self.text_entry.is_calendar
 		self.text_entry.show_calendar(book.has_feature("DailyDevotion"))
 		self.list.set_book(book)
 
@@ -225,6 +244,8 @@ class DictionarySelector(wx.Panel):
 		# set it to today
 		if book.has_feature("DailyDevotion") and not was_devotion:
 			self.choose_item(wx.DateTime.Today().Format("%B %e"))
+		else:
+			self.choose_item(self.text_entry.text.Value)
 			
 
 if __name__ == '__main__':

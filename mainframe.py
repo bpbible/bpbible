@@ -826,8 +826,6 @@ class MainFrame(wx.Frame, AuiLayer):
 	def dictionary_version_changed(self, newversion):
 		freeze_ui = guiutil.FreezeUI(self.dictionary_list)
 		self.dictionary_list.set_book(biblemgr.dictionary)
-		ref = self.dictionary_list.GetValue()
-		self.UpdateDictionaryUI(ref)
 		
 	def DictionaryListSelected(self, event=None):
 		self.UpdateDictionaryUI()
