@@ -8,6 +8,7 @@ from backend.bibleinterface import biblemgr
 from util.observerlist import ObserverList
 from gui.virtuallist import VirtualListBox
 from gui.guiutil import bmp
+from util import osutils
 
 _disabled = False#True
 
@@ -19,7 +20,7 @@ class DateConverter(object):
 		return len(self.object)
 	
 	def __getitem__(self, item):
-		return mmdd_to_date(self.object[item])
+		return mmdd_to_date(self.object[item]) or self.object[item]
 
 class DictionaryList(VirtualListBox):
 	def __init__(self, parent, book):
@@ -89,7 +90,7 @@ def mmdd_to_date(date):
 	if ansa == -1:
 		return None
 
-	return dt.Format("%B %e")
+	return dt.Format("%B ") + str(dt.Day)
 
 class TextEntry(wx.Panel):
 	def __init__(self, parent):
@@ -124,7 +125,8 @@ class TextEntry(wx.Panel):
 	
 	def show_popup(self, event):
 		def on_cal_changed(event):
-			self.Parent.choose_item(event.GetDate().Format("%B %e"))
+			dt = event.GetDate()
+			self.Parent.choose_item(dt.Format("%B ") + str(dt.Day))
 
 		def on_cal(event):
 			win.Destroy()
@@ -137,28 +139,35 @@ class TextEntry(wx.Panel):
 		if now_date is None:
 			now_date = wx.DateTime_Now()		
 		
-		panel = wx.Panel(win)#, style=wx.RAISED_BORDER)
+		style = 0
+
+		if osutils.is_msw():
+			style = wx.calendar.CAL_SEQUENTIAL_MONTH_SELECTION
+		
+		panel = wx.Panel(win)
 		
 		cal = wx.calendar.CalendarCtrl(panel, -1, now_date, pos=(1,1),
-			style = wx.calendar.CAL_SUNDAY_FIRST|wx.RAISED_BORDER
+			style=wx.RAISED_BORDER|style
 		)
+
 		panel.ClientSize = cal.Size + (1,1)
 		cal.Bind(wx.calendar.EVT_CALENDAR_SEL_CHANGED, on_cal_changed)
 		cal.Bind(wx.calendar.EVT_CALENDAR, on_cal)
-		
-		# hide the spin control
 		size_combo = 0
-		for child in panel.Children:
-			if isinstance(child, wx.SpinCtrl):
-				child.Hide()
-
-				# we will shorten ourselves by this amount
-				size_combo = child.Size[1] + 6
 		
-		# make combo fill up rest of space
-		for child in panel.Children:
-			if isinstance(child, wx.ComboBox):
-				child.Size = cal.Size[0], -1
+		if not style & wx.calendar.CAL_SEQUENTIAL_MONTH_SELECTION:
+			# hide the spin control
+			for child in panel.Children:
+				if isinstance(child, wx.SpinCtrl):
+					child.Hide()
+
+					# we will shorten ourselves by this amount
+					size_combo = child.Size[1] + 6
+			
+			# make combo fill up rest of space
+			for child in panel.Children:
+				if isinstance(child, wx.ComboBox):
+					child.Size = cal.Size[0], -1
 
 		# Show the popup right below or above the button
 		# depending on available screen space...
@@ -243,7 +252,8 @@ class DictionarySelector(wx.Panel):
 		# if we are changing to a devotion, and weren't a devotion,
 		# set it to today
 		if book.has_feature("DailyDevotion") and not was_devotion:
-			self.choose_item(wx.DateTime.Today().Format("%B %e"))
+			dt = wx.DateTime.Today()
+			self.choose_item(dt.Format("%B ") + str(dt.Day))
 		else:
 			self.choose_item(self.text_entry.text.Value)
 			

@@ -115,22 +115,22 @@ def KillTags(data):
 def remove_amps(data):
 	return re.sub("&[^;]*;", "", data)
 
-def amps_to_unicode(data):
-	def replace_amp(groups):
-		ent = groups.group(1)
-		if ent in htmlentitydefs.name2codepoint:
-			return unichr(htmlentitydefs.name2codepoint[ent])
+def replace_amp(groups):
+	ent = groups.group('amps')
+	if ent in htmlentitydefs.name2codepoint:
+		return unichr(htmlentitydefs.name2codepoint[ent])
 
-		if ent[0] == "#":
-			try:
-				return unichr(int(ent[1:]))
-			except ValueError:
-				from debug import dprint, WARNING
-				dprint(WARNING, "Invalid int in html escape", groups.group(0))
-			
-		return ent
-			
-	return re.sub("&([^;]*);", replace_amp, data)
+	if ent[0] == "#":
+		try:
+			return unichr(int(ent[1:]))
+		except ValueError:
+			from debug import dprint, WARNING
+			dprint(WARNING, "Invalid int in html escape", groups.group(0))
+		
+	return ent
+
+def amps_to_unicode(data):
+	return re.sub("&(?P<amps>[^;]*);", replace_amp, data)
 	
 
 def RemoveWhitespace(data):

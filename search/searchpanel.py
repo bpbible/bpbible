@@ -1,9 +1,11 @@
+import re
+
 #wx imports
 import wx
 from wx import xrc
 
 from util import osutils
-from util.unicode import to_unicode
+from util.unicode import to_unicode, to_str
 #from util.util import *
 from util import util
 from backend.bibleinterface import biblemgr
@@ -70,6 +72,7 @@ class SearchPanel(xrcSearchPanel):
 		self.index = None
 		self.version = None
 		self.stop = False
+		self.regexes = []
 
 		# if search panel is on screen at startup, on_show and set_version will
 		# both be called. Then if there is no index, it will prompt twice.
@@ -378,9 +381,11 @@ class SearchPanel(xrcSearchPanel):
 			search_type |= search.CASESENSITIVE
 		
 		try:
-			self.search_results = self.index.Search(key, search_type, 
-			searchrange=scope, progress=index_callback, excludes=exclude,
-			proximity=proximity)
+			self.search_results, self.regexes = self.index.Search(
+				key, search_type, searchrange=scope, 
+				progress=index_callback, excludes=exclude,
+				proximity=proximity
+			)
 
 		except SearchException, myexcept:
 			wx.MessageBox(unicode(myexcept), "Error in search")
@@ -445,11 +450,19 @@ class SearchPanel(xrcSearchPanel):
 		self.searcher = Searcher(biblemgr.bible)
 		self.searcher.callback = callback
 
-	    # If custom range, use it
+		# If custom range, use it
 		self.numwords = len(key.split())
 		self.search_results = self.searcher.Search(
-            to_str(key, biblemgr.bible.mod),
+			to_str(key, biblemgr.bible.mod),
 			search_config["search_type"], scope, case_sensitive)
+	
+		flags = re.UNICODE | (re.IGNORECASE * (not case_sensitive))
+		if search_config["search_type"] == SWMULTI:
+			self.regexes = [
+				re.compile(word, flags) for word in key.split()
+			]
+		else:
+			self.regexes = [re.compile(key, flags)]
 
 		# If we need to exclude, do another search through the scope 
 		# Then remove duplicates
@@ -459,7 +472,7 @@ class SearchPanel(xrcSearchPanel):
 					break
 
 				exclude_list = self.searcher.Search(
-                    to_str(string, biblemgr.bible.mod),
+					to_str(string, biblemgr.bible.mod),
 					search_config["search_type"],
 					"; ".join(self.search_results), 
 					case_sensitive)
@@ -513,6 +526,7 @@ class SearchPanel(xrcSearchPanel):
 		#Clear list
 		self.verselist.set_data("Reference Preview".split(), length=0)
 
+		self.versepreview.regexes = []
 		self.versepreview.SetReference(None)
 
 		#insert columns
@@ -537,6 +551,7 @@ class SearchPanel(xrcSearchPanel):
 		self.verselist.set_data("Reference Preview".split(), length=len(text))
 		self.set_title()
 
+		self.versepreview.regexes = self.regexes	
 		self.versepreview.SetReference(text[0])
 		
 		

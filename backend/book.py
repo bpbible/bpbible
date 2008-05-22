@@ -106,7 +106,8 @@ class Book(object):
 
 	
 	def GetReference(self, ref, specialref="", 
-			specialtemplate=None, context="", max_verses=176, raw=False):
+			specialtemplate=None, context="", max_verses=176, raw=False,
+			stripped=False, template=None):
 		"""GetReference gets a reference from a Book.
 		
 		specialref is a ref (string) which will be specially formatted 
@@ -128,7 +129,9 @@ class Book(object):
 		#verselist.SetPosition(SW_POSITION(1))
 		#verselist.Persist()
 		self.mod.SetKey(verselist)
-		template = self.templatelist()
+		if template is None:
+			template = self.templatelist()
+
 		description = to_unicode(self.mod.Description(), self.mod)
 		d = dict(range=rangetext, 
 				 version=self.mod.Name(), 
@@ -161,10 +164,16 @@ class Book(object):
 
 
 
-			if not raw:
-				text = render_text()
+			if raw:
+				text = self.mod.getRawEntry().decode("utf-8", "replace")
+			
+			elif stripped:
+				text = self.mod.StripText().decode("utf-8", "replace")
+				
+				
 			else:
-				text = self.mod.getRawEntry()
+				text = render_text()
+			
  
 			body_dict = dict(text=text,
 						  versenumber = versekey.Verse(), 

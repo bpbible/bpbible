@@ -402,7 +402,7 @@ class DictionaryFrame(BookFrame):
 		ref = self.book.snap_text(ref)
 
 		if self.book.has_feature("DailyDevotion"):
-			ref = mmdd_to_date(ref)
+			ref = mmdd_to_date(ref) or ref
 		
 		text = u"%s - %s (%s)" % (p.name, ref, version)
 		m.set_pane_title(p.name, text)
@@ -425,7 +425,7 @@ class DictionaryFrame(BookFrame):
 		snapped_ref = self.book.snap_text(ref)
 
 		if self.book.has_feature("DailyDevotion"):
-			snapped_ref = mmdd_to_date(snapped_ref)
+			snapped_ref = mmdd_to_date(snapped_ref) or snapped_ref
 		
 		text = "<b>%s</b>" % snapped_ref
 

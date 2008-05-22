@@ -825,17 +825,9 @@ def GetBookChapter(string, context = ""):
 	
 
 def BookName(text):
-	vk.setText(text)
+	vk.setText(to_str(text))
 	if vk.Error(): return None
-	return vk.bookName(ord(vk.Testament()),ord(vk.Book()))
-
-def GetShortText(text):
-	l = text.split("-")
-	ret=[]
-	for a in l:
-		vk.setText(a)
-		ret.append(vk.getShortText())
-	return "-".join(ret)
+	return vk.getBookName()
 
 def GetVKs(range, context=""):
 	lk=vk.ParseVerseList(to_str(range), to_str(context), True)

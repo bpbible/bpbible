@@ -2,7 +2,7 @@
 #psyco.full()
 from backend.bibleinterface import biblemgr
 from util.util import ReplaceUnicode, KillTags, VerseTemplate, remove_amps
-from util.unicode import to_unicode
+from util.unicode import get_to_unicode
 from util import search_utils
 from util.search_utils import *
 from swlib.pysw import SW, BookName
@@ -138,7 +138,8 @@ class BookIndex(object):
 	def GenerateIndex(self):
 		verses = []
 		mod = biblemgr.bible.mod
-		
+		#mod_to_unicode = get_to_unicode(mod)
+	
 		vk = SW.VerseKey(self.bookname, self.bookname)
 
 		old_vk = mod.getKey()
@@ -150,11 +151,13 @@ class BookIndex(object):
 		while vk.Error() == '\x00':
 			# TODO: do tests to make sure striptext works as expected
 			# (with respect to whitespace, uppercase, etc)
-			content = to_unicode(mod.StripText(), mod)
+			# TODO: take this into a function so it can be used by
+			# highlighting code
+			content = mod.StripText().decode("utf-8", "ignore")
 			
 			#content = content.replace("<br />", "\n")
 
-			content = remove_amps(KillTags(ReplaceUnicode(content)))
+			#content = remove_amps(KillTags(ReplaceUnicode(content)))
 			content = content.replace("\n", " ")
 			#TODO: do wordlist statistics here, as then the user can get
 			#the proper spelling suggestions
@@ -162,14 +165,14 @@ class BookIndex(object):
 			# only punctuation not to remove would be ', I think
 			###TODO### battle--you
 			###TODO### number of each
-			def add(word):
-				if(word in wordlist2):
-					wordlist2[word]+=1
-				else: wordlist2[word] = 1
+			#def add(word):
+			#	if(word in wordlist2):
+			#		wordlist2[word]+=1
+			#	else: wordlist2[word] = 1
 
-			for a in removeformatting2(content).split(" "):
-				#if verse is empty, a will be to.
-				if(a): add(a)
+			#for a in removeformatting2(content).split(" "):
+			#	#if verse is empty, a will be to.
+			#	if(a): add(a)
 
 			content = removeformatting(content)
 			
@@ -203,13 +206,9 @@ class BookIndex(object):
 
 		return mylist
 		
-	def RegexSearch(self, phrase, case_sensitive=False):
+	def RegexSearch(self, comp, case_sensitive=False):
 		mylist = []
 		
-		flags = re.IGNORECASE * (not case_sensitive) | re.UNICODE
-		
-
-		comp = re.compile(phrase, flags)
 		for a in comp.finditer(self.text):
 			mylist.append((a.start(), a.end()-a.start()))
 
@@ -256,7 +255,9 @@ class BookIndex(object):
 				if(upto >= len(mylist)):
 					return ret
 				num = mylist[upto][0]
-		return None
+		
+		dprint(ERROR, "Exceeded index length", mylist[upto])
+		return ret
 
 	def MultiSearch(self, wordlist, proximity, case_sensitive=False, \
 	average_word=0, minimum_average=5, ignore_minimum=False, excludes=(), 
@@ -440,6 +441,10 @@ class Index(object):
 		#global index
 		template = VerseTemplate("$text\n")
 		biblemgr.temporary_state(biblemgr.plainstate)
+		log = SW.Log.getSystemLog()
+		old_log_level = log.getLogLevel()
+		log.setLogLevel(0)
+		
 		#apply template
 		if not biblemgr.bible.ModuleExists(mod):#SetModule(mod):
 			raise Exception, "Module %s not found" % mod
@@ -471,6 +476,8 @@ class Index(object):
 				self.GatherStatistics()
 				
 		finally:
+			log.setLogLevel(old_log_level)
+		
 			biblemgr.restore_state()
 			biblemgr.bible.templatelist.pop()
 			
@@ -594,21 +601,26 @@ class Index(object):
 		#	if not subbed: words = removeformatting(words)
 		#	words = " ".join(map(lambda x: r"\b"+x+r"\b", words.split()))
 		
-		#Simple Phrase or Regex
+		# Regular expression
 		if(regex and not advanced):
 			#esc = re.escape(words)
+			flags = re.IGNORECASE * (not case_sensitive) | re.UNICODE
+			comp = re.compile(words, flags)		
+			
 			for num, book in enumerate(books):
 				continuing = progress((book.bookname, (100*num)/len(books)))
 				if not continuing:
 					break
-				results += book.FindIndex(book.RegexSearch(words, 
-										  case_sensitive))
+				results += book.FindIndex(
+					book.RegexSearch(comp,  case_sensitive)
+				)
+
 			progress(("Done", 100))
-			return results
+			return results, [comp]
 		
 		# Advance Phrase or Regex
 		# as phrase has been processed, it is now a regex
-		# ### UNSUPPORTED?
+		# ### UNSUPPORTED
 		if(advanced):
 			# TODO - searching for the* gives matches for thening, which should
 			# be strengthening
@@ -710,7 +722,7 @@ class Index(object):
 			if badwords:
 				raise SpellingException(badwords)
 		
-			return []
+			return [], []
 		
 		
 		excludelist = []
@@ -740,7 +752,7 @@ class Index(object):
 			results += r
 		
 		progress(("Done", 100))
-		return results
+		return results, [regex for regex, length in wordlist]
 	
 	def split_words(self, words):
 		"""Splits the words into results and excluded.
@@ -874,7 +886,15 @@ for a in re_list:
 	r[a] = re.compile(a, flags=re.UNICODE)
 
 r["l"]=re.compile(l, flags=re.UNICODE)
-r["p"]=re.compile("[%s]" % re.escape(string.punctuation), flags=re.UNICODE)
+r["p"]=re.compile("[%s]" % re.escape(
+	string.punctuation + 
+	u'\N{RIGHT DOUBLE QUOTATION MARK}' 
+	u'\N{LEFT DOUBLE QUOTATION MARK}'
+	u'\N{EM DASH}'
+	u'\N{RIGHT SINGLE QUOTATION MARK}'
+	u'\N{LEFT SINGLE QUOTATION MARK}'
+	
+), flags=re.UNICODE)
 r["punctuation_2"]=re.compile("[%s]" % re.escape(
 	''.join(x for x in string.punctuation if x not in "',-")
 ), flags=re.UNICODE)
@@ -897,8 +917,8 @@ def removeformatting(mystr):
 	
 	#TODO: replace symbols with nothing?
 	#for a in string.punctuation:
-	#ret = r["p"].sub(" ", ret)
-	ret = r["[^\w ]"].sub(" ", ret)
+	ret = r["p"].sub(" ", ret)
+	ret = r["[^\w ]"].sub("", ret)
 	ret = r[" +"].sub(" ", ret)
 	ret = ret.strip()
 	return ret
