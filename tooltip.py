@@ -409,7 +409,7 @@ pclass = wx.Frame
 class PermanentTooltip(TooltipBaseMixin, pclass):
 	"""A permanent tooltip with some HTML in it."""
 	def __init__(self, parent, html_type, 
-		style=wx.DEFAULT_FRAME_STYLE & ~(wx.MINIMIZE_BOX | wx.MAXIMIZE_BOX), 
+		style=wx.DEFAULT_FRAME_STYLE & ~(wx.MAXIMIZE_BOX), 
 			is_biblical=False):
 
 		super(PermanentTooltip, self).__init__(

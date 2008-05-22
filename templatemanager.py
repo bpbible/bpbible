@@ -5,7 +5,7 @@ import os
 
 from xrc.templatemanager_xrc import *
 from backend.bibleinterface import biblemgr
-from util.util import VerseTemplate, unformat, Template
+from util.util import VerseTemplate, Template
 import config
 import guiconfig
 from wx import stc

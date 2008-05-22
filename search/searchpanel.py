@@ -1,8 +1,11 @@
+import re
+
 #wx imports
 import wx
 from wx import xrc
 
 from util import osutils
+from util.unicode import to_unicode, to_str
 #from util.util import *
 from util import util
 from backend.bibleinterface import biblemgr
@@ -69,6 +72,7 @@ class SearchPanel(xrcSearchPanel):
 		self.index = None
 		self.version = None
 		self.stop = False
+		self.regexes = []
 
 		# if search panel is on screen at startup, on_show and set_version will
 		# both be called. Then if there is no index, it will prompt twice.
@@ -87,7 +91,7 @@ class SearchPanel(xrcSearchPanel):
 	
 	def on_list(self, event):
 		item_text = self.verselist.GetItemText(event.m_itemIndex)
-		self.versepreview.SetReference(str(item_text))
+		self.versepreview.SetReference(item_text)
 	
 	
 	def search_and_show(self, key=""):
@@ -306,7 +310,7 @@ class SearchPanel(xrcSearchPanel):
 			self.searching = True
 			self.search_button.SetLabel("&Stop")
 			
-			key = str(self.searchkey.GetValue())
+			key = self.searchkey.GetValue()
 			if not key: 
 				self.search_label.Label = "0 verses found"
 
@@ -333,9 +337,9 @@ class SearchPanel(xrcSearchPanel):
 
 			else:
 				# If custom range, use it
-				scope = str(self.custom_range.GetValue())
+				scope = self.custom_range.GetValue()
 			
-			excludestr = str(self.exclude.GetValue())
+			excludestr = self.exclude.GetValue()
 			exclude = excludestr
 			if not excludestr:
 				exclude = None
@@ -377,17 +381,19 @@ class SearchPanel(xrcSearchPanel):
 			search_type |= search.CASESENSITIVE
 		
 		try:
-			self.search_results = self.index.Search(key, search_type, 
-			searchrange=scope, progress=index_callback, excludes=exclude,
-			proximity=proximity)
+			self.search_results, self.regexes = self.index.Search(
+				key, search_type, searchrange=scope, 
+				progress=index_callback, excludes=exclude,
+				proximity=proximity
+			)
 
 		except SearchException, myexcept:
-			wx.MessageBox(str(myexcept), "Error in search")
+			wx.MessageBox(unicode(myexcept), "Error in search")
 			succeeded = False
 
 		except SpellingException, spell:
 			wx.MessageBox("The following words were not found in the module:"
-				"\n%s" % str(spell), "Unknown word")
+				"\n%s" % unicode(spell), "Unknown word")
 			
 			succeeded = False
 
@@ -422,6 +428,15 @@ class SearchPanel(xrcSearchPanel):
 			return
 
 		self.search_results = search.RemoveDuplicates(self.search_results)
+		
+		self.search_label.Label = (
+			"%s found, %s, %s" % (
+				util.pluralize("reference", len(self.search_results)),
+				util.pluralize("word", self.numwords),
+				util.pluralize("hit", self.hits),
+			)
+		)
+		
 		self.insert_results()
 
 	def on_sword_search(self, key, scope, exclude, case_sensitive):
@@ -435,10 +450,19 @@ class SearchPanel(xrcSearchPanel):
 		self.searcher = Searcher(biblemgr.bible)
 		self.searcher.callback = callback
 
-	    # If custom range, use it
+		# If custom range, use it
 		self.numwords = len(key.split())
-		self.search_results = self.searcher.Search(key, 
+		self.search_results = self.searcher.Search(
+			to_str(key, biblemgr.bible.mod),
 			search_config["search_type"], scope, case_sensitive)
+	
+		flags = re.UNICODE | (re.IGNORECASE * (not case_sensitive))
+		if search_config["search_type"] == SWMULTI:
+			self.regexes = [
+				re.compile(word, flags) for word in key.split()
+			]
+		else:
+			self.regexes = [re.compile(key, flags)]
 
 		# If we need to exclude, do another search through the scope 
 		# Then remove duplicates
@@ -447,7 +471,8 @@ class SearchPanel(xrcSearchPanel):
 				if not self.search_results: # or self.stop:
 					break
 
-				exclude_list = self.searcher.Search(string, 
+				exclude_list = self.searcher.Search(
+					to_str(string, biblemgr.bible.mod),
 					search_config["search_type"],
 					"; ".join(self.search_results), 
 					case_sensitive)
@@ -459,7 +484,7 @@ class SearchPanel(xrcSearchPanel):
 		self.hits = len(self.search_results)
 		if self.hits == 0:
 			self.search_label.Label = (
-				"0 verses found, %s, 0 hits" % 
+				"0 verses found, %s" % 
 					util.pluralize("word", self.numwords)
 			)
 			
@@ -484,6 +509,13 @@ class SearchPanel(xrcSearchPanel):
 			wx.CallAfter(self.clear_list)
 			return
 
+		self.search_label.Label = (
+			"%s found, %s" % (
+				util.pluralize("verse", self.hits),
+				util.pluralize("word", self.numwords),
+			)
+		)
+		
 		# Update UI
 		self.insert_results()
 
@@ -494,6 +526,7 @@ class SearchPanel(xrcSearchPanel):
 		#Clear list
 		self.verselist.set_data("Reference Preview".split(), length=0)
 
+		self.versepreview.regexes = []
 		self.versepreview.SetReference(None)
 
 		#insert columns
@@ -511,47 +544,14 @@ class SearchPanel(xrcSearchPanel):
 		text = self.search_results
 		self.search_button.SetLabel("&Search")
 
-		#make this plain
-		#template = VerseTemplate(body = "$text ")
-
-		#Set Reference to shortened version
-		#for val, item in enumerate(text):
-		#	#vk = SW.VerseKey(item)
-		#	text[val] = GetBestRange(item, abbrev=True)
-
-		self.verselist.results = self.search_results#text
-
-		#biblemgr.temporary_state(biblemgr.plainstate)
-		#biblemgr.bible.templatelist.push(template)
-		#for val, item in enumerate(text):
-		#	bibletext = br2nl(biblemgr.bible.GetReference(item))
-		#	bibletext = KillTags(util.ReplaceUnicode(bibletext))
-		#	bibletext = RemoveWhitespace(bibletext)
-		#	data[val] = (item, bibletext)
-		#biblemgr.restore_state()
-		#biblemgr.bible.templatelist.pop()
+		self.verselist.results = self.search_results
 
 		#Clear list
 		self.clear_list()
 		self.verselist.set_data("Reference Preview".split(), length=len(text))
-		#insert data	   
-		#for key, mydata in data.iteritems():
-		#	index = self.verselist.InsertStringItem(sys.maxint, mydata[0])
-		#	self.verselist.SetStringItem(index, 1, mydata[1])
-		#	self.verselist.SetItemData(index, key)
-		#self.verselist.SetColumnWidth(0, wx.LIST_AUTOSIZE)
-		#self.verselist.SetColumnWidth(0, self.verselist.GetColumnWidth(0) + 5)
-
-		#self.verselist.SetColumnWidth(1, wx.LIST_AUTOSIZE)
-		
 		self.set_title()
-		self.search_label.Label = (
-			"%s found, %s, %s" % (
-				util.pluralize("reference", len(text)),
-				util.pluralize("word", self.numwords),
-				util.pluralize("hit", self.hits),
-			)
-		)
+
+		self.versepreview.regexes = self.regexes	
 		self.versepreview.SetReference(text[0])
 		
 		
@@ -635,15 +635,16 @@ class SearchPanel(xrcSearchPanel):
 	def build_index(self, version):
 		def callback(value):
 			self.progressbar.SetValue(value[1])
-			continuing, skip = p.Update(value[1], "Indexing %s" % value[0])
+			continuing, skip = p.Update(value[1], "Processing %s" % value[0])
 			wx.GetApp().Yield()
 			return continuing
 
 		p = wx.ProgressDialog("Indexing %s" % version, "Preparing", 
 			style=wx.PD_APP_MODAL|wx.PD_CAN_ABORT|wx.PD_AUTO_HIDE )
 
+		p.Size = (400, -1)
 		p.Show()
-		self.show_progress_bar()
+		#self.show_progress_bar()
 
 		try:
 			#create index
@@ -659,7 +660,7 @@ class SearchPanel(xrcSearchPanel):
 			
 			return index
 		finally:
-			self.show_progress_bar(False)
+			#self.show_progress_bar(False)
 			p.Hide()
 			p.Destroy()
 
@@ -700,8 +701,8 @@ class SearchList(virtuallist.VirtualListCtrlXRC):
 		try:
 			item = self.results[idx]
 			bibletext = util.br2nl(biblemgr.bible.GetReference(item))
-			bibletext = util.KillTags(util.ReplaceUnicode(bibletext))
-			bibletext = util.RemoveWhitespace(util.remove_amps(bibletext))
+			bibletext = util.KillTags(bibletext)
+			bibletext = util.RemoveWhitespace(util.amps_to_unicode(bibletext))
 			return bibletext
 
 		finally:

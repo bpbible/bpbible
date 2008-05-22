@@ -1,6 +1,5 @@
 from util import util
 import os
-from util import osutils
 import sys
 import getopt
 from ConfigParser import RawConfigParser, NoSectionError, NoOptionError
@@ -102,30 +101,34 @@ use_system_inactive_caption_colour = False
 
 # templates
 def make_template(verse_per_line):
-	global bible_template, other_template
+	global bible_template, other_template, dictionary_template
 	global current_verse_template, verse_compare_template
 	br = "<br>" * verse_per_line
 	body = (
-	'<a href = "#$versenumber" name="$versenumber" target="$versenumber">'
-	'<small><sup>$versenumber</sup></small></a> $text %s\n' % br)
+	u'<a href = "#$versenumber" name="$versenumber" target="$versenumber">'
+	u'<small><sup>$versenumber</sup></small></a> $text %s\n' % br)
 	
 	bible_template = util.VerseTemplate(body=body)
 	#, footer="<br>$range ($version)")
 
 
 	other_template = util.VerseTemplate(
-		body="<b>$range</b><br>$text<p>($description)</p> \n"
+		body=u"<b>$range</b><br>$text<p>($description)</p> \n"
 	)
+	dictionary_template = util.VerseTemplate(
+		body=u"<br>$text<p>($description)</p> \n"
+	)
+	
 
-	body = ("<a href = '#current' target='$versenumber'><a name='$versenumber'>"
-			"<small><sup>$versenumber</sup></small></a></a> "
-			"<font color = 'green'>$text</font> %s\n") % br
+	body = (u"<a href = '#current' target='$versenumber'><a name='$versenumber'>"
+			u"<small><sup>$versenumber</sup></small></a></a> "
+			u"<font color = 'green'>$text</font> %s\n") % br
 
 	current_verse_template = util.VerseTemplate(body)
 
 	verse_compare_template = util.VerseTemplate("$text",
-		header="<p><b>(<a href='%s:$version'>$version</a>)"
-		"</b> " % BIBLE_VERSION_PROTOCOL
+		header=u"<p><b>(<a href='%s:$version'>$version</a>)"
+		u"</b> " % BIBLE_VERSION_PROTOCOL
 	)
 
 

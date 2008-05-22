@@ -1,11 +1,24 @@
 import swlib.swordlib as SW
 import re
 from util.debug import *
+from util.unicode import to_str, to_unicode
 
 REG_ICASE = 1 << 1
 SWMULTI = -2
 SWPHRASE = -1
 SWREGEX = 0
+
+POS_TOP = 1
+POS_BOTTOM = 2
+POS_MAXVERSE = 3
+POS_MAXCHAPTER = 4
+POS_MAXBOOK = 5
+
+TOP = SW.SW_POSITION(POS_TOP)
+BOTTOM = SW.SW_POSITION(POS_BOTTOM)
+MAXVERSE = SW.SW_POSITION(POS_MAXVERSE)
+MAXCHAPTER = SW.SW_POSITION(POS_MAXCHAPTER)
+MAXBOOK = SW.SW_POSITION(POS_MAXBOOK)
 
 
 for a in dir(SW):
@@ -85,13 +98,14 @@ class VK(SW.VerseKey):#, object):
 	"""
 
 	def __init__(self, key=()):
-		if isinstance(key, str):
+		if isinstance(key, basestring):
 			#if not KeyExists(key):
 			#	raise VerseParsingError, key
-			SW.VerseKey.__init__(self, key)
+			SW.VerseKey.__init__(self, to_str(key))
 			if self.Error():
 				raise VerseParsingError, key
 			return
+			
 		if isinstance(key, SW.Key):
 			SW.VerseKey.__init__(self, key)
 			return
@@ -125,8 +139,8 @@ class VK(SW.VerseKey):#, object):
 		return not self == other
 
 	# TODO: __nonzero__?
-	def __str__(self): return self.getRangeText()
-	def __repr__(self): return "VK('%s')" % self.getRangeText()
+	def __str__(self): return to_unicode(self.getRangeText())
+	def __repr__(self): return "VK('%s')" % to_unicode(self.getRangeText())
 
 	def __iadd__(self, amount): 
 		if amount < 0:
@@ -139,15 +153,15 @@ class VK(SW.VerseKey):#, object):
 		return self
 	
 	def get_text(self):
-		return str(self)
+		return self.__str__()
 	
 	def set_text(self, value):
-		if(isinstance(value, str)):
+		if(isinstance(value, basestring)):
 			if not KeyExists(value):
 				raise VerseParsingError, value
 			self.ClearBounds()
 				
-			self.setText(value)
+			self.setText(to_str(value))
 		else:
 			top, bottom=value
 			if not KeyExists(top):
@@ -163,7 +177,7 @@ class VK(SW.VerseKey):#, object):
 	text = property(get_text, set_text)
 	
 	def set_text_checked(self, value):
-		assert isinstance(value, str)
+		assert isinstance(value, basestring)
 		an = self.AutoNormalize(0)
 		try:
 			self.setText(value)
@@ -174,7 +188,7 @@ class VK(SW.VerseKey):#, object):
 
 	def __len__(self):
 		if self.isBoundSet():
-			self.setText(self.LowerBound().getText())
+			self.setPosition(TOP)
 			length=0
 			while not self.Error():
 				length+=1
@@ -211,7 +225,7 @@ class VK(SW.VerseKey):#, object):
 		if(not self.isBoundSet()):
 			yield self
 			raise StopIteration
-		self.setText(self.LowerBound().getText())
+		self.setPosition(TOP)
 		while not self.Error():
 			yield VK(self.getText())
 			self+=1
@@ -222,14 +236,14 @@ class VK(SW.VerseKey):#, object):
 				return self
 			raise IndexError, key
 		if key < 0:
-			self.setText(self.UpperBound().getText())
+			self.setPosition(BOTTOM)
 			for a in range(-key-1):
 				self-=1
 			if self.Error():
 				raise IndexError, key
 			return VK(self.getText())
 
-		self.setText(self.LowerBound().getText())
+		self.setPosition(TOP)
 		for a in range(key):
 			self+=1#key
 		if self.Error():
@@ -353,7 +367,9 @@ class VerseList(list):
 			list.__init__(self, args2)
 			return
 
-		if(isinstance(args, str)):
+		if isinstance(args, basestring):
+			args = to_str(args)
+			context = to_str(context)
 			s = args
 			if not raiseError:
 				args = vk.ParseVerseList(args, context, expand)
@@ -470,7 +486,7 @@ class VerseList(list):
 		return list.__setitem__(self, name, self.keyallowed(value))
 	
 	def getRangeText(self):	
-		return "; ".join(map(str, self))
+		return "; ".join(item.text for item in self)
 
 	def VerseInRange(self, verse):#, range, context="", vklist=None):
 		#if not(vklist): #lastrange and range==lastrange):
@@ -504,6 +520,8 @@ class VerseList(list):
 		'Gen 3:3-5'
 		>>> pysw.VerseList("Gen 3-Matt 5").GetBestRange(short=True)
 		'Gen 3-Matt 5'
+		>>> pysw.VerseList("Psa 58:0-1").GetBestRange() # a bit of a dodgy case
+		'Psalms 57:11-58:1'
 		"""
 		
 		def getdetails(versekey):
@@ -679,7 +697,7 @@ for a in books:
 class TK(SW.TreeKeyIdx):
 	"""A tree key. As this is module specific, create it from an existing tree
 	key retrieved from the module"""
-	def __init__(self, tk):
+	def __init__(self, tk, module=None):
 		tk2 = SW.TreeKey.castTo(tk.clone())
 		tk2 = SW.TreeKeyIdx.castTo(tk2)
 		tk2.thisown = False
@@ -690,6 +708,10 @@ class TK(SW.TreeKeyIdx):
 		self.this = tk2.this
 		#SW.TreeKeyIdx.__init__(self, tk2)
 		self.tk = self
+		self.module = module
+		if module is None and hasattr(tk, "module"):
+			self.module = tk.module
+		
 		#self.this = tk2
 		
 		#assert tk2, "tk must be a treekey"
@@ -704,16 +726,17 @@ class TK(SW.TreeKeyIdx):
 #			raise Exception, "tk must be a treekey"
 	
 	def __iter__(self):
-			tk = TK(self.tk)
-			if(tk.firstChild()):
+		tk = TK(self.tk)
+		if(tk.firstChild()):
+			yield TK(tk)
+			while(tk.nextSibling()):
 				yield TK(tk)
-				while(tk.nextSibling()):
-					yield TK(tk)
+
 	def __repr__(self):
-		return "<TK("+self.getText()+")>"
+		return "<TK(%s)>" % to_unicode(self.getText(), self.module)
 	
 	def __str__(self):
-		return self.getLocalName()
+		return to_unicode(self.getLocalName(), self.module)
 	
 	def __getitem__(self, key):
 		return [a for a in self][key]
@@ -739,22 +762,18 @@ class TK(SW.TreeKeyIdx):
 				raise AttributeError,attr
 
 
-	def breadcrumb(self, include_home=None, book=None):
-		breadcrumb = [self.getLocalName()]
+	def breadcrumb(self, include_home=None):
+		breadcrumb = [unicode(self)]
 		bref = TK(self)
 		while bref.parent():
-			breadcrumb.append(bref.getLocalName())
+			breadcrumb.append(unicode(bref))
 
 		if include_home:
 			breadcrumb[-1] = include_home
 		else:
 			del breadcrumb[-1]
 
-		if book:
-			# process the key to process any utf-8
-			breadcrumb = [book.mod.RenderText(t) for t in breadcrumb]
-
-		return " > ".join(breadcrumb[::-1])
+		return u" > ".join(breadcrumb[::-1])
 	
 def _test():
 	import doctest
@@ -763,9 +782,9 @@ def _test():
 
 
 # -- Utility functions
-def GetVerseTuple(string, context = ""):
+def GetVerseTuple(string, context=""):
 	#TODO check valid
-	text = vk.ParseVerseList(str(string), context, True).getText()
+	text = vk.ParseVerseList(to_str(string), to_str(context), True).getText()
 	# Normalize result
 	vk.setText(text)
 	return (vk.NewIndex(), vk.getText())
@@ -782,7 +801,7 @@ def GetVerseStr(verse, context = "", raiseError=False):
 	# Parse List (This is for context)
 	verse_split = verse.split(";")[0].split(",")[0]
 
-	vklist = VerseList(str(verse_split), context, expand=False,
+	vklist = VerseList(verse_split, context, expand=False,
 		raiseError=raiseError)
 	if not vklist: 
 		if raiseError:
@@ -797,7 +816,7 @@ def GetVerseStr(verse, context = "", raiseError=False):
 	return vk[0].text
 
 def GetBookChapter(string, context = ""):
-	chapter = vk.ParseVerseList(str(string), context, True).getText()
+	chapter = vk.ParseVerseList(to_str(string), to_str(context), True).getText()
 	index = chapter.find(":")
 	
 	if index != -1:
@@ -806,40 +825,32 @@ def GetBookChapter(string, context = ""):
 	
 
 def BookName(text):
-	vk.setText(text)
+	vk.setText(to_str(text))
 	if vk.Error(): return None
-	return vk.bookName(ord(vk.Testament()),ord(vk.Book()))
-
-def GetShortText(text):
-	l = text.split("-")
-	ret=[]
-	for a in l:
-		vk.setText(a)
-		ret.append(vk.getShortText())
-	return "-".join(ret)
+	return vk.getBookName()
 
 def GetVKs(range, context=""):
-	lk=vk.ParseVerseList(str(range), context, True)
+	lk=vk.ParseVerseList(to_str(range), to_str(context), True)
 	l=[]
 	l2=[]
 	while lk.Error()=='\x00':
 		l.append(lk.GetElement(len(l)))
 
-	for a in l:
-		if(not a):
+	for key in l:
+		if not key:
 			continue
-		v=VK.castTo(a)
-		if not v:
+		
+		vk = VK.castTo(key)
+
+		if not vk:
 			#1 verse only
-			v=[VK(a.getText())]
+			v=[VK(key.getText())]
 		else:
 			#range
-			v=[VK(v.LowerBound()), \
-				VK(v.UpperBound())]
-		l3=[]
-		for b in v:
-			l3.append(b)#getdetails(b))
-		l2.append(l3)
+			v=[VK(vk.LowerBound()), VK(vk.UpperBound())]
+
+		l2.append(v)
+
 	return l2
 
 
@@ -881,7 +892,7 @@ class Searcher(SW.Searcher):
 
 		scope = None
 		if(scopestr):
-			scope = self.vk.ParseVerseList(scopestr, "", True)
+			scope = self.vk.ParseVerseList(to_str(scopestr), "", True)
 
 		verseslist = self.doSearch(string, options, 
 			(not case_sensitive)*REG_ICASE, scope)

@@ -103,8 +103,6 @@ class DisplayFrame(HtmlSelectableWindow):
 		guiconfig.mainfrm.hide_tooltips(exceptions=exceptions)
 
 	def strip_text(self, word):
-		word = util.ReplaceUnicode(word)
-		
 		return word.strip(string.whitespace + string.punctuation)
 
 	def CellClicked(self, cell, x, y, event):
@@ -113,7 +111,6 @@ class DisplayFrame(HtmlSelectableWindow):
 
 		if(event.ControlDown()):
 			word = cell.ConvertToText(None)
-			#word = util.ReplaceUnicode(word)
 			word = self.strip_text(word)
 			if(word): 
 				wx.CallAfter(guiconfig.mainfrm.UpdateDictionaryUI, word)
@@ -424,7 +421,7 @@ class DisplayFrame(HtmlSelectableWindow):
 		if not cell: 
 			return None
 
-		return util.ReplaceUnicode(cell.ConvertToText(None))
+		return cell.ConvertToText(None)
 
 	def make_lookup_text(self):
 		update_ui = self._get_text("Look up %s in the dictionary")

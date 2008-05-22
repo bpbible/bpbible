@@ -10,13 +10,13 @@ from swlib.pysw import VK, VerseParsingError
 from swlib.pysw import GetVerseStr, GetBookChapter, GetBestRange
 from util import util
 from util.util import ReplaceUnicode
-from util.debug import *
+from util.unicode import to_str, to_unicode
 from gui import guiutil
 import config
 import guiconfig
 from moduleinfo import ModuleInfo
 from gui.menu import MenuItem, Separator
-from dictionarylist import DictionarySelector
+from dictionarylist import DictionarySelector, mmdd_to_date
 from gui.quickselector import QuickSelector
 
 from events import SETTINGS_CHANGED, CHAPTER_MOVE, VERSE_MOVE, QUICK_SELECTOR
@@ -47,7 +47,7 @@ class BookFrame(DisplayFrame):
 
 	def get_verified_one_verse(self, ref):
 		try:
-			ref = str(GetVerseStr(ref, self.reference, raiseError=True))
+			ref = GetVerseStr(ref, self.reference, raiseError=True)
 			return ref
 		
 		except VerseParsingError, e:
@@ -55,7 +55,7 @@ class BookFrame(DisplayFrame):
 		
 	def get_verified_multi_verses(self, ref):
 		try:
-			ref = str(GetBestRange(ref, self.reference, raiseError=True))
+			ref = (GetBestRange(ref, self.reference, raiseError=True))
 			return ref
 		
 		except VerseParsingError, e:
@@ -74,9 +74,9 @@ class BookFrame(DisplayFrame):
 		else:
 			data = text
 			data = data.replace("<!P>","</p><p>")
-			if True:#:wx.USE_UNICODE:
-				#replace common values
-				data = ReplaceUnicode(data)
+			#replace common values
+			#data = ReplaceUnicode(data)
+
 		self.SetPage(data, raw=raw)
 		self.update_title()
 		
@@ -290,7 +290,7 @@ class LinkedFrame(VerseKeyedFrame):
 	def set_ref(self, event):
 		ref = self.gui_reference.Value
 		if not ref: return
-		ref = self.get_verified(str(ref))
+		ref = self.get_verified(ref)
 		if not ref: return
 		self.SetReference(ref)
 	
@@ -385,12 +385,12 @@ class DictionaryFrame(BookFrame):
 
 		key = mod.getKey()
 		key.Persist(1)
-		key.setText(self.reference)
+		key.setText(to_str(self.reference, mod))
 		mod.setKey(key)
 		#while(not ord(self.mod.Error())):
 		#		topics.append(self.mod.getKeyText());
 		mod.increment(amount);
-		ref = mod.getKeyText()
+		ref = to_unicode(mod.getKeyText(), mod)
 		self.notify(ref, source=CHAPTER_MOVE)
 	
 	def update_title(self, shown=None):
@@ -398,7 +398,13 @@ class DictionaryFrame(BookFrame):
 		p = m.get_pane_for_frame(self)
 		version = self.book.version
 		ref = self.reference
-		text = "%s - %s (%s)" % (p.name, self.book.snap_text(ref), version)
+		
+		ref = self.book.snap_text(ref)
+
+		if self.book.has_feature("DailyDevotion"):
+			ref = mmdd_to_date(ref) or ref
+		
+		text = u"%s - %s (%s)" % (p.name, ref, version)
 		m.set_pane_title(p.name, text)
 	
 	def get_window(self):
@@ -408,6 +414,32 @@ class DictionaryFrame(BookFrame):
 	def notify(self, ref, source=None):
 		guiconfig.mainfrm.UpdateDictionaryUI(ref)
 		
+
+	@guiutil.frozen
+	def SetReference(self, ref, context=None, raw=None):
+		if raw is None:
+			raw = config.raw
+
+		self.reference = ref
+		
+		snapped_ref = self.book.snap_text(ref)
+
+		if self.book.has_feature("DailyDevotion"):
+			snapped_ref = mmdd_to_date(snapped_ref) or snapped_ref
+		
+		text = "<b>%s</b>" % snapped_ref
+
+		text += self.book.GetReference(ref, context=context, raw=raw)#bible text
+		if text is None:
+			data = config.MODULE_MISSING_STRING
+		else:
+			data = text
+			data = data.replace("<!P>","</p><p>")
+			#replace common values
+			#data = ReplaceUnicode(data)
+
+		self.SetPage(data, raw=raw)
+		self.update_title()
 
 #xrc_classes = [DictionaryFrame, CommentaryFrame, BookFrame, BibleFrame]
 #

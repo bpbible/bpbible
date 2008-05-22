@@ -11,11 +11,12 @@ from swlib.pysw import SW
 
 from backend.book import Bible, Commentary
 from backend.dictionary import Dictionary
+import backend.stringmgr
 
 from util import util
 from util import confparser
 from util.observerlist import ObserverList
-from util.debug import dprint, MESSAGE
+from util.debug import dprint, MESSAGE, WARNING
 from backend.filter import MarkupInserter
 from backend.genbook import GenBook
 import config
@@ -31,11 +32,20 @@ class BibleInterface(object):
 
 		self.on_before_reload = ObserverList()
 		self.on_after_reload = ObserverList()
+		self.reloading = False
+
+		self.mgrs = []
+		self.paths = []
 		
 		dprint(MESSAGE, "Creating manager")
-		self.make_manager()
+
+		self.make_managers()
+		
+		# call on after reload in case
+		self.on_after_reload(self)
+		
+
 		dprint(MESSAGE, "/Creating manager")
-		self.paths = set()
 
 		self.bible = Bible(self, biblename) 
 		self.commentary = Commentary(self, commentaryname)
@@ -48,7 +58,14 @@ class BibleInterface(object):
 	
 	def init_options(self):
 		for option, values in self.get_options():
-			self.options[option] = self.mgr.getGlobalOption(option)
+			for path, mgr in self.mgrs:
+				option_value = mgr.getGlobalOption(option)
+
+				# if NULL is ever a valid value for this, 
+				# this code may mean that a default 
+				# option value is not set in the options.
+				if option_value is not None:
+					self.options[option] = option_value
 		
 		#if people want no extras, here it is
 		self.temporary_state()
@@ -64,7 +81,9 @@ class BibleInterface(object):
 		if type(value) == bool:
 			processed_value = {True:"On", False:"Off"}[value]
 
-		self.mgr.setGlobalOption(str(option), str(processed_value))
+		for path, mgr in self.mgrs:
+			mgr.setGlobalOption(str(option), str(processed_value))
+
 		self.options[option] = processed_value
 	
 	def temporary_state(self, options = None):
@@ -86,26 +105,45 @@ class BibleInterface(object):
 	def save_state(self):
 		return dict(self.options)
 	
-	def GetModule(self, mod):
-		return self.mgr.getModule(mod)
-
+	def get_module(self, mod):
+		return self.modules.get(mod)
+	
+	def _get_modules(self):
+		self.modules = {}
+		for path, mgr in self.mgrs:
+			self.modules.update((name.c_str(), mod) 
+				for name, mod in mgr.getModules().iteritems()
+			)
+				
 	def get_options(self):
 		option_names = []
-		for option_name in self.mgr.getGlobalOptionsVector():
-			text = option_name.c_str()
-			option_values = []
-			for option_value in self.mgr.getGlobalOptionValuesVector(text):
-				option_values.append(option_value.c_str())
-			option_names.append((text, option_values))
-		return option_names
+		options = {}
+
+		for path, mgr in self.mgrs:
+			# I'm not sure if one SWMgr can include 3 options for a
+			# value, and another two. (for example)
+			# if so, we choose the last one
+			
+			for option_name in mgr.getGlobalOptionsVector():
+				text = option_name.c_str()
+	
+				options[text] = []
+				
+				if text not in option_names:
+					option_names.append(text)
+
+				for option_value in mgr.getGlobalOptionValuesVector(text):
+					options[text].append(option_value.c_str())
+		
+		# sort it by order received
+		return [(option, options[option]) for option in option_names]
 	
 	def get_tip(self, option):
-		return self.mgr.getGlobalOptionTip(option)
+		for path, mgr in reversed(self.mgrs):
+			tip = mgr.getGlobalOptionTip(option)
+			if tip:
+				return tip
 			
-	def augment_path(self, path):
-		self.mgr.augmentModules(path, True)
-		self.paths.add(path)
-	
 	def load_paths(self, filename=config.sword_paths_file):
 		config_parser = confparser.config()
 		try:
@@ -139,24 +177,26 @@ class BibleInterface(object):
 
 		config_parser.write(open(filename, "w"))
 	
-	def set_new_paths(self, paths):
+	def set_new_paths(self, paths=None, path_changed=None):
+		self.reloading = True
 		bible       = self.bible.version
 		dictionary  = self.dictionary.version
 		commentary  = self.commentary.version
 		genbook     = self.genbook.version
 		
-		items = [(self.bible, bible), 
-				 (self.dictionary, dictionary), 
-				 (self.commentary, commentary), 
-				 (self.genbook, genbook)
+		items = [
+			(self.bible, bible), 
+			(self.dictionary, dictionary), 
+			(self.commentary, commentary), 
+			(self.genbook, genbook)
 		]
 
-		del self.mgr
-		self.write_paths(paths)
+		if path_changed is None:
+			self.mgrs = []
+			self.write_paths(paths)
 
-		self.make_manager()
-			
-		self.paths = paths
+		self.on_before_reload(self)
+		self.make_managers(path_changed)
 
 		for item, module in items:
 			# put the items on hold so that they don't fire until all modules
@@ -180,11 +220,19 @@ class BibleInterface(object):
 
 		self.init_options()
 
+			
+		
 		for item, module in items:
 			item.observers.finish_hold()
-				
 		
-	def make_manager(self):
+		self.reloading = False
+		
+		# do the on_after_reload *after* the hold finishing so that the
+		# genbook can work out its treekey stuff before it is refreshed
+		self.on_after_reload(self)
+		
+			
+	def make_managers(self, path_changed=None):
 		#if hasattr(self, "dictionary"):
 		#	self.dictionary.clear_cache()
 		# turn off logging
@@ -192,46 +240,41 @@ class BibleInterface(object):
 		log_level = system_log.getLogLevel()
 		system_log.setLogLevel(0)
 		try:
-			self.markup_inserter = MarkupInserter(self)
-			markup = SW.MyMarkup(self.markup_inserter, 
-				SW.FMT_HTMLHREF, SW.ENC_HTML)
-			#markup = SW.MarkupFilterMgr(SW.FMT_HTMLHREF, SW.ENC_HTML)
-			markup.thisown = False
-			self.on_before_reload(self)
+			if path_changed is None:
+				paths = self.load_paths()[::-1]
+				for item in paths:
+					self.mgrs.append([item, self.make_manager(item)])
+			
+				self.paths = paths
+			else:
+				for item in self.mgrs:
+					if item[0] != path_changed:
+						continue
 
+					item[1] = self.make_manager(item[0])
 
-			paths = self.load_paths()[::-1]
-	
-			
-			mgr = SW.Mgr(paths[0], False, markup)
-			
-			#TODO: test this
-			ansa = mgr.Load()
-			
-			item_upto = 1
+			self._get_modules()
 
-			# keep on trying to load the paths until we hit the first one we
-			# could load
-			while ansa == -1 and item_upto < len(paths):
-				mgr.configPath = paths[item_upto]
-				ansa = mgr.Load()
-				item_upto += 1
-
-			# and then augment the rest
-			for item in paths[item_upto:]:
-				mgr.augmentModules(item)
-			
-			self.mgr = mgr
-			
-			self.on_after_reload(self)
-			
-			return mgr
 		finally:
 			# reset it to what it was
-			system_log.setLogLevel(log_level)
+			system_log.setLogLevel(log_level)	
+
+	def make_manager(self, path):
+		markup_inserter = MarkupInserter(self)
+		
+		markup = SW.MyMarkup(markup_inserter, 
+			SW.FMT_HTMLHREF, SW.ENC_HTML)
+		
+		#markup = SW.MarkupFilterMgr(SW.FMT_HTMLHREF, SW.ENC_HTML)
+		markup.thisown = False
+
+		# don't augment home path
+		mgr = SW.Mgr(path, True, markup, False, False)
+	
+		return mgr
 
 biblemgr = BibleInterface("ESV", "TSK", "ISBE") 
 
-biblemgr.dictionary.templatelist.push(config.other_template)
+biblemgr.dictionary.templatelist.push(config.dictionary_template)
 biblemgr.commentary.templatelist.push(config.other_template)
 biblemgr.bible.templatelist.push(config.bible_template)

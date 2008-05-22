@@ -1,5 +1,6 @@
 import wx
 import wx.html
+import wx.lib.wxpTag
 from wx import html
 from gui import guiutil
 from util import util
@@ -41,7 +42,7 @@ class TagHandler(wx.html.HtmlWinTagHandler):
 		except Exception, e:
 			import traceback
 			traceback.print_exc()
-			dprint(ERROR, e.args, e.message)#, dir(e), str(e)
+			dprint(ERROR, e.args, e.message)
 
 	
 class GLinkTagHandler(TagHandler):
@@ -265,9 +266,6 @@ class HtmlBase(wx.html.HtmlWindow):
 		Either or neither of text_colour and body_colour can be specified"""
 		self.top_left_cell = None
 	
-		if not wx.USE_UNICODE:
-			text = util.ReplaceUnicode(text)
-
 		#text = text.replace("<small>", "<font size=-1>")
 		#text = text.replace("</small>", "</font>")
 		text = util.htmlify_unicode(text)
@@ -403,8 +401,8 @@ class HtmlSelectableWindow(HtmlBase):
 		if not self.m_selection:
 			return
 
-		self.first = self.m_selection.GetFromCell()
-		self.last = self.m_selection.GetToCell()
+		from_cell = self.m_selection.GetFromCell()
+		to_cell = self.m_selection.GetToCell()
 
 		#the text without links
 		text=""
@@ -415,7 +413,7 @@ class HtmlSelectableWindow(HtmlBase):
 		#the differences between text and faketext
 		dels = []
 
-		i = linkiter(self.first, self.last)
+		i = linkiter(from_cell, to_cell)
 
 		prev = i.m_pos
 		while (i):
@@ -653,7 +651,7 @@ class HtmlSelectableWindow(HtmlBase):
 		if(self.select):
 			self.PutMeIn()
 
-		if(str(cellover) == str(self.lastcell)):
+		if eq(cellover, self.lastcell):
 			return
 		if(self.lastcell):
 			self.OnCellMouseLeave(self.lastcell, xx, yy)

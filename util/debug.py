@@ -4,14 +4,15 @@ debug.py - basic logging facilities
 
 import sys
 import time
-import osutils
 import util
 
-__all__ = ["MESSAGE", "WARNING", "ERROR", "dprint", "is_debugging", "TOOLTIP"]
+__all__ = ["MESSAGE", "WARNING", "ERROR", "dprint", "is_debugging", "TOOLTIP",
+"INSTALL_ZIP"]
 MESSAGE = 0
 WARNING = 1
 ERROR   = 2
-TOOLTIP = 3
+TOOLTIP = 0.5
+INSTALL_ZIP = 0.6
 
 level = 0
 

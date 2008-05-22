@@ -1,18 +1,15 @@
 #TODO: on move remove popup
 #TODO: \n on copy
 #TODO: ($text)$text
-import sys
-import string
 import wx
 
-from xrc.copyverses_xrc import *#xrcCopyVerseDialog
+from xrc.copyverses_xrc import xrcCopyVerseDialog
 from backend.bibleinterface import biblemgr
-from util.util import VerseTemplate, unformat, Template
+from util.util import VerseTemplate, Template
 from util import util
 
 from wx import stc
 from templatemanager import TemplatePanel, TemplateManager
-import  wx.lib.mixins.listctrl  as  listmix
 import guiconfig
 import config
 from gui import guiutil
@@ -38,8 +35,6 @@ class CopyVerseDialog(xrcCopyVerseDialog):
 		self.is_custom = False
 		self.based_on = ""
 		
-		self.ref = ""
-		
 		# fill up the list of templates
 		self.fill_templates()
 		
@@ -56,14 +51,14 @@ class CopyVerseDialog(xrcCopyVerseDialog):
 
 		else:
 			item_id = 0
-			for id, item in enumerate(self.tm.templates):
+			for idx, item in enumerate(self.tm.templates):
 				if item.name == settings:
-					item_id = id
+					item_id = idx
 					break
 
 				# remember default, but keep on looking
 				if item.name == "Default":
-					item_id = id
+					item_id = idx
 
 			self.tm.change_template(item_id)
 			self.gui_template_list.SetStringSelection(
@@ -81,22 +76,22 @@ class CopyVerseDialog(xrcCopyVerseDialog):
 			border=6)
 		self.tp_holder.Fit()
 		self.Fit()
-		self.MinSize = self.Size
+		self.SetMinSize(self.Size)
 
 
 		# do binding
-		for a in [wx.EVT_KILL_FOCUS, wx.EVT_TEXT_ENTER]:
-			self.reference.Bind(a, self.update)
+		for event in [wx.EVT_KILL_FOCUS, wx.EVT_TEXT_ENTER]:
+			self.reference.Bind(event, self.update)
 		
 		for item in self.template_panel.fields:
-			for a in [wx.EVT_KILL_FOCUS,]:#, stc.EVT_STC_MODIFIED]:
-				item.Bind(a, self.update)
+			for event in [wx.EVT_KILL_FOCUS]:#, stc.EVT_STC_MODIFIED]:
+				item.Bind(event, self.update)
 			item.Bind(stc.EVT_STC_MODIFIED, self.on_text_changed)
 			
 			colour, text_colour = guiconfig.get_window_colours()
-			for s in stc.STC_STYLE_DEFAULT, 0:
-				item.StyleSetBackground(s, colour)
-				item.StyleSetForeground(s, text_colour)
+			for style in stc.STC_STYLE_DEFAULT, 0:
+				item.StyleSetBackground(style, colour)
+				item.StyleSetForeground(style, text_colour)
 			
 			item.SetCaretForeground(text_colour)
 			
@@ -275,10 +270,8 @@ class CopyVerseDialog(xrcCopyVerseDialog):
 
 		return ansa
 
-	def SetReference(self, ref):
-		self.ref=None
-	
 	def CopyVerses(self):
+		print "Updating..."	
 		guiutil.copy(self.GetText())
 
 	def GetText(self):
@@ -292,12 +285,13 @@ class CopyVerseDialog(xrcCopyVerseDialog):
 		#apply template
 		biblemgr.bible.templatelist.push(template)
 
-		data = biblemgr.bible.GetReference(str(self.reference.GetValue()))
+		data = biblemgr.bible.GetReference(self.reference.GetValue())
 		if data is None:
 			data = config.MODULE_MISSING_STRING
 
 		data = util.br2nl(data)
-		data = unformat(data)
+		data = util.KillTags(data)
+		data = util.amps_to_unicode(data)
 
 		#restore
 		biblemgr.restore_state()

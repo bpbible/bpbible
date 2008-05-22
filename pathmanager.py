@@ -16,19 +16,20 @@ class PathItem(object):
 	def copy(self, name, readonly=False):
 		return PathItem(name)
 
-class PathManager(wx.Dialog):
+class PathManagerPanel(wx.Panel):
 	def __init__(self, parent):
-		super(PathManager, self).__init__(parent, title="Path manager")
+		super(PathManagerPanel, self).__init__(parent)
 		
 		sizer = wx.BoxSizer(wx.VERTICAL)
 		self.panel = MovableListPanel(parent=self, gui_parent=self,
 			copy_text="New")
 		
 		sizer.Add(self.panel, 1, wx.GROW)
-		b = wx.Button(self, id=wx.ID_OK)
 		#panel2 = wx.Panel(self)
 		s = wx.StdDialogButtonSizer()
-		s.AddButton(b)
+		s.AddButton(wx.Button(self, id=wx.ID_OK))
+		s.AddButton(wx.Button(self, id=wx.ID_CANCEL))
+		
 		s.Realize()
 		sizer.Add(s, 0, wx.GROW)
 		
@@ -64,19 +65,30 @@ class PathManager(wx.Dialog):
 
 	def on_template_change(self, selection): pass
 
-	def ShowModal(self):
-		ansa = super(PathManager, self).ShowModal()
-		wx.SafeYield()
-		if ansa == wx.ID_OK:
-			self.save()
-	
 	def save(self):
 		busy = wx.BusyInfo("Reading modules...")
 		biblemgr.set_new_paths([str(a.name) for a in self.templates])
 
+class PathManager(wx.Dialog):
+	def __init__(self, parent):
+		super(PathManager, self).__init__(parent, title="Path manager")
+		s = wx.BoxSizer(wx.HORIZONTAL)
+		self.pmp = PathManagerPanel(self)	
+		s.Add(self.pmp, 1, wx.GROW)
+		self.SetSizer(s)
+
+	def ShowModal(self):
+		ansa = super(PathManager, self).ShowModal()
+		wx.SafeYield()
+		if ansa == wx.ID_OK:
+			self.pmp.save()
+
+	
 if __name__ == '__main__':
 	app = wx.App(0)
 	PathManager(None).ShowModal()
+	
+	
 	wx.MessageBox(str([a.c_str() for a in biblemgr.mgr.getModules()]))
 	wx.MessageBox(biblemgr.bible.GetReference("Gen 3:1-5"))
 	

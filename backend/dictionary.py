@@ -1,8 +1,135 @@
 #from Sword import *
-from swlib.pysw import SW
+from swlib.pysw import SW, TOP
 from backend.book import Book
+from util.unicode import to_str, to_unicode
+from util.debug import dprint, WARNING
+import re
 
 topics_dict = dict()
+
+
+class LazyTopicList(object):
+	# these are the sizes of entries in SWORD dictionaries. Dividing total
+	# index length by entry size gives number of entries.
+	entry_sizes = {
+		SW.RawLD:  6, 
+		SW.RawLD4: 8, 
+		SW.zLD:    8
+	}
+	
+	# how many items do we grab around the one we are asked for?
+	# TODO: tune this value
+	GRAB_AROUND = 10
+
+	"""Implement a lazy topic list. This precomputes its length, and caches
+	any topics found"""
+	def __init__(self, module):
+		self.mod = module
+
+
+		self.cardinality = 0
+		self.entry_size = 0
+		self.upper = Upper(self)
+
+		success = False
+		try:
+			success = self.read_entry_count()
+		except Exception, e:
+			dprint(WARNING, "Exception trying to read entry count", e)
+
+		if not success:
+			# Work this out the slow way
+			topics = []
+			self.mod.setPosition(TOP)
+
+			while not ord(self.mod.Error()):
+				try:
+					topics.append(
+						to_unicode(self.mod.getKeyText(), self.mod)
+					)
+				except UnicodeDecodeError, e:
+					dprint(WARNING, "Error on ", e)
+				self.mod.increment(1)
+			
+			self.topics = topics
+		
+
+	def read_entry_count(self):
+		swld = SW.LD.castTo(self.mod)
+		if not swld:
+			dprint("WARNING", "Dictionary wasn't a SWLD!!!")
+			entry_items = {}
+		else:
+			entry_items = self.entry_sizes
+	
+		for ld_class, value in entry_items.items():
+			mod = ld_class.castTo(swld)
+			if not mod:
+				continue
+		
+			p = "%s%s.idx" % (
+				mod.getConfigEntry("PrefixPath"),
+				mod.getConfigEntry("DataPath"))
+
+			self.entry_size = value
+			f = open(p)
+			
+			# goto end of file
+			f.seek(0, 2)
+			
+			# and find what we are upto
+			self.cardinality = f.tell() / self.entry_size
+
+			f.close()
+			self.topics = [None for x in range(self.cardinality)]
+			return True
+
+	
+	def __len__(self):
+		if not self.entry_size:
+			return len(self.topics)
+		else:
+			return self.cardinality
+	
+	def __getitem__(self, item):
+		if self.entry_size and self.topics[item] is None:
+			myrange = [x for x in 
+				xrange(item - self.GRAB_AROUND, item + self.GRAB_AROUND + 1)
+				if 0 <= x < self.cardinality]
+		
+			self.mod.setPosition(TOP)
+
+			# go to first item we need to
+			first = myrange.pop(0)
+
+			# ###Important### don't use += on modules, as it changes the
+			# variable (*and* it's thisown flag). Use increment instead.
+			self.mod.increment(first)
+			self.topics[first] = to_unicode(
+				self.mod.getKeyText(), self.mod
+			)
+			
+
+			# and then any additional ones
+			for additional_item in myrange:
+				self.mod.increment(1)
+				self.topics[additional_item] = to_unicode(
+					self.mod.getKeyText(), self.mod
+				)
+				
+
+		return self.topics[item]
+		
+class Upper(object):
+	def __init__(self, object):
+		self.object = object
+	
+	def __len__(self):
+		return len(self.object)
+	
+	def __getitem__(self, item):
+		return self.object[item].upper()
+	
 class Dictionary(Book):
 	type = "Lexicons / Dictionaries"
 	def __init__(self, parent, version):
@@ -15,16 +142,25 @@ class Dictionary(Book):
 	def GetReference(self, ref, context = None, max_verses = 500, raw=False):
 		if not self.mod:
 			return None
+
+		render_text = self.get_rendertext()
+		
 		template = self.templatelist()
 		key = self.mod.getKey()
-		key.setText(ref)
+		key.setText(to_str(ref, self.mod))
 		self.mod.setKey(key)
-		text = self.mod.RenderText()
 		# We have to get KeyText after RenderText, otherwise our
 		# KeyText will be wrong
-		d = dict(range = self.mod.KeyText(), 
-				 version=self.mod.Name(),
-				 description=self.mod.Description())
+		
+		text = render_text()
+		
+		d = dict(
+			# render text so that we convert utf-8 into html
+			range=to_unicode(self.mod.KeyText(), self.mod),
+			description=to_unicode(self.mod.Description(), self.mod),
+			version=self.mod.Name(),
+		)
+
 		verses = template.header.safe_substitute(d)
 		d1 = d
 		if raw:
@@ -41,21 +177,15 @@ class Dictionary(Book):
 		topics_dict.clear()
 			
 	def GetTopics(self):#gets topic lists
-		topics = []
-		if(self.mod):
-			name = self.mod.Name()
-			if name in topics_dict:
-				return topics_dict[name]
-			
-			pos = SW.SW_POSITION(1)
-			
-			self.mod.setPosition(pos)
-
-			while(not ord(self.mod.Error())):
-				topics.append(self.mod.getKeyText())
-				self.mod.increment(1)
-		else:
+		if not self.mod:
 			return []
+		
+		# cache the topic lists
+		name = self.mod.Name()
+		if name in topics_dict:
+			return topics_dict[name]
+		
+		topics = LazyTopicList(self.mod)
 		topics_dict[name] = topics
 		return topics
 	
@@ -64,12 +194,10 @@ class Dictionary(Book):
 		if mod is None:
 			return text
 		k = mod.getKey()
-		k.setText(str(text))
+		k.setText(to_str(text, mod))
 		mod.setKey(k)
 		
 		# snap to entry
 		mod.getRawEntryBuf()
-		return mod.getKeyText()
-	
-		
+		return to_unicode(mod.getKeyText(), mod)
 

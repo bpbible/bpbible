@@ -1,0 +1,116 @@
+<?xml version="1.0" ?>
+<resource>
+  <object class="wxDialog" name="ModuleInstallDialog">
+    <object class="wxBoxSizer">
+      <orient>wxVERTICAL</orient>
+      <object class="sizeritem">
+        <object class="wxPanel" name="gui_warning_panel">
+          <object class="wxBoxSizer">
+            <orient>wxHORIZONTAL</orient>
+            <object class="sizeritem">
+              <object class="wxStaticBitmap">
+                <size>32,32</size>
+                <bitmap stock_id="wxART_WARNING"/>
+              </object>
+              <flag>wxALL|wxGROW|wxALIGN_CENTRE</flag>
+            </object>
+            <object class="sizeritem">
+              <object class="wxBoxSizer">
+                <object class="spacer">
+                  <option>1</option>
+                </object>
+                <object class="sizeritem">
+                  <object class="wxStaticText" name="static_text">
+                    <label>DUMMY</label>
+                  </object>
+                  <flag>wxGROW</flag>
+                </object>
+                <object class="spacer">
+                  <option>1</option>
+                </object>
+                <orient>wxVERTICAL</orient>
+              </object>
+              <option>1</option>
+              <flag>wxALL|wxGROW</flag>
+              <border>6</border>
+            </object>
+          </object>
+        </object>
+        <option>0</option>
+        <flag>wxTOP|wxLEFT|wxRIGHT|wxGROW</flag>
+        <border>6</border>
+      </object>
+      <object class="sizeritem">
+        <object class="wxPanel" name="modules_info">
+          <object class="wxBoxSizer">
+            <orient>wxVERTICAL</orient>
+          </object>
+          <style>wxSUNKEN_BORDER</style>
+        </object>
+        <option>1</option>
+        <flag>wxALL|wxGROW</flag>
+        <border>6</border>
+      </object>
+      <object class="sizeritem">
+        <object class="wxPanel">
+          <object class="wxBoxSizer">
+            <object class="sizeritem">
+              <object class="wxStaticText">
+                <label>Install to:</label>
+              </object>
+              <flag>wxALIGN_CENTRE_VERTICAL</flag>
+            </object>
+            <object class="sizeritem">
+              <object class="wxChoice" name="destination"/>
+              <option>1</option>
+              <flag>wxLEFT|wxGROW</flag>
+              <border>6</border>
+            </object>
+            <orient>wxHORIZONTAL</orient>
+          </object>
+        </object>
+        <option>0</option>
+        <flag>wxALL|wxGROW</flag>
+        <border>6</border>
+      </object>
+      <object class="sizeritem">
+        <object class="wxStdDialogButtonSizer">
+          <object class="button">
+            <object class="wxButton" name="wxID_OK"/>
+          </object>
+          <object class="button">
+            <object class="wxButton" name="wxID_CANCEL"/>
+          </object>
+        </object>
+        <option>0</option>
+        <flag>wxALL|wxGROW</flag>
+        <border>6</border>
+      </object>
+    </object>
+    <title>Book Installation</title>
+    <style>wxDEFAULT_DIALOG_STYLE</style>
+  </object>
+  <object class="wxPanel" name="ModuleInfoPanel">
+    <object class="wxBoxSizer">
+      <orient>wxHORIZONTAL</orient>
+      <object class="sizeritem">
+        <object class="wxHtmlWindow" name="module_description" subclass="displayframe.DisplayFrameXRC">
+          <style>wxHW_SCROLLBAR_NEVER</style>
+        </object>
+        <option>1</option>
+        <flag>wxGROW</flag>
+      </object>
+      <object class="sizeritem">
+        <object class="wxBitmapButton" name="info_button">
+          <bitmap stock_id="wxART_INFORMATION"/>
+          <tooltip>View Module information...</tooltip>
+          <help>View Module information...</help>
+          <style>wxBU_AUTODRAW</style>
+        </object>
+        <option>0</option>
+        <flag>wxLEFT|wxRIGHT|wxALIGN_CENTRE</flag>
+        <border>6</border>
+      </object>
+    </object>
+  </object>
+</resource>

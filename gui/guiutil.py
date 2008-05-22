@@ -25,18 +25,20 @@ class FreezeUI(object):
 		self.window.Freeze()
 	
 	def __del__(self):
-		self.window.Thaw()
+		if self.window.IsFrozen():	
+			self.window.Thaw()
 
 def frozen(function):
-	def func2(self, *args, **kwargs):
+	def frozen_internal(self, *args, **kwargs):
 		self.Freeze()
 		try:
 			function(self, *args, **kwargs)
 		finally:
-			self.Thaw()
+			if self.IsFrozen():	
+				self.Thaw()
 	
-	func2.__name__ = function.__name__
-	return func2
+	frozen_internal.__name__ = function.__name__
+	return frozen_internal
 
 def copy(text):
 	guiconfig.mainfrm.copy(text)
@@ -105,8 +107,10 @@ def is_xp_styled():
 
 def open_web_browser(href):
 	import webbrowser
-
+	
+	# Python 2.5+
 	if hasattr(webbrowser, "open_new_tab"):
 		webbrowser.open_new_tab(href)
+	# Python <= 2.4
 	else:
 		webbrowser.open_new(href)

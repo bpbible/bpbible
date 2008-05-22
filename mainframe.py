@@ -27,7 +27,6 @@ from genbookframe import GenBookFrame
 
 from auilayer import AuiLayer
 
-from util.util import ReplaceUnicode
 from util.observerlist import ObserverList
 from util import osutils
 #import mySearchDialog
@@ -52,6 +51,7 @@ from events import BibleEvent, SETTINGS_CHANGED, BIBLE_REF_ENTER, HISTORY
 from events import LOADING_SETTINGS
 from history import History, HistoryTree
 from util.configmgr import config_manager
+from install_manager.install_drop_target import ModuleDropTarget
 
 settings = config_manager.add_section("BPBible")
 
@@ -112,6 +112,7 @@ class MainFrame(wx.Frame, AuiLayer):
 		biblemgr.bible.observers += self.bible_version_changed
 		biblemgr.commentary.observers += self.commentary_version_changed
 		biblemgr.dictionary.observers += self.dictionary_version_changed
+		biblemgr.on_after_reload += self.on_modules_reloaded
 		
 		
 		#self.Freeze()
@@ -121,7 +122,6 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.bible_observers += self.add_history_item
 
 		self.load_data()
-		#self.augment_paths()
 		self.make_toolbars()
 		
 		self.create_searchers()
@@ -145,6 +145,8 @@ class MainFrame(wx.Frame, AuiLayer):
 		wx.CallAfter(dprint, MESSAGE, "Constructed")
 		wx.CallAfter(override_end)	
 		dprint(MESSAGE, "Done first round of setting up")
+		self.drop_target = ModuleDropTarget(self)
+		self.SetDropTarget(self.drop_target)
 		#guiutil.call_after_x(100, self.bibletext.scroll_to_current)
 		
 		# after three goes round the event loop, set timer for 100ms to scroll
@@ -262,6 +264,16 @@ class MainFrame(wx.Frame, AuiLayer):
 		if settings["maximized"]:
 			self.Maximize(True)
 				
+		def set_mod(book, mod_name):
+			if book.ModuleExists(mod_name):
+				book.SetModule(mod_name, notify=False)
+
+		set_mod(biblemgr.bible, settings["bible"])
+		set_mod(biblemgr.dictionary, settings["dictionary"])
+		set_mod(biblemgr.commentary, settings["commentary"])
+		
+		
+				
 	def save_data(self):
 		settings["layout"] = self.save_layout()
 		settings["bibleref"] = self.currentverse
@@ -298,9 +310,11 @@ class MainFrame(wx.Frame, AuiLayer):
 		# use a text control to do it
 		# TODO: check if this is still true
 		if ( wx.TheClipboard.Open() ):
-			txt = text
+			if osutils.is_gtk():
+				wx.TheClipboard.UsePrimarySelection(False)
+		
 			tdo = wx.TextDataObject()
-			tdo.SetText(txt)
+			tdo.SetText(text)
 			wx.TheClipboard.SetData(tdo)
 			wx.TheClipboard.Close()
 
@@ -483,7 +497,8 @@ class MainFrame(wx.Frame, AuiLayer):
 	
 	def on_path_manager(self, event):
 		PathManager(self).ShowModal()
-
+	
+	def on_modules_reloaded(self, biblemgr):
 		# as this will have refreshed the manager, refresh everything
 		self.version_tree.recreate()
 		self.fill_options_menu()
@@ -513,7 +528,7 @@ class MainFrame(wx.Frame, AuiLayer):
 
 	def set_menus_up(self):
 		#self.edit_menu
-		self.options_menu = self.get_menu("Options")
+		self.options_menu = self.get_menu("Bible Options")
 		assert self.options_menu, "Options menu could not be found"
 		self.fill_options_menu()
 		
@@ -600,12 +615,14 @@ class MainFrame(wx.Frame, AuiLayer):
 				
 			
 				for value in values:
-					item = sub_menu.AppendRadioItem(wx.ID_ANY, value, help=help)
+					item = sub_menu.AppendRadioItem(wx.ID_ANY, value, 
+						help=help_text)
 					if biblemgr.options[option] == value:
 						item.Check()
 					self.Bind(wx.EVT_MENU, self.on_option, item)
 				
-				item = self.options_menu.AppendSubMenu(sub_menu, option, help=help)
+				item = self.options_menu.AppendSubMenu(sub_menu, option, 
+					help=help_text)
 				self.Bind(wx.EVT_MENU, self.on_option, item)
 
 		self.options_menu.AppendSeparator()
@@ -726,14 +743,6 @@ class MainFrame(wx.Frame, AuiLayer):
 			name = self.get_pane_for_frame(frame).name 
 			self.aui_callbacks[name] = frame.update_title
 
-		def set_mod(book, mod_name):
-			if book.ModuleExists(mod_name):
-				book.SetModule(mod_name, notify=False)
-
-		set_mod(biblemgr.bible, settings["bible"])
-		set_mod(biblemgr.dictionary, settings["dictionary"])
-		set_mod(biblemgr.commentary, settings["commentary"])
-		
 		self.set_bible_ref(settings["bibleref"], LOADING_SETTINGS)
 		self.DictionaryListSelected()
 		self.version_tree.recreate()
@@ -755,8 +764,8 @@ class MainFrame(wx.Frame, AuiLayer):
 	#def BibleRefEnterChar(self, event):
 	
 	def BibleRefEnter(self, event=None):
-		if(str(self.bibleref.GetValue())[:6] == "search"):
-			self.searchkey = str(self.bibleref.GetValue()[7:])
+		if self.bibleref.GetValue()[:6] == "search":
+			self.searchkey = self.bibleref.GetValue()[7:]
 			if self.searchkey:
 				self.search_panel.search_and_show(self.searchkey)
 			else:
@@ -812,31 +821,20 @@ class MainFrame(wx.Frame, AuiLayer):
 	def dictionary_version_changed(self, newversion):
 		freeze_ui = guiutil.FreezeUI(self.dictionary_list)
 		self.dictionary_list.set_book(biblemgr.dictionary)
-		ref = str(ReplaceUnicode(self.dictionary_list.GetValue()))
-		self.UpdateDictionaryUI(ref)
 		
 	def DictionaryListSelected(self, event=None):
 		self.UpdateDictionaryUI()
 
 	def UpdateDictionaryUI(self, ref="", version=""):
-		if(not ref):
-			try:
-				ref = str(ReplaceUnicode(self.dictionary_list.GetValue()))
-			except UnicodeEncodeError:
-				return
+		if not ref:
+			ref = self.dictionary_list.GetValue().upper()
 		else:
-			try:
-				self.dictionary_list.SetValue(str(ReplaceUnicode(ref)))
-			except UnicodeEncodeError:
-				dprint(ERROR, "UnicodeError exception", ref)
-				return
-		ref = str(ReplaceUnicode(ref))
-		# Remove non alphanumeric at start
-		#ref = re.sub("\W", "", ref)
+			self.dictionary_list.SetValue(ref)
 
 		if(version): 
 			self.dictionarytext.SetMod(str(version))
-		self.dictionarytext.SetReference(str(ref))
+
+		self.dictionarytext.SetReference(ref)
 
 	def UpdateBibleUI(self, source, settings_changed=False):
 		self.bible_observers(

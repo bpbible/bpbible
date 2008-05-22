@@ -27,7 +27,7 @@ class GenBookTree(LazyTreeCombo):
 			self.tree.SetPyData(self.root, (["<empty>"], False))
 
 		else:
-			self.tk = TK(book.mod.getKey())
+			self.tk = TK(book.mod.getKey(), book.mod)
 			self.tree.SetPyData(self.root, (TK(self.tk), False))
 			self.tk.root()
 		self.AddItems(self.root)
@@ -47,7 +47,7 @@ class GenBookTree(LazyTreeCombo):
 		if not isinstance(data, TK):
 			return "<empty>"
 
-		return str(self.get_data(item))
+		return unicode(self.get_data(item))
 	
 	def format_combo(self, item):
 		data = self.get_data(item)
@@ -56,10 +56,4 @@ class GenBookTree(LazyTreeCombo):
 		
 		#TODO: some unicoding of this
 		# Institutes uses unicode in key strings
-		return util.ReplaceUnicode(
-			self.get_data(item).breadcrumb(book=self.book)
-		)
-
-
-
-
+		return self.get_data(item).breadcrumb()

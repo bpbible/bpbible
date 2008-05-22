@@ -3,6 +3,7 @@ from backend.bibleinterface import biblemgr
 from swlib.pysw import SW
 from gui.filterable_tree import TreeItem, FilterableTree
 from util.observerlist import ObserverList
+from util.unicode import to_unicode
 
 from moduleinfo import ModuleInfo
 
@@ -74,7 +75,7 @@ class ModuleTree(FilterableTree):
 		item = event.Item
 		data = self.tree.GetPyData(item)
 		if isinstance(data.data, SW.Module):
-			event.SetToolTip(data.data.Description())
+			event.SetToolTip(to_unicode(data.data.Description(), data.data))
 		
 
 	def version_tree_menu(self, event):

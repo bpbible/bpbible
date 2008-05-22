@@ -2,6 +2,7 @@ from string import Template as str_template
 import re
 import traceback
 import sys
+import htmlentitydefs
 
 class VerseTemplate(object):
 	"""VerseTemplate is a class which defines templates for Bible Text""" 
@@ -87,6 +88,8 @@ def ReplaceUnicode(data):
 
 	for item, replacement in replacements.items():
 		data = data.replace("&#%d;" % item, replacement)
+
+		# hmm. Using unicode replace on non-ascii str's text doesn't work
 		data = data.replace(unichr(item), replacement)
 
 	return data
@@ -112,6 +115,24 @@ def KillTags(data):
 def remove_amps(data):
 	return re.sub("&[^;]*;", "", data)
 
+def replace_amp(groups):
+	ent = groups.group('amps')
+	if ent in htmlentitydefs.name2codepoint:
+		return unichr(htmlentitydefs.name2codepoint[ent])
+
+	if ent[0] == "#":
+		try:
+			return unichr(int(ent[1:]))
+		except ValueError:
+			from debug import dprint, WARNING
+			dprint(WARNING, "Invalid int in html escape", groups.group(0))
+		
+	return ent
+
+def amps_to_unicode(data):
+	return re.sub("&(?P<amps>[^;]*);", replace_amp, data)
+	
+
 def RemoveWhitespace(data):
 	""" This removes extra whitespace, while not getting rid of content.
 
@@ -125,9 +146,6 @@ def nl2br(data):
 def br2nl(data):
 	return re.sub("<br[^>]*>", "\n", data)
 	
-def unformat(data):
-	return KillTags(ReplaceUnicode(data))
-
 def interact(interaction_locals):
 	import code
 	code.InteractiveConsole(locals=interaction_locals).interact()
