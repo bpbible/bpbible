@@ -63,7 +63,6 @@
   <object class="wxFrame" name="MainFrame" subclass="mainframe.MainFrameXRC">
     <object class="wxMenuBar" name="frame_1_menubar">
       <object class="wxMenu" name="file">
-        <label>_File</label>
         <object class="wxMenuItem" name="pathmanager">
           <label>_Set Sword Paths...</label>
         </object>
@@ -74,12 +73,12 @@
         <object class="wxMenuItem" name="wxID_EXIT">
           <label>_Exit</label>
         </object>
+        <label>_File</label>
       </object>
       <object class="wxMenu" name="options">
-        <label>Bible _Options</label>
+        <label>&amp;Display</label>
       </object>
       <object class="wxMenu" name="windows">
-        <label>Windows</label>
         <object class="wxMenuItem" name="menu_default_layout">
           <label>Default Layout</label>
         </object>
@@ -88,6 +87,7 @@
           <label>Toolbars</label>
         </object>
         <object class="separator"/>
+        <label>&amp;Window</label>
       </object>
       <object class="wxMenu" name="gui_debug_menu">
         <label>Debug</label>
@@ -119,6 +119,7 @@
     <object class="wxStatusBar" name="statusbar">
       <fields>1</fields>
       <widths>-1</widths>
+      <style>wxST_SIZEGRIP</style>
     </object>
     <size>800, 600</size>
     <title>Bible</title>

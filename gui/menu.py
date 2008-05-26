@@ -1,23 +1,30 @@
 import wx
+from util.debug import dprint, WARNING
 
 class Separator:
 	pass
 
 class MenuItem(object):
 	def __init__(self, text, action, doc=None, enabled=lambda:True,
-			update_text=lambda:None, update_ui=None, accelerator=None):
+			update_text=lambda:None, update_ui=None, accelerator=None,
+			id=wx.ID_ANY):
 		self.text = text
 		self.action = action
 		#self.window = window
 
 		if doc is None:
 			self.doc = action.__doc__
-			assert self.doc is not None
+			if self.doc is None:
+				dprint(WARNING, "No description for menu item", text)
+				self.doc = ""
+		else:
+			self.doc = doc
 		
 		self.enabled = enabled
 		self.update_text = update_text
 		self.update_ui = update_ui
 		self.accelerator = accelerator
+		self.id = id
 	
 	def create_item(self, window, menu, pos=None, is_popup=False):
 		if pos is None:
@@ -26,9 +33,11 @@ class MenuItem(object):
 		text = self.text
 		if self.accelerator and not is_popup:
 			text += "\t%s"%self.accelerator
-		item = menu.Append(wx.ID_ANY, text, self.doc)
+		item = menu.Append(self.id, text, self.doc)
 
-		window.Bind(wx.EVT_MENU, lambda evt:self.action(), item)
+		if self.action:
+			window.Bind(wx.EVT_MENU, lambda evt:self.action(), item)
+
 		window.Bind(wx.EVT_UPDATE_UI, self.on_update_ui, item)
 
 		return item

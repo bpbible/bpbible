@@ -22,6 +22,17 @@ class DateConverter(object):
 	def __getitem__(self, item):
 		return mmdd_to_date(self.object[item]) or self.object[item]
 
+class Upper(object):
+	def __init__(self, object):
+		self.object = object
+	
+	def __len__(self):
+		return len(self.object)
+	
+	def __getitem__(self, item):
+		return self.object[item].upper()
+	
+
 class DictionaryList(VirtualListBox):
 	def __init__(self, parent, book):
 		super(DictionaryList, self).__init__(parent)
@@ -32,7 +43,9 @@ class DictionaryList(VirtualListBox):
 		b = wx.BusyInfo("Getting dictionary topic list...")
 		if not _disabled:
 			self.topics = book.GetTopics()
-			self._upper_topics = self.topics.upper
+			# TODO: this is broken if we don't have a proper module and get
+			# returned a list...
+			self._upper_topics = Upper(self.topics)
 			
 			if book.has_feature("DailyDevotion"):
 				self.topics = DateConverter(self.topics)
@@ -51,8 +64,9 @@ class DictionaryList(VirtualListBox):
 		idx = bisect.bisect_left(self._upper_topics, unicode(text))
 
 		idx = min(len(self.topics)-1, idx)
-		self.EnsureVisible(idx)
-		self.Select(idx)
+		if idx >= 0:
+			self.EnsureVisible(idx)
+			self.Select(idx)
 
 # we want users to be able to view the 29 february even when not in a leap
 # year

@@ -28,7 +28,7 @@ def try_unicode(text, mod):
 
 class ModuleInfo(wx.Dialog):
 	def __init__(self, parent, module):
-		super(ModuleInfo, self).__init__(parent, title="Module Information", 
+		super(ModuleInfo, self).__init__(parent, title="Book Information", 
 			style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER)
 
 		self.module = module

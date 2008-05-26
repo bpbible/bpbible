@@ -2,6 +2,7 @@ import os
 import zipfile
 from swlib.pysw import SW
 from util.debug import dprint, WARNING, INSTALL_ZIP
+from util import confparser
 from cStringIO import StringIO
 
 ZIPFILE_TMP = "zipfile.tmp"
@@ -12,36 +13,44 @@ class InvalidModuleException(Exception):
 class BadMetadata(Exception):
 	pass
 
+class MultiMap(dict):
+	def items(self):
+		for item, values in self.iteritems():
+			for value in values:
+				yield SW.Buf(item), SW.Buf(value)
+	
 class ZipInstaller(object):
 	def __init__(self, zip_path):
 		self.zip_path = zip_path
 		self.zip_file, conf_file = self.open_zipfile(zip_path)
 		
-		self.name, self.config_section = self.read_config(conf_file)
+		self.config_section, self.name = self.read_config(conf_file)
 	
 	def read_config(self, conf_file):
-		outfile = open(ZIPFILE_TMP, "wb")
-		outfile.write(self.zip_file.read(conf_file))
-		outfile.close()
+		config_parser = confparser.config()
+		file_obj = StringIO(self.zip_file.read(conf_file))
 		
-		item = SW.Config(ZIPFILE_TMP)
-		sections = item.getSections()
-		it = sections.begin()
-		if it == sections.end():
+		config_parser._read(file_obj, conf_file)
+		
+		sections = config_parser.sections()
+	
+		if not sections:
 			raise BadMetadata("Cannot read book metadata in file %s" %
 				self.zip_file)
 		
-		name, section = it.value()
-		name = name.c_str()
-		it += 1
-		if it != sections.end():
+		if len(sections) > 1:
 			dprint(WARNING, 
-				"More than one section in module. Taking the first one:",
-				name
-			)
+            	"More than one section in module. Taking the first one:",
+            	sections[0]
+            )
+
+		section_name = sections[0]
+		config_section = MultiMap()
 		
-		os.remove(ZIPFILE_TMP)
-		return name, section
+		for item in config_parser.options(section_name):
+			config_section[item] = config_parser.get(section_name, item)
+
+		return config_section, section_name
 		
 	def open_zipfile(self, zip_path):
 		zip_file = self.read_zipfile(zip_path)
@@ -123,12 +132,8 @@ class ZipInstaller(object):
 		return self.getConfigEntry("Description")
 
 	def getConfigEntry(self, key):
-		it = self.config_section.find(SW.Buf(key))
-		if it == self.config_section.end():
-			return None
-		
-		key, value = it.value()
-		return value.c_str()
+		if key in self.config_section:
+			return self.config_section[key][0]
 
 	def getConfigMap(self):
 		return self.config_section

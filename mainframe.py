@@ -340,8 +340,7 @@ class MainFrame(wx.Frame, AuiLayer):
 
 	def create_aui_items(self):
 		self.version_tree = ModuleTree(self)
-		self.version_tree.on_module_choice += \
-			lambda module, book: book.SetModule(module)
+		self.version_tree.on_module_choice += self.on_module_choice
 
 		self.genbooktext = GenBookFrame(self, biblemgr.genbook)
 
@@ -368,6 +367,22 @@ class MainFrame(wx.Frame, AuiLayer):
 		sizer.Add(self.history_tree, 1, wx.GROW)
 		self.history_pane.SetSizer(sizer)
 
+	def on_module_choice(self, module, book):
+		# if the pane is not shown, show it
+		for frame in self.frames:
+			if hasattr(frame, "book") and frame.book == book:
+				pane = self.get_pane_for_frame(frame)
+				if not pane.IsShown():
+					self.show_panel(pane.name)	
+
+				break
+		
+		# set the module afterwards so that the pane size will be correctly
+		# set
+		book.SetModule(module)	
+
+				
+		
 	def on_copy_button(self, event=None):
 		"""Copy verses to other applications"""
 
@@ -528,13 +543,13 @@ class MainFrame(wx.Frame, AuiLayer):
 
 	def set_menus_up(self):
 		#self.edit_menu
-		self.options_menu = self.get_menu("Bible Options")
-		assert self.options_menu, "Options menu could not be found"
+		self.options_menu = self.get_menu("Display")
+		assert self.options_menu, "Display menu could not be found"
 		self.fill_options_menu()
 		
 		
-		self.windows_menu = self.get_menu("Windows")
-		assert self.windows_menu, "Windows menu could not be found"
+		self.windows_menu = self.get_menu("Window")
+		assert self.windows_menu, "Window menu could not be found"
 		
 		for item in self.windows_menu.MenuItems:
 			if item.Label == "Toolbars":
@@ -568,7 +583,7 @@ class MainFrame(wx.Frame, AuiLayer):
 			
 			menu = self.make_menu(items)
 
-			self.MenuBar.Insert(2+idx, menu, frame.title)
+			self.MenuBar.Insert(1+idx, menu, frame.title)
 
 		if not is_debugging():
 			for idx, (menu, menu_name) in enumerate(self.MenuBar.Menus):

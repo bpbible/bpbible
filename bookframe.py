@@ -427,13 +427,13 @@ class DictionaryFrame(BookFrame):
 		if self.book.has_feature("DailyDevotion"):
 			snapped_ref = mmdd_to_date(snapped_ref) or snapped_ref
 		
-		text = "<b>%s</b>" % snapped_ref
+		ref_text = "<b>%s</b>" % snapped_ref
 
-		text += self.book.GetReference(ref, context=context, raw=raw)#bible text
+		text = self.book.GetReference(ref, context=context, raw=raw)#bible text
 		if text is None:
 			data = config.MODULE_MISSING_STRING
 		else:
-			data = text
+			data = ref_text + text
 			data = data.replace("<!P>","</p><p>")
 			#replace common values
 			#data = ReplaceUnicode(data)

@@ -88,9 +88,9 @@ class VListCtrl(wx.VListBox):
 		self.info_button.Bind(wx.EVT_BUTTON, self.on_info_button)
 		
 		
-		self.uninstall_button = wx.Button(self, label="Uninstall")
+		#self.uninstall_button = wx.Button(self, label="Uninstall")
 		
-		self.buttons = self.uninstall_button, self.info_button
+		self.buttons = self.info_button #self.uninstall_button, 
 		self.Bind(wx.EVT_SIZE, self.on_size)
 
 		#sizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -125,10 +125,10 @@ class VListCtrl(wx.VListBox):
 
 	def layout_buttons(self):
 		self.info_button.Position = 6, -1
-		self.uninstall_button.Position = (
-			self.ClientSize[0] - self.uninstall_button.Size[0] - 6, 
-			-1
-		)
+		#self.uninstall_button.Position = (
+		#	self.ClientSize[0] - self.uninstall_button.Size[0] - 6, 
+		#	-1
+		#)
 		
 	def on_info_button(self, event):
 		if self.Selection == -1:

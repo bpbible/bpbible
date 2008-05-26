@@ -152,10 +152,14 @@ class BibleInterface(object):
 		except EnvironmentError:
 			return ["."]
 
-		data_path = config_parser.get("Install", "DataPath")[0]
+		data_path = ""
+
+		if config_parser.has_option("Install", "DataPath"):
+			data_path = config_parser.get("Install", "DataPath")[0]
+
 		if config_parser.has_option("Install", "AugmentPath"):
 			paths = config_parser.get("Install", "AugmentPath")[::-1]
-			if data_path not in paths:
+			if data_path and data_path not in paths:
 				paths.append(data_path)
 		else:
 			paths = [data_path]
@@ -179,7 +183,7 @@ class BibleInterface(object):
 	
 	def set_new_paths(self, paths=None, path_changed=None):
 		self.reloading = True
-		bible       = self.bible.version
+		bible		= self.bible.version
 		dictionary  = self.dictionary.version
 		commentary  = self.commentary.version
 		genbook     = self.genbook.version
@@ -229,6 +233,9 @@ class BibleInterface(object):
 		
 		# do the on_after_reload *after* the hold finishing so that the
 		# genbook can work out its treekey stuff before it is refreshed
+	    #TODO: this needs to happen before the modules get reloaded
+		# so that the strong's numbers are set up
+		
 		self.on_after_reload(self)
 		
 			

@@ -29,7 +29,6 @@ class LazyTopicList(object):
 
 		self.cardinality = 0
 		self.entry_size = 0
-		self.upper = Upper(self)
 
 		success = False
 		try:
@@ -120,16 +119,6 @@ class LazyTopicList(object):
 
 		return self.topics[item]
 		
-class Upper(object):
-	def __init__(self, object):
-		self.object = object
-	
-	def __len__(self):
-		return len(self.object)
-	
-	def __getitem__(self, item):
-		return self.object[item].upper()
-	
 class Dictionary(Book):
 	type = "Lexicons / Dictionaries"
 	def __init__(self, parent, version):
