@@ -438,6 +438,11 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.dictionary_list.item_changed += self.DictionaryListSelected
 
 		self.bibleref.Bind(wx.EVT_TEXT_ENTER, self.BibleRefEnter)
+
+		# if it is selected in the drop down tree, go straight there
+		self.bibleref.on_selected_in_tree += self.BibleRefEnter
+		
+		
 		#self.BibleRef.Bind(wx.EVT_COMBOBOX, self.BibleRefEnter)
 
 		self.Bind(wx.EVT_TOOL, self.on_copy_button, 

@@ -1,6 +1,7 @@
 import wx
 import wx.combo
 from util import osutils
+from util.observerlist import ObserverList
 
 
 class TreeCtrlComboPopup(wx.combo.ComboPopup):
@@ -89,7 +90,7 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
 		item, flags = self.tree.HitTest(evt.GetPosition())
 		if item and flags & wx.TREE_HITTEST_ONITEMLABEL:
 			self.curitem = item
-			self.set_value(item)
+			self.set_value(item, selected_in_tree=True)
 			self.Dismiss()
 
 		evt.Skip()
@@ -106,6 +107,12 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
 	
 	def on_key(self, event):
 		if event.KeyCode in (wx.WXK_RETURN, wx.WXK_ESCAPE):
+			
+			if event.KeyCode == wx.WXK_RETURN:
+				value = self.get_value()
+				if value:
+					self.combo.on_selected_in_tree(self.tree.GetItemText(value))
+				
 			self.Dismiss()
 			return
 
@@ -156,7 +163,7 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
 		if new_value:
 			self.set_value(new_value)
 		
-	def set_value(self, value):
+	def set_value(self, value, selected_in_tree=False):
 		self.value = value
 		self.tree.SelectItem(self.value)
 		#if not final:
@@ -178,6 +185,9 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
 
 			event.SetString(text)
 			combo.GetEventHandler().ProcessEvent(event)
+
+		if selected_in_tree:
+			combo.on_selected_in_tree(text)
 		
 		
 	def get_value(self):
@@ -241,6 +251,7 @@ class TreeCombo(wx.combo.ComboCtrl):
 		super(TreeCombo, self).__init__(parent, style=style)
 
 		self.readonly = style & wx.CB_READONLY
+		self.on_selected_in_tree = ObserverList()
 		
 		self.popup = TreeCtrlComboPopup()
 		self.popup.SetComboCtrl(self)
@@ -256,6 +267,7 @@ class TreeCombo(wx.combo.ComboCtrl):
 								self.GetId())
 		#event.SetString(text)
 		self.GetEventHandler().ProcessEvent(event)
+		
 		
 		#self.BibleRefEnter()
 			

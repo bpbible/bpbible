@@ -256,7 +256,8 @@ class LinkedFrame(VerseKeyedFrame):
 	
 	def create_toolbar(self):
 		self.toolbar = wx.ToolBar(self.panel, style=wx.TB_FLAT)
-		self.gui_reference = versetree.VerseTree(self.toolbar)
+		self.gui_reference = versetree.VerseTree(self.toolbar,
+									with_verses=True)
 		self.gui_reference.SetSize((140, -1))
 		
 		#self.gui_reference = wx.TextCtrl(self.toolbar,
@@ -285,6 +286,8 @@ class LinkedFrame(VerseKeyedFrame):
 		self.toolbar.Bind(wx.EVT_TOOL, self.set_ref, id=self.gui_go.Id)
 		self.toolbar.Bind(wx.EVT_TOOL, self.on_link, id=self.gui_link.Id)
 		self.gui_reference.Bind(wx.EVT_TEXT_ENTER, self.set_ref)
+		self.gui_reference.on_selected_in_tree += self.set_ref
+		
 		
 	
 	def set_ref(self, event):

@@ -671,7 +671,12 @@ class BookData(object):
 	
 	def __iter__(self):
 		for item in range(len(self.chapters)):
-			yield item + 1
+			yield ChapterData(item + 1)
+
+class ChapterData(int):
+	"""A class so that we can tell it is chapter data"""
+	def __iter__(self):
+		return iter(xrange(1, self+1))
 
 books = []
 vk = VK()
@@ -686,7 +691,9 @@ while not vk.Error():
 
 for a in books:
 	for b in range(vk.chapterCount(a.testament, a.booknumber)):
-		a.chapters.append(vk.verseCount(a.testament, a.booknumber, b+1))
+		a.chapters.append(
+			ChapterData(vk.verseCount(a.testament, a.booknumber, b+1))
+		)
 	#vk.Testament(a[1])
 	#vk.Book(a[2])
 #	a[0].append(([], vk.chapterCount(*a[1:])))
