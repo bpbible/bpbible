@@ -550,12 +550,13 @@ class Index(object):
 		books = [self.books[x] for x in sorted(books)]
 		return books
 	
-	def Search(self, words, type=MULTIWORD, proximity=15, progress=lambda x:x, 
+	def Search(self, words, type=COMBINED, proximity=15, progress=lambda x:x, 
 		searchrange=None, excludes=None, try_all=False):
 		"""Index.Search - this function does all bible searching
 		
 		In:	words - words to search for
 			type - 	One of:
+						COMBINED: all three below
 						REGEX: regex search
 						PHRASE: phrase search, supports wildcards
 						MULTIWORD: search for words within a given proximity
@@ -567,7 +568,7 @@ class Index(object):
 			searchrange - see BookRange
 			excludes - MULTIWORD only, words to exclude
 		
-		Out: results!
+		Out: results, regular expressions
 		"""
 
 		dprint(MESSAGE, "Search called with arguments", words, type,

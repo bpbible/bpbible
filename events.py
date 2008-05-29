@@ -2,7 +2,7 @@ sources = (
 	HISTORY,
 	#HISTORY_BACK,
 	QUICK_SELECTOR,
-	#VERSE_TREE,
+	VERSE_TREE,
 	BIBLE_REF_ENTER,
 	#TOOLTIP,
 	BIBLEFRAME,
@@ -16,7 +16,7 @@ sources = (
 	SEARCH,
 	LOADING_SETTINGS,
 	HEADER_BAR
-) = range(14)
+) = range(15)
 
 class BibleEvent(object):
 	def __init__(self, ref, settings_changed=False, source=None):

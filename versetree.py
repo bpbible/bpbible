@@ -52,6 +52,7 @@ class VerseTree(LazyTreeCombo):
 	
 	def set_current_verse(self, event):
 		self.currentverse = event.ref
+		self.SetText(event.ref)		
 
 	def get_tree_item(self):
 		text = self.GetValue()
@@ -97,7 +98,7 @@ class VerseTree(LazyTreeCombo):
 
 		while item2:
 			data = self.get_data(item2)
-			if data == chapter:
+			if data.chapter_number == chapter:
 				# if : isn't in there, we take it as a chapter reference
 				if not self.with_verses or ":" not in text:
 					return item2

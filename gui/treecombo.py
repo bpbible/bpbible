@@ -111,7 +111,9 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
 			if event.KeyCode == wx.WXK_RETURN:
 				value = self.get_value()
 				if value:
-					self.combo.on_selected_in_tree(self.tree.GetItemText(value))
+					self.combo.on_selected_in_tree(
+						self.combo.format_combo(value)
+					)
 				
 			self.Dismiss()
 			return

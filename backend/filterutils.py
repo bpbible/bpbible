@@ -17,7 +17,7 @@ filter_settings.add_item("strongs_headwords", True, item_type=bool)
 filter_settings.add_item("strongs_colour", "#0000ff")
 
 
-def me(func):
+def return_success(func):
 	def ret(*args, **kwargs):
 		return SW.ReturnSuccess(*func(*args, **kwargs))
 	ret.__name__ = func.__name__
@@ -67,6 +67,13 @@ registered = False
 class ParserBase(sgmllib.SGMLParser, object):
 	def __init__(self):
 		super(ParserBase, self).__init__()
+		self.token = None
+		self.buf = None
+		self.success = SW.INHERITED
+		self.u = None
+		self.biblemgr = None
+		
+		
 	
 	def init(self, token, userdata, buf = ""):
 		self.token = token

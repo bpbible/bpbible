@@ -48,7 +48,7 @@ from fontchoice import FontChoiceDialog
 from versecompare import VerseCompareFrame
 from htmlide import HtmlIde
 from events import BibleEvent, SETTINGS_CHANGED, BIBLE_REF_ENTER, HISTORY
-from events import LOADING_SETTINGS
+from events import LOADING_SETTINGS, VERSE_TREE
 from history import History, HistoryTree
 from util.configmgr import config_manager
 from install_manager.install_drop_target import ModuleDropTarget
@@ -94,7 +94,6 @@ class MainFrame(wx.Frame, AuiLayer):
 
 		self.bible_observers = ObserverList([
 					lambda event: self.bibletext.SetReference(event.ref),
-					lambda event: self.bibleref.SetValue(event.ref),
 					self.set_title
 		
 		])
@@ -202,6 +201,7 @@ class MainFrame(wx.Frame, AuiLayer):
 			
 		self.bibleref = versetree.VerseTree(self.main_toolbar)
 		self.bible_observers += self.bibleref.set_current_verse
+		
 		self.bibleref.SetSize((140, -1))
 		self.main_toolbar.AddControl(self.bibleref)
 		
@@ -440,7 +440,10 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.bibleref.Bind(wx.EVT_TEXT_ENTER, self.BibleRefEnter)
 
 		# if it is selected in the drop down tree, go straight there
-		self.bibleref.on_selected_in_tree += self.BibleRefEnter
+		# use callafter so that our text in the control isn't changed straight
+		# back
+		self.bibleref.on_selected_in_tree += lambda text: \
+			wx.CallAfter(self.set_bible_ref, text, source=VERSE_TREE)
 		
 		
 		#self.BibleRef.Bind(wx.EVT_COMBOBOX, self.BibleRefEnter)
@@ -793,7 +796,7 @@ class MainFrame(wx.Frame, AuiLayer):
 		else:
 			try:
 				self.set_bible_ref(self.bibleref.GetValue(),
-				source=BIBLE_REF_ENTER)
+					source=BIBLE_REF_ENTER)
 			except pysw.VerseParsingError, e:
 				wx.MessageBox(str(e), config.name)
 

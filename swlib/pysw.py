@@ -671,12 +671,22 @@ class BookData(object):
 	
 	def __iter__(self):
 		for item in range(len(self.chapters)):
-			yield ChapterData(item + 1)
+			yield ChapterData(
+				item+1, 
+				vk.verseCount(self.testament, self.booknumber, item + 1),
+			)
 
-class ChapterData(int):
+class ChapterData(object):
 	"""A class so that we can tell it is chapter data"""
+	def __init__(self, chapter_number, chapter_length):
+		self.chapter_number = chapter_number
+		self.chapter_length = chapter_length
+
 	def __iter__(self):
-		return iter(xrange(1, self+1))
+		return iter(xrange(1, self.chapter_length+1))
+	
+	def __str__(self):
+		return "%s" % self.chapter_number
 
 books = []
 vk = VK()
@@ -689,17 +699,15 @@ while not vk.Error():
 #	books[-1].append(*books[-1][1:])
 	vk.Book(ord(vk.Book())+1)
 
-for a in books:
-	for b in range(vk.chapterCount(a.testament, a.booknumber)):
-		a.chapters.append(
-			ChapterData(vk.verseCount(a.testament, a.booknumber, b+1))
+for book in books:
+	for chapter in range(vk.chapterCount(book.testament, book.booknumber)):
+		book.chapters.append(
+			ChapterData(chapter+1, 
+				vk.verseCount(book.testament, book.booknumber, chapter+1)
+			)
 		)
-	#vk.Testament(a[1])
-	#vk.Book(a[2])
-#	a[0].append(([], vk.chapterCount(*a[1:])))
-#	print a[0][-1]
-#	for b in range(a[0][-1][1]):
-#		a[0][-1][0].append(vk.verseCount(*(a[1:]+(b,))))
+del book
+del chapter
 
 class TK(SW.TreeKeyIdx):
 	"""A tree key. As this is module specific, create it from an existing tree

@@ -256,6 +256,11 @@ class LinkedFrame(VerseKeyedFrame):
 	
 	def create_toolbar(self):
 		self.toolbar = wx.ToolBar(self.panel, style=wx.TB_FLAT)
+		self.create_toolbar_items()
+		self.toolbar.Realize()
+		self.toolbar.MinSize = self.toolbar.Size
+	
+	def create_toolbar_items(self):		
 		self.gui_reference = versetree.VerseTree(self.toolbar,
 									with_verses=True)
 		self.gui_reference.SetSize((140, -1))
@@ -278,16 +283,12 @@ class LinkedFrame(VerseKeyedFrame):
 
 		self.toolbar.InsertControl(0, self.gui_reference)
 		
-		#self.set_link()
-		self.toolbar.Realize()
 		
 
-		self.toolbar.MinSize = self.toolbar.Size		
 		self.toolbar.Bind(wx.EVT_TOOL, self.set_ref, id=self.gui_go.Id)
 		self.toolbar.Bind(wx.EVT_TOOL, self.on_link, id=self.gui_link.Id)
 		self.gui_reference.Bind(wx.EVT_TEXT_ENTER, self.set_ref)
 		self.gui_reference.on_selected_in_tree += self.set_ref
-		
 		
 	
 	def set_ref(self, event):
@@ -297,30 +298,15 @@ class LinkedFrame(VerseKeyedFrame):
 		if not ref: return
 		self.SetReference(ref)
 	
-	def set_link(self):
-		print "set_link"
-		help = ["Link the %s to the Bible", 
-				"Unlink the %s from the Bible"]
-
-		self.linked = not self.linked
-		picts = ["link.png", "link_break.png"]
-		pic = config.graphics_path + picts[self.linked] 
-
-		self.gui_link.ShortHelp = help[self.linked] % self.title
-		self.gui_link.Tooltip = help[self.linked] % self.title
-		
-		self.gui_link.SetBitmap1(wx.BitmapFromImage(wx.Image(pic)))
-		self.toolbar.Realize()
-	
 	def on_link(self, event=None):
 		self.linked = not self.linked
-		#self.set_link()
 		if self.linked:
-			self.SetReference(guiconfig.mainfrm.currentverse)
+			self.notify(guiconfig.mainfrm.currentverse)
 	
 	def bible_ref_changed(self, event):
-		if self.linked:
-			self.SetReference(event.ref)
+		# only update if we are linked, and it isn't just a settings change
+		if self.linked and not event.settings_changed:
+			self.notify(event.ref)
 
 		elif event.settings_changed:
 			self.refresh()
@@ -416,7 +402,6 @@ class DictionaryFrame(BookFrame):
 	
 	def notify(self, ref, source=None):
 		guiconfig.mainfrm.UpdateDictionaryUI(ref)
-		
 
 	@guiutil.frozen
 	def SetReference(self, ref, context=None, raw=None):

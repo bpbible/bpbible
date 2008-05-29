@@ -1,6 +1,6 @@
 #from swlib.pysw import *
 import re
-from swlib.pysw import VK, SW, GetBestRange, GetVerseStr
+from swlib.pysw import VK, SW, GetBestRange, GetVerseStr, TOP
 from util.util import PushPopList, VerseTemplate
 from util import observerlist
 from util.debug import dprint, WARNING
@@ -105,7 +105,7 @@ class Book(object):
 					header=items, footer=items)
 
 	
-	def GetReference(self, ref, specialref="", 
+	def GetReference(self, ref, specialref="",
 			specialtemplate=None, context="", max_verses=176, raw=False,
 			stripped=False, template=None):
 		"""GetReference gets a reference from a Book.
@@ -115,7 +115,9 @@ class Book(object):
 		#only for bible keyed books
 		if not self.mod:
 			return None
-		vk = VK()
+		
+		if template is None:
+			template = self.templatelist()
 		if context:
 			lastverse = context
 		else:
@@ -124,40 +126,76 @@ class Book(object):
 		verselist = vk.ParseVerseList(to_str(ref), to_str(lastverse), True)
 		rangetext = GetBestRange(verselist.getRangeText())
 		if rangetext == "":
-			return rangetext #if invalid reference, return empty string
+			#if invalid reference, return empty string
+			return ""
+			
 		
-		#verselist.SetPosition(SW_POSITION(1))
-		#verselist.Persist()
-		self.mod.SetKey(verselist)
-		if template is None:
-			template = self.templatelist()
-
+		if specialref:
+			specialref = GetVerseStr(specialref)
+		
 		description = to_unicode(self.mod.Description(), self.mod)
 		d = dict(range=rangetext, 
 				 version=self.mod.Name(), 
 				 description=description)
 
 		verses = template.header.safe_substitute(d)
-		if specialref:
-			specialref = GetVerseStr(specialref)
-
-		verses_left = max_verses
-
-		ERR_OK = chr(0)
-		render_text = self.get_rendertext()
-
-				
-
-		while verselist.Error() == ERR_OK:
-			if verses_left == 0:
+		
+		
+		for body_dict, headings in self.GetReference_yield(
+			verselist, max_verses, raw, stripped
+		):
+			# if we have exceeded the verse limit, body_dict will be None
+			if body_dict is None:
 				verses += config.MAX_VERSES_EXCEEDED % max_verses
 				break
 
+			body_dict.update(d)
 			
-			self.mod.SetKey(verselist)
-			key = self.mod.getKey()
-			versekey = VK.castTo(key)
+			t = template
+
+			if specialref == body_dict["reference"]:
+				t = specialtemplate
+
 			verse = ""
+			for heading_dict in headings:
+				verse += t.headings.safe_substitute(heading_dict)
+			
+			verse += t.body.safe_substitute(body_dict)
+
+			verses += verse
+		
+		verses += template.footer.safe_substitute(d)
+		return verses
+		
+			
+	def GetReference_yield(self, verselist, max_verses=176, 
+			raw=False, stripped=False, module=None):
+		"""GetReference_yield: 
+			yield the body dictionary and headings dictinoary
+			for each reference.
+
+		Preconditions:
+			one of module or self.mod is not None
+			verselist is valid"""
+		#only for bible keyed books
+		verselist.setPosition(TOP)
+		#verselist.Persist()
+		mod = module or self.mod
+		mod.SetKey(verselist)
+		verses_left = max_verses
+
+		ERR_OK = chr(0)
+		render_text = self.get_rendertext(mod)
+
+		while verselist.Error() == ERR_OK:
+			if verses_left == 0:
+				yield None, None
+				return
+
+			
+			mod.SetKey(verselist)
+			key = mod.getKey()
+			versekey = VK.castTo(key)
 			#if(self.headings):
 			#	versekey.Headings(1)
 			reference = versekey.getText()
@@ -165,10 +203,10 @@ class Book(object):
 
 
 			if raw:
-				text = self.mod.getRawEntry().decode("utf-8", "replace")
+				text = mod.getRawEntry().decode("utf-8", "replace")
 			
 			elif stripped:
-				text = self.mod.StripText().decode("utf-8", "replace")
+				text = mod.StripText().decode("utf-8", "replace")
 				
 				
 			else:
@@ -185,44 +223,34 @@ class Book(object):
 			)	
 
 					  
-			body_dict.update(d)
-			
-			t = template
-			if specialref == reference:
-				t = specialtemplate
-
-			verse = ""
 			headings = self.get_headings(reference)
 
+			heading_dicts = []
 			for heading in headings:
 				if not raw:
-					heading = self.mod.RenderText(heading)
+					heading = mod.RenderText(heading)
 
 				heading_dict = dict(heading=heading)
 				heading_dict.update(body_dict)
+				heading_dicts.append(heading_dict)
 				
-				verse += t.headings.safe_substitute(heading_dict)
-			
-			verse += t.body.safe_substitute(body_dict)
-			#verse = self.ReplaceFootnote(verse)
+			yield body_dict, heading_dicts	
 
-			verses += verse
 			verselist.increment(1)
 			verses_left -= 1
 
-		verses += template.footer.safe_substitute(d)
-		return verses
 	
-	def get_headings(self, ref):
+	def get_headings(self, ref, mod=None):
 		"""Gets an array of the headings for the current verse. Must have just
 		called RenderText on the verse you want headings for"""
+		mod = mod or self.mod
 
 		heading = SW.Buf("Heading")
 		preverse = SW.Buf("Preverse")
 		interverse = SW.Buf("Interverse")
 		headings = []
 		heading_types = [preverse, interverse]
-		attrmap = self.mod.getEntryAttributesMap()#[SW.Buf("Heading")
+		attrmap = mod.getEntryAttributesMap()#[SW.Buf("Heading")
 		if heading in attrmap:
 			h = attrmap[heading]
 			for item in heading_types:
@@ -321,15 +349,16 @@ class Book(object):
 		return self.GetReference(text, specialref, specialtemplate, context,
 				raw=raw)
 
-	def get_rendertext(self):
+	def get_rendertext(self, mod=None):
 		"""Return the text render function.
 
 		This makes sure that plaintext modules render whitespace properly"""
-		render_text = self.mod.RenderText
+		module = mod or self.mod
+		render_text = module.RenderText
 
-		if self.mod.getConfigEntry("SourceType") in (None, "Plaintext"):
+		if module.getConfigEntry("SourceType") in (None, "Plaintext"):
 			def render_text(*args):
-				text = self.mod.RenderText(*args)
+				text = module.RenderText(*args)
 				text = text.replace("\n", "<br />")
 				return re.sub(" ( +)", lambda x:"&nbsp;"*len(x.group(1)), text)
 

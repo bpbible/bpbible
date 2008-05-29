@@ -89,7 +89,7 @@ class THMLRenderer(SW.RenderCallback):
 		super(THMLRenderer, self).__init__()
 		self.thisown = False
 
-	@filterutils.me
+	@filterutils.return_success
 	@filterutils.report_errors
 	@filterutils.ThMLUserData
 	def run(self, buf, token, userdata):

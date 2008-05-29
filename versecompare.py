@@ -4,12 +4,18 @@ from bookframe import LinkedFrame, BookFrame
 import config, guiconfig
 from config import BIBLE_VERSION_PROTOCOL
 from gui.multichoice import MultiChoiceDialog
+from gui import guiutil
+
 from gui.menu import MenuItem
 from backend.bibleinterface import biblemgr
 from protocols import protocol_handler
 from util import util
 from util.configmgr import config_manager
 from displayframe import IN_POPUP
+
+from swlib.pysw import GetBestRange, SW, VK
+from util.unicode import to_str
+
 
 
 verse_comparison_settings = config_manager.add_section("Verse Comparison")
@@ -19,6 +25,13 @@ verse_comparison_settings.add_item(
 	is_initial_lazy=True,
 	item_type="pickle"
 )
+
+verse_comparison_settings.add_item(
+	"parallel",
+	False,
+	item_type=bool
+)
+
 
 
 def on_bible_version(frame, href, url):
@@ -38,10 +51,86 @@ class VerseCompareFrame(LinkedFrame):
 		self.SetBook(book)
 		#verse_comparison_settings["comparison_modules"] = book.GetModuleList()
 	
-	def SetReference(self, ref, context=None):
+	def SetReference(self, ref, context=""):
 		text = "<h3>%s</h3>" % ref
-		mod = self.book.mod
 		self.reference = ref
+		text_func = [
+			self.get_compare_text,
+			self.get_parallel_text
+		][verse_comparison_settings["parallel"]]
+
+		
+		self.SetPage(text_func(ref, context))
+
+		self.gui_reference.SetValue(ref)
+		self.gui_reference.currentverse = ref
+		self.update_title()
+	
+	def get_parallel_text(self, ref, context):		
+		vk = SW.VerseKey()
+		verselist = vk.ParseVerseList(to_str(ref), to_str(context), True)
+		
+		items = []
+		text = ["<table border=1 valign=TOP>", "<tr>"]
+		for item in self.book.GetModules():
+			name = item.Name()
+			if name in verse_comparison_settings["comparison_modules"]:
+				items.append((
+					item, 
+					list(self.book.GetReference_yield(
+						verselist, module=item, max_verses=176
+					))
+				))
+				
+				text.append(u"<th><b><a href='%s:%s'>"
+					"%s</a></b></th>" % (BIBLE_VERSION_PROTOCOL, name, name))
+
+		text.append("</tr>")
+
+		rows = []
+		was_clipped = False
+		while True:
+			text.append("<tr>")
+			for module, refs in items:
+				if not refs:
+					text.append("</tr>")
+					break
+				
+				body_dict, headings = refs.pop(0)
+
+				if not body_dict:
+					was_clipped = True
+					# remove opening row
+					text.pop() 
+					break
+
+				text.append("<td>")
+				
+				for heading_dict in headings:
+					text.append(biblemgr.bible.templatelist().\
+						headings.safe_substitute(heading_dict))
+				
+				text.append("<sup>%(versenumber)d</sup> %(text)s"%body_dict)
+				
+				text.append("</td>")
+						
+			else:
+				text.append("</tr>")
+				continue
+
+			break
+
+		text.append("</table>")
+		
+		if was_clipped:
+			text.append(config.MAX_VERSES_EXCEEDED % 176)
+		
+
+		return '\n'.join(text)
+	
+	def get_compare_text(self, ref, context):
+		text = ""
+		mod = self.book.mod
 		
 		try:
 			self.book.templatelist.push(config.verse_compare_template)
@@ -56,11 +145,7 @@ class VerseCompareFrame(LinkedFrame):
 			self.book.mod = mod
 			self.book.templatelist.pop()
 
-		self.SetPage(text)
-		self.gui_reference.SetValue(ref)
-		self.gui_reference.currentverse = ref
-		self.update_title()
-		
+		return text
 
 	def notify(self, reference, source=None):
 		self.SetReference(reference)
@@ -102,4 +187,35 @@ class VerseCompareFrame(LinkedFrame):
 		mcd.Destroy()
 				
 	get_verified = BookFrame.get_verified_multi_verses
+
+	def create_toolbar_items(self):
+		super(VerseCompareFrame, self).create_toolbar_items()
+		
+		self.gui_book_choice = self.toolbar.InsertTool(3, wx.ID_ANY,  
+			guiutil.bmp("book.png"),
+			shortHelpString="Choose books to view"
+		)		
+
+		self.gui_parallel = self.toolbar.InsertTool(4, wx.ID_ANY,
+			guiutil.bmp("text_columns.png"),
+			isToggle=True,
+			shortHelpString="View in parallel mode"
+		)
+		self.toolbar.ToggleTool(self.gui_parallel.Id, 
+			verse_comparison_settings["parallel"]
+		)
+
+		self.toolbar.InsertSeparator(5)
+
+		self.toolbar.Bind(wx.EVT_TOOL, self.on_parallel_toggle, 
+			id=self.gui_parallel.Id)
+
+		self
+	
+		self.toolbar.Bind(wx.EVT_TOOL, lambda evt:self.set_versions(),
+			id=self.gui_book_choice.Id)
+	
+	def on_parallel_toggle(self, event):
+		verse_comparison_settings["parallel"] = event.Checked()
+		self.reload()
 		
