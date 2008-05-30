@@ -86,10 +86,15 @@ class VK(SW.VerseKey):#, object):
 	>>> vk
 	VK('Matthew 5:3')
 	>>> vk = pysw.VK(("Genesis 3:5", "Genesis 3:8"))
+	>>> vk == pysw.VerseList("genesis 3:5 - 8")[0]
+	True
+	>>> vk == None
+	False
 	>>> vk
 	VK('Genesis 3:5-Genesis 3:8')
 	>>> for item in vk:
 	...     print item
+	...     assert item != vk
 	...
 	Genesis 3:5
 	Genesis 3:6
@@ -130,10 +135,17 @@ class VK(SW.VerseKey):#, object):
 	def __gt__( self, other): return self.compare(other)>0
 	def __ge__( self, other): return self.compare(other)>-1
 	def __eq__(self, other):
-		try:
-			return self.equals(other)
-		except:
+		if other is None:
 			return False
+
+		if self.isBoundSet() != other.isBoundSet():
+			return False
+
+		if not self.isBoundSet():
+			return self.equals(other)
+
+		return (self.LowerBound().equals(other.LowerBound())
+				and self.UpperBound().equals(other.UpperBound()))
 
 	def __ne__(self, other):
 		return not self == other
