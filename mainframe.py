@@ -885,8 +885,8 @@ class MainFrame(wx.Frame, AuiLayer):
 			The possible sources are defined in events.py.
 		settings_changed: This is true if the settings have been changed.
 		"""
-		self.currentverse = str(pysw.GetVerseStr(ref, self.currentverse,
-			raiseError=True))
+		self.currentverse = pysw.GetVerseStr(ref, self.currentverse,
+			raiseError=True)
 		
 		
 		self.UpdateBibleUI(source, settings_changed)

@@ -285,7 +285,7 @@ class FilterableTree(wx.PyPanel):
 
 				child, cookie = self.tree.GetNextChild(current, cookie)
 
-		item = FindTreeItem(self.root)
+		item = FindTreeItem(self.tree.RootItem)
 		assert item, "Didn't find pericope in tree"
 		
 		self.select_without_event(item)

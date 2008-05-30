@@ -44,6 +44,8 @@ class TagHandler(wx.html.HtmlWinTagHandler):
 			traceback.print_exc()
 			dprint(ERROR, e.args, e.message)
 
+	def HandleTag2(self, tag):
+		return False
 	
 class GLinkTagHandler(TagHandler):
 	tags = "GLINK"

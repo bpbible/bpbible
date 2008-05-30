@@ -12,6 +12,8 @@ from gui.reference_display_frame import ReferenceDisplayFrame
 
 tokens = re.compile(r"""
 	(<glink[^>]*>.*?</glink>)	| # a strongs number and contents
+	(<a\ [^>]*>.*?</a>)			| # a link and contents	
+	(<h4>.*?</h4>)				| # a heading and contents	
 	(<[^>]+>)					| # any other html tag - not contents
 	(&(?P<amps>[^;]*);)			| # a html escape
 	(.)							  # anything else

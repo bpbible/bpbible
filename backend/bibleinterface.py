@@ -11,7 +11,6 @@ from swlib.pysw import SW
 
 from backend.book import Bible, Commentary
 from backend.dictionary import Dictionary
-import backend.stringmgr
 
 from util import util
 from util import confparser

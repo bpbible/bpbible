@@ -10,8 +10,6 @@ import config
 
 #ERR_OK = '\x00'
 
-vk = VK()
-
 class Book(object):
 	type = None
 	def __init__(self, parent, version = ""):
@@ -69,12 +67,13 @@ class Book(object):
 		#return "<No module>"
 
 	def GetModuleList(self):
-		return [name for name, mod in self.parent.modules.iteritems()
-				if mod.Type() == self.type or self.type is None]
+		return sorted([name for name, mod in self.parent.modules.iteritems()
+				if mod.Type() == self.type or self.type is None])
 	
 	def GetModules(self):
-		return [mod for name, mod in self.parent.modules.iteritems()
-				if mod.Type() == self.type or self.type == None]
+		return sorted([mod for name, mod in self.parent.modules.iteritems()
+				if mod.Type() == self.type or self.type == None], 
+				key = lambda mod: mod.Name())
 	
 	@staticmethod
 	def get_template_options():
@@ -123,7 +122,7 @@ class Book(object):
 		else:
 			lastverse = ""
 	
-		verselist = vk.ParseVerseList(to_str(ref), to_str(lastverse), True)
+		verselist = self.vk.ParseVerseList(to_str(ref), to_str(lastverse), True)
 		rangetext = GetBestRange(verselist.getRangeText())
 		if rangetext == "":
 			#if invalid reference, return empty string

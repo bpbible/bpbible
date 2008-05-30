@@ -3,6 +3,7 @@ import re
 from util.debug import *
 from util.unicode import to_str, to_unicode
 
+# constants
 REG_ICASE = 1 << 1
 SWMULTI = -2
 SWPHRASE = -1
@@ -20,10 +21,52 @@ MAXVERSE = SW.SW_POSITION(POS_MAXVERSE)
 MAXCHAPTER = SW.SW_POSITION(POS_MAXCHAPTER)
 MAXBOOK = SW.SW_POSITION(POS_MAXBOOK)
 
-
+# do renaming of SW.SWMgr -> SW.Mgr
 for a in dir(SW):
 	if(a[:2]=="SW"):
-			setattr(SW, a[2:], getattr(SW, a))
+		setattr(SW, a[2:], getattr(SW, a))
+
+
+# StringMgr handling
+class MyStringMgr(SW.PyStringMgr):
+	def getUpper(self, buf):
+		# TODO: a more advanced heuristic like bibletime's to check whether it
+		# is utf8 or latin1
+		encodings = "UTF-8", "cp1252"
+		text = buf.c_str()
+		#print `text`
+		for enc in encodings:
+			try:
+				# do an uppercase on the unicode object, then re-encode it 
+				# back to how it was.
+				# then set the buffer to the new string
+				buf.set(text.decode(enc).upper().encode(enc))
+				return
+
+			except UnicodeDecodeError:
+				pass
+
+		dprint(WARNING, "Couldn't convert text to uppercase", text)
+		return
+
+	def supportsUnicode(self):
+		return True
+		
+m=MyStringMgr()
+
+# we don't own this, the system string mgr holder does
+m.thisown = False
+SW.StringMgr.setSystemStringMgr(m)
+
+# *only* after we've set the system string mgr can we set the system 
+# locale mgr...
+locale_mgr = SW.LocaleMgr.getSystemLocaleMgr()
+locale_mgr.loadConfigDir("resources")
+
+if locale_mgr.getLocale("bpbible"):
+	locale_mgr.setDefaultLocaleName("bpbible")
+else:
+	dprint(WARNING, "bpbible locale not found")
 
 class VerseParsingError(Exception): pass
 #INEFFICIENT (create a new key always)

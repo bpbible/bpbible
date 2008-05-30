@@ -89,6 +89,6 @@ if __name__ == '__main__':
 	PathManager(None).ShowModal()
 	
 	
-	wx.MessageBox(str([a.c_str() for a in biblemgr.mgr.getModules()]))
+	wx.MessageBox(str([a.c_str() for a in biblemgr.modules]))
 	wx.MessageBox(biblemgr.bible.GetReference("Gen 3:1-5"))
 	

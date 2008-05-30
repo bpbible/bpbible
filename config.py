@@ -126,7 +126,7 @@ def make_template(verse_per_line):
 
 	current_verse_template = util.VerseTemplate(body)
 
-	verse_compare_template = util.VerseTemplate("$text",
+	verse_compare_template = util.VerseTemplate("<sup>$versenumber</sup> $text",
 		header=u"<p><b>(<a href='%s:$version'>$version</a>)"
 		u"</b> " % BIBLE_VERSION_PROTOCOL
 	)
