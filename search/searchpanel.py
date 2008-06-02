@@ -459,12 +459,20 @@ class SearchPanel(xrcSearchPanel):
 			search_config["search_type"], scope, case_sensitive)
 	
 		flags = re.UNICODE | (re.IGNORECASE * (not case_sensitive))
-		if search_config["search_type"] == SWMULTI:
-			self.regexes = [
-				re.compile(word, flags) for word in key.split()
-			]
-		else:
-			self.regexes = [re.compile(key, flags)]
+		try:
+			if search_config["search_type"] == SWMULTI:
+				self.regexes = [
+					re.compile(word, flags) for word in key.split()
+				]
+			else:
+				self.regexes = [re.compile(key, flags)]
+
+		except re.error, e:
+			dprint(WARNING, "Couldn't compile expression for sword search.",
+				key, e)
+
+			self.regexes = []
+			
 
 		# If we need to exclude, do another search through the scope 
 		# Then remove duplicates

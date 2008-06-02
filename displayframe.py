@@ -330,9 +330,9 @@ class DisplayFrame(HtmlSelectableWindow):
 			if not type or not value: 
 				return
 			#do lookup
-			type = "Strongs"+type#as module is StrongsHebrew
+			type = "Strongs"+type #as module is StrongsHebrew or StrongsGreek
 			if biblemgr.dictionary.ModuleExists(type):
-				biblemgr.dictionary.SetModule(type)
+				guiconfig.mainfrm.set_module(type, biblemgr.dictionary)
 				wx.CallAfter(guiconfig.mainfrm.UpdateDictionaryUI, value)
 			return
 		if action=="showMorph":
@@ -340,14 +340,14 @@ class DisplayFrame(HtmlSelectableWindow):
 			value = url.getParameterValue("value") #strongs number
 			if not type or not value: 
 				return
-			if type.split(":")[0] != "robinson":
+			
+			if type.split(":")[0] not in ("robinson", "Greek"):
 				return
 
-
 			#do lookup
-			type = "Robinson" #as module is StrongsHebrew
+			type = "Robinson"
 			if biblemgr.dictionary.ModuleExists(type):
-				biblemgr.dictionary.SetModule(type)
+				guiconfig.mainfrm.set_module(type, biblemgr.dictionary)
 				wx.CallAfter(guiconfig.mainfrm.UpdateDictionaryUI, value)
 
 	@staticmethod

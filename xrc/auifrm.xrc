@@ -67,7 +67,7 @@
           <label>_Set Sword Paths...</label>
         </object>
         <object class="wxMenuItem" name="installmodule">
-          <label>Install a book...</label>
+          <label>Install books...</label>
         </object>
         <object class="wxMenuItem" name="fontchoice">
           <label>Set fonts...</label>

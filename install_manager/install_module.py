@@ -134,6 +134,9 @@ class VListCtrl(wx.VListBox):
 			return
 
 		ModuleInfo(self, self.modules[self.Selection]).ShowModal()
+		
+		# set focus back to the panel, not to the button
+		self.SetFocusIgnoringChildren()
 	
 	def on_focus(self, event):
 		self.SetFocusIgnoringChildren()

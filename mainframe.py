@@ -342,7 +342,7 @@ class MainFrame(wx.Frame, AuiLayer):
 
 	def create_aui_items(self):
 		self.version_tree = ModuleTree(self)
-		self.version_tree.on_module_choice += self.on_module_choice
+		self.version_tree.on_module_choice += self.set_module
 
 		self.genbooktext = GenBookFrame(self, biblemgr.genbook)
 
@@ -369,7 +369,7 @@ class MainFrame(wx.Frame, AuiLayer):
 		sizer.Add(self.history_tree, 1, wx.GROW)
 		self.history_pane.SetSizer(sizer)
 
-	def on_module_choice(self, module, book):
+	def set_module(self, module, book):
 		# if the pane is not shown, show it
 		for frame in self.frames:
 			if hasattr(frame, "book") and frame.book == book:
@@ -531,7 +531,7 @@ class MainFrame(wx.Frame, AuiLayer):
 		fd = wx.FileDialog(self, 
 			wildcard="Installable books (*.zip)|*.zip",
 			style=wx.FD_DEFAULT_STYLE|wx.FD_MULTIPLE|wx.FD_MULTIPLE|wx.FD_OPEN,
-			defaultDir=settings["last_book_directory"]
+			defaultDir=settings["last_book_directory"], message="Choose books"
 		)
 
 		if fd.ShowModal() == wx.ID_OK:
@@ -868,14 +868,11 @@ class MainFrame(wx.Frame, AuiLayer):
 	def DictionaryListSelected(self, event=None):
 		self.UpdateDictionaryUI()
 
-	def UpdateDictionaryUI(self, ref="", version=""):
+	def UpdateDictionaryUI(self, ref=""):
 		if not ref:
 			ref = self.dictionary_list.GetValue().upper()
 		else:
 			self.dictionary_list.SetValue(ref)
-
-		if(version): 
-			self.dictionarytext.SetMod(str(version))
 
 		self.dictionarytext.SetReference(ref)
 

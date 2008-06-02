@@ -37,9 +37,6 @@ class BookFrame(DisplayFrame):
 	def SetBook(self, book):
 		self.book = book
 
-	def SetMod(self, book):
-		self.book.SetModule(book)
-
 	def SetPage(self, *args, **kwargs):
 		# close all open tooltips
 		guiconfig.mainfrm.hide_tooltips()

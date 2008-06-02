@@ -611,7 +611,15 @@ class Index(object):
 		if(regex and not advanced):
 			#esc = re.escape(words)
 			flags = re.IGNORECASE * (not case_sensitive) | re.UNICODE
-			comp = re.compile(words, flags)		
+
+			try:
+				comp = re.compile(words, flags)		
+			except re.error, e:
+				raise SearchException(
+					"There seems to be an error in your regular expression.\n"
+					"The error message given was: %r" % str(e)
+				)
+			
 			
 			for num, book in enumerate(books):
 				continuing = progress((book.bookname, (100*num)/len(books)))
@@ -743,9 +751,15 @@ class Index(object):
 		if badwords:
 			raise SpellingException(badwords)
 
-		excludelist.extend((re.compile(e, flags), 0) for e in excl_regexes)
-		wordlist.extend((re.compile(e, flags), 0) for e in regexes)
-		
+		try:
+			excludelist.extend((re.compile(e, flags), 0) for e in excl_regexes)
+			wordlist.extend((re.compile(e, flags), 0) for e in regexes)
+		except re.error, e:
+			raise SearchException(
+				"There seems to be an error in your regular expression.\n"
+				"The error message given was: %r" % str(e)
+			)
+				
 		# Do multiword
 		for num, book in enumerate(books):
 			continuing = progress((book.bookname, (100*num)/len(books)))
