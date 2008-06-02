@@ -8,7 +8,6 @@ INSTALL_QUERY_SINGLE = "Are you sure you want to install the following book?"
 INSTALL_QUERY_MANY = "Are you sure you want to install the following books?"
 
 def chop_text(dc, text, max_size):
-	print `text`
 	# first check if the text fits with no problems
 	x, y = dc.GetTextExtent(text)
 	if x <= max_size:
@@ -53,7 +52,7 @@ class ModuleInstallDialog(xrcModuleInstallDialog):
 		selection = self.destination.Selection
 		if selection == last_item:
 			dlg = wx.DirDialog(self, "Choose a directory:",
-				  style=wx.DD_DEFAULT_STYLE|wx.DD_DIR_MUST_EXIST, 
+				  style=wx.DD_DEFAULT_STYLE,#|wx.DD_DIR_MUST_EXIST, 
 				  defaultPath=self.dest_dir)
 			
 			# If the user selects OK, then we process the dialog's data.
@@ -90,7 +89,7 @@ class VListCtrl(wx.VListBox):
 		
 		#self.uninstall_button = wx.Button(self, label="Uninstall")
 		
-		self.buttons = self.info_button #self.uninstall_button, 
+		self.buttons = self.info_button, #self.uninstall_button, 
 		self.Bind(wx.EVT_SIZE, self.on_size)
 
 		#sizer = wx.BoxSizer(wx.HORIZONTAL)

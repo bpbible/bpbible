@@ -135,15 +135,13 @@ class ParserBase(sgmllib.SGMLParser, object):
 		if not match:
 			dprint(WARNING, "Could not find strong's headword", 
 				"mod:", modlang, "number:", number, "Entry:", entry)
-			self.success = SW.INHERITED
-			return
 
-		if text == last_item:
+		if text == last_item or not match:
 			# TR has strong's numbers past the last one (I think for
 			# morphlogy. If we hit the last one, do a quick check to see
 			# whether it is likely to be past the end. If so, just give the
 			# number.
-			if last_item.strip("GH0") not in number:
+			if last_item.strip("GH0") not in number or not match:
 				item = '<small><em>&lt;<a href="passagestudy.jsp?action=showStrongs&type=%s&value=%s">%s</a>&gt;</em></small>' % (modlang, number, number)
 				strongs_cache[value] = item
 				return item

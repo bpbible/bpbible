@@ -47,6 +47,7 @@ class MyStringMgr(SW.PyStringMgr):
 				pass
 
 		dprint(WARNING, "Couldn't convert text to uppercase", text)
+		buf.set(text.upper())
 		return
 
 	def supportsUnicode(self):
@@ -739,6 +740,9 @@ class ChapterData(object):
 
 	def __iter__(self):
 		return iter(xrange(1, self.chapter_length+1))
+	
+	def __len__(self):
+		return self.chapter_length
 	
 	def __str__(self):
 		return "%s" % self.chapter_number

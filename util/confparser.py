@@ -68,15 +68,15 @@ class MissingSectionHeaderError(ParsingError):
 class config(object):
 	SECTCRE = re.compile(
 		r'\['								 # [
-		r'(?P<header>[^]]+)'				  # very permissive!
+		r'(?P<header>[^]]+)'				 # very permissive!
 		r'\]'								 # ]
 		)
 	OPTCRE = re.compile(
-		r'(?P<option>[^:=\s][^:=]*)'		  # very permissive!
+		r'(?P<option>[^:=\s][^:=]*)'		 # very permissive!
 		r'\s*(?P<vi>[:=])\s*'				 # any number of space/tab,
-											  # followed by separator
-											  # (either : or =), followed
-											  # by any # space/tab
+											 # followed by separator
+											 # (either : or =), followed
+											 # by any # space/tab
 		r'(?P<value>.*)$'					 # everything up to eol
 		)
 	def __init__(self, defaults=None):
@@ -102,13 +102,17 @@ class config(object):
 		and just about everything else are ignored.
 
 		BM: made this work with multiple items for an option
+		BM: line continuation with \ working
 		"""
 		cursect = None							# None, or a dictionary
 		optname = None
 		lineno = 0
 		e = None								  # None, or an exception
+		was_continuation = False
+		is_continuation = False
 		
 		while True:
+			was_continuation = is_continuation
 			line = fp.readline()
 			if not line:
 				break
@@ -119,8 +123,17 @@ class config(object):
 			if line.split(None, 1)[0].lower() == 'rem' and line[0] in "rR":
 				# no leading whitespace
 				continue
+			if line.endswith("\\\n"):
+				is_continuation = True
+				# chop off the continuation character
+				line = line[:-2] + "\n"
+			else:
+				is_continuation = False
+
 			# continuation line?
-			if line[0].isspace() and cursect is not None and optname:
+			if(line[0].isspace() and cursect is not None and optname) or (
+				was_continuation
+			):
 				value = line.strip()
 				if value:
 					cursect[optname][-1] = "%s\n%s" % \

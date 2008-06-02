@@ -1,5 +1,6 @@
 import os
 from swlib.pysw import SW
+import zipfile
 
 encodings = dict(cp1252="Latin-1", utf8="UTF-8")
 text = """\
@@ -144,3 +145,17 @@ for item, (mod_dir, mod_extra, driver, key_type, conf, entries) in items.items()
 
 		#assert not os.system(importer % locals()), "%s failed" % (
 		#	importer % locals())
+
+conf_file = items["bible"][4]
+
+f = open("mods.d/test_bad.conf", "w")
+f.write(conf_file + "\ntest")
+f.close()
+
+zip = zipfile.ZipFile("test_bad.zip", "w")
+zip.write("mods.d/test_bad.conf")
+zip.close()
+
+zip = zipfile.ZipFile("test.zip", "w")
+zip.write("mods.d/utf8bibletest.conf")
+zip.close()

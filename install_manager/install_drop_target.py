@@ -32,6 +32,19 @@ class ModuleDropTarget(wx.FileDropTarget):
 			except zipinstaller.BadMetadata, e:
 				wx.MessageBox(e, "Error")
 				return
+			
+			except Exception, e:
+				wx.MessageBox(
+					("An error occurred while trying to read books. "
+					"Please report this issue:\n"
+					" 1. Press Ctrl-C to copy the error text\n"
+					" 2. In the BPBible menu, select Help > Report a problem.\n"
+					" 3. In the website that opens, click New Issue, and fill"
+					" in the details\n"
+					"The error given was:\n%s") % traceback.format_exc(), 
+					"Error reading books")
+				return
+				
 		
 		if bad_files:
 			if len(bad_files) > 1:
@@ -51,7 +64,7 @@ class ModuleDropTarget(wx.FileDropTarget):
 				dlg.Destroy()
 			except Exception, e:
 				wx.MessageBox(
-					("An error occurred while installing modules."
+					("An error occurred while installing modules.\n"
 					"Please make sure that the directory exists, and that you "
 					"have permission to write to the directory.\n"
 					"The error given was:\n%s") % traceback.format_exc(), 
@@ -59,7 +72,6 @@ class ModuleDropTarget(wx.FileDropTarget):
 				
 	def install_modules(self, modules, dest_dir):
 		def callback(progress, text):
-			print progress, text
 			continuing, skip = p.Update(progress, text)
 			wx.GetApp().Yield()
 	

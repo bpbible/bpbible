@@ -242,7 +242,7 @@ class HighlightedDisplayFrame(ReferenceDisplayFrame):
 
 		# TODO: put a function in search to do this for us...
 		biblemgr.temporary_state(biblemgr.plainstate)
-		template = VerseTemplate("$text ")
+		template = VerseTemplate("$text ", headings="")
 		biblemgr.bible.templatelist.push(template)
 		
 		

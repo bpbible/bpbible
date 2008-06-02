@@ -1,4 +1,5 @@
 #import psyco
+#psyco.log()
 #psyco.full()
 from backend.bibleinterface import biblemgr
 from util.util import ReplaceUnicode, KillTags, VerseTemplate, remove_amps
@@ -912,13 +913,15 @@ def removeformatting(mystr):
 	# remove commas in numbers
 	# Example "123,456" -> "123456"
 	#TODO: some locales may have 2.345.345 instead of 2,345,345
-	ret = r["(?<=\d),(?=\d)"].sub("", ret)
+	#ret = r["(?<=\d),(?=\d)"].sub("", ret)
 	
 	# remove apostrophes in words
-	ret = r["(?<=\w)'(?=\w)"].sub("", ret)
+	#ret = r["(?<=\w)'(?=\w)"].sub("", ret)
 
 	#remove hyphenation
-	ret = r["(?<=\w)-(?=\w)"].sub("", ret)
+	#ret = r["(?<=\w)-(?=\w)"].sub("", ret)
+
+	ret = r["l"].sub("", ret)
 	
 	#TODO: replace symbols with nothing?
 	#for a in string.punctuation:

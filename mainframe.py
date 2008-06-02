@@ -67,6 +67,8 @@ settings.add_item("copy_verse", "Default",
 settings.add_item("options", None, item_type="pickle")
 settings.add_item("size", None, item_type="pickle")
 settings.add_item("maximized", False, item_type=bool)
+settings.add_item("last_book_directory", "", item_type=str)
+
 
 
 
@@ -400,6 +402,10 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.Bind(wx.EVT_CLOSE, self.MainFrameClose)
 		self.Bind(wx.EVT_MENU, self.on_path_manager, 
 			id = xrc.XRCID('pathmanager'))
+		
+		self.Bind(wx.EVT_MENU, self.on_install_module,
+			id=xrc.XRCID('installmodule'))
+		
 		self.Bind(wx.EVT_MENU, self.load_default_perspective, 
 			id=xrc.XRCID('menu_default_layout'))
 		
@@ -521,6 +527,20 @@ class MainFrame(wx.Frame, AuiLayer):
 	def on_path_manager(self, event):
 		PathManager(self).ShowModal()
 	
+	def on_install_module(self, event):
+		fd = wx.FileDialog(self, 
+			wildcard="Installable books (*.zip)|*.zip",
+			style=wx.FD_DEFAULT_STYLE|wx.FD_MULTIPLE|wx.FD_MULTIPLE|wx.FD_OPEN,
+			defaultDir=settings["last_book_directory"]
+		)
+
+		if fd.ShowModal() == wx.ID_OK:
+			self.drop_target.handle_dropped_files(fd.Paths)
+			settings["last_book_directory"]	= fd.GetDirectory()
+
+		fd.Destroy()
+			
+	
 	def on_modules_reloaded(self, biblemgr):
 		# as this will have refreshed the manager, refresh everything
 		self.version_tree.recreate()
@@ -591,7 +611,7 @@ class MainFrame(wx.Frame, AuiLayer):
 			
 			menu = self.make_menu(items)
 
-			self.MenuBar.Insert(1+idx, menu, frame.title)
+			self.MenuBar.Insert(2+idx, menu, frame.title)
 
 		if not is_debugging():
 			for idx, (menu, menu_name) in enumerate(self.MenuBar.Menus):
