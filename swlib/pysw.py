@@ -62,7 +62,7 @@ SW.StringMgr.setSystemStringMgr(m)
 # *only* after we've set the system string mgr can we set the system 
 # locale mgr...
 locale_mgr = SW.LocaleMgr.getSystemLocaleMgr()
-locale_mgr.loadConfigDir("resources")
+locale_mgr.loadConfigDir("resources/locales.d")
 
 if locale_mgr.getLocale("bpbible"):
 	locale_mgr.setDefaultLocaleName("bpbible")
