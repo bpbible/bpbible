@@ -1,5 +1,5 @@
 from swlib import pysw
-from swlib.pysw import SW
+from swlib.pysw import SW, BOTTOM
 import sgmllib
 import re
 from util.debug import dprint, ERROR, WARNING
@@ -115,8 +115,10 @@ class ParserBase(sgmllib.SGMLParser, object):
 			dprint(WARNING, "Unknown lemma", value)
 			return
 		
-		mod = dict(H=strongshebrew, G=strongsgreek)[type]
-		modlang = dict(H="Hebrew", G="Greek")[type]
+		mod, modlang, last_item = dict(
+			H=(strongshebrew, "Hebrew", last_hebrew),
+			G=(strongsgreek, "Greek", last_greek)
+		)[type]
 
 		if not mod:
 			dprint(WARNING, "Mod is None for type ", type)
@@ -127,6 +129,8 @@ class ParserBase(sgmllib.SGMLParser, object):
 		k.setText(number)
 		mod.setKey(k)
 		entry = mod.getRawEntry()
+		text = mod.getKeyText()
+
 		match = word_re.match(entry)
 		if not match:
 			dprint(WARNING, "Could not find strong's headword", 
@@ -134,25 +138,48 @@ class ParserBase(sgmllib.SGMLParser, object):
 			self.success = SW.INHERITED
 			return
 
+		if text == last_item:
+			# TR has strong's numbers past the last one (I think for
+			# morphlogy. If we hit the last one, do a quick check to see
+			# whether it is likely to be past the end. If so, just give the
+			# number.
+			if last_item.strip("GH0") not in number:
+				item = '<small><em>&lt;<a href="passagestudy.jsp?action=showStrongs&type=%s&value=%s">%s</a>&gt;</em></small>' % (modlang, number, number)
+				strongs_cache[value] = item
+				return item
+				
+				
+		
 		word = match.groups()[0]
 		#self.buf += "&lt;%s&gt;" % word
 		item = '<font size="-1"><glink href="passagestudy.jsp?action=showStrongs&type=%s&value=%s">&lt;%s&gt;</glink></font>' % (modlang, number, word)
 		strongs_cache[value] = item
+
 		return item
 		
 	def set_biblemgr(self, biblemgr):
 		self.biblemgr = biblemgr
 
 def clear_cache(biblemgr=None):
-	global strongsgreek, strongshebrew, strongs_cache
+	global strongsgreek, strongshebrew, strongs_cache, last_greek, last_hebrew
 	strongsgreek = None
 	strongshebrew = None
+	last_greek = None
+	last_hebrew = None
 	strongs_cache = {}
 	
 def setup(biblemgr):
-	global strongsgreek, strongshebrew
+	global strongsgreek, strongshebrew, last_greek, last_hebrew
 	strongsgreek = biblemgr.get_module("StrongsGreek")
 	strongshebrew = biblemgr.get_module("StrongsHebrew")
+	if strongsgreek:
+		strongsgreek.setPosition(BOTTOM)
+		last_greek = strongsgreek.getKeyText()
+
+	if strongshebrew:
+		strongshebrew.setPosition(BOTTOM)
+		last_hebrew = strongshebrew.getKeyText()
+		
 
 def register_biblemgr(biblemgr):
 	global registered

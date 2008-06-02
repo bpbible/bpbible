@@ -746,13 +746,13 @@ class ChapterData(object):
 books = []
 vk = VK()
 vk.Book(1)
+
 while not vk.Error():
-	t=ord(vk.Testament())
-	b=ord(vk.Book())
-	n=vk.bookName(t, b)
-	books.append(BookData(n,t,b)) #ord(vk.Testament()), ord(vk.Book())))
-#	books[-1].append(*books[-1][1:])
-	vk.Book(ord(vk.Book())+1)
+	t = ord(vk.Testament())
+	b = ord(vk.Book())
+	n = vk.bookName(t, b)
+	books.append(BookData(n, t, b))
+	vk.Book(ord(vk.Book()) + 1)
 
 for book in books:
 	for chapter in range(vk.chapterCount(book.testament, book.booknumber)):

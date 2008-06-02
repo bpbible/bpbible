@@ -171,7 +171,7 @@ class DisplayFrame(HtmlSelectableWindow):
 		elif action=="showMorph":
 			type = url.getParameterValue("type") #Hebrew or greek
 			types = type.split(":", 1)
-			if types[0] != "robinson":
+			if types[0] not in ("robinson", "Greek"):
 				tooltipdata = ("Don't know how to open this morphology type:"
 					"<br>%s" % type)
 			else:

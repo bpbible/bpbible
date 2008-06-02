@@ -508,45 +508,49 @@ class Index(object):
 		Examples: "gen-mal" -> Old testament Books
 		"matt-john, genesis" -> Genesis and Gospels
 		"matt-twinkle" -> SearchException("Book 'twinkle' not found")"""
+		
+		def lookup_book(item):
+			first = BookName(item)
+
+			if not first:
+				raise SearchException, "Book '%s' not found!" % item
+	
+			for index, book in enumerate(self.books):
+				if BookName(book.bookname) == first:
+					return index
+	
+			raise SearchException, "Book '%s' not found!" % first
+		
+		
 		books=[]
+
 		ranges = searchrange.split(",")
-		for thing in ranges:
-			thisrange = thing.split("-")
-			if(len(thisrange)>2):
-				raise SearchException("Only one dash allowed in '%s'"% thing)
+
+		for item in ranges:
+			thisrange = item.split("-")
+			if len(thisrange) > 2:
+				raise SearchException("Only one dash allowed in '%s'" % item)	
+			
 			if("FOO" == thisrange[0].upper()):
 				#EASTEREGG
 				raise SearchException, "Would that be first or second foo?"
-			first = BookName(thisrange[0])
-			if not first:
-				raise SearchException, "Book '%s' not found!" % thisrange[0]
-	
-			f = -1
-			for index, book in enumerate(self.books):
-				if book.bookname == first:
-					f = index
-					break
-	
-			if f == -1:
-				raise SearchException, "Book '%s' not found!" % first
+
 		
-		
-			if(len(thisrange)==2):
-				last = BookName(thisrange[1])
-				if not last:
-					raise SearchException, "Book '%s' not found!" % thisrange[1]
-					l = -1
-				for index, book in enumerate(self.books):
-					if book.bookname == last:
-						l = index
-						break
-				if l == -1:
-					raise SearchException, "Book '%s' not found!" % last
-			else: l=f
-			if(l<f): l, f = f, l
+			f = lookup_book(thisrange[0])
+
+			if len(thisrange) == 2:
+				l = lookup_book(thisrange[1])
+
+			else: 
+				l = f
+
+			if l < f: 
+				l, f = f, l
+
 			for number in range(f, l+1):
 				if number not in books:
-					books+=[number]
+					books.append(number)
+
 		books = [self.books[x] for x in sorted(books)]
 		return books
 	

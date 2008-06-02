@@ -106,11 +106,13 @@ def is_xp_styled():
 	#	return False
 
 def open_web_browser(href):
-	import webbrowser
-	
-	# Python 2.5+
-	if hasattr(webbrowser, "open_new_tab"):
-		webbrowser.open_new_tab(href)
-	# Python <= 2.4
-	else:
-		webbrowser.open_new(href)
+	# I would use webbrowser, but it doesn't seem to work very well
+	#import webbrowser
+	#
+	## Python 2.5+
+	#if hasattr(webbrowser, "open_new_tab"):
+	#	webbrowser.open_new_tab(href)
+	## Python <= 2.4
+	#else:
+	#	webbrowser.open_new(href)
+	wx.LaunchDefaultBrowser(href)

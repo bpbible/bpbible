@@ -141,6 +141,7 @@ class SearchPanel(xrcSearchPanel):
 	
 	def set_version(self, version):
 		self.version = version
+		
 
 		self.genindex.Enable(version is not None)
 		
@@ -149,6 +150,8 @@ class SearchPanel(xrcSearchPanel):
 			self.check_for_index()
 
 		self.search_label.Label = "0 verses found"
+		self.versepreview.SetReference(None)
+		
 
 		wx.CallAfter(self.clear_list)
 
@@ -306,7 +309,6 @@ class SearchPanel(xrcSearchPanel):
 
 		try:
 			self.stop = False
-			print "Starting search"
 			self.searching = True
 			self.search_button.SetLabel("&Stop")
 			
@@ -329,6 +331,7 @@ class SearchPanel(xrcSearchPanel):
 				pass
 				
 			self.searchkey.Insert(key, 0)
+			self.searchkey.SetSelection(0)
 		
 			self.show_progress_bar()
 		    
@@ -351,7 +354,6 @@ class SearchPanel(xrcSearchPanel):
 
 		finally:
 			self.show_progress_bar(False)
-			print "Stopping search"
 			self.searching = False
 			self.search_button.SetLabel("&Search")
 			
