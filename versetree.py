@@ -33,7 +33,7 @@ class VerseTree(LazyTreeCombo):
 		return isinstance(data, (BookData, ChapterData))
 
 	def format_tree(self, item):
-		return str(self.get_data(item))
+		return "%s" % self.get_data(item)
 	
 	def format_combo(self, item):
 		data = self.get_data(item)
@@ -60,7 +60,7 @@ class VerseTree(LazyTreeCombo):
 		for book in VK.books:
 			if ("%s" % book) == text:
 				was_book = True
-				self.currentverse = str(text)
+				self.currentverse = text
 				break
 		else:
 			try:

@@ -424,6 +424,7 @@ class VerseList(list):
 			return
 
 		if isinstance(args, basestring):
+			orig_args = args
 			args = to_str(args)
 			context = to_str(context)
 			s = args
@@ -434,7 +435,7 @@ class VerseList(list):
 				an = vk.AutoNormalize(0)
 				try:
 					args = vk.ParseVerseList(args, context, expand)
-					self.TestForError(s, context)
+					self.TestForError(s, context, orig_args)
 				finally:
 					vk.AutoNormalize(an)
 					
@@ -451,7 +452,7 @@ class VerseList(list):
 				dprint(WARNING, "Possibly incorrect string. Result is", self)
 
 
-	def TestForError(self, args, context):
+	def TestForError(self, args, context, orig_args):
 		"""Check whether a given referencelist looks good
 		
 		>>> from swlib import pysw
@@ -481,7 +482,7 @@ class VerseList(list):
 		osis_ref = VK.convertToOSIS(args, SW.Key(context))
 		match = re.match(my_re, osis_ref)
 		if not match:
-			raise VerseParsingError, "Invalid Reference: %s" % args
+			raise VerseParsingError, "Invalid Reference: %s" % orig_args
 
 	def RefreshVKs(self, lk, raiseError=False):
 		"""Turns a listkey into a VerseList"""
@@ -879,7 +880,7 @@ def GetVerseStr(verse, context = "", raiseError=False):
 		raiseError=raiseError)
 	if not vklist: 
 		if raiseError:
-			raise VerseParsingError, "Invalid Reference: %s" % verse
+			raise VerseParsingError, u"Invalid Reference: %s" % verse
 		else:
 			return ""
 	

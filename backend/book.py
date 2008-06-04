@@ -294,9 +294,9 @@ class Book(object):
 
 	def GetFootnoteData(self, mod, passage, number, field):
 		if mod != self.mod:
-			if not self.ModuleExists(mod):
-				return None
 			mod = self.parent.get_module(mod)
+			if mod is None:
+				return None
 
 		else:
 			mod = self.mod

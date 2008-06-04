@@ -136,7 +136,7 @@
                                           </object>
                                           <object class="sizeritem">
                                             <object class="wxSpinCtrl" name="proximity">
-                                              <value>10</value>
+                                              <value>15</value>
                                               <min>0</min>
                                               <max>999</max>
                                               <style>wxSP_ARROW_KEYS</style>

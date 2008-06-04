@@ -1,5 +1,5 @@
 from backend import filterutils
-from swlib.pysw import SW
+from swlib.pysw import SW, GetBestRange
 from util.debug import dprint, WARNING
 
 class OSISParser(filterutils.ParserBase):
@@ -9,7 +9,28 @@ class OSISParser(filterutils.ParserBase):
 		
 		self.strongs_bufs = []
 		self.morph_bufs = []
+	
+	def start_reference(self, attributes):
+		attributes = dict(attributes)
+		#TODO check this
+		#TODO check for Bible:Gen.3.5
+		self.ref = attributes["osisref"]
+		idx = self.ref.find(":")
+		if idx != -1:
+			self.ref = self.ref[idx+1:]
+
+		self.u.suspendLevel += 1
+		self.u.suspendTextPassThru = self.u.suspendLevel
+	
+	def end_reference(self):
+		self.u.suspendLevel -= 1
+		self.u.suspendTextPassThru = self.u.suspendLevel
+
+		ref = GetBestRange(self.ref, context=self.u.key.getText(), abbrev=True)
 		
+		self.buf += '<a href="bible:%s">%s</a>' % (
+			ref, self.u.lastTextNode.c_str()
+		)
 	
 	def start_w(self, attributes):
 		self.strongs_bufs = []

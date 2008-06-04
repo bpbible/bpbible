@@ -16,6 +16,7 @@ import guiconfig
 import search
 from search import REGEX, PHRASE, CASESENSITIVE, MULTIWORD, COMBINED
 from search import SearchException, SpellingException, RemoveDuplicates
+from highlighted_frame import HighlightedDisplayFrame
 from swlib.pysw import VK, GetBestRange, Searcher, SWMULTI, SWPHRASE, SWREGEX
 from gui import guiutil
 from util.debug import dprint, WARNING
@@ -183,7 +184,7 @@ class SearchPanel(xrcSearchPanel):
 			self.search_button.Enable()
 			
 		else:
-			self.search_button.Enable()
+			self.search_button.Enable(self.version is not None)
 			
 			self.index = None
 		
@@ -390,12 +391,14 @@ class SearchPanel(xrcSearchPanel):
 			)
 
 		except SearchException, myexcept:
-			wx.MessageBox(unicode(myexcept), "Error in search")
+			wx.MessageBox(myexcept.message, "Error in search")
 			succeeded = False
 
 		except SpellingException, spell:
-			wx.MessageBox("The following words were not found in the module:"
-				"\n%s" % unicode(spell), "Unknown word")
+			wx.MessageBox(
+				"The following words were not found in the module:"
+				"\n%s" % unicode(spell), "Unknown word"
+			)
 			
 			succeeded = False
 
@@ -448,6 +451,10 @@ class SearchPanel(xrcSearchPanel):
 			guiconfig.app.Yield()
 			return not self.stop
 
+		if not biblemgr.bible.mod:
+			wx.CallAfter(self.clear_list)
+			return
+		
 		#Create searcher, and set percent callback to callback
 		self.searcher = Searcher(biblemgr.bible)
 		self.searcher.callback = callback

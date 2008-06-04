@@ -158,7 +158,7 @@ class BibleFrame(VerseKeyedFrame):
 	def random_verse(self):
 		"""Go to a random verse"""
 		randomnum = random.randint(1, 31102)
-		text = VK("Gen 1:"+str(randomnum)).text
+		text = VK("Gen 1:%d" % randomnum).text
 		self.notify(text, source=RANDOM_VERSE)
 	
 	def notify(self, reference, source=BIBLEFRAME):
@@ -269,7 +269,7 @@ class BibleFrame(VerseKeyedFrame):
 		link = cell.GetLink()
 		if(not link):
 			return
-		if(str(link.GetHref())==str(linktext)):
+		if link.GetHref() == linktext:
 			return cell
 
 	def ScrollTo(self, anchor, c):
@@ -332,7 +332,7 @@ class BibleFrame(VerseKeyedFrame):
 	def LinkClicked(self, link, cell):
 		if(self.select): return
 		#cell = link.GetHtmlCell()
-		href = str(link.GetHref())
+		href = link.GetHref()
 		if(href.startswith("#")):
 			string = cell.ConvertToText(None)
 			self.notify(GetVerseStr(string, self.reference),

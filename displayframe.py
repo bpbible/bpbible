@@ -154,6 +154,15 @@ class DisplayFrame(HtmlSelectableWindow):
 		bible = biblemgr.bible
 		dictionary = biblemgr.dictionary
 
+		# set the tooltip's reference to this reference in case there is a
+		# scripture note inside the note
+		# e.g. first note in Matthew 2:1 in calvin's commentaries
+		if not hasattr(frame, "reference"):
+			dprint(WARNING, "Frame didn't have reference", frame)
+			frame.reference = ""
+
+		frame.tooltip.html.reference = frame.reference
+
 		if action == "showStrongs":
 			type = url.getParameterValue("type") #Hebrew or greek
 			value = url.getParameterValue("value") #strongs number
@@ -163,7 +172,8 @@ class DisplayFrame(HtmlSelectableWindow):
 			type = "Strongs"+type #as module is StrongsHebrew
 			tooltipdata = dictionary.GetReferenceFromMod(type, value)
 			if tooltipdata is None:
-				tooltipdata = ("Module %s is not installed, so you cannot view"
+				tooltipdata = ("Module %s is not installed, "
+				"so you cannot view "
 				"details for this strong's number" %type)
 
 			SetText(tooltipdata)
@@ -202,7 +212,9 @@ class DisplayFrame(HtmlSelectableWindow):
 
 			if type == "n":
 				data = bible.GetFootnoteData(module, passage, value, "body")
+				data = data or ""
 				SetText(data)
+
 
 			elif type == "x":
 				#make this plain
@@ -273,7 +285,7 @@ class DisplayFrame(HtmlSelectableWindow):
 
 				#get refs
 				refs = bible.GetReferencesFromMod(module, value, 
-					context = str(frame.reference))
+					context=frame.reference)
 
 				data = "".join(refs)
 

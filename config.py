@@ -72,9 +72,15 @@ sword_paths_file += "sword.conf"
 raw = False
 name = "BPBible"
 
-MODULE_MISSING_STRING= """<b>This module is not set.</b><br>
-This may be because you do not have any of this type of module installed.
-Try going to <code>File > Set SWORD Paths</code> to set the module paths up."""
+MODULE_MISSING_STRING= """<b>This book is not set.</b><br>
+This may be because you do not have any of this type of book installed.
+<p> If you don't have any of this type of book, first download them from <a
+href="http://www.crosswire.org/sword/modules/index.jsp">http://www.crosswire.org/sword/modules/index.jsp</a>.<br>
+Then to install them, either drag them onto BPBible, or go <code>File >
+Install Books...</code> and select the books.
+<p> If you have already have SWORD books installed, go to <code>File >
+Set SWORD Paths</code> and add the path where the books are installed to the book search paths.
+"""
 
 MAX_VERSES_EXCEEDED = """<p><b>[Reference clipped as the maximum verse limit (%d verses) has been exceeded.
 <br>This probably means the reference was invalid]</b>"""

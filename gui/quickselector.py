@@ -50,7 +50,8 @@ class TextPanel(wx.PyPanel):
 		self.Caret.Show()
 	
 	def end_parent_modal(self, event):
-		self.Parent.EndModal(wx.CANCEL)
+		event.Skip()
+		wx.CallAfter(self.Parent.EndModal, wx.CANCEL)
 
 	def on_paint(self, event):
 		dc = wx.PaintDC(self)

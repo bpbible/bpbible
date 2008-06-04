@@ -44,19 +44,21 @@ class BookFrame(DisplayFrame):
 
 	def get_verified_one_verse(self, ref):
 		try:
-			ref = GetVerseStr(ref, self.reference, raiseError=True)
+			ref = GetVerseStr(ref, self.reference, 
+				raiseError=True)
 			return ref
 		
 		except VerseParsingError, e:
-			wx.MessageBox(str(e), config.name)
+			wx.MessageBox(e.message, config.name)
 		
 	def get_verified_multi_verses(self, ref):
 		try:
-			ref = (GetBestRange(ref, self.reference, raiseError=True))
+			ref = GetBestRange(ref, self.reference, 
+				raiseError=True)
 			return ref
 		
 		except VerseParsingError, e:
-			wx.MessageBox(str(e), config.name)	
+			wx.MessageBox(e.message, config.name)	
 		
 
 

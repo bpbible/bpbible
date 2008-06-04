@@ -149,9 +149,9 @@ class BibleInterface(object):
 			f = open(filename)
 			config_parser._read(f, filename)
 		except EnvironmentError:
-			return ["."]
+			return ["resources"]
 
-		data_path = ""
+		data_path = "resources"
 
 		if config_parser.has_option("Install", "DataPath"):
 			data_path = config_parser.get("Install", "DataPath")[0]

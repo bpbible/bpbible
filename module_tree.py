@@ -69,7 +69,10 @@ class ModuleTree(FilterableTree):
 			for module in modules: 
 				tree_item.add_child(module.Name(), data=module)
 
-		self.create()
+		if self.search.Value:
+			self.filter(self.search.Value)
+		else:
+			self.create()
 		
 	def version_tree_tooltip(self, event):
 		item = event.Item

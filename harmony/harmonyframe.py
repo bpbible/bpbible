@@ -252,7 +252,6 @@ class HarmonyPanel(xrcHarmonyPanel):
 			#Just refreshing, not a new verse
 			return self.refresh()
 
-		ref = str(ref)
 		self.currentverse = ref
 		peri = self.harmony.top.find_reference(ref)
 		if not peri:
@@ -416,8 +415,10 @@ class HarmonyPanel(xrcHarmonyPanel):
 				for ref, width in zip(refs, widths):
 					self.status(" Getting reference %s"%ref)
 				
-					ref = BI.biblemgr.bible.GetReference(str(ref))
-					verses += ref
+					ref_text = BI.biblemgr.bible.GetReference(
+						ref.GetBestRange()
+					)
+					verses += ref_text
 					self.status(" /Getting reference")
 					
 				verses += "\t</tr>\n<tr valign=top>\n"

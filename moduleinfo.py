@@ -74,7 +74,7 @@ class ModuleInfo(wx.Dialog):
 			wx.CallAfter(field.SetPage, value)
 			if height == -1:
 				w, height = field.GetTextExtent(value)
-				height += 8
+				height += 12
 			
 			gs.AddGrowableRow(id, height)
 

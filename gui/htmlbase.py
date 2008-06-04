@@ -400,8 +400,6 @@ class HtmlSelectableWindow(HtmlBase):
 		# without links into the final product using the list of deletions 
 
 		dprint(MESSAGE, "ON COPY")
-		if not self.m_selection:
-			return
 
 		# what the html control thinks the selection is
 		# This contains links
@@ -410,6 +408,9 @@ class HtmlSelectableWindow(HtmlBase):
 			guiutil.copy(text2)
 			return
 		
+		if not self.m_selection:
+			return
+			
 		from_cell = self.m_selection.GetFromCell()
 		to_cell = self.m_selection.GetToCell()
 

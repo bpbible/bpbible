@@ -11,7 +11,6 @@ import os
 import re
 import string
 import cPickle
-import collections
 from util.debug import *
 
 #from copy import copy
@@ -467,7 +466,7 @@ class Index(object):
 				for j in range(1, vk.bookCount(i)+1):
 					bookname=vk.bookName(i,j)
 					continuing = progress((bookname, 
-									100*(j+offsets[i])/books))
+									99*(j+offsets[i])/books))
 					if not continuing:
 						raise Cancelled
 					
@@ -488,20 +487,25 @@ class Index(object):
 	def GatherStatistics(self):
 		"""Index.GatherStatistics - Gathers statisitics including ranks,
 		occurrences and wordlists for spellchecking"""
-		idx=collections.defaultdict(lambda:0)
+		#idx=collections.defaultdict(lambda:0)
+		#for book in self.books:
+		#	for a in book.text.lower().split(" "):
+		#		idx[a] += 1
+
+		#b=sorted(idx.iteritems(), key=lambda x:x[1], reverse=True)
+		#self.statistics["occurrences"] = b
+
+		#rank={}
+		#for a1, a in enumerate(b):
+		#	rank[a[0]]=a1
+
+		#self.statistics["rank"]=rank
+		#self.statistics["wordlist"] = rank.keys()
+		wordlist = set()
 		for book in self.books:
-			for a in book.text.lower().split(" "):
-				idx[a] += 1
+			wordlist.update(book.text.lower().split(" "))
 
-		b=sorted(idx.iteritems(), key=lambda x:x[1], reverse=True)
-		self.statistics["occurrences"] = b
-
-		rank={}
-		for a1, a in enumerate(b):
-			rank[a[0]]=a1
-
-		self.statistics["rank"]=rank
-		self.statistics["wordlist"] = rank.keys()
+		self.statistics["wordlist"] = wordlist
 
 	def BookRange(self, searchrange):
 		"""Index.BookRange - Finds all the BookIndexes in the current range
@@ -617,7 +621,7 @@ class Index(object):
 			except re.error, e:
 				raise SearchException(
 					"There seems to be an error in your regular expression.\n"
-					"The error message given was: %r" % str(e)
+					"The error message given was: %s" % e
 				)
 			
 			
@@ -676,7 +680,6 @@ class Index(object):
 		if combined:
 			words, excl, regexes, excl_regexes = self.split_words(words)
 			excludes.extend(excl)
-			excl_regexes.extend(excl)
 
 		elif phrase:
 			words = [words]
@@ -757,7 +760,7 @@ class Index(object):
 		except re.error, e:
 			raise SearchException(
 				"There seems to be an error in your regular expression.\n"
-				"The error message given was: %r" % str(e)
+				"The error message given was: %s" % e
 			)
 				
 		# Do multiword

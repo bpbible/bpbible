@@ -12,7 +12,7 @@ import re
 from util.configmgr import config_manager
 
 from util import osutils
-from util.debug import dprint, TOOLTIP
+from util.debug import dprint, TOOLTIP, WARNING
 
 tooltip_settings = config_manager.add_section("Tooltip")
 
@@ -57,7 +57,9 @@ class TooltipBaseMixin(object):
 			#apply template
 			biblemgr.bible.templatelist.push(template)
 
-			data = "".join(biblemgr.bible.GetReferences(references))
+			data = "".join(
+				biblemgr.bible.GetReferences(references) or [""]
+			)
 
 
 			if(data.endswith("<hr>")):
@@ -72,6 +74,10 @@ class TooltipBaseMixin(object):
 		
 	
 	def show_bible_refs(self, href, url, x, y):
+		# don't show a tooltip if there is no bible
+		if biblemgr.bible.mod is None:
+			return
+
 		self.is_biblical = True
 		if url is None:
 			url = SW.URL(href)
@@ -302,6 +308,13 @@ class Tooltip(TooltipBaseMixin, tooltip_parent):
 
 		new = PermanentTooltip(guiconfig.mainfrm, self.html_type,
 			is_biblical=self.is_biblical)
+
+		if not hasattr(self.html, "reference"):
+			dprint(WARNING, "Tooltip html didn't have reference", frame)
+			self.html.reference = ""
+		
+		# the context of the note
+		new.html.reference = self.html.reference
 		
 		if self.is_biblical:
 			new.set_refs(self.references)
@@ -336,6 +349,10 @@ class Tooltip(TooltipBaseMixin, tooltip_parent):
 		self.wants_to_go_away = True
 		
 		def disappear():
+			# we may have been killed since the timer started...
+			if not self:
+				return
+
 			if self.wants_to_go_away and \
 				self.logical_parent.current_target != self.target:
 				dprint(TOOLTIP, 
@@ -503,9 +520,11 @@ class PermanentTooltip(TooltipBaseMixin, pclass):
 		
 	def set_refs(self, refs):
 		references = []
-		context = str(self.references[-1])
+		context = "%s" % self.references[-1]
 		for ref in refs:
-			new_ref = self.get_verified_multi_verses(str(ref), context)
+			new_ref = self.get_verified_multi_verses(
+				"%s" % ref, context
+			)
 			if new_ref is None:
 				return
 
@@ -533,11 +552,11 @@ class PermanentTooltip(TooltipBaseMixin, pclass):
 
 	def get_verified_multi_verses(self, ref, context):
 		try:
-			ref = str(GetBestRange(ref, context, raiseError=True))
+			ref = GetBestRange(ref, context, raiseError=True)
 			return ref
 		
 		except VerseParsingError, e:
-			wx.MessageBox(str(e), config.name)	
+			wx.MessageBox(e.message, config.name)
 		
 	def toggle_topness(self, evt):
 		styles = [wx.FRAME_FLOAT_ON_PARENT, wx.STAY_ON_TOP]
