@@ -222,7 +222,7 @@ class Book(object):
 			)	
 
 					  
-			headings = self.get_headings(reference)
+			headings = self.get_headings(reference, mod)
 
 			heading_dicts = []
 			for heading in headings:

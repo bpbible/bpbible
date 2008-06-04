@@ -403,6 +403,13 @@ class HtmlSelectableWindow(HtmlBase):
 		if not self.m_selection:
 			return
 
+		# what the html control thinks the selection is
+		# This contains links
+		text2 = self.SelectionToText()
+		if with_links:
+			guiutil.copy(text2)
+			return
+		
 		from_cell = self.m_selection.GetFromCell()
 		to_cell = self.m_selection.GetToCell()
 
@@ -418,6 +425,17 @@ class HtmlSelectableWindow(HtmlBase):
 		i = linkiter(from_cell, to_cell)
 
 		prev = i.m_pos
+
+		# if it starts with a space, kill this. Otherwise, we can run into
+		# nasty problems... (this seems to be a problem with a 
+		# 0 width selection of a space i.e. it's not really selected, but we
+		# think it is)
+		if prev.ConvertToText(None) == " " and \
+			not text2.startswith(" "):
+			
+			if i:
+				i.next()
+
 		while (i):
 			# new block
 			if (not eq(prev.GetParent(), i.m_pos.GetParent())):
@@ -441,14 +459,6 @@ class HtmlSelectableWindow(HtmlBase):
 				faketext += m
 				prev = i.m_pos;
 			i.next();
-
-		# what the html control thinks the selection is
-		# This contains links
-		text2 = self.SelectionToText()
-		if with_links:
-			guiutil.copy(text2)
-			return
-
 
 		c = 0
 		#strip of trailing space

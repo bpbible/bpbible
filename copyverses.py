@@ -193,15 +193,18 @@ class CopyVerseDialog(xrcCopyVerseDialog):
 		Returns True if selection was found, False otherwise.
 		If selection isn't found, first item will be selected"""
 		self.gui_template_list.Clear()
+		found = False
 		for idx, item in enumerate(self.tm.templates):
 			self.gui_template_list.Append(item.name)
 			if item.name == selection:
 				self.gui_template_list.SetSelection(idx)
-				return True
+				found = True
 		
-		# if not found, select the last item
-		self.gui_template_list.SetSelection(0)
-		return False
+		if not found:
+			# if not found, select the last item
+			self.gui_template_list.SetSelection(0)
+		
+		return found
 		
 	def Destroy(self):
 		self.tm.Destroy()

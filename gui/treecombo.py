@@ -135,6 +135,7 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
 
 		expanded = self.tree.IsExpanded(value)
 		has_children = self.tree.ItemHasChildren(value)
+		self.tree.EnsureVisible(value)
 		
 		if key_code == wx.WXK_UP:
 			new_value = self.tree.GetPrevVisible(value)

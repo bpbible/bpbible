@@ -828,14 +828,14 @@ class MainFrame(wx.Frame, AuiLayer):
 		wxversiondata = ", ".join(wx.PlatformInfo[1:])
 		sysversion = sys.version.split()[0]
 		name = config.name
-		text = """Bible study software.
+		text = """Flexible Bible study software.
 			Built Using the Sword Project from crosswire.org
 			Python Version: %(sysversion)s
 			wxPython Version: %(wxversion)s""".expandtabs(0) %locals()
 
 		info = wx.AboutDialogInfo()
 		info.Name = "BPBible"
-		info.Version = "0.2"
+		info.Version = "0.3"
 		info.Description = text#, 350, wx.ClientDC(self))
 		info.WebSite = ("bpbible.googlecode.com", 
 						"BPBible website")
