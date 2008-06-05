@@ -18,7 +18,7 @@ Wild cards allowed:
  * `*` matches zero or more letters
  * `[letters]` will match one of the letters inside the square brackets
  * `\d` will match a single digit. This will match `1` but not `one`
- * `(word, or, word2) will match one of the words in the brackets
+ * `(word, or, word2)` will match one of the words in the brackets
 
 Wild card examples:
  * `foot+` matches any word beginning with foot except foot
