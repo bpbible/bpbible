@@ -19,9 +19,9 @@
 AppName=BPBible
 AppVerName=BPBible 0.3
 AppPublisher=Benjamin Morgan
-AppPublisherURL=http://BPBible.GoogleCode.com/
-AppSupportURL=http://BPBible.GoogleCode.com/
-AppUpdatesURL=http://BPBible.GoogleCode.com/
+AppPublisherURL=http://BPBible.com/
+AppSupportURL=http://BPBible.com/
+AppUpdatesURL=http://BPBible.com/
 AppReadmeFile={app}\README.txt
 AppCopyright=© 2008 Benjamin Morgan
 AppId=BPBible

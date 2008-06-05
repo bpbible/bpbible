@@ -427,7 +427,7 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.Bind(wx.EVT_MENU, id = wx.ID_ABOUT, handler = self.AboutClick)
 		
 		web_links = dict(
-			gui_website="http://bpbible.googlecode.com",
+			gui_website="http://bpbible.com",
 			gui_documentation="http://code.google.com/p/bpbible/w/list",
 			gui_issues="http://code.google.com/p/bpbible/issues/list",
 			gui_books="http://www.crosswire.org/sword/modules/index.jsp"
@@ -840,7 +840,7 @@ class MainFrame(wx.Frame, AuiLayer):
 		info.Name = "BPBible"
 		info.Version = "0.3"
 		info.Description = text#, 350, wx.ClientDC(self))
-		info.WebSite = ("bpbible.googlecode.com", 
+		info.WebSite = ("bpbible.com", 
 						"BPBible website")
 		info.Developers = ["Ben Morgan", "SWORD library developers"]
 		info.Artists = ["Icons used are from famfamfam\n"
