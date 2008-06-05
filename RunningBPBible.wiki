@@ -27,12 +27,13 @@ source code. Instructions on how to build are supplied in the README file in
 that directory.
 
 If you want to install them under Linux, the procedure will probably be:
-`cd package`
-`./configure`
-`make pythonswig`
-`make python_make`
-`cd python`
-`python setup.py install`
-
+{{{
+cd package
+./configure
+make pythonswig
+make python_make
+cd python
+python setup.py install
+}}}
 == Running BPBible ==
 Once the SWIG bindings are installed, unzip the BPBible source. From there, run `python bpbible.py`. 
