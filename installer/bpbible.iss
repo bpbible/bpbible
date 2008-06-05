@@ -85,13 +85,13 @@ end;
 [EndCode]
 
 [Icons]
-Name: "{group}\BPBible"; Filename: "{app}\bpbible.exe"; Comment: "Run BPBible - read the Bible!"
+Name: "{group}\BPBible"; Filename: "{app}\bpbible.exe"; Comment: "Run BPBible - read the Bible!"; WorkingDir: "{app}"
 Name: "{group}\{cm:UninstallProgram,BPBible}"; Filename: "{uninstallexe}"; IconFilename: "{app}\uninstall.ico"; Comment: "Uninstall BPBible"
-Name: "{userdesktop}\BPBible"; Filename: "{app}\bpbible.exe"; Tasks: desktopicon; Comment: "Run BPBible - read the Bible!"
-Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\BPBible"; Filename: "{app}\bpbible.exe"; Tasks: quicklaunchicon; Comment: "Run BPBible - read the Bible!"
+Name: "{userdesktop}\BPBible"; Filename: "{app}\bpbible.exe"; Tasks: desktopicon; Comment: "Run BPBible - read the Bible!"; WorkingDir: "{app}"
+Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\BPBible"; Filename: "{app}\bpbible.exe"; Tasks: quicklaunchicon; Comment: "Run BPBible - read the Bible!"; WorkingDir: "{app}"
 
 [Run]
-Filename: "{app}\bpbible.exe"; Description: "{cm:LaunchProgram,BPBible}"; Flags: nowait postinstall skipifsilent
+Filename: "{app}\bpbible.exe"; Description: "{cm:LaunchProgram,BPBible}"; Flags: nowait postinstall skipifsilent; WorkingDir: "{app}"
 
 [UninstallDelete]
 ;Error log
