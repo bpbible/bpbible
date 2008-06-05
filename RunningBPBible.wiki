@@ -9,7 +9,7 @@ There are two ways to run BPBible:
 Under Windows, you probably want to run the binaries. Under Linux, you need to run from source. Once you have run it, you may want to [InstallingBooks install books].
 
 = Running binaries under Windows =
-To run the binaries under Windows, download the BPBible unstaller (`bpbible-x.x-setup.exe`). For the installer, run it and follow the prompts. Now run bpbible.exe in the application directory, or use the Start Menu, Desktop and Quick Launch shortcuts, if you chose to create them.
+To run the binaries under Windows, download the BPBible installer (`bpbible-x.x-setup.exe`). For the installer, run it and follow the prompts. Now run bpbible.exe in the application directory, or use the Start Menu, Desktop and Quick Launch shortcuts, if you chose to create them.
 
 = Running from source =
 == Dependencies ==
