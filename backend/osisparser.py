@@ -47,6 +47,8 @@ class OSISParser(filterutils.ParserBase):
 		
 			if not lemma.startswith("strong:"):
 				dprint(WARNING, "Could not match lemma", lemma)
+				self.success = SW.INHERITED		
+				
 				return
 			
 			headword = self.get_strongs_headword(lemma[7:])

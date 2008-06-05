@@ -430,6 +430,7 @@ class MainFrame(wx.Frame, AuiLayer):
 			gui_website="http://bpbible.googlecode.com",
 			gui_documentation="http://code.google.com/p/bpbible/w/list",
 			gui_issues="http://code.google.com/p/bpbible/issues/list",
+			gui_books="http://www.crosswire.org/sword/modules/index.jsp"
 		)
 		
 		def weblink_handler(weblink):
@@ -644,7 +645,7 @@ class MainFrame(wx.Frame, AuiLayer):
 		for option, values in options:
 			help_text = biblemgr.get_tip(option)
 		
-			if values == ["Off", "On"]:
+			if set(values) == set(("Off", "On")):
 				item = self.options_menu.AppendCheckItem(
 					wx.ID_ANY, 
 					option, 

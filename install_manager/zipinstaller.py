@@ -219,7 +219,7 @@ class WindowsZipInstaller(ZipInstaller):
 		if segments[0] == "newmods":
 			segments[0] = "mods.d"
 		
-		item = os.path.join(*segments[1:])
+		item = os.path.join(*segments)
 
 		return item
 		

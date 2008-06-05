@@ -113,6 +113,9 @@
         <object class="wxMenuItem" name="gui_issues">
           <label>Report a problem...</label>
         </object>
+        <object class="wxMenuItem" name="gui_books">
+          <label>Download books...</label>
+        </object>
         <object class="separator"/>
         <object class="wxMenuItem" name="wxID_ABOUT">
           <label>_About...</label>

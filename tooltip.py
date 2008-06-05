@@ -310,7 +310,7 @@ class Tooltip(TooltipBaseMixin, tooltip_parent):
 			is_biblical=self.is_biblical)
 
 		if not hasattr(self.html, "reference"):
-			dprint(WARNING, "Tooltip html didn't have reference", frame)
+			dprint(WARNING, "Tooltip html didn't have reference", self.html)
 			self.html.reference = ""
 		
 		# the context of the note
