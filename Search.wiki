@@ -1,9 +1,10 @@
-#summary Searching in BPBible
+﻿#summary Searching in BPBible
 #labels Featured,User-Documentation
 
 = Introduction =
 
-BPBible provides its own searching technology, allowing cross-verse searches. It also allows slower searches, using the SWORD library
+BPBible provides its own searching technology, allowing cross-verse searches.
+It also allows slower searches, using the SWORD library.
 
 = Indexed Searches =
 To run the cross verse search, you will have to index the module beforehand. If you do not index it, you will be restricted to the SWORD searches, which are much slower and do not provide cross-verse searching.
@@ -17,6 +18,7 @@ Wild cards allowed:
  * `*` matches zero or more letters
  * `[letters]` will match one of the letters inside the square brackets
  * `\d` will match a single digit. This will match `1` but not `one`
+ * `(word, or, word2) will match one of the words in the brackets
 
 Wild card examples:
  * `foot+` matches any word beginning with foot except foot
@@ -24,9 +26,13 @@ Wild card examples:
  * `bapti*` matches any word starting with bapti, including baptist and baptize 
  * `b[ai]ll` will match either ball or bill
  * `12\d` will match 120, 121, ..., 129, but will not match 1234
+ * `(humble, humility)` will find all references which have the words humble in, as well as all those with humility in.
+ * `"Son of (God, Man)"` will match the phrase `Son of God`, as well as the phrase `Son of Man`
 
 == Multi Word Searches ==
-Multi Word search will search for words within a certain distance of each other (approximately the proximity). For example, searching for `God love` will find all verses where God is close to love (either before it or after it).
+Multi Word search will search for words within a certain distance of each other (approximately the proximity in words). For example, searching for `God love` will find all verses where God is close to love (either before it or after it).
+
+The default value for proximity is 15 - this means that for this example, God will be within about 15 words or love.
 
 == Phrase searches ==
 Phrase search will search for the given phrase. For example, searching for `Son of man` will match all verses where the three words Son of man occur in a phrase.
@@ -64,7 +70,6 @@ Indexed search supports matches across verse boundaries. One search term can be 
 
 Fill in the dialog as follows:
  * Search Type: Combined
- * Search Proximity: 10 (Search terms to be within approximately 10 words of each other)
  * Find: `"Fruit of the spirit" self-control`
 
 Now click Search.
