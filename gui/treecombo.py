@@ -201,7 +201,7 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
 
 		return self.value
 		
-	def go_up(self):
+	def get_previous(self):
 		item = self.get_value()
 		if not item:
 			return
@@ -215,10 +215,10 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
 			prev = self.tree.GetItemParent(item)
 			if prev == self.tree.GetRootItem():
 				return
+
+		return prev
 	
-		self.set_value(prev)
-	
-	def go_down(self):
+	def get_next(self):
 		item = self.get_value()
 		if not item:
 			return
@@ -242,8 +242,18 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
 			if item == root:
 				return
 			item = self.tree.GetNextSibling(item)
+
+		return item
 	
-		self.set_value(item)
+	def go_up(self):
+		prev = self.get_previous()
+		if prev:
+			self.set_value(prev)
+	
+	def go_down(self):
+		next = self.get_next()
+		if next:
+			self.set_value(next)
 	
 	def SetComboCtrl(self, combo):
 		self.combo = combo

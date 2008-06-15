@@ -1080,7 +1080,5 @@ def printverses(l, index):
 	for a in flatten(l):
 		print "%s: %s\n" % (a, GetVerse(a, index))
 
-
-
-	
-
+if __name__ == '__main__':
+	esv=Index("ESV")

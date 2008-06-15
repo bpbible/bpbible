@@ -12,6 +12,14 @@ class OSISParser(filterutils.ParserBase):
 	
 	def start_reference(self, attributes):
 		attributes = dict(attributes)
+		if "osisref" not in attributes:
+			self.ref = None
+			self.success = SW.INHERITED
+			dprint(WARNING, "No osisref in reference", attributes)
+			
+			return
+			
+
 		#TODO check this
 		#TODO check for Bible:Gen.3.5
 		self.ref = attributes["osisref"]
@@ -23,6 +31,10 @@ class OSISParser(filterutils.ParserBase):
 		self.u.suspendTextPassThru = self.u.suspendLevel
 	
 	def end_reference(self):
+		if self.ref is None:
+			self.success = SW.INHERITED
+			return
+
 		self.u.suspendLevel -= 1
 		self.u.suspendTextPassThru = self.u.suspendLevel
 
@@ -45,13 +57,15 @@ class OSISParser(filterutils.ParserBase):
 		lemmas = attributes["lemma"]
 		for lemma in lemmas.split(" "):
 		
-			if not lemma.startswith("strong:"):
+			if (not lemma.startswith("strong:") and 
+				not lemma.startswith("x-Strongs:") and
+				not lemma.startswith("Strong:")):
 				dprint(WARNING, "Could not match lemma", lemma)
 				self.success = SW.INHERITED		
 				
 				return
 			
-			headword = self.get_strongs_headword(lemma[7:])
+			headword = self.get_strongs_headword(lemma[lemma.index(":")+1:])
 			if not headword:
 				self.success = SW.INHERITED
 				return

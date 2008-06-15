@@ -20,11 +20,6 @@ from backend.filter import MarkupInserter
 from backend.genbook import GenBook
 import config
 
-if util.is_py2exe():
-	# py2exe may get paths wrong
-	if os.path.dirname(sys.argv[0]):
-		os.chdir(os.path.dirname(sys.argv[0]))
-
 class BibleInterface(object):
 	def __init__(self, biblename="ESV", commentaryname="TSK",
 	  		dictionaryname="ISBE", genbook="Josephus"):

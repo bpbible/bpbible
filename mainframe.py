@@ -61,6 +61,8 @@ settings.add_item("bible", "ESV")
 settings.add_item("dictionary", "ISBE")
 settings.add_item("dictref", "")
 settings.add_item("commentary", "TSK")
+settings.add_item("genbook", "Josephus")
+
 settings.add_item("zoom_level", 0)
 settings.add_item("copy_verse", "Default",
 	item_type="pickle")
@@ -273,6 +275,7 @@ class MainFrame(wx.Frame, AuiLayer):
 		set_mod(biblemgr.bible, settings["bible"])
 		set_mod(biblemgr.dictionary, settings["dictionary"])
 		set_mod(biblemgr.commentary, settings["commentary"])
+		set_mod(biblemgr.genbook, settings["genbook"])
 		
 		
 				
@@ -281,6 +284,7 @@ class MainFrame(wx.Frame, AuiLayer):
 		settings["bibleref"] = self.currentverse
 		settings["bible"] = biblemgr.bible.version
 		settings["commentary"] = biblemgr.commentary.version
+		settings["genbook"] = biblemgr.genbook.version
 		settings["dictionary"] = biblemgr.dictionary.version
 
 		settings["options"] = biblemgr.save_state()
@@ -671,7 +675,9 @@ class MainFrame(wx.Frame, AuiLayer):
 					help=help_text)
 				self.Bind(wx.EVT_MENU, self.on_option, item)
 
-		self.options_menu.AppendSeparator()
+		if options:
+			self.options_menu.AppendSeparator()
+
 		strongs_headwords = self.options_menu.AppendCheckItem(
 			wx.ID_ANY,
 			"Use Strong's headwords",

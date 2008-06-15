@@ -4,9 +4,33 @@ from bookframe import BookFrame
 import genbooktree
 from backend.bibleinterface import biblemgr
 from util import util
+from util.debug import dprint, WARNING
+from protocols import protocol_handler
 
 
 import config
+
+def on_genbook_click(frame, href, url):
+	if url is None:
+		url = SW.URL(href)
+	
+	host = url.getHostName()
+
+	if host == "previous":
+		frame.chapter_back()
+
+	elif host == "next":
+		frame.chapter_forward()
+
+	elif host.startswith("parent"):
+		frame.go_to_parent(int(host[6:]))
+	
+	else:
+		dprint(WARNING, "Unknown genbook action", href)
+
+
+protocol_handler.register_handler("genbook", on_genbook_click)
+protocol_handler.register_hover("genbook", util.noop)	 
 
 class GenBookFrame(BookFrame):
 	title="Other Books"
@@ -31,14 +55,52 @@ class GenBookFrame(BookFrame):
 	def SetReference(self, ref, context=None):
 		self.reference = ref
 		if self.book.mod:
+			before = self.genbooktree.get_item(-1)
+			after = self.genbooktree.get_item(1)
+			data = '<table width="100%" VALIGN=CENTER ><tr>'
+			
+			graphics = config.graphics_path
+
+			if before:
+				data += ('<td align="LEFT" valign=CENTER>'
+						 '<a href="genbook:previous">'
+						 '<img src="%(graphics)sgo-previous.png">&nbsp;'
+						 '%(before)s</a></td>'
+				) % locals()
+			else:
+				data += '<td align=LEFT>'+ '&nbsp;'*15 + '</td>'
+						
+
+
 			bref = TK(ref)
+			breadcrumb = ['%s' % bref]
+			item = 0
 
-			breadcrumb = bref.breadcrumb(
-				include_home=self.book.version,
-			)
+			while bref.parent():
+				item += 1
+				breadcrumb.append(
+					'<a href="genbook:parent%d">%s</a>' % (item , bref)
+				)
+			
+			breadcrumb[-1] = self.book.version
 
-			breadcrumb = util.htmlify_unicode(breadcrumb)
-			data = "<b>%s</b><br />" % breadcrumb.replace(">", "&gt;")
+			breadcrumb = [util.htmlify_unicode(b) for b in breadcrumb]
+
+			data += "<td align=CENTER><center><b>%s</b></center></td>" % \
+				" &gt; ".join(reversed(breadcrumb))
+			
+			if after:
+				data += ('<td align="RIGHT" valign=CENTER>'
+						 '<a href="genbook:next">%(after)s&nbsp;'
+						 '<img src="%(graphics)sgo-next.png">'
+						 '</a></td>'
+				) % locals()
+			else:
+				data += '<td align=RIGHT>'+ '&nbsp;'*15 + '</td>'
+
+			data += "</tr></table>\n"
+			
+
 		
 			text = self.book.GetReferenceFromKey(ref, context = context)
 			data += text
@@ -53,22 +115,17 @@ class GenBookFrame(BookFrame):
 
 	def chapter_move(self, amount):
 		mod = self.book.mod
-		if not mod: return
-		key = TK(self.reference)
-		key.Persist(1)
-		#key.setText(self.reference)
-		mod.setKey(key)
-		#while(not ord(self.mod.Error())):
-		#		topics.append(self.mod.getKeyText());
-		mod.increment(amount);
-		#ref = mod.getKeyText()
-		text = key.getText()
-		rootkey = TK(key)
-		rootkey.root()
+		if not mod: 
+			return
 
-		# don't set it to the root
-		if key.getText() != rootkey.getText() or ord(mod.Error()):
-			self.SetReference(key)
+		self.genbooktree.go(amount)
+
+	def go_to_parent(self, amount):
+		mod = self.book.mod
+		if not mod: 
+			return
+
+		self.genbooktree.go_to_parent(amount)
 
 	def get_window(self):
 		return self.genbookpanel

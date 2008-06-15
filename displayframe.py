@@ -282,10 +282,16 @@ class DisplayFrame(HtmlSelectableWindow):
 				biblemgr.bible.templatelist.push(template)
 
 				value = value.split("; ")
+				
+				context = frame.reference
+				
+				# Gen books have references that are really tree keys...
+				if not isinstance(context, basestring):
+					context = "%s" % context
 
 				#get refs
 				refs = bible.GetReferencesFromMod(module, value, 
-					context=frame.reference)
+					context=context)
 
 				data = "".join(refs)
 

@@ -86,6 +86,10 @@ class VerseCompareFrame(LinkedFrame):
 					"%s</a></b></th>" % (BIBLE_VERSION_PROTOCOL, name, name))
 
 		text.append("</tr>")
+		
+		# if we have no bibles to compare, return the empty string
+		if not items:
+			return ""
 
 		rows = []
 		was_clipped = False

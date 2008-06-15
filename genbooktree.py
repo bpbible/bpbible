@@ -57,3 +57,37 @@ class GenBookTree(LazyTreeCombo):
 		#TODO: some unicoding of this
 		# Institutes uses unicode in key strings
 		return self.get_data(item).breadcrumb()
+	
+	def get_item(self, dir):
+		if dir == -1:
+			value = self.popup.get_previous()
+
+		else:
+			value = self.popup.get_next()
+
+		if not value:
+			return None
+
+		return self.popup.tree.GetItemText(value)
+	
+	def go(self, dir):
+		if dir == -1:
+			return self.popup.go_up()
+
+		return self.popup.go_down()
+		
+	def go_to_parent(self, amount):
+		item = self.popup.get_value()
+		if not item:
+			return
+
+		for idx in range(amount):
+			if not item:
+				return
+
+			item = self.popup.tree.GetItemParent(item)
+		
+		self.popup.set_value(item)
+		
+		
+	

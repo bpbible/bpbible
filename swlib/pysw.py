@@ -2,6 +2,7 @@ import swlib.swordlib as SW
 import re
 from util.debug import *
 from util.unicode import to_str, to_unicode
+from util import util
 
 # constants
 REG_ICASE = 1 << 1
@@ -26,6 +27,11 @@ for a in dir(SW):
 	if(a[:2]=="SW"):
 		setattr(SW, a[2:], getattr(SW, a))
 
+
+if util.is_py2exe():
+	# py2exe may get paths wrong
+	if os.path.dirname(sys.argv[0]):
+		os.chdir(os.path.dirname(sys.argv[0]))
 
 # StringMgr handling
 class MyStringMgr(SW.PyStringMgr):
@@ -848,7 +854,7 @@ class TK(SW.TreeKeyIdx):
 		else:
 			del breadcrumb[-1]
 
-		return u" > ".join(breadcrumb[::-1])
+		return " > ".join(breadcrumb[::-1])
 	
 def _test():
 	import doctest
