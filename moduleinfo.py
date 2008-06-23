@@ -7,15 +7,41 @@ from util.unicode import to_unicode_2
 
 def process(info):
 	if not info: return ""
-	# I haven't tested the unicode bits, so it's probably broken
+
 	def uniconvert(object):
 		return unichr(int(object.group(1)))
+	
+	def uniconvert_neg(object):
+		return unichr(int(object.group(1)) + 65536)
 		
+		
+	# take out links
+	info = re.sub(
+		r'<a href([^>]*)>([^<]*)</a>', 
+		"{link \x00\\1\x00\\2\x00}",
+		info
+	)
+
+	# now replace <>
+	info = re.sub("&", "&amp;", info)
+	
+	info = re.sub("<", "&lt;", info)
+	info = re.sub(">", "&gt;", info)
+
+	# put the links back in
+	info = re.sub(
+		"{link \x00([^\x00]*)\x00([^\x00]*)\x00}",
+		r"<a href\1>\2</a>",
+		info
+	)
+
 	info = re.sub(r"\\qc ?(.*?)(\pard|$)", r"<center>\1</center>\2", info)
 	info = re.sub(r"\\pard", "", info)
 	
 	info = re.sub(r"\\par ?", "<br />", info)
 	info = re.sub(r"\\u(\d+)\?", uniconvert, info)
+	info = re.sub(r"\\u(-\d+)\?", uniconvert_neg, info)
+	
 	return info
 
 def try_unicode(text, mod):
@@ -93,7 +119,11 @@ class ModuleInfo(wx.Dialog):
 		config_map = self.module.getConfigMap()
 		
 		items = [
-			(item.c_str(), value.c_str()) for item, value in config_map.items()
+			(
+				item.c_str(), 
+				process(try_unicode(value.c_str(), self.module))
+			) 
+			for item, value in config_map.items()
 		]
 
 		self.variable_items = [(item, value) for item, value in items 

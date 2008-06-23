@@ -44,7 +44,7 @@ class TooltipBaseMixin(object):
 		self.x, self.y = x, y
 	
 #	def SetTransparent(*args):pass
-	def set_biblical_text(self, references):
+	def set_biblical_text(self, references, force=False):
 		try:
 			template = util.VerseTemplate(
 				header = "<a href='nbible:$range'><b>$range</b></a><br>", 
@@ -66,6 +66,11 @@ class TooltipBaseMixin(object):
 				data = data[:-4]
 			
 			self.SetText(data)
+
+			if force:
+				self.html.SetPage(self.text, body_colour=self.colour,
+					text_colour=self.text_colour)
+			
 
 		finally:
 			if tooltip_settings["plain_xrefs"]:
@@ -537,18 +542,15 @@ class PermanentTooltip(TooltipBaseMixin, pclass):
 		self.gui_reference.ChangeValue(reference_strings)
 		self.Title = reference_strings.replace("|", "; ")
 		
-		self.set_biblical_text(self.references)
+		self.set_biblical_text(self.references, force=True)
 		
 	def set_ref(self, reference):
 		references = reference.split("|")
 		return self.set_refs(references)
-		[self.get_verified_multi_verses(str(reference))]
-		self.gui_reference.ChangeValue('|'.join(self.references))
-		self.set_biblical_text(self.references)
 	
 	def bible_ref_changed(self, event):
 		if event.settings_changed:
-			self.set_biblical_text(self.references)
+			self.set_biblical_text(self.references, force=True)
 
 	def get_verified_multi_verses(self, ref, context):
 		try:

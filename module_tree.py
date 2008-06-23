@@ -35,14 +35,12 @@ class ModuleTree(FilterableTree):
 		self.tree.Bind(wx.EVT_TREE_DELETE_ITEM, lambda evt:(evt.Skip(),
 													self.unbind_events()))
 		
-		self.tree.Bind(wx.EVT_TREE_ITEM_GETTOOLTIP, self.version_tree_tooltip)
 		self.tree.Bind(wx.EVT_TREE_ITEM_MENU, self.version_tree_menu)
 	
 	def unbind_events(self):
 		if not super(ModuleTree, self).unbind_events():
 			return
 
-		self.tree.Unbind(wx.EVT_TREE_ITEM_GETTOOLTIP)
 		self.tree.Unbind(wx.EVT_TREE_ITEM_MENU)
 		self.tree.Unbind(wx.EVT_TREE_DELETE_ITEM)
 		
@@ -67,7 +65,10 @@ class ModuleTree(FilterableTree):
 		for tree_item in self.model.children:
 			modules = tree_item.data.GetModules()
 			for module in modules: 
-				tree_item.add_child(module.Name(), data=module)
+				tree_item.add_child("%s - %s" % 
+					(module.Name(), to_unicode(module.Description(), module)),
+					data=module
+				)
 
 		if self.search.Value:
 			self.filter(self.search.Value)

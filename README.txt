@@ -1,7 +1,7 @@
 BPBible
 
 BPBible is a flexible Bible Study tool made using the SWORD project, Python 
-and wxPython. This is the second release of the software, so there are probably a few problems still hanging around.
+and wxPython. This is the third release of the software, so there are probably a few problems still hanging around.
 
 Website: bpbible.com
 
