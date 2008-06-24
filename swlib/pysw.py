@@ -462,15 +462,15 @@ class VerseList(list):
 		"""Check whether a given referencelist looks good
 		
 		>>> from swlib import pysw
-		>>> pysw.VerseList("Gen 3:3-5").TestForError("Gen 3:15", "3")
-		>>> pysw.VerseList("Gen 3:3-5").TestForError("Gen 3:15", "3")		
-		>>> pysw.VerseList("Gen 3:3-5").TestForError("Matt en 3:15", "5")
+		>>> pysw.VerseList("Gen 3:3-5").TestForError("Gen 3:15", "3", "Gen 3:15")
+		>>> pysw.VerseList("Gen 3:3-5").TestForError("Gen 3:15", "3", "Gen 3:15")
+		>>> pysw.VerseList("Gen 3:3-5").TestForError("Matt en 3:15", "5", "Matt en 3:15")
 		Traceback (most recent call last):
 		  File "<stdin>", line 1, in <module>
 		  File "swlib\pysw.py", line 301, in TestForError
 		    raise VerseParsingError, "Invalid Reference: %s" % args
 		VerseParsingError: Invalid Reference: Matt en 3:15
-		>>> pysw.VerseList("Gen 3:3-5").TestForError("Test", "5")
+		>>> pysw.VerseList("Gen 3:3-5").TestForError("Test", "5", "Test")
 		Traceback (most recent call last):
 		  File "<stdin>", line 1, in <module>
 		  File "swlib\pysw.py", line 301, in TestForError
