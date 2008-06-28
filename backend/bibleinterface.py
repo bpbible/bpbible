@@ -4,9 +4,6 @@ bibleinterface.py
 Exposes an interface onto a manager for bibles, commentaries, dictionaries and
 generic books
 """
-import os
-import sys
-
 from swlib.pysw import SW
 
 from backend.book import Bible, Commentary

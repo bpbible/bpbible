@@ -1,5 +1,7 @@
 import swlib.swordlib as SW
+import os
 import re
+import sys
 from util.debug import *
 from util.unicode import to_str, to_unicode
 from util import util
