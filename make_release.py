@@ -6,8 +6,8 @@
 
 import getopt
 import getpass
+import httplib
 import os
-import re
 import sys
 from contrib import googlecode_upload
 
@@ -47,7 +47,7 @@ src_dist = DictWrapper(
 )
 
 installer = DictWrapper(
-	file=os.path.join("installer", "bpbible-%s-setup.zip" % new_version),
+	file=os.path.join("installer", "bpbible-%s-setup.exe" % new_version),
 	summary="BPBible %s installer" % new_version,
 	labels=["Type-Installer", "OpSys-Windows", "Featured"],
 )
@@ -96,7 +96,7 @@ def checkin_release():
 	print "Checking in the changes for the release."
 	os.system("svn ci -m \"Updated version numbers for %(new_version)s.\" %(filenames)s" % globals())
 	print "Tagging the release."
-	os.system("svn cp -m \"Tagged release %(new_version)\""
+	os.system("svn cp -m \"Tagged release %(new_version)s\""
 			" %(svn_trunk)s %(svn_release_tag)s" % globals())
 
 def build_src_dist(zip_file):
@@ -125,7 +125,8 @@ def upload_release():
 
 	print "Uploading the release to Google Code."
 	user_name, password = get_credentials()
-	do_upload(user_name, password, options)
+	do_upload(user_name, password, installer)
+	do_upload(user_name, password, src_dist)
 
 def do_upload(user_name, password, options):
 	status, reason, url = googlecode_upload.upload(options.file, "bpbible", user_name, password,
