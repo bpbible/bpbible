@@ -49,7 +49,7 @@ if(setup(
 			"icon_resources":[(1, "graphics/bpbible.ico")],
             "other_resources": [(24,1,manifest)],
 			"description": "BPBible - Flexible Bible Study",
-        	"version": "0.3",
+        	"version": "0.3.1",
         	"name": "BPBible",
 		}
 	],

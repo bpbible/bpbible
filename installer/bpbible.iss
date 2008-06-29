@@ -4,9 +4,9 @@
 ;    This will compile BPBible for Windows.
 ; 2. Copy gdiplus.dll from the wxWidgets folder (e.g. wx-2.8-msw-unicode\wx\
 ;    gdiplus.dll) to this folder (installer\gdiplus.dll)
-; 3. Update the version number (from 0.3).  Change AppVerName, AppVersion,
+; 3. Update the version number (from 0.3.1).  Change AppVerName, AppVersion,
 ;    VersionInfoTextVersion, VersionInfoVersion and OutputBaseFilename.
-;    In Vim, you can just do :%s/0.3/{new version}/g
+;    In Vim, you can just do :%s/0.3.1/{new version}/g
 ;    NOTE: if you add another number (e.g. 0.2.1) you will need to update
 ;          the VersionInfoVersion line manually
 ; 4. You may need to update any paths that have changed for the
@@ -17,7 +17,7 @@
 
 [Setup]
 AppName=BPBible
-AppVerName=BPBible 0.3
+AppVerName=BPBible 0.3.1
 AppPublisher=Benjamin Morgan
 AppPublisherURL=http://BPBible.com/
 AppSupportURL=http://BPBible.com/
@@ -25,18 +25,18 @@ AppUpdatesURL=http://BPBible.com/
 AppReadmeFile={app}\README.txt
 AppCopyright=© 2008 Benjamin Morgan
 AppId=BPBible
-AppVersion=0.3
+AppVersion=0.3.1
 VersionInfoCompany=BPBible
 VersionInfoCopyright=© 2008 Benjamin Morgan
 VersionInfoDescription=BPBible is a flexible Bible Study tool...
-VersionInfoTextVersion=0.3
-VersionInfoVersion=0.3.0.0
+VersionInfoTextVersion=0.3.1
+VersionInfoVersion=0.3.1.0.0
 DefaultDirName={pf}\BPBible
 DefaultGroupName=BPBible
 AllowNoIcons=yes
 InfoBeforeFile=Info.rtf
 OutputDir=.
-OutputBaseFilename=bpbible-0.3-setup
+OutputBaseFilename=bpbible-0.3.1-setup
 SetupIconFile=..\graphics\bpbible.ico
 SolidCompression=yes
 Compression=lzma/ultra

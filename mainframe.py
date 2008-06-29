@@ -844,7 +844,7 @@ class MainFrame(wx.Frame, AuiLayer):
 
 		info = wx.AboutDialogInfo()
 		info.Name = "BPBible"
-		info.Version = "0.3"
+		info.Version = "0.3.1"
 		info.Description = text#, 350, wx.ClientDC(self))
 		info.WebSite = ("bpbible.com", 
 						"BPBible website")
