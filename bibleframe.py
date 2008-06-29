@@ -43,6 +43,8 @@ class BibleFrame(VerseKeyedFrame):
 		sizer.Add(self, 1, wx.GROW)
 		self.panel.SetSizer(sizer)
 
+		self._do_scroll_to_current = True
+
 	def setup(self):
 		self.observers = ObserverList()
 		super(BibleFrame, self).setup()
@@ -248,9 +250,19 @@ class BibleFrame(VerseKeyedFrame):
 		#file.writelines(data)
 		#file.close()
 		self.update_title()
-		
+
+	def suppress_scrolling(self, function):
+		"""Suppress any scrolling in this frame while the function is called."""
+		self._do_scroll_to_current = False
+		y = self.GetViewStart()[1]
+		function()
+		self.Scroll(-1, y)
+		self._do_scroll_to_current = True
 		
 	def scroll_to_current(self):
+		if not self._do_scroll_to_current:
+			return
+
 		me = self.Find(self.GetInternalRepresentation(), "#current")
 		self.ScrollTo("current", me)
 		
