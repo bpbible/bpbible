@@ -13,17 +13,23 @@ class ReferenceDisplayFrame(DisplayFrameXRC):
 		self.reference = None
 		super(ReferenceDisplayFrame, self).__init__()
 
-	def SetReference(self, reference):
-		"""Sets the reference to be displayed in the view (as a string)."""
+	def SetReference(self, reference, *args, **kwargs):
+		"""Sets the reference to be displayed in the view (as a string).
+		
+		The additional arguments are passed to Bible.GetReference().
+		"""
 		self.reference = reference
-		self.RefreshUI()
+		self._RefreshUI(*args, **kwargs)
 
-	def RefreshUI(self, event=None):
+	def RefreshUI(self, event):
+		self._RefreshUI()
+
+	def _RefreshUI(self, *args, **kwargs):
 		if not self.reference:
 			self.SetPage("")
 			return
 
-		data = biblemgr.bible.GetReference(self.reference)
+		data = biblemgr.bible.GetReference(self.reference, *args, **kwargs)
 		# XXX: This replace should be done for us by the backend Bible
 		# interface (or by Sword itself).
 		data = data.replace("<!P>","</p><p>")
