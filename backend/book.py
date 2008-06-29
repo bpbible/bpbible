@@ -1,5 +1,6 @@
 #from swlib.pysw import *
 import re
+import passage_list
 from swlib.pysw import VK, SW, GetBestRange, GetVerseStr, TOP
 from util.util import PushPopList, VerseTemplate
 from util import observerlist
@@ -106,11 +107,17 @@ class Book(object):
 	
 	def GetReference(self, ref, specialref="",
 			specialtemplate=None, context="", max_verses=176, raw=False,
-			stripped=False, template=None):
+			stripped=False, template=None, display_tags=None,
+			exclude_topic_tag=None):
 		"""GetReference gets a reference from a Book.
 		
 		specialref is a ref (string) which will be specially formatted 
-		according to specialtemplate"""
+		according to specialtemplate.
+
+		exclude_topic_tag: If this is not None, then it is a topic that
+		should not have a tag generated, because it is obvious from the
+		context (for example, the topic window for that topic).
+		"""
 		#only for bible keyed books
 		if not self.mod:
 			return None
@@ -121,6 +128,9 @@ class Book(object):
 			lastverse = context
 		else:
 			lastverse = ""
+
+		if display_tags is None:
+			display_tags = passage_list.settings.display_tags
 	
 		verselist = self.vk.ParseVerseList(to_str(ref), to_str(lastverse), True)
 		rangetext = GetBestRange(verselist.getRangeText())
@@ -141,7 +151,8 @@ class Book(object):
 		
 		
 		for body_dict, headings in self.GetReference_yield(
-			verselist, max_verses, raw, stripped
+			verselist, max_verses, raw, stripped,
+			exclude_topic_tag=exclude_topic_tag,
 		):
 			# if we have exceeded the verse limit, body_dict will be None
 			if body_dict is None:
@@ -161,6 +172,10 @@ class Book(object):
 			
 			verse += t.body.safe_substitute(body_dict)
 
+			# XXX: This should probably fit into the template mechanism.
+			if display_tags:
+				verse += body_dict["tags"]
+
 			verses += verse
 		
 		verses += template.footer.safe_substitute(d)
@@ -168,7 +183,7 @@ class Book(object):
 		
 			
 	def GetReference_yield(self, verselist, max_verses=176, 
-			raw=False, stripped=False, module=None):
+			raw=False, stripped=False, module=None, exclude_topic_tag=None):
 		"""GetReference_yield: 
 			yield the body dictionary and headings dictinoary
 			for each reference.
@@ -211,6 +226,12 @@ class Book(object):
 			else:
 				text = render_text()
 			
+			# XXX: This needs to be done better than this.  Move into
+			# subclass somehow.
+			if isinstance(self, Bible):
+				tags = self.insert_tags(versekey, exclude_topic_tag)
+			else:
+				tags = ""
  
 			body_dict = dict(text=text,
 						  versenumber = versekey.Verse(), 
@@ -219,11 +240,12 @@ class Book(object):
 						  bookabbrev = versekey.getBookAbbrev(),
 						  bookname = versekey.getBookName(),
 						  reference = reference,
+						  tags = tags,
 			)	
 
 					  
 			headings = self.get_headings(reference, mod)
-
+			versekey = VK.castTo(key)
 			heading_dicts = []
 			for heading in headings:
 				if not raw:
@@ -238,6 +260,33 @@ class Book(object):
 			verselist.increment(1)
 			verses_left -= 1
 
+	
+	def insert_tags(self, verse_key, exclude_topic_tag):
+		"""Generates and returns all the passage tags for the given verse."""
+		manager = passage_list.get_primary_passage_list_manager()
+		return "".join(
+				self._insert_tags_for_topic(verse_key, topic, exclude_topic_tag)
+				for topic in manager.subtopics
+			)
+
+	def _insert_tags_for_topic(self, verse_key, topic, exclude_topic_tag):
+		if topic != exclude_topic_tag:
+			result = self._topic_tags(verse_key, topic)
+		else:
+			result = ""
+
+		for subtopic in topic.subtopics:
+			result += self._insert_tags_for_topic(verse_key, subtopic, exclude_topic_tag)
+
+		return result
+	
+	def _topic_tags(self, verse_key, topic):
+		result = ""
+		for passage in topic.passages:
+			if passage.contains_verse(verse_key):
+				result += "<passage_tag topic_id=%d passage_entry_id=%d> &nbsp;" \
+					% (topic.get_id(), passage.get_id())
+		return result
 	
 	def get_headings(self, ref, mod=None):
 		"""Gets an array of the headings for the current verse. Must have just

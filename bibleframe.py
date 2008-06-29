@@ -71,6 +71,14 @@ class BibleFrame(VerseKeyedFrame):
 			
 			(Separator, IN_BOTH),
 			(MenuItem("Search", self.search, accelerator="Ctrl-F"), IN_MENU),
+
+			(Separator, IN_BOTH),
+			# Pick suitably arbitrary accelerators.
+			(MenuItem("Manage Topics", self.manage_passage_lists,
+					accelerator="F9"), IN_BOTH),
+			(MenuItem("Tag verses", self.tag_verses,
+					enabled=self.has_module, accelerator="F7"), IN_BOTH),
+
 			(Separator, IN_MENU),
 				 
 		) + items
@@ -83,6 +91,7 @@ class BibleFrame(VerseKeyedFrame):
 			ord("S"): self.search_quickly,
 			(ord("C"), wx.MOD_CMD|wx.MOD_SHIFT): self.copy_quickly,
 			(ord("T"), wx.MOD_SHIFT): self.tooltip_quickly,
+			ord("T"): self.tag_verses,
 			
 		})
 		return actions
@@ -172,6 +181,17 @@ class BibleFrame(VerseKeyedFrame):
 			title="Search in Bible for:")
 
 		qs.pseudo_modal(self.search_quickly_finished)
+ 
+	def manage_passage_lists(self):
+		"""A docstring."""
+		from passage_list_manager_frame import PassageListManagerFrame
+		frame = PassageListManagerFrame(self)
+		frame.Show()
+
+	def tag_verses(self):
+		"""Tags the currently selected verses."""
+		from tag_passage_dialog import tag_passage
+		tag_passage(self, self.get_quick_selected())
 	
 	def search_quickly_finished(self, qs, ansa):
 		if ansa == wx.OK:

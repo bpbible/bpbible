@@ -1,0 +1,74 @@
+<?xml version="1.0" ?>
+<resource>
+  <object class="wxDialog" name="TopicCreationDialog">
+    <object class="wxBoxSizer">
+      <orient>wxVERTICAL</orient>
+      <object class="sizeritem">
+        <object class="wxFlexGridSizer">
+          <object class="sizeritem">
+            <object class="wxStaticText">
+              <label>&amp;Parent:</label>
+            </object>
+            <flag>wxALIGN_CENTRE_VERTICAL</flag>
+          </object>
+          <object class="sizeritem">
+            <object class="unknown" name="topic_selector"/>
+            <flag>wxGROW</flag>
+            <ratio>1</ratio>
+          </object>
+          <object class="sizeritem">
+            <object class="wxStaticText">
+              <label>&amp;Name: </label>
+            </object>
+            <flag>wxALIGN_CENTRE_VERTICAL</flag>
+            <border>6</border>
+          </object>
+          <object class="sizeritem">
+            <object class="wxTextCtrl" name="name_text"/>
+            <flag>wxGROW</flag>
+            <border>6</border>
+            <ratio>1</ratio>
+          </object>
+          <object class="sizeritem">
+            <object class="wxStaticText">
+              <label>&amp;Description:</label>
+            </object>
+            <border>6</border>
+          </object>
+          <object class="sizeritem">
+            <object class="wxTextCtrl" name="description_text">
+              <style>wxTE_MULTILINE</style>
+            </object>
+            <flag>wxGROW</flag>
+            <border>6</border>
+            <minsize>120</minsize>
+            <ratio>1</ratio>
+          </object>
+          <cols>2</cols>
+          <rows>3</rows>
+          <vgap>6</vgap>
+          <hgap>6</hgap>
+          <growablecols>1</growablecols>
+          <growablerows>2</growablerows>
+        </object>
+        <option>1</option>
+        <flag>wxALL|wxGROW</flag>
+        <border>6</border>
+      </object>
+      <object class="sizeritem">
+        <object class="wxStdDialogButtonSizer">
+          <object class="button">
+            <object class="wxButton" name="wxID_OK"/>
+          </object>
+          <object class="button">
+            <object class="wxButton" name="wxID_CANCEL"/>
+          </object>
+        </object>
+        <flag>wxALL|wxGROW</flag>
+        <border>6</border>
+      </object>
+    </object>
+    <title>Create New Topic</title>
+    <style>wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxRESIZE_BOX|wxDIALOG_MODAL</style>
+  </object>
+</resource>

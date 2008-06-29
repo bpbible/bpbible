@@ -153,12 +153,42 @@ class CheckTagHandler(TagHandler):
 				wx.html.HtmlWidgetCell(obj, floatwidth))
 			
 		return True
+
+from passage_list import lookup_passage_list, lookup_passage_entry
+from gui.passage_tag import PassageTag
+
+class PassageTagHandler(TagHandler):
+	"""This tag handler inserts passage tag widgets for passage tags."""
+	tags = "PASSAGE_TAG"
+
+	def HandleTag2(self, tag):
+		assert tag.HasParam("topic_id")
+		passage_list = lookup_passage_list(
+				int(tag.GetParam("topic_id"))
+			)
+		assert tag.HasParam("passage_entry_id")
+		passage_entry = lookup_passage_entry(
+				int(tag.GetParam("passage_entry_id"))
+			)
+		assert passage_entry in passage_list.passages
+		
+		parser = self.GetParser()
+		parent = parser.GetWindowInterface().GetHTMLWindow()
+		assert parent
+		passage_tag = PassageTag(parent, passage_list, passage_entry)
+		passage_tag.Show(True)
+		
+		floatwidth = 0
+		parser.GetContainer().InsertCell(
+				wx.html.HtmlWidgetCell(passage_tag, floatwidth))
 			
+		return True
 
 wx.html.HtmlWinParser_AddTagHandler(GLinkTagHandler)
 wx.html.HtmlWinParser_AddTagHandler(HighlightedTagHandler)
 wx.html.HtmlWinParser_AddTagHandler(AnchorTagHandler)
 wx.html.HtmlWinParser_AddTagHandler(CheckTagHandler)
+wx.html.HtmlWinParser_AddTagHandler(PassageTagHandler)
 
 
 def get_text_size(base):

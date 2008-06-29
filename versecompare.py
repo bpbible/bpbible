@@ -143,7 +143,9 @@ class VerseCompareFrame(LinkedFrame):
 				if item.Name() in \
 					verse_comparison_settings["comparison_modules"]:
 					self.book.mod = item
-					text += self.book.GetReference(ref)
+					# We exclude tags since otherwise the same tags appear in
+					# every version, which isn't very sensible.
+					text += self.book.GetReference(ref, display_tags=False)
 
 		finally:
 			self.book.mod = mod

@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+<resource>
+  <object class="wxFrame" name="PassageListManagerFrame">
+    <title>Manage Topics</title>
+    <centered>1</centered>
+    <object class="wxSplitterWindow">
+      <object class="wxTreeCtrl" name="tree">
+        <style>wxNO_BORDER|wxTR_EDIT_LABELS|wxTR_HAS_BUTTONS|wxTR_LINES_AT_ROOT</style>
+        <XRCED>
+          <assign_var>1</assign_var>
+        </XRCED>
+      </object>
+      <object class="wxHtmlWindow" name="passage_preview" subclass="gui.reference_display_frame.ReferenceDisplayFrame">
+        <style>wxNO_BORDER</style>
+        <XRCED>
+          <assign_var>1</assign_var>
+        </XRCED>
+      </object>
+      <orientation>horizontal</orientation>
+      <sashpos>320</sashpos>
+    </object>
+  </object>
+</resource>

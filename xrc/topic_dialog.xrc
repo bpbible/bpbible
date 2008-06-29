@@ -1,0 +1,72 @@
+<?xml version="1.0" ?>
+<resource>
+  <object class="wxDialog" name="TopicDialog">
+    <object class="wxBoxSizer">
+      <orient>wxVERTICAL</orient>
+      <object class="sizeritem">
+        <object class="wxFlexGridSizer">
+          <object class="sizeritem">
+            <object class="wxStaticText">
+              <label>&amp;Topic:</label>
+            </object>
+            <flag>wxALIGN_CENTRE_VERTICAL</flag>
+          </object>
+          <object class="sizeritem">
+            <object class="unknown" name="topic_selector"/>
+            <flag>wxGROW</flag>
+            <ratio>1</ratio>
+          </object>
+          <object class="sizeritem">
+            <object class="wxStaticText">
+              <label>&amp;Description:</label>
+            </object>
+            <border>6</border>
+          </object>
+          <object class="sizeritem">
+            <object class="wxTextCtrl" name="description_text">
+              <style>wxTE_MULTILINE</style>
+            </object>
+            <flag>wxGROW</flag>
+            <border>6</border>
+            <minsize>100</minsize>
+            <ratio>1</ratio>
+          </object>
+          <cols>2</cols>
+          <rows>2</rows>
+          <vgap>6</vgap>
+          <hgap>6</hgap>
+          <growablecols>1</growablecols>
+          <growablerows>1</growablerows>
+        </object>
+        <flag>wxALL</flag>
+        <border>6</border>
+        <minsize>200</minsize>
+      </object>
+      <object class="sizeritem">
+        <object class="wxListCtrl" name="passage_list_ctrl">
+          <style>wxLC_REPORT|wxLC_SINGLE_SEL</style>
+          <XRCED>
+            <events>EVT_CHAR</events>
+          </XRCED>
+        </object>
+        <flag>wxALL|wxGROW</flag>
+        <border>6</border>
+        <minsize>150</minsize>
+      </object>
+      <object class="sizeritem">
+        <object class="wxHtmlWindow" name="passage_preview" subclass="gui.reference_display_frame.ReferenceDisplayFrame">
+          <style>wxSTATIC_BORDER</style>
+          <XRCED>
+            <assign_var>1</assign_var>
+          </XRCED>
+        </object>
+        <flag>wxALL|wxGROW</flag>
+        <border>6</border>
+        <minsize>150</minsize>
+      </object>
+    </object>
+    <size>900,900</size>
+    <title>Create New Topic</title>
+    <style>wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxRESIZE_BOX|wxDIALOG_MODAL</style>
+  </object>
+</resource>

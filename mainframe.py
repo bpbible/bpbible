@@ -52,6 +52,7 @@ from events import LOADING_SETTINGS, VERSE_TREE
 from history import History, HistoryTree
 from util.configmgr import config_manager
 from install_manager.install_drop_target import ModuleDropTarget
+import passage_list
 
 settings = config_manager.add_section("BPBible")
 
@@ -689,15 +690,23 @@ class MainFrame(wx.Frame, AuiLayer):
 			"Expand cross-references",
 			"Display cross references partially expanded"
 		)
+
+		display_tags = self.options_menu.AppendCheckItem(
+			wx.ID_ANY,
+			"Topic Tags",
+			"Display the topics that each verse is tagged with."
+		)
 		
 
 		self.Bind(wx.EVT_MENU, self.toggle_headwords, strongs_headwords)
 		self.Bind(wx.EVT_MENU, self.toggle_expand_cross_references, 
 			cross_references)
+		self.Bind(wx.EVT_MENU, self.toggle_display_tags, display_tags)
 		
 		filter_settings = config_manager["Filter"]
 		strongs_headwords.Check(filter_settings["strongs_headwords"])
 		cross_references.Check(filter_settings["footnote_ellipsis_level"])
+		display_tags.Check(passage_list.settings.display_tags)
 	
 	def toggle_headwords(self, event):
 		config_manager["Filter"]["strongs_headwords"] = event.IsChecked()
@@ -709,6 +718,10 @@ class MainFrame(wx.Frame, AuiLayer):
 		filter_settings["footnote_ellipsis_level"] = \
 			event.IsChecked() *	filterutils.default_ellipsis_level
 
+		self.UpdateBibleUI(settings_changed=True, source=SETTINGS_CHANGED)
+
+	def toggle_display_tags(self, event):
+		passage_list.settings.display_tags = event.IsChecked()
 		self.UpdateBibleUI(settings_changed=True, source=SETTINGS_CHANGED)
 		
 
