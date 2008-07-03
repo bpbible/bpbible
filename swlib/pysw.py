@@ -6,6 +6,19 @@ from util.debug import *
 from util.unicode import to_str, to_unicode
 from util import util
 
+def _test():
+	from swlib import pysw
+	import doctest	
+	print doctest.testmod(pysw)
+
+if __name__ == '__main__':
+	_test()
+
+	# don't go any further, or we will crash after creating a versekey after 
+	# the second stringmgr we construct (__main__ and swlib.pysw each have a
+	# stringmgr)
+	sys.exit()
+
 # constants
 REG_ICASE = 1 << 1
 SWMULTI = -2
@@ -61,7 +74,8 @@ class MyStringMgr(SW.PyStringMgr):
 	def supportsUnicode(self):
 		return True
 		
-m=MyStringMgr()
+
+m = MyStringMgr()
 
 # we don't own this, the system string mgr holder does
 m.thisown = False
@@ -76,6 +90,7 @@ if locale_mgr.getLocale("bpbible"):
 	locale_mgr.setDefaultLocaleName("bpbible")
 else:
 	dprint(WARNING, "bpbible locale not found")
+
 
 class VerseParsingError(Exception): pass
 #INEFFICIENT (create a new key always)
@@ -417,6 +432,30 @@ class VerseList(list):
 	VerseList([VK("Genesis 3:1"), VK("Genesis 3:3")])
 	VerseList("3:10-12", "Matthew")
 	VerseList(SW.ListKey()) """
+	REPLACEMENTS = [
+		# Mat. 4v6 -> Mat. 4:6
+		(r"""
+		(\d) # any digit
+		\s*  # some optional whitespace
+		v    # the letter v
+		\s*  # more optional whitespace 
+		(\d) # and then another digit""", r"\1:\2"),
+
+		# Mat. 4 6 -> Mat. 4:6
+		(r"""
+		(?P<word>(			# match a word without numbers or underscore
+			(?=[^\d_])		# following letter is not a digit
+			\w				# but is alphanumeric
+		)+)
+		\s*					# and then possibly whitespace
+		(?P<chapter>\d+)	# digits
+		\s+					# some whitespace
+		(?P<verse>\d+)		# and more digits
+		""", "\g<word> \g<chapter>:\g<verse>")
+	]
+	replacements = [(re.compile(f, flags=re.VERBOSE|re.UNICODE), t) 
+						for f, t in REPLACEMENTS]
+	
 
 	def __init__(self, args=None, context="", expand=True, raiseError=False):
 		converted = False
@@ -433,9 +472,13 @@ class VerseList(list):
 
 		if isinstance(args, basestring):
 			orig_args = args
+			for matcher, replacement in self.replacements:
+				args = matcher.sub(replacement, args)
+			
 			args = to_str(args)
 			context = to_str(context)
 			s = args
+
 			if not raiseError:
 				args = vk.ParseVerseList(args, context, expand)
 
@@ -568,93 +611,162 @@ class VerseList(list):
 
 	def GetBestRange(self, short=False):#text, context=""):
 		"""
-		>>> from swlib import pysw
-		>>> pysw.VerseList("Gen 3:16").GetBestRange()
+		>>> from swlib.pysw import GetBestRange
+		>>> GetBestRange("Gen 3:16")
 		'Genesis 3:16'
-		>>> pysw.VerseList("Gen 3:3-5").GetBestRange()
+		>>> GetBestRange("Gen 3:3-5")
 		'Genesis 3:3-5'
-		>>> pysw.VerseList("Gen 3:16-gen 4:5").GetBestRange()
+		>>> GetBestRange("Gen 3:16-gen 4:5")
 		'Genesis 3:16-4:5'
-		>>> pysw.VerseList("Gen 3-ex5:3").GetBestRange()
+		>>> GetBestRange("Gen 3-ex5:3")
 		'Genesis 3:1-Exodus 5:3'
-		>>> pysw.VerseList("Gen 3-5").GetBestRange()
+		>>> GetBestRange("Gen 3-5")
 		'Genesis 3-5'
-		>>> pysw.VerseList("Gen 3-matt 5").GetBestRange()
+		>>> GetBestRange("Gen 3-matt 5")
 		'Genesis 3-Matthew 5'
-		>>> pysw.VerseList("Gen 3:3-5").GetBestRange(short=True)
+		>>> GetBestRange("Gen 3:3-5", abbrev=True)
 		'Gen 3:3-5'
-		>>> pysw.VerseList("Gen 3-Matt 5").GetBestRange(short=True)
+		>>> GetBestRange("Gen 3-Matt 5", abbrev=True)
 		'Gen 3-Matt 5'
-		>>> pysw.VerseList("Psa 58:0-1").GetBestRange() # a bit of a dodgy case
+		>>> GetBestRange("Psa 58:0-1") # a bit of a dodgy case
 		'Psalms 57:11-58:1'
+		>>> GetBestRange("Matthew 24v27-30,44")
+		'Matthew 24:27-30,44'
+		>>> GetBestRange("Matthew 24 27")
+		'Matthew 24:27'
+		>>> GetBestRange("Matthew 24:27 28")
+		'Matthew 24:27,28'
+		>>> GetBestRange("Genesis 2 ")
+		'Genesis 2'
+		>>> GetBestRange("Genesis 2:3 ")
+		'Genesis 2:3'
+		>>> GetBestRange("Genesis 2 3")
+		'Genesis 2:3'
+		>>> GetBestRange("Matthew 5:3")
+		'Matthew 5:3'
+		>>> GetBestRange("Matthew 5")
+		'Matthew 5'
+		>>> GetBestRange("Genesis 3:5-9, 13-15;17")
+		'Genesis 3:5-9,13-15,17'
+		>>> GetBestRange("Genesis 3:5,8, 13:15")
+		'Genesis 3:5,8;13:15'
+		>>> GetBestRange("Gen 3:15-18, 23;Matt 5:3-8")
+		'Genesis 3:15-18,23;Matthew 5:3-8'
+		>>> GetBestRange("Jude")
+		'Jude 1'
+		>>> GetBestRange("Mark 15:23")
+		'Mark 15:23'
+		>>> GetBestRange("Jude 1:5")
+		'Jude 1:5'
+		>>> GetBestRange("Gen 3:23,24")
+		'Genesis 3:23,24'
+		>>> GetBestRange("Gen 3:23,24;1,5")
+		'Genesis 3:23,24,1,5'
+		>>> GetBestRange("Gen 4:5, Exodus 23:1")
+		'Genesis 4:5;Exodus 23:1'
+		>>> GetBestRange("Gen, Exodus")
+		'Genesis 1-50;Exodus 1-40'
+		>>> # need Genesis to make it a chapter ref
+		... # TODO this could be Genesis 4,5
+		... GetBestRange("Gen 4,5") 
+		'Genesis 4;Genesis 5'
+		>>> # need Genesis to make it a chapter ref	
+		... # TODO this might be done as Genesis 4:1, ch 5?
+		... # TODO this is interpreted by SWORD as verse 5, not chapter 5
+		... GetBestRange("Gen 4:1,Genesis 5")
+		'Genesis 4:1,Genesis 5'
+		>>> GetBestRange("1 Chr 2:5-2 Chr 3:9")
+		'1 Chronicles 2:5-2 Chronicles 3:9'
+		>>> GetBestRange("v5")
+		'Revelation 1:5'
+		>>> GetBestRange("Gen.4.5")
+		'Genesis 4:5'
 		"""
 		
 		def getdetails(versekey):
-			if(short): book = versekey.getBookAbbrev()
-			else: book = versekey.getBookName()
+			if short: 
+				book = versekey.getBookAbbrev()
+			else: 
+				book = versekey.getBookName()
+
 			chapter = versekey.Chapter()
 			verse = versekey.Verse()
+
 			chapter_verses = versekey.verseCount(
 				ord(versekey.Testament()), 
 				ord(versekey.Book()), 
-				chapter)
+				chapter
+			)
+
 			return book, chapter, verse, chapter_verses
 
 		#take details of first and last of each VK
 		l2 = [[getdetails(vk) for vk in (item[0], item[-1])] for item in self]
 				
-		#l2 =map(lambda x:map(lambda y: getdetails(y),(x[0],x[-1])), self)
-
 		# book, chapter, verse
 		lastbook, lastchapter, lastverse = None, None, None
-		range=""
+		range = ""
+
 		for item in l2:
-			(book1, chapter1, verse1, _), (book2, chapter2, verse2, vc2) = item
+			((book1, chapter1, verse1, verse_count1), 
+			 (book2, chapter2, verse2, verse_count2)) = item
 
 			# check whether we have a chapter range
 			# this means that the first verse is verse 1 and the second one is
 			# the last in the chapter
-			if (verse1, verse2) == (1, vc2):
+			if (verse1, verse2) == (1, verse_count2):
 				if not range:
 					separator=""
 				
 				else:
 					separator=";"
 
+				range += separator
+
 				if (book1, chapter1) != (book2, chapter2):
-					range += separator + "%s %d-" % (book1, chapter1)
+					range += "%s %d-" % (book1, chapter1)
 				
 					if book1 != book2:
-						range += separator + "%s %d" % (book2, chapter2)
+						range += "%s %d" % (book2, chapter2)
 					else:
-						range += separator + "%d" % (chapter2)
+						range += "%d" % (chapter2)
 					
 				else:
-					range += separator + "%s %d" % (book2, chapter2)
+					range += "%s %d" % (book2, chapter2)
 				
 				lastbook, lastchapter, lastverse = book2, chapter2, verse2
 				continue
 				
 					
-			for id, (book, chapter, verse, _) in enumerate(item):
+			for idx, (book, chapter, verse, _) in enumerate(item):
+				if (book, chapter, verse) == (lastbook, lastchapter, lastverse):
+					break
+
 				# if we don't have a range, no separator
 				if not range:
-					separator=""
+					separator = ""
 				
 				# if we are the second item in a pair, use a -
-				elif(id):
-					separator="-"
+				elif idx:
+					separator = "-"
 
+				# use comma to separate when in the same chapter				
+				elif (book, chapter) == (lastbook, lastchapter):
+					separator = ","
+				
 				else:
-					separator=";"
-			
-				if(book != lastbook):
-					range += separator + "%s %d:%d" %(book, chapter, verse)
-				elif(chapter != lastchapter):
-					range += separator + "%d:%d" % (chapter, verse)
-				elif(verse != lastverse):
-					if(separator==";"): separator=","
-					range += separator+str(verse)
+					separator = ";"
+				
+				range += separator
+
+				if book != lastbook:
+					range += "%s %d:%d" % (book, chapter, verse)
+
+				elif chapter != lastchapter:
+					range += "%d:%d" % (chapter, verse)
+
+				elif verse != lastverse:
+					range += "%d" % (verse)
 
 				lastbook, lastchapter, lastverse = book, chapter, verse
 			
@@ -858,11 +970,6 @@ class TK(SW.TreeKeyIdx):
 
 		return " > ".join(breadcrumb[::-1])
 	
-def _test():
-	import doctest
-	from swlib import pysw
-	print doctest.testmod(pysw)
-
 
 # -- Utility functions
 def GetVerseTuple(string, context=""):
@@ -985,3 +1092,5 @@ class Searcher(SW.Searcher):
 		if not strings: 
 			return []
 		return strings.split("; ")
+
+
