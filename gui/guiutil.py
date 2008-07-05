@@ -2,6 +2,7 @@ import wx
 import guiconfig
 import config
 from util import osutils
+from util import debug
 
 def toplevel_parent(item):
 	parent = item.Parent
@@ -116,3 +117,13 @@ def open_web_browser(href):
 	#else:
 	#	webbrowser.open_new(href)
 	wx.LaunchDefaultBrowser(href)
+
+def get_screen_rect(point):
+	"""Get the size of the screen the given window is on"""
+	screen = wx.Display.GetFromPoint(point)
+	if screen == wx.NOT_FOUND:
+		debug.dprint(debug.WARNING, "Couldn't find screen for window", window)
+		return wx.Rect()
+	
+	display = wx.Display(screen)
+	return display.GetClientArea()

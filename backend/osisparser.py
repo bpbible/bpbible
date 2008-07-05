@@ -120,6 +120,11 @@ class OSISParser(filterutils.ParserBase):
 					footnoteNumber)
 				self.success = SW.INHERITED
 				return
+
+			if not refs:
+				# if there weren't any references, just do the usual
+				self.success = SW.INHERITED
+				return
 				
 
 			self.u.inXRefNote = True

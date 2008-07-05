@@ -56,6 +56,9 @@ strongs_re = re.compile(r"([HG])(\d+)")
 #get ophelimos from 
 #  5624  ophelimos  o-fel'-ee-mos\n\n\n from a form of 3786; helpful or 
 #serviceable, i.e.\n advantageous:--profit(-able).\n see GREEK for 3786
+
+#TODO?: G5516 chi xi stigma H1021 Beyth hak-Kerem
+#     : G5607, G03588 - multiple words
 word_re = re.compile(r" \d+ +([^ ]+)")
 
 

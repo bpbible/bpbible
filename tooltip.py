@@ -107,7 +107,7 @@ class TooltipBaseMixin(object):
 		self.set_pos(x, y)
 		self.Start()
 		
-	def ShowTooltip(self):
+	def ShowTooltip(self, position=None):
 		"""Show the tooltip near the cursor.
 		
 		The text and target will have already been set, so we can easily get
@@ -134,33 +134,40 @@ class TooltipBaseMixin(object):
 				i.GetHeight() + tooltip_settings["border"])
 
 		self.html.SetDimensions(0, 0, w, h)
+		self.size()
 
 		#find screen width
 		screen_width = wx.SystemSettings.GetMetric(wx.SYS_SCREEN_X)
 		screen_height = wx.SystemSettings.GetMetric(wx.SYS_SCREEN_Y)
 
-		width, height = self.html.GetSize()
+		width, height = self.GetSize()
+		#assert (width, height) == (w, h)
 
 		# pop it up at mouse point
-		self.x, self.y = wx.GetMousePosition()
+		x, y = position or self.get_popup_position()
+		screen_rect = guiutil.get_screen_rect((x, y))
 		
-		# add one so that it's not right under the cursor
-		self.x += 1
-		self.y += 1
-		if(self.x + width > screen_width):
-			self.x = self.x - width - 2
-			if(self.x < 0):
-				self.x = 0
+		if x + width > screen_rect.Right:
+			x = max(screen_rect.Right - width - 2, screen_rect.Left)
 
-		if(self.y + height > screen_height):
-			self.y = self.y - height - 2#- self.GetCharHeight()
-			if(self.y < 0):
-				self.y = 0
+		if y + height > screen_rect.Bottom:
+			# if we moved the x along, try to move the y so it is above
+			if x == screen_rect.Right - width - 2:
+				y = y - height - 2
+			else:
+				y = screen_rect.Bottom - height - 2			
 
-		self.MoveXY(self.x, self.y)
-		self.size()
+			y = max(y, screen_rect.Top)
+
+		self.MoveXY(x, y)
 
 		self.Show()
+	
+	def get_popup_position(self):
+		x, y = wx.GetMousePosition()
+
+		# Add one so that it's not right under the cursor
+		return x + 1, y + 1	
 
 #TODO check how this works under (say) MAC
 tooltip_parent = wx.MiniFrame
@@ -328,7 +335,7 @@ class Tooltip(TooltipBaseMixin, tooltip_parent):
 			new.x, new.y = self.x, self.y
 			new.text = self.text
 
-		new.ShowTooltip()
+		new.ShowTooltip(self.Position)
 		
 		dprint(TOOLTIP, "Stop on permanent popup")
 		self.Stop()
