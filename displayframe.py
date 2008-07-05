@@ -319,9 +319,6 @@ class DisplayFrame(HtmlSelectableWindow):
 		frame.tooltip.show_bible_refs(href, url, screen_x, screen_y)
 
 	def show_tooltip(self, x, y):
-		scrolled_values = self.CalcScrolledPosition(x, y) 
-		screen_x, screen_y = self.ClientToScreen(scrolled_values)
-		self.tooltip.set_pos(screen_x, screen_y)
 		self.tooltip.is_biblical = False
 		self.tooltip.Start()
 

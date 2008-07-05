@@ -44,9 +44,6 @@ def _setup_tooltip(frame, html, x, y):
 	"""
 	frame.tooltip.SetText(html)
 
-	screen_x, screen_y = frame.ClientToScreen((x, y))
-	
-	frame.tooltip.set_pos(screen_x, screen_y)
 	frame.tooltip.is_biblical = False
 	frame.tooltip.Start()
 
