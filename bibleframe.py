@@ -72,14 +72,13 @@ class BibleFrame(VerseKeyedFrame):
 			(Separator, IN_BOTH),
 			(MenuItem("Search", self.search, accelerator="Ctrl-F"), IN_MENU),
 
-			(Separator, IN_BOTH),
-			# Pick suitably arbitrary accelerators.
-			(MenuItem("Manage Topics", self.manage_passage_lists,
-					accelerator="F9"), IN_BOTH),
-			(MenuItem("Tag verses", self.tag_verses,
-					enabled=self.has_module, accelerator="F7"), IN_BOTH),
-
 			(Separator, IN_MENU),
+			# Pick suitably arbitrary accelerators.
+			(MenuItem("Manage Topics", self.manage_passage_lists), IN_BOTH),
+			(MenuItem("Tag verses", self.tag_verses,
+					enabled=self.has_module), IN_BOTH),
+
+			(Separator, IN_BOTH),
 				 
 		) + items
 
