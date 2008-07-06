@@ -44,11 +44,15 @@ def tag_passage(parent, passage):
 
 	This shows the passage tagging dialog (modally), and allows the user to
 	act on it.
+
+	If the topic that the user enters does not exist, then a new topic will
+	be created.
 	"""
 	passage_entry = PassageEntry(passage)
 	dialog = TagPassageDialog(parent, passage_entry)
 	if dialog.ShowModal() == wx.ID_OK:
 		passage_entry.comment = dialog.comment_text.GetValue()
+		dialog.topic_selector.maybe_create_topic_from_text()
 		topic = dialog.topic_selector.selected_topic
 		topic.add_passage(passage_entry)
 		passage_list.settings.last_selected_topic = topic

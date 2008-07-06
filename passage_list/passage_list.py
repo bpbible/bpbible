@@ -71,6 +71,27 @@ class _BasePassageList(object):
 		window.
 		"""
 		return id(self)
+
+	def _find_or_create_topics(self, topics):
+		"""Finds or creates all of the topics in the given list of topics."""
+		assert topics, "Unexpected empty list."
+		if not topics:
+			return None
+
+		topic_name = topics.pop(0)
+		topic = self._find_or_create_topic(topic_name)
+
+		if topics:
+			return topic._find_or_create_topics(topics)
+		else:
+			return topic
+
+	def _find_or_create_topic(self, topic_name):
+		for topic in self.subtopics:
+			if topic.name.lower() == topic_name.lower():
+				return topic
+
+		return self.add_empty_subtopic(topic_name)
 	
 	def __eq__(self, other):
 		try:
@@ -116,6 +137,9 @@ class PassageList(_BasePassageList):
 					and super(PassageList, self).__eq__(other)
 		except:
 			return False
+
+	def __repr__(self):
+		return '<PassageList %s>' % repr(self.name)
 	
 	@staticmethod
 	def create_from_verse_list(name, verse_list, description="", comment=""):
@@ -143,7 +167,6 @@ def _create_passage_list(name, description, passages, subtopics):
 class PassageListManager(_BasePassageList):
 	"""This class provides the root passage list manager.
 
-	This can contain passage lists, but not passages.
 	A passage list manager must be associated with a file name, and the
 	save() method will save the file.
 	"""
@@ -182,6 +205,34 @@ class PassageListManager(_BasePassageList):
 		return []
 
 	path = property(get_path)
+
+	def find_or_create_topic(self, name):
+		"""Finds the topic with the given name.  If it doesn't exist, then
+		this will create it.
+		The search for the topic name is case insensitive.
+
+		If the name is a full name, then it will be handled properly.
+
+		This is used in the tag passage dialog to create a new topic if
+		the user doesn't select an existing topic.
+
+		>>> from passage_list import PassageListManager
+		>>> manager = PassageListManager()
+		>>> manager.find_or_create_topic("topic1")
+		<PassageList 'topic1'>
+		>>> manager.find_or_create_topic("topic2")
+		<PassageList 'topic2'>
+		>>> manager.subtopics
+		[<PassageList 'topic1'>, <PassageList 'topic2'>]
+		>>> manager.find_or_create_topic("topic1 > topic2")
+		<PassageList 'topic2'>
+		>>> manager.find_or_create_topic("Topic1")
+		<PassageList 'topic1'>
+		>>> manager.subtopics[0].subtopics
+		[<PassageList 'topic2'>]
+		"""
+		topics = [topic_name.strip() for topic_name in name.split(">")]
+		return self._find_or_create_topics(topics)
 
 def _create_manager(lists, passages):
 	manager = PassageListManager()
@@ -342,3 +393,7 @@ def lookup_passage_list(id):
 	"""
 	global _passage_list_id_dict
 	return _passage_list_id_dict[id]
+
+if __name__ == "__main__":
+	import doctest, passage_list as p
+	doctest.testmod(p)

@@ -28,6 +28,16 @@ class TopicSelector(wx.TextCtrl):
 		self._bind_events()
 		self.selected_topic = self._manager
 
+	def maybe_create_topic_from_text(self):
+		"""If the text in the text box is not the currently selected topic,
+		then create a new topic with that name.
+		"""
+		text = self.GetValue()
+		if text.lower() == self.selected_topic.full_name.lower():
+			return
+
+		self.selected_topic = self._manager.find_or_create_topic(text)
+
 	def get_selected_topic(self):
 		return self._selected_topic
 
@@ -153,10 +163,6 @@ class TopicSelector(wx.TextCtrl):
 				return
 
 		topic_index = self._topic_list.GetItemData(selection)
-		if topic_index == -1:
-			# Create new topic.
-			return
-			
 		self.selected_topic = self._topics[topic_index][1]
 
 	def _on_focus_got(self, event):
