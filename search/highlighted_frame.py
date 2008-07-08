@@ -230,7 +230,7 @@ class HighlightedDisplayFrame(ReferenceDisplayFrame):
 		self.regexes = []
 		super(HighlightedDisplayFrame, self).__init__()
 
-	def RefreshUI(self, event=None):
+	def _RefreshUI(self):
 		if not self.reference:
 			self.SetPage("")
 			return
