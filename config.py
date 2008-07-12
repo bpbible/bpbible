@@ -13,6 +13,7 @@ xrc_path = "xrc/"
 graphics_path = "graphics/"
 index_path = "./"
 sword_paths_file = "./"
+error_log = "error.log"
 
 """Attempt to override paths with settings in an INI file
 

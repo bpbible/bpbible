@@ -164,3 +164,7 @@ def noop(*args, **kwargs):
 
 def is_py2exe():
 	return hasattr(sys, "frozen")	
+
+def _(string):
+	"""No-op ready for I18N"""
+	return string

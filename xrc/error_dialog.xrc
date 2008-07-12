@@ -1,0 +1,97 @@
+<?xml version="1.0" ?>
+<resource>
+  <object class="wxDialog" name="ErrorDialog">
+    <object class="wxBoxSizer">
+      <orient>wxVERTICAL</orient>
+      <object class="sizeritem">
+        <object class="wxPanel" name="panel">
+          <object class="wxBoxSizer">
+            <orient>wxVERTICAL</orient>
+            <object class="sizeritem">
+              <object class="wxBoxSizer">
+                <object class="sizeritem">
+                  <object class="wxStaticBitmap">
+                    <bitmap stock_id="wxART_ERROR"/>
+                  </object>
+                  <flag>wxRIGHT|wxALIGN_CENTRE_HORIZONTAL</flag>
+                  <border>6</border>
+                </object>
+                <object class="sizeritem">
+                  <object class="wxTextCtrl" name="exception_text">
+                    <style>wxTE_MULTILINE|wxTE_READONLY</style>
+                  </object>
+                  <option>1</option>
+                  <flag>wxRIGHT|wxGROW</flag>
+                  <border>6</border>
+                </object>
+                <object class="sizeritem">
+                  <object class="wxBoxSizer">
+                    <object class="sizeritem">
+                      <object class="wxButton" name="wxID_OK">
+                        <default>1</default>
+                      </object>
+                      <option>0</option>
+                      <flag>wxBOTTOM</flag>
+                      <border>6</border>
+                    </object>
+                    <object class="sizeritem">
+                      <object class="wxButton" name="details_button">
+                        <label>&amp;Details &gt;&gt;</label>
+                      </object>
+                    </object>
+                    <orient>wxVERTICAL</orient>
+                  </object>
+                  <option>0</option>
+                  <flag>wxGROW|wxALIGN_CENTRE</flag>
+                  <border>6</border>
+                </object>
+                <orient>wxHORIZONTAL</orient>
+              </object>
+              <option>1</option>
+              <flag>wxALL|wxGROW</flag>
+              <border>6</border>
+            </object>
+            <object class="sizeritem">
+              <object class="wxBoxSizer">
+                <object class="sizeritem">
+                  <object class="wxCheckBox" name="hide_error">
+                    <label>Don't show this error again</label>
+                  </object>
+                </object>
+                <orient>wxVERTICAL</orient>
+              </object>
+              <flag>wxALL</flag>
+              <border>6</border>
+            </object>
+            <object class="sizeritem">
+              <object class="wxBoxSizer">
+                <object class="sizeritem">
+                  <object class="wxStaticLine"/>
+                  <option>0</option>
+                  <flag>wxBOTTOM|wxGROW</flag>
+                  <border>6</border>
+                </object>
+                <object class="sizeritem">
+                  <object class="wxTextCtrl" name="traceback_text">
+                    <style>wxTE_MULTILINE|wxTE_READONLY</style>
+                  </object>
+                  <option>1</option>
+                  <flag>wxGROW</flag>
+                  <border>0</border>
+                </object>
+                <orient>wxVERTICAL</orient>
+              </object>
+              <option>2</option>
+              <flag>wxBOTTOM|wxLEFT|wxRIGHT|wxGROW</flag>
+              <border>6</border>
+            </object>
+          </object>
+        </object>
+        <option>1</option>
+        <flag>wxGROW|wxALL</flag>
+      </object>
+    </object>
+    <title>Error</title>
+    <style>wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</style>
+  </object>
+</resource>

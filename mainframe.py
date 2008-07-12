@@ -53,6 +53,7 @@ from history import History, HistoryTree
 from util.configmgr import config_manager
 from install_manager.install_drop_target import ModuleDropTarget
 import passage_list
+from error_handling import ErrorDialog
 
 settings = config_manager.add_section("BPBible")
 
@@ -91,6 +92,9 @@ class MainFrame(wx.Frame, AuiLayer):
 		HtmlBase.override_loading_a_page = True
 
 		dprint(MESSAGE, "Setting up")
+	
+		# use this dialog to catch all our errors
+		ErrorDialog(self)
 	
 		guiconfig.mainfrm = self
 		self.toplevels = []
