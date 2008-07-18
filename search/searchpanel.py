@@ -396,7 +396,7 @@ class SearchPanel(xrcSearchPanel):
 
 		except SpellingException, spell:
 			wx.MessageBox(
-				"The following words were not found in the module:"
+				"The following words were not found in this Bible:"
 				"\n%s" % unicode(spell), "Unknown word"
 			)
 			

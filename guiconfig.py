@@ -1,11 +1,4 @@
 import wx
-#import PyAUI as aui
-
-
-from wx import aui
-
-#aui_hint = aui.AUI_MGR_RECTANGLE_HINT
-aui_hint = aui.AUI_MGR_TRANSPARENT_HINT
 
 mainfrm = None
 app = None

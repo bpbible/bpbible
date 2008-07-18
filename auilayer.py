@@ -104,7 +104,7 @@ class AuiLayer(object):
 			aui.AUI_MGR_ALLOW_FLOATING| 
 			aui.AUI_MGR_ALLOW_ACTIVE_PANE|
 			aui.AUI_MGR_NO_VENETIAN_BLINDS_FADE|
-			guiconfig.aui_hint)
+			aui.AUI_MGR_TRANSPARENT_HINT)
 
 
 		self.aui_uses_provider = False
