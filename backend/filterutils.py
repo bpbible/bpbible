@@ -1,6 +1,5 @@
 from swlib import pysw
 from swlib.pysw import SW, BOTTOM
-import sgmllib
 import re
 from util.debug import dprint, ERROR, WARNING
 import traceback
@@ -66,8 +65,7 @@ strongsgreek = strongshebrew = None
 strongs_cache = {}
 registered = False
 
-
-class ParserBase(sgmllib.SGMLParser, object):
+class ParserBase(object):
 	def __init__(self):
 		super(ParserBase, self).__init__()
 		self.token = None
@@ -75,35 +73,31 @@ class ParserBase(sgmllib.SGMLParser, object):
 		self.success = SW.INHERITED
 		self.u = None
 		self.biblemgr = None
-		
-		
 	
-	def init(self, token, userdata, buf = ""):
+	def process(self, token, userdata, buf=""):
 		self.token = token
 		self.buf = buf
 		self.success = SW.INHERITED
 		self.u = userdata
-		self.reset()
-
-	def report_unbalanced(self, tag):
-		method = getattr(self, "end_%s" % tag, None)
-		if method is None:
-			self.unknown_endtag(tag)
-		else: 
-			self.success = SW.SUCCEEDED
-			return method()
-
-	def unknown_starttag(self, tag, attributes): 
-		pass
-
-	def unknown_endtag(self, tag): 
-		pass
 	
-	def handle_starttag(self, tag, method, attributes):
-		self.success = SW.SUCCEEDED
-		method(attributes)
+		tag = SW.XMLTag("<%s>" % token)
+		if tag.isEndTag():
+			method = getattr(self, "end_%s" % tag.getName(), None)
+			if method is not None:
+				self.success = SW.SUCCEEDED		
+				method()
+		else:
+			method = getattr(self, "start_%s" % tag.getName(), None)
+			if method is not None:
+				self.success = SW.SUCCEEDED			
 
-	
+				# TODO: just pass this on, don't convert to dictionary
+				attributes = {}
+				for item in (i.c_str() for i in tag.getAttributeNames()):
+					attributes[item] = tag.getAttribute(item)
+
+				return method(attributes)
+				
 	def get_strongs_headword(self, value):
 		if value in strongs_cache:
 			return strongs_cache[value]

@@ -3,7 +3,7 @@ from swlib.pysw import SW, GetVerseStr, GetBestRange
 from util.debug import dprint, MESSAGE
 
 class ThMLParser(filterutils.ParserBase):
-	def start_scripref(self, attributes):
+	def start_scripRef(self, attributes):
 		if (#self.u.module.Type() ==  "Biblical Texts" or 
 			not	filterutils.filter_settings["expand_thml_refs"]):
 			# we don't do anything here. This may change when I have a module
@@ -11,10 +11,10 @@ class ThMLParser(filterutils.ParserBase):
 			self.success = SW.INHERITED
 			return
 		
-		self.start_tag = dict(attributes)
+		self.start_tag = attributes
 		self.u.suspendTextPassThru = True
 	
-	def end_scripref(self):
+	def end_scripRef(self):
 		if (#self.u.module.Type() ==  "Biblical Texts" or 
 			not	filterutils.filter_settings["expand_thml_refs"]):
 		
@@ -70,7 +70,6 @@ class ThMLParser(filterutils.ParserBase):
 		# This handles strongs numbers
 
 		# <sync type="Strongs" value="G1985" />
-		attributes = dict(attributes)
 		if ("type" not in attributes or attributes["type"]!="Strongs" or 
 			"value" not in attributes or 
 			not filterutils.filter_settings["strongs_headwords"]):
@@ -96,8 +95,7 @@ class THMLRenderer(SW.RenderCallback):
 		if not filterutils.filter_settings["use_thml_parser"]: 
 			return "", SW.INHERITED
 	
-		p.init(token, userdata)
-		p.feed("<%s>" % token)
+		p.process(token, userdata)
 
 		return p.buf, p.success	
 

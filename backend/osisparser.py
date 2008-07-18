@@ -11,7 +11,6 @@ class OSISParser(filterutils.ParserBase):
 		self.morph_bufs = []
 	
 	def start_reference(self, attributes):
-		attributes = dict(attributes)
 		if "osisref" not in attributes:
 			self.ref = None
 			self.success = SW.INHERITED
@@ -47,7 +46,6 @@ class OSISParser(filterutils.ParserBase):
 	def start_w(self, attributes):
 		self.strongs_bufs = []
 		# w lemma="strong:H03050" wn="008"
-		attributes = dict(attributes)
 	
 		if ("lemma" not in attributes or self.u.suspendTextPassThru or 
 			not	filterutils.filter_settings["strongs_headwords"]):
@@ -99,16 +97,15 @@ class OSISParser(filterutils.ParserBase):
 		self.success = SW.INHERITED
 		
 	def start_note(self, attributes):
-		attributes = dict(attributes)
 		self.did_xref = False
 		
 	
-		if "type" not in attributes or "swordfootnote" not in attributes:
+		if "type" not in attributes or "swordFootnote" not in attributes:
 			self.success = SW.INHERITED
 		
 		elif(attributes["type"] in ("crossReference", "x-cross-ref") and
 				filterutils.filter_settings["footnote_ellipsis_level"]):
-			footnoteNumber = attributes["swordfootnote"]
+			footnoteNumber = attributes["swordFootnote"]
 			footnotes = SW.Buf("Footnote")			
 			refList = SW.Buf("refList")
 			number = SW.Buf(footnoteNumber)
@@ -170,8 +167,7 @@ class OSISRenderer(SW.RenderCallback):
 			return "", SW.INHERITED
 	
 		# w lemma="strong:H03050" wn="008"		
-		p.init(token, u)
-		p.feed("<%s>" % token)
+		p.process(token, u)
 		return p.buf, p.success
 
 	def set_biblemgr(self, biblemgr):
