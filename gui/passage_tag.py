@@ -3,13 +3,15 @@ import guiconfig
 from protocols import protocol_handler
 from topic_dialog import TopicDialog
 from passage_list import lookup_passage_list
+from tooltip import TooltipConfig
 
 TAG_COLOUR = (255, 0, 0)
 
 def on_passage_tag_hover(frame, href, url, x, y):
 	passage_list = _get_passage_list_from_href(href)
-	html = _passage_list_html(passage_list)
-	_setup_tooltip(frame, html, x, y)
+
+	frame.tooltip.tooltip_config = TopicTooltipConfig(passage_list)
+	frame.tooltip.Start()
 
 def _get_passage_list_from_href(href):
 	"""Gets the passage list corresponding to the given passage tag HREF."""
@@ -19,32 +21,33 @@ def _get_passage_list_from_href(href):
 	passage_list_id = int(href_parts[1])
 	return lookup_passage_list(passage_list_id)
 
-def _passage_list_html(passage_list):
-	"""Gets the HTML for the given passage list."""
-	html = ""
-	description = passage_list.description.replace("\n", "<br>")
-	if description:
-		html = "<p>%s</p>" % description
-	passage_html = "<br>".join(_passage_entry_html(passage_entry)
-			for passage_entry in passage_list.passages)
-	html += "<p>%s</p>" % passage_html
-	
-	return html
+class TopicTooltipConfig(TooltipConfig):
+	def __init__(self, topic):
+		super(TopicTooltipConfig, self).__init__()
+		self.topic = topic
 
-def _passage_entry_html(passage_entry):
-	"""Gets the HTML for the given passage entry with its comment."""
-	comment = passage_entry.comment.replace("\n", "<br>")
-	reference = str(passage_entry)
-	return "<b><a href=\"bible:%(reference)s\">%(reference)s</a></b> " \
-		"%(comment)s" % locals()
-	
-def _setup_tooltip(frame, html, x, y):
-	"""Sets up the tooltip for the frame at the given location and with
-	the given HTML.
-	"""
-	frame.tooltip.SetText(html)
+	def get_title(self):
+		return self.topic.full_name
 
-	frame.tooltip.Start()
+	def get_text(self):
+		html = ""
+		description = self.topic.description.replace("\n", "<br>")
+		if description:
+			html = "<p>%s</p>" % description
+
+		passage_html = "<br>".join(self._passage_entry_text(passage_entry)
+				for passage_entry in self.topic.passages)
+		if passage_html:
+			html += "<p>%s</p>" % passage_html
+	
+		return html
+
+	def _passage_entry_text(self, passage_entry):
+		"""Gets the HTML for the given passage entry with its comment."""
+		comment = passage_entry.comment.replace("\n", "<br>")
+		reference = str(passage_entry)
+		return "<b><a href=\"bible:%(reference)s\">%(reference)s</a></b> " \
+			"%(comment)s" % locals()
 
 protocol_handler.register_hover("passage_tag", on_passage_tag_hover)
 

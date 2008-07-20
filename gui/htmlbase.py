@@ -155,7 +155,6 @@ class CheckTagHandler(TagHandler):
 		return True
 
 from passage_list import lookup_passage_list, lookup_passage_entry
-from gui.passage_tag import PassageTag
 
 class PassageTagHandler(TagHandler):
 	"""This tag handler inserts passage tag widgets for passage tags."""
@@ -175,6 +174,7 @@ class PassageTagHandler(TagHandler):
 		parser = self.GetParser()
 		parent = parser.GetWindowInterface().GetHTMLWindow()
 		assert parent
+		from gui.passage_tag import PassageTag
 		passage_tag = PassageTag(parent, passage_list, passage_entry)
 		passage_tag.Show(True)
 		
