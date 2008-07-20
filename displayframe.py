@@ -319,7 +319,6 @@ class DisplayFrame(HtmlSelectableWindow):
 		frame.tooltip.show_bible_refs(href, url, screen_x, screen_y)
 
 	def show_tooltip(self, x, y):
-		self.tooltip.is_biblical = False
 		self.tooltip.Start()
 
 	def OnCellMouseLeave(self, cell, x, y):

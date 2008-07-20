@@ -2,7 +2,7 @@ import wx
 from wx import html
 from displayframe import DisplayFrame
 from displayframe import IN_BOTH
-from tooltip import PermanentTooltip
+from tooltip import BiblicalPermanentTooltip
 import versetree
 
 
@@ -173,10 +173,8 @@ class BookFrame(DisplayFrame):
 		qs.pseudo_modal(self.go_quickly_finished)
 	
 	def open_tooltip(self, ref):
-		tooltip = PermanentTooltip(guiconfig.mainfrm,
-			html_type=DisplayFrame, is_biblical=True,)
-			
-		tooltip.set_ref(ref)
+		tooltip = BiblicalPermanentTooltip(guiconfig.mainfrm, ref=ref)
+
 		tooltip.ShowTooltip()
 	
 	def go_quickly_finished(self, qs, ansa):

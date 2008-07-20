@@ -44,7 +44,6 @@ def _setup_tooltip(frame, html, x, y):
 	"""
 	frame.tooltip.SetText(html)
 
-	frame.tooltip.is_biblical = False
 	frame.tooltip.Start()
 
 protocol_handler.register_hover("passage_tag", on_passage_tag_hover)

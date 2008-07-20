@@ -27,7 +27,6 @@ def on_headings_hover(frame, href, url, x, y):
 	
 	frame.tooltip.SetText(html)
 
-	frame.tooltip.is_biblical = False
 	frame.tooltip.Start()
 
 protocol_handler.register_hover("headings", on_headings_hover)

@@ -24,75 +24,56 @@ class TooltipBaseMixin(object):
 		self.text = None
 		self.target = None
 		self.new_target = None
-
+		self._tooltip_config = None
 		
-		self.is_biblical = kwargs.pop("is_biblical", False)
-		self.references = [""]
+		tooltip_config = kwargs.pop("tooltip_config", TooltipConfig())
 		
 		super(TooltipBaseMixin, self).__init__(*args, **kwargs)
 
-	def SetText(self, text):
-		# remove trailing new lines
-		text = re.sub("(<br[^>]*>\s*)*$", "", text)
-
-		self.text = text
-
-	def set_biblical_text(self, references, force=False):
-		try:
-			template = util.VerseTemplate(
-				header = "<a href='nbible:$range'><b>$range</b></a><br>", 
-				body = "<font color='blue'><sup><small>$versenumber"
-				"</small></sup></font> $text ", 
-				footer = "<hr>")
-			#no footnotes
-			if tooltip_settings["plain_xrefs"]:
-				biblemgr.temporary_state(biblemgr.plainstate)
-			#apply template
-			biblemgr.bible.templatelist.push(template)
-
-			data = "".join(biblemgr.bible.GetReferences(references) or [])
-
-			if(data.endswith("<hr>")):
-				data = data[:-4]
-			
-			self.SetText(data)
-
-			if force:
-				self.html.SetPage(self.text, body_colour=self.colour,
-					text_colour=self.text_colour)
-			
-
-		finally:
-			if tooltip_settings["plain_xrefs"]:
-				biblemgr.restore_state()
-			biblemgr.bible.templatelist.pop()
-		
+		self.set_tooltip_config(tooltip_config, update=False)
+		self.references = [""]
 	
 	def show_bible_refs(self, href, url, x, y):
 		# don't show a tooltip if there is no bible
 		if biblemgr.bible.mod is None:
 			return
 
-		self.is_biblical = True
 		if url is None:
 			url = SW.URL(href)
 
 		ref = url.getHostName()
 		if ref:
-			self.references = [ref]
+			references = [ref]
 		else:
 			values = url.getParameterValue("values")
 			if not values:
 				return
 
-			self.references = [
+			references = [
 				url.getParameterValue("val%s" % value)
 				for value in range(int(values))
 			]
 
-		self.set_biblical_text(self.references)
+		self.tooltip_config = BibleTooltipConfig(references)
 
 		self.Start()
+
+	def update_text(self, force=True):
+		self._SetText(self.tooltip_config.get_text())
+
+		if force:
+			self.html.SetPage(self.text, body_colour=self.colour,
+				text_colour=self.text_colour)
+
+	def SetText(self, text):
+		self.tooltip_config = TextTooltipConfig(text)
+		self.update_text(False)
+
+	def _SetText(self, text):
+		# remove trailing new lines
+		text = re.sub("(<br[^>]*>\s*)*$", "", text)
+
+		self.text = text
 		
 	def ShowTooltip(self, position=None):
 		"""Show the tooltip near the cursor.
@@ -152,6 +133,16 @@ class TooltipBaseMixin(object):
 
 		# Add one so that it's not right under the cursor
 		return x + 1, y + 1	
+
+	def get_tooltip_config(self):
+		return self._tooltip_config
+
+	def set_tooltip_config(self, tooltip_config, update=False):
+		self._tooltip_config = tooltip_config
+		self._tooltip_config.tooltip = self
+		self.update_text(force=update)
+
+	tooltip_config = property(get_tooltip_config, set_tooltip_config)
 
 #TODO check how this works under (say) MAC
 tooltip_parent = wx.MiniFrame
@@ -274,7 +265,7 @@ class Tooltip(TooltipBaseMixin, tooltip_parent):
 
 	def stay_on_top(self, evt):
 		new = PermanentTooltip(guiconfig.mainfrm, self.html_type,
-			is_biblical=self.is_biblical)
+			tooltip_config=self.tooltip_config,)
 
 		if not hasattr(self.html, "reference"):
 			dprint(WARNING, "Tooltip html didn't have reference", self.html)
@@ -282,12 +273,6 @@ class Tooltip(TooltipBaseMixin, tooltip_parent):
 		
 		# the context of the note
 		new.html.reference = self.html.reference
-		
-		if self.is_biblical:
-			new.set_refs(self.references)
-		else:
-			#new.html.bibleframe=self.html.bibleframe
-			new.text = self.text
 
 		new.ShowTooltip(self.Position)
 		
@@ -377,13 +362,13 @@ class PermanentTooltip(TooltipBaseMixin, pclass):
 	"""A permanent tooltip with some HTML in it."""
 	def __init__(self, parent, html_type, 
 		style=wx.DEFAULT_FRAME_STYLE & ~(wx.MAXIMIZE_BOX), 
-			is_biblical=False):
+			tooltip_config=None):
 
 		super(PermanentTooltip, self).__init__(
 			parent, 
 			title="Sticky Tooltip", 
 			style=style|wx.STAY_ON_TOP|wx.MINIMIZE_BOX , 
-			is_biblical=is_biblical
+			tooltip_config=tooltip_config
 		) 
 
 		self.style = style
@@ -397,27 +382,10 @@ class PermanentTooltip(TooltipBaseMixin, pclass):
 		self.toolbar = wx.ToolBar(self.buttonpanel,
 			style=wx.TB_FLAT|wx.TB_NODIVIDER|wx.TB_HORZ_TEXT)
 		
-		if self.is_biblical:
-			self.gui_reference = wx.TextCtrl(self.toolbar,
-					style=wx.TE_PROCESS_ENTER, size=(140, -1))
-			
-			self.toolbar.AddControl(self.gui_reference)
-			
-			self.gui_reference.Bind(wx.EVT_TEXT_ENTER, 
-				lambda x:self.set_ref(self.gui_reference.Value))
+		self.Bind(wx.EVT_CLOSE, self.on_close)
 
-			guiconfig.mainfrm.bible_observers += self.bible_ref_changed
-			self.Bind(wx.EVT_CLOSE, self.on_close)
-			self.gui_go = self.toolbar.AddLabelTool(wx.ID_ANY,  
-				"Go to verses",
-				guiutil.bmp("accept.png"),
-				shortHelp="Open this reference")
-
+		if self.tooltip_config.add_to_toolbar(self.toolbar):
 			self.toolbar.AddSeparator()
-			self.toolbar.Bind(wx.EVT_TOOL, 
-				lambda x:self.set_ref(self.gui_reference.Value), 
-				id=self.gui_go.Id
-			)
 
 		self.gui_anchor = self.toolbar.AddLabelTool(wx.ID_ANY,  
 			"Stay on top",
@@ -454,52 +422,22 @@ class PermanentTooltip(TooltipBaseMixin, pclass):
 				
 		# set icon
 		self.SetIcons(guiconfig.icons)
+
+		# Set the text
+		self.update_text()
 		
 		# non gui stuff
 		self.parent = parent
 		self.stayontop = True
 
+	def update_text(self, force=True):
+		super(PermanentTooltip, self).update_text(force=force)
+		self.Title = self.tooltip_config.get_title()
+
 	def on_close(self, event):
-		guiconfig.mainfrm.bible_observers -= self.bible_ref_changed
+		self.tooltip_config.on_close()
 		self.Destroy()
-		
-	def set_refs(self, refs):
-		references = []
-		context = "%s" % self.references[-1]
-		for ref in refs:
-			new_ref = self.get_verified_multi_verses(
-				"%s" % ref, context
-			)
-			if new_ref is None:
-				return
 
-			context = new_ref
-			references.append(new_ref)
-
-		self.references = references
-
-		reference_strings = '|'.join(self.references)
-		self.gui_reference.ChangeValue(reference_strings)
-		self.Title = reference_strings.replace("|", "; ")
-		
-		self.set_biblical_text(self.references, force=True)
-		
-	def set_ref(self, reference):
-		references = reference.split("|")
-		return self.set_refs(references)
-	
-	def bible_ref_changed(self, event):
-		if event.settings_changed:
-			self.set_biblical_text(self.references, force=True)
-
-	def get_verified_multi_verses(self, ref, context):
-		try:
-			ref = GetBestRange(ref, context, raiseError=True)
-			return ref
-		
-		except VerseParsingError, e:
-			wx.MessageBox(e.message, config.name)
-		
 	def toggle_topness(self, evt):
 		styles = [wx.FRAME_FLOAT_ON_PARENT, wx.STAY_ON_TOP]
 		self.stayontop = not(self.stayontop)
@@ -521,3 +459,149 @@ class PermanentTooltip(TooltipBaseMixin, pclass):
 		
 		# and set our size
 		self.ClientSize = w, h
+
+def BiblicalPermanentTooltip(parent, ref):
+	"""Creates a Biblical permanent tooltip, open to the given ref."""
+	tooltip_config = BibleTooltipConfig()
+	tooltip_config.set_ref(ref)
+	from displayframe import DisplayFrame
+	return PermanentTooltip(parent, html_type=DisplayFrame,
+			tooltip_config=tooltip_config)
+
+class TooltipConfig(object):
+	def __init__(self):
+		self.tooltip = None
+
+	def tooltip_changed(self):
+		if self.tooltip:
+			self.tooltip.update_text()
+
+	def add_to_toolbar(self, toolbar):
+		"""Called to add things to the toolbar (if anything is needed to be
+		added).
+		
+		This should return True if any items were added to the toolbar.
+		"""
+		return False
+
+	def on_close(self):
+		"""Called when the tooltip is closed."""
+
+	def get_title(self):
+		"""Gets the title to be used on a sticky tooltip."""
+		return "Sticky Tooltip"
+
+	def get_text(self):
+		"""Returns the actual text to be used for the tooltip."""
+		return ""
+
+class TextTooltipConfig(TooltipConfig):
+	def __init__(self, text):
+		super(TextTooltipConfig, self).__init__()
+		self.text = text
+
+	def get_text(self):
+		"""Returns the actual text to be used for the tooltip."""
+		return self.text
+
+class BibleTooltipConfig(TooltipConfig):
+	def __init__(self, references=None):
+		super(BibleTooltipConfig, self).__init__()
+		self.references = references
+		self.gui_reference = None
+
+	def add_to_toolbar(self, toolbar):
+		self.gui_reference = wx.TextCtrl(toolbar,
+				style=wx.TE_PROCESS_ENTER, size=(140, -1))
+
+		self.set_refs(self.references, update=False)
+
+		toolbar.AddControl(self.gui_reference)
+		
+		self.gui_reference.Bind(wx.EVT_TEXT_ENTER, 
+			lambda x:self.set_ref(self.gui_reference.Value))
+
+		guiconfig.mainfrm.bible_observers += self.bible_ref_changed
+		self.gui_go = toolbar.AddLabelTool(wx.ID_ANY,  
+			"Go to verses",
+			guiutil.bmp("accept.png"),
+			shortHelp="Open this reference"
+		)
+
+		toolbar.Bind(wx.EVT_TOOL, 
+			lambda x:self.set_ref(self.gui_reference.Value), 
+			id=self.gui_go.Id
+		)
+
+		return True
+
+	def on_close(self):
+		guiconfig.mainfrm.bible_observers -= self.bible_ref_changed
+
+	def get_title(self):
+		return "; ".join(self.references)
+
+	def get_text(self):
+		try:
+			template = util.VerseTemplate(
+				header = "<a href='nbible:$range'><b>$range</b></a><br>", 
+				body = "<font color='blue'><sup><small>$versenumber"
+				"</small></sup></font> $text ", 
+				footer = "<hr>")
+			#no footnotes
+			if tooltip_settings["plain_xrefs"]:
+				biblemgr.temporary_state(biblemgr.plainstate)
+			#apply template
+			biblemgr.bible.templatelist.push(template)
+
+			text = "".join(biblemgr.bible.GetReferences(self.references) or [])
+
+			if text.endswith("<hr>"):
+				return text[:-4]
+
+		finally:
+			if tooltip_settings["plain_xrefs"]:
+				biblemgr.restore_state()
+			biblemgr.bible.templatelist.pop()
+		
+		
+	def set_ref(self, reference):
+		references = reference.split("|")
+		return self.set_refs(references)
+		
+	def set_refs(self, refs, update=True):
+		references = []
+		try:
+			context = "%s" % self.references[-1]
+		except TypeError:
+			context = ""
+		for ref in refs:
+			new_ref = self.get_verified_multi_verses(
+				"%s" % ref, context
+			)
+			if new_ref is None:
+				return
+
+			context = new_ref
+			references.append(new_ref)
+
+		self.references = references
+
+		reference_strings = '|'.join(self.references)
+		if self.gui_reference:
+			self.gui_reference.ChangeValue(reference_strings)
+		
+		if update:
+			self.tooltip_changed()
+
+	def get_verified_multi_verses(self, ref, context):
+		try:
+			ref = GetBestRange(ref, context, raiseError=True)
+			return ref
+		
+		except VerseParsingError, e:
+			wx.MessageBox(e.message, config.name)
+	
+	def bible_ref_changed(self, event):
+		if event.settings_changed:
+			self.tooltip_changed()
