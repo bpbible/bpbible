@@ -4,7 +4,7 @@ from backend import chapter_headings
 from protocols import protocol_handler
 from displayframe import DisplayFrame
 from gui import guiutil
-from tooltip import Tooltip 
+from tooltip import Tooltip, TooltipConfig
 import guiconfig
 from util.observerlist import ObserverList
 
@@ -15,19 +15,30 @@ def on_headings_hover(frame, href, url, x, y):
 	
 	ref = url.getHostName()
 	ref = pysw.GetBookChapter(ref)
-	html = '<font size=+1><b><a href="nbible:%s">%s</a></b></font>' % (ref,ref)
-	vk = pysw.VK((ref, ref))
-	html += ": %d verses<br>" % len(vk)
-	
-	html += "<ul>"
-	
-	for vk, text in chapter_headings.get_chapter_headings(ref):
-		html += '<li><a href="nbible:%s">%s</a>' % (vk, text)
-	html += "</ul>"
-	
-	frame.tooltip.SetText(html)
+	frame.tooltip.tooltip_config = ChapterHeadingsTooltipConfig(ref)
 
 	frame.tooltip.Start()
+
+class ChapterHeadingsTooltipConfig(TooltipConfig):
+	"""The tooltip configuration for the headings in a chapter."""
+	def __init__(self, ref):
+		self.ref = ref
+
+	def get_text(self):
+		html = '<font size=+1><b><a href="nbible:%s">%s</a></b></font>' % (self.ref, self.ref)
+		vk = pysw.VK((self.ref, self.ref))
+		html += ": %d verses<br>" % len(vk)
+	
+		html += "<ul>"
+		for vk, text in chapter_headings.get_chapter_headings(self.ref):
+			html += '<li><a href="nbible:%s">%s</a>' % (vk, text)
+		html += "</ul>"
+
+		return html
+
+	def get_title(self):
+		return self.ref
+	
 
 protocol_handler.register_hover("headings", on_headings_hover)
 protocol_handler.register_handler("headings", DisplayFrame.on_link_clicked_bible)
