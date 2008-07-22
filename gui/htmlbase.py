@@ -315,6 +315,12 @@ class HtmlBase(wx.html.HtmlWindow):
 			text = text.replace(">", "&gt;")
 			text = text.replace("<", "&lt;")
 			text = text.replace("\n", "<br>\n")
+		else:
+			# apos is valid xml, but not valid html.
+			# Jub seems to use it, and it is valid osis, but the osishtmlhref
+			# filters don't get rid of it
+			text = text.replace("&apos;", "&#39;")
+			
 
 		return super(HtmlBase, self).SetPage(text)
 

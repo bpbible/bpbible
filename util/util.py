@@ -119,6 +119,9 @@ def replace_amp(groups):
 	ent = groups.group('amps')
 	if ent in htmlentitydefs.name2codepoint:
 		return unichr(htmlentitydefs.name2codepoint[ent])
+	
+	if ent == "apos":
+		return "'"
 
 	if ent[0] == "#":
 		try:
