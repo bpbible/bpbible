@@ -55,7 +55,7 @@ class MyApp(wx.App):
 
 
 def main():
-	inspection_imported = True
+	inspection_imported = False
 	try:
 		from wx.lib.mixins.inspect import InspectionMixin
 		inspection_imported = True

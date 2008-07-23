@@ -63,7 +63,6 @@ class ErrorDialog(xrcErrorDialog):
 
 		# if this exception is turned off, return immediately
 		exception_id = self.get_exception_id(type, value, tb)
-		print exception_id
 		if exception_id in errors["errors_to_ignore"]:
 			self.write_to_log(_("Above exception was ignored\n"))
 			return
