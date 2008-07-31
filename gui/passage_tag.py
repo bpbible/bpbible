@@ -2,6 +2,7 @@ import wx
 import guiconfig
 from protocols import protocol_handler
 from topic_dialog import TopicDialog
+from topic_selector import TopicSelector
 from passage_list import lookup_passage_list
 from tooltip import TooltipConfig
 
@@ -28,6 +29,16 @@ class TopicTooltipConfig(TooltipConfig):
 
 	def get_title(self):
 		return self.topic.full_name
+
+	def add_to_toolbar(self, toolbar):
+		self.topic_selector = TopicSelector(toolbar)
+		toolbar.AddControl(self.topic_selector)
+		self.topic_selector.selected_topic = self.topic
+		self.topic_selector.topic_changed_observers += self._change_selected_topic
+
+	def _change_selected_topic(self, new_topic):
+		self.topic = new_topic
+		self.tooltip_changed()
 
 	def get_text(self):
 		html = ""
