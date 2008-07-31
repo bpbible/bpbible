@@ -41,6 +41,8 @@ from util.configmgr import config_manager
 search_config = config_manager.add_section("Search")
 search_config.add_item("disappear_on_doubleclick", True, item_type=bool)
 search_config.add_item("search_type", COMBINED, item_type=int)
+search_config.add_item("past_search_length", 20, item_type=int)
+search_config.add_item("past_searches", [], item_type="pickle")
 
 
 search_items = (COMBINED, MULTIWORD, PHRASE, REGEX, SWMULTI, SWPHRASE, SWREGEX)
@@ -220,6 +222,9 @@ class SearchPanel(xrcSearchPanel):
 				self.search_splitter.ClientSize[1]/2
 		)
 
+		for search_key in search_config["past_searches"]:
+			self.searchkey.Append(search_key)
+
 		font = self.search_label.Font
 		font.SetWeight(wx.FONTWEIGHT_BOLD)
 		self.search_label.Font = font
@@ -333,6 +338,7 @@ class SearchPanel(xrcSearchPanel):
 				
 			self.searchkey.Insert(key, 0)
 			self.searchkey.SetSelection(0)
+			search_config["past_searches"] = self.searchkey.Strings[:search_config["past_search_length"]]
 		
 			self.show_progress_bar()
 		    
