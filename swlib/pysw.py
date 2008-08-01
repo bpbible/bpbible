@@ -892,34 +892,23 @@ del chapter
 class TK(SW.TreeKeyIdx):
 	"""A tree key. As this is module specific, create it from an existing tree
 	key retrieved from the module"""
-	def __init__(self, tk, module=None):
-		tk2 = SW.TreeKey.castTo(tk.clone())
-		tk2 = SW.TreeKeyIdx.castTo(tk2)
-		tk2.thisown = False
 
-		#super(TK, self).__init__(tk2, tk2)
-		
-		#self.this = tk2.this
+	def __init__(self, tk, module=None):
+		# result of tk.clone() is unowned
+		tk2 = SW.TreeKeyIdx.castTo(tk.clone())
+
+		# use the same swig pointer as the other, then kill the other
 		self.this = tk2.this
-		#SW.TreeKeyIdx.__init__(self, tk2)
+		del tk2
+
+		# we own this now
+		self.thisown = True
+		
 		self.tk = self
 		self.module = module
 		if module is None and hasattr(tk, "module"):
 			self.module = tk.module
-		
-		#self.this = tk2
-		
-		#assert tk2, "tk must be a treekey"
 
-		#self.this = tk
-
-#class TK(object):
-#	def __init__(self, tk):
-#		self.tk = SW.TreeKey.castTo(tk.clone())
-#		self.tk = SW.TreeKeyIdx.castTo(self.tk)
-#		if not self.tk:
-#			raise Exception, "tk must be a treekey"
-	
 	def __iter__(self):
 		tk = TK(self.tk)
 		if(tk.firstChild()):
@@ -935,27 +924,6 @@ class TK(SW.TreeKeyIdx):
 	
 	def __getitem__(self, key):
 		return [a for a in self][key]
-
-	def __getattributea__(self, attr):
-		if(attr == "__class__" or attr == "__dict__"):
-			#ORrible ack \/
-			if(attr == "__dict__"): raise AttributeError
-			try:
-				#mine = object.__getattribute__(self, attr)
-				other = getattr(self.tk, attr)
-				#print mine, other
-				return other
-			except Exception, e:
-				print e
-
-		try:
-			return object.__getattribute__(self, attr)
-		except:
-			try:
-				return getattr(self.tk, attr)
-			except:
-				raise AttributeError,attr
-
 
 	def breadcrumb(self, include_home=None):
 		breadcrumb = [unicode(self)]
