@@ -1,4 +1,4 @@
-import swlib.swordlib as SW
+import Sword as SW
 import os
 import re
 import sys

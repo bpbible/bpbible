@@ -1,4 +1,4 @@
-import swlib.swordlib as SW
+from swlib.pysw import SW
 from debug import dprint, WARNING
 from util import get_traceback
 
