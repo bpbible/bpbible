@@ -77,6 +77,8 @@ class DisplayFrame(HtmlSelectableWindow):
 	#	event.Skip()
 		
 	def MouseOut(self, event = None):
+		if event: event.Skip()
+
 		if(self._tooltip is not None and self.tooltip.timer is not None and 
 			self.tooltip.timer.IsRunning()):
 		
@@ -87,6 +89,8 @@ class DisplayFrame(HtmlSelectableWindow):
 
 
 	def MouseIn(self, event = None):
+		if event: event.Skip()
+	
 		self.mouseout = False
 		if self._tooltip:
 			exceptions = [self._tooltip]
