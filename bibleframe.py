@@ -6,7 +6,6 @@ from swlib.pysw import VK, GetVerseStr, GetBookChapter, GetBestRange
 from bookframe import VerseKeyedFrame
 from displayframe import IN_BOTH, IN_MENU, IN_POPUP
 from gui.htmlbase import linkiter, eq
-#from util.util import ReplaceUnicode
 from gui import guiutil
 from util.observerlist import ObserverList
 

@@ -15,7 +15,7 @@ import hashlib
 
 import config
 from util.configmgr import config_manager
-from util.util import _
+from util.i18n import _
 
 from xrc.error_dialog_xrc import xrcErrorDialog
 

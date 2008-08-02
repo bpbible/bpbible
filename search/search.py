@@ -3,7 +3,8 @@
 #psyco.log()
 #psyco.full()
 from backend.bibleinterface import biblemgr
-from util.util import ReplaceUnicode, KillTags, VerseTemplate, remove_amps
+from backend.verse_template import VerseTemplate
+from util.string_util import ReplaceUnicode, KillTags, remove_amps
 from util.unicode import get_to_unicode
 from util import search_utils
 from util.search_utils import *
@@ -124,7 +125,7 @@ class Index(object):
 			self.book.SetModule(mod, notify=False)
 			mod = self.book.mod
 
-			self.book.templatelist.push(template)
+			self.book.templatelist.append(template)
 			offsets = [0]
 			books = 0
 			for i in range(1,3):
@@ -481,7 +482,7 @@ class GenBookIndex(Index):
 			self.book.SetModule(mod, notify=False)
 			mod = self.book.mod
 
-			self.book.templatelist.push(template)
+			self.book.templatelist.append(template)
 			self.books.append(self.booktype(self.version))
 
 			if self.booktype.gatherstatistics:

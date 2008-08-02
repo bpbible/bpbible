@@ -2,7 +2,7 @@
 import re
 import passage_list
 from swlib.pysw import VK, SW, GetBestRange, GetVerseStr, TOP
-from util.util import PushPopList, VerseTemplate
+from backend.verse_template import VerseTemplate
 from util import observerlist
 from util.debug import dprint, WARNING
 from util.unicode import to_str, to_unicode
@@ -18,7 +18,7 @@ class Book(object):
 		self.mod = None
 		self.observers = observerlist.ObserverList()
 		self.template = VerseTemplate(body = "$text")
-		self.templatelist = PushPopList(self.template)
+		self.templatelist = [self.template]
 		self.vk = VK()
 		self.headings = False
 		if self.ModuleExists(version):
@@ -122,8 +122,8 @@ class Book(object):
 		if not self.mod:
 			return None
 		
-		if template is None:
-			template = self.templatelist()
+		if template is None and self.templatelist:
+			template = self.templatelist[-1]
 		if context:
 			lastverse = context
 		else:

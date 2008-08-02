@@ -4,7 +4,7 @@ import re
 import sys
 from util.debug import *
 from util.unicode import to_str, to_unicode
-from util import util
+from util import is_py2exe
 
 def _test():
 	from swlib import pysw
@@ -43,7 +43,7 @@ for a in dir(SW):
 		setattr(SW, a[2:], getattr(SW, a))
 
 
-if util.is_py2exe():
+if is_py2exe():
 	# py2exe may get paths wrong
 	if os.path.dirname(sys.argv[0]):
 		os.chdir(os.path.dirname(sys.argv[0]))

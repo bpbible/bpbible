@@ -3,7 +3,6 @@ import wx
 import sys
 from swlib.pysw import *
 from gui.treecombo import LazyTreeCombo
-from util import util
 		
 class GenBookTree(LazyTreeCombo):
 	def __init__(self, parent, book, frame):

@@ -9,7 +9,6 @@ from swlib.pysw import SW
 from backend.book import Bible, Commentary
 from backend.dictionary import Dictionary
 
-from util import util
 from util import confparser
 from util.observerlist import ObserverList
 from util.debug import dprint, MESSAGE, WARNING
@@ -43,7 +42,7 @@ class BibleInterface(object):
 		self.dictionary = Dictionary(self, dictionaryname)
 		self.genbook = GenBook(self, genbook) 
 		
-		self.state = util.PushPopList()
+		self.state = []
 		self.options = {}
 		self.init_options()
 	
@@ -78,16 +77,16 @@ class BibleInterface(object):
 		self.options[option] = processed_value
 	
 	def temporary_state(self, options = None):
-		self.state.push(dict(self.options))
+		self.state.append(dict(self.options))
 		if(options):
 			for key, value in options.items():
 				self.set_option(key, value)
 		
 	
 	def restore_state(self):
-		state = self.state.pop()
-		if not state: 
+		if not self.state:
 			return
+		state = self.state.pop()
 
 		#restore state
 		for key, value in state.items():
@@ -273,6 +272,6 @@ class BibleInterface(object):
 
 biblemgr = BibleInterface("ESV", "TSK", "ISBE") 
 
-biblemgr.dictionary.templatelist.push(config.dictionary_template)
-biblemgr.commentary.templatelist.push(config.other_template)
-biblemgr.bible.templatelist.push(config.bible_template)
+biblemgr.dictionary.templatelist.append(config.dictionary_template)
+biblemgr.commentary.templatelist.append(config.other_template)
+biblemgr.bible.templatelist.append(config.bible_template)

@@ -1,7 +1,7 @@
 from swlib.pysw import SW
 
 from util.debug import *
-from util import util
+from util import noop
 from gui import guiutil
 
 
@@ -42,4 +42,4 @@ def on_web_opened(frame, href, url):
 
 for item in ("http", "https", "ftp"):
 	protocol_handler.register_handler(item, on_web_opened)
-	protocol_handler.register_hover(item, util.noop)
+	protocol_handler.register_hover(item, noop)

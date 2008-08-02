@@ -22,7 +22,7 @@ class GenBook(Book):
 		if not self.mod:
 			return None
 		
-		template = self.templatelist()
+		template = self.templatelist[-1]
 		key = self.mod.getKey()
 		key.setText(ref)
 		self.mod.setKey(key)
@@ -45,7 +45,7 @@ class GenBook(Book):
 	def GetReferenceFromKey(self, ref, context = None, max_verses = 500):
 		if not self.mod:
 			return None
-		template = self.templatelist()
+		template = self.templatelist[-1]
 		#key = self.mod.getKey()
 		#	key.setText(ref)
 		

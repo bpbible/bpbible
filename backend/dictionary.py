@@ -134,7 +134,7 @@ class Dictionary(Book):
 
 		render_text = self.get_rendertext()
 		
-		template = self.templatelist()
+		template = self.templatelist[-1]
 		key = self.mod.getKey()
 		key.setText(to_str(ref, self.mod))
 		self.mod.setKey(key)

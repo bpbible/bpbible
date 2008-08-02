@@ -5,7 +5,6 @@ from wx import aui
 import guiconfig
 import config
 from gui import guiutil
-from util import util
 from util.configmgr import config_manager
 
 # the following three functions borrowed from wxAUI in dockart.cpp

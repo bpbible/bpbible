@@ -8,7 +8,8 @@ import wx
 #from swlib.pysw import GetBestRange
 from wx import xrc
 import backend.bibleinterface as BI
-from util.util import noop, VerseTemplate
+from backend.verse_template import VerseTemplate
+from util import noop
 from util.debug import dprint, MESSAGE
 from util import osutils
 
@@ -410,7 +411,7 @@ class HarmonyPanel(xrcHarmonyPanel):
 			verses += header + footer
 		else:
 			try:
-				BI.biblemgr.bible.templatelist.push(template)
+				BI.biblemgr.bible.templatelist.append(template)
 
 				for ref, width in zip(refs, widths):
 					self.status(" Getting reference %s"%ref)

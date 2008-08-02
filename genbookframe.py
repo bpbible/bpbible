@@ -3,7 +3,7 @@ from swlib.pysw import TK
 from bookframe import BookFrame
 import genbooktree
 from backend.bibleinterface import biblemgr
-from util import util
+from util import string_util, noop
 from util.debug import dprint, WARNING
 from protocols import protocol_handler
 
@@ -30,7 +30,7 @@ def on_genbook_click(frame, href, url):
 
 
 protocol_handler.register_handler("genbook", on_genbook_click)
-protocol_handler.register_hover("genbook", util.noop)	 
+protocol_handler.register_hover("genbook", noop)	 
 
 class GenBookFrame(BookFrame):
 	title="Other Books"
@@ -84,7 +84,7 @@ class GenBookFrame(BookFrame):
 			
 			breadcrumb[-1] = self.book.version
 
-			breadcrumb = [util.htmlify_unicode(b) for b in breadcrumb]
+			breadcrumb = [string_util.htmlify_unicode(b) for b in breadcrumb]
 
 			data += "<td align=CENTER><center><b>%s</b></center></td>" % \
 				" &gt; ".join(reversed(breadcrumb))

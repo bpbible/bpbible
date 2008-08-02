@@ -6,8 +6,8 @@ from wx import xrc
 
 from util import osutils
 from util.unicode import to_unicode, to_str
-#from util.util import *
-from util import util
+from util import string_util
+from backend.verse_template import VerseTemplate
 from backend.bibleinterface import biblemgr
 from xrc.search_xrc import *
 
@@ -421,7 +421,7 @@ class SearchPanel(xrcSearchPanel):
 		if not succeeded:
 			self.search_label.Label = (
 				"0 verses found, %s, 0 hits" % 
-					util.pluralize("word", self.numwords)
+					string_util.pluralize("word", self.numwords)
 			)
 				
 			wx.CallAfter(self.clear_list)
@@ -435,8 +435,8 @@ class SearchPanel(xrcSearchPanel):
 
 			self.search_label.Label = (
 				"0 verses found, %s, %s" % (
-					util.pluralize("word", self.numwords),
-					util.pluralize("hit", self.hits),
+					string_util.pluralize("word", self.numwords),
+					string_util.pluralize("hit", self.hits),
 					)
 			)
 			
@@ -447,9 +447,9 @@ class SearchPanel(xrcSearchPanel):
 		
 		self.search_label.Label = (
 			"%s found, %s, %s" % (
-				util.pluralize("reference", len(self.search_results)),
-				util.pluralize("word", self.numwords),
-				util.pluralize("hit", self.hits),
+				string_util.pluralize("reference", len(self.search_results)),
+				string_util.pluralize("word", self.numwords),
+				string_util.pluralize("hit", self.hits),
 			)
 		)
 		
@@ -513,7 +513,7 @@ class SearchPanel(xrcSearchPanel):
 		if self.hits == 0:
 			self.search_label.Label = (
 				"0 verses found, %s" % 
-					util.pluralize("word", self.numwords)
+					string_util.pluralize("word", self.numwords)
 			)
 			
 				
@@ -528,8 +528,8 @@ class SearchPanel(xrcSearchPanel):
 
 			self.search_label.Label = (
 				"0 verses found, %s, %s" % (
-					util.pluralize("word", self.numwords),
-					util.pluralize("hit", self.hits),
+					string_util.pluralize("word", self.numwords),
+					string_util.pluralize("hit", self.hits),
 					)
 			)
 				
@@ -539,8 +539,8 @@ class SearchPanel(xrcSearchPanel):
 
 		self.search_label.Label = (
 			"%s found, %s" % (
-				util.pluralize("verse", self.hits),
-				util.pluralize("word", self.numwords),
+				string_util.pluralize("verse", self.hits),
+				string_util.pluralize("word", self.numwords),
 			)
 		)
 		
@@ -564,7 +564,7 @@ class SearchPanel(xrcSearchPanel):
 	
 	def set_title(self):
 		text = "%s Bible search - %s" % (self.version,
-			util.pluralize("result", self.verselist.ItemCount))		
+			string_util.pluralize("result", self.verselist.ItemCount))		
 		guiconfig.mainfrm.set_pane_title("Search", text)
 
 	@guiutil.frozen
@@ -718,19 +718,19 @@ class SearchList(virtuallist.VirtualListCtrlXRC):
 		super(SearchList, self).__init__()
 
 	def get_data(self, idx, col):
-		template = util.VerseTemplate(body = "$text ")
+		template = VerseTemplate(body = "$text ")
 	
 		if col == 0:
 			return GetBestRange(self.results[idx], abbrev=True)
 
 		
 		biblemgr.temporary_state(biblemgr.plainstate)
-		biblemgr.bible.templatelist.push(template)
+		biblemgr.bible.templatelist.append(template)
 		try:
 			item = self.results[idx]
-			bibletext = util.br2nl(biblemgr.bible.GetReference(item))
-			bibletext = util.KillTags(bibletext)
-			bibletext = util.RemoveWhitespace(util.amps_to_unicode(bibletext))
+			bibletext = string_util.br2nl(biblemgr.bible.GetReference(item))
+			bibletext = string_util.KillTags(bibletext)
+			bibletext = string_util.RemoveWhitespace(string_util.amps_to_unicode(bibletext))
 			return bibletext
 
 		finally:

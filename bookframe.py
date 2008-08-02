@@ -8,8 +8,6 @@ import versetree
 
 from swlib.pysw import VK, VerseParsingError
 from swlib.pysw import GetVerseStr, GetBookChapter, GetBestRange
-from util import util
-from util.util import ReplaceUnicode
 from util.unicode import to_str, to_unicode
 from gui import guiutil
 import config
@@ -420,8 +418,6 @@ class DictionaryFrame(BookFrame):
 		else:
 			data = ref_text + text
 			data = data.replace("<!P>","</p><p>")
-			#replace common values
-			#data = ReplaceUnicode(data)
 
 		self.SetPage(data, raw=raw)
 		self.update_title()

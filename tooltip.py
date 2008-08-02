@@ -1,6 +1,6 @@
 import wx
 from wx import html
-from util import util
+from backend.verse_template import VerseTemplate
 import config, guiconfig
 from gui import htmlbase
 from backend.bibleinterface import biblemgr
@@ -543,7 +543,7 @@ class BibleTooltipConfig(TooltipConfig):
 
 	def get_text(self):
 		try:
-			template = util.VerseTemplate(
+			template = VerseTemplate(
 				header = "<a href='nbible:$range'><b>$range</b></a><br>", 
 				body = "<font color='blue'><sup><small>$versenumber"
 				"</small></sup></font> $text ", 
@@ -552,7 +552,7 @@ class BibleTooltipConfig(TooltipConfig):
 			if tooltip_settings["plain_xrefs"]:
 				biblemgr.temporary_state(biblemgr.plainstate)
 			#apply template
-			biblemgr.bible.templatelist.push(template)
+			biblemgr.bible.templatelist.append(template)
 
 			text = "".join(biblemgr.bible.GetReferences(self.references) or [])
 

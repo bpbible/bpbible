@@ -5,8 +5,8 @@ import wx
 
 from xrc.copyverses_xrc import xrcCopyVerseDialog
 from backend.bibleinterface import biblemgr
-from util.util import VerseTemplate, Template
-from util import util
+from backend.verse_template import VerseTemplate, Template
+from util import string_util
 
 from wx import stc
 from templatemanager import TemplatePanel, TemplateManager
@@ -286,15 +286,15 @@ class CopyVerseDialog(xrcCopyVerseDialog):
 		biblemgr.temporary_state(biblemgr.plainstate)
 
 		#apply template
-		biblemgr.bible.templatelist.push(template)
+		biblemgr.bible.templatelist.append(template)
 
 		data = biblemgr.bible.GetReference(self.reference.GetValue())
 		if data is None:
 			data = config.MODULE_MISSING_STRING
 
-		data = util.br2nl(data)
-		data = util.KillTags(data)
-		data = util.amps_to_unicode(data)
+		data = string_util.br2nl(data)
+		data = string_util.KillTags(data)
+		data = string_util.amps_to_unicode(data)
 
 		#restore
 		biblemgr.restore_state()

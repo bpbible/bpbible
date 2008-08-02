@@ -5,7 +5,7 @@ import os
 
 from xrc.templatemanager_xrc import *
 from backend.bibleinterface import biblemgr
-from util.util import VerseTemplate, Template
+from backend.verse_template import VerseTemplate, Template
 import config
 import guiconfig
 from wx import stc
@@ -497,7 +497,7 @@ class TemplateManager(xrcTemplateManager):
 	
 	
 	def update_preview(self):
-		biblemgr.bible.templatelist.push(self.movable_list.template)
+		biblemgr.bible.templatelist.append(self.movable_list.template)
 		data = biblemgr.bible.GetReference(PREVIEW_VERSES)
 		biblemgr.bible.templatelist.pop()
 

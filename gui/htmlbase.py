@@ -3,7 +3,7 @@ import wx.html
 import wx.lib.wxpTag
 from wx import html
 from gui import guiutil
-from util import util
+from util import string_util
 import guiconfig
 import re
 from util.configmgr import config_manager
@@ -300,7 +300,7 @@ class HtmlBase(wx.html.HtmlWindow):
 	
 		#text = text.replace("<small>", "<font size=-1>")
 		#text = text.replace("</small>", "</font>")
-		text = util.htmlify_unicode(text)
+		text = string_util.htmlify_unicode(text)
 
 		if body_colour is None or text_colour is None:
 			body_colour, text_colour = guiconfig.get_window_colours()

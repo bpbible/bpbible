@@ -1,7 +1,6 @@
 import wx
 from backend.bibleinterface import biblemgr
 from displayframe import DisplayFrameXRC
-from util.util import ReplaceUnicode
 
 class ReferenceDisplayFrame(DisplayFrameXRC):
 	"""This class is a display frame which is able to show references.
@@ -33,7 +32,4 @@ class ReferenceDisplayFrame(DisplayFrameXRC):
 		# XXX: This replace should be done for us by the backend Bible
 		# interface (or by Sword itself).
 		data = data.replace("<!P>","</p><p>")
-		#if not wx.USE_UNICODE:
-		#	#replace common values
-		#	data = ReplaceUnicode(data)
 		self.SetPage("%s" % data)

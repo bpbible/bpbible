@@ -1,7 +1,7 @@
 import re
 
-from util.util import KillTags, ReplaceUnicode, replace_amp, htmlify_unicode
-from util.util import remove_amps, VerseTemplate
+from backend.verse_template import VerseTemplate
+from util.string_util import KillTags, ReplaceUnicode, replace_amp, htmlify_unicode, remove_amps
 from util.debug import dprint, ERROR
 from util.unicode import to_unicode
 
@@ -243,7 +243,7 @@ class HighlightedDisplayFrame(ReferenceDisplayFrame):
 		# TODO: put a function in search to do this for us...
 		biblemgr.temporary_state(biblemgr.plainstate)
 		template = VerseTemplate("$text ", headings="")
-		biblemgr.bible.templatelist.push(template)
+		biblemgr.bible.templatelist.append(template)
 		
 		
 		content = biblemgr.bible.GetReference(self.reference, stripped=True)

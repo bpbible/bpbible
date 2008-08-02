@@ -1,4 +1,4 @@
-from util import util
+from backend.verse_template import VerseTemplate
 import os
 import sys
 import getopt
@@ -115,14 +115,14 @@ def make_template(verse_per_line):
 	u'<a href = "#$versenumber" name="$versenumber" target="$versenumber">'
 	u'<small><sup>$versenumber</sup></small></a> $text %s\n' % br)
 	
-	bible_template = util.VerseTemplate(body=body)
+	bible_template = VerseTemplate(body=body)
 	#, footer="<br>$range ($version)")
 
 
-	other_template = util.VerseTemplate(
+	other_template = VerseTemplate(
 		body=u"<b>$range</b><br>$text<p>($description)</p> \n"
 	)
-	dictionary_template = util.VerseTemplate(
+	dictionary_template = VerseTemplate(
 		body=u"<br>$text<p>($description)</p> \n"
 	)
 	
@@ -131,9 +131,9 @@ def make_template(verse_per_line):
 			u"<small><sup>$versenumber</sup></small></a></a> "
 			u"<font color = 'green'>$text</font> %s\n") % br
 
-	current_verse_template = util.VerseTemplate(body)
+	current_verse_template = VerseTemplate(body)
 
-	verse_compare_template = util.VerseTemplate("<sup>$versenumber</sup> $text",
+	verse_compare_template = VerseTemplate("<sup>$versenumber</sup> $text",
 		header=u"<p><b>(<a href='%s:$version'>$version</a>)"
 		u"</b> " % BIBLE_VERSION_PROTOCOL
 	)

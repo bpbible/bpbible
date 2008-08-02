@@ -9,7 +9,7 @@ from gui import guiutil
 from gui.menu import MenuItem
 from backend.bibleinterface import biblemgr
 from protocols import protocol_handler
-from util import util
+from util import noop
 from util.configmgr import config_manager
 from displayframe import IN_POPUP
 
@@ -38,7 +38,7 @@ def on_bible_version(frame, href, url):
 	biblemgr.bible.SetModule(url.getHostName())
 
 protocol_handler.register_handler(BIBLE_VERSION_PROTOCOL, on_bible_version)
-protocol_handler.register_hover(BIBLE_VERSION_PROTOCOL, util.noop)
+protocol_handler.register_hover(BIBLE_VERSION_PROTOCOL, noop)
 
 
 class VerseCompareFrame(LinkedFrame):
@@ -111,7 +111,7 @@ class VerseCompareFrame(LinkedFrame):
 				text.append("<td>")
 				
 				for heading_dict in headings:
-					text.append(biblemgr.bible.templatelist().\
+					text.append(biblemgr.bible.templatelist[-1].\
 						headings.safe_substitute(heading_dict))
 				
 				text.append("<sup>%(versenumber)d</sup> %(text)s"%body_dict)
@@ -137,7 +137,7 @@ class VerseCompareFrame(LinkedFrame):
 		mod = self.book.mod
 		
 		try:
-			self.book.templatelist.push(config.verse_compare_template)
+			self.book.templatelist.append(config.verse_compare_template)
 		
 			for item in self.book.GetModules():
 				if item.Name() in \

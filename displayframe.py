@@ -11,7 +11,7 @@ import config
 
 
 from backend.bibleinterface import biblemgr
-from util import util
+from backend.verse_template import VerseTemplate
 from util import osutils
 from tooltip import Tooltip, tooltip_settings
 from gui import htmlbase
@@ -222,7 +222,7 @@ class DisplayFrame(HtmlSelectableWindow):
 
 			elif type == "x":
 				#make this plain
-				template = util.VerseTemplate(header="<a href='nbible:$range'>"
+				template = VerseTemplate(header="<a href='nbible:$range'>"
 				"<b>$range</b></a><br>", 
 				body = "<font color = 'blue'><sup><small>$versenumber"
 				"</small></sup></font> $text", footer = "<hr>")
@@ -232,7 +232,7 @@ class DisplayFrame(HtmlSelectableWindow):
 						biblemgr.temporary_state(biblemgr.plainstate)
 					
 					#apply template
-					biblemgr.bible.templatelist.push(template)
+					biblemgr.bible.templatelist.append(template)
 
 					#find reference list
 					reflist = bible.GetFootnoteData(module, passage, value, "refList")
@@ -271,7 +271,7 @@ class DisplayFrame(HtmlSelectableWindow):
 			#make this plain
 			#template = VerseTemplate(header = "$range<br>", 
 			#body = '<font color = "blue"><small><sup>$versenumber</sup></small></font> $text')
-			template = util.VerseTemplate(
+			template = VerseTemplate(
 				header="<a href='bible:$range'><b>$range</b></a><br>", 
 				body = "<font color = 'blue'><sup><small>$versenumber"
 				"</small></sup></font> $text", 
@@ -283,7 +283,7 @@ class DisplayFrame(HtmlSelectableWindow):
 					#no footnotes
 					biblemgr.temporary_state(biblemgr.plainstate)
 					#apply template
-				biblemgr.bible.templatelist.push(template)
+				biblemgr.bible.templatelist.append(template)
 
 				value = value.split("; ")
 				

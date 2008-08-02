@@ -5,7 +5,7 @@ Reads a harmony from a data file.
 
 import re
 from swlib.pysw import VerseList#, VK
-from util.util import noop
+from util import noop
 
 gospels = ["Matthew", "Mark", "Luke", "John"]
 
