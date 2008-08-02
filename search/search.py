@@ -13,7 +13,6 @@ import re
 import string
 import cPickle
 from util.debug import *
-import process_osis
 from query_parser import WildCard, removeformatting, split_words
 from indexed_text import IndexedText, VerseIndexedText
 
