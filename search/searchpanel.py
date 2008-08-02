@@ -181,7 +181,12 @@ class SearchPanel(xrcSearchPanel):
 
 		if(self.version and search.IndexExists(self.version)):
 			busy_info = wx.BusyInfo("Reading search index...")
-			self.index = search.ReadIndex(self.version)
+			try:
+				self.index = search.ReadIndex(self.version)
+			except:
+				search.DeleteIndex(self.version)
+				self.index = None
+				return
 			self.genindex.SetLabel("Unindex")
 			self.search_button.Enable()
 			
