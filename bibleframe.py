@@ -73,7 +73,8 @@ class BibleFrame(VerseKeyedFrame):
 
 			(Separator, IN_MENU),
 			# Pick suitably arbitrary accelerators.
-			(MenuItem("Manage Topics", self.manage_passage_lists), IN_BOTH),
+			(MenuItem("Manage Topics", self.manage_topics,
+					accelerator="Ctrl+Shift+T"), IN_BOTH),
 			(MenuItem("Tag verses", self.tag_verses,
 					enabled=self.has_module), IN_BOTH),
 
@@ -180,10 +181,10 @@ class BibleFrame(VerseKeyedFrame):
 
 		qs.pseudo_modal(self.search_quickly_finished)
  
-	def manage_passage_lists(self):
-		"""A docstring."""
-		from passage_list_manager_frame import PassageListManagerFrame
-		frame = PassageListManagerFrame(self)
+	def manage_topics(self):
+		"""Manages all of the topics and the passages in them."""
+		from manage_topics_frame import ManageTopicsFrame
+		frame = ManageTopicsFrame(self)
 		frame.Show()
 
 	def tag_verses(self):

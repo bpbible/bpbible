@@ -16,8 +16,8 @@ def get_resources():
 
 
 
-class xrcPassageListManagerFrame(wx.Frame):
-#!XRCED:begin-block:xrcPassageListManagerFrame.PreCreate
+class xrcManageTopicsFrame(wx.Frame):
+#!XRCED:begin-block:xrcManageTopicsFrame.PreCreate
     def PreCreate(self, pre):
         """ This function is called during the class's initialization.
         
@@ -26,18 +26,18 @@ class xrcPassageListManagerFrame(wx.Frame):
         """
         pass
         
-#!XRCED:end-block:xrcPassageListManagerFrame.PreCreate
+#!XRCED:end-block:xrcManageTopicsFrame.PreCreate
 
     def __init__(self, parent):
         # Two stage creation (see http://wiki.wxpython.org/index.cgi/TwoStageCreation)
         pre = wx.PreFrame()
         self.PreCreate(pre)
-        get_resources().LoadOnFrame(pre, parent, "PassageListManagerFrame")
+        get_resources().LoadOnFrame(pre, parent, "ManageTopicsFrame")
         self.PostCreate(pre)
 
         # Define variables for the controls, bind event handlers
-        self.tree = xrc.XRCCTRL(self, "tree")
-        self.passage_preview = xrc.XRCCTRL(self, "passage_preview")
+        self.topic_tree = xrc.XRCCTRL(self, "topic_tree")
+        self.passage_list_ctrl = xrc.XRCCTRL(self, "passage_list_ctrl")
 
 
 
@@ -49,4 +49,4 @@ def __init_resources():
     global __res
     __res = xrc.EmptyXmlResource()
 
-    __res.Load('passage_list_manager.xrc')
+    __res.Load('manage_topics.xrc')

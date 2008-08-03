@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+<resource>
+  <object class="wxFrame" name="ManageTopicsFrame">
+    <object class="wxSplitterWindow">
+      <object class="wxTreeCtrl" name="topic_tree">
+        <style>wxTR_HAS_BUTTONS|wxTR_LINES_AT_ROOT</style>
+      </object>
+      <object class="wxListCtrl" name="passage_list_ctrl">
+        <style>wxLC_REPORT</style>
+      </object>
+      <orientation>vertical</orientation>
+      <style>wxSP_NOBORDER</style>
+    </object>
+    <title>Manage Topics</title>
+  </object>
+</resource>
