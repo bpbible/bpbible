@@ -1,4 +1,6 @@
 import wx
+import guiconfig
+from events import TOPIC_LIST
 from passage_list import get_primary_passage_list_manager, PassageEntry
 from passage_entry_dialog import PassageEntryDialog
 from topic_creation_dialog import TopicCreationDialog
@@ -18,12 +20,30 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		self.topic_tree.Bind(wx.EVT_TREE_SEL_CHANGED, self._selected_topic_changed)
 		self.topic_tree.Bind(wx.EVT_TREE_ITEM_GETTOOLTIP, self._get_topic_tool_tip)
 		self.topic_tree.Bind(wx.EVT_TREE_ITEM_MENU, self._show_topic_context_menu)
+		self.passage_list_ctrl.Bind(wx.EVT_LIST_ITEM_SELECTED, self._passage_selected)
+		self.passage_list_ctrl.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self._passage_activated)
 
 	def _setup_topic_tree(self):
 		self.root = self.topic_tree.AddRoot("Topics")
 		self.topic_tree.SetPyData(self.root, self._manager)
 		self._add_sub_topics(self._manager, self.root)
 		self.topic_tree.Expand(self.root)
+
+	def select_topic_and_passage(self, topic, passage_entry):
+		"""Selects the given topic in the tree, and the given passage entry
+		in the passage list.
+
+		This allows the correct topic and passage to be displayed when a tag
+		is clicked on.
+
+		This assumes that the passage entry is one of the passages in the
+		topic.
+		"""
+		self._set_selected_topic(topic)
+		assert passage_entry in topic.passages
+		index = topic.passages.index(passage_entry)
+		self._select_list_entry_by_index(index)
+		self.passage_list_ctrl.SetFocus()
 
 	def _get_selected_topic(self):
 		selection = self.topic_tree.GetSelection()
@@ -34,8 +54,8 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 	def _set_selected_topic(self, topic):
 		tree_item = self._find_topic(self.topic_tree.GetRootItem(), topic)
 		assert tree_item is not None
-		self.SelectItem(tree_item)
-		self.EnsureVisible(tree_item)
+		self.topic_tree.SelectItem(tree_item)
+		self.topic_tree.EnsureVisible(tree_item)
 		return tree_item
 
 	def _selected_topic_changed(self, event):
@@ -132,6 +152,15 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 
 		if topic.passages:
 			self._select_list_entry_by_index(0)
+
+
+	def _passage_selected(self, event):
+		passage_entry = self._get_selected_topic().passages[event.GetIndex()]
+		# Do nothing.
+
+	def _passage_activated(self, event):
+		passage_entry = self._get_selected_topic().passages[event.GetIndex()]
+		guiconfig.mainfrm.set_bible_ref(str(passage_entry), source=TOPIC_LIST)
 
 	def _select_list_entry_by_index(self, index):
 		"""Selects the entry in the list control with the given index."""

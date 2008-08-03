@@ -1,7 +1,7 @@
 import wx
 import guiconfig
 from protocols import protocol_handler
-from topic_dialog import TopicDialog
+from manage_topics_frame import ManageTopicsFrame
 from topic_selector import TopicSelector
 from passage_list import lookup_passage_list
 from tooltip import TooltipConfig
@@ -128,9 +128,9 @@ class PassageTag(wx.PyWindow):
 		wx.BufferedPaintDC(self, self.bmp)
 
 	def on_left_button_up(self, event):
-		dialog = TopicDialog(self, self._passage_list)
-		dialog.select_passage_entry(self._passage_entry)
-		dialog.Show()
+		frame = ManageTopicsFrame(self)
+		frame.select_topic_and_passage(self._passage_list, self._passage_entry)
+		frame.Show()
 		event.Skip()
 
 	def on_enter(self, x, y):

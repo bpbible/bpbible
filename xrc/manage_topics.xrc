@@ -6,7 +6,7 @@
         <style>wxTR_HAS_BUTTONS|wxTR_LINES_AT_ROOT</style>
       </object>
       <object class="wxListCtrl" name="passage_list_ctrl">
-        <style>wxLC_REPORT</style>
+        <style>wxLC_REPORT|wxLC_SINGLE_SEL</style>
       </object>
       <orientation>vertical</orientation>
       <style>wxSP_NOBORDER</style>
