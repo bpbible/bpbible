@@ -60,6 +60,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 
 	def _selected_topic_changed(self, event):
 		self._setup_passage_list_ctrl(topic=self._get_selected_topic())
+		self.Title = self._get_title()
 		event.Skip()
 
 	def _find_topic(self, tree_item, topic):
@@ -72,6 +73,14 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 			if node is not None:
 				return node
 			id, cookie = self.topic_tree.GetNextChild(id, cookie)
+
+	def _get_title(self):
+		"""Gets a title for the frame, based on the currently selected topic."""
+		topic = self._get_selected_topic()
+		title = "Manage Topics"
+		if topic is not self._manager:
+			title = "%s - %s" % (topic.full_name, title)
+		return title
 
 	def _add_sub_topics(self, parent_list, parent_node):
 		parent_list.add_subtopic_observers.add_observer(
