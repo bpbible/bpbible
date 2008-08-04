@@ -10,8 +10,9 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 	def __init__(self, parent):
 		super(ManageTopicsFrame, self).__init__(parent)
 		self._manager = get_primary_passage_list_manager()
+		self._selected_topic = None
 		self._init_passage_list_ctrl_headers()
-		self._setup_passage_list_ctrl(topic=None)
+		self._setup_passage_list_ctrl()
 		self._setup_topic_tree()
 		self._bind_events()
 
@@ -46,7 +47,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		self._select_list_entry_by_index(index)
 		self.passage_list_ctrl.SetFocus()
 
-	def _get_selected_topic(self):
+	def _get_tree_selected_topic(self):
 		selection = self.topic_tree.GetSelection()
 		if not selection.IsOk():
 			return None
@@ -60,7 +61,15 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		return tree_item
 
 	def _selected_topic_changed(self, event):
-		self._setup_passage_list_ctrl(topic=self._get_selected_topic())
+		old_topic = self._selected_topic
+		self._selected_topic = self._get_tree_selected_topic()
+		self._setup_passage_list_ctrl()
+
+		if old_topic is not None:
+			old_topic.add_passage_observers -= self._insert_topic_passage
+		if self._selected_topic is not None:
+			self._selected_topic.add_passage_observers += self._insert_topic_passage
+
 		self.Title = self._get_title()
 		event.Skip()
 
@@ -77,7 +86,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 
 	def _get_title(self):
 		"""Gets a title for the frame, based on the currently selected topic."""
-		topic = self._get_selected_topic()
+		topic = self._selected_topic
 		title = "Manage Topics"
 		if topic is not self._manager:
 			title = "%s - %s" % (topic.full_name, title)
@@ -126,7 +135,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		menu = wx.Menu()
 		id = wx.NewId()
 		self.Bind(wx.EVT_MENU,
-				lambda event: self._create_topic(),
+				lambda event: self._create_topic,
 				id=id)
 		menu.Append(id, "&New Topic")
 		id = wx.NewId()
@@ -137,18 +146,20 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		self.PopupMenu(menu)
 
 	def _create_topic(self):
-		dialog = TopicCreationDialog(self, self._get_selected_topic())
+		dialog = TopicCreationDialog(self, self._selected_topic)
 		dialog.Show()
 	
 	def _create_passage(self):
 		passage_entry = PassageEntry(None)
 		dialog = PassageEntryDialog(self, passage_entry)
 		if dialog.ShowModal() == wx.ID_OK:
-			self._get_selected_topic().add_passage(passage_entry)
+			self._selected_topic.add_passage(passage_entry)
 		dialog.Destroy()
 	
 	def _on_close(self, event):
 		self._remove_observers(self._manager)
+		if self._selected_topic is not None:
+			self._selected_topic.add_passage_observers -= self._insert_topic_passage
 		self._manager.save()
 		event.Skip()
 	
@@ -161,25 +172,29 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		self.passage_list_ctrl.InsertColumn(0, "Passage")
 		self.passage_list_ctrl.InsertColumn(1, "Comment")
 
-	def _setup_passage_list_ctrl(self, topic):
+	def _setup_passage_list_ctrl(self):
 		self.passage_list_ctrl.DeleteAllItems()
-		if topic is None:
+		if self._selected_topic is None:
 			return
 
-		for index, passage_entry in enumerate(topic.passages):
-			self.passage_list_ctrl.InsertStringItem(index, str(passage_entry))
-			self.passage_list_ctrl.SetStringItem(index, 1, passage_entry.comment)
+		for index, passage_entry in enumerate(self._selected_topic.passages):
+			self._insert_topic_passage(passage_entry, index)
 
-		if topic.passages:
+		if self._selected_topic.passages:
 			self._select_list_entry_by_index(0)
 
+	def _insert_topic_passage(self, passage_entry, index=None):
+		if index is None:
+			index = self._selected_topic.passages.index(passage_entry)
+		self.passage_list_ctrl.InsertStringItem(index, str(passage_entry))
+		self.passage_list_ctrl.SetStringItem(index, 1, passage_entry.comment)
 
 	def _passage_selected(self, event):
-		passage_entry = self._get_selected_topic().passages[event.GetIndex()]
+		passage_entry = self._selected_topic.passages[event.GetIndex()]
 		# Do nothing.
 
 	def _passage_activated(self, event):
-		passage_entry = self._get_selected_topic().passages[event.GetIndex()]
+		passage_entry = self._selected_topic.passages[event.GetIndex()]
 		guiconfig.mainfrm.set_bible_ref(str(passage_entry), source=TOPIC_LIST)
 
 	def _select_list_entry_by_index(self, index):
