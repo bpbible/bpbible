@@ -7,9 +7,6 @@ import string
 from swlib.pysw import SW
 
 
-class TextNode(unicode):
-	pass
-
 import htmlentitydefs
 thml_header = """<!DOCTYPE thml-entities [
 	%s
@@ -102,8 +99,8 @@ class ParseOSIS(ParseBase):
 	strongs_re = re.compile(r"^(?:strong|x-Strongs|Strong):([HG])(\d+)(!(.*))?")
 	strongs_off = True
 
-	STRONGS_MARKERS = u"\uFDD1"*3
-	MORPH_MARKERS = u"\uFDD2"*3
+	STRONGS_MARKER = u"\uFDD1".encode("utf-8")
+	FIELD_SEPARATOR = u"\uFDD2".encode("utf-8")
 	strongs_cache = {"": []}
 	morph_cache = {"": []}
 
@@ -131,7 +128,8 @@ class ParseOSIS(ParseBase):
 				items.append(p)
 			self.strongs_cache[l] = items
 
-		items = self.strongs_cache[l]
+		# take a copy, for we change it later on
+		items = self.strongs_cache[l][:]
 
 		m = node.attrib.get("morph", "")
 		if m not in self.morph_cache:
@@ -150,7 +148,7 @@ class ParseOSIS(ParseBase):
 					dprint(WARNING, "Unknown morph class", node.attrib)
 					continue
 
-				m_items.append("%s:%s" % (type, item))
+				m_items.append("%s%s%s" % (type, self.FIELD_SEPARATOR, item))
 
 			self.morph_cache[m] = m_items
 
@@ -163,12 +161,12 @@ class ParseOSIS(ParseBase):
 			self._parse_children(node, si)
 			return
 
-		si.write("%s%s%s" % (self.STRONGS_MARKERS[0],
+		si.write("%s%s%s" % (self.STRONGS_MARKER,
 			' '.join(items),
-			self.STRONGS_MARKERS[1]))
+			self.STRONGS_MARKER))
 
 		self._parse_children(node, si)
-		si.write(self.STRONGS_MARKERS[2])
+		si.write(self.STRONGS_MARKER)
 
 	mapping = dict(
 		title=handle_title,
@@ -248,17 +246,17 @@ def yield_verses(mod):
 	vk = VK()
 	vk.Headings(1)
 	vk.setPosition(TOP)
-	vk.setText("Matthew 1:1")
+	#vk.setText("Matthew 1:1")
 	vk.Persist(1)
 	vk.thisown = False
 	
 	mod.setKey(vk)
 
 	books = ("Genesis", "Matthew")#"Exodus")
-	#while not vk.Error():
+	while not vk.Error():
 	#while vk.Testament() in '\x00\x01':
-	while vk.Testament() == '\x00' or vk.Book() == '\x00' or \
-		vk.getBookName() in books:
+	#while vk.Testament() == '\x00' or vk.Book() == '\x00' or \
+	#	vk.getBookName() in books:
 		yield 
 		vk.increment(1)
 

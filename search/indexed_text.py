@@ -12,13 +12,15 @@ import process_text
 class IndexedText(object):
 	"""A bit of text, one reference per line, with an index built against it"""
 	gatherstatistics = True
-	def __init__(self, version, bookname=None):
-		self.index = [("NULL", 0, 0)] # ref, start, length
+	def __init__(self, version, bookname=None, create_index=True):
+		self.index = [] # ref, start, length
 		self.text = ""
+		self.strongs_info = []
 		self.bookname = bookname or version
 		self.version = version
 		module = self.load_module(version)
-		self.collect_text(module)
+		if create_index:
+			self.collect_text(module)
 	
 	def collect_text(self, module):
 		"""Collect the text for a given module, into a reference per line
@@ -89,10 +91,36 @@ class IndexedText(object):
 		content = content.decode("utf-8", "ignore")
 		content = removeformatting(content)
 		self.text = re.sub("\s*%s\s*" % MAGIC_TOKEN, "\n", content)
+		#self.text, self.strongs_info = self.extract_strongs(self.text)
 
 		self.create_index_against_text(module, key)
 
 		module.setKey(old_key)
+
+	def extract_strongs(self, text):
+		# put offset in an array, so that we can write to it in the callback
+		offset = [0]
+		matches = []
+
+		def replace(match):
+			o = offset[0]
+			number, text = match.group(1, 2)
+			matches.append((number, match.start() - o))
+			offset[0] = o + len(number) + 3
+			return text
+
+		text = re.sub(
+			# the second group can actually be empty, if it is just the
+			# article
+			u"%s([^%s]+)%s([^%s]*)%s" % ((
+				process_text.ParseOSIS.STRONGS_MARKER.decode("utf8"),
+			) * 5),
+			replace,
+			text
+		)
+
+		return text, matches
+		
 
 	def create_index_against_text(self, module, key):
 		"""Build an index against the text"""
@@ -155,7 +183,12 @@ class IndexedText(object):
 
 				begin, end = mylist[upto]
 		
-		dprint(ERROR, "Exceeded index length", mylist[upto])
+		dprint(
+			WARNING, 
+			"Exceeded index length "
+			"(this usually means 0 width match at the end of the text)", 
+			mylist[upto]
+		)
 		return ret
 		
 	def cut_down_index(self, bottom, top):
@@ -196,19 +229,14 @@ class IndexedText(object):
 		key.setText(to)
 
 	# --- Searching functions
-	def multi_search(self, wordlist, proximity, case_sensitive=False, \
-	average_word=0, minimum_average=5, ignore_minimum=False, excludes=(), 
-	try_all=False):
+	def multi_search(self, wordlist, proximity,
+	average_word=0, minimum_average=5, ignore_minimum=False, excludes=()):
 
-		# t is shorter to use than self.text
+		# t is shorter to use than self.text, also should be slightly faster
 		t = self.text
 		
 		mylist = []
 		
-		#empty query, empty results...
-		
-		#compile regex - it is escaped and may be case insensitive
-		#esc = re.escape(wordlist[0])
 		# keep track of our bounds
 		
 		total_length = 0
@@ -224,136 +252,137 @@ class IndexedText(object):
 		
 		wordlist = [word for word, length in wordlist]
 		
-		relist = []
-		if(not try_all):
-			# find the first word in the text, and then search based on it
-			# TODO: do all, and then match based on that?
-			# seems to be slower though
-			for a in wordlist[0].finditer(t):
-				relist+=[a]
-			del wordlist[0]
-		else:
-			relist2 = {}
-			for r in wordlist:
-				relist2[r] = list(r.finditer(t))
-			min = (0, None)
-			for comp, results in relist2.items():
-				if(min[0]<len(results)):
-					min = (comp, len(results))
-			relist = relist2[min[0]]
-			del relist2[min[0]]
-			#relist = relist2.keys()
-			#print relist
-
 		len_t = len(t)
 		len_words = 0#len(words)
-		lastbounds = (0,0)
+		lastbounds = (0, 0)
 		
-		for id, match in enumerate(relist):
+		for match in wordlist.pop(0).finditer(t):
+			match_start, match_end = match.span()
+
 			# if the next match of the master word
 			# is in the range we have just matched,
 			# go onto the next one
 			# NOTE: This is probably undesirable behaviour
 			# e.g. searching for foo bar in boink foo foo bar boink
 			# will yield foo foo bar instead of foo bar
-			if(match.start() < lastbounds[1]):
+			if(match_start < lastbounds[1]):
 				continue
 			
+			# Establish our boundary on this particularly match.
+
 			# Make sure our boundaries are at word borders.
 			# This is important, as otherwise we may match incorrectly
-			lower = match.start()-proximity*average_word-len_words
-			if(lower>0 and not t[lower]==" "):
+
+			# NOTE: this doesn't respect end of verse (e.g. new line) word
+			# boundaries. This is desirable behaviour, but not crucial, as we
+			# will just end up with a larger range
+			lower = match_start-proximity*average_word-len_words
+			if lower > 0 and t[lower] not in " \n":
 				# why not get next space instead of previous?
 				# might be quicker?
-				lower = t.rfind(" ", 0, lower) 
-			upper = match.end()+proximity*average_word+len_words
-			if(upper<len_t and not t[upper]==" "):
+				lower = t.rfind(" ", 0, lower)
+
+			upper = match_end + proximity * average_word + len_words
+			if upper < len_t and t[upper] not in " \n":
 				upper = t.find(" ", upper, len_t)
 
-			if(lower < 0):lower=0
-			if(upper>len_t): upper=len_t
-			bounds = lower, upper
+			# make sure we stay in bounds
+			if lower < 0: lower = 0
+			if upper > len_t: upper = len_t
 			
-			textrange = t[bounds[0]: bounds[1]]
-			#t[bounds[0]: bounds[1]]
+			bounds = lower, upper
+			textrange = t[lower: upper]
 
-			docontinue=False
+			# check for the excluded words in our range
+			excluded = False
 			for exclude, length in excludes:
-				if(exclude.search(textrange)):
-					docontinue=True
+				if exclude.search(textrange):
+					excluded = True
 					break
 
-			if docontinue: continue
+			if excluded: 
+				continue
 
+			# check for all the words to match
 			inrange = True
+			
 			for comp in wordlist:
-				if(not comp.search(textrange)):
+				if not comp.search(textrange):
 					inrange = False
 					break
 
 			if not inrange:
 				continue
 			
-			start = match.start()
-			end = match.end()
-			
 			# make range as narrow as possible
 			docontinue = False
+			start, end = match_start, match_end
+			
 			for comp in wordlist:
-				#try back first
-				backrange = self.text[bounds[0]: match.start()]
-				forwardrange = self.text[match.end(): bounds[1]]
-				#backind2 = t.rfind(word, bounds[0], match.start())
+				backrange = t[bounds[0]: match_start]
+				forwardrange = t[match_end: bounds[1]]
+				
+				# find smallest backwards match				
 				last = None
 				for j in comp.finditer(backrange):
 					last = j
 								
-				if last: backind = last.start() + bounds[0]
-				else: backind = -1
-				#print backind, backind2
-				#else:
-				#	backind = text.rfind(word, bounds
+				if last:
+					backind = last.start() + bounds[0]
+				else: 
+					backind = -1
+
 				if backind < lastbounds[1]:
 					backind = -1
 	
-				#if bounds[1]:
-				#	forwardind2 = t.find(word, match.end(), bounds[1])
-				#else:
-				#	forwardind2 = t.find(word, match.end())
-				forwardind = comp.search(forwardrange)
-				if forwardind: forwardind = forwardind.end() + match.end()
-				else: forwardind = -1
-				#if(forwardind2 != -1): forwardind += len(word)
-				#print forwardind, forwardind2
+				# find smallest forwards match
+				forward_match = comp.search(forwardrange)
+				if forward_match: 
+					forwardind = forward_match.end() + match_end
+				else: 
+					forwardind = -1
 				
 				#if we stray into the previous matches bounds, ignore it
 				if(forwardind < lastbounds[1]):
 					forwardind = -1
 	
-				if(forwardind == -1 and backind == -1):
+				# pick which side to take
+				# if neither forward nor back are there, skip this match
+				if forwardind == -1 and backind == -1:
 					docontinue = True
 					break
 	
-				if(forwardind == -1):
+				# if we couldn't find it forward, take the back
+				if forwardind == -1:
 					ind = backind
+				
+				# if no back, or forward is closer, pick it
+				elif backind == -1 or \
+						match_start - backind > forwardind - match_end:
 
-				elif(backind == -1 or match.start() - backind > forwardind -
-				match.end()):
 					ind = forwardind
-				else: ind = backind
-				if(ind < start):
+				
+				# otherwise, pick backwards
+				else: 
+					ind = backind
+				
+				# and loosen the range to include this
+				if ind < start:
 					start = ind
+
 				if ind > end:
 					end = ind
+
 			if docontinue:
 				continue
 	
-			lastbounds=(start, end)
+			# add this match onto our list of matches
+			lastbounds = (start, end)
 			mylist.append((start, end - start))
 
 		return mylist
 	
-	def regex_search(self, comp, case_sensitive=False):
+	def regex_search(self, comp):
 		mylist = []
 		
 		for a in comp.finditer(self.text):
@@ -361,18 +390,44 @@ class IndexedText(object):
 
 		return mylist
 	
-	RegexSearch = regex_search
-	MultiSearch = multi_search
-	FindIndex = find_index
+	def save(self, directory):
+		f = open(directory + "/index", "w")
+		for (item, start, length) in self.index:
+			print >> f, "%s|%s|%s" % (item.encode("utf8"), start, length)
+
+		f2 = open(directory + "/text", "w")
+		print >> f2, self.text.encode("utf8")
+		
+		f3 = open(directory + "/metadata", "w")
+		print >> f3, self.bookname
+		print >> f3, self.version
+	
+	@classmethod
+	def read(cls, directory):
+		f = open(directory + "/index")
+		index = []
+		for line in f:
+			item, start, length = line.split("|")
+			start = int(start)
+			length = int(length)
+			item = item.decode("utf8")
+			index.append((item, start, length))
+
+		f2 = open(directory + "/text")
+		text = f2.read().decode("utf8")
+
+		f3 = open(directory + "/metadata")
+		bookname = f3.next()
+		version = f3.next()
+		
+		obj = cls(version, bookname, create_index=False)
+		obj.bookname = bookname
+		obj.version = version
+		obj.index = index
+		obj.text = text
+		return obj
 	
 class VerseIndexedText(IndexedText):
-	def __init__(self, version, testament, booknumber):
-		self.testament = testament
-		self.book = booknumber
-		super(VerseIndexedText, self).__init__(
-			version, vk.bookName(self.testament, self.book)
-		)
-
 	def get_key(self, module):
 		vk = VK((self.bookname, self.bookname))
 		vk.Headings(0)
@@ -380,7 +435,7 @@ class VerseIndexedText(IndexedText):
 		return vk
 
 	def get_index(self, key):
-		return key.Chapter(), key.Verse()
+		return (key.Chapter(), key.Verse())
 	
 	def set_key(self, module, key, to):
 		key.Chapter(to[0])
@@ -394,4 +449,20 @@ class VerseIndexedText(IndexedText):
 #	
 #	def get_index(self, key):
 #		return str(tk)
+
+if __name__ == '__main__':
+	from util import timeit
+	import cPickle
+	v = VerseIndexedText("ESV", "Genesis")
+	def main1(cnt):
+		timeit(v.save, "ESV", times=cnt)
+		timeit(v.read, "ESV", times=cnt)
+	
+	def main2(cnt):
+		timeit(cPickle.dump, v, open("ESV/pickle", "w"), times=cnt)
+		timeit(cPickle.load, open("ESV/pickle"), times=cnt)
+
+	main1(300)
+	main2(300)
+
 

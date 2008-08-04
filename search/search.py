@@ -14,7 +14,8 @@ import re
 import string
 import cPickle
 from util.debug import *
-from query_parser import WildCard, removeformatting, split_words
+from query_parser import WildCard, removeformatting, split_words, process_word
+from query_parser import SpellingException
 from indexed_text import IndexedText, VerseIndexedText
 
 
@@ -64,13 +65,6 @@ class SearchException(Exception):
 
 class Cancelled(Exception):
 	pass
-
-class SpellingException(Exception):
-	def __init__(self, wordlist):
-		self.wrongwords=wordlist
-
-	def __str__(self):
-		return ", ".join(self.wrongwords)
 
 
 vk = SW.VerseKey()
@@ -139,7 +133,7 @@ class Index(object):
 					if not continuing:
 						raise Cancelled
 					
-					self.books.append(self.booktype(self.version,i,j))
+					self.books.append(self.booktype(self.version, bookname))
 
 			if(self.booktype.gatherstatistics):
 				self.GatherStatistics()
@@ -229,7 +223,7 @@ class Index(object):
 		return books
 	
 	def Search(self, words, type=COMBINED, proximity=15, progress=lambda x:x, 
-		searchrange=None, excludes=None, try_all=False):
+		searchrange=None, excludes=None):
 		"""Index.Search - this function does all bible searching
 		
 		In:	words - words to search for
@@ -260,12 +254,8 @@ class Index(object):
 		regex = type & REGEX
 		phrase = type & PHRASE
 		advanced = type & ADVANCED
+		assert not advanced, "Advanced isn't supported at the moment"
 		
-		#if excludes:
-		#	excludes, exsubbed = WildCard(excludes)
-		#	if not exsubbed:
-		#		excludes = removeformatting(excludes)
-
 		# Find our searchrange
 		if searchrange:
 			books=self.BookRange(searchrange)
@@ -275,17 +265,10 @@ class Index(object):
 		
 		results=[]
 		
-		#process for phrase
-		#if(phrase):
-		#	#remove punctuation
-		#	if not subbed: words = removeformatting(words)
-		#	words = " ".join(map(lambda x: r"\b"+x+r"\b", words.split()))
+		flags = re.IGNORECASE * (not case_sensitive) | re.UNICODE | re.MULTILINE
 		
 		# Regular expression
-		if(regex and not advanced):
-			#esc = re.escape(words)
-			flags = re.IGNORECASE * (not case_sensitive) | re.UNICODE | \
-					re.MULTILINE
+		if regex:
 
 			try:
 				comp = re.compile(words, flags)		
@@ -300,46 +283,11 @@ class Index(object):
 				continuing = progress((book.bookname, (100*num)/len(books)))
 				if not continuing:
 					break
-				results += book.FindIndex(
-					book.RegexSearch(comp,  case_sensitive)
-				)
+
+				results += book.find_index(book.regex_search(comp))
 
 			progress(("Done", 100))
 			return results, [comp]
-		
-		# Advance Phrase or Regex
-		# as phrase has been processed, it is now a regex
-		# ### UNSUPPORTED
-		if(advanced):
-			# TODO - searching for the* gives matches for thening, which should
-			# be strengthening
-			for num, book in enumerate(books):
-				# get (start, end, match) pairs
-				subresults = book.AdvancedRegex(words, case_sensitive)
-				#if subresults: print subresults
-				# Match start, end to text
-				inds = book.FindIndex(map(lambda x: x[:2], subresults))
-				#if inds: print inds
-				text = map(lambda x: x[2], subresults)
-				if(not case_sensitive):
-					text = map(lambda x: x.lower(), text)
-				
-				results += zip(text, inds)
-				continuing = progress((book.bookname, (100*num)/len(books)))
-				if not continuing:
-					break				
-			
-			# group by results
-			# ["identifier": [results, more], "foo":[bar, boing, bip]]
-			retval={}
-			for a in results:
-				if a[0] in retval:
-					retval[a[0]].append(a[1])
-				else:
-					retval[a[0]]=[a[1]]
-			progress(("Done", 100))
-
-			return retval
 		
 		if excludes:
 			excludes = excludes.split()
@@ -358,53 +306,26 @@ class Index(object):
 		else:
 			words = words.split()
 
-		return self.multi_search(words, books, proximity, case_sensitive, 
+		return self.multi_search(words, books, proximity, flags,
 			excludes, progress, regexes, excl_regexes)
 		
 	
-	def process_word(self, phrase, flags):
-		length = len(phrase)
-
-		# Process wildcards (not for REGEX)
-		subbed = False
-		phrase, subbed = WildCard(phrase)
-
-		# Check spelling (not for wildcarded or regex)
-		if not subbed:
-			phrase = removeformatting(phrase)
-			#wordlist = phrase.split(" ")
-			badwords = []
-			for a in phrase.lower().split(" "):
-				if (self.booktype.gatherstatistics and 
-						a not in self.statistics["wordlist"]):
-					badwords.append(a)
-
-			if(badwords):
-				raise SpellingException, badwords
-
-		#remove punctuation
-		#TODO remove formatting above
-		if not subbed: phrase = removeformatting(phrase)
-		phrase = phrase.replace(" ", r"\s+")
-		phrase = r"\b%s\b" % phrase
-		regex = re.compile(phrase, flags)
-
-		return regex, length
-		
-	def multi_search(self, words, books, proximity, case_sensitive, 
+	def multi_search(self, words, books, proximity, flags, 
 			excludes, progress, regexes, excl_regexes):
 
 		results = []
-		flags = re.IGNORECASE * (not case_sensitive) | re.UNICODE | \
-					re.MULTILINE
-		
 
 		badwords = []
 		wordlist = []
+		
+		if self.booktype.gatherstatistics:
+			index_word_list = self.statistics["wordlist"]
+		else:
+			index_word_list = None
 
 		for word in words:
 			try:
-				wordlist.append(self.process_word(word, flags) )
+				wordlist.append(process_word(word, flags, index_word_list))
 
 			except SpellingException, e:
 				badwords.extend(e.wrongwords)
@@ -443,10 +364,10 @@ class Index(object):
 			if not continuing:
 				break			
 
-			r = book.FindIndex(book.MultiSearch(wordlist[:], proximity, 
-			case_sensitive=case_sensitive, excludes=excludelist, try_all=False))
- 
-			results += r
+			matches = book.multi_search(wordlist[:], proximity, 
+				excludes=excludelist)
+			
+			results += book.find_index(matches)
 		
 		progress(("Done", 100))
 		return results, [regex for regex, length in wordlist]

@@ -1,6 +1,14 @@
 import re
 import string
 
+class SpellingException(Exception):
+	def __init__(self, wordlist):
+		self.wrongwords=wordlist
+
+	def __str__(self):
+		return ", ".join(self.wrongwords)
+
+
 # pre compile our regular expressions
 re_list = (
 	"(?<=\d),(?=\d)", 
@@ -191,17 +199,15 @@ def split_words(words):
 def WildCard(words):
 	# \w is our basic word unit. However, this includes _
 	# This shouldn't ever occur anyway.
-	all = "\w"
-
 	wildcards = {
 		# * - 0 or more letters
-		r"\*": all+"*", 
+		r"\*": "\w*", 
 
 		# ? - 1 letter
-		r"\?": all, 
+		r"\?": "\w", 
 
 		# + - 0 or more letters
-		r"\+": all+"+",
+		r"\+": "\w+",
 
 		# [] - one of these characters
 		r"\[([^]]+)\]": r"[\1]",
@@ -232,7 +238,29 @@ def WildCard(words):
 		words, was_subbed = wildcard.subn(replace, words)
 		if was_subbed: 
 			subbed = True
-
 	
 	return words, subbed
 
+def process_word(phrase, flags, wordlist=None):
+	# TODO We only remove punctuation, etc. when it is not a wildcard one.
+	# FIX THIS!
+
+	length = len(phrase)
+	phrase, subbed = WildCard(phrase)
+
+	# Check spelling (not for wildcarded or regex)
+	if not subbed:
+		phrase = removeformatting(phrase)
+		badwords = []
+		for word in phrase.lower().split(" "):
+			if wordlist is not None and word not in wordlist:
+				badwords.append(word)
+
+		if(badwords):
+			raise SpellingException, badwords
+
+	phrase = phrase.replace(" ", r"\s+")
+	phrase = r"\b%s\b" % phrase
+	regex = re.compile(phrase, flags)
+
+	return regex, length

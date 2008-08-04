@@ -183,7 +183,8 @@ class SearchPanel(xrcSearchPanel):
 			busy_info = wx.BusyInfo("Reading search index...")
 			try:
 				self.index = search.ReadIndex(self.version)
-			except:
+			except Exception, e:
+				dprint(WARNING, "Error reading index. Deleting it...", e)
 				search.DeleteIndex(self.version)
 				self.index = None
 				return
