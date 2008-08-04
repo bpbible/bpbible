@@ -19,6 +19,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		self.Bind(wx.EVT_CLOSE, self._on_close)
 		self.topic_tree.Bind(wx.EVT_TREE_SEL_CHANGED, self._selected_topic_changed)
 		self.topic_tree.Bind(wx.EVT_TREE_ITEM_GETTOOLTIP, self._get_topic_tool_tip)
+		self.topic_tree.Bind(wx.EVT_TREE_END_LABEL_EDIT, self._end_topic_label_edit)
 		self.topic_tree.Bind(wx.EVT_TREE_ITEM_MENU, self._show_topic_context_menu)
 		self.passage_list_ctrl.Bind(wx.EVT_LIST_ITEM_SELECTED, self._passage_selected)
 		self.passage_list_ctrl.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self._passage_activated)
@@ -109,6 +110,16 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		underlying window's mouse movements.
 		"""
 		event.SetToolTip(self.topic_tree.GetPyData(event.GetItem()).description)
+
+	def _end_topic_label_edit(self, event):
+		"""This event is used to update the names of topics.
+		
+		Any topic node can be edited, and its name will then be set based on
+		the new label text.
+		"""
+		if not event.IsEditCancelled():
+			topic = self.topic_tree.GetPyData(event.GetItem())
+			topic.name = event.GetLabel()
 	
 	def _show_topic_context_menu(self, event):
 		"""Shows the context menu for a topic in the topic tree."""

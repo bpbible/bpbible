@@ -3,7 +3,7 @@
   <object class="wxFrame" name="ManageTopicsFrame">
     <object class="wxSplitterWindow">
       <object class="wxTreeCtrl" name="topic_tree">
-        <style>wxTR_HAS_BUTTONS|wxTR_LINES_AT_ROOT</style>
+        <style>wxTR_EDIT_LABELS|wxTR_HAS_BUTTONS|wxTR_LINES_AT_ROOT</style>
       </object>
       <object class="wxListCtrl" name="passage_list_ctrl">
         <style>wxLC_REPORT|wxLC_SINGLE_SEL</style>
