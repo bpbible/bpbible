@@ -23,6 +23,7 @@ class TagPassageDialog(xrcTagPassageDialog):
 	def _bindEvents(self):
 		self.Bind(wx.EVT_BUTTON, self._on_ok_button_clicked, self.wxID_OK)
 		self.Bind(wx.EVT_BUTTON, self._on_new_tag_clicked, self.new_tag_button)
+		self.topic_selector.return_pressed_observers += self.comment_text.SetFocus
 	
 	def _on_ok_button_clicked(self, event):
 		if self._topic_is_selected():

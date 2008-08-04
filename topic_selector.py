@@ -25,6 +25,8 @@ class TopicSelector(wx.TextCtrl):
 		self._setup_list()
 		self._selected_topic = None
 		self.topic_changed_observers = ObserverList() 
+		# Called when return is pressed and the drop down is not shown.
+		self.return_pressed_observers = ObserverList()
 		self._bind_events()
 		self.selected_topic = self._manager
 
@@ -119,13 +121,14 @@ class TopicSelector(wx.TextCtrl):
 		keycode = event.GetKeyCode()
 		selection = self._topic_list.GetFirstSelected()
 
-		skip = True
+		if keycode == wx.WXK_RETURN and not self._dropdown.IsShown():
+			self.return_pressed_observers()
+			return
 
 		if not self._dropdown.IsShown():
 			event.Skip()
 			return
 
-		keycode = event.GetKeyCode()
 		if keycode == wx.WXK_DOWN:
 			if selection + 1 < self._topic_list.GetItemCount():
 				self._topic_list.Select(selection + 1)
