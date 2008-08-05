@@ -78,7 +78,11 @@ class ErrorDialog(xrcErrorDialog):
 		self.exception_text.ChangeValue(exception_text)
 		self.traceback_text.ChangeValue(traceback_text)
 		
-		self.ShowModal()
+		# There can be an error in here if showing it modal twice under linux
+		if not self.IsShown():
+			self.ShowModal()
+		else: 
+			return
 
 		# ignore this exception if the box is checked
 		if self.hide_error.IsChecked():
