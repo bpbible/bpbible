@@ -456,7 +456,7 @@ class TemplateManager(xrcTemplateManager):
 			f = open(template_file, "rb")
 			self.templates = pickle.load(f)
 		except Exception, e:
-			dprint(WARNING, "EXCEPTION", e)
+			dprint(WARNING, "Template loading exception", e)
 			#try:
 			#	import traceback
 			#	traceback.print_exc()

@@ -9,6 +9,7 @@ INSTALL_QUERY_MANY = "Are you sure you want to install the following books?"
 
 def chop_text(dc, text, max_size):
 	# first check if the text fits with no problems
+	# adapted from the aui source code
 	x, y = dc.GetTextExtent(text)
 	if x <= max_size:
 		return text

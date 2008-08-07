@@ -1,6 +1,5 @@
 from swlib.pysw import SW
 from debug import dprint, WARNING
-from util import get_traceback
 
 def to_unicode(text, mod=None):
 	if mod is None:

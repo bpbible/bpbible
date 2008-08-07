@@ -135,25 +135,25 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		menu = wx.Menu()
 		id = wx.NewId()
 		self.Bind(wx.EVT_MENU,
-				lambda event: self._create_topic,
+				lambda e: self._create_topic(event.Item),
 				id=id)
 		menu.Append(id, "&New Topic")
 		id = wx.NewId()
 		self.Bind(wx.EVT_MENU,
-				lambda event: self._create_passage(),
+				lambda e: self._create_passage(event.Item),
 				id=id)
 		menu.Append(id, "Add &Passage")
 		self.PopupMenu(menu)
 
-	def _create_topic(self):
-		dialog = TopicCreationDialog(self, self._selected_topic)
+	def _create_topic(self, item):
+		dialog = TopicCreationDialog(self, self.topic_tree.GetPyData(item))
 		dialog.Show()
 	
-	def _create_passage(self):
+	def _create_passage(self, item):
 		passage_entry = PassageEntry(None)
 		dialog = PassageEntryDialog(self, passage_entry)
 		if dialog.ShowModal() == wx.ID_OK:
-			self._selected_topic.add_passage(passage_entry)
+			self.topic_tree.GetPyData(item).add_passage(passage_entry)
 		dialog.Destroy()
 	
 	def _on_close(self, event):

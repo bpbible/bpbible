@@ -21,7 +21,7 @@ def WriteIndex(index, path = config.index_path):
 	else:
 		f = open("%s%s.idx" % (path, index.version), "wb")
 
-	cPickle.dump(index, f)
+	cPickle.dump(index, f, cPickle.HIGHEST_PROTOCOL)
 
 def ReadIndex(version, path = config.index_path):
 	if os.path.exists("%s%s.idxz" % (path, version)):
