@@ -9,6 +9,7 @@ from xrc.manage_topics_xrc import xrcManageTopicsFrame
 class ManageTopicsFrame(xrcManageTopicsFrame):
 	def __init__(self, parent):
 		super(ManageTopicsFrame, self).__init__(parent)
+		self.SetIcons(guiconfig.icons)
 		self._manager = get_primary_passage_list_manager()
 		self._selected_topic = None
 		self._init_passage_list_ctrl_headers()
@@ -21,15 +22,17 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		self.topic_tree.Bind(wx.EVT_TREE_SEL_CHANGED, self._selected_topic_changed)
 		self.topic_tree.Bind(wx.EVT_TREE_ITEM_GETTOOLTIP, self._get_topic_tool_tip)
 		self.topic_tree.Bind(wx.EVT_TREE_END_LABEL_EDIT, self._end_topic_label_edit)
+		self.topic_tree.Bind(wx.EVT_TREE_BEGIN_LABEL_EDIT, self._begin_topic_label_edit)
+		
 		self.topic_tree.Bind(wx.EVT_TREE_ITEM_MENU, self._show_topic_context_menu)
 		self.passage_list_ctrl.Bind(wx.EVT_LIST_ITEM_SELECTED, self._passage_selected)
 		self.passage_list_ctrl.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self._passage_activated)
 
 	def _setup_topic_tree(self):
-		self.root = self.topic_tree.AddRoot("Topics")
-		self.topic_tree.SetPyData(self.root, self._manager)
-		self._add_sub_topics(self._manager, self.root)
-		self.topic_tree.Expand(self.root)
+		root = self.topic_tree.AddRoot("Topics")
+		self.topic_tree.SetPyData(root, self._manager)
+		self._add_sub_topics(self._manager, root)
+		self.topic_tree.Expand(root)
 
 	def select_topic_and_passage(self, topic, passage_entry):
 		"""Selects the given topic in the tree, and the given passage entry
@@ -82,7 +85,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 			node = self._find_topic(id, topic)
 			if node is not None:
 				return node
-			id, cookie = self.topic_tree.GetNextChild(id, cookie)
+			id, cookie = self.topic_tree.GetNextChild(tree_item, cookie)
 
 	def _get_title(self):
 		"""Gets a title for the frame, based on the currently selected topic."""
@@ -109,6 +112,9 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		try:
 			self._add_topic_node(topic, parent_node)
 		except:
+			# TODO: remove bare except
+			# what do we need to do in here?
+			# what will throw an exception?
 			pass
 	
 	def _get_topic_tool_tip(self, event):
@@ -120,6 +126,11 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		"""
 		event.SetToolTip(self.topic_tree.GetPyData(event.GetItem()).description)
 
+	def _begin_topic_label_edit(self, event):
+		"""This event is used to stop us editing the root node."""
+		if event.GetItem() == self.topic_tree.RootItem:
+			event.Veto()
+	
 	def _end_topic_label_edit(self, event):
 		"""This event is used to update the names of topics.
 		
@@ -132,28 +143,33 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 	
 	def _show_topic_context_menu(self, event):
 		"""Shows the context menu for a topic in the topic tree."""
+		passage = self.topic_tree.GetPyData(event.Item)
 		menu = wx.Menu()
-		id = wx.NewId()
+		
+		item = menu.Append(wx.ID_ANY, "&New Topic")
 		self.Bind(wx.EVT_MENU,
-				lambda e: self._create_topic(event.Item),
-				id=id)
-		menu.Append(id, "&New Topic")
-		id = wx.NewId()
+				lambda e: self._create_topic(passage),
+				id=item.Id)
+		
+		item = menu.Append(wx.ID_ANY, "Add &Passage")
 		self.Bind(wx.EVT_MENU,
-				lambda e: self._create_passage(event.Item),
-				id=id)
-		menu.Append(id, "Add &Passage")
+				lambda e: self._create_passage(passage),
+				id=item.Id)
+		
 		self.PopupMenu(menu)
 
-	def _create_topic(self, item):
-		dialog = TopicCreationDialog(self, self.topic_tree.GetPyData(item))
-		dialog.Show()
+	def _create_topic(self, passage):
+		dialog = TopicCreationDialog(self, passage)
+		
+		# show it modally so we can destroy it afterwards
+		dialog.ShowModal()
+		dialog.Destroy()
 	
-	def _create_passage(self, item):
+	def _create_passage(self, passage):
 		passage_entry = PassageEntry(None)
 		dialog = PassageEntryDialog(self, passage_entry)
 		if dialog.ShowModal() == wx.ID_OK:
-			self.topic_tree.GetPyData(item).add_passage(passage_entry)
+			passage.add_passage(passage_entry)
 		dialog.Destroy()
 	
 	def _on_close(self, event):

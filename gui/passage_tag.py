@@ -128,7 +128,7 @@ class PassageTag(wx.PyWindow):
 		wx.BufferedPaintDC(self, self.bmp)
 
 	def on_left_button_up(self, event):
-		frame = ManageTopicsFrame(self)
+		frame = ManageTopicsFrame(guiconfig.mainfrm)
 		frame.select_topic_and_passage(self._passage_list, self._passage_entry)
 		frame.Show()
 		event.Skip()
