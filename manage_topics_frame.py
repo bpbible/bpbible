@@ -143,33 +143,33 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 	
 	def _show_topic_context_menu(self, event):
 		"""Shows the context menu for a topic in the topic tree."""
-		passage = self.topic_tree.GetPyData(event.Item)
+		topic = self.topic_tree.GetPyData(event.Item)
 		menu = wx.Menu()
 		
 		item = menu.Append(wx.ID_ANY, "&New Topic")
 		self.Bind(wx.EVT_MENU,
-				lambda e: self._create_topic(passage),
+				lambda e: self._create_topic(topic),
 				id=item.Id)
 		
 		item = menu.Append(wx.ID_ANY, "Add &Passage")
 		self.Bind(wx.EVT_MENU,
-				lambda e: self._create_passage(passage),
+				lambda e: self._create_passage(topic),
 				id=item.Id)
 		
 		self.PopupMenu(menu)
 
-	def _create_topic(self, passage):
-		dialog = TopicCreationDialog(self, passage)
+	def _create_topic(self, topic):
+		dialog = TopicCreationDialog(self, topic)
 		
 		# show it modally so we can destroy it afterwards
 		dialog.ShowModal()
 		dialog.Destroy()
 	
-	def _create_passage(self, passage):
+	def _create_passage(self, topic):
 		passage_entry = PassageEntry(None)
 		dialog = PassageEntryDialog(self, passage_entry)
 		if dialog.ShowModal() == wx.ID_OK:
-			passage.add_passage(passage_entry)
+			topic.add_passage(passage_entry)
 		dialog.Destroy()
 	
 	def _on_close(self, event):
