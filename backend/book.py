@@ -350,7 +350,7 @@ class Book(object):
 		else:
 			mod = self.mod
 
-		vk = VK(passage)
+		vk = SW.Key(passage)
 		mod.SetKey(vk) #set passage
 		mod.RenderText() # force entry attributes to get set	
 		data = mod.getEntryAttributesMap()[SW.Buf("Footnote")] \
