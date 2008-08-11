@@ -42,7 +42,6 @@ class BibleFrame(VerseKeyedFrame):
 		sizer.Add(self, 1, wx.GROW)
 		self.panel.SetSizer(sizer)
 
-		self._do_scroll_to_current = True
 
 	def setup(self):
 		self.observers = ObserverList()
@@ -52,6 +51,7 @@ class BibleFrame(VerseKeyedFrame):
 		return self.panel
 
 	def get_menu_items(self):
+
 		items = super(BibleFrame, self).get_menu_items()
 		items = (
 			(MenuItem("Harmony", self.show_harmony, accelerator="Ctrl-H"),
@@ -162,7 +162,8 @@ class BibleFrame(VerseKeyedFrame):
 		version = self.book.version
 		ref = self.reference
 		text = "%s (%s)" % (ref, version)
-		m.set_pane_title(p.name, text)		
+		
+		m.set_pane_title(p.name, text)
 		
 	
 	def random_verse(self):
@@ -270,93 +271,6 @@ class BibleFrame(VerseKeyedFrame):
 		#file.close()
 		self.update_title()
 
-	def suppress_scrolling(self, function):
-		"""Suppress any scrolling in this frame while the function is called."""
-		self._do_scroll_to_current = False
-		y = self.GetViewStart()[1]
-		function()
-		self.Scroll(-1, y)
-		self._do_scroll_to_current = True
-		
-	def scroll_to_current(self):
-		if not self._do_scroll_to_current:
-			return
-
-		me = self.Find(self.GetInternalRepresentation(), "#current")
-		self.ScrollTo("current", me)
-		
-	
-	def Find(self, cell, linktext):
-		"""Find anchor in hierarchy. 
-		
-		This is used instead of	html.HtmlCell.Find, which doesn't work as it
-		expects a 'void *'"""
-		child = cell.GetFirstChild()
-		while child:
-			ret = self.Find(child, linktext)
-			if(ret):
-				return ret
-			child = child.GetNext()
-		link = cell.GetLink()
-		if(not link):
-			return
-		if link.GetHref() == linktext:
-			return cell
-
-	def ScrollTo(self, anchor, c):
-		#register change
-		
-		# this used to be here...
-		#    self.ScrollToAnchor(anchor)
-
-
-		#scroll up a bit if possible
-		#this is the start
-		#x, y = self.GetViewStart()
-		#multiply to get pixels
-		#xx, yy = self.GetScrollPixelsPerUnit()
-		#y* = yy
-		# y = start in pixels 
-		# take 50 off y only if not within 100 pxls of bottom
-		#X, Y = self.GetVirtualSize()
-		# Y = Virtual size
-		#width, height = self.GetClientSizeTuple()
-		# client height - height
-		# y + height = bottom of screen (or should)
-		# y = start of view
-		# h = height of view
-		# if start + height is less than 100 from Virtual Size
-		# don't scroll
-		# if more than 100 pixels, do
-		#if(Y-y>50): 
-		#	y- = 100
-	#	
-	#	if y < 0: y = 0
-	#	#convert back
-	#	y/ = yy
-	#	#scroll
-	#	self.Scroll(x, y)
-		y = 0
-		scrollstep = self.GetScrollPixelsPerUnit()[1]
-
-		while c:
-			y+=c.GetPosY()
-			c = c.GetParent()
-		height = self.GetClientSizeTuple()[1]
-		#if(y>=50 and y<150):
-		#	pass#y- = (y-100)
-		#else:
-		#	y- = 100
-		# Try and keep in middle
-		# -40 is to correct for verse length, as we do not want start of 
-		# verse to start half way down, but the middle to be in the middle
-		median = height/2-40
-		if(y<median):
-			y = 0
-		else:
-			y -= median
-
-		self.Scroll(-1, y/scrollstep)
 		
 
 
@@ -441,4 +355,6 @@ class BibleFrame(VerseKeyedFrame):
 	#		print cell.this, self.FindVerse(cell)
 
 	#	return super(BibleFrame, self).CellClicked(cell, x, y, event)
+
+	
 

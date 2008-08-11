@@ -5,7 +5,9 @@ import genbooktree
 from backend.bibleinterface import biblemgr
 from util import string_util, noop
 from util.debug import dprint, WARNING
+from util.unicode import to_unicode
 from protocols import protocol_handler
+from swlib.pysw import SW
 
 
 import config
@@ -14,7 +16,10 @@ def on_genbook_click(frame, href, url):
 	if url is None:
 		url = SW.URL(href)
 	
-	host = url.getHostName()
+	host = to_unicode(
+		SW.URL.decode(url.getHostName()).c_str(),
+		frame.reference.module
+	)
 
 	if host == "previous":
 		frame.chapter_back()
@@ -26,7 +31,10 @@ def on_genbook_click(frame, href, url):
 		frame.go_to_parent(int(host[6:]))
 	
 	else:
-		dprint(WARNING, "Unknown genbook action", href)
+		key = TK(frame.book.mod.getKey(), frame.book.mod)
+		key.go_to(host)
+		
+		frame.go_to_key(key)
 
 
 protocol_handler.register_handler("genbook", on_genbook_click)
@@ -54,7 +62,16 @@ class GenBookFrame(BookFrame):
 	
 	def SetReference(self, ref, context=None):
 		self.reference = ref
-		if self.book.mod:
+		if not self.book.mod:
+			data = config.MODULE_MISSING_STRING
+				
+			self.SetPage(data)
+			self.update_title()
+			return
+		
+		root, display_children = self.book.get_display_level_root(ref)
+
+		if not display_children:
 			before = self.genbooktree.get_item(-1)
 			after = self.genbooktree.get_item(1)
 			data = '<table width="100%" VALIGN=CENTER ><tr>'
@@ -84,7 +101,8 @@ class GenBookFrame(BookFrame):
 			
 			breadcrumb[-1] = self.book.version
 
-			breadcrumb = [string_util.htmlify_unicode(b) for b in breadcrumb]
+			breadcrumb = [string_util.htmlify_unicode(b) 
+				for b in breadcrumb]
 
 			data += "<td align=CENTER><center><b>%s</b></center></td>" % \
 				" &gt; ".join(reversed(breadcrumb))
@@ -101,15 +119,50 @@ class GenBookFrame(BookFrame):
 			data += "</tr></table>\n"
 			
 
-		
-			text = self.book.GetReferenceFromKey(ref, context = context)
+			text = self.book.GetReference(ref, context = context)
 			data += text
-			data = data.replace("<!P>","</p><p>")
-
 		else:
-			data = config.MODULE_MISSING_STRING
-				
+			items = []
+			def add_items(key):
+				anchor = ""
+				bgcolor = ""
+				if key.equals(ref):
+					bgcolor = ' bgcolor="#9999ff"'
+					anchor = '<a name="current" href="#current">%s</a>' % key
+				else:
+					anchor = '<a href="genbook:%s">%s</a>' % (
+						SW.URL.encode(key.getText()).c_str(), key,
+					)
+					
+					
+					
+				items.append(
+					'<table width=100%% cellspacing=0 cellpadding=0>'
+					'<tr%s><td colspan=2px><b>%s</b>:%s</td></tr>'
+					% (bgcolor, anchor, self.book.GetReference(key))
+				)
+				items.append("</table>")
+				items.append(
+					"<table width=100% cellspacing=0 cellpadding=0>"
+				)
+
+				for child in key:
+					items.append("<tr><td width=20px></td><td>")
+					add_items(child)
+					items.append("</td></tr>")
+
+				items.append("</table>")
+
+			add_items(root)
+			data = ''.join(items)
+
+
+		data = data.replace("<!P>","</p><p>")
+
 		self.SetPage(data)
+		if display_children:
+			self.scroll_to_current()
+		
 		self.update_title()
 		
 
@@ -127,6 +180,13 @@ class GenBookFrame(BookFrame):
 
 		self.genbooktree.go_to_parent(amount)
 
+	def go_to_key(self, key):
+		mod = self.book.mod
+		if not mod: 
+			return
+
+		self.genbooktree.go_to_key(key)
+	
 	def get_window(self):
 		return self.genbookpanel
 

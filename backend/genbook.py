@@ -18,37 +18,19 @@ class TreeNode(object):
 
 class GenBook(Book):
 	type = 'Generic Books'	
-	def GetReference(self, ref, style = -1, context = None, max_verses = 500):
-		if not self.mod:
-			return None
-		
-		template = self.templatelist[-1]
-		key = self.mod.getKey()
-		key.setText(ref)
-		self.mod.setKey(key)
-		text = self.mod.RenderText()
-		# We have to get KeyText after RenderText, otherwise our
-		# KeyText will be wrong
-		d = dict(range = self.mod.KeyText(), version = self.mod.Name())
-		verses = template.header.substitute(d)
-		d1 = d
-		d1["text"] = text
-		verses += template.body.substitute(d1)
 
-#		verses += "<b>" + self.mod.KeyText() + "</b><br>"; #output heading
-#		verses += self.mod.RenderText(); #output text
-#		verses += "<br>(";
-#		verses += self.mod.Name();
-		verses += template.footer.substitute(d) #dictionary name
-		return verses
-
-	def GetReferenceFromKey(self, ref, context = None, max_verses = 500):
+	def GetReference(self, ref, context = None, max_verses = 500):
 		if not self.mod:
 			return None
 		template = self.templatelist[-1]
 		#key = self.mod.getKey()
 		#	key.setText(ref)
 		
+		if isinstance(ref, basestring):
+			key = TK(self.mod.getKey())
+			key.setText(ref)
+			ref = key
+			
 		# Without persist, most of the ones in heretics will not work!!!
 		ref.Persist(1)
 		self.mod.setKey(ref)
@@ -61,11 +43,7 @@ class GenBook(Book):
 		d1["text"] = text
 		verses += template.body.substitute(d1)
 
-#			verses += "<b>" + self.mod.KeyText() + "</b><br>"; #output heading
-#			verses += self.mod.RenderText(); #output text
-#			verses += "<br>(";
-#			verses += self.mod.Name();
-		verses += template.footer.substitute(d) #dictionary name
+		verses += template.footer.substitute(d)
 		return verses
 			
 			
@@ -95,3 +73,50 @@ class GenBook(Book):
 	
 	def GetChildren(self, tk):
 		return [a for a in tk]
+	
+	def display_level(self):
+		assert self.mod, "No module in get_config_entry"
+
+		try:
+			return int(self.mod.getConfigEntry("DisplayLevel"))
+		except (TypeError, ValueError), e:
+			# invalid number or not specified
+			return 1
+	
+	def get_display_level_root(self, key):
+		"""
+		Return the root of the view, and whether to 
+		display sub-levels for this node
+		"""
+		display_level = self.display_level()
+		if display_level != 1:
+			# display levels:
+			# if we are a leaf, just climb up the given number of levels
+			# if we are inbetween the above and below cases here, then go down
+			# first as far as possible, then up
+			# if our display-level'th first child is a leaf, then display
+			# all below here.
+			# if we are in between those two
+			count = 0
+			
+			ref = TK(key)
+			while ref.firstChild() and count < display_level:
+				count += 1
+		
+			if count < display_level:
+				# it was a close enough to being a leaf, go up now
+				parents_count = 1
+				root = TK(key)
+				root.root()
+				last_ref = TK(ref)
+				ref.parent()
+				while ref != root and parents_count < display_level:
+					last_ref = TK(ref)
+					ref.parent()
+					parents_count += 1
+
+				# show that reference and all its children
+				return last_ref, True
+
+		# don't show any children for this
+		return key, False

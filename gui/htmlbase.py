@@ -7,7 +7,7 @@ from util import string_util
 import guiconfig
 import re
 from util.configmgr import config_manager
-from util.debug import dprint, ERROR, MESSAGE
+from util.debug import dprint, ERROR, MESSAGE, WARNING
 
 
 html_settings = config_manager.add_section("Html")
@@ -224,6 +224,8 @@ class HtmlBase(wx.html.HtmlWindow):
 
 	def _setup(self):
 		self.top_left_cell = None
+		self._do_scroll_to_current = True
+		
 		self.Bind(wx.EVT_SIZE, self.on_size)
 		self.Bind(wx.EVT_IDLE, self.on_idle)
 		
@@ -323,6 +325,64 @@ class HtmlBase(wx.html.HtmlWindow):
 			
 
 		return super(HtmlBase, self).SetPage(text)
+	
+	def suppress_scrolling(self, function):
+		"""Suppress any scrolling in this frame while the function is called."""
+		self._do_scroll_to_current = False
+		y = self.GetViewStart()[1]
+		function()
+		self.Scroll(-1, y)
+		self._do_scroll_to_current = True
+		
+	def scroll_to_current(self):
+		if not self._do_scroll_to_current:
+			return
+
+		me = self.Find(self.GetInternalRepresentation(), "#current")
+		self.ScrollTo("current", me)
+		
+	
+	def Find(self, cell, linktext):
+		"""Find anchor in hierarchy. 
+		
+		This is used instead of	html.HtmlCell.Find, which doesn't work as it
+		expects a 'void *'"""
+		child = cell.GetFirstChild()
+		while child:
+			ret = self.Find(child, linktext)
+			if(ret):
+				return ret
+			child = child.GetNext()
+		link = cell.GetLink()
+		if(not link):
+			return
+		if link.GetHref() == linktext:
+			return cell
+
+	def ScrollTo(self, anchor, c):
+		y = 0
+		scrollstep = self.GetScrollPixelsPerUnit()[1]
+
+		if not c:
+			dprint(WARNING, "Trying to scroll to non-existent anchor", anchor)
+
+		while c:
+			y+=c.GetPosY()
+			c = c.GetParent()
+
+		height = self.GetClientSizeTuple()[1]
+
+		# Try and keep in middle
+		# -40 is to correct for verse length, as we do not want start of 
+		# verse to start half way down, but the middle to be in the middle
+		median = height/2-40
+		if(y<median):
+			y = 0
+		else:
+			y -= median
+
+		self.Scroll(-1, y/scrollstep)
+		
 
 def HtmlSelection_Set(self, fromCell, toCell):
 	# this version doesn't occur in the swig wrapped version, so here it is in

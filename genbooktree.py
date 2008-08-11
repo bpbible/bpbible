@@ -89,4 +89,38 @@ class GenBookTree(LazyTreeCombo):
 		self.popup.set_value(item)
 		
 		
-	
+	def go_to_key(self, tk):
+		# keep a copy
+		ref_to_aim_for = TK(tk)
+		
+		# position both at root
+		tk.root()
+		tree = self.popup.tree
+		tree_item = tree.RootItem
+
+		def look_for(tree_item):
+			while tk != ref_to_aim_for:
+				succeeded = tk.nextSibling()
+				if not succeeded or tk > ref_to_aim_for:
+					if succeeded:
+						# too far, go back
+						tk.previousSibling()
+					
+					# now try in the children
+					assert tk.firstChild(), \
+						"Couldn't get child even though should have a child"
+
+					if tree_item != tree.RootItem: 
+						tree.Expand(tree_item)
+					tree_item, cookie = tree.GetFirstChild(tree_item)
+					assert tree_item, "Couldn't find it in wx tree"
+
+					look_for(tree_item)
+					return
+				else:
+					tree_item = tree.GetNextSibling(tree_item)
+					assert tree_item, "wxTree finished too early"
+
+			self.popup.set_value(tree_item)
+		
+		look_for(tree_item)
