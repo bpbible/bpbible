@@ -62,6 +62,23 @@ ModDrv=RawGenBook
 """, 
 		all_entries
 	),
+	genbook_displaylevel=(
+		"modules/%(modulename)s",
+		"/%(modulename)s",
+		SW.RawGenBook,
+		SW.Key,
+		"""\
+[%(modulename)s]
+DataPath=./modules/%(modulename)s/%(modulename)s
+Description=A test of %(modulename)s - lumi\xe8re
+SourceType=Plaintext
+Encoding=%(sword_encoding)s
+ModDrv=RawGenBook
+DisplayLevel=2
+""", 
+		all_entries
+	),
+	
 	dictionary=(
 		"modules/%(modulename)s",
 		"/%(modulename)s",
