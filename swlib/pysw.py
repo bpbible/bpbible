@@ -908,6 +908,8 @@ class TK(SW.TreeKeyIdx):
 		self.module = module
 		if module is None and hasattr(tk, "module"):
 			self.module = tk.module
+		
+		assert self.module, "Moduleless tree key :("
 
 	def __iter__(self):
 		tk = TK(self.tk)
@@ -938,6 +940,9 @@ class TK(SW.TreeKeyIdx):
 
 		return " > ".join(breadcrumb[::-1])
 	
+	def go_to(self, value):
+		self.setText(to_str(value, self.module))
+
 
 # -- Utility functions
 def GetVerseTuple(string, context=""):
