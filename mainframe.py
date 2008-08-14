@@ -347,6 +347,7 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.aui_callbacks["Search"] = lambda toggle:wx.CallAfter(
 							self.search_panel.on_show, toggle)
 		
+		# TODO: only refresh if settings are changed
 		self.bible_observers += self.search_panel.versepreview.RefreshUI
 
 		wx.CallAfter(lambda:self.set_search_version(biblemgr.bible.version))
@@ -356,6 +357,7 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.version_tree.on_module_choice += self.set_module
 
 		self.genbooktext = GenBookFrame(self, biblemgr.genbook)
+		self.bible_observers += self.genbooktext.reload
 
 		self.bibletext = BibleFrame(self)
 		self.bibletext.SetBook(biblemgr.bible)

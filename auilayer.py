@@ -6,6 +6,8 @@ import guiconfig
 import config
 from gui import guiutil
 from util.configmgr import config_manager
+from util.observerlist import ObserverList
+from module_popup import ModulePopup
 
 # the following three functions borrowed from wxAUI in dockart.cpp
 
@@ -61,9 +63,13 @@ def wxAuiLightContrastColour(c):
 class DockArt(wx.aui.PyAuiDockArt):
 	"""DockArt: tracks the sections which when right clicked, bring up a
 	toolbar popup"""
-	def __init__(self):
+	text_padding = 2
+
+	def __init__(self, parent):
 		self.aui_dock_art = wx.aui.AuiDefaultDockArt()
+		self.caption_drawn = ObserverList()
 		super(DockArt, self).__init__()
+		self.parent = parent
 
 	def DrawBackground(self, dc, window, orientation, rect):
 		# note the empty space that has been taken by spurious background
@@ -72,7 +78,7 @@ class DockArt(wx.aui.PyAuiDockArt):
 		self.aui_dock_art.DrawBackground(dc, window, orientation, rect)
 		#dc.SetBrush(wx.BLUE_BRUSH)
 		#dc.DrawEllipseRect(rect)
-		self.owner.rects.append(rect)
+		self.parent.rects.append(rect)
 	
 	def DrawBorder(self, dc, rect, pane):
 		# note the empty space that has been taken by toolbars that aren't
@@ -82,19 +88,135 @@ class DockArt(wx.aui.PyAuiDockArt):
 		self.aui_dock_art.DrawBorder(dc, pane.window, rect, pane)
 	
 		if pane.IsToolbar() and not pane.IsFloating():
-			self.owner.rects.append(rect)
+			self.parent.rects.append(rect)
 	
-	#def DrawCaption(self, dc, window, text, rect, pane):
-	#	dc.Brush = wx.RED_BRUSH
-	#	dc.Pen = wx.TRANSPARENT_PEN
-	#	dc.GradientFillLinear(rect, "#0A246A", "#A6CAF0")
+	def setup_font(self, dc, active):
+		dc.TextForeground = self.GetColour([
+			aui.AUI_DOCKART_INACTIVE_CAPTION_TEXT_COLOUR,
+			aui.AUI_DOCKART_ACTIVE_CAPTION_TEXT_COLOUR
+		][active])
+		
+		dc.Font = self.GetFont(aui.AUI_DOCKART_CAPTION_FONT)
 
-	#	dc.TextForeground = "WHITE"
-	#	dc.DrawText(text, rect[0] + 5, rect[1])
-	#
-	#
-	#	pass
+	def DrawCaption(self, dc, window, text, rect, pane):
+		from install_manager.install_module import chop_text
+	
+		active = bool(pane.state & pane.optionActive)
 
+		match = None		
+		if pane.name in [title for p, title in self.parent.panes]:
+			self.regex = re.compile(r"\(([^)]+)\)")
+
+			# get the last match
+			for match in self.regex.finditer(text):
+				pass
+
+		if not match:
+			# use the default behaviour
+			return self.aui_dock_art.DrawCaption(dc, window, text, rect, pane)
+
+		# draw the background...
+		self.aui_dock_art.DrawCaption(dc, window, "", rect, pane)
+
+		# setup our font
+		self.setup_font(dc, active)
+		
+		combo_text = match.group(1)
+		before_text = text[:match.start(1)]
+		after_text = text[match.end(1):]
+		
+		max_width = rect[2] - 5
+
+		button_size = self.GetMetric(aui.AUI_DOCKART_PANE_BUTTON_SIZE)
+		max_width -= button_size * (
+			pane.HasCloseButton() + pane.HasMaximizeButton()
+		)
+		
+		
+		chopped_text = chop_text(dc, before_text, max_size=max_width)
+		w, h = dc.GetTextExtent(chopped_text)
+		
+		clipping_rect = wx.Rect(rect[0], rect[1], max_width, rect[3])
+		dc.SetClippingRegion(*clipping_rect)
+		dc.DrawText(chopped_text, rect[0] + 2,  rect.y+(rect.height/2)-(h/2))
+
+		#if before_text != chopped_text:
+		#	if pane.name in size_taken:
+		#		del size_taken[pane.name]
+
+		#	return
+		
+		c_w = w
+		c_h = h
+
+		w, h = dc.GetTextExtent(combo_text)
+		height = h + 2
+		
+		backing_rect = wx.Rect(
+			rect[0] + c_w + self.text_padding, rect.y+rect.height/2-height/2, 
+			w+self.text_padding+height, height
+		)
+
+		self.draw_combo(dc, window, backing_rect, combo_text, 
+			pane, clipping_rect)
+		
+		max_width -= backing_rect.width - 3
+
+		chopped_text = chop_text(dc, after_text, max_size=max_width)
+		w, h = dc.GetTextExtent(chopped_text)
+		
+		dc.DrawText(chopped_text, backing_rect.right + 2, 
+			rect.y+(rect.height/2)-(h/2))
+		
+		
+
+		w += rect[0] + 2
+		h = rect[1]
+		size_taken[pane.name] = backing_rect, combo_text, clipping_rect
+		#self.caption_drawn(pane, max_width, *size_taken[pane.name])
+		dc.DestroyClippingRegion()
+		
+	
+	def draw_combo(self, dc, window, rect, text, pane, clipping_rect=None):
+		assert pane.IsShown(), "Trying to draw hidden combo!"
+		active = bool(pane.state & pane.optionActive)
+		
+		self.setup_font(dc, active)
+		
+		
+		cc = self.GetColour([
+			aui.AUI_DOCKART_INACTIVE_CAPTION_COLOUR,
+			aui.AUI_DOCKART_ACTIVE_CAPTION_COLOUR,			
+		][active])
+		
+		dc.SetBrush(wx.Brush(wxAuiStepColour(cc, 120)))
+		dc.SetPen(wx.Pen(wxAuiStepColour(cc, 
+			70 + (pane.name not in mouse_over) * 25))
+		)
+		
+		w, h = dc.GetTextExtent(text)
+	
+		dc.DrawRectangleRect(rect)
+		
+		dc.DrawText(text, rect[0] + self.text_padding, 
+			rect.y+(rect.height/2)-(h/2))
+		
+		
+		h = rect.height
+		drop_arrow_rect = (
+			rect[0] + w + self.text_padding,
+			rect.y+(rect.height/2)-(h/2), 15, 15
+		)
+
+		# clipping doesn't seem to be done here. So draw all or nothing
+		if clipping_rect and clipping_rect.ContainsRect(drop_arrow_rect):
+			wx.RendererNative.Get().DrawDropArrow(
+				window, dc, drop_arrow_rect, 0
+			)
+	
+
+mouse_over = {}
+size_taken = {}
 class AuiLayer(object):
 	"""The AUI part of the main form"""
 	def setup(self):
@@ -107,14 +229,16 @@ class AuiLayer(object):
 
 
 		self.aui_uses_provider = False
+		self.maximized_pane_direction = None
+		
+		self.on_render = ObserverList()
 		
 		try:
-			dockart = DockArt()
-			dockart.owner = self
+			self.dockart = DockArt(self)
 			
 			self.aui_mgr.Bind(aui.EVT_AUI_RENDER, self.on_aui_render)
 
-			self.aui_mgr.SetArtProvider(dockart)
+			self.aui_mgr.SetArtProvider(self.dockart)
 			self.aui_uses_provider = True
 		except AttributeError:
 			# no constructor defined previous to wx 2.8.4.0, so can't override
@@ -163,7 +287,8 @@ class AuiLayer(object):
 	def set_aui_items_up(self):
 		self.ToolBar = None#self.main_toolbar
 	
-		items = [[self.version_tree, "Books",],
+		items = [
+			[self.version_tree, "Books",],
 			[self.bibletext.get_window(), "Bible", ["CloseButton", False]],
 			[self.commentarytext.get_window(), "Commentary",],
 			[self.dictionarytext.get_window(), "Dictionary"],
@@ -173,12 +298,12 @@ class AuiLayer(object):
 			[self.history_pane, "History"],
 		]
 
-		self.panes = (self.bibletext, self.commentarytext, 
+		panes = (
+			self.bibletext, self.commentarytext, 
 			self.dictionarytext, self.genbooktext, self.verse_compare
 		)
 
-		self.panes = [(frame, frame.title) for frame in self.panes]
-			
+		self.panes = [(frame, frame.title) for frame in panes]
 
 		if config_manager["BPBible"]["layout"] is not None:
 			layout = config_manager["BPBible"]["layout"]
@@ -190,6 +315,7 @@ class AuiLayer(object):
 			if maximized:
 				pane = self.aui_mgr.GetPane(maximized)
 				assert pane.IsOk(), maximized
+				self.fix_pane_direction(pane)
 				self.aui_mgr.MaximizePane(pane)
 			
 		else:
@@ -235,7 +361,70 @@ class AuiLayer(object):
 		self.aui_mgr.Bind(aui.EVT_AUI_PANE_CLOSE, self.on_pane_close)
 		self.aui_mgr.Bind(aui.EVT_AUI_PANE_RESTORE, self.on_pane_restore)
 		self.aui_mgr.Bind(aui.EVT_AUI_PANE_MAXIMIZE, self.on_pane_maximize)
+
+		self.aui_mgr.Bind(wx.EVT_MOTION, self.on_motion)
+		self.aui_mgr.Bind(wx.EVT_LEFT_DOWN, self.on_left_down)
+		self.aui_mgr.Bind(wx.EVT_LEAVE_WINDOW, self.on_leave_window)
 	
+	def on_leave_window(self, event):
+		self.clear_over_list()
+		event.Skip()
+	
+	def on_left_down(self, event):
+		if mouse_over:
+			self.popup(event)
+		else:
+			event.Skip()
+	
+	def popup(self, event):
+		assert(len(mouse_over)) == 1, "Only one thing can have mouse over"	
+		name, (rect, title, clipping_rect) = mouse_over.items()[0]
+		frames = [frame for frame, f_title in self.panes if f_title  == name]
+		assert len(frames) == 1, "Wrong frame count: %s (%r)" % (name, frames)
+		frame = frames[0]
+		
+		
+		p = ModulePopup(self, event, rect, frame.book)
+		def on_dismiss(chosen):
+			if not rect.Contains(self.ScreenToClient(wx.GetMousePosition())):
+				self.clear_over_list()
+			
+			if chosen is not None:
+				frame.book.SetModule(p.box.GetString(chosen))
+
+		p.on_dismiss += on_dismiss
+		p.Popup()
+	
+	def clear_over_list(self):
+		old_mouse_over = mouse_over.items()
+		mouse_over.clear()		
+
+		for key, (rect, title, clipping_rect) in old_mouse_over:
+			self.repaint_combo(key, rect, title, clipping_rect)
+
+	def repaint_combo(self, key, rect, title, clipping_rect):
+		dc = wx.ClientDC(self)
+		dc.SetClippingRegion(*clipping_rect)
+		pane = self.aui_mgr.GetPane(key)
+		if not pane.IsShown():
+			return False
+
+		self.dockart.draw_combo(dc, self, rect, title, pane, clipping_rect)
+		dc.DestroyClippingRegion()
+		return True
+
+	def on_motion(self, event):
+		self.clear_over_list()
+
+		for key, (rect, title, clipping_rect) in size_taken.items():
+			if rect.Contains((event.X, event.Y)):
+				mouse_over[key] = rect, title, clipping_rect
+				if self.repaint_combo(key, rect, title, clipping_rect):
+					return
+
+
+		event.Skip()
+
 	def show_toolbar_popup(self, event):
 		if self.aui_uses_provider:
 			for item in self.rects:
@@ -282,8 +471,7 @@ class AuiLayer(object):
 		maximized = self.get_maximized_pane()
 		
 		if maximized and not pane.IsToolbar(): 
-			self.aui_mgr.RestoreMaximizedPane()
-
+			self.restore_maximized_pane(maximized)
 		assert pane.IsOk(), panel
 		#if not toggle and pane.IsMaximized():
 		#	# restore the pane first
@@ -294,6 +482,10 @@ class AuiLayer(object):
 			self.aui_callbacks[panel](toggle)
 
 		self.on_pane_changed(panel, toggle)
+
+	def restore_maximized_pane(self, pane):
+		self.restore_pane_direction(pane)
+		self.aui_mgr.RestoreMaximizedPane()
 
 	def on_pane_changed(self, pane_name, toggle):
 		wx.CallAfter(self.update_all_aui_menu_items)
@@ -315,9 +507,26 @@ class AuiLayer(object):
 				item.Check(pane.IsShown())
 	
 	def on_pane_restore(self, event):
+		pane = event.GetPane()
+		self.restore_pane_direction(pane)
 		wx.CallAfter(self.update_all_aui_menu_items)
 	
-	on_pane_maximize = on_pane_restore
+	def fix_pane_direction(self, pane):
+		self.maximized_pane_direction = pane.dock_direction
+		pane.Right()
+	
+	def restore_pane_direction(self, pane):
+		if self.maximized_pane_direction:
+			 pane.dock_direction = self.maximized_pane_direction
+			 self.maximized_pane_direction = None
+	
+	def on_pane_maximize(self, event):
+		# workaround maximization bug - move the pane to the right before
+		# maximizing, then back afterwards
+		pane = event.GetPane()
+		self.fix_pane_direction(pane)
+		wx.CallAfter(self.update_all_aui_menu_items)
+		 
 
 	def on_pane_close(self, event):
 		self.event = event
@@ -325,18 +534,20 @@ class AuiLayer(object):
 	
 	def save_layout(self):
 		maximized = self.get_maximized_pane()
+		maximized_name = None
 		if maximized:
-			maximized = maximized.name
+			maximized_name = maximized.name
 
-		self.aui_mgr.RestoreMaximizedPane()
+			self.restore_maximized_pane(maximized)
+
 		data = dict(perspective=self.aui_mgr.SavePerspective(),
-					maximized=maximized)
+					maximized=maximized_name)
 		return data
 
 	def on_aui_render(self, event):
 		self.rects = []
+		self.on_render()
 		event.Skip()
-		
 	
 	def set_pane_title(self, panename, text):
 		pane = self.aui_mgr.GetPane(panename)
@@ -367,7 +578,11 @@ class AuiLayer(object):
 				
 				],
 	
-			[self.bibletext.get_window(), "Bible", ["Centre"], ["CloseButton", False]],
+			[self.bibletext.get_window(), "Bible", 
+				["Centre"], 
+				["CloseButton", False],
+				["Floatable", False],
+			],
 			[self.commentarytext.get_window(), "Commentary", ["Right"],["Layer",2]],
 			[self.dictionarytext.get_window(), "Dictionary", ["Bottom"]],
 			[self.genbooktext.get_window(), "Other Books", ["Top"], 
@@ -397,3 +612,4 @@ class AuiLayer(object):
 	
 		self.create_items(default_items)
 		self.create_toolbars(default_toolbars)		
+	

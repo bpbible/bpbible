@@ -82,7 +82,7 @@ class BookFrame(DisplayFrame):
 		self.book = None
 		
 		super(BookFrame, self).setup()
-	
+
 	def get_actions(self):
 		actions = super(BookFrame, self).get_actions()
 		actions.update({
@@ -105,7 +105,10 @@ class BookFrame(DisplayFrame):
 		"""Move to previous article"""
 		self.chapter_move(-1)
 	
-	def reload(self):
+	def reload(self, event=None):
+		if event and not event.settings_changed:
+			return
+
 		self.SetReference(self.reference)
 
 	def toggle_frame(self):
@@ -189,8 +192,6 @@ class BookFrame(DisplayFrame):
 	def get_verified(self, ref):
 		return ref
 
-
-	
 class VerseKeyedFrame(BookFrame):
 	def chapter_move(self, number):
 		vk = VK(self.reference)
@@ -325,8 +326,6 @@ class CommentaryFrame(LinkedFrame):
 		self.gui_reference.SetValue(ref)
 		self.gui_reference.currentverse = ref
 		
-	
-
 class DictionaryFrame(BookFrame):
 	title = "Dictionary"
 

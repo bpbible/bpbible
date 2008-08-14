@@ -179,10 +179,14 @@ class BibleInterface(object):
 		genbook     = self.genbook.version
 		
 		items = [
-			(self.bible, bible), 
+			(self.genbook, genbook),
 			(self.dictionary, dictionary), 
 			(self.commentary, commentary), 
-			(self.genbook, genbook)
+			
+			# do bible last, so that the others will have been notified of
+			# their version changes before it notifies them it has changed
+			(self.bible, bible), 
+			
 		]
 
 		if path_changed is None:
