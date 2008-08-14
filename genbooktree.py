@@ -15,7 +15,7 @@ class GenBookTree(LazyTreeCombo):
 		self.frame = frame
 		wx.CallAfter(self.SetBook, book)
 
-	def SetBook(self, book):
+	def SetBook(self, book, old=""):
 		self.root = self.tree.GetRootItem()
 		#if not self.root
 		
@@ -24,13 +24,26 @@ class GenBookTree(LazyTreeCombo):
 		self.book = book
 		if not book.mod:
 			self.tree.SetPyData(self.root, (["<empty>"], False))
+			self.AddItems(self.root)
+			self.set_value(self.tree.GetFirstChild(self.root)[0])
+			
 
 		else:
 			self.tk = TK(book.mod.getKey(), book.mod)
 			self.tree.SetPyData(self.root, (TK(self.tk), False))
-			self.tk.root()
-		self.AddItems(self.root)
-		self.set_value(self.tree.GetFirstChild(self.root)[0])
+			self.AddItems(self.root)
+			
+			# clear error
+			self.tk.Error()
+
+
+			self.tk.text = old
+			if not ord(self.tk.Error()) and self.tk.text:
+				self.go_to_key(self.tk)
+			
+			else:
+				self.set_value(self.tree.GetFirstChild(self.root)[0])
+			
 
 	def has_children(self, item):
 		data = self.get_data(item)

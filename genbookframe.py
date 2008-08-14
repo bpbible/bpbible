@@ -32,7 +32,7 @@ def on_genbook_click(frame, href, url):
 	
 	else:
 		key = TK(frame.book.mod.getKey(), frame.book.mod)
-		key.go_to(host)
+		key.text = host
 		
 		frame.go_to_key(key)
 
@@ -57,17 +57,23 @@ class GenBookFrame(BookFrame):
 		self.genbookpanel.Fit()
 		self.genbooktree.Bind(wx.EVT_COMBOBOX, self.on_genbook_change)
 		biblemgr.genbook.observers += self.genbook_version_changed
+		self.reference_text = None
 		
 		
 	
 	def SetReference(self, ref, context=None):
 		self.reference = ref
+		
 		if not self.book.mod:
 			data = config.MODULE_MISSING_STRING
+			self.reference_text = "<empty>"
+			
 				
 			self.SetPage(data)
 			self.update_title()
 			return
+		
+		self.reference_text = self.reference.text
 		
 		root, display_children = self.book.get_display_level_root(ref)
 
@@ -197,13 +203,4 @@ class GenBookFrame(BookFrame):
 		)
 
 	def genbook_version_changed(self, newversion):
-		if newversion:
-			key = TK(newversion.getKey(), newversion)
-			key.root()
-			self.SetReference(key)
-		else:
-			self.SetReference(None)
-
-		self.genbooktree.SetBook(biblemgr.genbook)
-	
-
+		self.genbooktree.SetBook(biblemgr.genbook, self.reference_text)

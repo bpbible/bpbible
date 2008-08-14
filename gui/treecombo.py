@@ -2,6 +2,7 @@ import wx
 import wx.combo
 from util import osutils
 from util.observerlist import ObserverList
+from util.debug import dprint, WARNING
 
 
 class TreeCtrlComboPopup(wx.combo.ComboPopup):
@@ -346,6 +347,9 @@ class LazyTreeCombo(TreeCombo):
 		self.OnChoice()
 	
 	def get_data(self, item):
+		if not item:
+			dprint(WARNING, "get_data called with invalid tree item")
+			return None
 		return self.tree.GetPyData(item)[0]
 		
 

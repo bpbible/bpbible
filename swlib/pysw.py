@@ -940,8 +940,25 @@ class TK(SW.TreeKeyIdx):
 
 		return " > ".join(breadcrumb[::-1])
 	
-	def go_to(self, value):
-		self.setText(to_str(value, self.module))
+	def get_text(self):
+		return to_unicode(self.getText(), self.module)
+
+	def set_text(self, value):
+		print "SETTING TEXT"
+		v = to_str(value, self.module)
+
+		self.setText(v)
+	
+	# horrible swig magic...
+	__swig_setmethods__	 = {"text":set_text}
+	__swig_getmethods__	 = {"text":get_text}
+	for _s in [SW.TreeKeyIdx]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
+	__setattr__ = lambda self, name, value: SW._swig_setattr(self, TK, name, value)
+	__swig_getmethods__ = {}
+	for _s in [SW.TreeKeyIdx]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
+	__getattr__ = lambda self, name: SW._swig_getattr(self, TK, name)
+	
+	text = property(get_text, set_text)
 
 
 # -- Utility functions
