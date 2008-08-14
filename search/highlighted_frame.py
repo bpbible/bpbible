@@ -1,6 +1,5 @@
 import re
 import unicodedata
-from itertools import takewhile
 
 from backend.verse_template import VerseTemplate
 from util.string_util import KillTags, ReplaceUnicode, replace_amp, htmlify_unicode, remove_amps
@@ -96,11 +95,13 @@ def unite(string1, string2):
 				# if we have run out of tokens, add on all the rest of the 
 				# tokens from the other string at the end
 				
-				# put diacritics on the last token 
-				result[-1].extend(takewhile(is_mark, iter2))
+				# put diacritics on the last token
+				l = list(iter2)
+				while l and is_mark(l[0]):
+					result[-1].append(l.pop(0))
 
 				# and the rest on the end
-				result.append(list(iter2))
+				result.append(l)
 				
 				return result
 			
