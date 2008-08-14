@@ -1,4 +1,6 @@
 import re
+import unicodedata
+from itertools import takewhile
 
 from backend.verse_template import VerseTemplate
 from util.string_util import KillTags, ReplaceUnicode, replace_amp, htmlify_unicode, remove_amps
@@ -24,6 +26,12 @@ not_word = re.compile(r"\W", flags=re.UNICODE)
 OPENING_TAG = 0
 CLOSING_TAG = 1
 ZERO_WIDTH_TAG = 2
+
+def is_mark(char):
+	if len(char) > 1:
+		return False
+	
+	return unicodedata.category(char).startswith("M")
 
 def get_tag(text):
 	if text.startswith("<") and text.endswith(">"):
@@ -51,6 +59,7 @@ def unite(string1, string2):
 	"""Unite string1 and string2.
 	
 	This maps each token in string1 into a sequence of tokens in string2."""
+	assert isinstance(string1, unicode) and isinstance(string2, unicode)
 	iter1 = tokenize(string1)
 	iter2 = tokenize(string2)
 
@@ -86,13 +95,31 @@ def unite(string1, string2):
 			except StopIteration:
 				# if we have run out of tokens, add on all the rest of the 
 				# tokens from the other string at the end
+				
+				# put diacritics on the last token 
+				result[-1].extend(takewhile(is_mark, iter2))
+
+				# and the rest on the end
 				result.append(list(iter2))
+				
 				return result
 			
 		else:
 			# otherwise put it in the list associated with the last token from
 			# string1
+			
+			# an ending diactric should get put with the previous token,
+			# however, as it has been replaced by a space, we have put it in
+			# as representing a space. If we come across another separator, 
+			# stick the diacritic onto the previous one
+			if (len(result) > 2 
+				and len(result[-1]) == 1 
+				and is_mark(result[-1][0])):
+				result[-2].append(result[-1][0])
+				result[-1] = []
+			
 			result[-1].append(token2)
+				
 
 		# and get our next token from string2
 		try:
