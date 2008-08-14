@@ -200,7 +200,7 @@ class SearchPanel(xrcSearchPanel):
 				wx.MessageBox("You don't have a current bible version, "
 				"so you cannot search at the moment", "No current version")
 				return
-			self.genindex.SetLabel("Index")
+			self.genindex.SetLabel("&Index")
 
 			msg = "Search index does not exist for module %s. " \
 				"Indexing will make search much faster. " \
@@ -653,7 +653,7 @@ class SearchPanel(xrcSearchPanel):
 			if error:
 				wx.MessageBox(error)
 			else:
-				self.genindex.SetLabel("Index")
+				self.genindex.SetLabel("&Index")
 				self.search_button.Disable()
 				
 		else:
