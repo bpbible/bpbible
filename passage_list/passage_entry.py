@@ -93,6 +93,9 @@ class PassageEntry(object):
 			return self._get_range_text()
 		else:
 			return self.passage.getText()
+
+	def __repr__(self):
+		return "PassageEntry(%s, %s)" % (repr(str(self)), repr(self.comment))
 	
 	def _get_range_text(self):
 		lower_bound = self.passage.LowerBound()
@@ -107,6 +110,10 @@ class PassageEntry(object):
 		else:
 			end_str = str(upper_bound.Verse())
 		return "%s - %s" % (begin_str, end_str)
+
+	def clone(self):
+		"""Makes a clean copy of this passage entry and returns it."""
+		return PassageEntry(passage=str(self), comment=self.comment)
 	
 	def __eq__(self, other):
 		try:

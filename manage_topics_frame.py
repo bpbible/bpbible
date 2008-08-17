@@ -5,12 +5,14 @@ from passage_list import get_primary_passage_list_manager, PassageEntry
 from passage_entry_dialog import PassageEntryDialog
 from topic_creation_dialog import TopicCreationDialog
 from xrc.manage_topics_xrc import xrcManageTopicsFrame
+from manage_topics_operations import ManageTopicsOperations
 
 class ManageTopicsFrame(xrcManageTopicsFrame):
 	def __init__(self, parent):
 		super(ManageTopicsFrame, self).__init__(parent)
 		self.SetIcons(guiconfig.icons)
 		self._manager = get_primary_passage_list_manager()
+		self._operations_manager = ManageTopicsOperations()
 		self._selected_topic = None
 		self._init_passage_list_ctrl_headers()
 		self._setup_passage_list_ctrl()
@@ -100,6 +102,10 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 				self._add_new_topic_node,
 				(parent_node,))
 
+		parent_list.remove_subtopic_observers.add_observer(
+				self._remove_topic_node,
+				(parent_node,))
+
 		for subtopic in parent_list.subtopics:
 			self._add_topic_node(subtopic, parent_node)
 	
@@ -116,6 +122,10 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 			# what do we need to do in here?
 			# what will throw an exception?
 			pass
+
+	def _remove_topic_node(self, parent_node, topic):
+		topic_node = self._find_topic(parent_node, topic)
+		self.topic_tree.Delete(topic_node)
 	
 	def _get_topic_tool_tip(self, event):
 		"""Gets the description for a topic.
@@ -155,6 +165,11 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		self.Bind(wx.EVT_MENU,
 				lambda e: self._create_passage(topic),
 				id=item.Id)
+
+		item = menu.Append(wx.ID_ANY, "Delete &Topic")
+		self.Bind(wx.EVT_MENU,
+				lambda e: self._operations_manager.remove_subtopic(topic.parent, topic),
+				id=item.Id)
 		
 		self.PopupMenu(menu)
 
@@ -169,7 +184,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		passage_entry = PassageEntry(None)
 		dialog = PassageEntryDialog(self, passage_entry)
 		if dialog.ShowModal() == wx.ID_OK:
-			topic.add_passage(passage_entry)
+			self._operations_manager.add_passage(topic, passage_entry)
 		dialog.Destroy()
 	
 	def _on_close(self, event):
@@ -181,6 +196,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 	
 	def _remove_observers(self, parent_topic):
 		parent_topic.add_subtopic_observers.remove(self._add_new_topic_node)
+		parent_topic.remove_subtopic_observers.remove(self._remove_topic_node)
 		for subtopic in parent_topic.subtopics:
 			self._remove_observers(subtopic)
 	

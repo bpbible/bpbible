@@ -16,14 +16,17 @@ class _BasePassageList(object):
 	def __init__(self, description=""):
 		self.description = description
 		self.parent = None
+		self.name_changed_observers = ObserverList()
 		self.subtopics = []
 		self.add_subtopic_observers = ObserverList()
+		self.remove_subtopic_observers = ObserverList()
 
 		global _passage_list_id_dict
 		_passage_list_id_dict[self.get_id()] = self
 
 		self.passages = []
 		self.add_passage_observers = ObserverList()
+		self.remove_passage_observers = ObserverList()
 	
 	def add_subtopic(self, subtopic):
 		"""Adds the given sub-topic to the end of the list of sub-topics."""
@@ -39,6 +42,20 @@ class _BasePassageList(object):
 		subtopic = PassageList(name, description)
 		self.add_subtopic(subtopic)
 		return subtopic
+
+	def remove_subtopic(self, topic):
+		"""Removes the given subtopic of the current topic.
+
+		After removal the remove_subtopics observers will be called.
+
+		If the subtopic is not present, then a MissingTopicError is raised.
+		"""
+		try:
+			index = self.subtopics.index(topic)
+			del self.subtopics[index]
+			self.remove_subtopic_observers(topic)
+		except ValueError:
+			raise MissingTopicError(topic)
 	
 	def add_passage(self, passage):
 		"""Adds the given passage to the end of the list of passages."""
@@ -48,6 +65,20 @@ class _BasePassageList(object):
 	def insert_passage(self, passage, index):
 		"""Inserts the given passage into the list of passages."""
 		self.passages.insert(index, passage)
+
+	def remove_passage(self, passage):
+		"""Removes the given passage for the current topic.
+
+		After removal the remove_passage observers will be called.
+
+		If the passage is not present, then a MissingPassageError is raised.
+		"""
+		try:
+			index = self.passages.index(passage)
+			del self.passages[index]
+			self.remove_passage_observers(passage)
+		except ValueError:
+			raise MissingPassageError(passage)
 	
 	def contains_verse(self, verse_key, recursive=False):
 		"""Returns true if the given verse is contained in the list.
@@ -105,7 +136,13 @@ class PassageList(_BasePassageList):
 
 	def __init__(self, name, description=""):
 		super(PassageList, self).__init__(description)
-		self.name = name
+		self._name = name
+
+	def set_name(self, name):
+		self._name = name
+		self.name_changed_observers(name)
+
+	name = property(lambda self: self._name, set_name)
 	
 	def get_topic_trail(self):
 		return self.parent.topic_trail + (self.name,)
@@ -384,6 +421,16 @@ def load_default_passage_lists(filename=DEFAULT_FILENAME):
 
 class InvalidPassageListError(Exception):
 	"""This exception is thrown when the passage list cannot be loaded."""
+
+class MissingTopicError(Exception):
+	"""This exception is thrown when an operation is performed on a topic
+	that is not a subtopic of the current topic.
+	"""
+
+class MissingPassageError(Exception):
+	"""This exception is thrown when an operation is performed on a passage
+	that is not present in the current topic.
+	"""
 
 def lookup_passage_list(id):
 	"""Looks up the passage list with the given ID.
