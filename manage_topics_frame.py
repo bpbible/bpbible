@@ -115,13 +115,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		self._add_sub_topics(passage_list, node)
 	
 	def _add_new_topic_node(self, parent_node, topic):
-		try:
-			self._add_topic_node(topic, parent_node)
-		except:
-			# TODO: remove bare except
-			# what do we need to do in here?
-			# what will throw an exception?
-			pass
+		self._add_topic_node(topic, parent_node)
 
 	def _remove_topic_node(self, parent_node, topic):
 		topic_node = self._find_topic(parent_node, topic)
