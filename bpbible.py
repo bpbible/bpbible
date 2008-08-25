@@ -4,6 +4,8 @@ from util.debug import dprint, MESSAGE, WARNING, is_debugging
 dprint(MESSAGE, "Importing wx")
 
 import wx
+dprint(MESSAGE, "importing wx.xrc")
+
 from wx import xrc
 dprint(MESSAGE, "/importing wx")
 

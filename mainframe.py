@@ -19,6 +19,7 @@ from backend.bibleinterface import biblemgr
 from backend import filterutils
 
 
+dprint(MESSAGE, "Importing frames")
 from bibleframe import BibleFrame
 from bookframe import CommentaryFrame
 from bookframe import DictionaryFrame
@@ -36,6 +37,8 @@ import config
 import guiconfig
 from module_tree import ModuleTree
 from pathmanager import PathManager
+
+dprint(MESSAGE, "Importing gui")
 from gui import htmlbase
 from gui import guiutil
 from gui.guiutil import bmp
@@ -133,10 +136,15 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.make_toolbars()
 		
 		self.create_searchers()
+		dprint(MESSAGE, "Setting AUI up")
+		
 		self.create_aui_items()
+		
+		
 		super(MainFrame, self).setup()
 		self.set_aui_items_up()
 		
+		dprint(MESSAGE, "Binding events")
 		
 		self.bind_events()
 		self.setup_frames()
@@ -144,6 +152,8 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.bibleref.SetFocus()
 		self.buffer = wx.TextCtrl(self)
 		self.buffer.Hide()
+		
+		dprint(MESSAGE, "Setting menus up")
 		
 		self.set_menus_up()
 
@@ -157,11 +167,11 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.SetDropTarget(self.drop_target)
 		#guiutil.call_after_x(100, self.bibletext.scroll_to_current)
 		
-		# after three goes round the event loop, set timer for 100ms to scroll
+		# after three goes round the event loop, set timer for 200ms to scroll
 		# to correct place
 		# Under GTK, neglecting to do this will mean that it will scroll to
 		# the top.
-		guiutil.call_after_x(3, wx.CallLater, 100, 
+		guiutil.call_after_x(3, wx.CallLater, 200, 
 			self.bibletext.scroll_to_current)
 		
 
