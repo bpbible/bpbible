@@ -9,6 +9,9 @@ dprint(MESSAGE, "importing wx.xrc")
 from wx import xrc
 dprint(MESSAGE, "/importing wx")
 
+# make sure contribs can be imported...
+import contrib
+
 import mainframe
 
 import config, guiconfig
