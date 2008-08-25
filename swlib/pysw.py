@@ -944,10 +944,7 @@ class TK(SW.TreeKeyIdx):
 		return to_unicode(self.getText(), self.module)
 
 	def set_text(self, value):
-		print "SETTING TEXT"
-		v = to_str(value, self.module)
-
-		self.setText(v)
+		self.setText(to_str(value, self.module))
 	
 	# horrible swig magic...
 	__swig_setmethods__	 = {"text":set_text}
