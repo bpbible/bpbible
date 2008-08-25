@@ -14,7 +14,7 @@ import re
 import string
 import cPickle
 from util.debug import *
-from query_parser import WildCard, removeformatting, split_words, process_word
+from query_parser import removeformatting, separate_words
 from query_parser import SpellingException
 from indexed_text import IndexedText, VerseIndexedText
 
@@ -252,6 +252,8 @@ class Index(object):
 		combined = type & COMBINED
 		case_sensitive = type & CASESENSITIVE
 		regex = type & REGEX
+		assert combined or regex, "Combined or regex is currently obligatory!!!"
+		
 		phrase = type & PHRASE
 		advanced = type & ADVANCED
 		assert not advanced, "Advanced isn't supported at the moment"
@@ -289,69 +291,30 @@ class Index(object):
 			progress(("Done", 100))
 			return results, [comp]
 		
-		if excludes:
-			excludes = excludes.split()
-		else:
-			excludes = []
-
-		regexes = []
-		excl_regexes = []
-		if combined:
-			words, excl, regexes, excl_regexes = split_words(words)
-			excludes.extend(excl)
-
-		elif phrase:
-			words = [words]
-
-		else:
-			words = words.split()
-
-		return self.multi_search(words, books, proximity, flags,
-			excludes, progress, regexes, excl_regexes)
-		
-	
-	def multi_search(self, words, books, proximity, flags, 
-			excludes, progress, regexes, excl_regexes):
-
-		results = []
-
-		badwords = []
-		wordlist = []
+		assert not excludes, "Excludes not currently supported"
 		
 		if self.booktype.gatherstatistics:
 			index_word_list = self.statistics["wordlist"]
 		else:
 			index_word_list = None
 
-		for word in words:
-			try:
-				wordlist.append(process_word(word, flags, index_word_list))
-
-			except SpellingException, e:
-				badwords.extend(e.wrongwords)
-
-		if not wordlist and not regexes:
-			if badwords:
-				raise SpellingException(badwords)
-		
+		regexes, excl_regexes = separate_words(words, index_word_list)
+		if not regexes and not excl_regexes:
 			return [], []
-		
-		
-		excludelist = []
-		
-		for word in excludes:
-			try:
-				excludelist.append(self.process_word(word, flags))
 
-			except SpellingException, e:
-				badwords.extend(e.wrongwords)
+		return self.multi_search(
+			regexes, excl_regexes, books, proximity, flags, progress
+		)
+		
+	
+	def multi_search(self, regexes, excl_regexes, books, 
+		proximity, flags, progress):
 
-		if badwords:
-			raise SpellingException(badwords)
+		results = []
 
 		try:
-			excludelist.extend((re.compile(e, flags), 0) for e in excl_regexes)
-			wordlist.extend((re.compile(e, flags), 0) for e in regexes)
+			excludelist = [(re.compile(e, flags), 0) for e in excl_regexes]
+			wordlist = [(re.compile(e, flags), 0) for e in regexes]
 		except re.error, e:
 			raise SearchException(
 				"There seems to be an error in your regular expression.\n"
