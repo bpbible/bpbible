@@ -97,12 +97,20 @@ class ParseOSIS(ParseBase):
 			
 	
 	strongs_re = re.compile(r"^(?:strong|x-Strongs|Strong):([HG])(\d+)(!(.*))?")
-	strongs_off = True
+	strongs_off = False
 
 	STRONGS_MARKER = u"\uFDD1".encode("utf-8")
 	FIELD_SEPARATOR = u"\uFDD2".encode("utf-8")
 	strongs_cache = {"": []}
 	morph_cache = {"": []}
+	MORPH_MAPPING = {
+		"robinson": "robinson",
+		"Robinson": "robinson",
+		"x-Robinsons": "robinson",
+		"x-Robison": "robinson",
+		"strongMorph": "strongMorph",
+	}
+	
 
 
 	def handle_w(self, node, si):
@@ -141,14 +149,14 @@ class ParseOSIS(ParseBase):
 					continue
 				
 				type, item = i
-				if type in ("x-Robinsons", "x-Robinson", "Robinson"):
-					type = "robinson"
 
-				if type not in ("robinson", "strongMorph"):
+
+				if type not in MORPH_MAPPING:
 					dprint(WARNING, "Unknown morph class", node.attrib)
 					continue
 
-				m_items.append("%s%s%s" % (type, self.FIELD_SEPARATOR, item))
+				m_items.append("%s%s%s" % (MORPH_MAPPING[type], 
+					self.FIELD_SEPARATOR, item))
 
 			self.morph_cache[m] = m_items
 
