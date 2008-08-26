@@ -6,16 +6,13 @@ from util.debug import dprint, WARNING, ERROR
 from query_parser import removeformatting
 import process_text
 
-
-
-
 class IndexedText(object):
 	"""A bit of text, one reference per line, with an index built against it"""
 	gatherstatistics = True
 	def __init__(self, version, bookname=None, create_index=True):
 		self.index = [] # ref, start, length
 		self.text = ""
-		self.strongs_info = []
+		self.strongs_info = ""
 		self.bookname = bookname or version
 		self.version = version
 		module = self.load_module(version)
@@ -91,7 +88,7 @@ class IndexedText(object):
 		content = content.decode("utf-8", "ignore")
 		content = removeformatting(content)
 		self.text = re.sub("\s*%s\s*" % MAGIC_TOKEN, "\n", content)
-		#self.text, self.strongs_info = self.extract_strongs(self.text)
+		self.text, self.strongs_info = self.extract_strongs(self.text)
 
 		self.create_index_against_text(module, key)
 
@@ -105,7 +102,9 @@ class IndexedText(object):
 		def replace(match):
 			o = offset[0]
 			number, text = match.group(1, 2)
-			matches.append((number, match.start() - o))
+			matches.append("%s\x00%s %s" % (
+				number, match.start() - o, match.end() - o
+			))
 			offset[0] = o + len(number) + 3
 			return text
 
@@ -119,8 +118,7 @@ class IndexedText(object):
 			text
 		)
 
-		return text, matches
-		
+		return text, '\n'.join(matches)
 
 	def create_index_against_text(self, module, key):
 		"""Build an index against the text"""
@@ -317,7 +315,7 @@ class IndexedText(object):
 			# make range as narrow as possible
 			docontinue = False
 			start, end = match_start, match_end
-			
+
 			for comp in wordlist:
 				backrange = t[bounds[0]: match_start]
 				forwardrange = t[match_end: bounds[1]]
@@ -382,6 +380,15 @@ class IndexedText(object):
 
 		return mylist
 	
+	def find_strongs(self, word):
+		word = "%s[^\x00]*\x00(\d+) (\d+)" % word
+		regex = re.compile(word, re.MULTILINE|re.IGNORECASE|re.UNICODE)
+		ret = []
+		for item in regex.finditer(self.strongs_info):
+			ret.append((int(item.group(1)), 0))
+
+		return ret
+
 	def regex_search(self, comp):
 		mylist = []
 		

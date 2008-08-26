@@ -577,7 +577,7 @@ def separate_words(string, wordlist=None):
 		
 		if not had_non_letter and isinstance(item, Word):
 			word = ''.join(item.items)
-			if wordlist is not None and word not in wordlist:
+			if wordlist is not None and word.lower() not in wordlist:
 				yield word
 
 	badwords = list(check_proper_word(result))
