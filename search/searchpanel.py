@@ -14,8 +14,9 @@ from xrc.search_xrc import *
 import config
 import guiconfig
 import search
-from search import REGEX, PHRASE, CASESENSITIVE, MULTIWORD, COMBINED
+from search import COMBINED
 from search import SearchException, SpellingException, RemoveDuplicates
+from query_parser import separate_words
 from highlighted_frame import HighlightedDisplayFrame
 from swlib.pysw import VK, GetBestRange, Searcher, SWMULTI, SWPHRASE, SWREGEX
 from gui import guiutil
@@ -40,29 +41,16 @@ from util.configmgr import config_manager
 
 search_config = config_manager.add_section("Search")
 search_config.add_item("disappear_on_doubleclick", True, item_type=bool)
-search_config.add_item("search_type", COMBINED, item_type=int)
+
+# we don't currently use this setting
+# search_config.add_item("search_type", COMBINED, item_type=int)
+search_config.add_item("indexed_search", True, item_type=bool)
 search_config.add_item("past_search_length", 20, item_type=int)
 search_config.add_item("past_searches", [], item_type="pickle")
 
-
-search_items = (COMBINED, MULTIWORD, PHRASE, REGEX, SWMULTI, SWPHRASE, SWREGEX)
-needs_index  = (1, 		  1,	     1,      1,     0,       0,        0) 
-
-needs_index = dict(zip(search_items, needs_index))
-
-sword_replacement_search = {
-	COMBINED: SWMULTI,
-	MULTIWORD: SWMULTI,
-	PHRASE: SWPHRASE,
-	REGEX: SWREGEX
-}
-
-		
 class SearchPanel(xrcSearchPanel):
-	def __init__(self, parent):#, search_type=SWMULTI):
+	def __init__(self, parent):
 		super(SearchPanel, self).__init__(parent)
-		#self.search_type = search_type
-		
 
 		if osutils.is_gtk():
 			self.Bind(wx.EVT_WINDOW_CREATE, self.on_create)
@@ -162,8 +150,8 @@ class SearchPanel(xrcSearchPanel):
 		self.has_started = True
 	
 	def check_for_index(self):
-		self.set_gui_search_type(search_config["search_type"])
-		if not needs_index[search_config["search_type"]]:
+		self.set_gui_search_type(search_config["indexed_search"])
+		if not search_config["indexed_search"]:
 			#self.genindex.SetLabel("Unindex")
 			self.search_button.Enable(biblemgr.bible.version is not None)
 			if not biblemgr.bible.version:
@@ -209,7 +197,7 @@ class SearchPanel(xrcSearchPanel):
 			if create == wx.YES:
 				self.index = self.build_index(self.version)
 			else:
-				self.set_gui_search_type(self.search_type)
+				self.set_gui_search_type(self.indexed_search)
 
 	def on_select(self, event):
 		item_text = self.verselist.GetItemText(event.m_itemIndex)
@@ -219,7 +207,7 @@ class SearchPanel(xrcSearchPanel):
 			self.on_close()
 			
 	def _post_init(self):
-		self.set_gui_search_type(search_config["search_type"])
+		self.set_gui_search_type(search_config["indexed_search"])
 
 		self.search_button.SetLabel("&Search")
 	
@@ -282,14 +270,10 @@ class SearchPanel(xrcSearchPanel):
 		self.range_bottom.SetSelection(number-1)
 		self.update_boxes(self.wholebible)
 
-	def set_gui_search_type(self, search_type):
+	def set_gui_search_type(self, indexed_search):
 		"""Sets the search type to be displayed in the GUI."""
-		for index, item in enumerate(search_items):
-			if item == search_type:
-				self.gui_search_type.SetSelection(index)
+		self.gui_search_type.SetSelection(not indexed_search)
 		
-
-			
 	def on_close(self, event=None):
 		guiconfig.mainfrm.show_panel("Search", False)
 
@@ -372,7 +356,7 @@ class SearchPanel(xrcSearchPanel):
 			
 
 	def perform_search(self, key, scope, exclude, case_sensitive):
-		if needs_index[self.search_type]:
+		if self.indexed_search:
 			self.on_indexed_search(key, scope, exclude, case_sensitive)
 		else:
 			self.on_sword_search(key, scope, exclude, case_sensitive)
@@ -389,7 +373,7 @@ class SearchPanel(xrcSearchPanel):
 
 
 		proximity = int(self.proximity.GetValue())
-		search_type = search_config["search_type"]
+		search_type = COMBINED
 		self.numwords = len(key.split())
 		succeeded = True
 		if case_sensitive:
@@ -471,44 +455,48 @@ class SearchPanel(xrcSearchPanel):
 		self.searcher = Searcher(biblemgr.bible)
 		self.searcher.callback = callback
 
-		# If custom range, use it
-		self.numwords = len(key.split())
-		self.search_results = self.searcher.Search(
-			to_str(key, biblemgr.bible.mod),
-			search_config["search_type"], scope, case_sensitive)
-	
-		flags = re.UNICODE | (re.IGNORECASE * (not case_sensitive))
+		regexes, excl_regexes = separate_words(key)
+		
 		try:
-			if search_config["search_type"] == SWMULTI:
-				self.regexes = [
-					re.compile(word, flags) for word in key.split()
-				]
-			else:
-				self.regexes = [re.compile(key, flags)]
-
+			flags = re.UNICODE | (re.IGNORECASE * (not case_sensitive))
+		
+			self.regexes = [re.compile(regex, flags) for regex in regexes]
 		except re.error, e:
 			dprint(WARNING, "Couldn't compile expression for sword search.",
 				key, e)
-
+		                                                                       
 			self.regexes = []
 			
+		self.numwords = len(regexes)
+		if not regexes:
+			self.search_results = []
+		
 
+		# set the previous results to the scope, so that we only search in it
+		search_scope = scope
+		for item in regexes:
+			self.search_results = self.searcher.Search(
+				to_str(item, biblemgr.bible.mod),
+				SWREGEX, search_scope, case_sensitive
+			)
+			search_scope = "; ".join(self.search_results)
+	
 		# If we need to exclude, do another search through the scope 
 		# Then remove duplicates
-		if exclude:
-			for string in exclude.split(" "):
-				if not self.search_results: # or self.stop:
-					break
+		for item in excl_regexes:
+			if not self.search_results: # or self.stop:
+				break
 
-				exclude_list = self.searcher.Search(
-					to_str(string, biblemgr.bible.mod),
-					search_config["search_type"],
-					"; ".join(self.search_results), 
-					case_sensitive)
-				
-				for excl in exclude_list:
-					if excl in self.search_results:
-						self.search_results.remove(excl)
+			exclude_list = self.searcher.Search(
+				to_str(item, biblemgr.bible.mod),
+				SWREGEX,
+				"; ".join(self.search_results), 
+				case_sensitive
+			)
+			
+			for excl in exclude_list:
+				if excl in self.search_results:
+					self.search_results.remove(excl)
 
 		self.hits = len(self.search_results)
 		if self.hits == 0:
@@ -587,7 +575,7 @@ class SearchPanel(xrcSearchPanel):
 		
 		
 	def on_search_type(self, evt):
-		search_config["search_type"] = search_items[evt.GetSelection()]
+		search_config["indexed_search"] = not evt.GetSelection()
 		self.check_for_index()
 		
 	def old_testament(self, event = None):
@@ -701,17 +689,17 @@ class SearchPanel(xrcSearchPanel):
 		return self.index and self.index.version == self.version
 
 	@property
-	def search_type(self):
+	def indexed_search(self):
 		"""Gets the type of search to be used.
 
 		This will be a Sword replacement if an indexed search is requested
 		and the module doesn't have an index.
 		Otherwise, it will be the global search type.
 		"""
-		search_type = search_config["search_type"]
-		if needs_index[search_type] and not self._has_index():
-			search_type = sword_replacement_search[search_type]
-		return search_type
+		indexed_search = search_config["indexed_search"]
+		if indexed_search and not self._has_index():
+			indexed_search = False
+		return indexed_search
 
 class SearchList(virtuallist.VirtualListCtrlXRC):
 	def __init__(self):

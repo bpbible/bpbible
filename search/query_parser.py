@@ -561,7 +561,7 @@ def print_regexes(string, verbose=False):
 				print "Excluded:",
 			print item.to_regex()
 
-def separate_words(string, wordlist):
+def separate_words(string, wordlist=None):
 	result = parse(string)
 	if not result: 
 		return [], []

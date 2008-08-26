@@ -4,10 +4,7 @@
     <object class="wxBoxSizer">
       <orient>wxVERTICAL</orient>
       <object class="sizeritem">
-        <option>1</option>
-        <flag>wxALL|wxEXPAND</flag>
         <object class="wxPanel" name="panel_1">
-          <style/>
           <object class="wxBoxSizer">
             <orient>wxVERTICAL</orient>
             <object class="sizeritem">
@@ -97,15 +94,10 @@
                                           <object class="sizeritem">
                                             <object class="wxChoice" name="gui_search_type">
                                               <content>
-                                                <item>Combined</item>
-                                                <item>Multi-word</item>
-                                                <item>Phrase</item>
-                                                <item>Regex</item>
-                                                <item>SWORD Multi-word</item>
-                                                <item>SWORD Phrase</item>
-                                                <item>SWORD Regex</item>
+                                                <item>Indexed</item>
+                                                <item>Unindexed</item>
                                               </content>
-                                              <selection>4</selection>
+                                              <selection>0</selection>
                                               <tooltip>Type of search to use</tooltip>
                                             </object>
                                             <option>1</option>
@@ -370,6 +362,8 @@
             </object>
           </object>
         </object>
+        <option>1</option>
+        <flag>wxALL|wxEXPAND</flag>
         <border>6</border>
       </object>
     </object>
