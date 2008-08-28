@@ -122,7 +122,7 @@ def get_screen_rect(point):
 	"""Get the size of the screen the given window is on"""
 	screen = wx.Display.GetFromPoint(point)
 	if screen == wx.NOT_FOUND:
-		debug.dprint(debug.WARNING, "Couldn't find screen for window", window)
+		debug.dprint(debug.WARNING, "Couldn't find screen for point", point)
 		return wx.Rect()
 	
 	display = wx.Display(screen)
