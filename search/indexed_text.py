@@ -416,7 +416,7 @@ class IndexedText(object):
 					# We have a slightly different policy here:
 					# The main match can overlap with this
 					# This isn't true for word searches
-					if obj[1] < match_end:
+					if obj[1] <= match_end:
 						backind = obj[0]
 
 					if obj[0] >= match_start and forwardind == -1:
