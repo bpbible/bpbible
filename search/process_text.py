@@ -151,11 +151,11 @@ class ParseOSIS(ParseBase):
 				type, item = i
 
 
-				if type not in MORPH_MAPPING:
+				if type not in self.MORPH_MAPPING:
 					dprint(WARNING, "Unknown morph class", node.attrib)
 					continue
 
-				m_items.append("%s%s%s" % (MORPH_MAPPING[type], 
+				m_items.append("%s%s%s" % (self.MORPH_MAPPING[type], 
 					self.FIELD_SEPARATOR, item))
 
 			self.morph_cache[m] = m_items
