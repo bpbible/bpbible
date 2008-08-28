@@ -1,6 +1,7 @@
 from backend.bibleinterface import biblemgr
 from swlib.pysw import VK, TOP, vk, SW
 import re
+import sys
 from util.debug import dprint, WARNING, ERROR
 
 from query_parser import removeformatting
@@ -102,10 +103,11 @@ class IndexedText(object):
 		def replace(match):
 			o = offset[0]
 			number, text = match.group(1, 2)
+			new_offset = (o + len(number) + 3)
 			matches.append("%s\x00%s %s" % (
-				number, match.start() - o, match.end() - o
+				number, match.start() - o, match.end() - new_offset
 			))
-			offset[0] = o + len(number) + 3
+			offset[0] = new_offset
 			return text
 
 		text = re.sub(
@@ -228,7 +230,8 @@ class IndexedText(object):
 
 	# --- Searching functions
 	def multi_search(self, wordlist, proximity,
-	average_word=0, minimum_average=5, ignore_minimum=False, excludes=()):
+		average_word=0, minimum_average=5, ignore_minimum=False, 
+		excludes=(), strongs=()):
 
 		# t is shorter to use than self.text, also should be slightly faster
 		t = self.text
@@ -241,7 +244,7 @@ class IndexedText(object):
 		for regex, length in wordlist:
 			total_length += length
 
-		if(not average_word):
+		if not average_word and len(wordlist):
 			average_word = total_length/len(wordlist)
 
 		if(average_word < minimum_average and not ignore_minimum):
@@ -254,8 +257,27 @@ class IndexedText(object):
 		len_words = 0#len(words)
 		lastbounds = (0, 0)
 		
-		for match in wordlist.pop(0).finditer(t):
-			match_start, match_end = match.span()
+		self.start_strongs_find(strongs)
+
+		if wordlist:
+			# we have to start with the wordlist if we can, otherwise we may
+			# not get references where the word overlaps with the strong's
+			# number
+			result_iter = wordlist.pop(0).finditer(t)
+		else:			
+			result_iter = self.strongs.pop(0)
+			self.strongs_upto.pop(0)
+			self.current_strongs.pop(0)
+			
+			# Knock sentinel off end
+			result_iter = result_iter[:-1]
+			
+
+		for result in result_iter:
+			if isinstance(result, tuple):
+				match_start, match_end = result
+			else:
+				match_start, match_end = result.span()
 
 			# if the next match of the master word
 			# is in the range we have just matched,
@@ -308,6 +330,15 @@ class IndexedText(object):
 				if not comp.search(textrange):
 					inrange = False
 					break
+			
+			if not inrange:
+				continue
+			
+			self.set_strongs_range(lower, upper)			
+			for strongs_info in self.current_strongs:
+				if not strongs_info:
+					inrange = False
+					break
 
 			if not inrange:
 				continue
@@ -344,6 +375,7 @@ class IndexedText(object):
 				if(forwardind < lastbounds[1]):
 					forwardind = -1
 	
+				# WARNING: duplicated code used below
 				# pick which side to take
 				# if neither forward nor back are there, skip this match
 				if forwardind == -1 and backind == -1:
@@ -374,12 +406,104 @@ class IndexedText(object):
 			if docontinue:
 				continue
 	
+			for item in self.current_strongs:
+				# cast out all ones that hit the previous one
+				item = [a for a in item if a[0] > lastbounds[1]]
+				
+				forwardind = backind = -1
+				# now find the one closest to start and end
+				for obj in item:
+					# We have a slightly different policy here:
+					# The main match can overlap with this
+					# This isn't true for word searches
+					if obj[1] < match_end:
+						backind = obj[0]
+
+					if obj[0] >= match_start and forwardind == -1:
+						forwardind = obj[1]
+				
+				# WARNING: duplicated code taken from above
+				# pick which side to take
+				# if neither forward nor back are there, skip this match
+				if forwardind == -1 and backind == -1:
+					docontinue = True
+					break
+	
+				# if we couldn't find it forward, take the back
+				if forwardind == -1:
+					ind = backind
+				
+				# if no back, or forward is closer, pick it
+				elif backind == -1 or \
+						match_start - backind > forwardind - match_end:
+
+					ind = forwardind
+				
+				# otherwise, pick backwards
+				else: 
+					ind = backind
+				
+				# and loosen the range to include this
+				if ind < start:
+					start = ind
+
+				if ind > end:
+					end = ind
+
+			if docontinue:
+				continue
 			# add this match onto our list of matches
 			lastbounds = (start, end)
 			mylist.append((start, end - start))
 
 		return mylist
 	
+	def start_strongs_find(self, words):
+		"""Set the strongs words we are looking for. This finds them and sets
+		up to look for them when needed"""
+		self.strongs = []
+		self.strongs_upto = []
+		self.current_strongs = []
+		for word in words:
+			l = []
+			word = "%s[^\x00]*\x00(\d+) (\d+)" % word
+
+			regex = re.compile(word, re.MULTILINE|re.IGNORECASE|re.UNICODE)
+			for item in regex.finditer(self.strongs_info):
+				l.append((int(item.group(1)), int(item.group(2))))
+			
+			# end sentinel - we use the end sentinel so that we don't have to
+			# check for the end of the list
+			l.append((sys.maxint, sys.maxint))
+
+			self.strongs_upto.append(0)
+			self.strongs.append(l)
+			self.current_strongs.append([])
+
+	def set_strongs_range(self, start, end):
+		"""Set the current strongs to the ones which fall in this range.
+		start >= previous start values"""
+		for idx, strongs in enumerate(self.strongs):
+			# remove old ones
+			current = [
+				item for item in self.current_strongs[idx] if item[1] >= start
+			]
+			
+			it = self.strongs_upto[idx]
+			
+			# pass over ones before here
+			while strongs[it][1] < start:
+				it += 1 
+			
+			# and put new ones in
+			while start <= strongs[it][0] and strongs[it][1] <= end:
+				current.append(strongs[it])
+				it += 1 
+			
+			self.strongs_upto[idx] = it
+			self.current_strongs[idx] = current
+
+
 	def find_strongs(self, word):
 		word = "%s[^\x00]*\x00(\d+) (\d+)" % word
 		regex = re.compile(word, re.MULTILINE|re.IGNORECASE|re.UNICODE)

@@ -298,16 +298,21 @@ class Index(object):
 		else:
 			index_word_list = None
 
-		regexes, excl_regexes = separate_words(words, index_word_list)
-		if not regexes and not excl_regexes:
+		(regexes, excl_regexes), (fields, excl_fields) = separate_words(
+														words, index_word_list)
+
+		if not regexes and not excl_regexes and not fields and not excl_fields:
 			return [], []
 
+		assert not excl_fields, "Excluded fields not currently supported"
+
 		return self.multi_search(
-			regexes, excl_regexes, books, proximity, flags, progress
+			regexes, excl_regexes, fields, excl_fields, books, proximity, 
+			flags, progress
 		)
 		
 	
-	def multi_search(self, regexes, excl_regexes, books, 
+	def multi_search(self, regexes, excl_regexes, fields, excl_fields, books, 
 		proximity, flags, progress):
 
 		results = []
@@ -320,6 +325,27 @@ class Index(object):
 				"There seems to be an error in your regular expression.\n"
 				"The error message given was: %s" % e
 			)
+		
+		strongs = []
+		for key, value in fields:
+			if key not in ("strongs", "strong"):
+				raise SearchException(
+					"Only strongs fields can be searched currently (not %s)"
+					% key
+				)
+				
+			match = re.match("^([GH])(\d+)(\w*)$", value)
+			if not match:
+				raise SearchException(
+					"Couldn't parse strong's number %s." % value
+				)
+
+			prefix, number, extra = match.group(1, 2, 3)
+			number = int(number)
+			if number == 0 or number > 9999:
+				raise SearchException("Invalid strong's number %s." % value)
+
+			strongs.append("%s%04d%s" % (prefix, int(number), extra))
 				
 		# Do multiword
 		for num, book in enumerate(books):
@@ -328,7 +354,7 @@ class Index(object):
 				break			
 
 			matches = book.multi_search(wordlist[:], proximity, 
-				excludes=excludelist)
+				excludes=excludelist, strongs=strongs[:])
 			
 			results += book.find_index(matches)
 		

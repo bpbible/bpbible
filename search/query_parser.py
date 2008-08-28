@@ -30,10 +30,10 @@ Components of a search can also be excluded by placing a leading dash:
 >>> print_regexes('-"ignore me"')
 Excluded: \bignore\sme\b
 
-Field search support isn't quite there yet, but it will look like this:
->>> print_regexes('strongs:G3550')
-Field: key: strongs value: G3550
-<No REGEX>
+Field search support looks like this:
+>>> query = parse('strongs:G3550')
+>>> query.get_field_values()
+('strongs', 'G3550')
 
 Groups provide alternatives:
 >>> print_regexes('(LORD, GOD) good')
@@ -122,7 +122,11 @@ Error cases. These probably should work, but can fail for now.
 \btest\sing\b
 """
 import re
+
+# make sure contrib is imported for ply
+import contrib
 import ply.lex as lex
+
 import string
 
 class SpellingException(Exception):
@@ -256,6 +260,19 @@ class GroupOfObjects(object):
 		return any(not isinstance(item, basestring) and item.is_excluded() 
 					for item in self.items)
 
+	def is_field(self):
+		return any(not isinstance(item, basestring) and item.is_field() 
+					for item in self.items)
+
+	def get_field_values(self):
+		assert self.is_field(), "Trying to get field values for non-field"
+		fields = [item for item in self.items 
+			if not isinstance(item, basestring) and item.is_field()]
+
+		assert len(fields) == 1, "Too many fields"
+
+		return fields[0].get_field_values()
+
 class Query(GroupOfObjects): pass
 class MultiQuery(GroupOfObjects): pass
 
@@ -294,6 +311,14 @@ class Field(GroupOfObjects):
 			self.item_to_regex(self.items[1])
 		)
 		return "<No REGEX>"
+
+	def is_field(self):
+		return True
+	
+	def get_field_values(self):
+		"""Return key, value pair for this field"""
+		return ''.join(self.items[0].items), self.item_to_regex(self.items[1])
+		
 
 tokens = (
 	'STAR', 'PLUS', 'QUESTION_MARK', 'GROUP', 'LETTER',
@@ -570,7 +595,7 @@ def separate_words(string, wordlist=None):
 		had_non_letter = False
 	
 		for child in item.items:
-			if not isinstance(child, basestring):
+			if not isinstance(child, (basestring, Field)):
 				had_non_letter = True
 				for badword in check_proper_word(child):
 					yield badword
@@ -585,10 +610,14 @@ def separate_words(string, wordlist=None):
 		raise SpellingException(badwords)	
 	
 	regexes = [], []
+	fields = [], []
 	for item in result.items:
-		regexes[item.is_excluded()].append(item.to_regex())
+		if item.is_field():
+			fields[item.is_excluded()].append(item.get_field_values())
+		else:
+			regexes[item.is_excluded()].append(item.to_regex())
 
-	return regexes
+	return regexes, fields
 		
 
 import ply.yacc as yacc
