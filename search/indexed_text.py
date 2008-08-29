@@ -231,7 +231,7 @@ class IndexedText(object):
 	# --- Searching functions
 	def multi_search(self, wordlist, proximity,
 		average_word=0, minimum_average=5, ignore_minimum=False, 
-		excludes=(), strongs=()):
+		excludes=(), strongs=(), excluded_strongs=()):
 
 		# t is shorter to use than self.text, also should be slightly faster
 		t = self.text
@@ -257,7 +257,7 @@ class IndexedText(object):
 		len_words = 0#len(words)
 		lastbounds = (0, 0)
 		
-		self.start_strongs_find(strongs)
+		self.start_strongs_find(strongs, excluded_strongs)
 
 		if wordlist:
 			# we have to start with the wordlist if we can, otherwise we may
@@ -265,9 +265,9 @@ class IndexedText(object):
 			# number
 			result_iter = wordlist.pop(0).finditer(t)
 		else:			
-			result_iter = self.strongs.pop(0)
-			self.strongs_upto.pop(0)
-			self.current_strongs.pop(0)
+			result_iter = self.strongs[0].pop(0)
+			self.strongs_upto[0].pop(0)
+			self.current_strongs[0].pop(0)
 			
 			# Knock sentinel off end
 			result_iter = result_iter[:-1]
@@ -322,6 +322,16 @@ class IndexedText(object):
 
 			if excluded: 
 				continue
+			
+			self.set_strongs_range(lower, upper, excluded=True)
+			for strongs_info in self.current_strongs[1]:
+				if strongs_info:
+					excluded = True
+					break
+
+			if excluded: 
+				continue
+				
 
 			# check for all the words to match
 			inrange = True
@@ -334,8 +344,8 @@ class IndexedText(object):
 			if not inrange:
 				continue
 			
-			self.set_strongs_range(lower, upper)			
-			for strongs_info in self.current_strongs:
+			self.set_strongs_range(lower, upper)
+			for strongs_info in self.current_strongs[0]:
 				if not strongs_info:
 					inrange = False
 					break
@@ -406,7 +416,7 @@ class IndexedText(object):
 			if docontinue:
 				continue
 	
-			for item in self.current_strongs:
+			for item in self.current_strongs[0]:
 				# cast out all ones that hit the previous one
 				item = [a for a in item if a[0] > lastbounds[1]]
 				
@@ -458,38 +468,39 @@ class IndexedText(object):
 
 		return mylist
 	
-	def start_strongs_find(self, words):
+	def start_strongs_find(self, words, excluded):
 		"""Set the strongs words we are looking for. This finds them and sets
 		up to look for them when needed"""
-		self.strongs = []
-		self.strongs_upto = []
-		self.current_strongs = []
-		for word in words:
-			l = []
-			word = "%s[^\x00]*\x00(\d+) (\d+)" % word
+		self.strongs = [[], []]
+		self.strongs_upto = [[], []]
+		self.current_strongs = [[], []]
+		for idx, group in enumerate((words, excluded)):
+			for word in group:
+				l = []
+				word = "%s[^\x00]*\x00(\d+) (\d+)" % word
 
-			regex = re.compile(word, re.MULTILINE|re.IGNORECASE|re.UNICODE)
-			for item in regex.finditer(self.strongs_info):
-				l.append((int(item.group(1)), int(item.group(2))))
-			
-			# end sentinel - we use the end sentinel so that we don't have to
-			# check for the end of the list
-			l.append((sys.maxint, sys.maxint))
+				regex = re.compile(word, re.MULTILINE|re.IGNORECASE|re.UNICODE)
+				for item in regex.finditer(self.strongs_info):
+					l.append((int(item.group(1)), int(item.group(2))))
+				
+				# end sentinel - we use the end sentinel so that we don't have to
+				# check for the end of the list
+				l.append((sys.maxint, sys.maxint))
 
-			self.strongs_upto.append(0)
-			self.strongs.append(l)
-			self.current_strongs.append([])
+				self.strongs_upto[idx].append(0)
+				self.strongs[idx].append(l)
+				self.current_strongs[idx].append([])
 
-	def set_strongs_range(self, start, end):
+	def set_strongs_range(self, start, end, excluded=False):
 		"""Set the current strongs to the ones which fall in this range.
 		start >= previous start values"""
-		for idx, strongs in enumerate(self.strongs):
+		for idx, strongs in enumerate(self.strongs[excluded]):
 			# remove old ones
 			current = [
-				item for item in self.current_strongs[idx] if item[1] >= start
+				item for item in self.current_strongs[excluded][idx] if item[1] >= start
 			]
 			
-			it = self.strongs_upto[idx]
+			it = self.strongs_upto[excluded][idx]
 			
 			# pass over ones before here
 			while strongs[it][1] < start:
@@ -500,8 +511,8 @@ class IndexedText(object):
 				current.append(strongs[it])
 				it += 1 
 			
-			self.strongs_upto[idx] = it
-			self.current_strongs[idx] = current
+			self.strongs_upto[excluded][idx] = it
+			self.current_strongs[excluded][idx] = current
 
 
 	def find_strongs(self, word):
