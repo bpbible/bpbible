@@ -40,6 +40,8 @@ class xrcSearchPanel(wx.Panel):
         self.searchkey = xrc.XRCCTRL(self, "searchkey")
         self.search_button = xrc.XRCCTRL(self, "search_button")
         self.genindex = xrc.XRCCTRL(self, "genindex")
+        self.collapsible_panel = xrc.XRCCTRL(self, "collapsible_panel")
+        self.tp_holder = xrc.XRCCTRL(self, "tp_holder")
         self.gui_search_type = xrc.XRCCTRL(self, "gui_search_type")
         self.proximity = xrc.XRCCTRL(self, "proximity")
         self.case_sensitive = xrc.XRCCTRL(self, "case_sensitive")

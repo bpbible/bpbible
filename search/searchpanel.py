@@ -222,6 +222,10 @@ class SearchPanel(xrcSearchPanel):
 		font = self.search_label.Font
 		font.SetWeight(wx.FONTWEIGHT_BOLD)
 		self.search_label.Font = font
+		self.collapsible_panel.WindowStyle |= wx.CP_NO_TLW_RESIZE
+		self.collapsible_panel.Bind(wx.EVT_COLLAPSIBLEPANE_CHANGED, 
+			self.on_collapse)	
+		
 
 		# Do all init here
 		#self.Fit()
@@ -269,6 +273,9 @@ class SearchPanel(xrcSearchPanel):
 		number = self.range_bottom.GetCount()
 		self.range_bottom.SetSelection(number-1)
 		self.update_boxes(self.wholebible)
+
+	def on_collapse(self, event):
+		self.panel_1.Layout()
 
 	def set_gui_search_type(self, indexed_search):
 		"""Sets the search type to be displayed in the GUI."""
@@ -455,7 +462,9 @@ class SearchPanel(xrcSearchPanel):
 		self.searcher = Searcher(biblemgr.bible)
 		self.searcher.callback = callback
 
-		regexes, excl_regexes = separate_words(key)
+		(regexes, excl_regexes), (strongs, excl_strongs) = separate_words(key)
+		assert not strongs and not excl_strongs, \
+			"Strong's searches don't work here yet"
 		
 		try:
 			flags = re.UNICODE | (re.IGNORECASE * (not case_sensitive))
@@ -464,7 +473,7 @@ class SearchPanel(xrcSearchPanel):
 		except re.error, e:
 			dprint(WARNING, "Couldn't compile expression for sword search.",
 				key, e)
-		                                                                       
+
 			self.regexes = []
 			
 		self.numwords = len(regexes)

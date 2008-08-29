@@ -591,7 +591,7 @@ class AuiLayer(object):
 			[self.search_panel, "Search", 
 				["Left"], ["Layer", 1],
 				["MinSize", scrollsize],
-				["BestSize", self.search_panel.GetBestSize()],
+				["BestSize", (630, 470)],
 				["Hide"],
 				["Float"],
 				["Dockable", False],
