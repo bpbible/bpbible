@@ -229,7 +229,7 @@ class IndexedText(object):
 		key.setText(to)
 
 	# --- Searching functions
-	def multi_search(self, wordlist, proximity,
+	def multi_search(self, wordlist, proximity, is_word_proximity=True,
 		average_word=0, minimum_average=5, ignore_minimum=False, 
 		excludes=(), strongs=(), excluded_strongs=()):
 
@@ -293,22 +293,34 @@ class IndexedText(object):
 			# Make sure our boundaries are at word borders.
 			# This is important, as otherwise we may match incorrectly
 
-			# NOTE: this doesn't respect end of verse (e.g. new line) word
-			# boundaries. This is desirable behaviour, but not crucial, as we
-			# will just end up with a larger range
-			lower = match_start-proximity*average_word-len_words
-			if lower > 0 and t[lower] not in " \n":
-				# why not get next space instead of previous?
-				# might be quicker?
-				lower = t.rfind(" ", 0, lower)
+			if is_word_proximity:
+				# NOTE: this doesn't respect end of verse (e.g. new line) word
+				# boundaries. This is desirable behaviour, but not crucial, as 
+				# we will just end up with a larger range
+				lower = match_start-proximity*average_word-len_words
+				if lower > 0 and t[lower] not in " \n":
+					# why not get next space instead of previous?
+					# might be quicker?
+					lower = t.rfind(" ", 0, lower)
 
-			upper = match_end + proximity * average_word + len_words
-			if upper < len_t and t[upper] not in " \n":
-				upper = t.find(" ", upper, len_t)
+				upper = match_end + proximity * average_word + len_words
+				if upper < len_t and t[upper] not in " \n":
+					upper = t.find(" ", upper, len_t)
+				
+				# make sure we stay in bounds
+				if lower < 0: lower = 0
+				if upper > len_t: upper = len_t
+					
+			else:
+				lower = match_start
+				upper = match_end - 1
+				for item in range(proximity):
+					lower = t.rfind("\n", 0, lower)
+					upper = t.find("\n", upper+1)
+					# make sure we stay in bounds
+					if lower == -1: lower = 0
+					if upper == -1: upper = len_t					
 
-			# make sure we stay in bounds
-			if lower < 0: lower = 0
-			if upper > len_t: upper = len_t
 			
 			bounds = lower, upper
 			textrange = t[lower: upper]

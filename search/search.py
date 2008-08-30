@@ -222,8 +222,8 @@ class Index(object):
 		books = [self.books[x] for x in sorted(books)]
 		return books
 	
-	def Search(self, words, type=COMBINED, proximity=15, progress=lambda x:x, 
-		searchrange=None, excludes=None):
+	def Search(self, words, type=COMBINED, proximity=15, 
+		is_word_proximity=False, progress=lambda x:x, searchrange=None):
 		"""Index.Search - this function does all bible searching
 		
 		In:	words - words to search for
@@ -238,13 +238,12 @@ class Index(object):
 			proximity - search radius for MULTIWORD
 			progress - function for reporting search progress
 			searchrange - see BookRange
-			excludes - MULTIWORD only, words to exclude
 		
 		Out: results, regular expressions
 		"""
 
 		dprint(MESSAGE, "Search called with arguments", words, type,
-			proximity, progress, searchrange, excludes)
+			proximity, progress, searchrange)
 
 		if self.book.version != self.version:
 			self.book.SetModule(self.version)
@@ -291,27 +290,27 @@ class Index(object):
 			progress(("Done", 100))
 			return results, [comp]
 		
-		assert not excludes, "Excludes not currently supported"
-		
 		if self.booktype.gatherstatistics:
 			index_word_list = self.statistics["wordlist"]
 		else:
 			index_word_list = None
 
 		(regexes, excl_regexes), (fields, excl_fields) = separate_words(
-														words, index_word_list)
+				words, index_word_list, 
+				cross_verse_search=is_word_proximity or proximity > 1
+		)
 
 		if not regexes and not excl_regexes and not fields and not excl_fields:
 			return [], []
 
 		return self.multi_search(
 			regexes, excl_regexes, fields, excl_fields, books, proximity, 
-			flags, progress
+			is_word_proximity, flags, progress
 		)
 		
 	
 	def multi_search(self, regexes, excl_regexes, fields, excl_fields, books, 
-		proximity, flags, progress):
+		proximity, is_word_proximity, flags, progress):
 
 		results = []
 
@@ -352,9 +351,9 @@ class Index(object):
 			if not continuing:
 				break			
 
-			matches = book.multi_search(wordlist[:], proximity, 
-				excludes=excludelist, strongs=strongs[0][:],
-				excluded_strongs=strongs[1])
+			matches = book.multi_search(wordlist[:], proximity,
+				is_word_proximity=is_word_proximity, excludes=excludelist,
+				strongs=strongs[0][:], excluded_strongs=strongs[1])
 			
 			results += book.find_index(matches)
 		

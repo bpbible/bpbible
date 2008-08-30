@@ -31,6 +31,8 @@ from util.configmgr import config_manager
 #TODO: better status bar: text overlay
 #						  status messages
 
+# TODO: Sword regex search doesn't work with word boundaries
+
 #class MyThread(threading.Thread):
 #	def __init__(self, dialog):
 #		self.dialog = dialog
@@ -346,15 +348,9 @@ class SearchPanel(xrcSearchPanel):
 				# If custom range, use it
 				scope = self.custom_range.GetValue()
 			
-			excludestr = self.exclude.GetValue()
-			exclude = excludestr
-			if not excludestr:
-				exclude = None
-			
-			
 			case_sensitive = self.case_sensitive.GetValue()
 
-			self.perform_search(key, scope, exclude, case_sensitive)
+			self.perform_search(key, scope, case_sensitive)
 
 		finally:
 			self.show_progress_bar(False)
@@ -362,13 +358,13 @@ class SearchPanel(xrcSearchPanel):
 			self.search_button.SetLabel("&Search")
 			
 
-	def perform_search(self, key, scope, exclude, case_sensitive):
+	def perform_search(self, key, scope, case_sensitive):
 		if self.indexed_search:
-			self.on_indexed_search(key, scope, exclude, case_sensitive)
+			self.on_indexed_search(key, scope, case_sensitive)
 		else:
-			self.on_sword_search(key, scope, exclude, case_sensitive)
+			self.on_sword_search(key, scope, case_sensitive)
 	
-	def on_indexed_search(self, key, scope, exclude, case_sensitive):
+	def on_indexed_search(self, key, scope, case_sensitive):
 		"""This is what does the main bit of searching."""
 		assert self._has_index()
 		def index_callback(value):#, userdata):
@@ -381,6 +377,7 @@ class SearchPanel(xrcSearchPanel):
 
 		proximity = int(self.proximity.GetValue())
 		search_type = COMBINED
+		is_word_proximity = self.proximity_type.Selection == 0
 		self.numwords = len(key.split())
 		succeeded = True
 		if case_sensitive:
@@ -389,8 +386,8 @@ class SearchPanel(xrcSearchPanel):
 		try:
 			self.search_results, self.regexes = self.index.Search(
 				key, search_type, searchrange=scope, 
-				progress=index_callback, excludes=exclude,
-				proximity=proximity
+				progress=index_callback,
+				proximity=proximity, is_word_proximity=is_word_proximity
 			)
 
 		except SearchException, myexcept:
@@ -447,7 +444,7 @@ class SearchPanel(xrcSearchPanel):
 		
 		self.insert_results()
 
-	def on_sword_search(self, key, scope, exclude, case_sensitive):
+	def on_sword_search(self, key, scope, case_sensitive):
 		"""This is what does the main bit of searching."""
 		def callback(value, userdata):
 			self.progressbar.SetValue(value)

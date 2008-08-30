@@ -280,9 +280,18 @@ class Exclusion(GroupOfObjects):
 	def is_excluded(self):
 		return True
 
+cross_verse = True
+
 class Words(GroupOfObjects): 
 	def to_regex(self):
-		return r'\s'.join(self.item_to_regex(item) for item in self.items)
+		delimiter = r"\s"
+
+		# if we are not doing a cross-verse search, don't match a phrase
+		# across a verse - so use a space.
+		if not cross_verse:
+			delimiter = " "
+
+		return delimiter.join(self.item_to_regex(item) for item in self.items)
 
 class Option(GroupOfObjects): 
 	def to_regex(self):
@@ -586,7 +595,10 @@ def print_regexes(string, verbose=False):
 				print "Excluded:",
 			print item.to_regex()
 
-def separate_words(string, wordlist=None):
+def separate_words(string, wordlist=None, cross_verse_search=True):
+	global cross_verse
+	cross_verse = cross_verse_search
+
 	result = parse(string)
 	if not result: 
 		return [], []

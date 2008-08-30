@@ -84,7 +84,6 @@
                                               <orient>wxHORIZONTAL</orient>
                                               <object class="sizeritem">
                                                 <object class="wxBoxSizer">
-                                                  <orient>wxHORIZONTAL</orient>
                                                   <object class="sizeritem">
                                                     <object class="wxStaticText">
                                                       <label>Search &amp;Type:</label>
@@ -102,85 +101,65 @@
                                                       <tooltip>Type of search to use</tooltip>
                                                     </object>
                                                     <option>1</option>
-                                                    <flag>wxRIGHT|wxALIGN_CENTRE_VERTICAL</flag>
+                                                    <flag>wxRIGHT|wxEXPAND|wxALIGN_CENTRE_VERTICAL</flag>
                                                     <minsize>120,-1</minsize>
                                                   </object>
+                                                  <orient>wxHORIZONTAL</orient>
                                                 </object>
                                                 <option>1</option>
                                                 <flag>wxGROW|wxRIGHT</flag>
-                                                <border>6</border>
+                                                <border>0</border>
                                               </object>
                                             </object>
                                             <flag>wxGROW|wxALL</flag>
                                             <border>6</border>
                                           </object>
+                                          
                                           <object class="sizeritem">
                                             <object class="wxBoxSizer">
-                                              <orient>wxHORIZONTAL</orient>
                                               <object class="sizeritem">
-                                                <object class="wxBoxSizer">
-                                                  <orient>wxHORIZONTAL</orient>
-                                                  <object class="sizeritem">
-                                                    <object class="wxStaticText">
-                                                      <label>&amp;Word Proximity:</label>
-                                                    </object>
-                                                    <flag>wxRIGHT|wxALIGN_CENTRE</flag>
-                                                    <border>6</border>
-                                                  </object>
-                                                  <object class="sizeritem">
-                                                    <object class="wxSpinCtrl" name="proximity">
-                                                      <value>15</value>
-                                                      <min>0</min>
-                                                      <max>999</max>
-                                                      <style>wxSP_ARROW_KEYS</style>
-                                                      <tooltip>How close should search terms be to each other</tooltip>
-                                                    </object>
-                                                    <option>1</option>
-                                                    <flag>wxALIGN_CENTRE|wxALIGN_CENTRE_VERTICAL|wxALIGN_CENTRE_HORIZONTAL</flag>
-                                                    <minsize>50,-1</minsize>
-                                                  </object>
+                                                <object class="wxStaticText">
+                                                  <label>Proximity:</label>
                                                 </object>
-                                                <option>1</option>
-                                                <flag>wxGROW</flag>
-                                              </object>
-                                              <object class="sizeritem">
-                                                <object class="wxBoxSizer">
-                                                  <orient>wxHORIZONTAL</orient>
-                                                  <object class="sizeritem">
-                                                    <option>1</option>
-                                                    <flag>wxEXPAND|wxALIGN_CENTRE</flag>
-                                                    <object class="wxCheckBox" name="case_sensitive">
-                                                      <label>Case sensitive</label>
-                                                      <tooltip>Match only if case is same</tooltip>
-                                                    </object>
-                                                  </object>
-                                                </object>
-                                                <flag>wxALL|wxGROW</flag>
-                                                <border>6</border>
-                                              </object>
-                                            </object>
-                                            <flag>wxGROW|wxALL</flag>
-                                            <border>6</border>
-                                          </object>
-                                          <object class="sizeritem">
-                                            <object class="wxBoxSizer">
-                                              <orient>wxHORIZONTAL</orient>
-                                              <object class="sizeritem">
                                                 <flag>wxRIGHT|wxALIGN_CENTRE</flag>
-                                                <object class="wxStaticText" name="">
-                                                  <label>E&amp;xclude:</label>
-                                                </object>
                                                 <border>6</border>
                                               </object>
                                               <object class="sizeritem">
-                                                <option>1</option>
-                                                <flag>wxEXPAND|wxALIGN_CENTRE</flag>
-                                                <object class="wxTextCtrl" name="exclude">
-                                                  <tooltip>Exclude results which contain these words</tooltip>
+                                                <object class="wxSpinCtrl" name="proximity">
+                                                  <value>15</value>
+                                                  <min>1</min>
+                                                  <max>999</max>
+                                                  <tooltip>How close should search terms be to each other</tooltip>
+                                                  <style>wxSP_ARROW_KEYS</style>
+                                                </object>
+                                                <flag>wxRIGHT|wxEXPAND</flag>
+                                                <border>6</border>
+                                              </object>
+                                              <object class="sizeritem">
+                                                <object class="wxChoice" name="proximity_type">
+                                                  <content>
+                                                    <item>Words</item>
+                                                    <item>Verses</item>
+                                                  </content>
+                                                  <selection>0</selection>
                                                 </object>
                                               </object>
+                                              <orient>wxHORIZONTAL</orient>
                                             </object>
-                                            <flag>wxGROW|wxALL</flag>
+                                            <flag>wxALL|wxGROW</flag>
+                                            <border>6</border>
+                                          </object>
+                                          <object class="sizeritem">
+                                            <object class="wxBoxSizer">
+                                              <object class="sizeritem">
+                                                <object class="wxCheckBox" name="case_sensitive">
+                                                  <label>Case sensitive</label>
+                                                  <tooltip>Match only if case is same</tooltip>
+                                                </object>
+                                              </object>
+                                              <orient>wxHORIZONTAL</orient>
+                                            </object>
+                                            <flag>wxALL</flag>
                                             <border>6</border>
                                           </object>
                                         </object>
