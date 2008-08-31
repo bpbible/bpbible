@@ -41,19 +41,7 @@ class xrcSearchPanel(wx.Panel):
         self.search_button = xrc.XRCCTRL(self, "search_button")
         self.genindex = xrc.XRCCTRL(self, "genindex")
         self.collapsible_panel = xrc.XRCCTRL(self, "collapsible_panel")
-        self.tp_holder = xrc.XRCCTRL(self, "tp_holder")
-        self.gui_search_type = xrc.XRCCTRL(self, "gui_search_type")
-        self.proximity = xrc.XRCCTRL(self, "proximity")
-        self.proximity_type = xrc.XRCCTRL(self, "proximity_type")
-        self.case_sensitive = xrc.XRCCTRL(self, "case_sensitive")
-        self.wholebible = xrc.XRCCTRL(self, "wholebible")
-        self.oldtestament = xrc.XRCCTRL(self, "oldtestament")
-        self.newtestament = xrc.XRCCTRL(self, "newtestament")
-        self.dummy_radio = xrc.XRCCTRL(self, "dummy_radio")
-        self.range_top = xrc.XRCCTRL(self, "range_top")
-        self.range_bottom = xrc.XRCCTRL(self, "range_bottom")
-        self.label_2 = xrc.XRCCTRL(self, "label_2")
-        self.custom_range = xrc.XRCCTRL(self, "custom_range")
+        self.options_holder = xrc.XRCCTRL(self, "options_holder")
         self.search_label = xrc.XRCCTRL(self, "search_label")
         self.search_splitter = xrc.XRCCTRL(self, "search_splitter")
         self.verselist = xrc.XRCCTRL(self, "verselist")
@@ -63,8 +51,8 @@ class xrcSearchPanel(wx.Panel):
 
 
 
-class xrcsearch_holder(wx.Panel):
-#!XRCED:begin-block:xrcsearch_holder.PreCreate
+class xrcOptionsPanel(wx.Panel):
+#!XRCED:begin-block:xrcOptionsPanel.PreCreate
     def PreCreate(self, pre):
         """ This function is called during the class's initialization.
         
@@ -73,16 +61,51 @@ class xrcsearch_holder(wx.Panel):
         """
         pass
         
-#!XRCED:end-block:xrcsearch_holder.PreCreate
+#!XRCED:end-block:xrcOptionsPanel.PreCreate
 
     def __init__(self, parent):
         # Two stage creation (see http://wiki.wxpython.org/index.cgi/TwoStageCreation)
         pre = wx.PrePanel()
         self.PreCreate(pre)
-        get_resources().LoadOnPanel(pre, parent, "search_holder")
+        get_resources().LoadOnPanel(pre, parent, "OptionsPanel")
         self.PostCreate(pre)
 
         # Define variables for the controls, bind event handlers
+        self.gui_search_type = xrc.XRCCTRL(self, "gui_search_type")
+        self.proximity = xrc.XRCCTRL(self, "proximity")
+        self.proximity_type = xrc.XRCCTRL(self, "proximity_type")
+        self.case_sensitive = xrc.XRCCTRL(self, "case_sensitive")
+
+
+
+class xrcRangePanel(wx.Panel):
+#!XRCED:begin-block:xrcRangePanel.PreCreate
+    def PreCreate(self, pre):
+        """ This function is called during the class's initialization.
+        
+        Override it for custom setup before the window is created usually to
+        set additional window styles using SetWindowStyle() and SetExtraStyle().
+        """
+        pass
+        
+#!XRCED:end-block:xrcRangePanel.PreCreate
+
+    def __init__(self, parent):
+        # Two stage creation (see http://wiki.wxpython.org/index.cgi/TwoStageCreation)
+        pre = wx.PrePanel()
+        self.PreCreate(pre)
+        get_resources().LoadOnPanel(pre, parent, "RangePanel")
+        self.PostCreate(pre)
+
+        # Define variables for the controls, bind event handlers
+        self.wholebible = xrc.XRCCTRL(self, "wholebible")
+        self.oldtestament = xrc.XRCCTRL(self, "oldtestament")
+        self.newtestament = xrc.XRCCTRL(self, "newtestament")
+        self.dummy_radio = xrc.XRCCTRL(self, "dummy_radio")
+        self.range_top = xrc.XRCCTRL(self, "range_top")
+        self.range_bottom = xrc.XRCCTRL(self, "range_bottom")
+        self.label_2 = xrc.XRCCTRL(self, "label_2")
+        self.custom_range = xrc.XRCCTRL(self, "custom_range")
 
 
 

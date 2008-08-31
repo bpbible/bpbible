@@ -571,6 +571,7 @@ class AuiLayer(object):
 	def default_set_aui_items_up(self):
 		"""Code used to generate perspective"""
 		scrollsize = self.search_panel.BestSize
+		scrollsize2 = (630, 470)
 		#scrollsize[0] += 63
 		default_items = [[self.version_tree, "Books", ["Left"], 
 				["MinSize", [138, 50]],# self.version_tree.GetSize()],
@@ -591,7 +592,10 @@ class AuiLayer(object):
 			[self.search_panel, "Search", 
 				["Left"], ["Layer", 1],
 				["MinSize", scrollsize],
-				["BestSize", (630, 470)],
+				["BestSize", scrollsize2],
+				["FloatingSize", scrollsize2],
+				
+				
 				["Hide"],
 				["Float"],
 				["Dockable", False],

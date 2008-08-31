@@ -50,6 +50,95 @@ search_config.add_item("indexed_search", True, item_type=bool)
 search_config.add_item("past_search_length", 20, item_type=int)
 search_config.add_item("past_searches", [], item_type="pickle")
 
+class RangePanel(xrcRangePanel):
+	def __init__(self, parent):
+		super(RangePanel, self).__init__(parent)
+		self.oldtestament.Bind(wx.EVT_RADIOBUTTON, self.old_testament)
+		self.newtestament.Bind(wx.EVT_RADIOBUTTON, self.new_testament)
+		self.wholebible.Bind(wx.EVT_RADIOBUTTON, self.whole_bible)
+		self.custom_range.Bind(wx.EVT_TEXT, self.on_custom_changed)
+		self.range_top.Bind(wx.EVT_CHOICE, self.on_range_top)
+		self.range_bottom.Bind(wx.EVT_CHOICE, self.on_range_bottom)
+		
+		self.biblebooks = []
+
+		for book in VK.books:
+			bookname = book.bookname
+			self.biblebooks.append(bookname)
+			self.range_top.Append(bookname)
+			self.range_bottom.Append(bookname)
+
+		self.range_top.SetSelection(0)
+		number = self.range_bottom.GetCount()
+		self.range_bottom.SetSelection(number-1)
+		self.update_boxes(self.wholebible)
+		
+		
+	def old_testament(self, event = None):
+		self.range_top.SetSelection(0)
+		vk = VK()
+		num = vk.bookCount(1)
+		self.range_bottom.SetSelection(num-1)
+		self.update_boxes(self.oldtestament)
+		
+	def new_testament(self, event=None):
+		vk = VK()
+		start = vk.bookCount(1)
+		self.range_top.SetSelection(start)
+		number = self.range_bottom.GetCount()
+		self.range_bottom.SetSelection(number-1)
+
+		self.update_boxes(self.newtestament)
+
+	   
+	def whole_bible(self, event=None):
+		self.range_top.SetSelection(0)
+		number = self.range_bottom.GetCount()
+		self.range_bottom.SetSelection(number-1)
+		self.update_boxes(self.wholebible)
+	
+	def on_custom_changed(self, event=None):
+		self.update_boxes(set_custom=False)		
+	
+	def on_range_top(self, event=None):
+		sel = self.range_top.GetSelection()
+		if(self.range_bottom.GetSelection() < sel):
+			self.range_bottom.SetSelection(sel)
+		self.update_boxes()
+
+	def on_range_bottom(self, event=None):
+		sel = self.range_bottom.GetSelection()
+		if(self.range_top.GetSelection() > sel):
+			self.range_top.SetSelection(sel)		 
+		self.update_boxes()
+	
+	def update_boxes(self, radio=None, set_custom=True):
+		# we have a dummy radio box, which gets the selection when no radio
+		# box is selected. This is needed under wxGTK, where it seems you
+		# cannot set it a radio box's value to False
+		# The dummy radio box is hidden, of course.
+		if radio is None:
+			radio = self.dummy_radio
+
+		for item in [self.oldtestament, self.newtestament, self.wholebible,
+				self.dummy_radio]:
+			item.SetValue(item is radio)
+
+		if set_custom:
+			self.custom_range.ChangeValue("%s - %s" % (
+				self.range_top.StringSelection,
+				self.range_bottom.StringSelection))
+
+	def get_scope(self):
+		if self.wholebible.Value:
+			scope = None
+
+		else:
+			# If custom range, use it
+			scope = self.custom_range.GetValue()
+
+		return scope
+
 class SearchPanel(xrcSearchPanel):
 	def __init__(self, parent):
 		super(SearchPanel, self).__init__(parent)
@@ -76,7 +165,7 @@ class SearchPanel(xrcSearchPanel):
 	
 	def on_create(self, event=None):
 		self.Unbind(wx.EVT_WINDOW_CREATE)
-		wx.CallAfter(self._post_init)
+		self._post_init()
 		if event:
 			event.Skip()
 
@@ -97,6 +186,10 @@ class SearchPanel(xrcSearchPanel):
 	
 	def show(self, search_on_show=False):
 		self.search_on_show = search_on_show
+		self.search_splitter.SetSashPosition(
+				self.search_splitter.ClientSize[1]/2
+		)
+		
 		guiconfig.mainfrm.show_panel("Search")
 	
 	def on_show(self, toggle):
@@ -209,7 +302,6 @@ class SearchPanel(xrcSearchPanel):
 			self.on_close()
 			
 	def _post_init(self):
-		self.set_gui_search_type(search_config["indexed_search"])
 
 		self.search_button.SetLabel("&Search")
 	
@@ -237,18 +329,18 @@ class SearchPanel(xrcSearchPanel):
 		self.Bind(wx.EVT_BUTTON, self.on_search_button, self.search_button)
 		self.Bind(wx.EVT_BUTTON, self.on_close, id=wx.ID_CLOSE)
 		
-		self.gui_search_type.Bind(wx.EVT_CHOICE, self.on_search_type)
+		self.range_panel = RangePanel(self.options_holder)
+		self.options_panel = xrcOptionsPanel(self.options_holder)
+		self.options_holder.Sizer.Add(self.options_panel, 1, wx.GROW)
+		self.options_holder.Sizer.Add(self.range_panel, 1, wx.GROW)
+		
+		self.options_panel.gui_search_type.Bind(
+			wx.EVT_CHOICE, self.on_search_type)
 
-		self.oldtestament.Bind(wx.EVT_RADIOBUTTON, self.old_testament)
-		self.newtestament.Bind(wx.EVT_RADIOBUTTON, self.new_testament)
-		self.wholebible.Bind(wx.EVT_RADIOBUTTON, self.whole_bible)
-		self.custom_range.Bind(wx.EVT_TEXT, self.on_custom_changed)
 		
 		
 		self.verselist.Bind(wx.EVT_LIST_ITEM_SELECTED, self.on_list)
 		self.verselist.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self.on_select)
-		self.range_top.Bind(wx.EVT_CHOICE, self.on_range_top)
-		self.range_bottom.Bind(wx.EVT_CHOICE, self.on_range_bottom)
 		self.genindex.Bind(wx.EVT_BUTTON, self.generate_index)
 
 		# Set properties:
@@ -263,25 +355,15 @@ class SearchPanel(xrcSearchPanel):
 		#							  wx.TE_PROCESS_ENTER)
 		#self.verselist.InsertColumn(0, "Reference")
 		#self.verselist.InsertColumn(1, "Preview")
-		self.biblebooks = []
-
-		for book in VK.books:
-			bookname = book.bookname
-			self.biblebooks.append(bookname)
-			self.range_top.Append(bookname)
-			self.range_bottom.Append(bookname)
-
-		self.range_top.SetSelection(0)
-		number = self.range_bottom.GetCount()
-		self.range_bottom.SetSelection(number-1)
-		self.update_boxes(self.wholebible)
+		self.set_gui_search_type(search_config["indexed_search"])
+		
 
 	def on_collapse(self, event):
 		self.panel_1.Layout()
 
 	def set_gui_search_type(self, indexed_search):
 		"""Sets the search type to be displayed in the GUI."""
-		self.gui_search_type.SetSelection(not indexed_search)
+		self.options_panel.gui_search_type.SetSelection(not indexed_search)
 		
 	def on_close(self, event=None):
 		guiconfig.mainfrm.show_panel("Search", False)
@@ -341,14 +423,9 @@ class SearchPanel(xrcSearchPanel):
 		
 			self.show_progress_bar()
 		    
-			if self.wholebible.Value:
-				scope = None
-
-			else:
-				# If custom range, use it
-				scope = self.custom_range.GetValue()
+			scope = self.range_panel.get_scope()
 			
-			case_sensitive = self.case_sensitive.GetValue()
+			case_sensitive = self.options_panel.case_sensitive.GetValue()
 
 			self.perform_search(key, scope, case_sensitive)
 
@@ -375,9 +452,9 @@ class SearchPanel(xrcSearchPanel):
 			return not self.stop
 
 
-		proximity = int(self.proximity.GetValue())
+		proximity = int(self.options_panel.proximity.GetValue())
 		search_type = COMBINED
-		is_word_proximity = self.proximity_type.Selection == 0
+		is_word_proximity = self.options_panel.proximity_type.Selection == 0
 		self.numwords = len(key.split())
 		succeeded = True
 		if case_sensitive:
@@ -583,61 +660,6 @@ class SearchPanel(xrcSearchPanel):
 	def on_search_type(self, evt):
 		search_config["indexed_search"] = not evt.GetSelection()
 		self.check_for_index()
-		
-	def old_testament(self, event = None):
-		self.range_top.SetSelection(0)
-		vk = VK()
-		num = vk.bookCount(1)
-		self.range_bottom.SetSelection(num-1)
-		self.update_boxes(self.oldtestament)
-		
-	def new_testament(self, event=None):
-		vk = VK()
-		start = vk.bookCount(1)
-		self.range_top.SetSelection(start)
-		number = self.range_bottom.GetCount()
-		self.range_bottom.SetSelection(number-1)
-
-		self.update_boxes(self.newtestament)
-
-	   
-	def whole_bible(self, event=None):
-		self.range_top.SetSelection(0)
-		number = self.range_bottom.GetCount()
-		self.range_bottom.SetSelection(number-1)
-		self.update_boxes(self.wholebible)
-	
-	def on_custom_changed(self, event=None):
-		self.update_boxes(set_custom=False)		
-	
-	def on_range_top(self, event=None):
-		sel = self.range_top.GetSelection()
-		if(self.range_bottom.GetSelection() < sel):
-			self.range_bottom.SetSelection(sel)
-		self.update_boxes()
-
-	def on_range_bottom(self, event=None):
-		sel = self.range_bottom.GetSelection()
-		if(self.range_top.GetSelection() > sel):
-			self.range_top.SetSelection(sel)		 
-		self.update_boxes()
-	
-	def update_boxes(self, radio=None, set_custom=True):
-		# we have a dummy radio box, which gets the selection when no radio
-		# box is selected. This is needed under wxGTK, where it seems you
-		# cannot set it a radio box's value to False
-		# The dummy radio box is hidden, of course.
-		if radio is None:
-			radio = self.dummy_radio
-
-		for item in [self.oldtestament, self.newtestament, self.wholebible,
-				self.dummy_radio]:
-			item.SetValue(item is radio)
-
-		if set_custom:
-			self.custom_range.ChangeValue("%s - %s" % (
-				self.range_top.StringSelection,
-				self.range_bottom.StringSelection))
 		
 
 	def generate_index(self, event=None):
