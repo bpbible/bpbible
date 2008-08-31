@@ -51,7 +51,7 @@ def get_user_data_desc(filter):
 	
 	return UserData
 
-strongs_re = re.compile(r"([HG])(\d+)")
+strongs_re = re.compile(r"([HG])(\d+)(!\w)?")
 #get ophelimos from 
 #  5624  ophelimos  o-fel'-ee-mos\n\n\n from a form of 3786; helpful or 
 #serviceable, i.e.\n advantageous:--profit(-able).\n see GREEK for 3786
@@ -107,7 +107,7 @@ class ParserBase(object):
 			dprint(WARNING, "Could not match lemma", value)
 			return
 	
-		type, number = match.groups()
+		type, number, extra = match.groups()
 		if type not in "HG":
 			dprint(WARNING, "Unknown lemma", value)
 			return
@@ -146,6 +146,8 @@ class ParserBase(object):
 				
 		
 		word = match.groups()[0]
+		if extra:
+			number += extra
 		#self.buf += "&lt;%s&gt;" % word
 		item = '<font size="-1"><glink href="passagestudy.jsp?action=showStrongs&type=%s&value=%s">&lt;%s&gt;</glink></font>' % (modlang, number, word)
 		strongs_cache[value] = item

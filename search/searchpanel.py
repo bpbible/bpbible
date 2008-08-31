@@ -155,6 +155,7 @@ class SearchPanel(xrcSearchPanel):
 		self.version = None
 		self.stop = False
 		self.regexes = []
+		self.fields = []
 
 		# if search panel is on screen at startup, on_show and set_version will
 		# both be called. Then if there is no index, it will prompt twice.
@@ -427,6 +428,7 @@ class SearchPanel(xrcSearchPanel):
 			
 			case_sensitive = self.options_panel.case_sensitive.GetValue()
 
+			
 			self.perform_search(key, scope, case_sensitive)
 
 		finally:
@@ -436,12 +438,64 @@ class SearchPanel(xrcSearchPanel):
 			
 
 	def perform_search(self, key, scope, case_sensitive):
+		proximity = int(self.options_panel.proximity.GetValue())
+		is_word_proximity = self.options_panel.proximity_type.Selection == 0
+		
+		
 		if self.indexed_search:
-			self.on_indexed_search(key, scope, case_sensitive)
+			index_word_list = self.index.statistics["wordlist"]
 		else:
-			self.on_sword_search(key, scope, case_sensitive)
-	
-	def on_indexed_search(self, key, scope, case_sensitive):
+			index_word_list = None
+
+		
+		succeeded = True
+		try:
+			(regexes, excl_regexes), (fields, excl_fields) = separate_words(
+				key, index_word_list, 
+				cross_verse_search=is_word_proximity or proximity > 1
+			)
+		except SearchException, myexcept:
+			wx.MessageBox(myexcept.message, "Error in search")
+			succeeded = False
+
+		except SpellingException, spell:
+			wx.MessageBox(
+				"The following words were not found in this Bible:"
+				"\n%s" % unicode(spell), "Unknown word"
+			)
+		
+			succeeded = False
+		
+		if not succeeded:
+			self.regexes = []	
+			self.fields = []
+			return
+		
+			
+		
+
+		flags = re.UNICODE | re.IGNORECASE * (not case_sensitive) | re.MULTILINE
+		
+		try:
+			self.regexes = [re.compile(regex, flags) for regex in regexes]
+			self.fields = fields
+		except re.error, e:
+			dprint(WARNING, "Couldn't compile expression for search.",
+				key, e)
+
+			self.regexes = []	
+			self.fields = []
+		
+		if self.indexed_search:
+			self.on_indexed_search(regexes, excl_regexes, fields, excl_fields, 
+				scope, case_sensitive, proximity, is_word_proximity)
+
+		else:
+			self.on_sword_search(regexes, excl_regexes, fields, excl_fields, 
+				scope, case_sensitive)
+
+	def on_indexed_search(self, regexes, excl_regexes, fields, excl_fields, 
+		scope, case_sensitive, proximity, is_word_proximity):
 		"""This is what does the main bit of searching."""
 		assert self._has_index()
 		def index_callback(value):#, userdata):
@@ -450,19 +504,17 @@ class SearchPanel(xrcSearchPanel):
 			#wx.SafeYield(self.search_button)
 			guiconfig.app.Yield()
 			return not self.stop
-
-
-		proximity = int(self.options_panel.proximity.GetValue())
+		
 		search_type = COMBINED
-		is_word_proximity = self.options_panel.proximity_type.Selection == 0
-		self.numwords = len(key.split())
+		self.numwords = len(regexes)
 		succeeded = True
 		if case_sensitive:
 			search_type |= search.CASESENSITIVE
 		
 		try:
-			self.search_results, self.regexes = self.index.Search(
-				key, search_type, searchrange=scope, 
+			self.search_results = self.index.Search(
+				regexes, excl_regexes, fields, excl_fields, 
+				search_type, searchrange=scope,
 				progress=index_callback,
 				proximity=proximity, is_word_proximity=is_word_proximity
 			)
@@ -521,7 +573,8 @@ class SearchPanel(xrcSearchPanel):
 		
 		self.insert_results()
 
-	def on_sword_search(self, key, scope, case_sensitive):
+	def on_sword_search(self, regexes, excl_regexes, fields, excl_fields, 
+		scope, case_sensitive):
 		"""This is what does the main bit of searching."""
 		def callback(value, userdata):
 			self.progressbar.SetValue(value)
@@ -536,20 +589,9 @@ class SearchPanel(xrcSearchPanel):
 		self.searcher = Searcher(biblemgr.bible)
 		self.searcher.callback = callback
 
-		(regexes, excl_regexes), (strongs, excl_strongs) = separate_words(key)
-		assert not strongs and not excl_strongs, \
+		assert not fields and not excl_fields, \
 			"Strong's searches don't work here yet"
 		
-		try:
-			flags = re.UNICODE | (re.IGNORECASE * (not case_sensitive))
-		
-			self.regexes = [re.compile(regex, flags) for regex in regexes]
-		except re.error, e:
-			dprint(WARNING, "Couldn't compile expression for sword search.",
-				key, e)
-
-			self.regexes = []
-			
 		self.numwords = len(regexes)
 		if not regexes:
 			self.search_results = []
@@ -627,6 +669,7 @@ class SearchPanel(xrcSearchPanel):
 		self.verselist.set_data("Reference Preview".split(), length=0)
 
 		self.versepreview.regexes = []
+		self.versepreview.strongs = []
 		self.versepreview.SetReference(None)
 
 		#insert columns
@@ -652,6 +695,7 @@ class SearchPanel(xrcSearchPanel):
 		self.set_title()
 
 		self.versepreview.regexes = self.regexes	
+		self.versepreview.strongs = [value for key, value in self.fields]
 		self.versepreview.SetReference(text[0])
 		
 		

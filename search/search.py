@@ -222,8 +222,9 @@ class Index(object):
 		books = [self.books[x] for x in sorted(books)]
 		return books
 	
-	def Search(self, words, type=COMBINED, proximity=15, 
-		is_word_proximity=False, progress=lambda x:x, searchrange=None):
+	def Search(self, regexes, excl_regexes, fields, excl_fields,
+		type=COMBINED, proximity=15, is_word_proximity=False, 
+		progress=lambda x:x, searchrange=None):
 		"""Index.Search - this function does all bible searching
 		
 		In:	words - words to search for
@@ -242,16 +243,12 @@ class Index(object):
 		Out: results, regular expressions
 		"""
 
-		dprint(MESSAGE, "Search called with arguments", words, type,
-			proximity, progress, searchrange)
-
 		if self.book.version != self.version:
 			self.book.SetModule(self.version)
 		
 		combined = type & COMBINED
 		case_sensitive = type & CASESENSITIVE
-		regex = type & REGEX
-		assert combined or regex, "Combined or regex is currently obligatory!!!"
+		assert combined, "Combined or regex is currently obligatory!!!"
 		
 		phrase = type & PHRASE
 		advanced = type & ADVANCED
@@ -268,40 +265,8 @@ class Index(object):
 		
 		flags = re.IGNORECASE * (not case_sensitive) | re.UNICODE | re.MULTILINE
 		
-		# Regular expression
-		if regex:
-
-			try:
-				comp = re.compile(words, flags)		
-			except re.error, e:
-				raise SearchException(
-					"There seems to be an error in your regular expression.\n"
-					"The error message given was: %s" % e
-				)
-			
-			
-			for num, book in enumerate(books):
-				continuing = progress((book.bookname, (100*num)/len(books)))
-				if not continuing:
-					break
-
-				results += book.find_index(book.regex_search(comp))
-
-			progress(("Done", 100))
-			return results, [comp]
-		
-		if self.booktype.gatherstatistics:
-			index_word_list = self.statistics["wordlist"]
-		else:
-			index_word_list = None
-
-		(regexes, excl_regexes), (fields, excl_fields) = separate_words(
-				words, index_word_list, 
-				cross_verse_search=is_word_proximity or proximity > 1
-		)
-
 		if not regexes and not excl_regexes and not fields and not excl_fields:
-			return [], []
+			return []
 
 		return self.multi_search(
 			regexes, excl_regexes, fields, excl_fields, books, proximity, 
@@ -358,7 +323,7 @@ class Index(object):
 			results += book.find_index(matches)
 		
 		progress(("Done", 100))
-		return results, [regex for regex, length in wordlist]
+		return results
 	
 	
 	def WriteIndex(self):

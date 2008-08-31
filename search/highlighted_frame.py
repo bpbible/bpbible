@@ -4,7 +4,6 @@ import unicodedata
 from backend.verse_template import VerseTemplate
 from util.string_util import KillTags, ReplaceUnicode, replace_amp, htmlify_unicode, remove_amps
 from util.debug import dprint, ERROR
-from util.unicode import to_unicode
 
 from search import removeformatting
 
@@ -13,6 +12,7 @@ from gui.reference_display_frame import ReferenceDisplayFrame
 
 tokens = re.compile(r"""
 	(<glink[^>]*>.*?</glink>)	| # a strongs number and contents
+	(&lt;<a\ [^>]*>.*?</a>&gt;) | # a link with <> around and contents		
 	(<a\ [^>]*>.*?</a>)			| # a link and contents	
 	(<h4>.*?</h4>)				| # a heading and contents	
 	(<[^>]+>)					| # any other html tag - not contents
@@ -131,7 +131,92 @@ def unite(string1, string2):
 
 			return []
 
-def highlight(string1, string2, regexes, 
+def highlight_section(results, start, end, start_tag, end_tag):
+	# +1 as we have preamble at start.
+	results[start + 1].insert(0, start_tag)
+	tags_open = []
+	upto = start + 1
+
+	pos = 1
+
+	# go between our start and our end
+	# this loop will find all the tags that are open by the end of the
+	# match, and also find all the tags that are closed before the end
+	# and close the highlighting just before and start it just after
+	# the closed tag
+	while upto <= end:
+		# go through all the items for the current position
+		while pos < len(results[upto]):
+			tag, type = get_tag(results[upto][pos])
+
+			# if it wasn't a tag, go to the next position
+			if not tag:
+				pos += 1
+				continue
+			
+			# append opening tags to our stack
+			if type == OPENING_TAG:
+				tags_open.append((tag, results[upto][pos], upto, pos))
+
+			elif type == CLOSING_TAG:
+				while tags_open:
+					# pop off tags until we match
+					# We may be popping off tags without a matching
+					# closing tag
+					popped_tag, text, oldupto, oldpos = tags_open.pop()
+					if popped_tag == tag:
+						break
+				
+				# if we didn't find the tag, put in our end tag, the
+				# closing tag, and then our start tag
+				else:
+					results[upto][pos:pos+1] = [
+						end_tag,
+						results[upto][pos],
+						start_tag
+					]
+
+					# update the position to include the two new
+					# entries
+					pos += 2
+					
+			# go to the next position
+			pos += 1
+					
+		upto += 1
+		pos = 0
+							
+	# put the end tag in
+	results[end].append(end_tag)
+	
+	last_upto = -1
+	offset = 0
+
+	while tags_open:
+		# and finish off our tags open
+		# this we do by finding the open tags and closing just before
+		# them, and then opening just after them
+		tag, text, upto, pos = tags_open.pop()
+
+		if upto == last_upto:
+			pos += offset
+		else:
+			offset = 0
+
+		# close just before the first tag open that isn't closed		
+		results[upto][pos:pos+1] = [
+			end_tag,
+			results[upto][pos],
+			start_tag
+		]
+
+		# two new tags added in
+		offset += 2
+
+		last_upto = upto
+		
+
+def highlight(string1, string2, regexes, strongs=(),
 		start_tag='<b><font color="#008800">', end_tag='</font></b>'):
 	"""Highlight string2 with the regular expressions regexes, being matched
 	on string1
@@ -151,92 +236,41 @@ def highlight(string1, string2, regexes,
 		for match in regex.finditer(string1):
 			matched = True
 			start, end = match.span()
-			# +1 as we have preamble at start.
-			results[start + 1].insert(0, start_tag)
-			tags_open = []
-			upto = start + 1
+			highlight_section(results, start, end, start_tag, end_tag)
 
-			pos = 1
-
-			# go between our start and our end
-			# this loop will find all the tags that are open by the end of the
-			# match, and also find all the tags that are closed before the end
-			# and close the highlighting just before and start it just after
-			# the closed tag
-			while upto <= end:
-				# go through all the items for the current position
-				while pos < len(results[upto]):
-					tag, type = get_tag(results[upto][pos])
-
-					# if it wasn't a tag, go to the next position
-					if not tag:
-						pos += 1
-						continue
-					
-					# append opening tags to our stack
-					if type == OPENING_TAG:
-						tags_open.append((tag, results[upto][pos], upto, pos))
-
-					elif type == CLOSING_TAG:
-						while tags_open:
-							# pop off tags until we match
-							# We may be popping off tags without a matching
-							# closing tag
-							popped_tag, text, oldupto, oldpos = tags_open.pop()
-							if popped_tag == tag:
-								break
-						
-						# if we didn't find the tag, put in our end tag, the
-						# closing tag, and then our start tag
-						else:
-							results[upto][pos:pos+1] = [
-								end_tag,
-								results[upto][pos],
-								start_tag
-							]
-
-							# update the position to include the two new
-							# entries
-							pos += 2
-							
-					# go to the next position
-					pos += 1
-							
-				upto += 1
-				pos = 0
-									
-			# put the end tag in
-			results[end].append(end_tag)
-			
-			last_upto = -1
-			offset = 0
-
-			while tags_open:
-				# and finish off our tags open
-				# this we do by finding the open tags and closing just before
-				# them, and then opening just after them
-				tag, text, upto, pos = tags_open.pop()
-
-				if upto == last_upto:
-					pos += offset
-				else:
-					offset = 0
-
-				# close just before the first tag open that isn't closed		
-				results[upto][pos:pos+1] = [
-					end_tag,
-					results[upto][pos],
-					start_tag
-				]
-
-				# two new tags added in
-				offset += 2
-
-				last_upto = upto
-		
 		if not matched:
 			dprint(ERROR, "Regular expression not matched against plain text",
 				regex.pattern, string1)
+	
+	for strong in strongs:
+		match = re.match("([GH])(\d+)(\w?)", strong)
+		assert match, "couldn't interpret strong's number for highlighting"
+		prefix, number, extra = match.group(1, 2, 3)
+		lang = ["Hebrew", "Greek"][prefix=="G"]
+		number = str(int(number))
+		if extra:
+			number += "!%s" % extra
+
+		href = r"passagestudy.jsp\?action=showStrongs&type=%s" \
+			"&value=%s(?:!\w)?"	% (lang, number)
+		glink_matcher = re.compile(
+			'^<glink([^>]*)(href="%s")([^>]*)>([^<]*)</glink>$' % href
+		)
+		strongs_matcher = re.compile(
+			'^(&lt;<a ([^>]*)(href="%s")([^>]*)>([^<]*)</a>&gt;)$' % href
+		)
+
+		for tokens in results:
+			for idx, token in enumerate(tokens):
+				# highlight strong's numbers...	
+				token = glink_matcher.sub(					
+					r'<b><glink colour="#008800"\1\2\3>\4</glink></b>',
+					token)
+
+				tokens[idx] = strongs_matcher.sub(
+					r'<b><font color="#008800">\1</font></b>',
+					token)
+					
 	
 	replacements = {
 		'<' : '&lt;',
@@ -256,6 +290,7 @@ def highlight(string1, string2, regexes,
 class HighlightedDisplayFrame(ReferenceDisplayFrame):
 	def __init__(self):
 		self.regexes = []
+		self.strongs = []
 		super(HighlightedDisplayFrame, self).__init__()
 
 	def _RefreshUI(self):
@@ -278,11 +313,13 @@ class HighlightedDisplayFrame(ReferenceDisplayFrame):
 		biblemgr.restore_state()
 		biblemgr.bible.templatelist.pop()
 
+		#TODO: highlight with \n's properly
+		# e.g. /word\nanother/
 		content = remove_amps(KillTags(ReplaceUnicode(content)))
 		content = content.replace("\n", " ")
 		content = removeformatting(content)
 
-		data = highlight(content, data, self.regexes)
+		data = highlight(content, data, self.regexes, self.strongs)
 		
 		# XXX: This replace should be done for us by the backend Bible
 		# interface (or by Sword itself).
