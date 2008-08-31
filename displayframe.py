@@ -394,12 +394,13 @@ class DisplayFrame(HtmlSelectableWindow):
 		return menu_items
 
 	def show_popup(self, event):
+		self.popup_position = guiutil.get_mouse_pos(self)#event.Position
+		
 		menu = guiconfig.mainfrm.make_menu(
 			[x for (x, where_shown) in self.get_menu_items() 
 				if where_shown & IN_POPUP],
 			is_popup=True)
 		
-		self.popup_position = guiutil.get_mouse_pos(self)#event.Position
 		event_object = event.EventObject
 		
 		#if osutils.is_gtk():
@@ -414,6 +415,7 @@ class DisplayFrame(HtmlSelectableWindow):
 	def _get_text(self, lookup_text):
 		def update_ui(event):
 			text = self.SelectionToText()
+
 			if not text:
 				text = self.get_clicked_cell_text()
 
@@ -461,20 +463,34 @@ class DisplayFrame(HtmlSelectableWindow):
 		update_ui = self._get_text("Search for %s in the Bible")
 
 		def on_search_click():
-			""""Search for the selected word in the Bible"""
-			text = self.SelectionToText()
+			"""Search for the selected word in the Bible"""
+			cell = self.FindCell(*self.popup_position)
+			link = cell.GetLink()
+			strongs_number = None
+			if link:
+				match = re.match(u'passagestudy.jsp\?action=showStrongs&type='
+						  '(Greek|Hebrew)&value=(\d+)(!\w+)?', link.GetHref())
+				if match:
+					prefix, number, extra = match.group(1, 2, 3)
+					strongs_number = "HG"[prefix=="Greek"] + number
+					if extra:
+						strongs_number += extra[1:]
+			
+					text = "strongs:" + strongs_number
+			
 			if not text:
-				text = self.get_clicked_cell_text()
+				text = self.SelectionToText()
+				if not text:
+					text = self.get_clicked_cell_text()
 
-			text = self.strip_text(text)
+				text = self.strip_text(text)
 
-			# if this is a phrase, put quotes around it.
-			# In the future, it may be wise to set the type to phrase
-			if " " in text:
-				text = '"%s"' % text
+				# if this is a phrase, put quotes around it.
+				# In the future, it may be wise to set the type to phrase
+				if " " in text:
+					text = '"%s"' % text
 
 			guiconfig.mainfrm.search_panel.search_and_show(text)
-
 
 		return MenuItem("Search on word", on_search_click, 
 			update_ui=update_ui)
