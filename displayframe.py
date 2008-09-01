@@ -467,6 +467,7 @@ class DisplayFrame(HtmlSelectableWindow):
 			cell = self.FindCell(*self.popup_position)
 			link = cell.GetLink()
 			strongs_number = None
+			text = None
 			if link:
 				match = re.match(u'passagestudy.jsp\?action=showStrongs&type='
 						  '(Greek|Hebrew)&value=(\d+)(!\w+)?', link.GetHref())
