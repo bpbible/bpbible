@@ -136,7 +136,7 @@ class Book(object):
 		rangetext = GetBestRange(verselist.getRangeText())
 		if rangetext == "":
 			#if invalid reference, return empty string
-			return ""
+			return u""
 			
 		
 		if specialref:
