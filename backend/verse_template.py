@@ -2,8 +2,8 @@ from string import Template as str_template
 
 class VerseTemplate(object):
 	"""VerseTemplate is a class which defines templates for Bible Text""" 
-	def __init__(self, body="$text", header="", footer="", 
-	headings="<p><h4>$heading</h4><br>\n"):
+	def __init__(self, body=u"$text", header=u"", footer=u"", 
+	headings=u"<p><h4>$heading</h4><br>\n"):
 		self.header = str_template(header)
 		self.body = str_template(body)
 		self.footer = str_template(footer)
