@@ -330,8 +330,8 @@ class Index(object):
 		search_utils.WriteIndex(self)
 
 class GenBookIndex(Index):
-	def __init__(self, version, booktype=IndexedText):
-		super(GenBookIndex, self).__init__(version, booktype=booktype)
+	def __init__(self, version, progress=lambda x:x, booktype=IndexedText):
+		super(GenBookIndex, self).__init__(version, progress, booktype=booktype)
 	
 	@property
 	def book(self):
