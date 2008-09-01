@@ -58,7 +58,8 @@ def unite(string1, string2):
 	"""Unite string1 and string2.
 	
 	This maps each token in string1 into a sequence of tokens in string2."""
-	assert isinstance(string1, unicode) and isinstance(string2, unicode)
+	assert isinstance(string1, unicode) and isinstance(string2, unicode), \
+		"%r %r %r %r" % (string1, string2, type(string1), type(string2))
 	iter1 = tokenize(string1)
 	iter2 = tokenize(string2)
 
@@ -252,7 +253,7 @@ def highlight(string1, string2, regexes, strongs=(),
 			number += "!%s" % extra
 
 		href = r"passagestudy.jsp\?action=showStrongs&type=%s" \
-			"&value=%s(?:!\w)?"	% (lang, number)
+			"&value=0*%s(?:!\w)?"	% (lang, number)
 		glink_matcher = re.compile(
 			'^<glink([^>]*)(href="%s")([^>]*)>([^<]*)</glink>$' % href
 		)
@@ -291,6 +292,7 @@ class HighlightedDisplayFrame(ReferenceDisplayFrame):
 	def __init__(self):
 		self.regexes = []
 		self.strongs = []
+		self.parent = None
 		super(HighlightedDisplayFrame, self).__init__()
 
 	def _RefreshUI(self):
@@ -298,20 +300,17 @@ class HighlightedDisplayFrame(ReferenceDisplayFrame):
 			self.SetPage("")
 			return
 
-		data = biblemgr.bible.GetReference(self.reference)
-
-		mod = biblemgr.bible.mod
-		#mod.KeyText(self.reference)
+		data = self.parent.book.GetReference(self.reference)
 
 		# TODO: put a function in search to do this for us...
 		biblemgr.temporary_state(biblemgr.plainstate)
-		template = VerseTemplate("$text ", headings="")
-		biblemgr.bible.templatelist.append(template)
+		template = VerseTemplate(u"$text ", headings="")
+		self.parent.book.templatelist.append(template)
 		
 		
-		content = biblemgr.bible.GetReference(self.reference, stripped=True)
+		content = self.parent.book.GetReference(self.reference, stripped=True)
 		biblemgr.restore_state()
-		biblemgr.bible.templatelist.pop()
+		self.parent.book.templatelist.pop()
 
 		#TODO: highlight with \n's properly
 		# e.g. /word\nanother/

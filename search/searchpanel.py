@@ -19,7 +19,7 @@ from search import COMBINED
 from search import SearchException, SpellingException, RemoveDuplicates
 from query_parser import separate_words
 from highlighted_frame import HighlightedDisplayFrame
-from swlib.pysw import VK, GetBestRange, Searcher, SWMULTI, SWPHRASE, SWREGEX
+from swlib.pysw import TK, VK, GetBestRange, Searcher, SWREGEX
 from gui import guiutil
 from util.debug import dprint, WARNING
 from gui import virtuallist
@@ -143,11 +143,11 @@ class RangePanel(xrcRangePanel):
 class SearchPanel(xrcSearchPanel):
 	def __init__(self, parent):
 		super(SearchPanel, self).__init__(parent)
-
-		if osutils.is_gtk():
-			self.Bind(wx.EVT_WINDOW_CREATE, self.on_create)
-		else:
-			wx.CallAfter(self.on_create)
+		
+		#if osutils.is_gtk():
+		#	self.Bind(wx.EVT_WINDOW_CREATE, self.on_create)
+		#else:
+		wx.CallAfter(self.on_create)
 
 		self.search_results = ""
 
@@ -174,9 +174,8 @@ class SearchPanel(xrcSearchPanel):
 		return True
 	
 	def on_list(self, event):
-		item_text = self.verselist.GetItemText(event.m_itemIndex)
+		item_text = self.verselist.results[event.m_itemIndex]
 		self.versepreview.SetReference(item_text)
-	
 	
 	def search_and_show(self, key=""):
 		self.searchkey.SetValue(key)
@@ -192,7 +191,7 @@ class SearchPanel(xrcSearchPanel):
 				self.search_splitter.ClientSize[1]/2
 		)
 		
-		guiconfig.mainfrm.show_panel("Search")
+		guiconfig.mainfrm.show_panel(self.title)
 	
 	def on_show(self, toggle):
 		if self.version is None:
@@ -201,7 +200,7 @@ class SearchPanel(xrcSearchPanel):
 		if not toggle: 
 			return
 
-		panel = guiconfig.mainfrm.aui_mgr.GetPane("Search")
+		panel = guiconfig.mainfrm.aui_mgr.GetPane(self.title)
 		if panel.IsFloating():
 			# do resizing to force layout 
 			#panel.window.SetSize(panel.window.GetSize() + (0, 1))		
@@ -234,7 +233,7 @@ class SearchPanel(xrcSearchPanel):
 		self.genindex.Enable(version is not None)
 		
 
-		if(guiconfig.mainfrm.is_pane_shown("Search") and self.has_started):
+		if(guiconfig.mainfrm.is_pane_shown(self.title) and self.has_started):
 			self.check_for_index()
 
 		self.search_label.Label = "0 verses found"
@@ -250,8 +249,8 @@ class SearchPanel(xrcSearchPanel):
 		self.set_gui_search_type(search_config["indexed_search"])
 		if not search_config["indexed_search"]:
 			#self.genindex.SetLabel("Unindex")
-			self.search_button.Enable(biblemgr.bible.version is not None)
-			if not biblemgr.bible.version:
+			self.search_button.Enable(self.book.version is not None)
+			if not self.book.version:
 				wx.MessageBox("You don't have a current bible version, "
 				"so you cannot search at the moment", "No current version")
 			
@@ -287,7 +286,7 @@ class SearchPanel(xrcSearchPanel):
 				return
 			self.genindex.SetLabel("&Index")
 
-			msg = "Search index does not exist for module %s. " \
+			msg = "Search index does not exist for book %s. " \
 				"Indexing will make search much faster. " \
 				"Create Index?" % self.version 
 			create = wx.MessageBox(msg, "Create Index?", wx.YES_NO)
@@ -304,6 +303,8 @@ class SearchPanel(xrcSearchPanel):
 			self.on_close()
 			
 	def _post_init(self):
+		self.verselist.parent = self
+		self.versepreview.parent = self
 
 		self.search_button.SetLabel("&Search")
 	
@@ -368,7 +369,7 @@ class SearchPanel(xrcSearchPanel):
 		self.options_panel.gui_search_type.SetSelection(not indexed_search)
 		
 	def on_close(self, event=None):
-		guiconfig.mainfrm.show_panel("Search", False)
+		guiconfig.mainfrm.show_panel(self.title, False)
 
 	def stop_search(self):
 		self.stop = True
@@ -588,12 +589,12 @@ class SearchPanel(xrcSearchPanel):
 			guiconfig.app.Yield()
 			return not self.stop
 
-		if not biblemgr.bible.mod:
+		if not self.book.mod:
 			wx.CallAfter(self.clear_list)
 			return
 		
 		#Create searcher, and set percent callback to callback
-		self.searcher = Searcher(biblemgr.bible)
+		self.searcher = Searcher(self.book)
 		self.searcher.callback = callback
 
 		assert not fields and not excl_fields, \
@@ -608,7 +609,7 @@ class SearchPanel(xrcSearchPanel):
 		search_scope = scope
 		for item in regexes:
 			self.search_results = self.searcher.Search(
-				to_str(item, biblemgr.bible.mod),
+				to_str(item, self.book.mod),
 				SWREGEX, search_scope, case_sensitive
 			)
 			search_scope = "; ".join(self.search_results)
@@ -620,7 +621,7 @@ class SearchPanel(xrcSearchPanel):
 				break
 
 			exclude_list = self.searcher.Search(
-				to_str(item, biblemgr.bible.mod),
+				to_str(item, self.book.mod),
 				SWREGEX,
 				"; ".join(self.search_results), 
 				case_sensitive
@@ -685,9 +686,9 @@ class SearchPanel(xrcSearchPanel):
 		self.set_title()
 	
 	def set_title(self):
-		text = "%s Bible search - %s" % (self.version,
+		text = "%s search - %s" % (self.version,
 			string_util.pluralize("result", self.verselist.ItemCount))		
-		guiconfig.mainfrm.set_pane_title("Search", text)
+		guiconfig.mainfrm.set_pane_title(self.title, text)
 
 	@guiutil.frozen
 	def insert_results(self):
@@ -745,7 +746,7 @@ class SearchPanel(xrcSearchPanel):
 		try:
 			#create index
 			try:
-				index = search.Index(version, callback)
+				index = self.index_type(version, callback)
 			except search.Cancelled:
 				return None
 			
@@ -779,31 +780,68 @@ class SearchPanel(xrcSearchPanel):
 		if indexed_search and not self._has_index():
 			indexed_search = False
 		return indexed_search
+	
+	@property
+	def book(self):
+		return biblemgr.bible
+	
+	@property
+	def index_type(self):
+		return search.Index
+	
+	@property
+	def title(self):
+		return "Search"	
+
+	def search_list_format_text(self, text):
+		return GetBestRange(text, abbrev=True)		
 
 class SearchList(virtuallist.VirtualListCtrlXRC):
 	def __init__(self):
 		self.results = []
+		self.parent = None
 		super(SearchList, self).__init__()
 
 	def get_data(self, idx, col):
+		assert self.parent, "Parentless search list :("
 		template = VerseTemplate(body = "$text ")
 	
 		if col == 0:
-			return GetBestRange(self.results[idx], abbrev=True)
+			return self.parent.search_list_format_text(self.results[idx])
 
 		
 		biblemgr.temporary_state(biblemgr.plainstate)
-		biblemgr.bible.templatelist.append(template)
+		self.parent.book.templatelist.append(template)
 		try:
 			item = self.results[idx]
-			bibletext = string_util.br2nl(biblemgr.bible.GetReference(item))
+			bibletext = string_util.br2nl(self.parent.book.GetReference(item))
 			bibletext = string_util.KillTags(bibletext)
 			bibletext = string_util.RemoveWhitespace(string_util.amps_to_unicode(bibletext))
 			return bibletext
 
 		finally:
 			biblemgr.restore_state()
-			biblemgr.bible.templatelist.pop()
+			self.parent.book.templatelist.pop()
+
+class GenbookSearchPanel(SearchPanel):
+	@property
+	def book(self):
+		return biblemgr.genbook
+	
+	@property
+	def index_type(self):
+		return search.GenBookIndex
+
+	@property
+	def title(self):
+		return "Genbook Search"
+
+	def search_list_format_text(self, text):
+		mod = self.book.mod
+		key = TK(mod.getKey(), mod)
+		items = []
+		for item in text.split(" - "):
+			key.text = item
+			items.append(key.breadcrumb())
+		return " - ".join(items)
 		
-	
-	

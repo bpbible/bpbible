@@ -294,9 +294,11 @@ class AuiLayer(object):
 			[self.dictionarytext.get_window(), "Dictionary"],
 			[self.genbooktext.get_window(), "Other Books"],
 			[self.verse_compare.get_window(), "Version Comparison"],			
-			[self.search_panel, "Search"],
+			
 			[self.history_pane, "History"],
 		]
+		items.extend([item, item.title] for item in self.searchers)
+
 
 		panes = (
 			self.bibletext, self.commentarytext, 
@@ -589,7 +591,17 @@ class AuiLayer(object):
 			[self.genbooktext.get_window(), "Other Books", ["Top"], 
 				["Hide"]
 			],
-			[self.search_panel, "Search", 
+			
+			[self.verse_compare.get_window(), "Version Comparison", ["Left"],			
+				["Hide"]
+			],
+			[self.history_pane, "History", ["Left"],
+				["Hide"]
+			],
+			
+		]
+		for item in self.searchers:
+			default_items.append([item, item.title, 
 				["Left"], ["Layer", 1],
 				["MinSize", scrollsize],
 				["BestSize", scrollsize2],
@@ -599,15 +611,7 @@ class AuiLayer(object):
 				["Hide"],
 				["Float"],
 				["Dockable", False],
-			],
-			[self.verse_compare.get_window(), "Version Comparison", ["Left"],			
-				["Hide"]
-			],
-			[self.history_pane, "History", ["Left"],
-				["Hide"]
-			],
-			
-		]
+			])
 		
 		default_toolbars = self.toolbars
 							#([self.main_toolbar, "Navigation"],

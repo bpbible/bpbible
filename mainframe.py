@@ -45,7 +45,7 @@ from gui.guiutil import bmp
 from gui.menu import Separator
 from gui.htmlbase import HtmlBase
 
-from search.searchpanel import SearchPanel
+from search.searchpanel import SearchPanel, GenbookSearchPanel
 
 from fontchoice import FontChoiceDialog 
 from versecompare import VerseCompareFrame
@@ -352,15 +352,28 @@ class MainFrame(wx.Frame, AuiLayer):
 
 	def create_searchers(self):
 		self.search_panel = SearchPanel(self)
+		self.genbook_search_panel = GenbookSearchPanel(self)
 		
+		def make_closure(item):
+			def version_changed(version=None):
+				wx.CallAfter(item.set_version, item.book.version)
+
+			def callback(toggle):
+				wx.CallAfter(item.on_show, toggle)			
+
+			return version_changed, callback
+
+		self.searchers = self.search_panel, self.genbook_search_panel
 		self.aui_callbacks = {}
-		self.aui_callbacks["Search"] = lambda toggle:wx.CallAfter(
-							self.search_panel.on_show, toggle)
-		
+		for item in self.searchers:
+			version_changed, callback = make_closure(item)
+			self.aui_callbacks[item.title] = callback
+
+			item.book.observers += version_changed
+			version_changed()
+			
 		# TODO: only refresh if settings are changed
 		self.bible_observers += self.search_panel.versepreview.RefreshUI
-
-		wx.CallAfter(lambda:self.set_search_version(biblemgr.bible.version))
 
 	def create_aui_items(self):
 		self.version_tree = ModuleTree(self)
@@ -839,9 +852,6 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.save_data()
 		self.Destroy()
 
-	def set_search_version(self, version):
-		self.search_panel.set_version(version)
-
 	#def BibleRefEnterChar(self, event):
 	
 	def BibleRefEnter(self, event=None):
@@ -892,7 +902,6 @@ class MainFrame(wx.Frame, AuiLayer):
 		wx.AboutBox(info)
 
 	def bible_version_changed(self, newversion):
-		self.set_search_version(biblemgr.bible.version)
 		self.UpdateBibleUI(settings_changed=True, source=SETTINGS_CHANGED)
 	
 	def commentary_version_changed(self, newversion):
