@@ -223,7 +223,7 @@ class Index(object):
 		return books
 	
 	def Search(self, regexes, excl_regexes, fields, excl_fields,
-		type=COMBINED, proximity=15, is_word_proximity=False, 
+		type=COMBINED, proximity=15, is_word_proximity=True, 
 		progress=lambda x:x, searchrange=None):
 		"""Index.Search - this function does all bible searching
 		

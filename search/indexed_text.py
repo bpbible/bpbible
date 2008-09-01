@@ -491,7 +491,7 @@ class IndexedText(object):
 				l = []
 				word = "%s[^\x00]*\x00(\d+) (\d+)" % word
 
-				regex = re.compile(word, re.MULTILINE|re.IGNORECASE|re.UNICODE)
+				regex = re.compile(word, re.MULTILINE|re.UNICODE)
 				for item in regex.finditer(self.strongs_info):
 					l.append((int(item.group(1)), int(item.group(2))))
 				

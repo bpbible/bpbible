@@ -1,4 +1,5 @@
 import re
+import time
 
 #wx imports
 import wx
@@ -498,11 +499,17 @@ class SearchPanel(xrcSearchPanel):
 		scope, case_sensitive, proximity, is_word_proximity):
 		"""This is what does the main bit of searching."""
 		assert self._has_index()
+		last_time = [time.time()]
 		def index_callback(value):#, userdata):
-			#dprint(MESSAGE, "callback status", *value)
-			self.progressbar.SetValue(value[1])
-			#wx.SafeYield(self.search_button)
-			guiconfig.app.Yield()
+			# calling GUI functions here is quite expensive (under linux,
+			# takes twice as long if you do it always), so only do it every
+			# 0.1 seconds
+			if time.time() - last_time[0] > 0.1:
+				self.progressbar.SetValue(value[1])
+				
+				guiconfig.app.Yield()
+				last_time[0] = time.time()
+
 			return not self.stop
 		
 		search_type = COMBINED
