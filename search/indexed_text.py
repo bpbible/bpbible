@@ -3,6 +3,7 @@ from swlib.pysw import VK, TOP, vk, SW
 import re
 import sys
 from util.debug import dprint, WARNING, ERROR
+from util.unicode import to_unicode
 
 from query_parser import removeformatting
 import process_text
@@ -167,11 +168,11 @@ class IndexedText(object):
 					n += 1
 	
 				self.set_key(module, key, key_value)
-				ref1 = key.getText()
+				ref1 = to_unicode(key.getText(), module)
 
 				if n > 1:
 					self.set_key(module, key, self.index[idx+n-1][0])
-					ref2 = key.getText()
+					ref2 = to_unicode(key.getText(), module)
 					ret.append("%s - %s" % (ref1, ref2))
 
 				else:
