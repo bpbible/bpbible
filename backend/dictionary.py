@@ -128,7 +128,8 @@ class Dictionary(Book):
 		parent.on_before_reload += self.clear_cache
 
 
-	def GetReference(self, ref, context = None, max_verses = 500, raw=False):
+	def GetReference(self, ref, context = None, max_verses = 500,
+			stripped=False, raw=False):
 		if not self.mod:
 			return None
 
@@ -138,10 +139,14 @@ class Dictionary(Book):
 		key = self.mod.getKey()
 		key.setText(to_str(ref, self.mod))
 		self.mod.setKey(key)
+		
 		# We have to get KeyText after RenderText, otherwise our
 		# KeyText will be wrong
 		
-		text = render_text()
+		if stripped:
+			text = self.mod.StripText().decode("utf-8", "replace")
+		else:
+			text = render_text()
 		
 		d = dict(
 			# render text so that we convert utf-8 into html

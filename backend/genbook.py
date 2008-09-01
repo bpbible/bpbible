@@ -1,6 +1,7 @@
 #from swlib.Sword import *
 from swlib.pysw import SW, TK
 from backend.book import Book
+from util.unicode import to_str
 
 class TreeNode(object):
 	def __init__(self, parent, data): 
@@ -19,22 +20,29 @@ class TreeNode(object):
 class GenBook(Book):
 	type = 'Generic Books'	
 
-	def GetReference(self, ref, context = None, max_verses = 500):
+	def GetReference(self, ref, context = None, max_verses = 500,
+			stripped=False):
 		if not self.mod:
 			return None
 		template = self.templatelist[-1]
+		render_text = self.get_rendertext()
+		
 		#key = self.mod.getKey()
 		#	key.setText(ref)
 		
 		if isinstance(ref, basestring):
-			key = TK(self.mod.getKey())
-			key.setText(ref)
+			key = TK(self.mod.getKey(), self.mod)
+			key.setText(to_str(ref, self.mod))
 			ref = key
 			
 		# Without persist, most of the ones in heretics will not work!!!
 		ref.Persist(1)
 		self.mod.setKey(ref)
-		text = self.mod.RenderText()
+		if stripped:
+			text = self.mod.StripText().decode("utf-8", "replace")
+		else:
+			text = render_text()
+
 		# We have to get KeyText after RenderText, otherwise our
 		# KeyText will be wrong
 		d = dict(range = self.mod.KeyText(), version = self.mod.Name())
@@ -88,6 +96,7 @@ class GenBook(Book):
 		Return the root of the view, and whether to 
 		display sub-levels for this node
 		"""
+		assert key.module == self.mod
 		display_level = self.display_level()
 		if display_level != 1:
 			# display levels:
