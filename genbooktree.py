@@ -31,7 +31,7 @@ class GenBookTree(LazyTreeCombo):
 		else:
 			self.tk = TK(book.mod.getKey(), book.mod)
 			self.tk.root()
-			self.tree.SetPyData(self.root, (TK(self.tk), False))
+			self.tree.SetPyData(self.root, (ImmutableTK(self.tk), False))
 			self.AddItems(self.root)
 			
 			# clear error
@@ -105,7 +105,7 @@ class GenBookTree(LazyTreeCombo):
 		
 	def go_to_key(self, tk):
 		# keep a copy
-		ref_to_aim_for = TK(tk)
+		ref_to_aim_for = ImmutableTK(tk)
 		
 		# position both at root
 		tk.root()
