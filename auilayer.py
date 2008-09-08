@@ -408,7 +408,7 @@ class AuiLayer(object):
 		dc = wx.ClientDC(self)
 		dc.SetClippingRegion(*clipping_rect)
 		pane = self.aui_mgr.GetPane(key)
-		if not pane.IsShown():
+		if not pane.IsShown() or pane.IsFloating():
 			return False
 
 		self.dockart.draw_combo(dc, self, rect, title, pane, clipping_rect)
