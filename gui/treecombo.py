@@ -349,6 +349,9 @@ class LazyTreeCombo(TreeCombo):
 	def get_data(self, item):
 		if not item:
 			dprint(WARNING, "get_data called with invalid tree item")
+			import traceback
+			traceback.print_stack()
+			
 			return None
 		return self.tree.GetPyData(item)[0]
 		
