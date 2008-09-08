@@ -21,7 +21,7 @@ from query_parser import separate_words
 from highlighted_frame import HighlightedDisplayFrame
 from swlib.pysw import TK, VK, GetBestRange, Searcher, SWREGEX
 from gui import guiutil
-from util.debug import dprint, WARNING
+from util.debug import dprint, WARNING, is_debugging
 from gui import virtuallist
 from gui import reference_display_frame
 from events import SEARCH
@@ -246,10 +246,23 @@ class SearchPanel(xrcSearchPanel):
 		self.set_title()
 		self.has_started = True
 	
+	def set_genindex_button_up(self, text_says_index=True):
+		if text_says_index:
+			self.genindex.SetLabel("&Index")
+			
+		else:
+			self.genindex.SetLabel("Unindex")
+		
+		if not is_debugging():
+			self.genindex.ContainingSizer.Show(self.genindex, text_says_index)
+			self.panel_1.Layout()
+			
+
+		
+
 	def check_for_index(self):
 		self.set_gui_search_type(search_config["indexed_search"])
 		if not search_config["indexed_search"]:
-			#self.genindex.SetLabel("Unindex")
 			self.search_button.Enable(self.book.version is not None)
 			if not self.book.version:
 				wx.MessageBox("You don't have a current bible version, "
@@ -259,7 +272,7 @@ class SearchPanel(xrcSearchPanel):
 		
 
 		if self.index and self.index.version == self.version:
-			self.genindex.SetLabel("Unindex")
+			self.set_genindex_button_up(text_says_index=False)
 			self.search_button.Enable()
 		
 			return
@@ -273,7 +286,7 @@ class SearchPanel(xrcSearchPanel):
 				search.DeleteIndex(self.version)
 				self.index = None
 				return
-			self.genindex.SetLabel("Unindex")
+			self.set_genindex_button_up(text_says_index=False)
 			self.search_button.Enable()
 			
 		else:
@@ -285,7 +298,7 @@ class SearchPanel(xrcSearchPanel):
 				wx.MessageBox("You don't have a current bible version, "
 				"so you cannot search at the moment", "No current version")
 				return
-			self.genindex.SetLabel("&Index")
+			self.set_genindex_button_up(text_says_index=True)
 
 			msg = "Search index does not exist for book %s. " \
 				"Indexing will make search much faster. " \
@@ -730,7 +743,7 @@ class SearchPanel(xrcSearchPanel):
 			if error:
 				wx.MessageBox(error)
 			else:
-				self.genindex.SetLabel("&Index")
+				self.set_genindex_button_up(says_index=True)
 				self.search_button.Disable()
 				
 		else:
@@ -762,7 +775,7 @@ class SearchPanel(xrcSearchPanel):
 			#write it to file
 			index.WriteIndex()
 			self.search_button.Enable()
-			self.genindex.SetLabel("Unindex")
+			self.set_genindex_button_up(text_says_index=False)
 			
 			return index
 		finally:
