@@ -21,37 +21,76 @@ class GenBook(Book):
 	type = 'Generic Books'	
 
 	def GetReference(self, ref, context = None, max_verses = 500,
-			stripped=False):
+			stripped=False, end_ref=None):
+		"""Get a reference from a genbook.
+
+		ref should be either a TK or a string. If it is a TK, it is guaranteed
+		not to change its position."""
 		if not self.mod:
 			return None
+		
 		template = self.templatelist[-1]
 		render_text = self.get_rendertext()
+		module = self.mod
 		
-		#key = self.mod.getKey()
-		#	key.setText(ref)
+		if isinstance(ref, TK) and end_ref:
+			# we will move, so take a copy to move
+			ref = TK(ref)
 		
 		if isinstance(ref, basestring):
-			key = TK(self.mod.getKey(), self.mod)
-			key.setText(to_str(ref, self.mod))
+			key = TK(module.getKey(), module)
+			key.setText(to_str(ref, module))
 			ref = key
-			
-		# Without persist, most of the ones in heretics will not work!!!
-		ref.Persist(1)
-		self.mod.setKey(ref)
-		if stripped:
-			text = self.mod.StripText().decode("utf-8", "replace")
-		else:
-			text = render_text()
+		
+		if isinstance(end_ref, basestring):
+			key = TK(module.getKey(), module)
+			key.setText(to_str(end_ref, module))
+			end_ref = key
 
-		# We have to get KeyText after RenderText, otherwise our
+		old_key = module.getKey()
+		if not ord(old_key.Persist()):
+			# if it wasn't a persistent key, the module owns it
+			# so take a copy of it, and say we own it
+			old_key = old_key.clone()
+			old_key.thisown = True
+		
+		ref.Persist(1)
+		module.setKey(ref)
+		
+		# snap to it
+		entry = module.getRawEntry()
+		
+		# We have to get KeyText after getRawEntry, otherwise our
 		# KeyText will be wrong
-		d = dict(range = self.mod.KeyText(), version = self.mod.Name())
+		d = dict(range = module.KeyText(), version = module.Name())
 		verses = template.header.substitute(d)
-		d1 = d
-		d1["text"] = text
-		verses += template.body.substitute(d1)
+		
+		d1 = d.copy()
+		
+		
+		while True:
+			if stripped:
+				text = module.StripText(entry).decode("utf-8", "replace")
+			else:
+				text = render_text(entry)
+
+			d1["reference"] = module.getKeyText()
+			d1["reference_encoded"] = \
+				SW.URL.encode(module.getKeyText()).c_str()
+			
+			d1["text"] = text
+			d1["breadcrumbed_reference"] = ref.breadcrumb(delimiter=">")
+			
+			verses += template.body.substitute(d1)
+			if not end_ref or end_ref == ref:
+				break
+			
+			ref.increment(1)
+			entry = module.getRawEntry()
 
 		verses += template.footer.substitute(d)
+		module.setKey(old_key)
+		
 		return verses
 			
 			

@@ -108,7 +108,7 @@ class Book(object):
 	def GetReference(self, ref, specialref="",
 			specialtemplate=None, context="", max_verses=176, raw=False,
 			stripped=False, template=None, display_tags=None,
-			exclude_topic_tag=None):
+			exclude_topic_tag=None, end_ref=None):
 		"""GetReference gets a reference from a Book.
 		
 		specialref is a ref (string) which will be specially formatted 
@@ -132,6 +132,9 @@ class Book(object):
 		if display_tags is None:
 			display_tags = passage_list.settings.display_tags
 	
+		if end_ref:
+			ref += " - " + end_ref
+
 		verselist = self.vk.ParseVerseList(to_str(ref), to_str(lastverse), True)
 		rangetext = GetBestRange(verselist.getRangeText())
 		if rangetext == "":
