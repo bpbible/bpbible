@@ -187,13 +187,14 @@ class SearchPanel(xrcSearchPanel):
 	
 	def show(self, search_on_show=False):
 		self.search_on_show = search_on_show
+		guiconfig.mainfrm.show_panel(self.title)
+	
+	def on_show(self, toggle):
 		self.search_splitter.SetSashPosition(
 				self.search_splitter.ClientSize[1]/2
 		)
 		
-		guiconfig.mainfrm.show_panel(self.title)
-	
-	def on_show(self, toggle):
+		
 		if self.version is None:
 			self.genindex.Disable()
 	
@@ -296,11 +297,15 @@ class SearchPanel(xrcSearchPanel):
 				self.set_gui_search_type(self.indexed_search)
 
 	def on_select(self, event):
-		item_text = self.verselist.GetItemText(event.m_itemIndex)
-		
-		guiconfig.mainfrm.set_bible_ref(item_text, source=SEARCH)
+		self.go_to_reference(event.m_itemIndex)
 		if search_config["disappear_on_doubleclick"]:
 			self.on_close()
+		
+	
+	def go_to_reference(self, idx):
+		item_text = self.verselist.GetItemText(idx)
+		
+		guiconfig.mainfrm.set_bible_ref(item_text, source=SEARCH)
 			
 	def _post_init(self):
 		self.verselist.parent = self
@@ -332,13 +337,7 @@ class SearchPanel(xrcSearchPanel):
 		self.Bind(wx.EVT_BUTTON, self.on_search_button, self.search_button)
 		self.Bind(wx.EVT_BUTTON, self.on_close, id=wx.ID_CLOSE)
 		
-		self.range_panel = RangePanel(self.options_holder)
-		self.options_panel = xrcOptionsPanel(self.options_holder)
-		self.options_holder.Sizer.Add(self.options_panel, 1, wx.GROW)
-		self.options_holder.Sizer.Add(self.range_panel, 1, wx.GROW)
-		
-		self.options_panel.gui_search_type.Bind(
-			wx.EVT_CHOICE, self.on_search_type)
+		self.construct_option_panels(self.options_holder)
 
 		
 		
@@ -359,7 +358,18 @@ class SearchPanel(xrcSearchPanel):
 		#self.verselist.InsertColumn(0, "Reference")
 		#self.verselist.InsertColumn(1, "Preview")
 		self.set_gui_search_type(search_config["indexed_search"])
+
+	def construct_option_panels(self, parent):
+		self.range_panel = RangePanel(parent)
+		self.options_panel = xrcOptionsPanel(parent)
+		parent.Sizer.Add(self.options_panel, 1, wx.GROW)
+		parent.Sizer.Add(self.range_panel, 1, wx.GROW)
 		
+		self.options_panel.gui_search_type.Bind(
+			wx.EVT_CHOICE, self.on_search_type)
+		
+	def get_scope(self):
+		return self.range_panel.get_scope()
 
 	def on_collapse(self, event):
 		self.panel_1.Layout()
@@ -426,7 +436,7 @@ class SearchPanel(xrcSearchPanel):
 		
 			self.show_progress_bar()
 		    
-			scope = self.range_panel.get_scope()
+			scope = self.get_scope()
 			
 			case_sensitive = self.options_panel.case_sensitive.GetValue()
 
@@ -792,6 +802,11 @@ class SearchPanel(xrcSearchPanel):
 	@property
 	def title(self):
 		return "Search"	
+	
+	@property
+	def template(self):
+		return None
+		
 
 	def search_list_format_text(self, text):
 		return GetBestRange(text, abbrev=True)		
@@ -814,9 +829,19 @@ class SearchList(virtuallist.VirtualListCtrlXRC):
 		self.parent.book.templatelist.append(template)
 		try:
 			item = self.results[idx]
-			bibletext = string_util.br2nl(self.parent.book.GetReference(item))
-			bibletext = string_util.KillTags(bibletext)
-			bibletext = string_util.RemoveWhitespace(string_util.amps_to_unicode(bibletext))
+			ref_parts = item.split(" - ")
+			reference = ref_parts.pop(0)
+			end_reference = None
+			if ref_parts:
+				end_reference = ref_parts[0]
+			
+			bibletext = string_util.amps_to_unicode(
+			string_util.RemoveWhitespace(
+			string_util.KillTags(			
+			string_util.br2nl(
+				self.parent.book.GetReference(reference, end_ref=end_reference)
+			))))
+
 			return bibletext
 
 		finally:
@@ -834,7 +859,14 @@ class GenbookSearchPanel(SearchPanel):
 
 	@property
 	def title(self):
-		return "Genbook Search"
+		return "Other Book Search"
+
+	@property
+	def template(self):
+		return VerseTemplate(
+			u'<p><a href="genbook:$reference_encoded"><small><em>'
+			'$breadcrumbed_reference</em></small></a> $text'
+		)
 
 	def search_list_format_text(self, text):
 		mod = self.book.mod
@@ -842,6 +874,31 @@ class GenbookSearchPanel(SearchPanel):
 		items = []
 		for item in text.split(" - "):
 			key.text = item
-			items.append(key.breadcrumb())
+			items.append(key.breadcrumb(delimiter=">"))
 		return " - ".join(items)
+	
+	def go_to_reference(self, idx):
+		item = self.verselist.results[idx]
+		mod = self.book.mod
 		
+		ref_parts = item.split(" - ")
+		reference = ref_parts.pop(0)
+		
+		key = TK(mod.getKey(), mod)
+		key.text = reference
+		
+		guiconfig.mainfrm.genbooktext.SetReference(key)
+			
+	
+	def get_scope(self):
+		return None
+	
+	def construct_option_panels(self, parent):
+		self.options_panel = xrcOptionsPanel(parent)
+
+		# we have entries, not verses
+		self.options_panel.proximity_type.SetString(1, "Entries")
+		parent.Sizer.Add(self.options_panel, 1, wx.GROW)
+		
+		self.options_panel.gui_search_type.Bind(
+			wx.EVT_CHOICE, self.on_search_type)

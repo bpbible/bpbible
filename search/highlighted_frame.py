@@ -299,8 +299,22 @@ class HighlightedDisplayFrame(ReferenceDisplayFrame):
 		if not self.reference:
 			self.SetPage("")
 			return
+		
+		ref_parts = self.reference.split(" - ")
+		self.reference = ref_parts.pop(0)
+		self.end_reference = None
+		if ref_parts:
+			self.end_reference = ref_parts[0]
 
-		data = self.parent.book.GetReference(self.reference)
+		if self.parent.template:
+			self.parent.book.templatelist.append(self.parent.template)
+
+		data = self.parent.book.GetReference(
+			self.reference,
+			end_ref=self.end_reference)
+
+		if self.parent.template:
+			self.parent.book.templatelist.pop()
 
 		# TODO: put a function in search to do this for us...
 		biblemgr.temporary_state(biblemgr.plainstate)
@@ -308,7 +322,8 @@ class HighlightedDisplayFrame(ReferenceDisplayFrame):
 		self.parent.book.templatelist.append(template)
 		
 		
-		content = self.parent.book.GetReference(self.reference, stripped=True)
+		content = self.parent.book.GetReference(self.reference, stripped=True,
+				end_ref=self.end_reference)
 		biblemgr.restore_state()
 		self.parent.book.templatelist.pop()
 
