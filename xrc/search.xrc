@@ -29,13 +29,19 @@
                               <border>6</border>
                             </object>
                             <object class="sizeritem">
-                              <option>1</option>
-                              <flag>wxALIGN_CENTRE</flag>
                               <object class="wxComboBox" name="searchkey">
-                                <content/>
-                                <style>wxCB_DROPDOWN</style>
                                 <tooltip>Words to search for</tooltip>
                               </object>
+                              <option>1</option>
+                              <flag>wxRIGHT|wxALIGN_CENTRE</flag>
+                              <border>1</border>
+                            </object>
+                            <object class="sizeritem">
+                              <object class="wxBitmapButton" name="keyboard_button">
+                                <bitmap>graphics/keyboard.png</bitmap>
+                                <tooltip>Open the Virtual Keyboard</tooltip>
+                              </object>
+                              <flag>wxSHAPED|wxALIGN_CENTRE|wxFIXED_MINSIZE</flag>
                             </object>
                           </object>
                           <option>1</option>

@@ -27,6 +27,7 @@ from gui import reference_display_frame
 from events import SEARCH
 from util.configmgr import config_manager
 
+from keypad import KeyPad
 
 
 #TODO: better status bar: text overlay
@@ -246,15 +247,19 @@ class SearchPanel(xrcSearchPanel):
 		self.set_title()
 		self.has_started = True
 	
-	def set_genindex_button_up(self, text_says_index=True):
-		if text_says_index:
+	def set_index_available(self, available=True):
+		if not available:
 			self.genindex.SetLabel("&Index")
 			
 		else:
 			self.genindex.SetLabel("Unindex")
+			self.search_button.Enable()
+
+		
 		
 		if not is_debugging():
-			self.genindex.ContainingSizer.Show(self.genindex, text_says_index)
+			self.genindex.ContainingSizer.Show(self.genindex, not available)
+		
 			self.panel_1.Layout()
 			
 
@@ -272,8 +277,7 @@ class SearchPanel(xrcSearchPanel):
 		
 
 		if self.index and self.index.version == self.version:
-			self.set_genindex_button_up(text_says_index=False)
-			self.search_button.Enable()
+			self.set_index_available(True)
 		
 			return
 
@@ -285,9 +289,12 @@ class SearchPanel(xrcSearchPanel):
 				dprint(WARNING, "Error reading index. Deleting it...", e)
 				search.DeleteIndex(self.version)
 				self.index = None
+				self.show_keyboard_button(shown=False)
+				self.set_index_available(False)
+
+				
 				return
-			self.set_genindex_button_up(text_says_index=False)
-			self.search_button.Enable()
+			self.set_index_available(True)
 			
 		else:
 			self.search_button.Enable(self.version is not None)
@@ -298,7 +305,7 @@ class SearchPanel(xrcSearchPanel):
 				wx.MessageBox("You don't have a current bible version, "
 				"so you cannot search at the moment", "No current version")
 				return
-			self.set_genindex_button_up(text_says_index=True)
+			self.set_index_available(False)
 
 			msg = "Search index does not exist for book %s. " \
 				"Indexing will make search much faster. " \
@@ -334,6 +341,14 @@ class SearchPanel(xrcSearchPanel):
 		for search_key in search_config["past_searches"]:
 			self.searchkey.Append(search_key)
 
+		if osutils.is_msw():
+			# MSW insertion point is lost when the control is unfocused
+			# so track it		
+			self.insertion_point = 0
+			self.searchkey.Bind(wx.EVT_SET_FOCUS, self.on_searchkey_focus)
+			self.searchkey.Bind(wx.EVT_KILL_FOCUS, self.on_searchkey_unfocus)
+		
+
 		font = self.search_label.Font
 		font.SetWeight(wx.FONTWEIGHT_BOLD)
 		self.search_label.Font = font
@@ -357,11 +372,17 @@ class SearchPanel(xrcSearchPanel):
 		self.verselist.Bind(wx.EVT_LIST_ITEM_SELECTED, self.on_list)
 		self.verselist.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self.on_select)
 		self.genindex.Bind(wx.EVT_BUTTON, self.generate_index)
+		self.keyboard_button.Bind(wx.EVT_BUTTON, self.show_keyboard)
+		w = self.searchkey.Size[1]
+		self.keyboard_button.SetSize((w, w))
+		self.keyboard_button.SetMinSize((w, w))
+		
 
 		# Set properties:
 
 		# under gtk, enter in the searchkey should push button...
 		if not osutils.is_msw():
+
 			self.searchkey.Bind(wx.EVT_KEY_UP, 
 			lambda event:event.KeyCode == wx.WXK_RETURN and (self.on_search(),) 
 				or event.Skip())
@@ -386,11 +407,60 @@ class SearchPanel(xrcSearchPanel):
 
 	def on_collapse(self, event):
 		self.panel_1.Layout()
+	
+	def on_searchkey_focus(self, event):
+		event.Skip()
+		
+		self.searchkey.Bind(wx.EVT_IDLE, self.set_insertion_point)
+	
+	def on_searchkey_unfocus(self, event):
+		event.Skip()
+	
+		unbound = self.searchkey.Unbind(wx.EVT_IDLE)
+		assert unbound, "Unequal focus shifting"
+	
+	def set_insertion_point(self, event):
+		event.Skip()
+		self.insertion_point = self.searchkey.InsertionPoint
+
+	def show_keyboard(self, event):
+		assert self.index is not None, "No index in show keyboard"
+
+		# TEMPORARY check
+		if "letters" not in self.index.statistics:	
+			wx.MessageBox("Rebuild your index...")
+			return
+
+		btn = event.GetEventObject()
+		pos = btn.ClientToScreen((btn.Size[0], 0))
+		position = pos, (-btn.Size[0], btn.Size[0])
+		kp = KeyPad(self, self.index.statistics["letters"], position)
+		
+		def press_key(key):
+			if osutils.is_msw():
+				insertion_point = self.insertion_point
+				self.insertion_point += 1
+				
+			else:
+				insertion_point = self.searchkey.GetInsertionPoint()
+				
+			text = self.searchkey.Value 
+			text = text[:insertion_point] + key + text[insertion_point:]
+			self.searchkey.Value = text
+			self.searchkey.SetInsertionPoint(insertion_point + 1)
+
+		kp.key_pressed += press_key
+		kp.Popup()
 
 	def set_gui_search_type(self, indexed_search):
 		"""Sets the search type to be displayed in the GUI."""
 		self.options_panel.gui_search_type.SetSelection(not indexed_search)
+		self.show_keyboard_button(shown=indexed_search)
 		
+	def show_keyboard_button(self, shown=True):
+		self.keyboard_button.ContainingSizer.Show(self.keyboard_button, shown)
+		self.panel_1.Layout()
+	
 	def on_close(self, event=None):
 		guiconfig.mainfrm.show_panel(self.title, False)
 
@@ -733,6 +803,7 @@ class SearchPanel(xrcSearchPanel):
 		
 	def on_search_type(self, evt):
 		search_config["indexed_search"] = not evt.GetSelection()
+		self.show_keyboard_button(shown=search_config["indexed_search"])
 		self.check_for_index()
 		
 
@@ -743,7 +814,8 @@ class SearchPanel(xrcSearchPanel):
 			if error:
 				wx.MessageBox(error)
 			else:
-				self.set_genindex_button_up(says_index=True)
+				self.set_index_available(False)
+				self.show_keyboard_button(shown=False)				
 				self.search_button.Disable()
 				
 		else:
@@ -774,8 +846,8 @@ class SearchPanel(xrcSearchPanel):
 			
 			#write it to file
 			index.WriteIndex()
-			self.search_button.Enable()
-			self.set_genindex_button_up(text_says_index=False)
+			self.set_index_available(True)
+			self.show_keyboard_button()
 			
 			return index
 		finally:

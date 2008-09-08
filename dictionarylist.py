@@ -183,12 +183,13 @@ class TextEntry(wx.Panel):
 				if isinstance(child, wx.ComboBox):
 					child.Size = cal.Size[0], -1
 
+		win.Size = panel.GetSize() - (0, size_combo)
+		
 		# Show the popup right below or above the button
 		# depending on available screen space...
 		btn = event.GetEventObject()
-		pos = btn.ClientToScreen((0, btn.Size[1]))
-		win.Size = panel.GetSize() - (0, size_combo)
-		win.Position(pos, (0, 0))#win.Size[1]))
+		pos = btn.ClientToScreen((btn.Size[0], 0))
+		win.Position(pos, (-btn.Size[0], btn.Size[1]))
 
 		win.Popup()
 		

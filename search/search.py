@@ -165,10 +165,17 @@ class Index(object):
 		#self.statistics["rank"]=rank
 		#self.statistics["wordlist"] = rank.keys()
 		wordlist = set()
+		letters = set()
 		for book in self.books:
+			letters.update(book.text)
 			wordlist.update(book.text.lower().split())
 
 		self.statistics["wordlist"] = wordlist
+
+		# remove whitespace
+		letters.discard(u"\n")
+		letters.discard(u" ")
+		self.statistics["letters"] = letters
 
 	def BookRange(self, searchrange):
 		"""Index.BookRange - Finds all the BookIndexes in the current range

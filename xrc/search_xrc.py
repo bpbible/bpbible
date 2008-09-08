@@ -38,6 +38,7 @@ class xrcSearchPanel(wx.Panel):
         # Define variables for the controls, bind event handlers
         self.panel_1 = xrc.XRCCTRL(self, "panel_1")
         self.searchkey = xrc.XRCCTRL(self, "searchkey")
+        self.keyboard_button = xrc.XRCCTRL(self, "keyboard_button")
         self.search_button = xrc.XRCCTRL(self, "search_button")
         self.genindex = xrc.XRCCTRL(self, "genindex")
         self.collapsible_panel = xrc.XRCCTRL(self, "collapsible_panel")
