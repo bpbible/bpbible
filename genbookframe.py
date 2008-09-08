@@ -11,8 +11,12 @@ from swlib.pysw import SW
 
 
 import config
+import guiconfig
 
 def on_genbook_click(frame, href, url):
+	if frame != guiconfig.mainfrm.genbooktext:
+		frame = guiconfig.mainfrm.genbooktext
+
 	if url is None:
 		url = SW.URL(href)
 	
