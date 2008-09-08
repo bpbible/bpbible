@@ -911,23 +911,37 @@ class TK(SW.TreeKeyIdx):
 		
 		assert self.module, "Moduleless tree key :("
 
+	def check_changed(self):
+		pass
+
 	def __iter__(self):
-		tk = TK(self.tk)
+		self.check_changed()
+		cls = type(self)
+		tk = cls(self.tk)
 		if(tk.firstChild()):
-			yield TK(tk)
+			yield cls(tk)
 			while(tk.nextSibling()):
-				yield TK(tk)
+				yield cls(tk)
 
 	def __repr__(self):
-		return "<TK(%s)>" % to_unicode(self.getText(), self.module)
+		self.check_changed()
+	
+		return "<%s(%s)>" % (type(self).__name__, 
+			to_unicode(self.getText(), self.module))
 	
 	def __str__(self):
+		self.check_changed()
+	
 		return to_unicode(self.getLocalName(), self.module)
 	
 	def __getitem__(self, key):
+		self.check_changed()
+	
 		return [a for a in self][key]
 
-	def breadcrumb(self, include_home=None):
+	def breadcrumb(self, include_home=None, delimiter=" > "):
+		self.check_changed()
+	
 		breadcrumb = [unicode(self)]
 		bref = TK(self)
 		while bref.parent():
@@ -938,9 +952,11 @@ class TK(SW.TreeKeyIdx):
 		else:
 			del breadcrumb[-1]
 
-		return " > ".join(breadcrumb[::-1])
+		return delimiter.join(breadcrumb[::-1])
 	
 	def get_text(self):
+		self.check_changed()
+	
 		return to_unicode(self.getText(), self.module)
 
 	def set_text(self, value):
@@ -957,6 +973,26 @@ class TK(SW.TreeKeyIdx):
 	
 	text = property(get_text, set_text)
 
+
+class ImmutableTK(TK):
+	"""A TK which is immutable - it can't/shouldn't be changed.
+
+	Don't assign this to a module permanently - i.e. with Persist turned on,
+	or it may be changed by something moving the module position.
+
+	This will raise errors if it detects a change."""
+	def __init__(self, *args, **kwargs):
+		super(ImmutableTK, self).__init__(*args, **kwargs)
+		self.immutable = self.getText()
+
+	def check_changed(self):
+		if self.immutable != self.getText():
+			raise TypeError, "Detected mutating ImmutableTK"
+
+	def error(self, *args, **kwargs):
+		raise TypeError, "This is immutable"
+	
+	increment = setText = set_text = root = error
 
 # -- Utility functions
 def GetVerseTuple(string, context=""):
