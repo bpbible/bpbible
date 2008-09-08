@@ -71,6 +71,7 @@ class xrcOptionsPanel(wx.Panel):
         self.PostCreate(pre)
 
         # Define variables for the controls, bind event handlers
+        self.options_panel = xrc.XRCCTRL(self, "options_panel")
         self.gui_search_type = xrc.XRCCTRL(self, "gui_search_type")
         self.proximity = xrc.XRCCTRL(self, "proximity")
         self.proximity_type = xrc.XRCCTRL(self, "proximity_type")

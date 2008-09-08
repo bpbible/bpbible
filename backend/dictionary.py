@@ -129,9 +129,11 @@ class Dictionary(Book):
 
 
 	def GetReference(self, ref, context = None, max_verses = 500,
-			stripped=False, raw=False):
+			stripped=False, raw=False, end_ref=None):
 		if not self.mod:
 			return None
+
+		assert not end_ref, "Dictionaries don't support ranges"
 
 		render_text = self.get_rendertext()
 		
@@ -150,10 +152,13 @@ class Dictionary(Book):
 		
 		d = dict(
 			# render text so that we convert utf-8 into html
-			range=to_unicode(self.mod.KeyText(), self.mod),
+			range=to_unicode(self.mod.getKeyText(), self.mod),
 			description=to_unicode(self.mod.Description(), self.mod),
 			version=self.mod.Name(),
+			reference_encoded=SW.URL.encode(self.mod.getKeyText()).c_str(),
+			
 		)
+		d["reference"] = d["range"]
 
 		verses = template.header.safe_substitute(d)
 		d1 = d

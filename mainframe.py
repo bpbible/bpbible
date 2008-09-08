@@ -45,7 +45,8 @@ from gui.guiutil import bmp
 from gui.menu import Separator
 from gui.htmlbase import HtmlBase
 
-from search.searchpanel import SearchPanel, GenbookSearchPanel
+from search.searchpanel import (SearchPanel, GenbookSearchPanel,
+								 DictionarySearchPanel)
 
 from fontchoice import FontChoiceDialog 
 from versecompare import VerseCompareFrame
@@ -353,6 +354,8 @@ class MainFrame(wx.Frame, AuiLayer):
 	def create_searchers(self):
 		self.search_panel = SearchPanel(self)
 		self.genbook_search_panel = GenbookSearchPanel(self)
+		self.dictionary_search_panel = DictionarySearchPanel(self)
+		
 		
 		def make_closure(item):
 			def version_changed(version=None):
@@ -363,7 +366,12 @@ class MainFrame(wx.Frame, AuiLayer):
 
 			return version_changed, callback
 
-		self.searchers = self.search_panel, self.genbook_search_panel
+		self.searchers = (
+			self.search_panel, 
+			self.genbook_search_panel,
+			self.dictionary_search_panel
+		)
+
 		self.aui_callbacks = {}
 		for item in self.searchers:
 			version_changed, callback = make_closure(item)

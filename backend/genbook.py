@@ -1,7 +1,7 @@
 #from swlib.Sword import *
 from swlib.pysw import SW, TK
 from backend.book import Book
-from util.unicode import to_str
+from util.unicode import to_str, to_unicode
 
 class TreeNode(object):
 	def __init__(self, parent, data): 
@@ -74,7 +74,7 @@ class GenBook(Book):
 			else:
 				text = render_text(entry)
 
-			d1["reference"] = module.getKeyText()
+			d1["reference"] = to_unicode(module.getKeyText(), module)
 			d1["reference_encoded"] = \
 				SW.URL.encode(module.getKeyText()).c_str()
 			

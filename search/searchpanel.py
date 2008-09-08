@@ -149,7 +149,7 @@ class SearchPanel(xrcSearchPanel):
 		#else:
 		wx.CallAfter(self.on_create)
 
-		self.search_results = ""
+		self.search_results = []
 
 		self.searching = False
 		self.index = None
@@ -450,8 +450,7 @@ class SearchPanel(xrcSearchPanel):
 			
 
 	def perform_search(self, key, scope, case_sensitive):
-		proximity = int(self.options_panel.proximity.GetValue())
-		is_word_proximity = self.options_panel.proximity_type.Selection == 0
+		proximity, is_word_proximity = self.get_proximity_options()
 		
 		
 		if self.indexed_search:
@@ -806,6 +805,11 @@ class SearchPanel(xrcSearchPanel):
 	@property
 	def template(self):
 		return None
+
+	def get_proximity_options(self):
+		proximity = int(self.options_panel.proximity.GetValue())
+		is_word_proximity = self.options_panel.proximity_type.Selection == 0
+		return proximity, is_word_proximity
 		
 
 	def search_list_format_text(self, text):
@@ -835,12 +839,11 @@ class SearchList(virtuallist.VirtualListCtrlXRC):
 			if ref_parts:
 				end_reference = ref_parts[0]
 			
-			bibletext = string_util.amps_to_unicode(
-			string_util.RemoveWhitespace(
-			string_util.KillTags(			
-			string_util.br2nl(
-				self.parent.book.GetReference(reference, end_ref=end_reference)
-			))))
+			bibletext = string_util.RemoveWhitespace(
+				self.parent.book.GetReference(
+					reference, end_ref=end_reference, stripped=True
+				)
+			)
 
 			return bibletext
 
@@ -902,3 +905,47 @@ class GenbookSearchPanel(SearchPanel):
 		
 		self.options_panel.gui_search_type.Bind(
 			wx.EVT_CHOICE, self.on_search_type)
+
+class DictionarySearchPanel(SearchPanel):
+	@property
+	def book(self):
+		return biblemgr.dictionary
+	
+	@property
+	def index_type(self):
+		return search.DictionaryIndex
+
+	@property
+	def title(self):
+		return "Dictionary Search"
+
+	def search_list_format_text(self, text):
+		assert len(text.split(" - ")), "Can't have ranges in dictionary"
+		return text
+	
+	def go_to_reference(self, idx):
+		item = self.verselist.results[idx]
+		mod = self.book.mod
+		
+		ref_parts = item.split(" - ")
+		reference = ref_parts.pop(0)
+		
+		guiconfig.mainfrm.UpdateDictionaryUI(reference)
+	
+	def get_scope(self):
+		return None
+	
+	def construct_option_panels(self, parent):
+		self.options_panel = xrcOptionsPanel(parent)
+		containing_sizer = self.options_panel.proximity_type.ContainingSizer
+		self.options_panel.options_panel.Sizer.Detach(containing_sizer)
+		parent.Sizer.Add(self.options_panel, 1, wx.GROW)
+		for item in containing_sizer.Children:
+			item.Window.Destroy()
+		
+		self.options_panel.gui_search_type.Bind(
+			wx.EVT_CHOICE, self.on_search_type)
+	
+	def get_proximity_options(self):
+		# we must be all in the same entry
+		return 1, False

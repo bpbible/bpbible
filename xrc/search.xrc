@@ -168,7 +168,7 @@
       <object class="sizeritem">
         <object class="wxStaticBoxSizer">
           <object class="sizeritem">
-            <object class="wxPanel">
+            <object class="wxPanel" name="options_panel">
               <object class="wxBoxSizer">
                 <orient>wxVERTICAL</orient>
                 <object class="sizeritem">
