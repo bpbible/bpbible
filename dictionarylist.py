@@ -256,7 +256,10 @@ class DictionarySelector(wx.Panel):
 	def GetValue(self):
 		return self.text_entry.get_value()
 
-	SetValue = choose_item
+	def SetValue(self, text):
+		# make sure we process this properly so that going to a date in a
+		# daily devotional sets the text to proper english text
+		self.list.choose_item(text)
 
 	def set_book(self, book):
 		was_devotion = self.text_entry.is_calendar
