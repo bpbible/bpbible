@@ -842,6 +842,8 @@ class SearchPanel(xrcSearchPanel):
 			try:
 				index = self.index_type(version, callback)
 			except search.Cancelled:
+				self.show_keyboard_button(False)
+			
 				return None
 			
 			#write it to file

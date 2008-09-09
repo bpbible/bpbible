@@ -10,10 +10,14 @@ from search import removeformatting
 from backend.bibleinterface import biblemgr
 from gui.reference_display_frame import ReferenceDisplayFrame
 
+#TODO: highlight Aenon - AE joined up, that is - in KJV
 tokens = re.compile(r"""
 	(<glink[^>]*>.*?</glink>)	| # a strongs number and contents
 	(&lt;<a\ [^>]*>.*?</a>&gt;) | # a link with <> around and contents		
-	(<a\ [^>]*>.*?</a>)			| # a link and contents	
+	(<a\ href="passagestudy.jsp?(
+		(action=showRef[^>]*>)  | # a reference - don't include text
+		([^>]*>.*?</a>) 		  # or another sword link and contents	
+	))
 	(<h4>.*?</h4>)				| # a heading and contents	
 	(<[^>]+>)					| # any other html tag - not contents
 	(&(?P<amps>[^;]*);)			| # a html escape
@@ -258,7 +262,7 @@ def highlight(string1, string2, regexes, strongs=(),
 			'^<glink([^>]*)(href="%s")([^>]*)>([^<]*)</glink>$' % href
 		)
 		strongs_matcher = re.compile(
-			'^(&lt;<a ([^>]*)(href="%s")([^>]*)>([^<]*)</a>&gt;)$' % href
+			'^(&lt;<a [^>]*href="%s"[^>]*>)([^<]*)(</a>&gt;)$' % href
 		)
 
 		for tokens in results:
@@ -269,7 +273,7 @@ def highlight(string1, string2, regexes, strongs=(),
 					token)
 
 				tokens[idx] = strongs_matcher.sub(
-					r'<b><font color="#008800">\1</font></b>',
+					r'<b><font color="#008800">\1<font color="#008800">\2</font>\3</font></b>',
 					token)
 					
 	
