@@ -11,17 +11,17 @@ class OSISParser(filterutils.ParserBase):
 		self.morph_bufs = []
 	
 	def start_reference(self, attributes):
-		if "osisref" not in attributes:
+		if "osisRef" not in attributes:
 			self.ref = None
 			self.success = SW.INHERITED
-			dprint(WARNING, "No osisref in reference", attributes)
+			dprint(WARNING, "No osisRef in reference", attributes)
 			
 			return
 			
 
 		#TODO check this
 		#TODO check for Bible:Gen.3.5
-		self.ref = attributes["osisref"]
+		self.ref = attributes["osisRef"]
 		idx = self.ref.find(":")
 		if idx != -1:
 			self.ref = self.ref[idx+1:]
