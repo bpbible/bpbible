@@ -4,6 +4,14 @@ from util import osutils
 from util.observerlist import ObserverList
 from util.debug import dprint, WARNING
 
+def check_item(item):
+	if not item:
+		dprint(WARNING, "Called with invalid tree item")
+		import traceback
+		traceback.print_stack()
+			
+	return bool(item)
+
 
 class TreeCtrlComboPopup(wx.combo.ComboPopup):
 	# overridden ComboPopup methods
@@ -168,6 +176,9 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
 			self.set_value(new_value)
 		
 	def set_value(self, value, selected_in_tree=False):
+		if not check_item(value):
+			return
+
 		self.value = value
 		self.tree.SelectItem(self.value)
 		#if not final:
@@ -347,11 +358,7 @@ class LazyTreeCombo(TreeCombo):
 		self.OnChoice()
 	
 	def get_data(self, item):
-		if not item:
-			dprint(WARNING, "get_data called with invalid tree item")
-			import traceback
-			traceback.print_stack()
-			
+		if not check_item(item):
 			return None
 		return self.tree.GetPyData(item)[0]
 		

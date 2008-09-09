@@ -135,7 +135,12 @@ class GenBook(Book):
 		Return the root of the view, and whether to 
 		display sub-levels for this node
 		"""
-		assert key.module == self.mod
+		assert key.module == self.mod, \
+			"Mismatched module and key: %s, %s" % (
+				key.module.Name(),
+				self.mod.Name()
+			)
+
 		display_level = self.display_level()
 		if display_level != 1:
 			# display levels:

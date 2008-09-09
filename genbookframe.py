@@ -68,8 +68,12 @@ class GenBookFrame(BookFrame):
 	def SetReference(self, ref, context=None):
 		self.reference = ref
 		
-		if not self.book.mod:
-			data = config.MODULE_MISSING_STRING
+		if ref == "<empty>":
+			if self.book.mod is None:
+				data = config.MODULE_MISSING_STRING
+			else:
+				data = """This book is empty"""
+
 			self.reference_text = "<empty>"
 			
 				

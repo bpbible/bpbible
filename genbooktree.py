@@ -22,13 +22,9 @@ class GenBookTree(LazyTreeCombo):
 		self.tree.DeleteChildren(self.tree.RootItem)
 		
 		self.book = book
-		if not book.mod:
-			self.tree.SetPyData(self.root, (["<empty>"], False))
-			self.AddItems(self.root)
-			self.set_value(self.tree.GetFirstChild(self.root)[0])
 			
 
-		else:
+		if book.mod:
 			self.tk = TK(book.mod.getKey(), book.mod)
 			self.tk.root()
 			self.tree.SetPyData(self.root, (ImmutableTK(self.tk), False))
@@ -39,11 +35,20 @@ class GenBookTree(LazyTreeCombo):
 
 
 			self.tk.text = old
-			if not ord(self.tk.Error()) and self.tk.text:
-				self.go_to_key(self.tk)
+			first_child = self.tree.GetFirstChild(self.root)[0]
+			if first_child:
+				if not ord(self.tk.Error()) and self.tk.text:
+					self.go_to_key(self.tk)
 			
-			else:
-				self.set_value(self.tree.GetFirstChild(self.root)[0])
+				else:
+					self.set_value(first_child)
+			
+				return
+		
+		self.tree.SetPyData(self.root, (["<empty>"], False))
+		self.AddItems(self.root)
+		self.set_value(self.tree.GetFirstChild(self.root)[0])
+				
 			
 
 	def has_children(self, item):
