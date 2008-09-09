@@ -68,7 +68,7 @@ class GenBookFrame(BookFrame):
 	def SetReference(self, ref, context=None):
 		self.reference = ref
 		
-		if ref == "<empty>":
+		if isinstance(ref, basestring) and ref == "<empty>":
 			if self.book.mod is None:
 				data = config.MODULE_MISSING_STRING
 			else:
