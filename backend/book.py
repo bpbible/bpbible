@@ -438,8 +438,11 @@ class Book(object):
 				
 class Commentary(Book):
 	type = "Commentaries"
+	noun = "commentary"
+
 
 class Bible(Book):
 	type = "Biblical Texts"
+	noun = "Bible"
 
 

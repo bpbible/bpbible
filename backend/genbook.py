@@ -19,6 +19,7 @@ class TreeNode(object):
 
 class GenBook(Book):
 	type = 'Generic Books'	
+	noun = "book"
 
 	def GetReference(self, ref, context = None, max_verses = 500,
 			stripped=False, end_ref=None):

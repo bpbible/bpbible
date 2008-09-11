@@ -270,8 +270,9 @@ class SearchPanel(xrcSearchPanel):
 		if not search_config["indexed_search"]:
 			self.search_button.Enable(self.book.version is not None)
 			if not self.book.version:
-				wx.MessageBox("You don't have a current bible version, "
-				"so you cannot search at the moment", "No current version")
+				wx.MessageBox("You don't have a current %s, "
+				"so you cannot search at the moment" % self.book.noun, 
+				"No current version")
 			
 			return
 		
@@ -302,8 +303,9 @@ class SearchPanel(xrcSearchPanel):
 			self.index = None
 		
 			if not self.version:
-				wx.MessageBox("You don't have a current bible version, "
-				"so you cannot search at the moment", "No current version")
+				wx.MessageBox("You don't have a current %s version, "
+				"so you cannot search at the moment" % self.book.noun, 
+				"No current version")
 				return
 			self.set_index_available(False)
 
@@ -550,8 +552,8 @@ class SearchPanel(xrcSearchPanel):
 
 		except SpellingException, spell:
 			wx.MessageBox(
-				"The following words were not found in this Bible:"
-				"\n%s" % unicode(spell), "Unknown word"
+				"The following words were not found in this %s:"
+				"\n%s" % (self.book.noun, unicode(spell)), "Unknown word"
 			)
 		
 			succeeded = False
