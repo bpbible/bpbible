@@ -46,7 +46,7 @@ from gui.menu import Separator
 from gui.htmlbase import HtmlBase
 
 from search.searchpanel import (SearchPanel, GenbookSearchPanel,
-								 DictionarySearchPanel)
+								 DictionarySearchPanel, CommentarySearchPanel)
 
 from fontchoice import FontChoiceDialog 
 from versecompare import VerseCompareFrame
@@ -361,6 +361,8 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.search_panel = SearchPanel(self)
 		self.genbook_search_panel = GenbookSearchPanel(self)
 		self.dictionary_search_panel = DictionarySearchPanel(self)
+		self.commentary_search_panel = CommentarySearchPanel(self)
+		
 		
 		
 		def make_closure(item):
@@ -375,7 +377,8 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.searchers = (
 			self.search_panel, 
 			self.genbook_search_panel,
-			self.dictionary_search_panel
+			self.dictionary_search_panel, 
+			self.commentary_search_panel,
 		)
 
 		self.aui_callbacks = {}

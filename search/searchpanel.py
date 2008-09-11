@@ -1032,3 +1032,23 @@ class DictionarySearchPanel(SearchPanel):
 	def get_proximity_options(self):
 		# we must be all in the same entry
 		return 1, False
+
+class CommentarySearchPanel(SearchPanel):
+	@property
+	def book(self):
+		return biblemgr.commentary
+	
+	@property
+	def title(self):
+		return "Commentary Search"
+
+	@property
+	def index_type(self):
+		return search.CommentaryIndex
+
+	def construct_option_panels(self, parent):
+		super(CommentarySearchPanel, self).construct_option_panels(parent)
+
+		# default is within 1 verse
+		self.options_panel.proximity_type.Selection = 1
+		self.options_panel.proximity.Value = 1

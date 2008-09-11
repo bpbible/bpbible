@@ -77,6 +77,7 @@ class IndexedText(object):
 			except Exception, e:
 				import traceback
 				traceback.print_exc()
+				print self.get_key(module).getText()
 		
 		if content is None:
 			# fallback, don't want to have to do this...
