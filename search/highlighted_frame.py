@@ -2,6 +2,7 @@ import re
 import unicodedata
 
 from backend.verse_template import VerseTemplate
+from backend.book import Bible
 from util.string_util import KillTags, ReplaceUnicode, replace_amp, htmlify_unicode, remove_amps
 from util.debug import dprint, ERROR
 
@@ -11,19 +12,29 @@ from backend.bibleinterface import biblemgr
 from gui.reference_display_frame import ReferenceDisplayFrame
 
 #TODO: highlight Aenon - AE joined up, that is - in KJV
-tokens = re.compile(r"""
-	(<glink[^>]*>.*?</glink>)	| # a strongs number and contents
-	(&lt;<a\ [^>]*>.*?</a>&gt;) | # a link with <> around and contents		
-	(<a\ href="passagestudy.jsp?(
-		(action=showRef[^>]*>)  | # a reference - don't include text
-		([^>]*>.*?</a>) 		  # or another sword link and contents	
-	))
-	(<h4>.*?</h4>)				| # a heading and contents	
-	(<[^>]+>)					| # any other html tag - not contents
-	(&(?P<amps>[^;]*);)			| # a html escape
-	(.)							  # anything else
-""", flags=re.DOTALL|re.VERBOSE|re.IGNORECASE)
 
+regex = r"""
+	(<glink[^>]*>.*?</glink>)		| # a strongs number and contents
+	(&lt;<a\ [^>]*>.*?</a>&gt;) 	| # a link with <> around and contents		
+	%s								  # if we are in a bible, exclude text
+									  # from cross-reference links
+	(<a\ href="passagestudy.jsp?(
+		(action=showRef[^>]*>)  	| # a reference - don't include text
+		([^>]*>.*?</a>) 		 	  # or another sword link and contents	
+	))								|
+	(<h4>.*?</h4>)					| # a heading and contents	
+	(<[^>]+>)						| # any other html tag - not contents
+	(&(?P<amps>[^;]*);)				| # a html escape
+	(.)							  	# anything else
+""" 
+
+tokens = [
+	re.compile(regex % item, flags=re.DOTALL|re.VERBOSE|re.IGNORECASE)
+		for item in (
+			'',
+			'(<a\ href="bible:[^>]+>.*?</a>)	| # a bible link from xrefs', 
+	)]
+	
 not_word = re.compile(r"\W", flags=re.UNICODE)
 
 OPENING_TAG = 0
@@ -50,22 +61,22 @@ def get_tag(text):
 	
 	return None, -1
 
-def tokenize(string):
-	for item in tokens.finditer(string):
+def tokenize(string, is_bible):
+	for item in tokens[is_bible].finditer(string):
 		text = item.group(0)
 		if item.group('amps'):
 			text = replace_amp(item)
 
 		yield text
 
-def unite(string1, string2):
+def unite(string1, string2, is_bible):
 	"""Unite string1 and string2.
 	
 	This maps each token in string1 into a sequence of tokens in string2."""
 	assert isinstance(string1, unicode) and isinstance(string2, unicode), \
 		"%r %r %r %r" % (string1, string2, type(string1), type(string2))
-	iter1 = tokenize(string1)
-	iter2 = tokenize(string2)
+	iter1 = tokenize(string1, is_bible)
+	iter2 = tokenize(string2, is_bible)
 
 	# the empty list is the before section
 	result = [[]]
@@ -221,7 +232,7 @@ def highlight_section(results, start, end, start_tag, end_tag):
 		last_upto = upto
 		
 
-def highlight(string1, string2, regexes, strongs=(),
+def highlight(string1, string2, is_bible, regexes, strongs=(),
 		start_tag='<b><font color="#008800">', end_tag='</font></b>'):
 	"""Highlight string2 with the regular expressions regexes, being matched
 	on string1
@@ -230,7 +241,7 @@ def highlight(string1, string2, regexes, strongs=(),
 	string2 should be the same text, but with extra rendering niceties
 	start_tag and end_tag give the tags for the start and end of highlighting
 	"""
-	results = unite(string1, string2)
+	results = unite(string1, string2, is_bible)
 	
 	# if we couldn't process it, return string2 intact
 	if not results:
@@ -305,17 +316,17 @@ class HighlightedDisplayFrame(ReferenceDisplayFrame):
 			return
 		
 		ref_parts = self.reference.split(" - ")
-		self.reference = ref_parts.pop(0)
-		self.end_reference = None
+		reference = ref_parts.pop(0)
+		end_reference = None
 		if ref_parts:
-			self.end_reference = ref_parts[0]
+			end_reference = ref_parts[0]
 
 		if self.parent.template:
 			self.parent.book.templatelist.append(self.parent.template)
 
 		data = self.parent.book.GetReference(
-			self.reference,
-			end_ref=self.end_reference)
+			reference,
+			end_ref=end_reference)
 
 		if self.parent.template:
 			self.parent.book.templatelist.pop()
@@ -326,8 +337,8 @@ class HighlightedDisplayFrame(ReferenceDisplayFrame):
 		self.parent.book.templatelist.append(template)
 		
 		
-		content = self.parent.book.GetReference(self.reference, stripped=True,
-				end_ref=self.end_reference)
+		content = self.parent.book.GetReference(reference, stripped=True,
+				end_ref=end_reference)
 		biblemgr.restore_state()
 		self.parent.book.templatelist.pop()
 
@@ -337,7 +348,10 @@ class HighlightedDisplayFrame(ReferenceDisplayFrame):
 		content = content.replace("\n", " ")
 		content = removeformatting(content)
 
-		data = highlight(content, data, self.regexes, self.strongs)
+		data = highlight(content, data, 
+			is_bible=self.parent.book.mod.Type() == Bible.type,
+			regexes=self.regexes, strongs=self.strongs, 
+			)
 		
 		# XXX: This replace should be done for us by the backend Bible
 		# interface (or by Sword itself).
@@ -352,7 +366,7 @@ if __name__ == '__main__':
 	string2 = u"a<b>b</b>c&#8220;d TE.ST&#950;."
 	match1 = 2, 4
 
-	items = unite(string1, string2)
+	items = unite(string1, string2, True)
 	assert len(items) == len(string1) + 2
 
 	print "Before", items[0]
