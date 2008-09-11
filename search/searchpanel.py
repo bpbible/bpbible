@@ -927,8 +927,9 @@ class SearchList(virtuallist.VirtualListCtrlXRC):
 					reference, end_ref=end_reference, stripped=True
 				)
 			)
-
-			return bibletext
+			
+			# trim to 500, otherwise it can be very slow on long entries
+			return bibletext[:500] + "..."
 
 		finally:
 			biblemgr.restore_state()

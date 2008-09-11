@@ -601,7 +601,7 @@ def separate_words(string, wordlist=None, cross_verse_search=True):
 
 	result = parse(string)
 	if not result: 
-		return [], []
+		return ([], []), ([], [])
 	
 	def check_proper_word(item):
 		had_non_letter = False
