@@ -107,36 +107,39 @@ use_system_inactive_caption_colour = False
 
 
 # templates
-def make_template(verse_per_line):
-	global bible_template, other_template, dictionary_template
-	global current_verse_template, verse_compare_template
-	br = "<br>" * verse_per_line
-	body = (
-	u'<a href = "#$versenumber" name="$versenumber" target="$versenumber">'
-	u'<small><sup>$versenumber</sup></small></a> $text %s\n' % br)
-	
-	bible_template = VerseTemplate(body=body)
-	#, footer="<br>$range ($version)")
+body = (
+u'<a href = "#$versenumber" name="$versenumber" target="$versenumber">'
+u'<small><sup>$versenumber</sup></small></a> $text \n')
 
 
-	other_template = VerseTemplate(
-		body=u"<b>$range</b><br>$text<p>($description)</p> \n"
-	)
-	dictionary_template = VerseTemplate(
-		body=u"<br>$text<p>($description)</p> \n"
-	)
-	
-
-	body = (u"<a href = '#current' target='$versenumber'><a name='$versenumber'>"
-			u"<small><sup>$versenumber</sup></small></a></a> "
-			u"<font color = 'green'>$text</font> %s\n") % br
-
-	current_verse_template = VerseTemplate(body)
-
-	verse_compare_template = VerseTemplate("<sup>$versenumber</sup> $text",
-		header=u"<p><b>(<a href='%s:$version'>$version</a>)"
-		u"</b> " % BIBLE_VERSION_PROTOCOL
-	)
+bible_template = VerseTemplate(body=body)
+vpl_body = (
+u'<a href = "#$versenumber" name="$versenumber" target="$versenumber">'
+u'<small><sup>$versenumber</sup></small></a> $text<br>\n')
+vpl_bible_template = VerseTemplate(body=vpl_body)
 
 
-make_template(verse_per_line)
+#, footer="<br>$range ($version)")
+
+
+other_template = VerseTemplate(
+	body=u"<b>$range</b><br>$text<p>($description)</p> \n"
+)
+dictionary_template = VerseTemplate(
+	body=u"<br>$text<p>($description)</p> \n"
+)
+
+
+body = (u"<a href = '#current' target='$versenumber'><a name='$versenumber'>"
+		u"<small><sup>$versenumber</sup></small></a></a> "
+		u"<font color = 'green'>$text</font> ")
+
+current_verse_templates = [
+	VerseTemplate(body + "\n"),
+	VerseTemplate(body=body + "<br>\n")
+]
+
+verse_compare_template = VerseTemplate("<sup>$versenumber</sup> $text",
+	header=u"<p><b>(<a href='%s:$version'>$version</a>)"
+	u"</b> " % BIBLE_VERSION_PROTOCOL
+)

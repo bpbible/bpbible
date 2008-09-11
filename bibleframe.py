@@ -246,7 +246,8 @@ class BibleFrame(VerseKeyedFrame):
 			data += "</tr></table>\n"
 
 		chapter = self.book.GetChapter(ref, self.reference,
-			config.current_verse_template, context, raw=raw)
+			config.current_verse_templates[bible_settings["verse_per_line"]], 
+			context, raw=raw)
 
 		if chapter is None:
 			data = config.MODULE_MISSING_STRING

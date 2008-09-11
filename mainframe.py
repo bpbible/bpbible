@@ -20,7 +20,7 @@ from backend import filterutils
 
 
 dprint(MESSAGE, "Importing frames")
-from bibleframe import BibleFrame
+from bibleframe import BibleFrame, bible_settings
 from bookframe import CommentaryFrame
 from bookframe import DictionaryFrame
 from displayframe import IN_MENU
@@ -76,9 +76,6 @@ settings.add_item("options", None, item_type="pickle")
 settings.add_item("size", None, item_type="pickle")
 settings.add_item("maximized", False, item_type=bool)
 settings.add_item("last_book_directory", "", item_type=str)
-
-
-
 
 dprint(MESSAGE, "/Other imports")
 
@@ -163,6 +160,15 @@ class MainFrame(wx.Frame, AuiLayer):
 		
 		wx.CallAfter(dprint, MESSAGE, "Constructed")
 		wx.CallAfter(override_end)	
+
+		# call it after two times round so everything is set up
+		# TODO: need a nicer initialization sequence
+		wx.CallAfter(
+			wx.CallAfter, 
+				self.set_verse_per_line, 
+					bible_settings["verse_per_line"]
+		)
+		
 		dprint(MESSAGE, "Done first round of setting up")
 		self.drop_target = ModuleDropTarget(self)
 		self.SetDropTarget(self.drop_target)
@@ -728,6 +734,12 @@ class MainFrame(wx.Frame, AuiLayer):
 			"Display cross references partially expanded"
 		)
 
+		verse_per_line = self.options_menu.AppendCheckItem(
+			wx.ID_ANY,
+			"One line per verse",
+			"Display each verse on its own line."
+		)
+		
 		display_tags = self.options_menu.AppendCheckItem(
 			wx.ID_ANY,
 			"Topic Tags",
@@ -739,11 +751,16 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.Bind(wx.EVT_MENU, self.toggle_expand_cross_references, 
 			cross_references)
 		self.Bind(wx.EVT_MENU, self.toggle_display_tags, display_tags)
+		self.Bind(wx.EVT_MENU, 
+			lambda evt:self.set_verse_per_line(evt.IsChecked()), 
+			verse_per_line)
 		
 		filter_settings = config_manager["Filter"]
 		strongs_headwords.Check(filter_settings["strongs_headwords"])
 		cross_references.Check(filter_settings["footnote_ellipsis_level"])
 		display_tags.Check(passage_list.settings.display_tags)
+		verse_per_line.Check(bible_settings["verse_per_line"])
+
 	
 	def toggle_headwords(self, event):
 		config_manager["Filter"]["strongs_headwords"] = event.IsChecked()
@@ -759,6 +776,15 @@ class MainFrame(wx.Frame, AuiLayer):
 
 	def toggle_display_tags(self, event):
 		passage_list.settings.display_tags = event.IsChecked()
+		self.UpdateBibleUI(settings_changed=True, source=SETTINGS_CHANGED)
+		
+	def set_verse_per_line(self, to):
+		bible_settings["verse_per_line"] = to
+		if to:
+			biblemgr.bible.templatelist[-1] = config.vpl_bible_template
+		else:
+			biblemgr.bible.templatelist[-1] = config.bible_template
+			
 		self.UpdateBibleUI(settings_changed=True, source=SETTINGS_CHANGED)
 		
 
