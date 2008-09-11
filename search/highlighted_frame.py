@@ -14,18 +14,20 @@ from gui.reference_display_frame import ReferenceDisplayFrame
 #TODO: highlight Aenon - AE joined up, that is - in KJV
 
 regex = r"""
-	(<glink[^>]*>.*?</glink>)		| # a strongs number and contents
-	(&lt;<a\ [^>]*>.*?</a>&gt;) 	| # a link with <> around and contents		
-	%s								  # if we are in a bible, exclude text
-									  # from cross-reference links
+	(<glink[^>]*>.*?</glink>)		 | # a strongs number and contents
+	(&lt;<a\ [^>]*>.*?</a>&gt;) 	 | # a link with <> around and contents		
+	(<a\ href="genbook:[^>]+>.*?</a>)| # a genbook link 
+	
+	%s								   # if we are in a bible, exclude text
+									   # from cross-reference links
 	(<a\ href="passagestudy.jsp?(
-		(action=showRef[^>]*>)  	| # a reference - don't include text
-		([^>]*>.*?</a>) 		 	  # or another sword link and contents	
-	))								|
-	(<h4>.*?</h4>)					| # a heading and contents	
-	(<[^>]+>)						| # any other html tag - not contents
-	(&(?P<amps>[^;]*);)				| # a html escape
-	(.)							  	# anything else
+		(action=showRef[^>]*>)  	 | # a reference - don't include text
+		([^>]*>.*?</a>) 		 	   # or another sword link and contents	
+	))								 |
+	(<h4\ class="heading">.*?</h4>)	 | # a heading and contents	
+	(<[^>]+>)						 | # any other html tag - not contents
+	(&(?P<amps>[^;]*);)				 | # a html escape
+	(.)							  	   # anything else
 """ 
 
 tokens = [
@@ -143,7 +145,7 @@ def unite(string1, string2, is_bible):
 			token2 = iter2.next()
 		except StopIteration:
 			dprint(ERROR, "Didn't match token in first string", token1,
-				string1, string2)
+				string1, string2, list(iter1))
 
 			return []
 
