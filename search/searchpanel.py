@@ -373,10 +373,6 @@ class SearchPanel(xrcSearchPanel):
 		self.verselist.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self.on_select)
 		self.genindex.Bind(wx.EVT_BUTTON, self.generate_index)
 		self.keyboard_button.Bind(wx.EVT_BUTTON, self.show_keyboard)
-		w = self.searchkey.Size[1]
-		self.keyboard_button.SetSize((w, w))
-		self.keyboard_button.SetMinSize((w, w))
-		
 
 		# Set properties:
 

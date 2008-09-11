@@ -1,0 +1,8 @@
+Sources for graphics:
+
+keyboard.png: From silk icons, darkened.
+accept.png, anchor.png, application_form_*.png, bullet_arrow_*.png,
+calendar_view_day.png, find.png, link.png, magnifier*.png, page_copy.png,
+text-columns.png - From silk icons
+go-next.png,  go-previous.png, go-up.png - Tango icons
+bible-*.png, bible.svg, bpbible.ico - modified from open clipart
