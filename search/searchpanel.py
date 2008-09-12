@@ -702,6 +702,7 @@ class SearchPanel(xrcSearchPanel):
 				to_str(item, self.book.mod),
 				SWREGEX, search_scope, case_sensitive
 			)
+			# TODO: ;'s don't cut it - in the ISBE, they are often used
 			search_scope = "; ".join(self.search_results)
 	
 		# If we need to exclude, do another search through the scope 

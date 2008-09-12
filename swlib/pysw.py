@@ -1105,6 +1105,7 @@ class Searcher(SW.Searcher):
 
 		scope = None
 		if(scopestr):
+			# TODO: this is VerseKey specific
 			scope = self.vk.ParseVerseList(to_str(scopestr), "", True)
 
 		verseslist = self.doSearch(string, options, 
@@ -1114,6 +1115,8 @@ class Searcher(SW.Searcher):
 
 		if not strings: 
 			return []
+		
+		# TODO: ;'s don't cut it - in the ISBE, they are often used		
 		return strings.split("; ")
 
 

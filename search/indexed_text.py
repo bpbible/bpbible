@@ -3,7 +3,7 @@ from swlib.pysw import VK, TOP, vk, SW
 import re
 import sys
 from util.debug import dprint, WARNING, ERROR
-from util.unicode import to_unicode
+from util.unicode import to_unicode, to_str
 
 from query_parser import removeformatting
 import process_text
@@ -40,18 +40,31 @@ class IndexedText(object):
 			old_key = old_key.clone()
 			old_key.thisown = True
 
+		entries = self.get_entries()
+		
 		key = self.get_key(module)
 		key.Persist(1)
-		module.setPosition(TOP)
+		if not entries:
+			module.setPosition(TOP)
+
 		module.setKey(key)
 		
 		# clear the error
 		module.Error()
+		
+		i = 0
+		if entries:
+			while not ord(module.Error()) and i < entries:
+				items.append(module.getRawEntry())
+				module.increment(1)
+				i += 1
 
-		# gather the text
-		while not ord(module.Error()):
-			items.append(module.getRawEntry())
-			module.increment(1)
+		else:
+			# gather the text
+			while not ord(module.Error()):
+				items.append(module.getRawEntry())
+				module.increment(1)
+			
 		
 		# the key's headings attribute gets set to 1 at the end of the
 		# previous loop...
@@ -128,7 +141,10 @@ class IndexedText(object):
 		"""Build an index against the text"""
 		self.index = [] # reference, start, length
 		
-		module.setPosition(TOP)
+		if self.get_entries():
+			module.getKey().setText(to_str(self.start, module))
+		else:
+			module.setPosition(TOP)
 		
 		# clear error
 		module.Error()
@@ -546,6 +562,9 @@ class IndexedText(object):
 
 		return mylist
 	
+	def get_entries(self):
+		return None	
+	
 	def save(self, directory):
 		f = open(directory + "/index", "w")
 		for (item, start, length) in self.index:
@@ -596,6 +615,23 @@ class VerseIndexedText(IndexedText):
 	def set_key(self, module, key, to):
 		key.Chapter(to[0])
 		key.Verse(to[1])
+
+class DictionaryIndexedText(IndexedText):
+	def __init__(self, version, start, entries, create_index=True):
+		self.start = start
+		self.entries = entries
+		bookname = start + " (%d entries) " % entries
+		super(DictionaryIndexedText, self).__init__(version, bookname,
+			create_index=create_index)
+	
+	def get_key(self, module):
+		key = module.getKey()
+		key.setText(to_str(self.start, module))
+		return key
+	
+	def get_entries(self):
+		return self.entries
+
 
 #class GenbookText(IndexedText):
 #	def get_key(self, module):

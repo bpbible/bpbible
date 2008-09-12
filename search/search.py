@@ -16,7 +16,7 @@ import cPickle
 from util.debug import *
 from query_parser import removeformatting, separate_words
 from query_parser import SpellingException
-from indexed_text import IndexedText, VerseIndexedText
+from indexed_text import IndexedText, VerseIndexedText, DictionaryIndexedText
 
 
 _number = 0
@@ -326,7 +326,7 @@ class Index(object):
 			matches = book.multi_search(wordlist[:], proximity,
 				is_word_proximity=is_word_proximity, excludes=excludelist,
 				strongs=strongs[0][:], excluded_strongs=strongs[1])
-			
+
 			results += book.find_index(matches)
 		
 		progress(("Done", 100))
@@ -378,9 +378,60 @@ class GenBookIndex(Index):
 			biblemgr.genbook.SetModule(oldmod, notify=False)
 		
 class DictionaryIndex(GenBookIndex):
+	def __init__(self, version, progress=lambda x:x, 
+		booktype=DictionaryIndexedText):
+		super(DictionaryIndex, self).__init__(version, progress, 
+			booktype=booktype)
+	
 	@property
 	def book(self):
 		return biblemgr.dictionary
+
+	def GenerateIndex(self, mod, progress = lambda x:x):
+		"""Index.GenerateIndex - Collates book indexes"""
+		template = VerseTemplate("$text\n")
+		biblemgr.temporary_state(biblemgr.plainstate)
+		log = SW.Log.getSystemLog()
+		old_log_level = log.getLogLevel()
+		log.setLogLevel(0)
+		
+		#apply template
+		if not self.book.ModuleExists(mod):
+			raise Exception, "Module %s not found" % mod
+
+		oldmod = self.book.version
+		
+		
+		try:
+			topics = self.book.GetTopics()
+			self.book.SetModule(mod, notify=False)
+			mod = self.book.mod
+
+			self.book.templatelist.append(template)
+			entry_size = 200
+			for a in range(0, len(topics), entry_size):
+				continuing = progress((topics[a], 
+							99*a/len(topics)))
+
+				
+				self.books.append(self.booktype(self.version, 
+					start=topics[a], entries=entry_size))
+				
+				if not continuing:
+					raise Cancelled
+					
+
+			if self.booktype.gatherstatistics:
+				self.GatherStatistics()
+				
+		finally:
+			log.setLogLevel(old_log_level)
+		
+			biblemgr.restore_state()
+			self.book.templatelist.pop()
+			
+			biblemgr.genbook.SetModule(oldmod, notify=False)
+		
 
 class CommentaryIndex(Index):
 	@property
