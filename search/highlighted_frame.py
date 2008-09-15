@@ -335,7 +335,7 @@ class HighlightedDisplayFrame(ReferenceDisplayFrame):
 
 		# TODO: put a function in search to do this for us...
 		biblemgr.temporary_state(biblemgr.plainstate)
-		template = VerseTemplate(u"$text ", headings="")
+		template = VerseTemplate(u"$text ", headings=u"")
 		self.parent.book.templatelist.append(template)
 		
 		

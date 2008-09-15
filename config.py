@@ -139,7 +139,8 @@ current_verse_templates = [
 	VerseTemplate(body=body + "<br>\n")
 ]
 
-verse_compare_template = VerseTemplate("<sup>$versenumber</sup> $text",
+verse_compare_template = VerseTemplate(
+	u"<sup>$versenumber</sup> $text",
 	header=u"<p><b>(<a href='%s:$version'>$version</a>)"
 	u"</b> " % BIBLE_VERSION_PROTOCOL
 )
