@@ -62,8 +62,12 @@ class ParseOSIS(ParseBase):
 		self._parse_children(node, si)
 		si.write("\n")
 	
-	handle_lg = handle_title
-	handle_p = handle_title
+	def handle_lg(self, node, si):
+		si.write("\n")
+		self._parse_children(node, si)
+		si.write("\n")	
+
+	handle_p = handle_lg
 	
 	def handle_divineName(self, node, si):
 		si2 = StringIO()
