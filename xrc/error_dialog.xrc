@@ -18,7 +18,7 @@
                 </object>
                 <object class="sizeritem">
                   <object class="wxTextCtrl" name="exception_text">
-                    <style>wxTE_MULTILINE|wxTE_READONLY</style>
+                    <style>wxTE_MULTILINE|wxTE_READONLY|wxTE_RICH2</style>
                   </object>
                   <option>1</option>
                   <flag>wxRIGHT|wxGROW</flag>

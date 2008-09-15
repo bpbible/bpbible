@@ -16,6 +16,7 @@ import hashlib
 import config
 from util.configmgr import config_manager
 from util.i18n import _
+import re
 
 from xrc.error_dialog_xrc import xrcErrorDialog
 
@@ -24,6 +25,7 @@ errors.add_item("errors_to_ignore", [], item_type="pickle")
 
 COLLAPSED_TEXTS = _("<< &Details"), _("&Details >>")
 PANE = 2
+fixed_width_re = re.compile("``(((?!``)(..?))*)``", re.DOTALL)
 
 class ErrorDialog(xrcErrorDialog):
 	def __init__(self, parent):
@@ -35,6 +37,7 @@ class ErrorDialog(xrcErrorDialog):
 		self.details_button.Bind(wx.EVT_BUTTON, self.collapse_toggle)
 		sys.excepthook = self.handle_error
 		self._log = None
+		self.exc_text = ""
 		
 	def write_to_log(self, text):
 		"""
@@ -56,8 +59,9 @@ class ErrorDialog(xrcErrorDialog):
 		traceback_text = _("%s%s\n") % (self.traceback_text.Value,
 			''.join(traceback.format_exception(type, value, tb)))
 
-		exception_text = _("%sAn error has occurred.\n%s: %s\n") % (
-			self.exception_text.Value, type.__name__, value)
+		self.exc_text = _("%sAn error has occurred.\n%s: %s\n") % (
+			self.exc_text, type.__name__, value)
+
 
 		self.write_to_log(traceback_text)
 
@@ -72,11 +76,37 @@ class ErrorDialog(xrcErrorDialog):
 		self.MinSize = self.Size = 350, 125
 		self.hide_error.SetValue(False)
 		
+		# take out the `` which marks fixed width text
+		# and remember where it is
+		items = []
+		def collect_font(match):
+			items.append((
+				# offset is 4 per previous item, plus 2 for the current one
+				match.start(1) - (len(items) * 4 + 2),
+				match.end(1) - (len(items) * 4 + 2)
+			))
+			return match.group(1)
+
+
+		exception_text = fixed_width_re.sub(collect_font, self.exc_text)
+	
 		# append, don't replace
 		# otherwise two errors within two event loops will leave only the last
 		# one...
 		self.exception_text.ChangeValue(exception_text)
 		self.traceback_text.ChangeValue(traceback_text)
+
+		fixed_width = wx.TextAttr(
+			font=wx.Font(
+				self.exception_text.Font.PointSize,
+				wx.FONTFAMILY_TELETYPE, 
+				wx.FONTSTYLE_NORMAL, 
+				wx.FONTWEIGHT_NORMAL
+			)
+		)
+
+		for start, end in items:
+			self.exception_text.SetStyle(start, end, fixed_width)
 		
 		# There can be an error in here if showing it modal twice under linux
 		if not self.IsShown():
@@ -91,6 +121,8 @@ class ErrorDialog(xrcErrorDialog):
 		# now put it back to empty ready for next time
 		self.traceback_text.ChangeValue('')
 		self.exception_text.ChangeValue('')
+		self.exc_text = ""
+
 		
 
 	def collapse_toggle(self, event):
