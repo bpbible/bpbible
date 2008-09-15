@@ -12,7 +12,10 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		super(ManageTopicsFrame, self).__init__(parent)
 		self.SetIcons(guiconfig.icons)
 		self._manager = get_primary_passage_list_manager()
-		self._operations_manager = ManageTopicsOperations()
+		self._operations_context = OperationsContext(self)
+		self._operations_manager = ManageTopicsOperations(
+				context=self._operations_context
+			)
 		self._selected_topic = None
 		self._init_passage_list_ctrl_headers()
 		self._setup_passage_list_ctrl()
@@ -147,22 +150,22 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 	
 	def _show_topic_context_menu(self, event):
 		"""Shows the context menu for a topic in the topic tree."""
-		topic = self.topic_tree.GetPyData(event.Item)
+		self._selected_topic = self.topic_tree.GetPyData(event.Item)
 		menu = wx.Menu()
 		
 		item = menu.Append(wx.ID_ANY, "&New Topic")
 		self.Bind(wx.EVT_MENU,
-				lambda e: self._create_topic(topic),
+				lambda e: self._create_topic(self._selected_topic),
 				id=item.Id)
 		
 		item = menu.Append(wx.ID_ANY, "Add &Passage")
 		self.Bind(wx.EVT_MENU,
-				lambda e: self._create_passage(topic),
+				lambda e: self._create_passage(),
 				id=item.Id)
 
 		item = menu.Append(wx.ID_ANY, "Delete &Topic")
 		self.Bind(wx.EVT_MENU,
-				lambda e: self._operations_manager.remove_subtopic(topic.parent, topic),
+				lambda e: self._operations_manager.remove_subtopic(),
 				id=item.Id)
 		
 		self.PopupMenu(menu)
@@ -174,11 +177,11 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		dialog.ShowModal()
 		dialog.Destroy()
 	
-	def _create_passage(self, topic):
+	def _create_passage(self):
 		passage_entry = PassageEntry(None)
 		dialog = PassageEntryDialog(self, passage_entry)
 		if dialog.ShowModal() == wx.ID_OK:
-			self._operations_manager.add_passage(topic, passage_entry)
+			self._operations_manager.add_passage(passage_entry)
 		dialog.Destroy()
 	
 	def _on_close(self, event):
@@ -227,3 +230,22 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		"""Selects the entry in the list control with the given index."""
 		state = wx.LIST_STATE_SELECTED | wx.LIST_STATE_FOCUSED
 		self.passage_list_ctrl.SetItemState(index, state, state)
+
+class OperationsContext(object):
+	"""Provides a context for passage list manager operations.
+
+	This gives access to which passage and topic are currently selected in
+	the manager.
+	"""
+	def __init__(self, frame):
+		self._frame = frame
+
+	def get_selected_topic(self):
+		#return self._frame._get_tree_selected_topic()
+		return self._frame._selected_topic
+
+	def get_selected_passage(self):
+		pass
+
+	def get_selected_item(self):
+		pass
