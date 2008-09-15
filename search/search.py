@@ -17,6 +17,7 @@ from util.debug import *
 from query_parser import removeformatting, separate_words
 from query_parser import SpellingException
 from indexed_text import IndexedText, VerseIndexedText, DictionaryIndexedText
+from stemming import get_stemmer
 
 
 _number = 0
@@ -176,6 +177,19 @@ class Index(object):
 		letters.discard(u"\n")
 		letters.discard(u" ")
 		self.statistics["letters"] = letters
+
+		stemmer = get_stemmer(self.book.mod)
+		stem_map = {}
+		for word, stemmed in zip(wordlist, stemmer.stemWords(wordlist)):
+			if word in stem_map and stemmed not in stem_map:
+				print word
+			if stemmed in stem_map:
+				stem_map[stemmed].append(word)
+
+			else:
+				stem_map[stemmed] = [word]
+
+		self.statistics["stem_map"] = stem_map
 
 	def BookRange(self, searchrange):
 		"""Index.BookRange - Finds all the BookIndexes in the current range

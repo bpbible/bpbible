@@ -86,8 +86,12 @@ Star is for 0 or more characters
 \b\w*ites\b
 
 Plus is for 1 or more characters
->>> print_regexes("+ites")
-\b\w+ites\b
+>>> print_regexes("foot+")
+\bfoot\w+\b
+
+However, plus at the start means to match exactly - no stemming
+>>> print_regexes("+good")
+\bgood\b
 
 Question mark is for a single character
 >>> print_regexes("b?ll")
@@ -174,54 +178,52 @@ r["punctuation_2"]=re.compile("[%s]" % re.escape(
 ), flags=re.UNICODE)
 
 def removeformatting(mystr):
-	ret = mystr
-
 	# remove commas in numbers
 	# Example "123,456" -> "123456"
 	#TODO: some locales may have 2.345.345 instead of 2,345,345
-	#ret = r["(?<=\d),(?=\d)"].sub("", ret)
+	#mystr = r["(?<=\d),(?=\d)"].sub("", mystr)
 	
 	# remove apostrophes in words
-	#ret = r["(?<=\w)'(?=\w)"].sub("", ret)
+	#mystr = r["(?<=\w)'(?=\w)"].sub("", mystr)
 
 	#remove hyphenation
-	#ret = r["(?<=\w)-(?=\w)"].sub("", ret)
+	#mystr = r["(?<=\w)-(?=\w)"].sub("", mystr)
 
-	ret = r["l"].sub("", ret)
+	mystr = r["l"].sub(u"", mystr)
 	
 	#TODO: replace symbols with nothing?
 	#for a in string.punctuation:
-	ret = r["p"].sub(" ", ret)
-	ret = r[u"[^\\w\s\uFDD0-\uFDEF]"].sub("", ret)
-	ret = r["\\s+"].sub(" ", ret)
-	ret = ret.strip()
-	return ret
+	mystr = r["p"].sub(u" ", mystr)
+	mystr = r[u"[^\\w\s\uFDD0-\uFDEF]"].sub(u"", mystr)
+	mystr = r["\\s+"].sub(u" ", mystr)
+	mystr = mystr.strip()
+	return mystr
 
 def removeformatting2(mystr):
 	"""Remove some formatting, but leave enough data in place to display an
 	intelligent output to user with spell checking."""
 	ret = mystr
 	#TODO: replace symbols with nothing?
-	ret = r["(?<!\d),"].sub(" ", ret)
-	ret = r[",(?!\d)"].sub(" ", ret)
+	ret = r["(?<!\d),"].sub(u" ", ret)
+	ret = r[",(?!\d)"].sub(u" ", ret)
 	
 	# remove apostrophes not in words
-	ret = r["(?<!\w)'"].sub(" ", ret)
-	ret = r["'(?!\w)"].sub(" ", ret)
+	ret = r["(?<!\w)'"].sub(u" ", ret)
+	ret = r["'(?!\w)"].sub(u" ", ret)
 
 	#don't remove hyphenation, but all other dashes
-	ret = r["(?<!\w)-"].sub(" ", ret)
-	ret = r["-(?!\w)"].sub(" ", ret)
+	ret = r["(?<!\w)-"].sub(u" ", ret)
+	ret = r["-(?!\w)"].sub(u" ", ret)
 	
-	ret = r["punctuation_2"].sub(" ", ret)
-	ret = r[" +"].sub(" ", ret)
+	ret = r["punctuation_2"].sub(u" ", ret)
+	ret = r[" +"].sub(u" ", ret)
 	ret = ret.strip()
 	return ret
 
 
 # the parser proper
 def indent(item, level=4):
-	return re.sub("(?m)^", " " * level, item)
+	return re.sub("(?m)^", u" " * level, item)
 
 
 class GroupOfObjects(object):
@@ -276,9 +278,13 @@ class GroupOfObjects(object):
 class Query(GroupOfObjects): pass
 class MultiQuery(GroupOfObjects): pass
 
+
 class Exclusion(GroupOfObjects):
 	def is_excluded(self):
 		return True
+
+class Inclusion(GroupOfObjects): pass
+		
 
 cross_verse = True
 
@@ -305,6 +311,8 @@ class Phrase(GroupOfObjects):
 	def to_regex(self, ):
 		assert len(self.items) == 1
 		return r"\b%s\b" % self.item_to_regex(self.items[0])
+
+class SingleWord(Phrase): pass
 
 class WildCard(GroupOfObjects): 
 	def to_regex(self):
@@ -459,10 +467,19 @@ def p_exclusion(p):
 	'''exclusion : MINUS query_part'''
 	p[0] = Exclusion(p[2])
 
-def p_query_part_without_option(p):
-	'''query_part_without_option : word
-				  				 | phrase'''
+def p_inclusion(p):
+	'''inclusion : PLUS query_part'''
+	p[0] = Inclusion(p[2])
+	
+
+def p_query_part_without_option_phrase(p):
+	'''query_part_without_option : phrase'''
 	p[0] = Phrase(p[1])
+
+def p_query_part_without_option_word(p):
+	'''query_part_without_option : word'''
+	p[0] = SingleWord(p[1])
+	
 
 def p_query_part_regex_field_without_option(p):
 	'''query_part_without_option : REGEX
@@ -472,7 +489,8 @@ def p_query_part_regex_field_without_option(p):
 def p_query_part(p):
 	'''query_part : LPAREN option RPAREN
 				  | query_part_without_option
-				  | exclusion'''
+				  | exclusion
+				  | inclusion'''
 	if len(p) == 2:
 		p[0] = p[1]
 	else:
@@ -568,9 +586,9 @@ class ParseError(Exception):
 
 	def __str__(self):
 		return u"""\
-Could not understand string
+Could not understand string ``
 %s
-%*s^""" % (self.string1, self.len, "")
+%*s^``""" % (self.string1, self.len, "")
 
 def p_error(t):
 	if t is None: 
@@ -595,7 +613,8 @@ def print_regexes(string, verbose=False):
 				print "Excluded:",
 			print item.to_regex()
 
-def separate_words(string, wordlist=None, cross_verse_search=True):
+def separate_words(string, wordlist=None, stemming_data=None, stemmer=None,
+		cross_verse_search=True):
 	global cross_verse
 	cross_verse = cross_verse_search
 
@@ -603,6 +622,20 @@ def separate_words(string, wordlist=None, cross_verse_search=True):
 	if not result: 
 		return ([], []), ([], [])
 	
+
+	def get_whole_word(item):
+		if isinstance(item, SingleWord):
+			c = item.items[0]
+		
+			for child in c.items:
+				if not isinstance(child, basestring):
+					return None
+
+			return ''.join(c.items)
+
+		return None
+	
+
 	def check_proper_word(item):
 		had_non_letter = False
 	
@@ -627,7 +660,15 @@ def separate_words(string, wordlist=None, cross_verse_search=True):
 		if item.is_field():
 			fields[item.is_excluded()].append(item.get_field_values())
 		else:
-			regexes[item.is_excluded()].append(item.to_regex())
+			# Don't stem for wildcards or phrases or regexes,
+			# or for excluded words
+			word = get_whole_word(item)
+			if word is None or item.is_excluded() or stemmer is None:
+				regexes[item.is_excluded()].append(item.to_regex())
+			else:
+				regexes[item.is_excluded()].append(r"\b%s\b" %
+					stemmer.compose_regex(stemming_data, word)
+				)
 
 	return regexes, fields
 		

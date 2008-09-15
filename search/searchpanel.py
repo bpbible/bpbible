@@ -18,6 +18,8 @@ import search
 from search import COMBINED
 from search import SearchException, SpellingException, RemoveDuplicates
 from query_parser import separate_words
+from stemming import get_stemmer
+
 from highlighted_frame import HighlightedDisplayFrame
 from swlib.pysw import TK, VK, GetBestRange, Searcher, SWREGEX
 from gui import guiutil
@@ -536,16 +538,21 @@ class SearchPanel(xrcSearchPanel):
 		
 		if self.indexed_search:
 			index_word_list = self.index.statistics["wordlist"]
+			stemming_data = self.index.statistics["stem_map"]
+			stemmer = get_stemmer(self.book.mod)
 		else:
 			index_word_list = None
+			stemming_data = None
+			stemmer = None
 
 		
 		succeeded = True
 		try:
 			(regexes, excl_regexes), (fields, excl_fields) = separate_words(
-				key, index_word_list, 
+				key, index_word_list, stemming_data, stemmer,
 				cross_verse_search=is_word_proximity or proximity > 1
 			)
+
 		except SearchException, myexcept:
 			wx.MessageBox(myexcept.message, "Error in search")
 			succeeded = False
