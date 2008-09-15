@@ -176,7 +176,7 @@ class Book(object):
 			verse += t.body.safe_substitute(body_dict)
 
 			# XXX: This should probably fit into the template mechanism.
-			if display_tags:
+			if not stripped and not raw and display_tags:
 				verse += body_dict["tags"]
 
 			verses += verse
