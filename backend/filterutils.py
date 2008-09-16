@@ -130,8 +130,10 @@ class ParserBase(object):
 
 		match = word_re.match(entry)
 		if not match:
-			dprint(WARNING, "Could not find strong's headword", 
-				"mod:", modlang, "number:", number, "Entry:", entry)
+			# don't report hebrew 00, as this is used throughout the KJV OT
+			if not (number == '00' and modlang == "Hebrew"):
+				dprint(WARNING, "Could not find strong's headword", 
+					"mod:", modlang, "number:", number, "Entry:", entry)
 
 		if text == last_item or not match:
 			# TR has strong's numbers past the last one (I think for
