@@ -1,4 +1,4 @@
-from backend.verse_template import VerseTemplate
+from backend.verse_template import VerseTemplate, SmartVerseTemplate
 import os
 import sys
 import getopt
@@ -109,15 +109,10 @@ use_system_inactive_caption_colour = False
 # templates
 body = (
 u'<a href = "#$versenumber" name="$versenumber" target="$versenumber">'
-u'<small><sup>$versenumber</sup></small></a> $text \n')
+u'<small><sup>$versenumber</sup></small></a> $text $tags')
 
 
-bible_template = VerseTemplate(body=body)
-vpl_body = (
-u'<a href = "#$versenumber" name="$versenumber" target="$versenumber">'
-u'<small><sup>$versenumber</sup></small></a> $text<br>\n')
-vpl_bible_template = VerseTemplate(body=vpl_body)
-
+bible_template = SmartVerseTemplate(body=body)
 
 #, footer="<br>$range ($version)")
 
@@ -132,13 +127,11 @@ dictionary_template = VerseTemplate(
 
 body = (u"<a href = '#current' target='$versenumber'><a name='$versenumber'>"
 		u"<small><sup>$versenumber</sup></small></a></a> "
-		u"<font color = 'green'>$text</font> ")
+		u"<font color = 'green'>$text</font> $tags")
 
-current_verse_templates = [
-	VerseTemplate(body + "\n"),
-	VerseTemplate(body=body + "<br>\n")
-]
+current_verse_template = SmartVerseTemplate(body)
 
+# TODO: do we want this to have tags? I'd guess not
 verse_compare_template = VerseTemplate(
 	u"<sup>$versenumber</sup> $text",
 	header=u"<p><b>(<a href='%s:$version'>$version</a>)"

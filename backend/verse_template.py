@@ -1,4 +1,5 @@
 from string import Template as str_template
+import re
 
 class VerseTemplate(object):
 	"""VerseTemplate is a class which defines templates for Bible Text""" 
@@ -8,6 +9,9 @@ class VerseTemplate(object):
 		self.body = str_template(body)
 		self.footer = str_template(footer)
 		self.headings = str_template(headings)
+	
+	def finalize(self, text):
+		return text
 
 class Template(VerseTemplate):
 	def __init__(self, name, readonly=True, *args, **kwargs):
@@ -42,3 +46,65 @@ class Template(VerseTemplate):
 	
 	def __contains__(self, item):
 		return item in self.keys()
+
+class SmartBody(object):
+	included_whitespace = "((<br( [^>]*)?>)|(<p( [^>]*)?>)|(<!P>))\s*"
+	vpl_text = '<br class="verse_per_line">'
+	
+	incl_whitespace_start = re.compile("^" + included_whitespace, re.IGNORECASE)
+	incl_whitespace_end = re.compile(included_whitespace + "$", re.IGNORECASE)
+	incl_whitespace_br_start = re.compile(
+		"(?P<ws>%s)%s" % (included_whitespace, vpl_text),
+		re.IGNORECASE
+	)
+	incl_whitespace_br_end = re.compile(
+		"%s(?P<ws>%s)" % (vpl_text, included_whitespace),
+		re.IGNORECASE
+	)
+	
+	def __init__(self, body, verse_per_line=True):
+		self.body = body
+		self.verse_per_line = verse_per_line
+	
+	def safe_substitute(self, dict):
+		text = dict.pop("text")
+		
+		whitespace = []
+		def collect(match):
+			whitespace.append(match.group(0))
+			return ""
+
+		# float leading whitespace out to the front
+		text = self.incl_whitespace_start.sub(collect, text)
+
+		leading_whitespace = whitespace
+		whitespace = []
+		
+		# float trailing whitespace to end
+		text = self.incl_whitespace_end.sub(collect, text)
+		
+		dict["text"] = text
+
+		ret = "%s%s%s%s\n" % (
+			''.join(leading_whitespace),
+			self.body.safe_substitute(dict),
+			''.join(whitespace),
+			self.vpl_text * self.verse_per_line,			
+		)
+
+		return ret
+	
+	def finalize(self, text):
+		return self.incl_whitespace_br_start.sub(r"\g<ws>", 
+			self.incl_whitespace_br_end.sub(r"\g<ws>", text)
+		)
+		
+
+class SmartVerseTemplate(VerseTemplate):
+	def __init__(self, *args, **kwargs):
+		super(SmartVerseTemplate, self).__init__(*args, **kwargs)
+		self.body = SmartBody(self.body)
+		
+	
+	def finalize(self, text):
+		return self.body.finalize(text)

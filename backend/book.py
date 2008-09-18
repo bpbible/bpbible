@@ -150,7 +150,8 @@ class Book(object):
 				 version=self.mod.Name(), 
 				 description=description)
 
-		verses = template.header.safe_substitute(d)
+		text = template.header.safe_substitute(d)
+		verses = []
 		
 		
 		for body_dict, headings in self.GetReference_yield(
@@ -159,7 +160,7 @@ class Book(object):
 		):
 			# if we have exceeded the verse limit, body_dict will be None
 			if body_dict is None:
-				verses += config.MAX_VERSES_EXCEEDED % max_verses
+				verses.append(config.MAX_VERSES_EXCEEDED % max_verses)
 				break
 
 			body_dict.update(d)
@@ -175,14 +176,11 @@ class Book(object):
 			
 			verse += t.body.safe_substitute(body_dict)
 
-			# XXX: This should probably fit into the template mechanism.
-			if not stripped and not raw and display_tags:
-				verse += body_dict["tags"]
-
-			verses += verse
+			verses.append(verse)
 		
-		verses += template.footer.safe_substitute(d)
-		return verses
+		text += template.finalize(''.join(verses))
+		text += template.footer.safe_substitute(d)
+		return text
 		
 			
 	def GetReference_yield(self, verselist, max_verses=176, 
