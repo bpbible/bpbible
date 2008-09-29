@@ -405,12 +405,15 @@ class AuiLayer(object):
 			self.repaint_combo(key, rect, title, clipping_rect)
 
 	def repaint_combo(self, key, rect, title, clipping_rect):
-		dc = wx.ClientDC(self)
-		dc.SetClippingRegion(*clipping_rect)
 		pane = self.aui_mgr.GetPane(key)
-		if not pane.IsShown() or pane.IsFloating():
+		maximized_pane = self.get_maximized_pane()
+		if not (pane.IsShown() and not pane.IsFloating() and (
+			not maximized_pane or maximized_pane == pane)):
 			return False
 
+		dc = wx.ClientDC(self)
+		dc.SetClippingRegion(*clipping_rect)
+		
 		self.dockart.draw_combo(dc, self, rect, title, pane, clipping_rect)
 		dc.DestroyClippingRegion()
 		return True
