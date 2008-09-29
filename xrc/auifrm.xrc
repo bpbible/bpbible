@@ -129,6 +129,6 @@
     </object>
     <size>800, 600</size>
     <title>Bible</title>
-    <style>wxCLIP_CHILDREN|wxCAPTION|wxSYSTEM_MENU|wxRESIZE_BORDER|wxCLOSE_BOX|wxMAXIMIZE_BOX|wxMINIMIZE_BOX|wxFRAME_SHAPED</style>
+    <style>wxDEFAULT_FRAME_STYLE|wxRESIZE_BORDER|wxRESIZE_BOX</style>
   </object>
 </resource>

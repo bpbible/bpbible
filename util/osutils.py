@@ -7,6 +7,9 @@ def is_gtk():
 def is_msw():
 	return "wxMSW" in wx.PlatformInfo
 
+def is_mac():
+	return "wxMac" in wx.PlatformInfo
+
 def is_win2000():
 	"""
 	Return whether windows <= 2000

@@ -117,6 +117,9 @@ class ChapterItem(wx.Panel):
 	def draw(self):
 		# create a memory dc
 		dc = wx.MemoryDC()
+		width, height = 1, 1
+		bmp = wx.EmptyBitmap(width, height)
+		dc.SelectObject(bmp)
 
 		# set its font to the window font
 		dc.SetFont(self.Font)

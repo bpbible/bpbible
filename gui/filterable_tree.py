@@ -7,7 +7,7 @@ import string
 def GetPrevVisible(self, item):
 	"""Taken from the wxgeneric GetPrevVisible. 
 	
-	This is missing in wxGTK 2.8.*"""
+	This is missing in wxGTK 2.8.* and wxMac 2.8.4.1"""
 	assert item.IsOk(), "invalid tree item"
 	assert self.IsVisible(item), "this item itself should be visible"
 
@@ -33,7 +33,7 @@ def GetPrevVisible(self, item):
 
 	return prevItem
 
-if osutils.is_gtk():
+if osutils.is_gtk() or osutils.is_mac():
 	wx.TreeCtrl.GetPrevVisible = GetPrevVisible
 
 class TreeItem(object):
@@ -182,6 +182,8 @@ class FilterableTree(wx.PyPanel):
 		
 		elif event.KeyCode == wx.WXK_RETURN:
 			self.on_selection(selection)
+		else:
+			event.Skip()
 
 	def create(self, model=None):
 		self.unbind_events()

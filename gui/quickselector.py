@@ -42,6 +42,8 @@ class TextPanel(wx.PyPanel):
 		#self.font = 
 		self.font = wx.Font(20, wx.SWISS, wx.NORMAL, wx.FONTWEIGHT_BOLD, False)
 		dc = wx.MemoryDC()
+		bmp = wx.EmptyBitmap(1, 1)
+		dc.SelectObject(bmp)
 		dc.SetFont(self.font)
 		w, self.height = dc.GetTextExtent(string.letters)
 		w = dc.GetTextExtent("a")[0]
