@@ -1069,5 +1069,6 @@ class CommentarySearchPanel(SearchPanel):
 	
 	@property
 	def template(self):
-		# Use the same template as the dictionary for this one
-		return config.dictionary_template
+		return VerseTemplate(
+			body=u"$text"
+		)
