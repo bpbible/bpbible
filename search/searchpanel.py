@@ -316,7 +316,7 @@ class SearchPanel(xrcSearchPanel):
 				"Create Index?" % self.version 
 			create = wx.MessageBox(msg, "Create Index?", wx.YES_NO)
 			if create == wx.YES:
-				self.index = self.build_index(self.version)
+				self.build_index(self.version)
 			else:
 				self.set_gui_search_type(self.indexed_search)
 
@@ -825,7 +825,7 @@ class SearchPanel(xrcSearchPanel):
 				self.search_button.Disable()
 				
 		else:
-			self.index = self.build_index(self.version)
+			self.build_index(self.version)
 			
 			
 
@@ -846,18 +846,18 @@ class SearchPanel(xrcSearchPanel):
 		try:
 			#create index
 			try:
-				index = self.index_type(version, callback)
+				self.index = self.index_type(version, callback)
 			except search.Cancelled:
 				self.show_keyboard_button(False)
 			
 				return None
 			
-			#write it to file
-			index.WriteIndex()
 			self.set_index_available(True)
 			self.show_keyboard_button()
 			
-			return index
+			#write it to file
+			self.index.WriteIndex()
+
 		finally:
 			#self.show_progress_bar(False)
 			p.Hide()
@@ -916,7 +916,7 @@ class SearchList(virtuallist.VirtualListCtrlXRC):
 
 	def get_data(self, idx, col):
 		assert self.parent, "Parentless search list :("
-		template = VerseTemplate(body = "$text ")
+		template = VerseTemplate(body=u"$text ", headings=u"")
 	
 		if col == 0:
 			return self.parent.search_list_format_text(self.results[idx])
@@ -938,8 +938,11 @@ class SearchList(virtuallist.VirtualListCtrlXRC):
 				)
 			)
 			
-			# trim to 500, otherwise it can be very slow on long entries
-			return bibletext[:500] + "..."
+			# trim to 500, otherwise it can be very slow on long entries		
+			if len(bibletext) > 500:
+				bibletext = bibletext[:500] + "..."
+
+			return bibletext
 
 		finally:
 			biblemgr.restore_state()
@@ -1063,3 +1066,8 @@ class CommentarySearchPanel(SearchPanel):
 		# default is within 1 verse
 		self.options_panel.proximity_type.Selection = 1
 		self.options_panel.proximity.Value = 1
+	
+	@property
+	def template(self):
+		# Use the same template as the dictionary for this one
+		return config.dictionary_template
