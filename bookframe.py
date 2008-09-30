@@ -1,7 +1,7 @@
 import wx
 from wx import html
 from displayframe import DisplayFrame
-from displayframe import IN_BOTH
+from displayframe import IN_BOTH, IN_MENU
 from tooltip import BiblicalPermanentTooltip
 import versetree
 
@@ -136,6 +136,11 @@ class BookFrame(DisplayFrame):
 					update_text=set_text), IN_BOTH),
 				(Separator, IN_BOTH),
 			)
+
+		extras += (
+			(MenuItem("Search", self.search), IN_MENU),
+			(Separator, IN_MENU),
+		)
 		
 		items = extras + super(BookFrame, self).get_menu_items()
 		if self.shows_info:
@@ -147,6 +152,12 @@ class BookFrame(DisplayFrame):
 
 		return items
 	
+			
+	def search(self):
+		"""Search in this book"""
+		search_panel = self.get_search_panel_for_frame()
+		assert search_panel, "Search panel not found for %s" % self
+		search_panel.show()
 			
 	def has_module(self):
 		return self.book.mod is not None
@@ -166,6 +177,15 @@ class BookFrame(DisplayFrame):
 	
 	def get_window(self):
 		return self
+	
+	def get_search_panel_for_frame(self):
+		for item in guiconfig.mainfrm.searchers:
+			if self.book == item.book:
+				return item
+
+		return None		
+
+		
 
 	def go_quickly(self):
 		qs = QuickSelector(self.get_window(), 
@@ -191,7 +211,7 @@ class BookFrame(DisplayFrame):
 	
 	def get_verified(self, ref):
 		return ref
-
+	
 class VerseKeyedFrame(BookFrame):
 	def chapter_move(self, number):
 		vk = VK(self.reference)

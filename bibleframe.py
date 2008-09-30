@@ -51,8 +51,12 @@ class BibleFrame(VerseKeyedFrame):
 		return self.panel
 
 	def get_menu_items(self):
-
 		items = super(BibleFrame, self).get_menu_items()
+		
+		for item, scope in items:
+			if item != Separator and item.text == "Search":
+				item.accelerator = "Ctrl-F"
+
 		items = (
 			(MenuItem("Harmony", self.show_harmony, accelerator="Ctrl-H"),
 				IN_MENU),
@@ -69,9 +73,6 @@ class BibleFrame(VerseKeyedFrame):
 					
 			
 			(Separator, IN_BOTH),
-			(MenuItem("Search", self.search, accelerator="Ctrl-F"), IN_MENU),
-
-			(Separator, IN_MENU),
 			# Pick suitably arbitrary accelerators.
 			(MenuItem("Manage Topics", self.manage_topics,
 					accelerator="Ctrl+Shift+T"), IN_BOTH),
@@ -152,10 +153,6 @@ class BibleFrame(VerseKeyedFrame):
 		harmony_frame.SetIcons(guiconfig.icons)
 		harmony_frame.Show()
 		
-	def search(self):
-		"""Search in this bible"""
-		guiconfig.mainfrm.search_panel.show()
-	
 	def update_title(self, shown=None):
 		m = guiconfig.mainfrm
 		p = m.get_pane_for_frame(self)
