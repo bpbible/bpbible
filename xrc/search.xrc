@@ -229,7 +229,7 @@
                         <tooltip>How close should search terms be to each other</tooltip>
                         <style>wxSP_ARROW_KEYS</style>
                       </object>
-                      <flag>wxRIGHT|wxEXPAND</flag>
+                      <flag>wxRIGHT|wxEXPAND|wxALIGN_CENTRE</flag>
                       <border>6</border>
                     </object>
                     <object class="sizeritem">
@@ -240,6 +240,7 @@
                         </content>
                         <selection>0</selection>
                       </object>
+                      <flag>wxALIGN_CENTRE</flag>
                     </object>
                     <orient>wxHORIZONTAL</orient>
                   </object>
