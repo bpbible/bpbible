@@ -18,6 +18,7 @@ from query_parser import removeformatting, separate_words
 from query_parser import SpellingException
 from indexed_text import IndexedText, VerseIndexedText, DictionaryIndexedText
 from stemming import get_stemmer
+from fields import all_fields
 
 
 _number = 0
@@ -312,24 +313,16 @@ class Index(object):
 		strongs = [[], []]
 		for idx, values in enumerate((fields, excl_fields)):
 			for (key, value) in values:
-				if key not in ("strongs", "strong"):
+				for field in all_fields:
+					if key == field.field_name:
+						strongs[idx].append(
+							(key, field.prepare(value))
+						)
+						break
+				else:
 					raise SearchException(
-						"Only strongs fields can be searched currently (not %s)"
-						% key
+						"You cannot search on the field %r" % key
 					)
-					
-				match = re.match("^([GH])(\d+)(\w*)$", value)
-				if not match:
-					raise SearchException(
-						"Couldn't parse strong's number %s." % value
-					)
-
-				prefix, number, extra = match.group(1, 2, 3)
-				number = int(number)
-				if number > 9999:
-					raise SearchException("Invalid strong's number %s." % value)
-
-				strongs[idx].append("%s%04d%s" % (prefix, int(number), extra))
 				
 		# Do multiword
 		for num, book in enumerate(books):

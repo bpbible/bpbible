@@ -1,5 +1,5 @@
 from backend.bibleinterface import biblemgr
-from swlib.pysw import VK, TOP, vk, SW
+from swlib.pysw import VK, TOP, SW, TK
 import re
 import sys
 from util.debug import dprint, WARNING, ERROR
@@ -7,6 +7,7 @@ from util.unicode import to_unicode, to_str
 
 from query_parser import removeformatting
 import process_text
+import fields
 
 class IndexedText(object):
 	"""A bit of text, one reference per line, with an index built against it"""
@@ -14,7 +15,8 @@ class IndexedText(object):
 	def __init__(self, version, bookname=None, create_index=True):
 		self.index = [] # ref, start, length
 		self.text = ""
-		self.strongs_info = ""
+		self.field_data = {}
+
 		self.bookname = bookname or version
 		self.version = version
 		module = self.load_module(version)
@@ -44,26 +46,24 @@ class IndexedText(object):
 		
 		key = self.get_key(module)
 		key.Persist(1)
+		module.setKey(key)
 		if not entries:
 			module.setPosition(TOP)
 
-		module.setKey(key)
+		key_entry = self.get_key_entry(key)
 		
 		# clear the error
 		module.Error()
 		
 		i = 0
-		if entries:
-			while not ord(module.Error()) and i < entries:
-				items.append(module.getRawEntry())
-				module.increment(1)
-				i += 1
+		if not entries:
+			entries = sys.maxint
 
-		else:
-			# gather the text
-			while not ord(module.Error()):
-				items.append(module.getRawEntry())
-				module.increment(1)
+		# gather the text		
+		while not ord(module.Error()) and i < entries:
+			items.append((key_entry(), module.getRawEntry()))
+			module.increment(1)
+			i += 1
 			
 		
 		# the key's headings attribute gets set to 1 at the end of the
@@ -73,14 +73,16 @@ class IndexedText(object):
 		# try and do smart parsing
 		content = None
 		if ord(module.Markup()) == SW.FMT_OSIS:
+			xml_items = [
+				"<KeyedEntry key='%s'>%s</KeyedEntry>" % i for i in	items
+			]
+
 			# fix its encoding if necessary
 			if ord(module.Encoding()) == SW.ENC_LATIN1:
 				xml_items = [
-					item.decode("cp1252").encode("utf8") for item in items
+					item.decode("cp1252").encode("utf8")
+					for item in xml_items
 				]
-			else:
-				xml_items = items
-
 
 			try:
 				content = process_text.ParseOSIS().parse(
@@ -98,13 +100,13 @@ class IndexedText(object):
 			# encode the token as utf-8 so that we end up with a string from
 			# here
 			content = MAGIC_TOKEN.encode("utf8").join(
-				module.StripText(item) for item in items
+				module.StripText(item) for key, item in items
 			)
 
 		content = content.decode("utf-8", "ignore")
 		content = removeformatting(content)
 		self.text = re.sub("\s*%s\s*" % MAGIC_TOKEN, "\n", content)
-		self.text, self.strongs_info = self.extract_strongs(self.text)
+		self.text, self.field_data = self.extract_strongs(self.text)
 
 		self.create_index_against_text(module, key)
 
@@ -114,28 +116,39 @@ class IndexedText(object):
 		# put offset in an array, so that we can write to it in the callback
 		offset = [0]
 		matches = []
-
+		
+		# TODO use \1
+		expr = re.compile(
+			u"([%s])([^%s]*)[%s]([^%s]*)[%s]" % (
+				(process_text.special_chars,) * 5),
+			re.UNICODE
+		)
 		def replace(match):
 			o = offset[0]
-			number, text = match.group(1, 2)
+			type, number, text = match.group(1, 2, 3)
+
+			#text = expr.sub(replace, text)
+			
 			new_offset = (o + len(number) + 3)
-			matches.append("%s\x00%s %s" % (
-				number, match.start() - o, match.end() - new_offset
-			))
+			start = match.start() - o
+			collectors[type].collect(number, text, 
+				match.start() - o, match.end() - new_offset)
 			offset[0] = new_offset
 			return text
-
-		text = re.sub(
-			# the second group can actually be empty, if it is just the
-			# article
-			u"%s([^%s]+)%s([^%s]*)%s" % ((
-				process_text.ParseOSIS.STRONGS_MARKER.decode("utf8"),
-			) * 5),
-			replace,
-			text
+		
+		collectors = dict(
+			(field.MARKER.decode("utf8"), field())
+				for field in fields.all_fields
 		)
+		
+		# TODO: handle the case of fields within fields
+		text = expr.sub(replace, text)
+		
+		field_data = {}
+		for field_name, collector in collectors.items():
+			field_data[collector.field_name] = collector.finalize()
 
-		return text, '\n'.join(matches)
+		return text, field_data
 
 	def create_index_against_text(self, module, key):
 		"""Build an index against the text"""
@@ -152,7 +165,8 @@ class IndexedText(object):
 		iterator = re.compile("^.*$", re.M).finditer(self.text)
 		for match in iterator:
 			error = ord(module.Error())
-			assert not error, "%r %s %s" % (error, match.group(), module.getKeyText())
+			assert not error, \
+				"%r Text: %r Key: %s" % (error, match.group(), module.getKeyText())
 
 			ind = self.get_index(key)
 			start, end = match.span()
@@ -240,6 +254,9 @@ class IndexedText(object):
 	def get_key(self, module):
 		return module.getKey()
 	
+	def get_key_entry(self, key):
+		return key.getText
+
 	def get_index(self, key):
 		return key.getText()
 	
@@ -505,13 +522,16 @@ class IndexedText(object):
 		self.strongs_upto = [[], []]
 		self.current_strongs = [[], []]
 		for idx, group in enumerate((words, excluded)):
-			for word in group:
+			for (field_type, word) in group:
 				l = []
-				word = "%s[^\x00]*\x00(\d+) (\d+)" % word
+				word = "%s[^\x00]*\x00(?P<first>\d+) (?P<second>\d+)" % word
 
 				regex = re.compile(word, re.MULTILINE|re.UNICODE)
-				for item in regex.finditer(self.strongs_info):
-					l.append((int(item.group(1)), int(item.group(2))))
+				for item in regex.finditer(self.field_data[field_type]):
+					l.append((
+							int(item.group("first")),
+							int(item.group("second"))
+					))
 				
 				# end sentinel - we use the end sentinel so that we don't have to
 				# check for the end of the list
@@ -544,15 +564,6 @@ class IndexedText(object):
 			self.strongs_upto[excluded][idx] = it
 			self.current_strongs[excluded][idx] = current
 
-
-	def find_strongs(self, word):
-		word = "%s[^\x00]*\x00(\d+) (\d+)" % word
-		regex = re.compile(word, re.MULTILINE|re.IGNORECASE|re.UNICODE)
-		ret = []
-		for item in regex.finditer(self.strongs_info):
-			ret.append((int(item.group(1)), 0))
-
-		return ret
 
 	def regex_search(self, comp):
 		mylist = []
@@ -633,7 +644,15 @@ class DictionaryIndexedText(IndexedText):
 		return self.entries
 
 
-#class GenbookText(IndexedText):
+class GenbookText(IndexedText):
+	def get_key_entry(self, key):
+		return key.getLocalName
+
+	def get_key(self, module):
+		key = module.getKey()
+		key.setText(to_str(self.start, module))
+		return TK(key)
+
 #	def get_key(self, module):
 #		tk = TK(module.getKey())
 #		tk.root()

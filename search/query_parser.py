@@ -35,6 +35,11 @@ Field search support looks like this:
 >>> query.get_field_values()
 ('strongs', 'G3550')
 
+Fields can have dashes and colons in (unlike usual words)
+>>> query = parse('ref:Gen3:15-Gen3:19')
+>>> query.get_field_values()
+('ref', 'Gen3:15-Gen3:19')
+
 Groups provide alternatives:
 >>> print_regexes('(LORD, GOD) good')
 (\bLORD\b|\bGOD\b)
@@ -502,8 +507,19 @@ def p_query_part(p):
 #	p[0] = Query(p[1])
 
 def p_field(p):
-	'''field : word FIELD word'''
+	'''field : word FIELD word-with-dash'''
 	p[0] = Field(p[1], p[3])
+
+def p_word_with_dash_dash(p):
+	'''word-with-dash : word MINUS word-with-dash
+					  | word FIELD word-with-dash'''
+	p[0] = p[1]
+	p[1].items += [p[2]] + p[3].items
+
+def p_word_with_dash(p):
+	'''word-with-dash : word'''
+	p[0] = p[1]
+	
 
 def p_word_and_item(p):
 	'''word : word word_item'''
@@ -683,7 +699,7 @@ def _test():
 
 if __name__ == '__main__':
 	import sys
-	if "test" in sys.argv:
+	if "interactive" not in sys.argv:
 		sys.exit(_test())
 	
 	while 1:
