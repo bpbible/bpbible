@@ -48,48 +48,51 @@ if is_py2exe():
 	if os.path.dirname(sys.argv[0]):
 		os.chdir(os.path.dirname(sys.argv[0]))
 
-# StringMgr handling
-class MyStringMgr(SW.PyStringMgr):
-	def getUpper(self, buf):
-		# TODO: a more advanced heuristic like bibletime's to check whether it
-		# is utf8 or latin1
-		encodings = "UTF-8", "cp1252"
-		text = buf.c_str()
-		#print `text`
-		for enc in encodings:
-			try:
-				# do an uppercase on the unicode object, then re-encode it 
-				# back to how it was.
-				# then set the buffer to the new string
-				buf.set(text.decode(enc).upper().encode(enc))
-				return
-
-			except UnicodeDecodeError:
-				pass
-
-		dprint(WARNING, "Couldn't convert text to uppercase", text)
-		buf.set(text.upper())
-		return
-
-	def supportsUnicode(self):
-		return True
-		
-
-m = MyStringMgr()
-
-# we don't own this, the system string mgr holder does
-m.thisown = False
-SW.StringMgr.setSystemStringMgr(m)
-
-# *only* after we've set the system string mgr can we set the system 
-# locale mgr...
-locale_mgr = SW.LocaleMgr.getSystemLocaleMgr()
-locale_mgr.loadConfigDir("resources/locales.d")
-
-if locale_mgr.getLocale("bpbible"):
-	locale_mgr.setDefaultLocaleName("bpbible")
+if hasattr(sys, "SW_dont_do_stringmgr"):
+	dprint(WARNING, "Skipping StringMgr initialization")
 else:
-	dprint(WARNING, "bpbible locale not found")
+	# StringMgr handling
+	class MyStringMgr(SW.PyStringMgr):
+		def getUpper(self, buf):
+			# TODO: a more advanced heuristic like bibletime's to check whether it
+			# is utf8 or latin1
+			encodings = "UTF-8", "cp1252"
+			text = buf.c_str()
+			#print `text`
+			for enc in encodings:
+				try:
+					# do an uppercase on the unicode object, then re-encode it 
+					# back to how it was.
+					# then set the buffer to the new string
+					buf.set(text.decode(enc).upper().encode(enc))
+					return
+	
+				except UnicodeDecodeError:
+					pass
+	
+			dprint(WARNING, "Couldn't convert text to uppercase", text)
+			buf.set(text.upper())
+			return
+	
+		def supportsUnicode(self):
+			return True
+			
+	
+	m = MyStringMgr()
+	
+	# we don't own this, the system string mgr holder does
+	m.thisown = False
+	SW.StringMgr.setSystemStringMgr(m)
+	
+	# *only* after we've set the system string mgr can we set the system 
+	# locale mgr...
+	locale_mgr = SW.LocaleMgr.getSystemLocaleMgr()
+	locale_mgr.loadConfigDir("resources/locales.d")
+	
+	if locale_mgr.getLocale("bpbible"):
+		locale_mgr.setDefaultLocaleName("bpbible")
+	else:
+		dprint(WARNING, "bpbible locale not found")
 
 
 class VerseParsingError(Exception): pass
