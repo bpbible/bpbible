@@ -25,7 +25,8 @@ class ProtocolHandler(object):
 		self._handle(self.protocols, frame, href)
 	
 	def _handle(self, d, frame, href, *args):
-		url = SW.URL(str(href))
+		href = SW.URL.decode(str(href)).c_str()
+		url = SW.URL(href)
 		protocol = url.getProtocol()
 		
 		if protocol in d:

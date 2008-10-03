@@ -21,7 +21,7 @@ def on_genbook_click(frame, href, url):
 		url = SW.URL(href)
 	
 	host = to_unicode(
-		SW.URL.decode(url.getHostName()).c_str(),
+		url.getHostName(),
 		frame.reference.module
 	)
 
@@ -36,7 +36,14 @@ def on_genbook_click(frame, href, url):
 	
 	else:
 		key = TK(frame.book.mod.getKey(), frame.book.mod)
-		key.text = host
+		path = to_unicode(
+			url.getPath(),
+			frame.reference.module
+		)
+		ref = u"/%s" % host
+		if path:
+			ref += "/%s" % path
+		key.text = ref
 		
 		frame.go_to_key(key)
 

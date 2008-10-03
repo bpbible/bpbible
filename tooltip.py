@@ -38,9 +38,6 @@ class TooltipBaseMixin(object):
 		if biblemgr.bible.mod is None:
 			return
 
-		if url is None:
-			url = SW.URL(href)
-
 		ref = url.getHostName()
 		if ref:
 			references = [ref]
@@ -558,6 +555,9 @@ class BibleTooltipConfig(TooltipConfig):
 
 			if text.endswith("<hr>"):
 				return text[:-4]
+
+			else:
+				return text
 
 		finally:
 			if tooltip_settings["plain_xrefs"]:

@@ -217,13 +217,15 @@ def ellipsize(refs, last_text="", ellipsis=None):
 			last_text = ref
 			buf.append('<a href="bible:%(ref)s">%(ref)s</a>'% locals())
 		if(left_over):
-			e = "<b><a href = \"bible:?values=%d" % left_over
+			url = "?values=%d" % left_over
+			e = "<b><a href="
 			for idx, item in enumerate(refs[ellipsis:]):
 				ref = pysw.VerseList(item, last_text).GetBestRange(True)
 				last_text = ref
 			
-				e += "&val%d=%s" % (idx, SW.URL.encode(ref).c_str())
-			e+= "\">...</a></b>"
+				url += "&val%d=%s" % (idx, ref)
+
+			e = '<b><a href="bible:%s">...</a></b>' % SW.URL.encode(url).c_str()
 		refs = []
 		
 	
