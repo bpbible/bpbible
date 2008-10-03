@@ -43,8 +43,9 @@ I'n the beginning God cree-ated the heavens and the 1,2345 earth."""),
 lumi\xe8re d'avec les t\xe9n\xe8bres."""),
 ]
 
-
-
+stress_test = [
+	("Key %d" % i, "This is key number '%d'" % i) for i in range(100000)
+]
 
 items = dict(
 	genbook=(
@@ -94,6 +95,22 @@ ModDrv=RawLD
 """, 
 		all_entries
 	),
+	dictionary_stress_test=(
+		"modules/%(modulename)s",
+		"/%(modulename)s",
+		SW.RawLD4,
+		SW.Key,
+		"""\
+[%(modulename)s]
+DataPath=./modules/%(modulename)s/%(modulename)s
+Description=A stress test with 100,000 entries
+SourceType=Plaintext
+Encoding=%(sword_encoding)s
+ModDrv=RawLD4
+""", 
+		stress_test
+	),
+	
 	bible=(
 		"modules/%(modulename)s",
 		"",
