@@ -394,19 +394,19 @@ class DisplayFrame(HtmlSelectableWindow):
 		return menu_items
 
 	def show_popup(self, event):
-		self.popup_position = guiutil.get_mouse_pos(self)#event.Position
+		event_object = event.EventObject
+		
+		self.popup_position = guiutil.get_mouse_pos(event_object)
 		
 		menu = guiconfig.mainfrm.make_menu(
 			[x for (x, where_shown) in self.get_menu_items() 
 				if where_shown & IN_POPUP],
 			is_popup=True)
 		
-		event_object = event.EventObject
-		
 		#if osutils.is_gtk():
 		#	self.popup_position = event_object.ScreenToClient(self.popup_position)
 
-		event.EventObject.PopupMenu(menu, self.popup_position)
+		event_object.PopupMenu(menu, self.popup_position)
 
 	def get_popup_menu_items(self):
 		return ((self.make_search_text(), self.make_lookup_text(), Separator) + 
