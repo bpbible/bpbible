@@ -509,6 +509,14 @@ class DisplayFrame(HtmlSelectableWindow):
 		"""Copy the selected text with links"""
 		self.OnCopy(with_links=True)
 	
+	def get_actions(self):
+		actions = super(DisplayFrame, self).get_actions()
+		actions.update({
+			wx.WXK_ESCAPE: guiconfig.mainfrm.hide_tooltips,
+		})
+
+		return actions
+
 	#def test_wxp(self):
 	#	import wx.lib.wxpTag
 	#	self.SetPage("3 <wxp class='CheckBox'><param label='2' /></wxp>4")
