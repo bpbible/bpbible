@@ -25,9 +25,13 @@ class ProtocolHandler(object):
 		self._handle(self.protocols, frame, href)
 	
 	def _handle(self, d, frame, href, *args):
-		href = SW.URL.decode(str(href)).c_str()
-		url = SW.URL(href)
+		url = SW.URL(str(href))
 		protocol = url.getProtocol()
+		# don't decode if no protocol, or : in decoded may become the protocol
+		if protocol:
+			href = SW.URL.decode(str(href)).c_str()
+			url = SW.URL(href)
+			protocol = url.getProtocol()
 		
 		if protocol in d:
 			d[protocol](frame, href, url, *args)
