@@ -130,6 +130,7 @@ class ParseOSIS(ParseBase):
 		cnt = 0
 		for item in ref.split(" "):
 			if "-" in item:
+				assert item.count("-") == 1, item
 				start, end = item.split("-")
 
 				# NASTY HACK: VerseKey max argument can't handle anything
@@ -143,8 +144,8 @@ class ParseOSIS(ParseBase):
 			else:
 				items.append(item)
 
-		refs = ' '.join(items)
-		refs = refs.replace(".", self.FIELD_SEPARATOR)
+		refs = u' '.join(items)
+		refs = refs.encode("utf8").replace(".", self.FIELD_SEPARATOR)
 		self.write_field(node, si, fields.RefField, refs,
 			parse_children)
 		
