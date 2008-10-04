@@ -382,7 +382,7 @@ class GenBookIndex(Index):
 			biblemgr.restore_state()
 			self.book.templatelist.pop()
 			
-			biblemgr.genbook.SetModule(oldmod, notify=False)
+			self.book.SetModule(oldmod, notify=False)
 		
 class DictionaryIndex(GenBookIndex):
 	def __init__(self, version, progress=lambda x:x, 
@@ -437,7 +437,7 @@ class DictionaryIndex(GenBookIndex):
 			biblemgr.restore_state()
 			self.book.templatelist.pop()
 			
-			biblemgr.genbook.SetModule(oldmod, notify=False)
+			self.book.SetModule(oldmod, notify=False)
 		
 
 class CommentaryIndex(Index):
