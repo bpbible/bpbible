@@ -130,7 +130,7 @@ class VerseCompareFrame(LinkedFrame):
 			text.append(config.MAX_VERSES_EXCEEDED % 176)
 		
 
-		return '\n'.join(text)
+		return ''.join(text)
 	
 	def get_compare_text(self, ref, context):
 		text = ""
