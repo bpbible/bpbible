@@ -140,11 +140,12 @@ class DockArt(wx.aui.PyAuiDockArt):
 		dc.SetClippingRegion(*clipping_rect)
 		dc.DrawText(chopped_text, rect[0] + 2,  rect.y+(rect.height/2)-(h/2))
 
-		#if before_text != chopped_text:
-		#	if pane.name in size_taken:
-		#		del size_taken[pane.name]
+		if before_text != chopped_text:
+			if pane.name in size_taken:
+				del size_taken[pane.name]
 
-		#	return
+			dc.DestroyClippingRegion()
+			return
 		
 		c_w = w
 		c_h = h
@@ -172,7 +173,7 @@ class DockArt(wx.aui.PyAuiDockArt):
 
 		w += rect[0] + 2
 		h = rect[1]
-		size_taken[pane.name] = backing_rect, combo_text, clipping_rect
+		size_taken[pane.name] = pane, backing_rect, combo_text, clipping_rect
 		#self.caption_drawn(pane, max_width, *size_taken[pane.name])
 		dc.DestroyClippingRegion()
 		
@@ -373,6 +374,7 @@ class AuiLayer(object):
 		event.Skip()
 	
 	def on_left_down(self, event):
+		#TODO: don't popup on maximize button or close button click
 		if mouse_over:
 			self.popup(event)
 		else:
@@ -380,7 +382,11 @@ class AuiLayer(object):
 	
 	def popup(self, event):
 		assert(len(mouse_over)) == 1, "Only one thing can have mouse over"	
-		name, (rect, title, clipping_rect) = mouse_over.items()[0]
+		name, (pane, rect, title, clipping_rect) = mouse_over.items()[0]
+		if not self.pane_can_be_seen(pane):
+			event.Skip()
+			return
+
 		frames = [frame for frame, f_title in self.panes if f_title  == name]
 		assert len(frames) == 1, "Wrong frame count: %s (%r)" % (name, frames)
 		frame = frames[0]
@@ -401,14 +407,18 @@ class AuiLayer(object):
 		old_mouse_over = mouse_over.items()
 		mouse_over.clear()		
 
-		for key, (rect, title, clipping_rect) in old_mouse_over:
+		for key, (pane, rect, title, clipping_rect) in old_mouse_over:
 			self.repaint_combo(key, rect, title, clipping_rect)
+
+	def pane_can_be_seen(self, pane):
+		maximized_pane = self.get_maximized_pane()
+		
+		return (pane.IsShown() and not pane.IsFloating() and (
+			not maximized_pane or repr(maximized_pane) == repr(pane)))
 
 	def repaint_combo(self, key, rect, title, clipping_rect):
 		pane = self.aui_mgr.GetPane(key)
-		maximized_pane = self.get_maximized_pane()
-		if not (pane.IsShown() and not pane.IsFloating() and (
-			not maximized_pane or maximized_pane == pane)):
+		if not self.pane_can_be_seen(pane):
 			return False
 
 		dc = wx.ClientDC(self)
@@ -421,10 +431,13 @@ class AuiLayer(object):
 	def on_motion(self, event):
 		self.clear_over_list()
 
-		for key, (rect, title, clipping_rect) in size_taken.items():
-			if rect.Contains((event.X, event.Y)):
-				mouse_over[key] = rect, title, clipping_rect
-				if self.repaint_combo(key, rect, title, clipping_rect):
+		pos = (event.X, event.Y)			
+		
+		for key, (pane, backing_rect, 
+				title, clipping_rect) in size_taken.items():
+			if backing_rect.Contains(pos) and clipping_rect.Contains(pos):
+				mouse_over[key] = pane, backing_rect, title, clipping_rect
+				if self.repaint_combo(key, backing_rect, title, clipping_rect):
 					return
 
 
