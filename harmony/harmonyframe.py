@@ -204,10 +204,11 @@ class HarmonyPanel(xrcHarmonyPanel):
 		self.update_bible_ui(self.tool_bible_ref.GetValue())
 	
 	def fill_pericope_list(self):
-		if not self.harmony.loaded:
-			busy_info = wx.BusyInfo("Loading harmony")
-			self.harmony.load()
-			del busy_info
+		if self.harmony.loaded:
+			return
+		busy_info = wx.BusyInfo("Loading harmony")
+		self.harmony.load()
+		del busy_info
 
 		def FillList(parent, child):
 			tree_item = self.pericope_list.AppendItem(parent, child.name)
