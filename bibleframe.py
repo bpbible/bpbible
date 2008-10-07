@@ -17,6 +17,7 @@ from gui.quickselector import QuickSelector
 from events import BIBLEFRAME, RANDOM_VERSE, VERSE_LINK_SELECTED, HEADER_BAR
 from copyverses import CopyVerseDialog
 
+from util.i18n import _
 from util.configmgr import config_manager
 from versecompare import VerseCompareFrame
 import header_bar
@@ -43,8 +44,16 @@ class BibleFrame(VerseKeyedFrame):
 		self.panel.SetSizer(sizer)
 
 
+	def set_verse_per_line(self, to):
+		"""Set to either verse-per-line or not. 
+		
+		Doesn't update UI."""
+		config.bible_template.body.verse_per_line = to
+		config.current_verse_template.body.verse_per_line = to
+
 	def setup(self):
 		self.observers = ObserverList()
+		self.set_verse_per_line(bible_settings["verse_per_line"])
 		super(BibleFrame, self).setup()
 	
 	def get_window(self):

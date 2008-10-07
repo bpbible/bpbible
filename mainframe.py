@@ -58,6 +58,7 @@ from util.configmgr import config_manager
 from install_manager.install_drop_target import ModuleDropTarget
 import passage_list
 from error_handling import ErrorDialog
+from util.i18n import _
 
 settings = config_manager.add_section("BPBible")
 
@@ -161,14 +162,6 @@ class MainFrame(wx.Frame, AuiLayer):
 		wx.CallAfter(dprint, MESSAGE, "Constructed")
 		wx.CallAfter(override_end)	
 
-		# call it after two times round so everything is set up
-		# TODO: need a nicer initialization sequence
-		wx.CallAfter(
-			wx.CallAfter, 
-				self.set_verse_per_line, 
-					bible_settings["verse_per_line"]
-		)
-		
 		dprint(MESSAGE, "Done first round of setting up")
 		self.drop_target = ModuleDropTarget(self)
 		self.SetDropTarget(self.drop_target)
@@ -196,7 +189,7 @@ class MainFrame(wx.Frame, AuiLayer):
 	
 		toolbars = [
 			wx.ToolBar(self, wx.ID_ANY, style=toolbar_style) 
-			for _ in range(3)
+			for i in range(3)
 		]
 
 		(self.main_toolbar, self.zoom_toolbar, 
@@ -206,24 +199,24 @@ class MainFrame(wx.Frame, AuiLayer):
 			toolbar.SetToolBitmapSize((16, 16))
 
 		self.tool_back = self.history_toolbar.AddLabelTool(wx.ID_ANY,  
-			"Back", bmp("go-previous.png"),
-			shortHelp="Go back a verse")
+			_("Back"), bmp("go-previous.png"),
+			shortHelp=_("Go back a verse"))
 		
 		self.tool_forward = self.history_toolbar.AddLabelTool(wx.ID_ANY,  
-			"Forward", bmp("go-next.png"),
-			shortHelp="Go forward a verse")
+			_("Forward"), bmp("go-next.png"),
+			shortHelp=_("Go forward a verse"))
 			
 		self.tool_zoom_in = self.zoom_toolbar.AddLabelTool(wx.ID_ANY,  
-			"Zoom In", bmp("magnifier_zoom_in.png"),
-			shortHelp="Make text bigger")
+			_("Zoom In"), bmp("magnifier_zoom_in.png"),
+			shortHelp=_("Make text bigger"))
 			
 		self.tool_zoom_default = self.zoom_toolbar.AddLabelTool(wx.ID_ANY,  
-			"Default Zoom", bmp("magnifier.png"),
-			shortHelp="Return text to default size")
+			_("Default Zoom"), bmp("magnifier.png"),
+			shortHelp=_("Return text to default size"))
 			
 		self.tool_zoom_out = self.zoom_toolbar.AddLabelTool(wx.ID_ANY,  
-			"Zoom Out", bmp("magifier_zoom_out.png"),
-			shortHelp="Make text smaller")
+			_("Zoom Out"), bmp("magifier_zoom_out.png"),
+			shortHelp=_("Make text smaller"))
 			
 		self.bibleref = versetree.VerseTree(self.main_toolbar)
 		self.bible_observers += self.bibleref.set_current_verse
@@ -232,16 +225,16 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.main_toolbar.AddControl(self.bibleref)
 		
 		self.tool_go = self.main_toolbar.AddLabelTool(wx.ID_ANY,  
-			"Go to verse", bmp("accept.png"),
-			shortHelp="Open this verse")
+			_("Go to verse"), bmp("accept.png"),
+			shortHelp=_("Open this verse"))
 			
 		self.tool_search = self.main_toolbar.AddLabelTool(wx.ID_ANY,  
-			"Bible Search", bmp("find.png"),
-			shortHelp="Search in this Bible")
+			_("Bible Search"), bmp("find.png"),
+			shortHelp=_("Search in this Bible"))
 			
 		self.tool_copy_verses = self.main_toolbar.AddLabelTool(wx.ID_ANY,  
-			"Copy Verses", bmp("page_copy.png"),
-			shortHelp="Open the Copy Verses dialog")
+			_("Copy Verses"), bmp("page_copy.png"),
+			shortHelp=_("Open the Copy Verses dialog"))
 		
 		#self.zoom_toolbar = xrc.XRCCTRL(self, "zoom_toolbar")
 		#self.main_toolbar = xrc.XRCCTRL(self, "main_toolbar")
@@ -300,7 +293,30 @@ class MainFrame(wx.Frame, AuiLayer):
 		set_mod(biblemgr.genbook, settings["genbook"])
 		
 		
-				
+	
+	def capture_size(self, set_back=True):
+		"""Capture the real size, not including maximization or minimization
+		of the window.
+
+		This will cause the screen to flash if minimized/maximized"""
+	 	i = self.IsIconized()
+		if i:
+			self.Iconize(False)
+
+	 	w = self.IsMaximized()
+		if w:
+			self.Maximize(False)
+
+		size = self.Size
+		if set_back:
+		 	if w: 
+				self.Maximize(w)
+
+	 		if i: 
+				self.Iconize(i)
+
+		return w, size
+	
 	def save_data(self):
 		settings["layout"] = self.save_layout()
 		settings["bibleref"] = self.currentverse
@@ -311,11 +327,11 @@ class MainFrame(wx.Frame, AuiLayer):
 
 		settings["options"] = biblemgr.save_state()
 
-		settings["size"] = self.Size
+		settings["maximized"], settings["size"] = \
+			self.capture_size(set_back=False)
 
 		#settings["position"] = self.Position
 		
-		settings["maximized"] = self.IsMaximized()
 		
 
 		try:
@@ -604,7 +620,7 @@ class MainFrame(wx.Frame, AuiLayer):
 
 	def on_font_choice(self, event):
 		dialog = FontChoiceDialog(self, config_manager["Html"]["font_name"], 
-								   config_manager["Html"]["base_text_size"])
+									config_manager["Html"]["base_text_size"])
 		dialog.ShowModal()
 
 		self.refresh_all_pages()
@@ -615,8 +631,8 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.refresh_all_pages()
 
 	def get_menu(self, label):
-		for menu, menu_name in self.MenuBar.Menus:
-			if menu_name == label:
+		for idx, (menu, menu_name) in enumerate(self.MenuBar.Menus):
+			if self.MenuBar.GetMenuLabel(idx) == label:
 				break
 		else:
 			menu = None
@@ -625,16 +641,16 @@ class MainFrame(wx.Frame, AuiLayer):
 
 	def set_menus_up(self):
 		#self.edit_menu
-		self.options_menu = self.get_menu("Display")
+		self.options_menu = self.get_menu(_("&Display"))	
 		assert self.options_menu, "Display menu could not be found"
 		self.fill_options_menu()
 		
 		
-		self.windows_menu = self.get_menu("Window")
+		self.windows_menu = self.get_menu(_("&Window"))
 		assert self.windows_menu, "Window menu could not be found"
 		
 		for item in self.windows_menu.MenuItems:
-			if item.Label == "Toolbars":
+			if item.Label == _("Toolbars"):
 				self.toolbar_menu = item.SubMenu
 				break
 		else:
@@ -669,7 +685,7 @@ class MainFrame(wx.Frame, AuiLayer):
 
 		if not is_debugging():
 			for idx, (menu, menu_name) in enumerate(self.MenuBar.Menus):
-				if menu_name == "Debug":
+				if self.MenuBar.GetMenuLabel(idx) == _("Debug"):
 					self.MenuBar.Remove(idx)
 					break
 			#else:
@@ -783,10 +799,8 @@ class MainFrame(wx.Frame, AuiLayer):
 		
 	def set_verse_per_line(self, to):
 		bible_settings["verse_per_line"] = to
-		biblemgr.bible.templatelist[-1] = config.bible_template
-		config.bible_template.body.verse_per_line = to
-		config.current_verse_template.body.verse_per_line = to
-			
+		self.bibleframe.set_verse_per_line(to)
+
 		self.UpdateBibleUI(settings_changed=True, source=SETTINGS_CHANGED)
 		
 
