@@ -802,7 +802,7 @@ class SearchPanel(xrcSearchPanel):
 
 		self.versepreview.regexes = self.regexes	
 		self.versepreview.strongs = [
-			value for key, value in self.fields if key == "strong"
+			value for key, value in self.fields if key == "strongs"
 		]
 		
 		self.versepreview.SetReference(text[0])
