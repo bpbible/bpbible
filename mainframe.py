@@ -299,20 +299,20 @@ class MainFrame(wx.Frame, AuiLayer):
 		of the window.
 
 		This will cause the screen to flash if minimized/maximized"""
-	 	i = self.IsIconized()
+		i = self.IsIconized()
 		if i:
 			self.Iconize(False)
 
-	 	w = self.IsMaximized()
+		w = self.IsMaximized()
 		if w:
 			self.Maximize(False)
 
 		size = self.Size
 		if set_back:
-		 	if w: 
+			if w: 
 				self.Maximize(w)
 
-	 		if i: 
+			if i: 
 				self.Iconize(i)
 
 		return w, size
