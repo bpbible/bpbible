@@ -4,6 +4,17 @@ import re
 
 import displayframe
 from util.unicode import to_unicode_2
+from util import languages
+from gui.htmlbase import html_settings
+
+def get_html_height(text):
+	dc = wx.MemoryDC()
+	bmp = wx.EmptyBitmap(1, 1)
+	dc.SelectObject(bmp)
+	dc.Font = wx.FFont(html_settings["base_text_size"],
+					wx.FONTFAMILY_ROMAN, face=html_settings["font_name"])
+	
+	return dc.GetTextExtent(text)
 
 def process(info):
 	if not info: return ""
@@ -64,6 +75,11 @@ class ModuleInfo(wx.Dialog):
 			("Name", process(try_unicode(module.Name(), module)), -1), 
 			("Description", 
 				process(try_unicode(module.Description(), module)), 75),
+			("Language",
+				process(try_unicode(
+						languages.get_language_description(module.Lang()), 
+						module)), -1), 
+			
 			("About", process(
 				try_unicode(module.getConfigEntry("About"), module)), 115), 
 			("License", process(try_unicode(
@@ -99,7 +115,7 @@ class ModuleInfo(wx.Dialog):
 			
 			wx.CallAfter(field.SetPage, value)
 			if height == -1:
-				w, height = field.GetTextExtent(value)
+				w, height = get_html_height(value)
 				height += 12
 			
 			gs.AddGrowableRow(id, height)
