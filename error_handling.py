@@ -137,6 +137,7 @@ class ErrorDialog(xrcErrorDialog):
 			self.Size = -1, self.Size[1] + existing_size
 			
 		self.details_button.Label = COLLAPSED_TEXTS[self.collapsed]
+		self.panel.Sizer.Layout()
 	
 	def get_exception_id(self, type, value, tb):
 		"""Get a unique identifier for a traceback.
