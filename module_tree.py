@@ -6,6 +6,7 @@ from util.observerlist import ObserverList
 from util.unicode import to_unicode
 
 from moduleinfo import ModuleInfo
+from util import languages
 
 
 class ModuleTree(FilterableTree):
@@ -14,6 +15,7 @@ class ModuleTree(FilterableTree):
 		super(ModuleTree, self).__init__(parent, None)
 		
 		self.on_module_choice = ObserverList()
+		self.on_category_choice = ObserverList()
 
 		self.module_types = (
 			("Bibles", biblemgr.bible),
@@ -55,20 +57,16 @@ class ModuleTree(FilterableTree):
 
 		if isinstance(item_data, SW.Module):
 			self.on_module_choice(item_data, parent_data)
+		else:
+			self.on_category_choice(item_data, parent_data)
 		
 	def recreate(self):
 		self.model = TreeItem("Hidden root")
 		
-		for text, book in self.module_types:
-			self.model.add_child(text, data=book, filterable=False)
+		self.add_first_level_groups()
 
 		for tree_item in self.model.children:
-			modules = tree_item.data.GetModules()
-			for module in modules: 
-				tree_item.add_child("%s - %s" % 
-					(module.Name(), to_unicode(module.Description(), module)),
-					data=module
-				)
+			self.add_children(tree_item)
 
 		if self.search.Value:
 			self.filter(self.search.Value)
@@ -81,7 +79,6 @@ class ModuleTree(FilterableTree):
 		if isinstance(data.data, SW.Module):
 			event.SetToolTip(to_unicode(data.data.Description(), data.data))
 		
-
 	def version_tree_menu(self, event):
 		def make_event(module):	
 			def show_information(event):
@@ -103,10 +100,54 @@ class ModuleTree(FilterableTree):
 
 		menu.Bind(wx.EVT_MENU, make_event(data), item)
 		self.tree.PopupMenu(menu, event.Point)
+	
+	def add_first_level_groups(self):
+		for text, book in self.module_types:
+			self.model.add_child(text, data=book, filterable=False)	
 
+	def add_children(self, tree_item):
+		modules = tree_item.data.GetModules()
+		for module in modules: 
+			self.add_module(tree_item, module)
+	
+	def add_module(self, tree_item, module):
+		tree_item.add_child("%s - %s" % 
+			(module.Name(), to_unicode(module.Description(), module)),
+			data=module
+		)
+	
+class PathModuleTree(ModuleTree):
+	def add_first_level_groups(self):
+		for path, mgr in biblemgr.mgrs:
+			self.model.add_child(path, data=mgr)
+	
+	def add_children(self, tree_item):
+		for mod in tree_item.data.getModules().values():
+			self.add_module(tree_item, mod)
+	
+class LanguageModuleTree(ModuleTree):
+	def add_first_level_groups(self):
+		language_mappings = {}
+		self.data = {}
+		for module in biblemgr.modules.values():
+			lang = module.Lang()
+			if lang not in language_mappings:
+				language_mappings[lang] = \
+					languages.get_language_description(lang)
+
+			self.data.setdefault(lang, []).append(module)
+		
+		for lang, mapping in sorted(language_mappings.items(), 
+			key=lambda (lang, mapping): mapping):
+			self.model.add_child(mapping, data=lang)
+	
+	def add_children(self, tree_item):
+		for mod in self.data[tree_item.data]:
+			self.add_module(tree_item, mod)
+	
 if __name__ == '__main__':
 	a = wx.App(0)
 	f = wx.Frame(None)
-	tree = ModuleTree(f)
+	tree = LanguageModuleTree(f)
 	f.Show()
 	a.MainLoop()
