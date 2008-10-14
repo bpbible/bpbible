@@ -107,7 +107,7 @@ class Book(object):
 
 	
 	def GetReference(self, ref, specialref="",
-			specialtemplate=None, context="", max_verses=176, raw=False,
+			specialtemplate=None, context="", max_verses=177, raw=False,
 			stripped=False, template=None, display_tags=None,
 			exclude_topic_tag=None, end_ref=None, headings=False):
 		"""GetReference gets a reference from a Book.
@@ -189,7 +189,7 @@ class Book(object):
 		return text
 		
 			
-	def GetReference_yield(self, verselist, max_verses=176, 
+	def GetReference_yield(self, verselist, max_verses=177, 
 			raw=False, stripped=False, module=None, exclude_topic_tag=None):
 		"""GetReference_yield: 
 			yield the body dictionary and headings dictinoary
