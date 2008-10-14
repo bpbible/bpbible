@@ -9,6 +9,7 @@ class OSISParser(filterutils.ParserBase):
 		
 		self.strongs_bufs = []
 		self.morph_bufs = []
+		self.in_indent = False
 	
 	def start_reference(self, attributes):
 		if "osisRef" not in attributes:
@@ -24,6 +25,12 @@ class OSISParser(filterutils.ParserBase):
 		self.ref = attributes["osisRef"]
 		idx = self.ref.find(":")
 		if idx != -1:
+			if self.ref[:idx].startswith("Bible"):
+				self.ref = None
+				self.success = SW.INHERITED
+				dprint(WARNING, "Different protocol", attributes)			
+				return
+			
 			self.ref = self.ref[idx+1:]
 
 		self.u.suspendLevel += 1
@@ -152,7 +159,51 @@ class OSISParser(filterutils.ParserBase):
 
 		self.success = SW.INHERITED	
 	
-		
+	# TODO:
+	# lg starting in previous chapter
+	# verse numbers on x-indent lines
+	# verse numbers (and footnotes) float lefter? (hard)
+	# version comparison problems - kill these!
+
+	def start_title(self, attributes):
+		self.buf += '<h6 class="heading">'
+	
+	def end_title(self):
+		self.buf += '</h6>'
+
+	def start_lg(self, attributes):
+		if attributes.get("eID"):
+			return self.end_lg()
+
+		self.buf += '<indent-block-start source="lg" width="5" />'
+	
+	def end_lg(self):
+		self.buf += '<indent-block-end source="lg" />'
+	
+	def start_l(self, attributes):
+		if attributes.get("eID"):
+			return self.end_l()
+
+		if attributes.get("type") in ("x-indent", "x-declares"):
+			if self.in_indent:
+				dprint(WARNING, "Nested indented l's", self.u.key.getText())
+
+			self.in_indent = True
+			indent = 2
+			if attributes["type"] == "x-declares":
+				indent = 5
+			self.buf += '<indent-block-start width="%s"/>' % indent
+		else:
+			self.success = SW.INHERITED
+
+	def end_l(self):
+		if self.in_indent:
+			self.buf += "<indent-block-end />"
+			self.in_indent = False
+			
+		else:
+			self.success = SW.INHERITED
+			
 
 class OSISRenderer(SW.RenderCallback):
 	def __init__(self):
