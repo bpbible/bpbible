@@ -278,21 +278,6 @@ class BibleFrame(VerseKeyedFrame):
 		#file.close()
 		self.update_title()
 
-		
-
-
-	def LinkClicked(self, link, cell):
-		if(self.select): return
-		#cell = link.GetHtmlCell()
-		href = link.GetHref()
-		if(href.startswith("#")):
-			string = cell.ConvertToText(None)
-			self.notify(GetVerseStr(string, self.reference),
-				source=VERSE_LINK_SELECTED)
-			#self.ScrollTo(string,cell)
-			return
-		super(BibleFrame, self).LinkClicked(link, cell)
-	
 	def FindVerse(self, cell, start_cell):
 		assert cell.IsTerminalCell()
 		i = linkiter(start_cell, cell)
