@@ -9,3 +9,9 @@ class HtmlIde(xrcHtmlIde):
 		
 	def on_set_html(self, event):
 		self.html_window.SetPage(self.html_src.Value)
+
+if __name__ == '__main__':
+	a = wx.App()
+	f = HtmlIde(None)
+	f.Show()
+	a.MainLoop()
