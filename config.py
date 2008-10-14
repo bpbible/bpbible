@@ -108,8 +108,8 @@ use_system_inactive_caption_colour = False
 
 # templates
 body = (
-u'<a href = "#$versenumber" name="$versenumber" target="$versenumber">'
-u'<small><sup>$versenumber</sup></small></a> $text $tags')
+u'<glink href="nbible:$versenumber">'
+u'<small><sup>$versenumber</sup></small></glink> $text $tags')
 
 
 bible_template = SmartVerseTemplate(body=body)
@@ -125,8 +125,8 @@ dictionary_template = VerseTemplate(
 )
 
 
-body = (u"<a href = '#current' target='$versenumber'><a name='$versenumber'>"
-		u"<small><sup>$versenumber</sup></small></a></a> "
+body = (u"<glink href='nbible:$versenumber#current'>"
+		u"<small><sup>$versenumber</sup></small></glink> "
 		u"<font color = 'green'>$text</font> $tags")
 
 current_verse_template = SmartVerseTemplate(body)

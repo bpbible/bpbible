@@ -42,7 +42,7 @@ class TagHandler(wx.html.HtmlWinTagHandler):
 		except Exception, e:
 			import traceback
 			traceback.print_exc()
-			dprint(ERROR, e.args, e.message)
+			dprint(ERROR, "Error occurred in handling tag", e.args, e.message)
 
 	def HandleTag2(self, tag):
 		return False
@@ -115,7 +115,51 @@ class HighlightedTagHandler(TagHandler):
 
 		return True
 
+def get_level(container):
+	level = 0
+	while container.Parent:
+		container = container.Parent
+		level += 1
 	
+	return level
+		
+class LineGroupTagHandler(TagHandler):
+	tags = "INDENT-BLOCK-START,INDENT-BLOCK-END"
+	
+	# sanity check - don't dedent more than we indented
+	# keep the level we are at for the current document
+	
+	### don't try loading more than one file at once with this tag handler...	
+	indent_level = 0
+
+	def HandleTag2(self, tag):
+		parser = self.GetParser()
+
+		if tag.GetName() == "INDENT-BLOCK-START":
+			indent = 5
+
+			container = parser.OpenContainer()
+			if tag.HasParam("WIDTH"):
+				indent = int(tag.GetParam("WIDTH"))
+
+			container.SetIndent(indent * parser.GetCharWidth(), 
+				html.HTML_INDENT_LEFT)
+		
+			parser.OpenContainer()
+			parser.OpenContainer()
+			LineGroupTagHandler.indent_level += 1
+			
+		elif LineGroupTagHandler.indent_level > 0:
+			parser.CloseContainer()
+			parser.CloseContainer()
+			parser.CloseContainer()
+			
+
+			LineGroupTagHandler.indent_level -= 1
+		else:
+			dprint(WARNING, "Dedent without matching indent")
+			
+		return True
 
 class HtmlAnchorCell(html.HtmlCell):
 	def __init__(self, anchor):
@@ -189,6 +233,7 @@ wx.html.HtmlWinParser_AddTagHandler(HighlightedTagHandler)
 wx.html.HtmlWinParser_AddTagHandler(AnchorTagHandler)
 wx.html.HtmlWinParser_AddTagHandler(CheckTagHandler)
 wx.html.HtmlWinParser_AddTagHandler(PassageTagHandler)
+wx.html.HtmlWinParser_AddTagHandler(LineGroupTagHandler)
 
 
 def get_text_size(base):
@@ -302,11 +347,22 @@ class HtmlBase(wx.html.HtmlWindow):
 	
 		#text = text.replace("<small>", "<font size=-1>")
 		#text = text.replace("</small>", "</font>")
+
+		# remove all &#1243;'s which will stop our language recognition
+		text = string_util.amps_to_unicode(text, replace_specials=False)
+
+		#TODO: hook this up
+		# text = string_util.insert_language_font(text, string_util.greek,
+		#		"TITUS Cyberbit Basic")
+		
+		# now put things back (not sure if this is needed...)
 		text = string_util.htmlify_unicode(text)
 
 		if body_colour is None or text_colour is None:
 			body_colour, text_colour = guiconfig.get_window_colours()
 
+		# clear the page before setting the fonts to stop it reloading
+		super(HtmlBase, self).SetPage("")
 		self.SetStandardFonts(get_text_size(html_settings["base_text_size"]), 
 			html_settings["font_name"])
 		
@@ -323,6 +379,9 @@ class HtmlBase(wx.html.HtmlWindow):
 			# filters don't get rid of it
 			text = text.replace("&apos;", "&#39;")
 			
+
+		# reset the indent level
+		LineGroupTagHandler.indent_level = 0
 
 		return super(HtmlBase, self).SetPage(text)
 	
@@ -356,7 +415,7 @@ class HtmlBase(wx.html.HtmlWindow):
 		link = cell.GetLink()
 		if(not link):
 			return
-		if link.GetHref() == linktext:
+		if link.GetHref().endswith(linktext):
 			return cell
 
 	def ScrollTo(self, anchor, c):
@@ -401,7 +460,7 @@ def HtmlSelection_Set(self, fromCell, toCell):
 
 # stuff from displayframe
 def eq(a, b):
-	return str(a)==str(b)
+	return repr(a)==repr(b)
 
 def choptext(faketext, d):
 	dels = d[:]

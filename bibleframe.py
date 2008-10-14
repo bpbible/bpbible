@@ -21,6 +21,7 @@ from util.i18n import _
 from util.configmgr import config_manager
 from versecompare import VerseCompareFrame
 import header_bar
+import re
 
 
 bible_settings = config_manager.add_section("Bible")
@@ -308,22 +309,15 @@ class BibleFrame(VerseKeyedFrame):
 			#print i.m_pos.ConvertToText(None)
 
 			if(i.m_pos.GetLink()):
-				target = i.m_pos.GetLink().GetTarget()
-				if target:
-					try:
-						int(target)
-					except:
-						print "Excepting"
-						pass
-					else:
-						verse = target
-						#print "TARGET", target
-
+				match = re.match("nbible:([^#]*)(#current)?", 
+					i.m_pos.GetLink().Href)
+				#GetTarget()
+				if match:
+					verse = match.group(1)
 			
 			prev = i.m_pos
 			i.next()
 			
-
 		if not eq(prev, cell):
 			return None
 
