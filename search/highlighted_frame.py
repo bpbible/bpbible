@@ -24,7 +24,7 @@ regex = r"""
 		(action=showRef[^>]*>)  	 | # a reference - don't include text
 		([^>]*>.*?</a>) 		 	   # or another sword link and contents	
 	))								 |
-	(<h4\ class="heading">.*?</h4>)	 | # a heading and contents	
+	(<h6\ class="heading">.*?</h6>)	 | # a heading and contents	
 	(<[^>]+>)						 | # any other html tag - not contents
 	(&(?P<amps>[^;]*);)				 | # a html escape
 	(.)							  	   # anything else

@@ -4,8 +4,9 @@ import passage_list
 from swlib.pysw import VK, SW, GetBestRange, GetVerseStr, TOP
 from backend.verse_template import VerseTemplate
 from util import observerlist
-from util.debug import dprint, WARNING
+from util.debug import dprint, WARNING, ERROR
 from util.unicode import to_str, to_unicode
+from util.i18n import _
 
 import config
 
@@ -108,7 +109,7 @@ class Book(object):
 	def GetReference(self, ref, specialref="",
 			specialtemplate=None, context="", max_verses=176, raw=False,
 			stripped=False, template=None, display_tags=None,
-			exclude_topic_tag=None, end_ref=None):
+			exclude_topic_tag=None, end_ref=None, headings=False):
 		"""GetReference gets a reference from a Book.
 		
 		specialref is a ref (string) which will be specially formatted 
@@ -135,9 +136,12 @@ class Book(object):
 		if end_ref:
 			ref += " - " + end_ref
 
+		old_headings = self.vk.Headings(headings)
+
 		verselist = self.vk.ParseVerseList(to_str(ref), to_str(lastverse), True)
 		rangetext = GetBestRange(verselist.getRangeText())
 		if rangetext == "":
+			self.vk.Headings(old_headings)
 			#if invalid reference, return empty string
 			return u""
 			
@@ -178,6 +182,8 @@ class Book(object):
 
 			verses.append(verse)
 		
+		self.vk.Headings(old_headings)
+
 		text += template.finalize(''.join(verses))
 		text += template.footer.safe_substitute(d)
 		return text
@@ -302,19 +308,18 @@ class Book(object):
 		attrmap = mod.getEntryAttributesMap()#[SW.Buf("Heading")
 		if heading in attrmap:
 			h = attrmap[heading]
-			for item in heading_types:
-				if item in h:
-					i = 0
-					p = h[item]
-					while True:
-						i_buf = SW.Buf(str(i))
-						if i_buf in p:
-							headings.append(p[i_buf].c_str())
-						else: break
-						i += 1
+			if preverse in h:
+				i = 0
+				p = h[preverse]
+				while True:
+					i_buf = SW.Buf(str(i))
+					if i_buf in p:
+						headings.append(p[i_buf].c_str())
+					else: break
+					i += 1
 			
-			if not headings:
-				dprint(WARNING, "no heading found for", ref)
+				if not headings:
+					dprint(WARNING, "no heading found for", ref)
 
 		return headings
 				
@@ -390,13 +395,22 @@ class Book(object):
 			context="", raw=False):
 		#vk = self.mod.getKey()
 		self.vk.setText(to_str(ref, self.mod))
+		
 		#get first ref
 		text = self.vk.getText()
-		index = text.find(":")
-		if(not index == -1):
-			text = text[:index]
+
+		match = re.match("([\w\s]+) (\d+):(\d+)", text)
+		if match:
+			book, chapter, verse = match.group(1, 2, 3)
+
+			# include the introduction
+			text = "%s %s:0-%s %s" % (book, chapter, book, chapter)
+
+		else:
+			dprint(ERROR, "Couldn't parse verse text", text)
+
 		return self.GetReference(text, specialref, specialtemplate, context,
-				raw=raw)
+				raw=raw, headings=True)
 
 	def get_rendertext(self, mod=None):
 		"""Return the text render function.
@@ -436,11 +450,11 @@ class Book(object):
 				
 class Commentary(Book):
 	type = "Commentaries"
-	noun = "commentary"
+	noun = _("commentary")
 
 
 class Bible(Book):
 	type = "Biblical Texts"
-	noun = "Bible"
+	noun = _("Bible")
 
 

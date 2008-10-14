@@ -4,7 +4,7 @@ import re
 class VerseTemplate(object):
 	"""VerseTemplate is a class which defines templates for Bible Text""" 
 	def __init__(self, body=u"$text", header=u"", footer=u"", 
-	headings=u'<p><h4 class="heading">$heading</h4><br>\n'):
+	headings=u'<h6 class="heading">$heading</h6>\n'):
 		self.header = str_template(header)
 		self.body = str_template(body)
 		self.footer = str_template(footer)
@@ -68,6 +68,12 @@ class SmartBody(object):
 	
 	def safe_substitute(self, dict):
 		text = dict.pop("text")
+		if dict["versenumber"] == 0 and not text or text == "<br />":
+			return ""
+		
+		if dict["versenumber"] == 0:
+			dict["versenumber"] = ""
+			
 		
 		whitespace = []
 		def collect(match):
