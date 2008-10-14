@@ -274,7 +274,7 @@ class SearchPanel(xrcSearchPanel):
 			if not self.book.version:
 				wx.MessageBox("You don't have a current %s, "
 				"so you cannot search at the moment" % self.book.noun, 
-				"No current version")
+				"No current version", parent=self)
 			
 			return
 		
@@ -307,14 +307,14 @@ class SearchPanel(xrcSearchPanel):
 			if not self.version:
 				wx.MessageBox("You don't have a current %s version, "
 				"so you cannot search at the moment" % self.book.noun, 
-				"No current version")
+				"No current version", parent=self)
 				return
 			self.set_index_available(False)
 
 			msg = "Search index does not exist for book %s. " \
 				"Indexing will make search much faster. " \
 				"Create Index?" % self.version 
-			create = wx.MessageBox(msg, "Create Index?", wx.YES_NO)
+			create = wx.MessageBox(msg, "Create Index?", wx.YES_NO, parent=self)
 			if create == wx.YES:
 				self.build_index(self.version)
 			else:
@@ -554,13 +554,14 @@ class SearchPanel(xrcSearchPanel):
 			)
 
 		except SearchException, myexcept:
-			wx.MessageBox(myexcept.message, "Error in search")
+			wx.MessageBox(myexcept.message, "Error in search", parent=self)
 			succeeded = False
 
 		except SpellingException, spell:
 			wx.MessageBox(
 				"The following words were not found in this %s:"
-				"\n%s" % (self.book.noun, unicode(spell)), "Unknown word"
+				"\n%s" % (self.book.noun, unicode(spell)), "Unknown word",
+				parent=self
 			)
 		
 			succeeded = False
@@ -625,13 +626,13 @@ class SearchPanel(xrcSearchPanel):
 			)
 
 		except SearchException, myexcept:
-			wx.MessageBox(myexcept.message, "Error in search")
+			wx.MessageBox(myexcept.message, "Error in search", parent=self)
 			succeeded = False
 
 		except SpellingException, spell:
 			wx.MessageBox(
 				"The following words were not found in this Bible:"
-				"\n%s" % unicode(spell), "Unknown word"
+				"\n%s" % unicode(spell), "Unknown word", parent=self
 			)
 			
 			succeeded = False
@@ -647,22 +648,6 @@ class SearchPanel(xrcSearchPanel):
 					string_util.pluralize("word", self.numwords)
 			)
 				
-			wx.CallAfter(self.clear_list)
-			return
-		
-		
-		if self.hits > 20000:
-			wx.MessageBox("Your search gave %d hits, which is too many\n"
-				"Try a more specific search." % self.hits, 
-				"Too many hits")
-
-			self.search_label.Label = (
-				"0 verses found, %s, %s" % (
-					string_util.pluralize("word", self.numwords),
-					string_util.pluralize("hit", self.hits),
-					)
-			)
-			
 			wx.CallAfter(self.clear_list)
 			return
 
@@ -741,22 +726,6 @@ class SearchPanel(xrcSearchPanel):
 			return
 		
 		
-		if self.hits > 20000:
-			wx.MessageBox("Your search gave %d hits, which is too many\n"
-				"Try a more specific search." % self.hits, 
-				"Too many hits")
-
-			self.search_label.Label = (
-				"0 verses found, %s, %s" % (
-					string_util.pluralize("word", self.numwords),
-					string_util.pluralize("hit", self.hits),
-					)
-			)
-				
-			
-			wx.CallAfter(self.clear_list)
-			return
-
 		self.search_label.Label = (
 			"%s found, %s" % (
 				string_util.pluralize("verse", self.hits),
@@ -821,7 +790,7 @@ class SearchPanel(xrcSearchPanel):
 			self.index = None
 			error = search.DeleteIndex(self.version)
 			if error:
-				wx.MessageBox(error)
+				wx.MessageBox(error, parent=self)
 			else:
 				self.set_index_available(False)
 				self.show_keyboard_button(shown=False)				

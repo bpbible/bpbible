@@ -36,30 +36,44 @@ ADVANCED = Number()
 ADVANCED_REGEX = ADVANCED | REGEX
 COMBINED = Number()
 
-
 def RemoveDuplicates(vlist):
-	"""This function removes duplicates and overlaps.
-
-e.g. [Romans 6:3, Romans 6:3] -> [Romans 6:3]
-	 [Romans 6:3-4, Romans 6:4] -> [Romans 6:3-4]"""
+	"""This function removes duplicates and overlaps in search results.
+	>>> RemoveDuplicates(["Romans 6:3", "Romans 6:3"])
+	['Romans 6:3']
+	>>> RemoveDuplicates(["Romans 6:3 - Romans 6:4", "Romans 6:4"])
+	['Romans 6:3 - Romans 6:4']
+	>>> RemoveDuplicates(["Romans 6:3", "Romans 6:3 - Romans 6:4", "Romans 6:4"])
+	['Romans 6:3 - Romans 6:4']
+	>>> RemoveDuplicates(["Romans 6:3", "Romans 6:4"])
+	['Romans 6:3', 'Romans 6:4']
+	>>> RemoveDuplicates(["Romans 6:2 - Romans 6:3", "Romans 6:3 - Romans 6:4"])
+	['Romans 6:2 - Romans 6:3', 'Romans 6:3 - Romans 6:4']
+	>>> RemoveDuplicates(["Romans 6:2 - Romans 6:3", "Romans 6:3", "Romans 6:3 - Romans 6:4"])
+	['Romans 6:2 - Romans 6:3', 'Romans 6:3 - Romans 6:4']
+	"""
 	btext = [] #second list
-	verses = [] #list of verses included
+	seen = set()
+	verses = set() #list of verses included
+	removals = set()
 
 	for a in vlist:
 		spl = a.split(" - ")
 		#remove single verses from list if already included
 		#ie Lev 12:10, Lev 12:10-11 -> Lev 12:10-11
 		#but Lev 12:9-10, Lev 12:10-11 stays same
-		if(len(spl)==2):
-			if(spl[0] in btext):
-				btext.remove(spl[0])
+		if len(spl) == 2:
+			if spl[0] in seen:
+				removals.add(spl[0])
+				#btext.remove(spl[0])
 
-		if(a not in btext):
+		if a not in seen:
 			# if we have already been included, don't include again
-			if not (len(spl)==1 and a in verses):
+			if not (len(spl) == 1 and a in verses):
 				btext.append(a)
-			verses.extend(spl)
-	return btext
+				seen.add(a)
+			
+			verses.update(spl)
+	return [x for x in btext if x not in removals]
 
 
 class SearchException(Exception):
@@ -446,4 +460,5 @@ class CommentaryIndex(Index):
 		return biblemgr.commentary
 		
 if __name__ == '__main__':
-	esv=Index("ESV")
+	import doctest
+	doctest.testmod()
