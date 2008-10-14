@@ -159,24 +159,7 @@ class LineGroupTagHandler(TagHandler):
 		else:
 			dprint(WARNING, "Dedent without matching indent")
 			
-		return True
-
-class HtmlAnchorCell(html.HtmlCell):
-	def __init__(self, anchor):
-		self.anchor = anchor
-		super(html.HtmlCell, self).__init__()
-	
-	def Draw(self, dc, x, y, view_y1, view_y2, info):
-		pass
-
-class AnchorTagHandler(TagHandler):
-	tags = "ANCHOR"
-
-	def HandleTag2(self, tag):
-		parser = self.GetParser()
-		if tag.HasParam("NAME"):
-			parser.GetContainer().InsertCell(HtmlAnchorCell(tag.GetParam("NAME")))
-			return True
+		return False
 
 class CheckTagHandler(TagHandler):
 	tags = "CHECK"
@@ -230,7 +213,6 @@ class PassageTagHandler(TagHandler):
 
 wx.html.HtmlWinParser_AddTagHandler(GLinkTagHandler)
 wx.html.HtmlWinParser_AddTagHandler(HighlightedTagHandler)
-wx.html.HtmlWinParser_AddTagHandler(AnchorTagHandler)
 wx.html.HtmlWinParser_AddTagHandler(CheckTagHandler)
 wx.html.HtmlWinParser_AddTagHandler(PassageTagHandler)
 wx.html.HtmlWinParser_AddTagHandler(LineGroupTagHandler)
