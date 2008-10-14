@@ -1,6 +1,12 @@
 import wx
 
-mainfrm = None
+class DummyMainfrm(object):
+	def hide_tooltips(*args, **kwargs):
+		pass
+	
+	lost_focus = True
+
+mainfrm = DummyMainfrm()
 app = None
 icons = None
 
