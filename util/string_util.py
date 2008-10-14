@@ -2,6 +2,14 @@ import re
 import traceback
 import htmlentitydefs
 
+greek = u'\u0370-\u03e1\u03f0-\u03ff\u1f00-\u1fff'
+hebrew = u'\u0590-\u05ff\ufb1d-\ufb4f'
+
+def insert_language_font(text, language_letters, font, 
+	replacement=r'<font face="%(font)s">\1</font>'):
+	return re.sub("(([%s]\s*)+)" % language_letters, 
+		replacement % {"font": font}, text)
+
 def ReplaceUnicode(data):
 	""" This replaces common unicode characters with ASCII equivalents """
 	#replace common values
@@ -44,8 +52,12 @@ def KillTags(data):
 def remove_amps(data):
 	return re.sub("&[^;]*;", "", data)
 
+do_replace_specials = False
 def replace_amp(groups):
 	ent = groups.group('amps')
+	if not do_replace_specials and ent in ["lt", "gt", "amp"]:
+		return groups.group()
+
 	if ent in htmlentitydefs.name2codepoint:
 		return unichr(htmlentitydefs.name2codepoint[ent])
 	
@@ -61,8 +73,10 @@ def replace_amp(groups):
 		
 	return ent
 
-def amps_to_unicode(data):
-	return re.sub("&(?P<amps>[^;]*);", replace_amp, data)
+def amps_to_unicode(data, replace_specials=True):
+	global do_replace_specials
+	do_replace_specials = replace_specials
+	return re.sub("&(?P<amps>[\w#]*);", replace_amp, data)
 	
 
 def RemoveWhitespace(data):
