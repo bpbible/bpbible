@@ -442,7 +442,7 @@ def HtmlSelection_Set(self, fromCell, toCell):
 
 # stuff from displayframe
 def eq(a, b):
-	return repr(a)==repr(b)
+	return (a.this == b.this)
 
 def choptext(faketext, d):
 	dels = d[:]
@@ -466,12 +466,13 @@ class linkiter(object):
 			return None
 
 		while 1:
-			if eq(self.m_pos,self.m_to):
+			if eq(self.m_pos, self.m_to):
 				self.m_pos = None;
 				return None;
 
-			if ( self.m_pos.GetNext() ):
-				self.m_pos = self.m_pos.GetNext();
+			next = self.m_pos.GetNext()
+			if ( next ):
+				self.m_pos = next
 			else:
 				while ( not self.m_pos.GetNext()):
 					self.m_pos = self.m_pos.GetParent();
@@ -801,7 +802,7 @@ class HtmlSelectableWindow(HtmlBase):
 		if(self.select):
 			self.PutMeIn()
 
-		if eq(cellover, self.lastcell):
+		if self.lastcell and cellover and eq(cellover, self.lastcell):
 			return
 		if(self.lastcell):
 			self.OnCellMouseLeave(self.lastcell, xx, yy)
