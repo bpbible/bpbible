@@ -37,7 +37,7 @@ class ConfigSection(object):
 	def add_item(self, item, initial_value=None, is_initial_lazy=False,
 			item_type=str):
 
-		assert item_type in (str, int, bool, float, "pickle"), "Can only handle items of type str, int, bool, float, picklke"
+		assert item_type in (str, int, bool, float, "pickle"), "Can only handle items of type str, int, bool, float, pickle"
 		self.items[item] = initial_value
 		if is_initial_lazy:
 			self.lazy_items.append(item)
