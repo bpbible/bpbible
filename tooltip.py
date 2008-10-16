@@ -192,6 +192,8 @@ class Tooltip(TooltipBaseMixin, tooltip_parent):
 		self.html = html_type(self.htmlpanel, 
 			logical_parent=logical_parent, style=html.HW_SCROLLBAR_NEVER)
 
+		self.html.book = biblemgr.bible
+
 		self.html.parent = self
 
 		# create the toolbar
@@ -405,6 +407,8 @@ class PermanentTooltip(TooltipBaseMixin, pclass):
 		# make html
 		self.html = html_type(self.container_panel, 
 			style=html.HW_SCROLLBAR_AUTO)
+
+		self.html.book = biblemgr.bible
 		
 		# make sizer for panel
 		self.global_sizer = wx.BoxSizer(wx.VERTICAL)		

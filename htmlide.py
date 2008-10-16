@@ -8,6 +8,7 @@ class HtmlIde(xrcHtmlIde):
 		self.gui_go.Bind(wx.EVT_BUTTON, self.on_set_html)
 		
 	def on_set_html(self, event):
+		self.html_window.mod = None
 		self.html_window.SetPage(self.html_src.Value)
 
 if __name__ == '__main__':

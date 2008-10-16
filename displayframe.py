@@ -517,6 +517,26 @@ class DisplayFrame(HtmlSelectableWindow):
 
 		return actions
 
+	def SetPage(self, *args, **kwargs):
+		import fontchoice
+		assert hasattr(self, "mod"), self
+
+		self.language_code, (self.font, self.size, gui) = \
+			fontchoice.get_font_params(self.mod)
+
+		super(DisplayFrame, self).SetPage(*args, **kwargs)
+	
+	def set_mod(self, value):
+		self._mod = value
+	
+	def get_mod(self):
+		if hasattr(self, "_mod"):
+			return self._mod
+		
+		assert hasattr(self, "book"), self
+		return self.book.mod
+	
+	mod = property(get_mod, set_mod)
 	#def test_wxp(self):
 	#	import wx.lib.wxpTag
 	#	self.SetPage("3 <wxp class='CheckBox'><param label='2' /></wxp>4")

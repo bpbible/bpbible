@@ -131,6 +131,9 @@ class ZipInstaller(object):
 	def Description(self):
 		return self.getConfigEntry("Description")
 
+	def Lang(self):
+		return self.getConfigEntry("Lang") or "en"
+
 	def getConfigEntry(self, key):
 		if key in self.config_section:
 			return self.config_section[key][0]

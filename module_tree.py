@@ -122,7 +122,8 @@ class PathModuleTree(ModuleTree):
 			self.model.add_child(path, data=mgr)
 	
 	def add_children(self, tree_item):
-		for mod in tree_item.data.getModules().values():
+		for mod in sorted(tree_item.data.getModules().values(), 
+							key=lambda mod:mod.Name()):
 			self.add_module(tree_item, mod)
 	
 class LanguageModuleTree(ModuleTree):
@@ -142,7 +143,8 @@ class LanguageModuleTree(ModuleTree):
 			self.model.add_child(mapping, data=lang)
 	
 	def add_children(self, tree_item):
-		for mod in self.data[tree_item.data]:
+		for mod in sorted(self.data[tree_item.data], 
+							key=lambda mod:mod.Name()):
 			self.add_module(tree_item, mod)
 	
 if __name__ == '__main__':

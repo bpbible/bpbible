@@ -167,6 +167,9 @@ class SearchPanel(xrcSearchPanel):
 		# set_version
 		self.has_started = False
 		self.search_on_show = False
+		
+		self.verselist.parent = self
+		self.versepreview.parent = self
 	
 	def on_create(self, event=None):
 		self.Unbind(wx.EVT_WINDOW_CREATE)
@@ -332,9 +335,6 @@ class SearchPanel(xrcSearchPanel):
 		guiconfig.mainfrm.set_bible_ref(item_text, source=SEARCH)
 			
 	def _post_init(self):
-		self.verselist.parent = self
-		self.versepreview.parent = self
-
 		self.search_button.SetLabel("&Search")
 	
 		self.search_splitter.SetSashGravity(0.5)
@@ -809,7 +809,7 @@ class SearchPanel(xrcSearchPanel):
 			return continuing
 
 		p = wx.ProgressDialog("Indexing %s" % version, "Preparing", 
-			style=wx.PD_APP_MODAL|wx.PD_CAN_ABORT|wx.PD_AUTO_HIDE )
+			parent=self, style=wx.PD_APP_MODAL|wx.PD_CAN_ABORT|wx.PD_AUTO_HIDE )
 
 		p.Size = (400, -1)
 		p.Show()

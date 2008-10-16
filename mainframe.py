@@ -619,8 +619,7 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.refresh_all_pages()
 
 	def on_font_choice(self, event):
-		dialog = FontChoiceDialog(self, config_manager["Html"]["font_name"], 
-									config_manager["Html"]["base_text_size"])
+		dialog = FontChoiceDialog(self)
 		dialog.ShowModal()
 
 		self.refresh_all_pages()

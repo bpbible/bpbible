@@ -5,10 +5,10 @@ import htmlentitydefs
 greek = u'\u0370-\u03e1\u03f0-\u03ff\u1f00-\u1fff'
 hebrew = u'\u0590-\u05ff\ufb1d-\ufb4f'
 
-def insert_language_font(text, language_letters, font, 
-	replacement=r'<font face="%(font)s">\1</font>'):
+def insert_language_font(text, language_letters, font, size,
+	replacement=r'<fontarea basefont="%(font)s" basesize="%(size)s">\1</fontarea>'):
 	return re.sub("(([%s]\s*)+)" % language_letters, 
-		replacement % {"font": font}, text)
+		replacement % {"font": font, "size": size}, text)
 
 def ReplaceUnicode(data):
 	""" This replaces common unicode characters with ASCII equivalents """
@@ -32,6 +32,9 @@ def ReplaceUnicode(data):
 	return data
 
 def htmlify_unicode(data):
+	# I'd like to use the following:
+	# return data.encode("ascii", "xmlcharrefreplace")
+	# however, this doesn't work always with str's with bad encoding
 	letters = []
 	for item in data:
 		item_int = ord(item)

@@ -376,9 +376,22 @@ class HtmlBase(wx.html.HtmlWindow):
 		# remove all &#1243;'s which will stop our language recognition
 		text = string_util.amps_to_unicode(text, replace_specials=False)
 
-		#TODO: hook this up
-		# text = string_util.insert_language_font(text, string_util.greek,
-		#		"TITUS Cyberbit Basic")
+		import fontchoice
+		# put greek and hebrew in their fonts
+		for lang_code, letters, dont_use_for in (
+			# ancient greek (to 1453)
+			("grc", string_util.greek, ("el", "grc")),
+
+			# Hebrew (generally)
+			("he", string_util.hebrew, ("he",)),
+		):
+			# if we are, say, a greek book, don't take greek out specially
+			if self.language_code in dont_use_for:
+				continue
+
+			default, (font, size, use_in_gui) = \
+				fontchoice.get_language_font_params(lang_code)
+			text = string_util.insert_language_font(text, letters, font, size)
 		
 		# now put things back (not sure if this is needed...)
 		text = string_util.htmlify_unicode(text)
@@ -386,10 +399,11 @@ class HtmlBase(wx.html.HtmlWindow):
 		if body_colour is None or text_colour is None:
 			body_colour, text_colour = guiconfig.get_window_colours()
 
+		print "Using font", self.font
 		text = HTML_TEXT % (
 			body_colour, 			
-			html_settings["font_name"], 
-			html_settings["base_text_size"], 
+			self.font, 
+			self.size, 
 			text_colour, 
 			text
 		)
@@ -409,6 +423,19 @@ class HtmlBase(wx.html.HtmlWindow):
 		# reset internal state of tag handlers
 		for item in tag_handlers:
 			item.clear()
+
+		# If the font size has changed by a reasonable amount, line-height
+		# will be wrong. So set the font now, so that when we really set the
+		# page it will be correct
+		super(HtmlBase, self).SetPage(
+			HTML_TEXT % (
+				body_colour, 			
+				self.font, 
+				self.size, 
+				text_colour, 
+				""
+			)
+		)
 
 		return super(HtmlBase, self).SetPage(text)
 	

@@ -7,12 +7,14 @@ from util.unicode import to_unicode_2
 from util import languages
 from gui.htmlbase import html_settings
 
-def get_html_height(text):
+def get_html_height(module, text):
+	import fontchoice
+
+	default, (font, size, in_gui) = fontchoice.get_module_font_params(module)
 	dc = wx.MemoryDC()
 	bmp = wx.EmptyBitmap(1, 1)
 	dc.SelectObject(bmp)
-	dc.Font = wx.FFont(html_settings["base_text_size"],
-					wx.FONTFAMILY_ROMAN, face=html_settings["font_name"])
+	dc.Font = wx.FFont(size, wx.FONTFAMILY_ROMAN, face=font)
 	
 	return dc.GetTextExtent(text)
 
@@ -111,11 +113,12 @@ class ModuleInfo(wx.Dialog):
 			label.Font = font
 
 			field = displayframe.DisplayFrame(panel, style=wx.SUNKEN_BORDER)
+			field.mod = self.module
 			field.SetBorders(1)
 			
 			wx.CallAfter(field.SetPage, value)
 			if height == -1:
-				w, height = get_html_height(value)
+				w, height = get_html_height(self.module, value)
 				height += 12
 			
 			gs.AddGrowableRow(id, height)
@@ -151,6 +154,7 @@ class ModuleInfo(wx.Dialog):
 
 		self.variable_field = displayframe.DisplayFrame(panel, 
 			style=wx.SUNKEN_BORDER)
+		self.variable_field.mod = self.module			
 		self.variable_field.SetBorders(1)
 		self.update_value()
 		

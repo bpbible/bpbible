@@ -312,6 +312,11 @@ class HighlightedDisplayFrame(ReferenceDisplayFrame):
 		self.parent = None
 		super(HighlightedDisplayFrame, self).__init__()
 
+	@property
+	def book(self):
+		assert self.parent, "HighlightedDisplayFrame without parent..."
+		return self.parent.book
+
 	def _RefreshUI(self):
 		if not self.reference:
 			self.SetPage("")
@@ -361,7 +366,7 @@ class HighlightedDisplayFrame(ReferenceDisplayFrame):
 		#if not wx.USE_UNICODE:
 		#	#replace common values
 		#	data = ReplaceUnicode(data)
-		self.SetPage("%s" % data)		
+		self.SetPage("%s" % data)
 
 if __name__ == '__main__':
 	string1 = u"abcd TE ST\u03b6"

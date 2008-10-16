@@ -189,6 +189,7 @@ class HarmonyPanel(xrcHarmonyPanel):
 		self.Bind(wx.EVT_TOOL, self.bible_ref_enter, id=xrc.XRCID('tool_go'))				
 
 		self.bible_text.owner = self
+		self.bible_text.book = BI.biblemgr.bible
 		self.currentverse = ""
 		self.currentperi = ""
 	

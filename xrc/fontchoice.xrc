@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resource>
   <object class="wxDialog" name="FontChoiceDialog">
-    <title>Font Choice</title>
     <object class="wxBoxSizer">
       <orient>wxVERTICAL</orient>
       <object class="sizeritem">
@@ -10,99 +9,152 @@
             <orient>wxVERTICAL</orient>
             <object class="sizeritem">
               <object class="wxBoxSizer">
-                <orient>wxVERTICAL</orient>
                 <object class="sizeritem">
                   <object class="wxBoxSizer">
-                    <orient>wxHORIZONTAL</orient>
+                    <object class="sizeritem">
+                      <object class="wxPanel" name="filterable_tree_holder">
+                        <object class="wxBoxSizer">
+                          <orient>wxVERTICAL</orient>
+                        </object>
+                      </object>
+                      <option>1</option>
+                      <flag>wxALL|wxGROW</flag>
+                      <border>6</border>
+                    </object>
+                    <orient>wxVERTICAL</orient>
+                  </object>
+                  <option>2</option>
+                  <flag>wxGROW</flag>
+                </object>
+                <object class="sizeritem">
+                  <object class="wxBoxSizer">
                     <object class="sizeritem">
                       <object class="wxBoxSizer">
-                        <orient>wxVERTICAL</orient>
                         <object class="sizeritem">
-                          <object class="wxStaticText">
-                            <label>Font:</label>
+                          <object class="wxCheckBox" name="gui_use_default_font">
+                            <label>Use default font</label>
+                            <hidden>1</hidden>
                           </object>
+                          <flag>wxRIGHT</flag>
+                          <border>6</border>
                         </object>
                         <object class="sizeritem">
-                          <object class="wxChoice" name="font_face">
-                            <content>
-                              <item/></content>
+                          <object class="wxCheckBox" name="gui_use_in_ui">
+                            <label>Use this font in the user interface</label>
+                          </object>
+                        </object>
+                        <orient>wxVERTICAL</orient>
+                      </object>
+                    </object>
+                    <object class="sizeritem">
+                      <object class="wxBoxSizer">
+                        <object class="sizeritem">
+                          <object class="wxBoxSizer">
+                            <orient>wxVERTICAL</orient>
+                            <object class="sizeritem">
+                              <object class="wxStaticText">
+                                <label>Font:</label>
+                              </object>
+                            </object>
+                            <object class="sizeritem">
+                              <object class="wxChoice" name="font_face">
+                                <content>
+                                  <item/>
+                                </content>
+                              </object>
+                              <option>1</option>
+                              <flag>wxLEFT|wxGROW</flag>
+                            </object>
                           </object>
                           <option>1</option>
-                          <flag>wxLEFT|wxGROW</flag>
+                          <flag>wxGROW</flag>
+                          <border>6</border>
                         </object>
+                        <object class="sizeritem">
+                          <object class="wxBoxSizer">
+                            <orient>wxVERTICAL</orient>
+                            <object class="sizeritem">
+                              <object class="wxStaticText">
+                                <label>Font size:</label>
+                              </object>
+                            </object>
+                            <object class="sizeritem">
+                              <object class="wxSpinCtrl" name="font_size">
+                                <value>10</value>
+                                <min>2</min>
+                                <max>100</max>
+                              </object>
+                              <option>1</option>
+                              <flag>wxLEFT|wxGROW</flag>
+                            </object>
+                          </object>
+                          <option>1</option>
+                          <flag>wxGROW|wxLEFT</flag>
+                          <border>6</border>
+                        </object>
+                        <orient>wxHORIZONTAL</orient>
+                      </object>
+                      <flag>wxTOP|wxBOTTOM|wxGROW</flag>
+                      <border>6</border>
+                    </object>
+                    <object class="sizeritem">
+                      <object class="wxBoxSizer">
+                        <object class="sizeritem">
+                          <object class="wxStaticText">
+                            <label>Preview:</label>
+                            <font>
+                              <size>10</size>
+                              <style>normal</style>
+                              <weight>normal</weight>
+                              <underlined>0</underlined>
+                              <family>swiss</family>
+                              <face>Sans</face>
+                              <encoding>UTF-8</encoding>
+                            </font>
+                          </object>
+                        </object>
+                        <object class="sizeritem">
+                          <object class="wxHtmlWindow" name="preview" subclass="displayframe.DisplayFrameXRC">
+                            <style>wxSUNKEN_BORDER</style>
+                            <borders>1</borders>
+                          </object>
+                          <option>2</option>
+                          <flag>wxALL|wxGROW</flag>
+                          <minsize>300,150</minsize>
+                        </object>
+                        <orient>wxVERTICAL</orient>
                       </object>
                       <option>1</option>
                       <flag>wxGROW</flag>
                       <border>6</border>
                     </object>
-                    <object class="sizeritem">
-                      <object class="wxBoxSizer">
-                        <orient>wxVERTICAL</orient>
-                        <object class="sizeritem">
-                          <object class="wxStaticText">
-                            <label>Font size:</label>
-                          </object>
-                        </object>
-                        <object class="sizeritem">
-                          <object class="wxSpinCtrl" name="font_size">
-                            <value>10</value>
-                            <min>2</min>
-                            <max>100</max>
-                          </object>
-                          <option>1</option>
-                          <flag>wxLEFT|wxGROW</flag>
-                        </object>
-                      </object>
-                      <option>1</option>
-                      <flag>wxGROW|wxLEFT</flag>
-                      <border>6</border>
-                    </object>
+                    <orient>wxVERTICAL</orient>
                   </object>
+                  <option>3</option>
                   <flag>wxGROW|wxALL</flag>
                   <border>6</border>
                 </object>
-                <object class="sizeritem">
-                  <object class="wxBoxSizer">
-                    <orient>wxVERTICAL</orient>
-                    <object class="sizeritem">
-                      <object class="wxStaticText">
-                        <label>Preview:</label>
-                      </object>
-                    </object>
-                    <object class="sizeritem">
-                      <object class="wxHtmlWindow" name="preview" subclass="fontchoice.HtmlWin">
-                        <style>wxSUNKEN_BORDER</style>
-                        <borders>1</borders>
-                      </object>
-                      <option>2</option>
-                      <flag>wxALL|wxGROW</flag>
-                      <minsize>300,150</minsize>
-                    </object>
-                  </object>
-                  <option>1</option>
-                  <flag>wxALL|wxGROW</flag>
-                  <border>6</border>
-                </object>
-                <object class="sizeritem">
-                  <object class="wxStdDialogButtonSizer">
-                    <object class="button">
-                      <object class="wxButton" name="wxID_OK">
-                        <label></label>
-                        <label>&amp;Ok</label>
-                      </object>
-                    </object>
-                    <object class="button">
-                      <object class="wxButton" name="wxID_CANCEL">
-                        <label></label>
-                        <label>&amp;Cancel</label>
-                      </object>
-                    </object>
-                  </object>
-                  <flag>wxGROW</flag>
-                </object>
+                <orient>wxHORIZONTAL</orient>
               </object>
               <option>1</option>
-              <flag>wxGROW|wxALL</flag>
+              <flag>wxGROW</flag>
+            </object>
+            <object class="sizeritem">
+              <object class="wxStdDialogButtonSizer">
+                <object class="button">
+                  <object class="wxButton" name="wxID_OK">
+                    <label/>
+                    <label>&amp;Ok</label>
+                  </object>
+                </object>
+                <object class="button">
+                  <object class="wxButton" name="wxID_CANCEL">
+                    <hidden>1</hidden>
+                  </object>
+                </object>
+              </object>
+              <option>0</option>
+              <flag>wxALL|wxGROW</flag>
               <border>6</border>
             </object>
           </object>
@@ -111,6 +163,7 @@
         <flag>wxGROW</flag>
       </object>
     </object>
+    <title>Font Choice</title>
     <style>wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</style>
   </object>
 </resource>
