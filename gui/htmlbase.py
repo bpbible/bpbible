@@ -15,7 +15,7 @@ html_settings.add_item("font_name", "Arial")
 html_settings.add_item("base_text_size", 10, item_type=int)
 html_settings.add_item("zoom_level", 0, item_type=int)
 
-HTML_TEXT = '<body bgcolor="%s"><div><font color="%s">%s</font></div></body>'
+HTML_TEXT = '<body bgcolor="%s"><fontarea basefont="%s" basesize="%s"><div><font color="%s">%s</font></div></fontarea></body>'
 
 # some magic zoom constants
 zoom_levels = {-2: 0.75, 
@@ -47,6 +47,10 @@ class TagHandler(wx.html.HtmlWinTagHandler):
 	def HandleTag2(self, tag):
 		return False
 	
+	@classmethod
+	def clear(cls):
+		pass
+
 class GLinkTagHandler(TagHandler):
 	tags = "GLINK"
 
@@ -132,6 +136,11 @@ class LineGroupTagHandler(TagHandler):
 	### don't try loading more than one file at once with this tag handler...	
 	indent_level = 0
 
+
+	@classmethod
+	def clear(cls):
+		cls.indent_level = 0
+
 	def HandleTag2(self, tag):
 		parser = self.GetParser()
 
@@ -160,6 +169,36 @@ class LineGroupTagHandler(TagHandler):
 			dprint(WARNING, "Dedent without matching indent")
 			
 		return False
+
+class FontAreaTagHandler(TagHandler):
+	tags = "FONTAREA"
+	fonts = []
+	@classmethod
+	def clear(cls):
+		cls.fonts = []
+	
+	def HandleTag2(self, tag):
+		parser = self.GetParser()
+		font = tag.GetParam("basefont")
+
+		# multiply by our zoom factor
+		size = get_text_size(int(tag.GetParam("basesize")))
+		FontAreaTagHandler.fonts.append((font, size))
+		parser.SetStandardFonts(size, font)
+		parser.GetContainer().InsertCell(
+			html.HtmlFontCell(parser.CreateCurrentFont())
+		)
+		
+		self.ParseInner(tag)
+		FontAreaTagHandler.fonts.pop()
+
+		if FontAreaTagHandler.fonts:
+			old_font, old_size = FontAreaTagHandler.fonts[-1]
+			parser.SetStandardFonts(old_size, old_font)
+			parser.GetContainer().InsertCell(                			
+				html.HtmlFontCell(parser.CreateCurrentFont())			
+			)
+		return True
 
 class CheckTagHandler(TagHandler):
 	tags = "CHECK"
@@ -211,12 +250,16 @@ class PassageTagHandler(TagHandler):
 			
 		return True
 
-wx.html.HtmlWinParser_AddTagHandler(GLinkTagHandler)
-wx.html.HtmlWinParser_AddTagHandler(HighlightedTagHandler)
-wx.html.HtmlWinParser_AddTagHandler(CheckTagHandler)
-wx.html.HtmlWinParser_AddTagHandler(PassageTagHandler)
-wx.html.HtmlWinParser_AddTagHandler(LineGroupTagHandler)
-
+tag_handlers = [
+	GLinkTagHandler,
+	HighlightedTagHandler,
+	CheckTagHandler,
+	PassageTagHandler,
+	LineGroupTagHandler,
+	FontAreaTagHandler
+]
+for item in tag_handlers:
+	wx.html.HtmlWinParser_AddTagHandler(item)
 
 def get_text_size(base):
 	ansa = zoom_levels[html_settings["zoom_level"]] * base
@@ -343,12 +386,13 @@ class HtmlBase(wx.html.HtmlWindow):
 		if body_colour is None or text_colour is None:
 			body_colour, text_colour = guiconfig.get_window_colours()
 
-		# clear the page before setting the fonts to stop it reloading
-		super(HtmlBase, self).SetPage("")
-		self.SetStandardFonts(get_text_size(html_settings["base_text_size"]), 
-			html_settings["font_name"])
-		
-		text = HTML_TEXT % (body_colour, text_colour, text)
+		text = HTML_TEXT % (
+			body_colour, 			
+			html_settings["font_name"], 
+			html_settings["base_text_size"], 
+			text_colour, 
+			text
+		)
 
 		if raw:
 			text = text.replace("&", "&amp;")
@@ -362,8 +406,9 @@ class HtmlBase(wx.html.HtmlWindow):
 			text = text.replace("&apos;", "&#39;")
 			
 
-		# reset the indent level
-		LineGroupTagHandler.indent_level = 0
+		# reset internal state of tag handlers
+		for item in tag_handlers:
+			item.clear()
 
 		return super(HtmlBase, self).SetPage(text)
 	
