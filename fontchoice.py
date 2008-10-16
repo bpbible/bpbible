@@ -60,6 +60,7 @@ class FontChoiceDialog(xrcFontChoiceDialog):
 		self.tree.on_module_choice += self.on_module_choice
 		self.tree.on_category_choice += self.on_category_choice
 		self.filterable_tree_holder.Sizer.Add(self.tree, 1, wx.GROW)
+		self.filterable_tree_holder.Layout()
 		names = wx.FontEnumerator().GetFacenames()
 		names.sort()
 		self.font_face.Clear()
@@ -109,6 +110,11 @@ class FontChoiceDialog(xrcFontChoiceDialog):
 		self.gui_use_default_font.SetValue(default)
 		self.gui_use_default_font.ContainingSizer.Show(0, data!=DefaultFont)
 		self.Layout()
+		self.filterable_tree_holder.Parent.Layout()
+		
+		# refresh to ensure that the static text doesn't get painted anywhere
+		# else
+		self.Refresh()
 	
 	def on_module_choice(self, data, parent_data):
 		self.mod = data
