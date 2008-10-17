@@ -15,7 +15,7 @@ import hashlib
 
 import config
 from util.configmgr import config_manager
-from util.i18n import _
+from util.i18n import N_
 import re
 
 from xrc.error_dialog_xrc import xrcErrorDialog
@@ -23,7 +23,7 @@ from xrc.error_dialog_xrc import xrcErrorDialog
 errors = config_manager.add_section("Errors")
 errors.add_item("errors_to_ignore", [], item_type="pickle")
 
-COLLAPSED_TEXTS = _("<< &Details"), _("&Details >>")
+COLLAPSED_TEXTS = N_("<< &Details"), N_("&Details >>")
 PANE = 2
 fixed_width_re = re.compile("``(((?!``)(..?))*)``", re.DOTALL)
 
@@ -39,6 +39,14 @@ class ErrorDialog(xrcErrorDialog):
 		self._log = None
 		self.exc_text = ""
 		
+	
+	def install(self):
+		sys.excepthook = self.handle_error
+
+	def uninstall(self):
+		sys.excepthook = sys.__excepthook__
+	
+
 	def write_to_log(self, text):
 		"""
 		Attempt to write errors to a log.
@@ -136,7 +144,7 @@ class ErrorDialog(xrcErrorDialog):
 		else:
 			self.Size = -1, self.Size[1] + existing_size
 			
-		self.details_button.Label = COLLAPSED_TEXTS[self.collapsed]
+		self.details_button.Label = _(COLLAPSED_TEXTS[self.collapsed])
 		self.panel.Sizer.Layout()
 	
 	def get_exception_id(self, type, value, tb):

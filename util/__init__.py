@@ -21,3 +21,10 @@ def timeit(f, *args, **kwargs):
 		return last_result
 
 	
+class classproperty(object):
+	def __init__(self, data):
+		self._data = data
+
+	def __get__(self, obj, objtype):
+		return self._data(obj)
+	

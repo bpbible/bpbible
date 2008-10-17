@@ -73,6 +73,10 @@
           <label>Set fonts...</label>
         </object>
         <object class="separator"/>
+        <object class="wxMenu" name="languages">
+          <label>&amp;Language</label>
+        </object>
+        <object class="separator"/>
         <object class="wxMenuItem" name="wxID_EXIT">
           <label>_Exit</label>
         </object>

@@ -17,7 +17,6 @@ from gui.quickselector import QuickSelector
 from events import BIBLEFRAME, RANDOM_VERSE, VERSE_LINK_SELECTED, HEADER_BAR
 from copyverses import CopyVerseDialog
 
-from util.i18n import _
 from util.configmgr import config_manager
 from versecompare import VerseCompareFrame
 import header_bar

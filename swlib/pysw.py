@@ -5,6 +5,7 @@ import sys
 from util.debug import *
 from util.unicode import to_str, to_unicode
 from util import is_py2exe
+from util import classproperty
 
 def _test():
 	from swlib import pysw
@@ -100,14 +101,6 @@ class VerseParsingError(Exception): pass
 def KeyExists(key):
 	return not(ord(SW.VerseKey(key).Error()))
 
-class myproperty(object):
-	def __init__(self, data):
-		self._data = data
-
-	def __get__(self, obj, objtype):
-		return self._data(obj)
-	
-
 def set_vk_chapter_checked(self, chapter):
 	chapters = self.chapterCount(ord(self.Testament()), ord(self.Book()))
 	if 0 < chapter <= chapters:
@@ -196,7 +189,7 @@ class VK(SW.VerseKey):#, object):
 
 		SW.VerseKey.__init__(self, *key)
 
-	@myproperty
+	@classproperty
 	def books(self): return books
 
 	def __cmp___(self, other): return self.compare(other)

@@ -86,6 +86,7 @@ class HarmonyFrame(xrcHarmonyFrame):
 		self.SetSize((800, 600))
 		self.SetMinSize((400, 300))
 		guiconfig.mainfrm.bible_observers += self.on_settings_change
+		guiconfig.mainfrm.on_close += self.Destroy
 		#l1=sorted(ParseHarmony.pericopeintlist.items(), lambda x,y: x[0]-y[0])
 #		for number, peri in l1: 
 #			gospels = []
@@ -113,6 +114,8 @@ class HarmonyFrame(xrcHarmonyFrame):
 			self.frame.refresh()
 
 	def Destroy(self):
+		# remove from the close list
+		guiconfig.mainfrm.on_close -= self.Destroy
 		self.harmony_notebook.Unbind(wx.EVT_NOTEBOOK_PAGE_CHANGED)
 		
 		#if osutils.is_gtk():

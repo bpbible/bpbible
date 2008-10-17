@@ -16,11 +16,38 @@ import mainframe
 
 import config, guiconfig
 from util import osutils
+from util.configmgr import config_manager
+
+import util.i18n
+import gui.i18n
+
 
 #from search import mySearchPanel
 
 class MyApp(wx.App):
+	def Initialize(self):
+		self.close = True
+		config_manager.load()
+		util.i18n.initialize()
+		gui.i18n.initialize()
+		
+		frame = self.res.LoadFrame(None,  "MainFrame" )
+		if(frame == None):
+			wx.MessageBox("Could not load MainFrame from auifrm.xrc", \
+				"Fatal Error", style = wx.ICON_ERROR)
+			return False
+
+
+		frame.SetIcons(guiconfig.icons)
+		#frame.SetIcon(icon_bundle.GetIcon((32,32)))
+
+		self.SetTopWindow(frame)
+		frame.Show(True)
+		
+	
 	def OnInit(self):
+		self.close = False
+	
 		dprint(MESSAGE, "App Init")
 		
 		wx.InitAllImageHandlers()
@@ -43,18 +70,6 @@ class MyApp(wx.App):
 		
 
 		self.res = xrc.XmlResource(config.xrc_path+"auifrm.xrc" )
-		frame = self.res.LoadFrame(None,  "MainFrame" )
-		if(frame == None):
-			wx.MessageBox("Could not load MainFrame from auifrm.xrc", \
-				"Fatal Error", style = wx.ICON_ERROR)
-			return False
-
-
-		frame.SetIcons(icon_bundle)
-		#frame.SetIcon(icon_bundle.GetIcon((32,32)))
-
-		self.SetTopWindow(frame)
-		frame.Show(True)
 		return True
 	
 
@@ -90,7 +105,9 @@ def main():
 	dprint(MESSAGE, "App created")
 	
 	guiconfig.app = app
-	app.MainLoop()
+	while not app.close:
+		app.Initialize()
+		app.MainLoop()
 
 if __name__ == '__main__':
 	main()

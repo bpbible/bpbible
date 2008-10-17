@@ -1,0 +1,237 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2008-10-17 15:44+EST\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: utf-8\n"
+"Generated-By: pygettext.py 1.5\n"
+
+#: backend/book.py:456
+msgid "commentary"
+msgstr ""
+
+#: backend/book.py:464 xrc/auifrm_xrc.py:152
+msgid "Bible"
+msgstr ""
+
+#: error_handling.py:26
+msgid "&Details >>"
+msgstr ""
+
+#: error_handling.py:26
+msgid "<< &Details"
+msgstr ""
+
+#: error_handling.py:67
+msgid "%s%s\n"
+msgstr ""
+
+#: error_handling.py:70
+msgid ""
+"%sAn error has occurred.\n"
+"%s: %s\n"
+msgstr ""
+
+#: error_handling.py:79
+msgid "Above exception was ignored\n"
+msgstr ""
+
+#: gui/i18n.py:37 test2.py:25
+msgid "Hello, World!"
+msgstr ""
+
+#: mainframe.py:207 xrc/auifrm_xrc.py:129
+msgid "Back"
+msgstr ""
+
+#: mainframe.py:208 xrc/auifrm_xrc.py:127 xrc/auifrm_xrc.py:128
+msgid "Go back a verse"
+msgstr ""
+
+#: mainframe.py:211 xrc/auifrm_xrc.py:132
+msgid "Forward"
+msgstr ""
+
+#: mainframe.py:212 xrc/auifrm_xrc.py:130 xrc/auifrm_xrc.py:131
+msgid "Go forward a verse"
+msgstr ""
+
+#: mainframe.py:215 xrc/auifrm_xrc.py:111
+msgid "Zoom In"
+msgstr ""
+
+#: mainframe.py:216 xrc/auifrm_xrc.py:109 xrc/auifrm_xrc.py:110
+msgid "Make text bigger"
+msgstr ""
+
+#: mainframe.py:219 xrc/auifrm_xrc.py:117
+msgid "Default Zoom"
+msgstr ""
+
+#: mainframe.py:220 xrc/auifrm_xrc.py:115 xrc/auifrm_xrc.py:116
+msgid "Return text to default size"
+msgstr ""
+
+#: mainframe.py:223 xrc/auifrm_xrc.py:114
+msgid "Zoom Out"
+msgstr ""
+
+#: mainframe.py:224 xrc/auifrm_xrc.py:112 xrc/auifrm_xrc.py:113
+msgid "Make text smaller"
+msgstr ""
+
+#: mainframe.py:233
+msgid "Go to verse"
+msgstr ""
+
+#: mainframe.py:234 xrc/auifrm_xrc.py:118 xrc/auifrm_xrc.py:119
+msgid "Open this verse"
+msgstr ""
+
+#: mainframe.py:237 xrc/auifrm_xrc.py:123
+msgid "Bible Search"
+msgstr ""
+
+#: mainframe.py:238 xrc/auifrm_xrc.py:121 xrc/auifrm_xrc.py:122
+msgid "Search in this Bible"
+msgstr ""
+
+#: mainframe.py:241 xrc/auifrm_xrc.py:124
+msgid "Copy Verses"
+msgstr ""
+
+#: mainframe.py:242 xrc/auifrm_xrc.py:125
+msgid "Open the Copy Verses dialog"
+msgstr ""
+
+#: mainframe.py:651 mainframe.py:653 xrc/auifrm_xrc.py:136
+msgid "&Language"
+msgstr ""
+
+#: mainframe.py:672 xrc/auifrm_xrc.py:139
+msgid "&Display"
+msgstr ""
+
+#: mainframe.py:677 xrc/auifrm_xrc.py:142
+msgid "&Window"
+msgstr ""
+
+#: mainframe.py:681 xrc/auifrm_xrc.py:141
+msgid "Toolbars"
+msgstr ""
+
+#: mainframe.py:716 xrc/auifrm_xrc.py:143
+msgid "Debug"
+msgstr ""
+
+#: util/i18n.py:39
+msgid "English"
+msgstr ""
+
+#: util/i18n.py:40
+msgid "Spanish"
+msgstr ""
+
+#: util/i18n.py:41
+msgid "BM test"
+msgstr ""
+
+#: xrc/auifrm_xrc.py:120
+msgid "Go to Verse"
+msgstr ""
+
+#: xrc/auifrm_xrc.py:126
+msgid "Verse Copy"
+msgstr ""
+
+#: xrc/auifrm_xrc.py:133
+msgid "&Set Sword Paths..."
+msgstr ""
+
+#: xrc/auifrm_xrc.py:134
+msgid "Install books..."
+msgstr ""
+
+#: xrc/auifrm_xrc.py:135
+msgid "Set fonts..."
+msgstr ""
+
+#: xrc/auifrm_xrc.py:137
+msgid "&Exit"
+msgstr ""
+
+#: xrc/auifrm_xrc.py:138
+msgid "&File"
+msgstr ""
+
+#: xrc/auifrm_xrc.py:140
+msgid "Default Layout"
+msgstr ""
+
+#: xrc/auifrm_xrc.py:144
+msgid "Html Ide"
+msgstr ""
+
+#: xrc/auifrm_xrc.py:145
+msgid "WI"
+msgstr ""
+
+#: xrc/auifrm_xrc.py:146
+msgid "&Help"
+msgstr ""
+
+#: xrc/auifrm_xrc.py:147
+msgid "BPBible Website"
+msgstr ""
+
+#: xrc/auifrm_xrc.py:148
+msgid "Documentation..."
+msgstr ""
+
+#: xrc/auifrm_xrc.py:149
+msgid "Report a problem..."
+msgstr ""
+
+#: xrc/auifrm_xrc.py:150
+msgid "Download books..."
+msgstr ""
+
+#: xrc/auifrm_xrc.py:151
+msgid "&About..."
+msgstr ""
+
+#: xrc/fontchoice_xrc.py:71
+msgid "Use default font"
+msgstr ""
+
+#: xrc/fontchoice_xrc.py:72
+msgid "Use this font in the user interface"
+msgstr ""
+
+#: xrc/fontchoice_xrc.py:73
+msgid "Font:"
+msgstr ""
+
+#: xrc/fontchoice_xrc.py:74
+msgid "Font size:"
+msgstr ""
+
+#: xrc/fontchoice_xrc.py:75
+msgid "Preview:"
+msgstr ""
+
+#: xrc/fontchoice_xrc.py:76
+msgid "&Ok"
+msgstr ""
+
+#: xrc/fontchoice_xrc.py:77
+msgid "Font Choice"
+msgstr ""

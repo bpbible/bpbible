@@ -4,9 +4,9 @@ import passage_list
 from swlib.pysw import VK, SW, GetBestRange, GetVerseStr, TOP
 from backend.verse_template import VerseTemplate
 from util import observerlist
+from util import classproperty
 from util.debug import dprint, WARNING, ERROR
 from util.unicode import to_str, to_unicode
-from util.i18n import _
 
 import config
 
@@ -450,11 +450,16 @@ class Book(object):
 				
 class Commentary(Book):
 	type = "Commentaries"
-	noun = _("commentary")
+
+	@classproperty
+	def noun(cls):
+		return _("commentary")
 
 
 class Bible(Book):
 	type = "Biblical Texts"
-	noun = _("Bible")
+	@classproperty
+	def noun(cls):
+		return _("Bible")
 
 

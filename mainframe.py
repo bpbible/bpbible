@@ -58,7 +58,7 @@ from util.configmgr import config_manager
 from install_manager.install_drop_target import ModuleDropTarget
 import passage_list
 from error_handling import ErrorDialog
-from util.i18n import _
+import util.i18n
 
 settings = config_manager.add_section("BPBible")
 
@@ -92,11 +92,16 @@ class MainFrame(wx.Frame, AuiLayer):
 
 	def setup(self):
 		HtmlBase.override_loading_a_page = True
+		self.on_close = ObserverList()
+		
 
 		dprint(MESSAGE, "Setting up")
 	
 		# use this dialog to catch all our errors
-		ErrorDialog(self)
+		self.error_dialog = ErrorDialog(self)
+		self.error_dialog.install()
+		self.on_close += self.error_dialog.uninstall
+		
 	
 		guiconfig.mainfrm = self
 		self.toplevels = []
@@ -272,7 +277,6 @@ class MainFrame(wx.Frame, AuiLayer):
 	def load_data(self):
 		dprint(MESSAGE, "Loading data")
 		
-		config_manager.load()
 		if settings["options"]:
 			for item, value in settings["options"].iteritems():
 				biblemgr.set_option(item, value)
@@ -637,8 +641,33 @@ class MainFrame(wx.Frame, AuiLayer):
 			menu = None
 		return menu
 	
-
+	
+	def on_language_choice(self, event):
+		util.i18n.locale_settings["language"] = self.language_mapping[event.Id]
+		self.restart()
+		
 	def set_menus_up(self):
+		self.file_menu = self.MenuBar.GetMenu(0)
+		print _("&Language")
+		for item in self.file_menu.MenuItems:
+			if item.ItemLabel == _("&Language"):
+				language_menu = item.SubMenu
+				break
+		else:
+			assert False, "Language menu could not be found"
+		
+		self.language_mapping = {}
+		for text, display_name in util.i18n.languages.items():
+			menu_item = language_menu.AppendRadioItem(
+				wx.ID_ANY, _(display_name), 
+			)
+			menu_item.Check(text == util.i18n.locale_settings["language"])
+
+			self.language_mapping[menu_item.Id] = text
+			self.Bind(wx.EVT_MENU, self.on_language_choice, menu_item)
+
+
+		
 		#self.edit_menu
 		self.options_menu = self.get_menu(_("&Display"))	
 		assert self.options_menu, "Display menu could not be found"
@@ -890,7 +919,11 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.DictionaryListSelected()
 		self.version_tree.recreate()
 
-	def MainFrameClose(self, event):
+	def restart(self, event=None):
+		guiconfig.app.close = False
+		self.MainFrameClose(None)
+	
+	def MainFrameClose(self, event=None):
 		# unbind activation events so that we don't get these called when the
 		# frame disappears for the last time
 		self.Unbind(wx.EVT_ACTIVATE)
@@ -899,6 +932,7 @@ class MainFrame(wx.Frame, AuiLayer):
 				a.Unbind(wx.EVT_ACTIVATE)
 
 		self.save_data()
+		self.on_close()
 		self.Destroy()
 
 	#def BibleRefEnterChar(self, event):
