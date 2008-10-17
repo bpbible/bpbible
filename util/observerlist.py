@@ -10,8 +10,10 @@ class ObserverList(object):
 		if self.on_hold:
 			self.deferred.append((args, kwargs))
 			return
-
-		for function, initial_args in self.observers:
+		
+		# take a copy so the objects can remove themselves from the list while
+		# iterating over it
+		for function, initial_args in self.observers[:]:
 			if not self._call_function(function, initial_args + args, kwargs):
 				return
 
