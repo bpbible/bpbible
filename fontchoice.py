@@ -186,9 +186,10 @@ class FontChoiceDialog(xrcFontChoiceDialog):
 					else:
 						ref = frame.reference.text
 						
-				ref = self.mod.KeyText(to_str(ref, self.mod))
+				self.mod.KeyText(to_str(ref, self.mod))
 				
 				text = self.mod.RenderText()
+				ref = self.mod.getKeyText()
 				self.preview.SetPage("%s (%s)<br>%s" % (
 					to_unicode(ref, self.mod), self.mod.Name(), text
 				))
