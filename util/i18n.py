@@ -29,7 +29,7 @@ def initialize():
 	if type(mytranslation) == gettext.NullTranslations:
 		dprint(WARNING, "Language not found for python", langid)
 	
-	mytranslation.install()
+	mytranslation.install(unicode=True)
 
 def N_(text):
 	"""Mark text as i18n'able, but don't translate it yet"""
