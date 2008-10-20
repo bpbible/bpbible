@@ -19,7 +19,7 @@ To build from source, you will need to have the following:
  # SWORD 1.5.11
  # Windows or Linux
 
-BPBible has now been tested somewhat under Mac, and it mostly works. Some things, such as verse tooltips, don't yet work though.
+BPBible SVN has been tested somewhat under Mac, and it mostly works. Some things, such as verse tooltips, don't yet work though.  This support is likely to make its way into the next BPBible release.
 
 == Building the SWIG bindings ==
 The SWIG bindings are located in the bindings/swig directory of the SWORD
