@@ -88,6 +88,11 @@ class BookFrame(DisplayFrame):
 		actions.update({
 			wx.WXK_F8: self.chapter_forward,
 			wx.WXK_F5: self.chapter_back,
+			(wx.WXK_F5, wx.MOD_CMD): self.restore_pane,
+			(wx.WXK_F10, wx.MOD_CMD): self.maximize_pane,
+			
+
+			
 		})
 
 		if self.use_quickselector:
@@ -95,6 +100,24 @@ class BookFrame(DisplayFrame):
 		
 		return actions
 
+	def restore_pane(self):
+		self.maximize_pane(False)
+	
+	def maximize_pane(self, to=True):
+		main = guiconfig.mainfrm
+		pane = main.get_pane_for_frame(self)
+		maximized_pane = main.get_maximized_pane()
+		if to:
+			if not maximized_pane:
+				main.maximize_pane(pane)
+				
+		else:
+			if maximized_pane:
+				main.restore_maximized_pane(pane)
+		main.aui_mgr.Update()
+		wx.CallAfter(main.update_all_aui_menu_items)
+			
+			
 	def chapter_move(self, amount): pass
 
 	def chapter_forward(self):
