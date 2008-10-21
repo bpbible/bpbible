@@ -24,7 +24,7 @@
                   <label>Preview</label>
                   <orient>wxVERTICAL</orient>
                   <object class="sizeritem">
-                    <object class="wxHtmlWindow" name="gui_preview" subclass="gui.htmlbase.HtmlBaseXRC">
+                    <object class="wxHtmlWindow" name="gui_preview" subclass="displayframe.DisplayFrameXRC">
                       <borders>1</borders>
                     </object>
                     <option>2</option>

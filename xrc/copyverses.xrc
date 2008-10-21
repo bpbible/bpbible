@@ -2,7 +2,6 @@
 <resource>
   <!--%import xrced_stc-->
   <object class="wxDialog" name="CopyVerseDialog">
-    <title>Copy verses</title>
     <object class="wxBoxSizer">
       <orient>wxVERTICAL</orient>
       <object class="sizeritem">
@@ -93,7 +92,7 @@
                 <label>Preview</label>
                 <orient>wxVERTICAL</orient>
                 <object class="sizeritem">
-                  <object class="wxHtmlWindow" name="preview" subclass="gui.htmlbase.HtmlBaseXRC">
+                  <object class="wxHtmlWindow" name="preview" subclass="displayframe.DisplayFrameXRC">
                     <borders>1</borders>
                   </object>
                   <option>2</option>
@@ -131,6 +130,7 @@
         <border>10</border>
       </object>
     </object>
+    <title>Copy Verses</title>
     <style>wxCAPTION|wxSYSTEM_MENU|wxRESIZE_BORDER|wxCLOSE_BOX</style>
   </object>
 </resource>

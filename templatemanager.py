@@ -504,6 +504,7 @@ class TemplateManager(xrcTemplateManager):
 		if data is None:
 			data = config.MODULE_MISSING_STRING
 		
+		self.gui_preview.book = biblemgr.bible
 		self.gui_preview.SetPage(data)
 		
 	

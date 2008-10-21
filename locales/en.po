@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2008-10-17 15:44+EST\n"
+"POT-Creation-Date: 2008-10-21 21:29+AUS Eastern Daylight Time\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,8 +18,12 @@ msgstr ""
 msgid "commentary"
 msgstr ""
 
-#: backend/book.py:464 xrc/auifrm_xrc.py:152
+#: backend/book.py:463 xrc/auifrm_xrc.py:152
 msgid "Bible"
+msgstr ""
+
+#: copyverses.py:31
+msgid "<custom: based on %s>"
 msgstr ""
 
 #: error_handling.py:26
@@ -104,7 +108,7 @@ msgstr ""
 msgid "Search in this Bible"
 msgstr ""
 
-#: mainframe.py:241 xrc/auifrm_xrc.py:124
+#: mainframe.py:241 xrc/auifrm_xrc.py:124 xrc/copyverses_xrc.py:80
 msgid "Copy Verses"
 msgstr ""
 
@@ -208,6 +212,34 @@ msgstr ""
 msgid "&About..."
 msgstr ""
 
+#: xrc/copyverses_xrc.py:73
+msgid "&Reference"
+msgstr ""
+
+#: xrc/copyverses_xrc.py:74
+msgid "&Template"
+msgstr ""
+
+#: xrc/copyverses_xrc.py:75
+msgid "&Save template"
+msgstr ""
+
+#: xrc/copyverses_xrc.py:76
+msgid "&Load Template"
+msgstr ""
+
+#: xrc/copyverses_xrc.py:77
+msgid "Edit Template..."
+msgstr ""
+
+#: xrc/copyverses_xrc.py:78 xrc/templatemanager_xrc.py:97
+msgid "Preview"
+msgstr ""
+
+#: xrc/copyverses_xrc.py:79 xrc/templatemanager_xrc.py:99
+msgid "&Cancel"
+msgstr ""
+
 #: xrc/fontchoice_xrc.py:71
 msgid "Use default font"
 msgstr ""
@@ -228,10 +260,50 @@ msgstr ""
 msgid "Preview:"
 msgstr ""
 
-#: xrc/fontchoice_xrc.py:76
+#: xrc/fontchoice_xrc.py:76 xrc/templatemanager_xrc.py:98
 msgid "&Ok"
 msgstr ""
 
 #: xrc/fontchoice_xrc.py:77
 msgid "Font Choice"
+msgstr ""
+
+#: xrc/templatemanager_xrc.py:96
+msgid "Template Manager"
+msgstr ""
+
+#: xrc/templatemanager_xrc.py:100
+msgid "&Header"
+msgstr ""
+
+#: xrc/templatemanager_xrc.py:101
+msgid "&Body"
+msgstr ""
+
+#: xrc/templatemanager_xrc.py:102
+msgid "$$text "
+msgstr ""
+
+#: xrc/templatemanager_xrc.py:103
+msgid "&Footer"
+msgstr ""
+
+#: xrc/templatemanager_xrc.py:104
+msgid ""
+"\n"
+"$$range ($$version)"
+msgstr ""
+
+#: xrc/templatemanager_xrc.py:105
+msgid "&Headings"
+msgstr ""
+
+#: xrc/templatemanager_xrc.py:106
+msgid "<h5>$$heading</h5>"
+msgstr ""
+
+#: xrc/templatemanager_xrc.py:107
+msgid ""
+"Use $$text for the text of a verse, $$versenum for the\n"
+"verse number and $$reference for the reference"
 msgstr ""

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2008-10-17 15:44+EST\n"
+"POT-Creation-Date: 2008-10-21 21:29+AUS Eastern Daylight Time\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,9 +18,13 @@ msgstr ""
 msgid "commentary"
 msgstr "Other man's words"
 
-#: backend/book.py:464 xrc/auifrm_xrc.py:152
+#: backend/book.py:463 xrc/auifrm_xrc.py:152
 msgid "Bible"
 msgstr "God's word"
+
+#: copyverses.py:31
+msgid "<custom: based on %s>"
+msgstr ""
 
 #: error_handling.py:26
 msgid "&Details >>"
@@ -104,7 +108,7 @@ msgstr "Search the good book"
 msgid "Search in this Bible"
 msgstr "Run your eyes over the page for this word"
 
-#: mainframe.py:241 xrc/auifrm_xrc.py:124
+#: mainframe.py:241 xrc/auifrm_xrc.py:124 xrc/copyverses_xrc.py:80
 msgid "Copy Verses"
 msgstr "Transport the verses into the clipboard"
 
@@ -134,15 +138,15 @@ msgstr "For the experts"
 
 #: util/i18n.py:39
 msgid "English"
-msgstr ""
+msgstr "Usual Lingo"
 
 #: util/i18n.py:40
 msgid "Spanish"
-msgstr ""
+msgstr "Spaniard lingo"
 
 #: util/i18n.py:41
 msgid "BM test"
-msgstr ""
+msgstr "Crazy test"
 
 #: xrc/auifrm_xrc.py:120
 msgid "Go to Verse"
@@ -208,13 +212,41 @@ msgstr "Get more reading material"
 msgid "&About..."
 msgstr "&Read all about these there scurvy knaves"
 
+#: xrc/copyverses_xrc.py:73
+msgid "&Reference"
+msgstr "&The location be:"
+
+#: xrc/copyverses_xrc.py:74
+msgid "&Template"
+msgstr "&Whatchameecallit"
+
+#: xrc/copyverses_xrc.py:75
+msgid "&Save template"
+msgstr "&Store this template"
+
+#: xrc/copyverses_xrc.py:76
+msgid "&Load Template"
+msgstr "&Retrieve a template"
+
+#: xrc/copyverses_xrc.py:77
+msgid "Edit Template..."
+msgstr "Change the way this be working..."
+
+#: xrc/copyverses_xrc.py:78 xrc/templatemanager_xrc.py:97
+msgid "Preview"
+msgstr "Scan your eyes over them changes"
+
+#: xrc/copyverses_xrc.py:79 xrc/templatemanager_xrc.py:99
+msgid "&Cancel"
+msgstr ""
+
 #: xrc/fontchoice_xrc.py:71
 msgid "Use default font"
-msgstr ""
+msgstr "What it would have been if you hadn't changed it"
 
 #: xrc/fontchoice_xrc.py:72
 msgid "Use this font in the user interface"
-msgstr ""
+msgstr "N/A"
 
 #: xrc/fontchoice_xrc.py:73
 msgid "Font:"
@@ -228,10 +260,52 @@ msgstr "What size wilt thou pick"
 msgid "Preview:"
 msgstr "Scan your eyes over them changes"
 
-#: xrc/fontchoice_xrc.py:76
+#: xrc/fontchoice_xrc.py:76 xrc/templatemanager_xrc.py:98
 msgid "&Ok"
 msgstr "&Perfect"
 
 #: xrc/fontchoice_xrc.py:77
 msgid "Font Choice"
 msgstr "Choose a font, me hearties"
+
+#: xrc/templatemanager_xrc.py:96
+msgid "Template Manager"
+msgstr "Manage dem templates"
+
+#: xrc/templatemanager_xrc.py:100
+msgid "&Header"
+msgstr "The &top bit"
+
+#: xrc/templatemanager_xrc.py:101
+msgid "&Body"
+msgstr "The &middle bit"
+
+#: xrc/templatemanager_xrc.py:102
+msgid "$$text "
+msgstr ""
+
+#: xrc/templatemanager_xrc.py:103
+msgid "&Footer"
+msgstr "The &End bit"
+
+#: xrc/templatemanager_xrc.py:104
+msgid ""
+"\n"
+"$$range ($$version)"
+msgstr ""
+
+#: xrc/templatemanager_xrc.py:105
+msgid "&Headings"
+msgstr "&The section bits at the top"
+
+#: xrc/templatemanager_xrc.py:106
+msgid "<h5>$$heading</h5>"
+msgstr ""
+
+#: xrc/templatemanager_xrc.py:107
+msgid ""
+"Use $$text for the text of a verse, $$versenum for the\n"
+"verse number and $$reference for the reference"
+msgstr "You can use $$text to bring up the verse text\n"
+"$$versenum to bring up the verse number\n"
+"and $$reference for the reference"

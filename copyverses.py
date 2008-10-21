@@ -27,7 +27,6 @@ from util.configmgr import config_manager
 
 		
 		
-CUSTOM_STRING = "<custom: based on %s>"
 class CopyVerseDialog(xrcCopyVerseDialog):
 	def __init__(self, parent):
 		super(CopyVerseDialog, self).__init__(parent)
@@ -107,6 +106,8 @@ class CopyVerseDialog(xrcCopyVerseDialog):
 		self.gui_save_template.Bind(wx.EVT_BUTTON, self.save_template)
 		self.gui_load_template.Bind(wx.EVT_BUTTON, self.load_template)
 		self.gui_template_list.Bind(wx.EVT_CHOICE, self.on_template_choice)
+
+		self.preview.book = biblemgr.bible
 		
 		#self.panel1instructions.Wrap(300)
 		#s =self.GetSizer()
@@ -128,7 +129,10 @@ class CopyVerseDialog(xrcCopyVerseDialog):
 	def make_custom(self, based_on):
 		self.is_custom = True
 		self.based_on = based_on
-		self.gui_template_list.Append(CUSTOM_STRING % self.based_on)
+		self.gui_template_list.Append(
+			_("<custom: based on %s>") % self.based_on
+		)
+
 	
 		self.gui_template_list.SetSelection(self.gui_template_list.Count - 1)
 		
