@@ -102,6 +102,17 @@ class DockArt(wx.aui.PyAuiDockArt):
 		from install_manager.install_module import chop_text
 	
 		active = bool(pane.state & pane.optionActive)
+		max_width = rect[2] - 5
+
+		button_size = self.GetMetric(aui.AUI_DOCKART_PANE_BUTTON_SIZE)
+		max_width -= button_size * (
+			pane.HasCloseButton() + pane.HasMaximizeButton()
+		)
+		caption_sizes[pane.name] = (
+			pane, wx.Rect(rect[0], rect[1], max_width, rect[3])
+		)
+		
+		
 
 		match = None		
 		if pane.name in [title for p, title in self.parent.panes]:
@@ -124,13 +135,6 @@ class DockArt(wx.aui.PyAuiDockArt):
 		combo_text = match.group(1)
 		before_text = text[:match.start(1)]
 		after_text = text[match.end(1):]
-		
-		max_width = rect[2] - 5
-
-		button_size = self.GetMetric(aui.AUI_DOCKART_PANE_BUTTON_SIZE)
-		max_width -= button_size * (
-			pane.HasCloseButton() + pane.HasMaximizeButton()
-		)
 		
 		
 		chopped_text = chop_text(dc, before_text, max_size=max_width)
@@ -218,6 +222,7 @@ class DockArt(wx.aui.PyAuiDockArt):
 
 mouse_over = {}
 size_taken = {}
+caption_sizes = {}
 class AuiLayer(object):
 	"""The AUI part of the main form"""
 	def setup(self):
@@ -318,14 +323,18 @@ class AuiLayer(object):
 			if maximized:
 				pane = self.aui_mgr.GetPane(maximized)
 				assert pane.IsOk(), maximized
-				self.fix_pane_direction(pane)
-				self.aui_mgr.MaximizePane(pane)
+				self.maximize_pane(pane)
+
 			
 		else:
 			self.default_set_aui_items_up()
 
 
 		self.aui_mgr.Update()
+	
+	def maximize_pane(self, pane):
+		self.fix_pane_direction(pane)
+		self.aui_mgr.MaximizePane(pane)
 	
 	def get_pane_for_frame(self, frame):
 		for f, pane_name in self.panes:
@@ -367,11 +376,30 @@ class AuiLayer(object):
 
 		self.aui_mgr.Bind(wx.EVT_MOTION, self.on_motion)
 		self.aui_mgr.Bind(wx.EVT_LEFT_DOWN, self.on_left_down)
+		self.aui_mgr.Bind(wx.EVT_LEFT_DCLICK, self.on_left_dclick)
+		
 		self.aui_mgr.Bind(wx.EVT_LEAVE_WINDOW, self.on_leave_window)
 	
 	def on_leave_window(self, event):
 		self.clear_over_list()
 		event.Skip()
+	
+	def on_left_dclick(self, event):
+		maximized_pane = self.get_maximized_pane()
+		
+		for name, (pane, rect) in caption_sizes.items():
+			if rect.Contains(event.Position) and self.pane_can_be_seen(pane):
+				if maximized_pane:
+					assert maximized_pane.name == name, "Wrong maximized pane"
+					self.restore_maximized_pane(pane)
+				else:
+					self.maximize_pane(pane)
+				
+				self.aui_mgr.Update()
+				wx.CallAfter(self.update_all_aui_menu_items)
+				break
+		else:
+			event.Skip()
 	
 	def on_left_down(self, event):
 		#TODO: don't popup on maximize button or close button click
@@ -504,6 +532,7 @@ class AuiLayer(object):
 	def restore_maximized_pane(self, pane):
 		self.restore_pane_direction(pane)
 		self.aui_mgr.RestoreMaximizedPane()
+		
 
 	def on_pane_changed(self, pane_name, toggle):
 		wx.CallAfter(self.update_all_aui_menu_items)
