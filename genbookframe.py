@@ -68,6 +68,9 @@ class GenBookFrame(BookFrame):
 		self.genbookpanel.Fit()
 		self.genbooktree.Bind(wx.EVT_COMBOBOX, self.on_genbook_change)
 		biblemgr.genbook.observers += self.genbook_version_changed
+		guiconfig.mainfrm.on_close += lambda:biblemgr.genbook.observers.remove(
+			self.genbook_version_changed
+		)
 		self.reference_text = None
 		
 		

@@ -127,7 +127,24 @@ class MainFrame(wx.Frame, AuiLayer):
 		biblemgr.bible.observers += self.bible_version_changed
 		biblemgr.commentary.observers += self.commentary_version_changed
 		biblemgr.dictionary.observers += self.dictionary_version_changed
+
 		biblemgr.on_after_reload += self.on_modules_reloaded
+		self.on_close += lambda: \
+			biblemgr.bible.observers.remove(self.bible_version_changed)
+		
+		self.on_close += lambda: \
+			biblemgr.commentary.observers.remove(
+				self.commentary_version_changed
+			)
+		
+		self.on_close += lambda: \
+			biblemgr.dictionary.observers.remove(
+				self.dictionary_version_changed
+			)
+		
+		self.on_close += lambda: \
+			biblemgr.on_after_reload.remove(self.on_modules_reloaded)
+		
 		
 		
 		#self.Freeze()
@@ -391,8 +408,11 @@ class MainFrame(wx.Frame, AuiLayer):
 
 			def callback(toggle):
 				wx.CallAfter(item.on_show, toggle)			
-
-			return version_changed, callback
+			
+			def remove_observer():
+				item.book.observers.remove(version_changed)
+				
+			return version_changed, callback, remove_observer
 
 		self.searchers = (
 			self.search_panel, 
@@ -403,10 +423,11 @@ class MainFrame(wx.Frame, AuiLayer):
 
 		self.aui_callbacks = {}
 		for item in self.searchers:
-			version_changed, callback = make_closure(item)
+			version_changed, callback, remove_observer = make_closure(item)
 			self.aui_callbacks[item.title] = callback
 
 			item.book.observers += version_changed
+			self.on_close += remove_observer
 			version_changed()
 			
 		# TODO: only refresh if settings are changed
@@ -924,16 +945,26 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.MainFrameClose(None)
 	
 	def MainFrameClose(self, event=None):
-		# unbind activation events so that we don't get these called when the
-		# frame disappears for the last time
-		self.Unbind(wx.EVT_ACTIVATE)
-		for a in self.toplevels:
-			if a:
-				a.Unbind(wx.EVT_ACTIVATE)
+		try:
+			# unbind activation events so that we don't get these called when the
+			# frame disappears for the last time
+			self.Unbind(wx.EVT_ACTIVATE)
+			for a in self.toplevels:
+				if a:
+					a.Unbind(wx.EVT_ACTIVATE)
 
-		self.save_data()
-		self.on_close()
-		self.Destroy()
+			self.save_data()
+			self.on_close()
+		except Exception, e:
+			# give notification - we probably have uninstalled our error
+			# handler
+			wx.MessageBox(_("An error occurred on closing:\n%s") % e)
+
+			# but let it propagate and print a stack trace
+			raise
+		finally:
+			# but whatever happens, close
+			self.Destroy()
 
 	#def BibleRefEnterChar(self, event):
 	

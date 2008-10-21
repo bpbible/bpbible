@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2008-10-21 21:29+AUS Eastern Daylight Time\n"
+"POT-Creation-Date: 2008-10-21 22:14+AUS Eastern Daylight Time\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,7 +23,7 @@ msgstr ""
 msgid "Bible"
 msgstr ""
 
-#: ./copyverses.py:31
+#: ./copyverses.py:133
 msgid "<custom: based on %s>"
 msgstr ""
 
@@ -55,88 +55,94 @@ msgstr ""
 msgid "Hello, World!"
 msgstr ""
 
-#: ./mainframe.py:207 ./xrc/auifrm_xrc.py:129
+#: ./mainframe.py:224 ./xrc/auifrm_xrc.py:129
 msgid "Back"
 msgstr ""
 
-#: ./mainframe.py:208 ./xrc/auifrm_xrc.py:127 ./xrc/auifrm_xrc.py:128
+#: ./mainframe.py:225 ./xrc/auifrm_xrc.py:127 ./xrc/auifrm_xrc.py:128
 msgid "Go back a verse"
 msgstr ""
 
-#: ./mainframe.py:211 ./xrc/auifrm_xrc.py:132
+#: ./mainframe.py:228 ./xrc/auifrm_xrc.py:132
 msgid "Forward"
 msgstr ""
 
-#: ./mainframe.py:212 ./xrc/auifrm_xrc.py:130 ./xrc/auifrm_xrc.py:131
+#: ./mainframe.py:229 ./xrc/auifrm_xrc.py:130 ./xrc/auifrm_xrc.py:131
 msgid "Go forward a verse"
 msgstr ""
 
-#: ./mainframe.py:215 ./xrc/auifrm_xrc.py:111
+#: ./mainframe.py:232 ./xrc/auifrm_xrc.py:111
 msgid "Zoom In"
 msgstr ""
 
-#: ./mainframe.py:216 ./xrc/auifrm_xrc.py:109 ./xrc/auifrm_xrc.py:110
+#: ./mainframe.py:233 ./xrc/auifrm_xrc.py:109 ./xrc/auifrm_xrc.py:110
 msgid "Make text bigger"
 msgstr ""
 
-#: ./mainframe.py:219 ./xrc/auifrm_xrc.py:117
+#: ./mainframe.py:236 ./xrc/auifrm_xrc.py:117
 msgid "Default Zoom"
 msgstr ""
 
-#: ./mainframe.py:220 ./xrc/auifrm_xrc.py:115 ./xrc/auifrm_xrc.py:116
+#: ./mainframe.py:237 ./xrc/auifrm_xrc.py:115 ./xrc/auifrm_xrc.py:116
 msgid "Return text to default size"
 msgstr ""
 
-#: ./mainframe.py:223 ./xrc/auifrm_xrc.py:114
+#: ./mainframe.py:240 ./xrc/auifrm_xrc.py:114
 msgid "Zoom Out"
 msgstr ""
 
-#: ./mainframe.py:224 ./xrc/auifrm_xrc.py:112 ./xrc/auifrm_xrc.py:113
+#: ./mainframe.py:241 ./xrc/auifrm_xrc.py:112 ./xrc/auifrm_xrc.py:113
 msgid "Make text smaller"
 msgstr ""
 
-#: ./mainframe.py:233
+#: ./mainframe.py:250
 msgid "Go to verse"
 msgstr ""
 
-#: ./mainframe.py:234 ./xrc/auifrm_xrc.py:118 ./xrc/auifrm_xrc.py:119
+#: ./mainframe.py:251 ./xrc/auifrm_xrc.py:118 ./xrc/auifrm_xrc.py:119
 msgid "Open this verse"
 msgstr ""
 
-#: ./mainframe.py:237 ./xrc/auifrm_xrc.py:123
+#: ./mainframe.py:254 ./xrc/auifrm_xrc.py:123
 msgid "Bible Search"
 msgstr ""
 
-#: ./mainframe.py:238 ./xrc/auifrm_xrc.py:121 ./xrc/auifrm_xrc.py:122
+#: ./mainframe.py:255 ./xrc/auifrm_xrc.py:121 ./xrc/auifrm_xrc.py:122
 msgid "Search in this Bible"
 msgstr ""
 
-#: ./mainframe.py:241 ./xrc/auifrm_xrc.py:124 ./xrc/copyverses_xrc.py:80
+#: ./mainframe.py:258 ./xrc/auifrm_xrc.py:124 ./xrc/copyverses_xrc.py:80
 msgid "Copy Verses"
 msgstr ""
 
-#: ./mainframe.py:242 ./xrc/auifrm_xrc.py:125
+#: ./mainframe.py:259 ./xrc/auifrm_xrc.py:125
 msgid "Open the Copy Verses dialog"
 msgstr ""
 
-#: ./mainframe.py:651 ./mainframe.py:653 ./xrc/auifrm_xrc.py:136
+#: ./mainframe.py:672 ./mainframe.py:674 ./xrc/auifrm_xrc.py:136
 msgid "&Language"
 msgstr ""
 
-#: ./mainframe.py:672 ./xrc/auifrm_xrc.py:139
+#: ./mainframe.py:693 ./xrc/auifrm_xrc.py:139
 msgid "&Display"
 msgstr ""
 
-#: ./mainframe.py:677 ./xrc/auifrm_xrc.py:142
+#: ./mainframe.py:698 ./xrc/auifrm_xrc.py:142
 msgid "&Window"
 msgstr ""
 
-#: ./mainframe.py:681 ./xrc/auifrm_xrc.py:141
+#: ./mainframe.py:702 ./xrc/auifrm_xrc.py:141
 msgid "Toolbars"
 msgstr ""
 
-#: ./mainframe.py:716 ./xrc/auifrm_xrc.py:143
+#: ./mainframe.py:737 ./xrc/auifrm_xrc.py:143
 msgid "Debug"
+msgstr ""
+
+#: ./mainframe.py:961
+msgid ""
+"An error occurred on closing:\n"
+"%s"
 msgstr ""
 
 #: ./util/i18n.py:39
