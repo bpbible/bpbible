@@ -293,10 +293,15 @@ class SearchPanel(xrcSearchPanel):
 				self.index = search.ReadIndex(self.version)
 			except Exception, e:
 				dprint(WARNING, "Error reading index. Deleting it...", e)
-				search.DeleteIndex(self.version)
+				try:
+					search.DeleteIndex(self.version)
+				except Exception, e2:
+					dprint(WARNING, "Couldn't delete it", e2)
+
 				self.index = None
 				self.show_keyboard_button(shown=False)
 				self.set_index_available(False)
+			#	del busy_info
 
 				
 				return
@@ -827,8 +832,29 @@ class SearchPanel(xrcSearchPanel):
 			self.set_index_available(True)
 			self.show_keyboard_button()
 			
+
 			#write it to file
-			self.index.WriteIndex()
+
+			def index_callback(value):
+				# calling GUI functions here is quite expensive (under linux,
+				# takes twice as long if you do it always), so only do it every
+				# 0.1 seconds
+				if time.time() - last_time[0] > 0.1:
+					continuing, skip = p.Update(value[1], 
+						"Writing %s" % value[0])
+				
+					self.progressbar.SetValue(value[1])
+					
+					guiconfig.app.Yield()
+					last_time[0] = time.time()
+		                                                                           
+					return continuing
+				return True
+
+			p.Show()
+			
+			last_time = [time.time()]
+			self.index.WriteIndex(progress=index_callback)
 
 		finally:
 			#self.show_progress_bar(False)

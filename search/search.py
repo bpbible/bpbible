@@ -8,6 +8,7 @@ from util.string_util import ReplaceUnicode, KillTags, remove_amps
 from util.unicode import get_to_unicode
 from util import search_utils
 from util.search_utils import *
+import util
 from swlib.pysw import SW, BookName, VK, TOP
 import os
 import re
@@ -301,7 +302,9 @@ class Index(object):
 		
 		flags = re.IGNORECASE * (not case_sensitive) | re.UNICODE | re.MULTILINE
 		
-		if not regexes and not excl_regexes and not fields and not excl_fields:
+		if not regexes and not fields:
+			# we can't search for just a negative at the moment
+			# so -/a/ isn't a valid search
 			return []
 
 		return self.multi_search(
@@ -354,8 +357,8 @@ class Index(object):
 		return results
 	
 	
-	def WriteIndex(self):
-		search_utils.WriteIndex(self)
+	def WriteIndex(self, progress=util.noop):
+		search_utils.WriteIndex(self, progress=progress)
 
 class GenBookIndex(Index):
 	def __init__(self, version, progress=lambda x:x, booktype=IndexedText):
