@@ -174,7 +174,7 @@ class Book(object):
 			if specialref == body_dict["reference"]:
 				t = specialtemplate
 
-			verse = ""
+			verse = u""
 			for heading_dict in headings:
 				verse += t.headings.safe_substitute(heading_dict)
 			
