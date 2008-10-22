@@ -1,5 +1,6 @@
 from backend.bibleinterface import biblemgr
 from swlib.pysw import VK
+import re
 
 headings_cache = {}
 
@@ -29,20 +30,31 @@ def get_chapter_headings(chapter):
 	# and turn on headings
 	biblemgr.set_option("Headings", True)
 
-	#
-	vk = VK((chapter, chapter))
+	vk = VK()
+	vk.Headings(1)
+	vk.LowerBound("%s:0" % chapter)
+	vk.UpperBound(chapter)
 
 	mod = biblemgr.bible.mod
 	headings = []
 	for item in vk:	
 		mod.setKey(item)
-		mod.RenderText()
+		content = mod.RenderText()
+
+		# if it was in verse 0, link to verse 1 for now
+		if item.Verse() == 0:
+			item.Verse(1)
+		
+		headings += ((item, text) for heading, text in re.findall(
+			'(<h6 class="heading" canonical="[^"]*">(.*?)</h6>)', 
+			content, re.U))
+		
 		headings += ((item, mod.RenderText(heading))
-			for heading in biblemgr.bible.get_headings(item.getText()))
+			for heading, canonical in biblemgr.bible.get_headings(item.getText()))
 	
 	biblemgr.restore_state()
 	version_headings[chapter] = headings
 	return headings
 
 if __name__ == '__main__':
-	print get_chapter_headings("Matthew 5")
+	print get_chapter_headings("Psalm 3")

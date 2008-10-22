@@ -302,7 +302,11 @@ class VK(SW.VerseKey):#, object):
 			raise StopIteration
 		self.setPosition(TOP)
 		while not self.Error():
-			yield VK(self.getText())
+			vk = VK()
+			vk.Headings(self.Headings())
+			vk.setText(self.getText())
+			yield vk
+
 			self+=1
 
 	def __getitem__(self, key):

@@ -166,7 +166,8 @@ class OSISParser(filterutils.ParserBase):
 	# version comparison problems - kill these!
 
 	def start_title(self, attributes):
-		self.buf += '<h6 class="heading">'
+		self.buf += '<h6 class="heading" canonical="%s">' % \
+			attributes.get("canonical", "false")
 	
 	def end_title(self):
 		self.buf += '</h6>'

@@ -75,7 +75,8 @@ class ParseOSIS(ParseBase):
 		self._parse_children(node, si)
 		
 	def handle_title(self, node, si):
-		if self.headings_off:
+		# only put canonical headings (e.g. in Psalms)
+		if node.attrib.get("canonical") != "true":
 			return
 
 		si.write("\n")

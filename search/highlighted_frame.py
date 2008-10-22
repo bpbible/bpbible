@@ -24,7 +24,8 @@ regex = r"""
 		(action=showRef[^>]*>)  	 | # a reference - don't include text
 		([^>]*>.*?</a>) 		 	   # or another sword link and contents	
 	))								 |
-	(<h6\ class="heading">.*?</h6>)	 | # a heading and contents	
+	(<h6\ class="heading"\ 
+		canonical="false">.*?</h6>)	 | # a heading (not canonical) and contents	
 	(<[^>]+>)						 | # any other html tag - not contents
 	(&(?P<amps>[^;]*);)				 | # a html escape
 	(.)							  	   # anything else
@@ -340,7 +341,7 @@ class HighlightedDisplayFrame(ReferenceDisplayFrame):
 
 		# TODO: put a function in search to do this for us...
 		biblemgr.temporary_state(biblemgr.plainstate)
-		template = VerseTemplate(u"$text ", headings=u"")
+		template = VerseTemplate(u"$text ")#, headings=u"")
 		self.parent.book.templatelist.append(template)
 		
 		
@@ -351,6 +352,11 @@ class HighlightedDisplayFrame(ReferenceDisplayFrame):
 
 		#TODO: highlight with \n's properly
 		# e.g. /word\nanother/
+
+		# remove non-canonical headings
+		content = re.sub('(<h6 class="heading" canonical="false">.*?</h6>)',
+						 '', content)	
+
 		content = remove_amps(KillTags(ReplaceUnicode(content)))
 		content = content.replace("\n", " ")
 		content = removeformatting(content)

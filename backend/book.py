@@ -254,11 +254,14 @@ class Book(object):
 			headings = self.get_headings(reference, mod)
 			versekey = VK.castTo(key)
 			heading_dicts = []
-			for heading in headings:
+			for heading, canonical in headings:
 				if not raw:
-					heading = mod.RenderText(heading)
+					if stripped:
+						heading = mod.StripText(heading)
+					else:
+						heading = mod.RenderText(heading)
 
-				heading_dict = dict(heading=heading)
+				heading_dict = dict(heading=heading, canonical=canonical)
 				heading_dict.update(body_dict)
 				heading_dicts.append(heading_dict)
 				
@@ -303,6 +306,7 @@ class Book(object):
 		heading = SW.Buf("Heading")
 		preverse = SW.Buf("Preverse")
 		interverse = SW.Buf("Interverse")
+		canonical = SW.Buf("canonical")
 		headings = []
 		heading_types = [preverse, interverse]
 		attrmap = mod.getEntryAttributesMap()#[SW.Buf("Heading")
@@ -312,9 +316,23 @@ class Book(object):
 				i = 0
 				p = h[preverse]
 				while True:
+					is_canonical = "false"
 					i_buf = SW.Buf(str(i))
+
+					# try to see if this is a canonical heading
+					# unfortunately, if there happens to be a interverse
+					# heading after a canonical heading, it will overwrite it
+					# so we may not get the correct answer. This oughtn't to
+					# matter overly much
+					if i_buf in h:
+						attributes = h[i_buf]
+						if(canonical in attributes and
+							attributes[canonical].c_str() == "true"):
+							is_canonical = "true"
+						
 					if i_buf in p:
-						headings.append(p[i_buf].c_str())
+						headings.append((p[i_buf].c_str(), is_canonical))
+
 					else: break
 					i += 1
 			

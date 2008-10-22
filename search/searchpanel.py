@@ -888,7 +888,8 @@ class SearchList(virtuallist.VirtualListCtrlXRC):
 
 	def get_data(self, idx, col):
 		assert self.parent, "Parentless search list :("
-		template = VerseTemplate(body=u"$text ", headings=u"")
+		template = VerseTemplate(body=u"$text ")#, headings=u"")
+		
 	
 		if col == 0:
 			return self.parent.search_list_format_text(self.results[idx])
@@ -904,11 +905,21 @@ class SearchList(virtuallist.VirtualListCtrlXRC):
 			if ref_parts:
 				end_reference = ref_parts[0]
 			
-			bibletext = string_util.RemoveWhitespace(
-				self.parent.book.GetReference(
+
+			content = self.parent.book.GetReference(
 					reference, end_ref=end_reference, stripped=True
 				)
-			)
+			
+			# remove non-canonical headings
+			content = re.sub('<h6 class="heading" canonical="false">.*?</h6>',
+						 '', content)
+			content = re.sub(
+				'<h6 class="heading" canonical="true">(.*?)</h6>', r'\1', 
+				content)
+
+
+						 
+			bibletext = string_util.RemoveWhitespace(content)
 			
 			# trim to 500, otherwise it can be very slow on long entries		
 			if len(bibletext) > 500:

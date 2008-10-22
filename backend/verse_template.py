@@ -4,7 +4,7 @@ import re
 class VerseTemplate(object):
 	"""VerseTemplate is a class which defines templates for Bible Text""" 
 	def __init__(self, body=u"$text", header=u"", footer=u"", 
-	headings=u'<h6 class="heading">$heading</h6>\n'):
+	headings=u'<h6 class="heading" canonical="$canonical">$heading</h6>\n'):
 		self.header = str_template(header)
 		self.body = str_template(body)
 		self.footer = str_template(footer)
@@ -62,6 +62,8 @@ class SmartBody(object):
 		re.IGNORECASE
 	)
 	
+	empty_versenumber = re.compile("<small><sup></sup></small></glink>\s?")
+	
 	def __init__(self, body, verse_per_line=True):
 		self.body = body
 		self.verse_per_line = verse_per_line
@@ -97,6 +99,10 @@ class SmartBody(object):
 			''.join(whitespace),
 			self.vpl_text * self.verse_per_line,			
 		)
+		
+		# remove empty verse number
+		ret = self.empty_versenumber.sub("", ret)
+		
 
 		return ret
 	
