@@ -848,7 +848,7 @@ class MainFrame(wx.Frame, AuiLayer):
 		
 	def set_verse_per_line(self, to):
 		bible_settings["verse_per_line"] = to
-		self.bibleframe.set_verse_per_line(to)
+		self.bibletext.set_verse_per_line(to)
 
 		self.UpdateBibleUI(settings_changed=True, source=SETTINGS_CHANGED)
 		
