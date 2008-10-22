@@ -189,6 +189,19 @@ class FontChoiceDialog(xrcFontChoiceDialog):
 				self.mod.KeyText(to_str(ref, self.mod))
 				
 				text = self.mod.RenderText()
+				# if there is no text here, look back and forth for text
+				if not text:
+					old = self.mod.getSkipConsecutiveLinks()
+					self.mod.setSkipConsecutiveLinks(True)
+					
+					for direction in 1, -1:
+						self.mod.increment(direction)
+						text = self.mod.RenderText()
+						if text:
+							break
+					
+					self.mod.setSkipConsecutiveLinks(old)
+
 				ref = self.mod.getKeyText()
 				self.preview.SetPage("%s (%s)<br>%s" % (
 					to_unicode(ref, self.mod), self.mod.Name(), text
