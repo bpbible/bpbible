@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2008-10-21 22:14+AUS Eastern Daylight Time\n"
+"POT-Creation-Date: 2008-10-24 09:38+AUS Eastern Daylight Time\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -14,12 +14,80 @@ msgstr ""
 "Content-Transfer-Encoding: utf-8\n"
 "Generated-By: pygettext.py 1.5\n"
 
-#: backend/book.py:456
+#: backend/book.py:474
 msgid "commentary"
 msgstr ""
 
-#: backend/book.py:463 xrc/auifrm_xrc.py:152
+#: backend/book.py:481 xrc/auifrm_xrc.py:59
 msgid "Bible"
+msgstr ""
+
+#: bibleframe.py:66
+msgid "Search"
+msgstr ""
+
+#: bibleframe.py:71
+msgid "Harmony"
+msgstr ""
+
+#: bibleframe.py:74
+msgid "Opens the harmony"
+msgstr ""
+
+#: bibleframe.py:77
+msgid "Random verse"
+msgstr ""
+
+#: bibleframe.py:80
+msgid "Go to a random verse"
+msgstr ""
+
+#: bibleframe.py:83
+msgid "Copy verses"
+msgstr ""
+
+#: bibleframe.py:87
+msgid "Copy verses to other applications"
+msgstr ""
+
+#: bibleframe.py:91 bibleframe.py:140
+msgid "Open sticky tooltip"
+msgstr ""
+
+#: bibleframe.py:94
+msgid "Open a sticky tooltip with the selected verses"
+msgstr ""
+
+#: bibleframe.py:98
+msgid "Compare verses"
+msgstr ""
+
+#: bibleframe.py:101
+msgid "Open the verse comparison pane to the selected verses"
+msgstr ""
+
+#: bibleframe.py:108
+msgid "Manage Topics"
+msgstr ""
+
+#: bibleframe.py:111
+msgid "Manages all of the topics and the passages in them."
+msgstr ""
+
+#: bibleframe.py:114
+msgid "Tag verses"
+msgstr ""
+
+#: bibleframe.py:117
+msgid "Tags the currently selected verses."
+msgstr ""
+
+#: bibleframe.py:175
+msgid "Copying selected verses..."
+msgstr ""
+
+#: bibleframe.py:212
+msgid "Search in Bible for:"
 msgstr ""
 
 #: copyverses.py:133
@@ -34,10 +102,6 @@ msgstr ""
 msgid "<< &Details"
 msgstr ""
 
-#: error_handling.py:67
-msgid "%s%s\n"
-msgstr ""
-
 #: error_handling.py:70
 msgid ""
 "%sAn error has occurred.\n"
@@ -48,98 +112,188 @@ msgstr ""
 msgid "Above exception was ignored\n"
 msgstr ""
 
-#: gui/i18n.py:37 test2.py:25
-msgid "Hello, World!"
-msgstr ""
-
-#: mainframe.py:224 xrc/auifrm_xrc.py:129
+#: mainframe.py:225
 msgid "Back"
 msgstr ""
 
-#: mainframe.py:225 xrc/auifrm_xrc.py:127 xrc/auifrm_xrc.py:128
+#: mainframe.py:226
 msgid "Go back a verse"
 msgstr ""
 
-#: mainframe.py:228 xrc/auifrm_xrc.py:132
+#: mainframe.py:229
 msgid "Forward"
 msgstr ""
 
-#: mainframe.py:229 xrc/auifrm_xrc.py:130 xrc/auifrm_xrc.py:131
+#: mainframe.py:230
 msgid "Go forward a verse"
 msgstr ""
 
-#: mainframe.py:232 xrc/auifrm_xrc.py:111
+#: mainframe.py:233
 msgid "Zoom In"
 msgstr ""
 
-#: mainframe.py:233 xrc/auifrm_xrc.py:109 xrc/auifrm_xrc.py:110
+#: mainframe.py:234
 msgid "Make text bigger"
 msgstr ""
 
-#: mainframe.py:236 xrc/auifrm_xrc.py:117
+#: mainframe.py:237
 msgid "Default Zoom"
 msgstr ""
 
-#: mainframe.py:237 xrc/auifrm_xrc.py:115 xrc/auifrm_xrc.py:116
+#: mainframe.py:238
 msgid "Return text to default size"
 msgstr ""
 
-#: mainframe.py:240 xrc/auifrm_xrc.py:114
+#: mainframe.py:241
 msgid "Zoom Out"
 msgstr ""
 
-#: mainframe.py:241 xrc/auifrm_xrc.py:112 xrc/auifrm_xrc.py:113
+#: mainframe.py:242
 msgid "Make text smaller"
 msgstr ""
 
-#: mainframe.py:250
+#: mainframe.py:251
 msgid "Go to verse"
 msgstr ""
 
-#: mainframe.py:251 xrc/auifrm_xrc.py:118 xrc/auifrm_xrc.py:119
+#: mainframe.py:252
 msgid "Open this verse"
 msgstr ""
 
-#: mainframe.py:254 xrc/auifrm_xrc.py:123
+#: mainframe.py:255
 msgid "Bible Search"
 msgstr ""
 
-#: mainframe.py:255 xrc/auifrm_xrc.py:121 xrc/auifrm_xrc.py:122
+#: mainframe.py:256
 msgid "Search in this Bible"
 msgstr ""
 
-#: mainframe.py:258 xrc/auifrm_xrc.py:124 xrc/copyverses_xrc.py:80
+#: mainframe.py:259 xrc/copyverses_xrc.py:80
 msgid "Copy Verses"
 msgstr ""
 
-#: mainframe.py:259 xrc/auifrm_xrc.py:125
+#: mainframe.py:260
 msgid "Open the Copy Verses dialog"
 msgstr ""
 
-#: mainframe.py:672 mainframe.py:674 xrc/auifrm_xrc.py:136
+#: mainframe.py:288
+msgid "Navigation"
+msgstr ""
+
+#: mainframe.py:290
+msgid "Zoom"
+msgstr ""
+
+#: mainframe.py:292
+msgid "History toolbar"
+msgstr ""
+
+#: mainframe.py:672 xrc/auifrm_xrc.py:43
 msgid "&Language"
 msgstr "&Lengua"
 
-#: mainframe.py:693 xrc/auifrm_xrc.py:139
+#: mainframe.py:691 xrc/auifrm_xrc.py:46
 msgid "&Display"
 msgstr ""
 
-#: mainframe.py:698 xrc/auifrm_xrc.py:142
+#: mainframe.py:696 xrc/auifrm_xrc.py:49
 msgid "&Window"
 msgstr "&Ventana"
 
-#: mainframe.py:702 xrc/auifrm_xrc.py:141
+#: mainframe.py:700 xrc/auifrm_xrc.py:48
 msgid "Toolbars"
 msgstr ""
 
-#: mainframe.py:737 xrc/auifrm_xrc.py:143
+#: mainframe.py:713
+msgid "Show the %s toolbar"
+msgstr ""
+
+#: mainframe.py:716
+msgid "Show the %s pane"
+msgstr ""
+
+#: mainframe.py:735 xrc/auifrm_xrc.py:50
 msgid "Debug"
 msgstr ""
 
-#: mainframe.py:961
+#: mainframe.py:793
+msgid "Use Strong's headwords"
+msgstr ""
+
+#: mainframe.py:794
+msgid "Display Strong's numbers using the transliterated text"
+msgstr ""
+
+#: mainframe.py:799
+msgid "Expand cross-references"
+msgstr ""
+
+#: mainframe.py:800
+msgid "Display cross references partially expanded"
+msgstr ""
+
+#: mainframe.py:805
+msgid "One line per verse"
+msgstr ""
+
+#: mainframe.py:806
+msgid "Display each verse on its own line."
+msgstr ""
+
+#: mainframe.py:811
+msgid "Topic Tags"
+msgstr ""
+
+#: mainframe.py:812
+msgid "Display the topics that each verse is tagged with."
+msgstr ""
+
+#: mainframe.py:959
 msgid ""
 "An error occurred on closing:\n"
 "%s"
+msgstr ""
+
+#: mainframe.py:970
+msgid "search "
+msgstr ""
+
+#: mainframe.py:991
+msgid ""
+"Flexible Bible study software.\n"
+"\t\t\tBuilt Using the Sword Project from crosswire.org\n"
+"\t\t\tPython Version: %(sysversion)s\n"
+"\t\t\twxPython Version: %(wxversion)s"
+msgstr ""
+
+#: mainframe.py:997
+msgid "BPBible"
+msgstr ""
+
+#: mainframe.py:1001
+msgid "BPBible website"
+msgstr ""
+
+#: mainframe.py:1002
+msgid "Ben Morgan"
+msgstr ""
+
+#: mainframe.py:1002
+msgid "SWORD library developers"
+msgstr ""
+
+#: mainframe.py:1003
+msgid ""
+"Icons used are from famfamfam\n"
+"http://www.famfamfam.com/lab/icons/silk\n"
+"and the Tango Desktop Project\n"
+"http://tango.freedesktop.org/Tango_Desktop_Project"
+msgstr ""
+
+#: mainframe.py:1008
+msgid ""
+"BPBible is licensed under the GPL v2. For more details, refer to the LICENSE."
+"txt file in the application directory"
 msgstr ""
 
 #: util/i18n.py:39
@@ -154,67 +308,59 @@ msgstr "Español"
 msgid "BM test"
 msgstr ""
 
-#: xrc/auifrm_xrc.py:120
-msgid "Go to Verse"
-msgstr ""
-
-#: xrc/auifrm_xrc.py:126
-msgid "Verse Copy"
-msgstr ""
-
-#: xrc/auifrm_xrc.py:133
+#: xrc/auifrm_xrc.py:40
 msgid "&Set Sword Paths..."
 msgstr ""
 
-#: xrc/auifrm_xrc.py:134
+#: xrc/auifrm_xrc.py:41
 msgid "Install books..."
 msgstr ""
 
-#: xrc/auifrm_xrc.py:135
+#: xrc/auifrm_xrc.py:42
 msgid "Set fonts..."
 msgstr ""
 
-#: xrc/auifrm_xrc.py:137
+#: xrc/auifrm_xrc.py:44
 msgid "&Exit"
 msgstr ""
 
-#: xrc/auifrm_xrc.py:138
+#: xrc/auifrm_xrc.py:45
 msgid "&File"
 msgstr ""
 
-#: xrc/auifrm_xrc.py:140
+#: xrc/auifrm_xrc.py:47
 msgid "Default Layout"
 msgstr ""
 
-#: xrc/auifrm_xrc.py:144
+#: xrc/auifrm_xrc.py:51
 msgid "Html Ide"
 msgstr ""
 
-#: xrc/auifrm_xrc.py:145
+#: xrc/auifrm_xrc.py:52
 msgid "WI"
 msgstr ""
 
-#: xrc/auifrm_xrc.py:146
+#: xrc/auifrm_xrc.py:53
 msgid "&Help"
 msgstr "&Ayuda"
 
-#: xrc/auifrm_xrc.py:147
+#: xrc/auifrm_xrc.py:54
 msgid "BPBible Website"
 msgstr ""
 
-#: xrc/auifrm_xrc.py:148
+#: xrc/auifrm_xrc.py:55
 msgid "Documentation..."
 msgstr ""
 
-#: xrc/auifrm_xrc.py:149
+#: xrc/auifrm_xrc.py:56
 msgid "Report a problem..."
 msgstr ""
 
-#: xrc/auifrm_xrc.py:150
+#: xrc/auifrm_xrc.py:57
 msgid "Download books..."
 msgstr ""
 
-#: xrc/auifrm_xrc.py:151
+#: xrc/auifrm_xrc.py:58
 msgid "&About..."
 msgstr ""
 

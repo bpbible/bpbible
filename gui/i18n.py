@@ -27,17 +27,3 @@ def initialize():
 	mylocale.AddCatalogLookupPathPrefix(i18n.localedir)
 	if not mylocale.AddCatalog(i18n.domain):
 		dprint(WARNING, "Couldn't add wx catalog", i18n.langid)
-	
-		
-
-	
-# Set up Python's gettext
-if __name__ == '__main__':
-	# use Python's gettext
-	print i18n._("Hello, World!")
-
-	# use wxWidgets' translation services
-	print wx.GetTranslation("Hello, World!")
-
-	# if getting unicode errors try something like this:
-	#print wx.GetTranslation("Hello, World!").encode("utf-8")

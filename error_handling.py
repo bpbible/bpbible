@@ -64,7 +64,7 @@ class ErrorDialog(xrcErrorDialog):
 			self._log.write(text)
 		
 	def handle_error(self, type, value, tb):
-		traceback_text = _("%s%s\n") % (self.traceback_text.Value,
+		traceback_text = u"%s%s\n" % (self.traceback_text.Value,
 			''.join(traceback.format_exception(type, value, tb)))
 
 		self.exc_text = _("%sAn error has occurred.\n%s: %s\n") % (

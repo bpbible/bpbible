@@ -63,30 +63,60 @@ class BibleFrame(VerseKeyedFrame):
 		items = super(BibleFrame, self).get_menu_items()
 		
 		for item, scope in items:
-			if item != Separator and item.text == "Search":
+			if item != Separator and item.text == _("Search"):
 				item.accelerator = "Ctrl-F"
 
 		items = (
-			(MenuItem("Harmony", self.show_harmony, accelerator="Ctrl-H"),
-				IN_MENU),
-			(MenuItem("Random verse", self.random_verse, accelerator="Ctrl-R"),
-				IN_BOTH),
-			(MenuItem("Copy verses", guiconfig.mainfrm.on_copy_button, 
-				enabled=self.has_module, accelerator="Ctrl-Alt-C"), IN_BOTH),
+			(MenuItem(
+				_("Harmony"), 
+				self.show_harmony, 
+				accelerator="Ctrl-H",
+				doc=_("Opens the harmony"),
+			), IN_MENU),
+			(MenuItem(
+					_("Random verse"), 
+					self.random_verse, 
+					accelerator="Ctrl-R",
+					doc=_("Go to a random verse")
+			), IN_BOTH),
+			(MenuItem(
+				_("Copy verses"), 
+				guiconfig.mainfrm.on_copy_button, 
+				enabled=self.has_module, 
+				accelerator="Ctrl-Alt-C",
+				doc=_("Copy verses to other applications")
+			), IN_BOTH),
 			
-			(MenuItem("Open sticky tooltip", self.open_sticky_tooltip, 
-					enabled=self.has_module), IN_POPUP),
+			(MenuItem(
+				_("Open sticky tooltip"), 
+				self.open_sticky_tooltip, 
+				enabled=self.has_module, 
+				doc=_("Open a sticky tooltip with the selected verses")
+			), IN_POPUP),
 					
-			(MenuItem("Compare verses", self.compare_verses, 
-					enabled=self.has_module), IN_POPUP),
+			(MenuItem(
+				_("Compare verses"), 
+				self.compare_verses, 
+				enabled=self.has_module,
+				doc=_("Open the verse comparison pane to the selected verses")
+			), IN_POPUP),
 					
 			
 			(Separator, IN_BOTH),
 			# Pick suitably arbitrary accelerators.
-			(MenuItem("Manage Topics", self.manage_topics,
-					accelerator="Ctrl+Shift+T"), IN_BOTH),
-			(MenuItem("Tag verses", self.tag_verses,
-					enabled=self.has_module), IN_BOTH),
+			(MenuItem(
+				_("Manage Topics"), 
+				self.manage_topics,
+				accelerator="Ctrl+Shift+T",
+				doc=_("Manages all of the topics and the passages in them.")	
+			), IN_BOTH),
+			(MenuItem(
+				_("Tag verses"), 
+				self.tag_verses,
+				enabled=self.has_module,
+				doc=_("Tags the currently selected verses.")
+
+			), IN_BOTH),
 
 			(Separator, IN_BOTH),
 				 
@@ -107,7 +137,7 @@ class BibleFrame(VerseKeyedFrame):
 	
 	def tooltip_quickly(self):
 		qs = QuickSelector(self.get_window(), 
-			title="Open sticky tooltip")
+			title=_("Open sticky tooltip"))
 
 		qs.pseudo_modal(self.tooltip_quickly_finished)
 		
@@ -129,14 +159,11 @@ class BibleFrame(VerseKeyedFrame):
 		return text
 
 	def open_sticky_tooltip(self):
-		"""Open a sticky tooltip with the selected verses"""
 		text = self.get_quick_selected()
 		self.open_tooltip(text)
 	
 	
 	def compare_verses(self):
-		"""Open the verse comparison pane to the selected verses"""
-		
 		text = self.get_quick_selected()
 		title = VerseCompareFrame.title
 		#if not guiconfig.mainfrm.is_pane_shown(title):
@@ -145,7 +172,7 @@ class BibleFrame(VerseKeyedFrame):
 			
 	
 	def copy_quickly(self):
-		d = wx.BusyInfo("Copying selected verses...")
+		d = wx.BusyInfo(_("Copying selected verses..."))
 		wx.Yield()
 	
 		text = self.get_quick_selected()
@@ -157,7 +184,6 @@ class BibleFrame(VerseKeyedFrame):
 	
 		
 	def show_harmony(self):
-		"""Opens the harmony"""
 		harmony_frame = HarmonyFrame(guiconfig.mainfrm)
 		harmony_frame.SetIcons(guiconfig.icons)
 		harmony_frame.Show()
@@ -173,7 +199,6 @@ class BibleFrame(VerseKeyedFrame):
 		
 	
 	def random_verse(self):
-		"""Go to a random verse"""
 		randomnum = random.randint(1, 31102)
 		text = VK("Gen 1:%d" % randomnum).text
 		self.notify(text, source=RANDOM_VERSE)
@@ -184,18 +209,16 @@ class BibleFrame(VerseKeyedFrame):
 
 	def search_quickly(self):
 		qs = QuickSelector(self.get_window(), 
-			title="Search in Bible for:")
+			title=_("Search in Bible for:"))
 
 		qs.pseudo_modal(self.search_quickly_finished)
  
 	def manage_topics(self):
-		"""Manages all of the topics and the passages in them."""
 		from manage_topics_frame import ManageTopicsFrame
 		frame = ManageTopicsFrame(self)
 		frame.Show()
 
 	def tag_verses(self):
-		"""Tags the currently selected verses."""
 		from tag_passage_dialog import tag_passage
 		tag_passage(self, self.get_quick_selected())
 	

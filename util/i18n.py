@@ -19,7 +19,7 @@ localedir = "locales"
 domain = "messages"             # the translation file is messages.mo
 
 def initialize():
-	global langid
+	global langid, mytranslation
 	langid = locale_settings["language"]
 	
 	# Set up Python's gettext

@@ -26,7 +26,8 @@ import gui.i18n
 
 class MyApp(wx.App):
 	def Initialize(self):
-		self.close = True
+		was_restarted = self.restarting
+		self.starting = self.restarting = False
 		config_manager.load()
 		util.i18n.initialize()
 		gui.i18n.initialize()
@@ -43,10 +44,13 @@ class MyApp(wx.App):
 
 		self.SetTopWindow(frame)
 		frame.Show(True)
+		if was_restarted:
+			frame.Raise()
 		
 	
 	def OnInit(self):
-		self.close = False
+		self.starting = True
+		self.restarting = False
 	
 		dprint(MESSAGE, "App Init")
 		
@@ -105,7 +109,7 @@ def main():
 	dprint(MESSAGE, "App created")
 	
 	guiconfig.app = app
-	while not app.close:
+	while app.starting or app.restarting:
 		app.Initialize()
 		app.MainLoop()
 

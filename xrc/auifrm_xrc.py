@@ -16,75 +16,6 @@ def get_resources():
 
 
 
-class xrczoom_toolbar(wx.ToolBar):
-#!XRCED:begin-block:xrczoom_toolbar.PreCreate
-    def PreCreate(self, pre):
-        """ This function is called during the class's initialization.
-        
-        Override it for custom setup before the window is created usually to
-        set additional window styles using SetWindowStyle() and SetExtraStyle().
-        """
-        pass
-        
-#!XRCED:end-block:xrczoom_toolbar.PreCreate
-
-    def __init__(self, parent):
-        # Two stage creation (see http://wiki.wxpython.org/index.cgi/TwoStageCreation)
-        pre = wx.PreToolBar()
-        self.PreCreate(pre)
-        get_resources().LoadOnToolBar(pre, parent, "zoom_toolbar")
-        self.PostCreate(pre)
-
-        # Define variables for the controls, bind event handlers
-
-
-
-class xrcmain_toolbar(wx.ToolBar):
-#!XRCED:begin-block:xrcmain_toolbar.PreCreate
-    def PreCreate(self, pre):
-        """ This function is called during the class's initialization.
-        
-        Override it for custom setup before the window is created usually to
-        set additional window styles using SetWindowStyle() and SetExtraStyle().
-        """
-        pass
-        
-#!XRCED:end-block:xrcmain_toolbar.PreCreate
-
-    def __init__(self, parent):
-        # Two stage creation (see http://wiki.wxpython.org/index.cgi/TwoStageCreation)
-        pre = wx.PreToolBar()
-        self.PreCreate(pre)
-        get_resources().LoadOnToolBar(pre, parent, "main_toolbar")
-        self.PostCreate(pre)
-
-        # Define variables for the controls, bind event handlers
-
-
-
-class xrchistory_toolbar(wx.ToolBar):
-#!XRCED:begin-block:xrchistory_toolbar.PreCreate
-    def PreCreate(self, pre):
-        """ This function is called during the class's initialization.
-        
-        Override it for custom setup before the window is created usually to
-        set additional window styles using SetWindowStyle() and SetExtraStyle().
-        """
-        pass
-        
-#!XRCED:end-block:xrchistory_toolbar.PreCreate
-
-    def __init__(self, parent):
-        # Two stage creation (see http://wiki.wxpython.org/index.cgi/TwoStageCreation)
-        pre = wx.PreToolBar()
-        self.PreCreate(pre)
-        get_resources().LoadOnToolBar(pre, parent, "history_toolbar")
-        self.PostCreate(pre)
-
-        # Define variables for the controls, bind event handlers
-
-
-
 
 
 # ------------------------ Resource data ----------------------
@@ -106,30 +37,6 @@ def __gettext_strings():
     
     def _(str): pass
     
-    _("Make text bigger")
-    _("Make text bigger")
-    _("Zoom In")
-    _("Make text smaller")
-    _("Make text smaller")
-    _("Zoom Out")
-    _("Return text to default size")
-    _("Return text to default size")
-    _("Default Zoom")
-    _("Open this verse")
-    _("Open this verse")
-    _("Go to Verse")
-    _("Search in this Bible")
-    _("Search in this Bible")
-    _("Bible Search")
-    _("Copy Verses")
-    _("Open the Copy Verses dialog")
-    _("Verse Copy")
-    _("Go back a verse")
-    _("Go back a verse")
-    _("Back")
-    _("Go forward a verse")
-    _("Go forward a verse")
-    _("Forward")
     _("&Set Sword Paths...")
     _("Install books...")
     _("Set fonts...")

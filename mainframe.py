@@ -58,6 +58,7 @@ from util.configmgr import config_manager
 from install_manager.install_drop_target import ModuleDropTarget
 import passage_list
 from error_handling import ErrorDialog
+from util.i18n import N_
 import util.i18n
 
 settings = config_manager.add_section("BPBible")
@@ -284,11 +285,11 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.Bind(wx.EVT_CONTEXT_MENU, self.show_toolbar_popup)
 		self.Bind(wx.EVT_RIGHT_UP, self.show_toolbar_popup)
 
-		self.toolbars = ([self.main_toolbar, "Navigation", 
+		self.toolbars = ([self.main_toolbar, N_("Navigation"), 
 							("BestSize", best_size)],
-						 [self.zoom_toolbar, "Zoom",
+						 [self.zoom_toolbar, N_("Zoom"),
 						 	["Hide"]],
-						 [self.history_toolbar, "History toolbar",
+						 [self.history_toolbar, N_("History toolbar"),
 						 	["Row", 0]])
 	
 	def load_data(self):
@@ -480,8 +481,6 @@ class MainFrame(wx.Frame, AuiLayer):
 				
 		
 	def on_copy_button(self, event=None):
-		"""Copy verses to other applications"""
-
 		text = self.bibletext.get_quick_selected()
 		
 		cvd = CopyVerseDialog(self)
@@ -669,7 +668,6 @@ class MainFrame(wx.Frame, AuiLayer):
 		
 	def set_menus_up(self):
 		self.file_menu = self.MenuBar.GetMenu(0)
-		print _("&Language")
 		for item in self.file_menu.MenuItems:
 			if item.ItemLabel == _("&Language"):
 				language_menu = item.SubMenu
@@ -712,10 +710,10 @@ class MainFrame(wx.Frame, AuiLayer):
 
 			if pane.IsToolbar(): 
 				item = self.toolbar_menu.AppendCheckItem(wx.ID_ANY, pane.name,
-					help="Show the %s toolbar"%pane.name)
+					help=_("Show the %s toolbar")%pane.name)
 			else:
 				item = self.windows_menu.AppendCheckItem(wx.ID_ANY, pane.name,
-					help="Show the %s pane"%pane.name)
+					help=_("Show the %s pane")%pane.name)
 
 			if pane.IsShown():
 				item.Check()
@@ -792,26 +790,26 @@ class MainFrame(wx.Frame, AuiLayer):
 
 		strongs_headwords = self.options_menu.AppendCheckItem(
 			wx.ID_ANY,
-			"Use Strong's headwords",
-			"Display Strong's numbers using the transliterated text"
+			_("Use Strong's headwords"),
+			_("Display Strong's numbers using the transliterated text")
 		)
 
 		cross_references = self.options_menu.AppendCheckItem(
 			wx.ID_ANY,
-			"Expand cross-references",
-			"Display cross references partially expanded"
+			_("Expand cross-references"),
+			_("Display cross references partially expanded")
 		)
 
 		verse_per_line = self.options_menu.AppendCheckItem(
 			wx.ID_ANY,
-			"One line per verse",
-			"Display each verse on its own line."
+			_("One line per verse"),
+			_("Display each verse on its own line.")
 		)
 		
 		display_tags = self.options_menu.AppendCheckItem(
 			wx.ID_ANY,
-			"Topic Tags",
-			"Display the topics that each verse is tagged with."
+			_("Topic Tags"),
+			_("Display the topics that each verse is tagged with.")
 		)
 		
 
@@ -941,7 +939,7 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.version_tree.recreate()
 
 	def restart(self, event=None):
-		guiconfig.app.close = False
+		guiconfig.app.restarting = True
 		self.MainFrameClose(None)
 	
 	def MainFrameClose(self, event=None):
@@ -969,7 +967,7 @@ class MainFrame(wx.Frame, AuiLayer):
 	#def BibleRefEnterChar(self, event):
 	
 	def BibleRefEnter(self, event=None):
-		if self.bibleref.GetValue()[:6] == "search":
+		if self.bibleref.startswith(_("search ")):
 			self.searchkey = self.bibleref.GetValue()[7:]
 			if self.searchkey:
 				self.search_panel.search_and_show(self.searchkey)
@@ -990,26 +988,26 @@ class MainFrame(wx.Frame, AuiLayer):
 		wxversiondata = ", ".join(wx.PlatformInfo[1:])
 		sysversion = sys.version.split()[0]
 		name = config.name
-		text = """Flexible Bible study software.
+		text = _("""Flexible Bible study software.
 			Built Using the Sword Project from crosswire.org
 			Python Version: %(sysversion)s
-			wxPython Version: %(wxversion)s""".expandtabs(0) %locals()
+			wxPython Version: %(wxversion)s""").expandtabs(0) %locals()
 
 		info = wx.AboutDialogInfo()
-		info.Name = "BPBible"
+		info.Name = _("BPBible")
 		info.Version = "0.3.1"
 		info.Description = text#, 350, wx.ClientDC(self))
 		info.WebSite = ("bpbible.com", 
-						"BPBible website")
-		info.Developers = ["Ben Morgan", "SWORD library developers"]
-		info.Artists = ["Icons used are from famfamfam\n"
+						_("BPBible website"))
+		info.Developers = [_("Ben Morgan"), _("SWORD library developers")]
+		info.Artists = [_("Icons used are from famfamfam\n"
 			"http://www.famfamfam.com/lab/icons/silk\n"
 			"and the Tango Desktop Project\n"
-			"http://tango.freedesktop.org/Tango_Desktop_Project"]
+			"http://tango.freedesktop.org/Tango_Desktop_Project")]
 
-		info.License = wordwrap("BPBible is licensed under the GPL v2. "
+		info.License = wordwrap(_("BPBible is licensed under the GPL v2. "
 			"For more details, refer to the LICENSE.txt file in the "
-			"application directory", 330, wx.ClientDC(self))
+			"application directory"), 330, wx.ClientDC(self))
 
 
 		# Then we call wx.AboutBox giving it that info object

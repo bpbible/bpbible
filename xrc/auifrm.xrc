@@ -1,65 +1,8 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <resource version="2.3.0.1">
-  <object class="wxToolBar" name="zoom_toolbar">
-    <object class="tool" name="tool_zoom_in">
-      <bitmap>..\graphics\magnifier_zoom_in.png</bitmap>
-      <tooltip>Make text bigger</tooltip>
-      <longhelp>Make text bigger</longhelp>
-      <label>Zoom In</label>
-    </object>
-    <object class="tool" name="tool_zoom_out">
-      <bitmap>..\graphics\magifier_zoom_out.png</bitmap>
-      <tooltip>Make text smaller</tooltip>
-      <longhelp>Make text smaller</longhelp>
-      <label>Zoom Out</label>
-    </object>
-    <bitmapsize>16</bitmapsize>
-    <style>wxTB_FLAT|wxTB_NODIVIDER|wxTB_HORZ_TEXT</style>
-    <object class="tool" name="tool_zoom_default">
-      <bitmap>..\graphics\magnifier.png</bitmap>
-      <tooltip>Return text to default size</tooltip>
-      <longhelp>Return text to default size</longhelp>
-      <label>Default Zoom</label>
-    </object>
-  </object>
-  <object class="wxToolBar" name="main_toolbar">
-    <object class="tool" name="tool_go">
-      <bitmap>..\graphics\accept.png</bitmap>
-      <tooltip>Open this verse</tooltip>
-      <longhelp>Open this verse</longhelp>
-      <label>Go to Verse</label>
-    </object>
-    <object class="tool" name="tool_search">
-      <bitmap>..\graphics\find.png</bitmap>
-      <tooltip>Search in this Bible</tooltip>
-      <longhelp>Search in this Bible</longhelp>
-      <label>Bible Search</label>
-    </object>
-    <object class="tool" name="tool_copy_verses">
-      <bitmap>..\graphics\page_copy.png</bitmap>
-      <tooltip>Copy Verses</tooltip>
-      <longhelp>Open the Copy Verses dialog</longhelp>
-      <label>Verse Copy</label>
-    </object>
-    <bitmapsize>16</bitmapsize>
-    <style>wxTB_FLAT|wxTB_NODIVIDER|wxTB_HORZ_TEXT</style>
-  </object>
-  <object class="wxToolBar" name="history_toolbar">
-    <object class="tool" name="tool_back">
-      <bitmap>..\graphics\go-previous.png</bitmap>
-      <tooltip>Go back a verse</tooltip>
-      <longhelp>Go back a verse</longhelp>
-      <label>Back</label>
-    </object>
-    <object class="tool" name="tool_forward">
-      <bitmap>..\graphics\go-next.png</bitmap>
-      <tooltip>Go forward a verse</tooltip>
-      <longhelp>Go forward a verse</longhelp>
-      <label>Forward</label>
-    </object>
-    <bitmapsize>16</bitmapsize>
-    <style>wxTB_FLAT|wxTB_NODIVIDER|wxTB_HORZ_TEXT</style>
-  </object>
+  
+  
+  
   <object class="wxFrame" name="MainFrame" subclass="mainframe.MainFrameXRC">
     <object class="wxMenuBar" name="frame_1_menubar">
       <object class="wxMenu" name="file">
