@@ -114,6 +114,8 @@ class VerseCompareFrame(LinkedFrame):
 					text.append(biblemgr.bible.templatelist[-1].\
 						headings.safe_substitute(heading_dict))
 				
+				#TODO: put per-language font support in here
+				# especially greek/hebrew with overrides
 				text.append("<sup>%(versenumber)d</sup> %(text)s"%body_dict)
 				
 				text.append("</td>")
@@ -166,17 +168,20 @@ class VerseCompareFrame(LinkedFrame):
 	def get_menu_items(self):
 		actions = super(VerseCompareFrame, self).get_menu_items()
 		actions = (
-			(MenuItem("Set versions to compare", self.set_versions),
-			IN_POPUP),
+			(MenuItem(
+				_("Set books to compare"), 
+				self.set_versions,
+				doc=_("Set the books this version comparison will use")
+			), IN_POPUP),
 		) + actions
 		return actions
 
 	def set_versions(self):
-		"""Set the versions this version comparison will use"""
+		
 		modules = self.book.GetModuleList()
 		mcd = MultiChoiceDialog(guiconfig.mainfrm, 
-			"Choose modules to compare in the verse comparison window", 
-			"Choose modules", 
+			_("Choose books to compare in the verse comparison window"), 
+			_("Choose books"), 
 			choices=modules)
 		selections = [idx for idx, module in enumerate(modules) 
 				if module in verse_comparison_settings["comparison_modules"]]
@@ -199,13 +204,13 @@ class VerseCompareFrame(LinkedFrame):
 		
 		self.gui_book_choice = self.toolbar.InsertTool(3, wx.ID_ANY,  
 			guiutil.bmp("book.png"),
-			shortHelpString="Choose books to view"
+			shortHelpString=_("Choose books to compare")
 		)		
 
 		self.gui_parallel = self.toolbar.InsertTool(4, wx.ID_ANY,
 			guiutil.bmp("text_columns.png"),
 			isToggle=True,
-			shortHelpString="View in parallel mode"
+			shortHelpString=_("View in parallel mode")
 		)
 		self.toolbar.ToggleTool(self.gui_parallel.Id, 
 			verse_comparison_settings["parallel"]

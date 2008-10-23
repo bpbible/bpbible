@@ -135,7 +135,6 @@ class BookFrame(DisplayFrame):
 		self.SetReference(self.reference)
 
 	def toggle_frame(self):
-		"""Shows or hides the frame"""
 		pane = guiconfig.mainfrm.get_pane_for_frame(self)
 		guiconfig.mainfrm.show_panel(pane.name, not pane.IsShown())
 	
@@ -148,20 +147,29 @@ class BookFrame(DisplayFrame):
 		def set_text():
 			pane = guiconfig.mainfrm.get_pane_for_frame(self)
 			if not pane.IsShown():
-				return "Show the '%s' frame" % pane.name
+				return _("Show the %s pane") % pane.name
 			else:
-				return "Hide the '%s' frame" % pane.name
+				return _("Hide the %s pane") % pane.name
 
 		extras = ()
 		if self.is_hidable():
 			extras += (
-				(MenuItem("Show this frame", self.toggle_frame, 
-					update_text=set_text), IN_BOTH),
+				(MenuItem(
+					"Show this frame", # this is a dummy waiting for set_text
+					self.toggle_frame, 
+					update_text=set_text,
+					doc=_("Shows or hides the pane")
+				), IN_BOTH),
 				(Separator, IN_BOTH),
 			)
 
 		extras += (
-			(MenuItem("Search", self.search), IN_MENU),
+			(MenuItem(
+				_("Search"), 
+				self.search,
+				doc=_("Search in this book")
+
+			), IN_MENU),
 			(Separator, IN_MENU),
 		)
 		
@@ -169,15 +177,18 @@ class BookFrame(DisplayFrame):
 		if self.shows_info:
 			items += (
 			(Separator, IN_BOTH),
-			(MenuItem("Information...", self.show_module_information,
-				enabled=self.has_module), IN_BOTH),
+			(MenuItem(
+				_("Information..."), 
+				self.show_module_information,
+				enabled=self.has_module,
+				doc=_("Show information on the current book")
+			), IN_BOTH),
 		)
 
 		return items
 	
 			
 	def search(self):
-		"""Search in this book"""
 		search_panel = self.get_search_panel_for_frame()
 		assert search_panel, "Search panel not found for %s" % self
 		search_panel.show()
@@ -186,7 +197,6 @@ class BookFrame(DisplayFrame):
 		return self.book.mod is not None
 	
 	def show_module_information(self):
-		"""Show information on the current module"""
 		ModuleInfo(guiconfig.mainfrm, self.book.mod).ShowModal()
 		
 	def update_title(self, shown=None):
@@ -212,7 +222,7 @@ class BookFrame(DisplayFrame):
 
 	def go_quickly(self):
 		qs = QuickSelector(self.get_window(), 
-			title="Go to reference")
+			title=_("Go to reference"))
 
 		qs.pseudo_modal(self.go_quickly_finished)
 	
@@ -309,13 +319,15 @@ class LinkedFrame(VerseKeyedFrame):
 		
 		self.gui_go = self.toolbar.AddTool(wx.ID_ANY,  
 			guiutil.bmp("accept.png"),
-			shortHelpString="Open this reference")
+			shortHelpString=_("Go to this reference"))
 
 		self.toolbar.AddSeparator()
 		
-		self.gui_link = self.toolbar.AddCheckTool(wx.ID_ANY,
+		self.gui_link = self.toolbar.AddCheckTool(
+			wx.ID_ANY,
 			guiutil.bmp("link.png"), 
-			shortHelp="Link the %s to the Bible" % self.title)
+			shortHelp=_("Link the %s to the Bible") % self.title
+		)
 
 		self.linked = True
 		self.toolbar.ToggleTool(self.gui_link.Id, True)

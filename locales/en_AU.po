@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2008-10-24 09:38+AUS Eastern Daylight Time\n"
+"POT-Creation-Date: 2008-10-24 10:21+AUS Eastern Daylight Time\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,13 +22,13 @@ msgstr "Other man's words"
 msgid "Bible"
 msgstr "God's word"
 
-#: bibleframe.py:66
+#: bibleframe.py:66 bookframe.py:168
 msgid "Search"
 msgstr "Search the good book"
 
 #: bibleframe.py:71
 msgid "Harmony"
-msgstr ""
+msgstr "Parallel passage viewer"
 
 #: bibleframe.py:74
 msgid "Opens the harmony"
@@ -52,11 +52,11 @@ msgstr "Zap verses into a different program"
 
 #: bibleframe.py:91 bibleframe.py:140
 msgid "Open sticky tooltip"
-msgstr ""
+msgstr "Open a tooltip of stickyness"
 
 #: bibleframe.py:94
 msgid "Open a sticky tooltip with the selected verses"
-msgstr ""
+msgstr "Open a tooltip of stickyness with the verses selected"
 
 #: bibleframe.py:98
 msgid "Compare verses"
@@ -64,7 +64,7 @@ msgstr "See the differences between them texts"
 
 #: bibleframe.py:101
 msgid "Open the verse comparison pane to the selected verses"
-msgstr ""
+msgstr "Zap to the text differentiator with these verses"
 
 #: bibleframe.py:108
 msgid "Manage Topics"
@@ -84,11 +84,47 @@ msgstr ""
 
 #: bibleframe.py:175
 msgid "Copying selected verses..."
-msgstr ""
+msgstr "Zapping 'em into the clipboard"
 
 #: bibleframe.py:212
 msgid "Search in Bible for:"
 msgstr "Run your eyes over the page for this word"
+
+#: bookframe.py:150 mainframe.py:716
+msgid "Show the %s pane"
+msgstr "%s pane: show"
+
+#: bookframe.py:152
+msgid "Hide the %s pane"
+msgstr "%s pane: hide"
+
+#: bookframe.py:161
+msgid "Shows or hides the pane"
+msgstr "pane: toggle"
+
+#: bookframe.py:170
+msgid "Search in this book"
+msgstr "Run your eyes over the book for this word"
+
+#: bookframe.py:181
+msgid "Information..."
+msgstr "Open the metadata..."
+
+#: bookframe.py:184
+msgid "Show information on the current book"
+msgstr ""
+
+#: bookframe.py:225
+msgid "Go to reference"
+msgstr "Zip to this reference"
+
+#: bookframe.py:322
+msgid "Go to this reference"
+msgstr "Zip to this reference"
+
+#: bookframe.py:329
+msgid "Link the %s to the Bible"
+msgstr ""
 
 #: copyverses.py:133
 msgid "<custom: based on %s>"
@@ -157,8 +193,8 @@ msgid "Go to verse"
 msgstr "Zip to this reference"
 
 #: mainframe.py:252
-msgid "Open this verse"
-msgstr ""
+msgid "Go to this verse"
+msgstr "Zip to this reference"
 
 #: mainframe.py:255
 msgid "Bible Search"
@@ -190,7 +226,7 @@ msgstr ""
 
 #: mainframe.py:672 xrc/auifrm_xrc.py:43
 msgid "&Language"
-msgstr ""
+msgstr "&Lingo"
 
 #: mainframe.py:691 xrc/auifrm_xrc.py:46
 msgid "&Display"
@@ -207,10 +243,6 @@ msgstr "These be the floating strips"
 #: mainframe.py:713
 msgid "Show the %s toolbar"
 msgstr "%s toolbar: show"
-
-#: mainframe.py:716
-msgid "Show the %s pane"
-msgstr "%s pane: show"
 
 #: mainframe.py:735 xrc/auifrm_xrc.py:50
 msgid "Debug"
@@ -293,6 +325,12 @@ msgid ""
 "and the Tango Desktop Project\n"
 "http://tango.freedesktop.org/Tango_Desktop_Project"
 msgstr ""
+"Thanks be to famfamfam\n"
+"http://www.famfamfam.com/lab/icons/silk\n"
+"and the Tango Desktop Project\n"
+"http://tango.freedesktop.org/Tango_Desktop_Project"
+"for the use of their icons"
+
 
 #: mainframe.py:1008
 msgid ""
@@ -312,6 +350,30 @@ msgstr "Spaniard lingo"
 #: util/i18n.py:41
 msgid "BM test"
 msgstr "Crazy test"
+
+#: versecompare.py:172
+msgid "Set books to compare"
+msgstr "Select the texts to differentiate"
+
+#: versecompare.py:174
+msgid "Set the books this version comparison will use"
+msgstr "Set which texts to differentiate"
+
+#: versecompare.py:183
+msgid "Choose books to compare in the verse comparison window"
+msgstr "Select books to differentiate here"
+
+#: versecompare.py:184
+msgid "Choose books"
+msgstr "Select the texts"
+
+#: versecompare.py:207
+msgid "Choose books to compare"
+msgstr "Select the texts to differentiate"
+
+#: versecompare.py:213
+msgid "View in parallel mode"
+msgstr "Align 'em in columns"
 
 #: xrc/auifrm_xrc.py:40
 msgid "&Set Sword Paths..."
@@ -395,7 +457,7 @@ msgstr "Scan your eyes over them changes"
 
 #: xrc/copyverses_xrc.py:79 xrc/templatemanager_xrc.py:99
 msgid "&Cancel"
-msgstr ""
+msgstr "&Yuck - go back"
 
 #: xrc/fontchoice_xrc.py:71
 msgid "Use default font"

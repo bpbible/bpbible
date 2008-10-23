@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2008-10-24 09:38+AUS Eastern Daylight Time\n"
+"POT-Creation-Date: 2008-10-24 10:21+AUS Eastern Daylight Time\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,7 +22,7 @@ msgstr ""
 msgid "Bible"
 msgstr ""
 
-#: bibleframe.py:66
+#: bibleframe.py:66 bookframe.py:168
 msgid "Search"
 msgstr ""
 
@@ -88,6 +88,42 @@ msgstr ""
 
 #: bibleframe.py:212
 msgid "Search in Bible for:"
+msgstr ""
+
+#: bookframe.py:150 mainframe.py:716
+msgid "Show the %s pane"
+msgstr ""
+
+#: bookframe.py:152
+msgid "Hide the %s pane"
+msgstr ""
+
+#: bookframe.py:161
+msgid "Shows or hides the pane"
+msgstr ""
+
+#: bookframe.py:170
+msgid "Search in this book"
+msgstr ""
+
+#: bookframe.py:181
+msgid "Information..."
+msgstr ""
+
+#: bookframe.py:184
+msgid "Show information on the current book"
+msgstr ""
+
+#: bookframe.py:225
+msgid "Go to reference"
+msgstr ""
+
+#: bookframe.py:322
+msgid "Go to this reference"
+msgstr ""
+
+#: bookframe.py:329
+msgid "Link the %s to the Bible"
 msgstr ""
 
 #: copyverses.py:133
@@ -157,7 +193,7 @@ msgid "Go to verse"
 msgstr ""
 
 #: mainframe.py:252
-msgid "Open this verse"
+msgid "Go to this verse"
 msgstr ""
 
 #: mainframe.py:255
@@ -206,10 +242,6 @@ msgstr ""
 
 #: mainframe.py:713
 msgid "Show the %s toolbar"
-msgstr ""
-
-#: mainframe.py:716
-msgid "Show the %s pane"
 msgstr ""
 
 #: mainframe.py:735 xrc/auifrm_xrc.py:50
@@ -306,6 +338,30 @@ msgstr ""
 
 #: util/i18n.py:41
 msgid "BM test"
+msgstr ""
+
+#: versecompare.py:172
+msgid "Set books to compare"
+msgstr ""
+
+#: versecompare.py:174
+msgid "Set the books this version comparison will use"
+msgstr ""
+
+#: versecompare.py:183
+msgid "Choose books to compare in the verse comparison window"
+msgstr ""
+
+#: versecompare.py:184
+msgid "Choose books"
+msgstr ""
+
+#: versecompare.py:207
+msgid "Choose books to compare"
+msgstr ""
+
+#: versecompare.py:213
+msgid "View in parallel mode"
 msgstr ""
 
 #: xrc/auifrm_xrc.py:40

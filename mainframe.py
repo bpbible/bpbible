@@ -249,7 +249,7 @@ class MainFrame(wx.Frame, AuiLayer):
 		
 		self.tool_go = self.main_toolbar.AddLabelTool(wx.ID_ANY,  
 			_("Go to verse"), bmp("accept.png"),
-			shortHelp=_("Open this verse"))
+			shortHelp=_("Go to this verse"))
 			
 		self.tool_search = self.main_toolbar.AddLabelTool(wx.ID_ANY,  
 			_("Bible Search"), bmp("find.png"),
