@@ -35,8 +35,13 @@ def frozen(function):
 		try:
 			function(self, *args, **kwargs)
 		finally:
-			if self.IsFrozen():	
-				self.Thaw()
+			try:
+				if self.IsFrozen():	
+					self.Thaw()
+				# even with checking it is frozen, it will sometimes throw an
+				# assertion on 
+			except AssertionError, e:
+				debug.dprint(debug.WARNING, "Ignoring assertion with thaw", e)
 	
 	frozen_internal.__name__ = function.__name__
 	return frozen_internal
@@ -127,3 +132,27 @@ def get_screen_rect(point):
 	
 	display = wx.Display(screen)
 	return display.GetClientArea()
+
+
+# try to stop the interactive interpreter grinding our _ builtin into the dirt
+def fix_underscore_in_builtin():
+	import wx.py.dispatcher as d
+	# it helpfully sends out this signal when a statement has just been
+	# executed
+	d.connect(handle, signal='Interpreter.push', weak=False)
+
+def handle(signal, sender, command, source, more, **kwargs):
+	import __builtin__
+	from types import MethodType
+	
+	import util.i18n
+	
+	# if the _ isn't correct, move builtin _ into the local _ 
+	if not isinstance(_, MethodType) or _.im_self != util.i18n.mytranslation:
+		sender.locals['_'] = __builtin__._
+	
+		# now trample over the last-result _ with the i18n _
+		util.i18n.mytranslation.install(unicode=True)
+
+# install our fixer
+fix_underscore_in_builtin()
