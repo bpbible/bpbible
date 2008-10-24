@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2008-10-24 12:00+AUS Eastern Daylight Time\n"
+"POT-Creation-Date: 2008-10-24 22:40+AUS Eastern Daylight Time\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,75 +26,83 @@ msgstr "The history tab"
 msgid "commentary"
 msgstr "Other man's words"
 
-#: backend/book.py:481 bibleframe.py:33 xrc/auifrm_xrc.py:59
+#: backend/book.py:481 bibleframe.py:34 xrc/auifrm_xrc.py:59
 msgid "Bible"
 msgstr "God's word"
 
-#: bibleframe.py:68 bookframe.py:169 search/searchpanel.py:149
+#: bibleframe.py:69 bookframe.py:169 search/searchpanel.py:149
 msgid "Search"
 msgstr "Hunt around inside this book"
 
-#: bibleframe.py:73
+#: bibleframe.py:74
 msgid "Harmony"
 msgstr "Parallel passage viewer"
 
-#: bibleframe.py:76
+#: bibleframe.py:77
 msgid "Open the harmony"
 msgstr "Open th"
 
-#: bibleframe.py:79
+#: bibleframe.py:80 xrc/guess_verse_xrc.py:67
+msgid "Guess the Verse"
+msgstr "Guess where a reference be"
+
+#: bibleframe.py:83
+msgid "Play Guess the Verse"
+msgstr "Guess where a reference be"
+
+#: bibleframe.py:87
 msgid "Random verse"
 msgstr "Go somewhere new"
 
-#: bibleframe.py:82
+#: bibleframe.py:90
 msgid "Go to a random verse"
 msgstr "Go somewhere new"
 
-#: bibleframe.py:85
+#: bibleframe.py:93
 msgid "Copy verses"
 msgstr "Transport the verses into the clipboard"
 
-#: bibleframe.py:89
+#: bibleframe.py:97
 msgid "Copy verses to other applications"
 msgstr "Zap verses into a different program"
 
-#: bibleframe.py:93 bibleframe.py:142
+#: bibleframe.py:101 bibleframe.py:150
 msgid "Open sticky tooltip"
 msgstr "Open a tooltip of stickyness"
 
-#: bibleframe.py:96
+#: bibleframe.py:104
 msgid "Open a sticky tooltip with the selected verses"
 msgstr "Open a tooltip of stickyness with the verses selected"
 
-#: bibleframe.py:100
+#: bibleframe.py:108
 msgid "Compare verses"
 msgstr "See the differences between them texts"
 
-#: bibleframe.py:103
+#: bibleframe.py:111
 msgid "Open the verse comparison pane to the selected verses"
 msgstr "Zap to the text differentiator with these verses"
 
-#: bibleframe.py:110
+#: bibleframe.py:118
 msgid "Manage Topics"
 msgstr ""
 
-#: bibleframe.py:113
+#: bibleframe.py:121
 msgid "Manages all of the topics and the passages in them."
 msgstr ""
 
-#: bibleframe.py:116
+#: bibleframe.py:124
 msgid "Tag verses"
 msgstr ""
 
-#: bibleframe.py:119
+#: bibleframe.py:127
 msgid "Tags the currently selected verses."
 msgstr ""
 
-#: bibleframe.py:177
+#: bibleframe.py:185
 msgid "Copying selected verses..."
 msgstr "Zapping 'em into the clipboard"
 
-#: bibleframe.py:214
+#: bibleframe.py:227
 msgid "Search in Bible for:"
 msgstr "Run your eyes over the page for this word"
 
@@ -348,7 +356,7 @@ msgstr ""
 "Thanks be to famfamfam\n"
 "http://www.famfamfam.com/lab/icons/silk\n"
 "and the Tango Desktop Project\n"
-"http://tango.freedesktop.org/Tango_Desktop_Projectfor the use of their icons"
+"http://tango.freedesktop.org/Tango_Desktop_Project for the use of their icons"
 
 #: mainframe.py:1018
 msgid ""
@@ -520,6 +528,10 @@ msgstr "&Perfect"
 #: xrc/fontchoice_xrc.py:77
 msgid "Font Choice"
 msgstr "Choose a font, me hearties"
+
+#: xrc/guess_verse_xrc.py:66
+msgid "&Guess"
+msgstr "Go on, check it"
 
 #: xrc/templatemanager_xrc.py:96
 msgid "Template Manager"

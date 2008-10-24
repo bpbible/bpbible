@@ -1,6 +1,7 @@
 import wx
 from backend.bibleinterface import biblemgr
 from displayframe import DisplayFrameXRC
+from util import overridableproperty
 
 class ReferenceDisplayFrame(DisplayFrameXRC):
 	"""This class is a display frame which is able to show references.
@@ -28,8 +29,32 @@ class ReferenceDisplayFrame(DisplayFrameXRC):
 			self.SetPage("")
 			return
 
+		template = self.template
+		if template:
+			kwargs["template"] = template
+
 		data = biblemgr.bible.GetReference(self.reference, *args, **kwargs)
 		# XXX: This replace should be done for us by the backend Bible
 		# interface (or by Sword itself).
 		data = data.replace("<!P>","</p><p>")
 		self.SetPage("%s" % data)
+	
+	@overridableproperty
+	def template(self):
+		return None
+	
+	@property
+	def book(self):
+		return biblemgr.bible
+	
+		
+class PlainReferenceDisplayFrame(ReferenceDisplayFrame):
+	def _RefreshUI(self, *args, **kwargs):
+		try:
+			biblemgr.temporary_state(biblemgr.plainstate)
+		
+			return super(PlainReferenceDisplayFrame, self)._RefreshUI(
+				*args, **kwargs
+			)
+		finally:
+			biblemgr.restore_state()

@@ -28,3 +28,51 @@ class classproperty(object):
 	def __get__(self, obj, objtype):
 		return self._data(obj)
 	
+class overridableproperty(object):
+	"""
+	A computed default value which can be overridden. 
+	
+	@overridableproperty
+	def template(self):
+		return None
+	
+	Is approximately the equivalent of:
+	def get_template(self):
+		if hasattr(self, "_template"):
+			return self._template
+
+		return None
+
+	def set_template(self, template):
+		self._template = template
+	
+	def del_template(self):
+		del self._template
+	
+	template = property(get_template, set_template, del_template)
+	del get_template, set_template, del_template
+	"""
+	
+	def __init__(self, function, storage=None):
+		self._default_get = function
+		if storage is None:
+			self.storage = "__%s_data" % self._default_get.__name__
+		else:
+			self.storage = storage
+
+	def __get__(self, obj, objtype):
+		if obj is None:
+			return self
+
+		if not hasattr(obj, self.storage):
+			return self._default_get(obj)
+		
+		return getattr(obj, self.storage)
+
+	def __set__(self, obj, value):
+		return setattr(obj, self.storage, value)
+	
+	def __delete__(self, obj):
+		return delattr(obj, self.storage)
+
+

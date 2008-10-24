@@ -23,6 +23,7 @@ import header_bar
 import re
 from util.i18n import N_
 
+from guess_verse import GuessVerseFrame
 
 
 bible_settings = config_manager.add_section("Bible")
@@ -75,6 +76,13 @@ class BibleFrame(VerseKeyedFrame):
 				accelerator="Ctrl-H",
 				doc=_("Open the harmony"),
 			), IN_MENU),
+			(MenuItem(
+				_("Guess the Verse"), 
+				self.show_guess_verse, 
+				accelerator="Ctrl-Shift-G",
+				doc=_("Play Guess the Verse"),
+			), IN_MENU),
+			
 			(MenuItem(
 					_("Random verse"), 
 					self.random_verse, 
@@ -189,6 +197,11 @@ class BibleFrame(VerseKeyedFrame):
 		harmony_frame = HarmonyFrame(guiconfig.mainfrm)
 		harmony_frame.SetIcons(guiconfig.icons)
 		harmony_frame.Show()
+		
+	def show_guess_verse(self):
+		guess_frame = GuessVerseFrame(guiconfig.mainfrm)
+		guess_frame.SetIcons(guiconfig.icons)
+		guess_frame.Show()
 		
 	def update_title(self, shown=None):
 		m = guiconfig.mainfrm
