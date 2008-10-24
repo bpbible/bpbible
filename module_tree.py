@@ -87,6 +87,9 @@ class ModuleTree(FilterableTree):
 			return show_information
 	
 		item = event.Item
+		if not item:
+			return
+
 		data = self.tree.GetPyData(item).data
 
 		if not isinstance(data, SW.Module): 
