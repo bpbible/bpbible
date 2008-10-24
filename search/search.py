@@ -90,12 +90,6 @@ def printx(x):
 	print x
 	return True
 
-class BookIndex(object):
-	"""Place holder to tell people to rebuild indexes.
-	This should be removed before the 0.4 release"""
-	def __setstate__(self, state):
-		raise Exception("You need to rebuild your index")
-
 class Index(object):
 	def __init__(self, version, progress=printx, booktype=VerseIndexedText):
 		self.version = version
