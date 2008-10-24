@@ -18,6 +18,7 @@ from dictionarylist import DictionarySelector, mmdd_to_date
 from gui.quickselector import QuickSelector
 
 from events import SETTINGS_CHANGED, CHAPTER_MOVE, VERSE_MOVE, QUICK_SELECTOR
+from util.i18n import N_
 
 
 class BookFrame(DisplayFrame):
@@ -205,7 +206,7 @@ class BookFrame(DisplayFrame):
 		version = self.book.version
 		ref = self.reference
 		
-		text = "%s - %s (%s)" % (p.name, ref, version)
+		text = "%s - %s (%s)" % (self.title, ref, version)
 		m.set_pane_title(p.name, text)
 	
 	def get_window(self):
@@ -244,6 +245,10 @@ class BookFrame(DisplayFrame):
 	
 	def get_verified(self, ref):
 		return ref
+	
+	@property
+	def title(self):
+		return _(self.id)
 	
 class VerseKeyedFrame(BookFrame):
 	def chapter_move(self, number):
@@ -369,7 +374,7 @@ class LinkedFrame(VerseKeyedFrame):
 		self.SetReference(self.reference)
 
 class CommentaryFrame(LinkedFrame):
-	title = "Commentary"
+	id = N_("Commentary")
 
 	def __init__(self, parent, book):
 		super(CommentaryFrame, self).__init__(parent)
@@ -382,7 +387,7 @@ class CommentaryFrame(LinkedFrame):
 		self.gui_reference.currentverse = ref
 		
 class DictionaryFrame(BookFrame):
-	title = "Dictionary"
+	id = N_("Dictionary")
 
 	def __init__(self, parent, book):
 		self.dict = wx.Panel(parent)
@@ -442,7 +447,7 @@ class DictionaryFrame(BookFrame):
 		if self.book.has_feature("DailyDevotion"):
 			ref = mmdd_to_date(ref) or ref
 		
-		text = u"%s - %s (%s)" % (p.name, ref, version)
+		text = u"%s - %s (%s)" % (self.title, ref, version)
 		m.set_pane_title(p.name, text)
 	
 	def get_window(self):

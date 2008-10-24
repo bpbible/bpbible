@@ -8,6 +8,7 @@ from gui import guiutil
 from util.configmgr import config_manager
 from util.observerlist import ObserverList
 from module_popup import ModulePopup
+from util.debug import dprint, WARNING
 
 # the following three functions borrowed from wxAUI in dockart.cpp
 
@@ -290,6 +291,72 @@ class AuiLayer(object):
 
 			prov.SetColour(setting, colour)
 	
+	def get_aui_items(self):
+		default_items = [
+			[self.version_tree, _("Books"), "Books", [], [["Left"], 
+				["MinSize", [138, 50]],# self.version_tree.GetSize()],
+				["BestSize", [138, 50]],#self.version_tree.GetBestSize()]
+				
+				]],
+	
+			[self.bibletext.get_window(), 
+				self.bibletext.title, 
+				self.bibletext.id, 
+				[["CloseButton", False]],
+				[["Centre"], 
+				["Floatable", False]],
+			],
+			[self.commentarytext.get_window(), 
+				self.commentarytext.title, 
+				self.commentarytext.id, 
+				[],
+				[["Right"],["Layer",2]]],
+			[self.dictionarytext.get_window(), 
+				self.dictionarytext.title, 
+				self.dictionarytext.id, 
+				[],
+				[["Bottom"]]
+			],
+			[self.genbooktext.get_window(), 
+				self.genbooktext.title, 
+				self.genbooktext.id, 
+				[],
+				[["Top"], 
+				["Hide"]]
+			],
+			
+			[self.verse_compare.get_window(), 
+				self.verse_compare.title, 
+				self.verse_compare.id, 
+				[], [
+				["Left"],			
+				["Hide"]
+				]
+			],
+			[self.history_pane, _("History"), "History", [], [["Left"],
+				["Hide"]]
+			],
+			
+		]
+		for item in self.searchers:
+			scrollsize = self.search_panel.BestSize
+			scrollsize2 = (630, 470)
+			#scrollsize[0] += 63
+		
+			default_items.append([item, item.title, item.id, [], [
+				["Left"], ["Layer", 1],
+				["MinSize", scrollsize],
+				["BestSize", scrollsize2],
+				["FloatingSize", scrollsize2],
+				
+				
+				["Hide"],
+				["Float"],
+				["Dockable", False],
+			]])
+
+		return default_items
+	
 	def set_aui_items_up(self):
 		self.ToolBar = None#self.main_toolbar
 	
@@ -311,11 +378,23 @@ class AuiLayer(object):
 			self.dictionarytext, self.genbooktext, self.verse_compare
 		)
 
-		self.panes = [(frame, frame.title) for frame in panes]
+		self.panes = [(frame, frame.id) for frame in panes]
 
+		self.pane_titles = {}
+		self.pane_titles = {}
+		
+		
+		for window, title, id, a1, a2 in self.get_aui_items():
+			self.pane_titles[title] = id
+				
+
+		for item in self.toolbars:
+			self.pane_titles[_(item[1])] = item[1]
+		
+		
 		if config_manager["BPBible"]["layout"] is not None:
 			layout = config_manager["BPBible"]["layout"]
-			self.create_items(items)
+			self.create_items(self.get_aui_items(), use_startups=False)
 			self.create_toolbars(self.toolbars)
 			
 			self.load_aui_perspective(layout["perspective"])
@@ -340,20 +419,28 @@ class AuiLayer(object):
 		for f, pane_name in self.panes:
 			if f == frame:
 				pane = self.aui_mgr.GetPane(pane_name)
-				assert pane.IsOk()
+				assert pane.IsOk(), pane_name
 				return pane
 		
-	
-	def create_items(self, items):
-		for item in items:
+	def get_frame_for_pane(self, pane):
+		for f, pane_name in self.panes:
+			if pane.name == pane_name:
+				return f
+
+	def create_items(self, items, use_startups=True):
+		for frame, title, name, always_items, startup_items in items:
 			defaults = "CaptionVisible MaximizeButton Movable Floatable " \
 				"MinimizeButton"
-			item[2:] = [[j] for j in defaults.split()] + item[2:]
+
+			items = [[j] for j in defaults.split()]
+			items += always_items
+			if use_startups:
+				items +=startup_items
 			info = aui.AuiPaneInfo().BestSize((300, 300)) \
-			.Name(item[1]).Caption(item[1]).MinimizeButton(True).Layer(0)
-			for attr in item[2:]:
+			.Name(name).Caption(title).MinimizeButton(True).Layer(0)
+			for attr in items:
 				getattr(info, attr[0])(*attr[1:])
-			self.aui_mgr.AddPane(item[0], info)
+			self.aui_mgr.AddPane(frame, info)
 	
 	def create_toolbars(self, toolbars):
 		for item in toolbars:
@@ -361,7 +448,7 @@ class AuiLayer(object):
 			item = item[:]
 			item[2:] = [[j] for j in defaults.split()] + item[2:]
 			info = aui.AuiPaneInfo()\
-			.Name(item[1]).Caption(item[1]).Row(0).ToolbarPane().\
+			.Name(item[1]).Caption(_(item[1])).Row(0).ToolbarPane().\
 			LeftDockable(False).RightDockable(False)
 
 			for attr in item[2:]:
@@ -497,10 +584,27 @@ class AuiLayer(object):
 		self.on_changed()
 
 	def load_aui_perspective(self, perspective):
-		#perspective = re.sub("caption=[^;]*;","", perspective)
-		#print perspective
+		def get_caption(match):
+			n = match.group(2)
+			for frame, caption, name, dummy, dummy in self.get_aui_items():
+				if name == n:
+					break
+			else:
+				for item in self.toolbars:
+					if item[1] == n:
+						caption = _(item[1])
+						break
+				else:
+					dprint(WARNING, "Couldn't find caption by name", n)
+					return match.group(0)
+
+			return match.group(1) + caption + ";"
+
+		# strip out the captions and replace with the proper i18n'ed caption
+		perspective = re.sub("(name=([^;]*);caption=)[^;]*;", 
+			get_caption, perspective)
+
 		self.aui_mgr.LoadPerspective(perspective)
-		#d = dict()
 		self.on_changed()
 	
 	def on_changed(self):
@@ -549,7 +653,7 @@ class AuiLayer(object):
 				if item.IsSeparator():
 					break
 	
-				pane = self.aui_mgr.GetPane(item.Label)
+				pane = self.aui_mgr.GetPane(self.pane_titles[item.Label])
 				assert pane.IsOk(), item.Label
 				item.Check(pane.IsShown())
 	
@@ -617,52 +721,12 @@ class AuiLayer(object):
 	
 	def default_set_aui_items_up(self):
 		"""Code used to generate perspective"""
-		scrollsize = self.search_panel.BestSize
-		scrollsize2 = (630, 470)
-		#scrollsize[0] += 63
-		default_items = [[self.version_tree, "Books", ["Left"], 
-				["MinSize", [138, 50]],# self.version_tree.GetSize()],
-				["BestSize", [138, 50]],#self.version_tree.GetBestSize()]
-				
-				],
-	
-			[self.bibletext.get_window(), "Bible", 
-				["Centre"], 
-				["CloseButton", False],
-				["Floatable", False],
-			],
-			[self.commentarytext.get_window(), "Commentary", ["Right"],["Layer",2]],
-			[self.dictionarytext.get_window(), "Dictionary", ["Bottom"]],
-			[self.genbooktext.get_window(), "Other Books", ["Top"], 
-				["Hide"]
-			],
-			
-			[self.verse_compare.get_window(), "Version Comparison", ["Left"],			
-				["Hide"]
-			],
-			[self.history_pane, "History", ["Left"],
-				["Hide"]
-			],
-			
-		]
-		for item in self.searchers:
-			default_items.append([item, item.title, 
-				["Left"], ["Layer", 1],
-				["MinSize", scrollsize],
-				["BestSize", scrollsize2],
-				["FloatingSize", scrollsize2],
-				
-				
-				["Hide"],
-				["Float"],
-				["Dockable", False],
-			])
 		
 		default_toolbars = self.toolbars
 							#([self.main_toolbar, "Navigation"],
 							#[self.zoom_toolbar, "Zoom"])
 			
 	
-		self.create_items(default_items)
+		self.create_items(self.get_aui_items())
 		self.create_toolbars(default_toolbars)		
 	

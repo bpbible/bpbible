@@ -425,7 +425,7 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.aui_callbacks = {}
 		for item in self.searchers:
 			version_changed, callback, remove_observer = make_closure(item)
-			self.aui_callbacks[item.title] = callback
+			self.aui_callbacks[item.id] = callback
 
 			item.book.observers += version_changed
 			self.on_close += remove_observer
@@ -708,12 +708,22 @@ class MainFrame(wx.Frame, AuiLayer):
 			if pane.name in ("Bible",):
 				continue
 
-			if pane.IsToolbar(): 
-				item = self.toolbar_menu.AppendCheckItem(wx.ID_ANY, pane.name,
-					help=_("Show the %s toolbar")%pane.name)
+			for title, id in self.pane_titles.items():
+				if id == pane.name:
+					break
+			
 			else:
-				item = self.windows_menu.AppendCheckItem(wx.ID_ANY, pane.name,
-					help=_("Show the %s pane")%pane.name)
+				dprint(WARNING, "Couldn't find pane title", pane.name)
+				continue
+
+			if pane.IsToolbar(): 
+				item = self.toolbar_menu.AppendCheckItem(wx.ID_ANY,
+					title,
+					help=_("Show the %s toolbar")%title)
+			else:
+				item = self.windows_menu.AppendCheckItem(wx.ID_ANY,
+					title,
+					help=_("Show the %s pane")%title)
 
 			if pane.IsShown():
 				item.Check()
@@ -877,7 +887,7 @@ class MainFrame(wx.Frame, AuiLayer):
 	def on_window(self, event):
 		obj = event.GetEventObject()
 		menuitem = obj.MenuBar.FindItemById(event.Id)
-		self.show_panel(menuitem.Label, event.Checked())
+		self.show_panel(self.pane_titles[menuitem.Label], event.Checked())
 	
 	def on_activate(self, event):
 		# call our hiding event afterwards when focus has been updated
@@ -967,8 +977,8 @@ class MainFrame(wx.Frame, AuiLayer):
 	#def BibleRefEnterChar(self, event):
 	
 	def BibleRefEnter(self, event=None):
-		if self.bibleref.startswith(_("search ")):
-			self.searchkey = self.bibleref.GetValue()[7:]
+		if self.bibleref.Value.startswith(_("search ")):
+			self.searchkey = self.bibleref.GetValue()[len(_("search ")):]
 			if self.searchkey:
 				self.search_panel.search_and_show(self.searchkey)
 			else:

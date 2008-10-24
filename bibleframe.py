@@ -21,6 +21,8 @@ from util.configmgr import config_manager
 from versecompare import VerseCompareFrame
 import header_bar
 import re
+from util.i18n import N_
+
 
 
 bible_settings = config_manager.add_section("Bible")
@@ -28,7 +30,7 @@ bible_settings.add_item("verse_per_line", False, item_type=bool)
 
 
 class BibleFrame(VerseKeyedFrame):
-	title = "Bible"
+	id = N_("Bible")
 	html_header = False
 
 	def __init__(self, parent):
@@ -71,7 +73,7 @@ class BibleFrame(VerseKeyedFrame):
 				_("Harmony"), 
 				self.show_harmony, 
 				accelerator="Ctrl-H",
-				doc=_("Opens the harmony"),
+				doc=_("Open the harmony"),
 			), IN_MENU),
 			(MenuItem(
 					_("Random verse"), 
@@ -165,7 +167,7 @@ class BibleFrame(VerseKeyedFrame):
 	
 	def compare_verses(self):
 		text = self.get_quick_selected()
-		title = VerseCompareFrame.title
+		title = VerseCompareFrame.id
 		#if not guiconfig.mainfrm.is_pane_shown(title):
 		guiconfig.mainfrm.show_panel(title)
 		guiconfig.mainfrm.verse_compare.notify(text)

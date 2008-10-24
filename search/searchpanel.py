@@ -30,6 +30,8 @@ from events import SEARCH
 from util.configmgr import config_manager
 
 from keypad import KeyPad
+from util.i18n import N_
+
 
 
 #TODO: better status bar: text overlay
@@ -144,6 +146,7 @@ class RangePanel(xrcRangePanel):
 		return scope
 
 class SearchPanel(xrcSearchPanel):
+	id = N_("Search")
 	def __init__(self, parent):
 		super(SearchPanel, self).__init__(parent)
 		
@@ -193,7 +196,7 @@ class SearchPanel(xrcSearchPanel):
 	
 	def show(self, search_on_show=False):
 		self.search_on_show = search_on_show
-		guiconfig.mainfrm.show_panel(self.title)
+		guiconfig.mainfrm.show_panel(self.id)
 	
 	def on_show(self, toggle):
 		self.search_splitter.SetSashPosition(
@@ -207,7 +210,7 @@ class SearchPanel(xrcSearchPanel):
 		if not toggle: 
 			return
 
-		panel = guiconfig.mainfrm.aui_mgr.GetPane(self.title)
+		panel = guiconfig.mainfrm.aui_mgr.GetPane(self.id)
 		if panel.IsFloating():
 			# do resizing to force layout 
 			#panel.window.SetSize(panel.window.GetSize() + (0, 1))		
@@ -240,7 +243,7 @@ class SearchPanel(xrcSearchPanel):
 		self.genindex.Enable(version is not None)
 		
 
-		if(guiconfig.mainfrm.is_pane_shown(self.title) and self.has_started):
+		if(guiconfig.mainfrm.is_pane_shown(self.id) and self.has_started):
 			self.check_for_index()
 
 		self.search_label.Label = "0 verses found"
@@ -467,7 +470,7 @@ class SearchPanel(xrcSearchPanel):
 		self.panel_1.Layout()
 	
 	def on_close(self, event=None):
-		guiconfig.mainfrm.show_panel(self.title, False)
+		guiconfig.mainfrm.show_panel(self.id, False)
 
 	def stop_search(self):
 		self.stop = True
@@ -760,7 +763,7 @@ class SearchPanel(xrcSearchPanel):
 	def set_title(self):
 		text = "%s search - %s" % (self.version,
 			string_util.pluralize("result", self.verselist.ItemCount))		
-		guiconfig.mainfrm.set_pane_title(self.title, text)
+		guiconfig.mainfrm.set_pane_title(self.id, text)
 
 	@guiutil.frozen
 	def insert_results(self):
@@ -891,7 +894,7 @@ class SearchPanel(xrcSearchPanel):
 	
 	@property
 	def title(self):
-		return "Search"	
+		return _(self.id)
 	
 	@property
 	def template(self):
@@ -958,6 +961,7 @@ class SearchList(virtuallist.VirtualListCtrlXRC):
 			self.parent.book.templatelist.pop()
 
 class GenbookSearchPanel(SearchPanel):
+	id = N_("Other Book Search")
 	@property
 	def book(self):
 		return biblemgr.genbook
@@ -965,10 +969,6 @@ class GenbookSearchPanel(SearchPanel):
 	@property
 	def index_type(self):
 		return search.GenBookIndex
-
-	@property
-	def title(self):
-		return "Other Book Search"
 
 	@property
 	def template(self):
@@ -1013,6 +1013,7 @@ class GenbookSearchPanel(SearchPanel):
 			wx.EVT_CHOICE, self.on_search_type)
 
 class DictionarySearchPanel(SearchPanel):
+	id = N_("Dictionary Search")
 	@property
 	def book(self):
 		return biblemgr.dictionary
@@ -1020,10 +1021,6 @@ class DictionarySearchPanel(SearchPanel):
 	@property
 	def index_type(self):
 		return search.DictionaryIndex
-
-	@property
-	def title(self):
-		return "Dictionary Search"
 
 	def search_list_format_text(self, text):
 		assert len(text.split(" - ")), "Can't have ranges in dictionary"
@@ -1057,13 +1054,10 @@ class DictionarySearchPanel(SearchPanel):
 		return 1, False
 
 class CommentarySearchPanel(SearchPanel):
+	id = N_("Commentary Search")
 	@property
 	def book(self):
 		return biblemgr.commentary
-	
-	@property
-	def title(self):
-		return "Commentary Search"
 
 	@property
 	def index_type(self):

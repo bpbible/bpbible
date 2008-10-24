@@ -16,6 +16,8 @@ from displayframe import IN_POPUP
 from swlib.pysw import GetBestRange, SW, VK
 from util.unicode import to_str
 
+from util.i18n import N_
+
 
 
 verse_comparison_settings = config_manager.add_section("Verse Comparison")
@@ -42,7 +44,7 @@ protocol_handler.register_hover(BIBLE_VERSION_PROTOCOL, noop)
 
 
 class VerseCompareFrame(LinkedFrame):
-	title = "Version Comparison"
+	id = N_("Version Comparison")
 	has_menu = False
 	shows_info = False
 
@@ -162,7 +164,7 @@ class VerseCompareFrame(LinkedFrame):
 		m = guiconfig.mainfrm
 		p = m.get_pane_for_frame(self)
 		ref = self.reference
-		text = "%s - %s" % (p.name, ref)
+		text = "%s - %s" % (self.title, ref)
 		m.set_pane_title(p.name, text)
 		
 	def get_menu_items(self):

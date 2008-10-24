@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2008-10-24 10:21+AUS Eastern Daylight Time\n"
+"POT-Creation-Date: 2008-10-24 12:00+AUS Eastern Daylight Time\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -14,116 +14,132 @@ msgstr ""
 "Content-Transfer-Encoding: utf-8\n"
 "Generated-By: pygettext.py 1.5\n"
 
+#: auilayer.py:296
+msgid "Books"
+msgstr ""
+
+#: auilayer.py:336
+msgid "History"
+msgstr ""
+
 #: backend/book.py:474
 msgid "commentary"
 msgstr ""
 
-#: backend/book.py:481 xrc/auifrm_xrc.py:59
+#: backend/book.py:481 bibleframe.py:33 xrc/auifrm_xrc.py:59
 msgid "Bible"
 msgstr ""
 
-#: bibleframe.py:66 bookframe.py:168
+#: bibleframe.py:68 bookframe.py:169 search/searchpanel.py:149
 msgid "Search"
 msgstr ""
 
-#: bibleframe.py:71
+#: bibleframe.py:73
 msgid "Harmony"
 msgstr ""
 
-#: bibleframe.py:74
-msgid "Opens the harmony"
+#: bibleframe.py:76
+msgid "Open the harmony"
 msgstr ""
 
-#: bibleframe.py:77
+#: bibleframe.py:79
 msgid "Random verse"
 msgstr ""
 
-#: bibleframe.py:80
+#: bibleframe.py:82
 msgid "Go to a random verse"
 msgstr ""
 
-#: bibleframe.py:83
+#: bibleframe.py:85
 msgid "Copy verses"
 msgstr ""
 
-#: bibleframe.py:87
+#: bibleframe.py:89
 msgid "Copy verses to other applications"
 msgstr ""
 
-#: bibleframe.py:91 bibleframe.py:140
+#: bibleframe.py:93 bibleframe.py:142
 msgid "Open sticky tooltip"
 msgstr ""
 
-#: bibleframe.py:94
+#: bibleframe.py:96
 msgid "Open a sticky tooltip with the selected verses"
 msgstr ""
 
-#: bibleframe.py:98
+#: bibleframe.py:100
 msgid "Compare verses"
 msgstr ""
 
-#: bibleframe.py:101
+#: bibleframe.py:103
 msgid "Open the verse comparison pane to the selected verses"
 msgstr ""
 
-#: bibleframe.py:108
+#: bibleframe.py:110
 msgid "Manage Topics"
 msgstr ""
 
-#: bibleframe.py:111
+#: bibleframe.py:113
 msgid "Manages all of the topics and the passages in them."
 msgstr ""
 
-#: bibleframe.py:114
+#: bibleframe.py:116
 msgid "Tag verses"
 msgstr ""
 
-#: bibleframe.py:117
+#: bibleframe.py:119
 msgid "Tags the currently selected verses."
 msgstr ""
 
-#: bibleframe.py:175
+#: bibleframe.py:177
 msgid "Copying selected verses..."
 msgstr ""
 
-#: bibleframe.py:212
+#: bibleframe.py:214
 msgid "Search in Bible for:"
 msgstr ""
 
-#: bookframe.py:150 mainframe.py:716
+#: bookframe.py:151 mainframe.py:726
 msgid "Show the %s pane"
 msgstr ""
 
-#: bookframe.py:152
+#: bookframe.py:153
 msgid "Hide the %s pane"
 msgstr ""
 
-#: bookframe.py:161
+#: bookframe.py:162
 msgid "Shows or hides the pane"
 msgstr ""
 
-#: bookframe.py:170
+#: bookframe.py:171
 msgid "Search in this book"
 msgstr ""
 
-#: bookframe.py:181
+#: bookframe.py:182
 msgid "Information..."
 msgstr ""
 
-#: bookframe.py:184
+#: bookframe.py:185
 msgid "Show information on the current book"
 msgstr ""
 
-#: bookframe.py:225
+#: bookframe.py:226
 msgid "Go to reference"
 msgstr ""
 
-#: bookframe.py:322
+#: bookframe.py:327
 msgid "Go to this reference"
 msgstr ""
 
-#: bookframe.py:329
+#: bookframe.py:334
 msgid "Link the %s to the Bible"
+msgstr ""
+
+#: bookframe.py:377
+msgid "Commentary"
+msgstr ""
+
+#: bookframe.py:390
+msgid "Dictionary"
 msgstr ""
 
 #: copyverses.py:133
@@ -146,6 +162,10 @@ msgstr ""
 
 #: error_handling.py:79
 msgid "Above exception was ignored\n"
+msgstr ""
+
+#: genbookframe.py:57
+msgid "Other Books"
 msgstr ""
 
 #: mainframe.py:225
@@ -240,57 +260,57 @@ msgstr ""
 msgid "Toolbars"
 msgstr ""
 
-#: mainframe.py:713
+#: mainframe.py:722
 msgid "Show the %s toolbar"
 msgstr ""
 
-#: mainframe.py:735 xrc/auifrm_xrc.py:50
+#: mainframe.py:745 xrc/auifrm_xrc.py:50
 msgid "Debug"
 msgstr ""
 
-#: mainframe.py:793
+#: mainframe.py:803
 msgid "Use Strong's headwords"
 msgstr ""
 
-#: mainframe.py:794
+#: mainframe.py:804
 msgid "Display Strong's numbers using the transliterated text"
 msgstr ""
 
-#: mainframe.py:799
+#: mainframe.py:809
 msgid "Expand cross-references"
 msgstr ""
 
-#: mainframe.py:800
+#: mainframe.py:810
 msgid "Display cross references partially expanded"
 msgstr ""
 
-#: mainframe.py:805
+#: mainframe.py:815
 msgid "One line per verse"
 msgstr ""
 
-#: mainframe.py:806
+#: mainframe.py:816
 msgid "Display each verse on its own line."
 msgstr ""
 
-#: mainframe.py:811
+#: mainframe.py:821
 msgid "Topic Tags"
 msgstr ""
 
-#: mainframe.py:812
+#: mainframe.py:822
 msgid "Display the topics that each verse is tagged with."
 msgstr ""
 
-#: mainframe.py:959
+#: mainframe.py:969
 msgid ""
 "An error occurred on closing:\n"
 "%s"
 msgstr ""
 
-#: mainframe.py:970
+#: mainframe.py:980 mainframe.py:981
 msgid "search "
 msgstr ""
 
-#: mainframe.py:991
+#: mainframe.py:1001
 msgid ""
 "Flexible Bible study software.\n"
 "\t\t\tBuilt Using the Sword Project from crosswire.org\n"
@@ -298,23 +318,23 @@ msgid ""
 "\t\t\twxPython Version: %(wxversion)s"
 msgstr ""
 
-#: mainframe.py:997
+#: mainframe.py:1007
 msgid "BPBible"
 msgstr ""
 
-#: mainframe.py:1001
+#: mainframe.py:1011
 msgid "BPBible website"
 msgstr ""
 
-#: mainframe.py:1002
+#: mainframe.py:1012
 msgid "Ben Morgan"
 msgstr ""
 
-#: mainframe.py:1002
+#: mainframe.py:1012
 msgid "SWORD library developers"
 msgstr ""
 
-#: mainframe.py:1003
+#: mainframe.py:1013
 msgid ""
 "Icons used are from famfamfam\n"
 "http://www.famfamfam.com/lab/icons/silk\n"
@@ -322,10 +342,22 @@ msgid ""
 "http://tango.freedesktop.org/Tango_Desktop_Project"
 msgstr ""
 
-#: mainframe.py:1008
+#: mainframe.py:1018
 msgid ""
 "BPBible is licensed under the GPL v2. For more details, refer to the LICENSE."
 "txt file in the application directory"
+msgstr ""
+
+#: search/searchpanel.py:964
+msgid "Other Book Search"
+msgstr ""
+
+#: search/searchpanel.py:1016
+msgid "Dictionary Search"
+msgstr ""
+
+#: search/searchpanel.py:1057
+msgid "Commentary Search"
 msgstr ""
 
 #: util/i18n.py:39
@@ -340,27 +372,31 @@ msgstr ""
 msgid "BM test"
 msgstr ""
 
-#: versecompare.py:172
-msgid "Set books to compare"
+#: versecompare.py:47
+msgid "Version Comparison"
 msgstr ""
 
 #: versecompare.py:174
+msgid "Set books to compare"
+msgstr ""
+
+#: versecompare.py:176
 msgid "Set the books this version comparison will use"
 msgstr ""
 
-#: versecompare.py:183
+#: versecompare.py:185
 msgid "Choose books to compare in the verse comparison window"
 msgstr ""
 
-#: versecompare.py:184
+#: versecompare.py:186
 msgid "Choose books"
 msgstr ""
 
-#: versecompare.py:207
+#: versecompare.py:209
 msgid "Choose books to compare"
 msgstr ""
 
-#: versecompare.py:213
+#: versecompare.py:215
 msgid "View in parallel mode"
 msgstr ""
 

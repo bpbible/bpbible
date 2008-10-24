@@ -12,6 +12,8 @@ from swlib.pysw import SW
 
 import config
 import guiconfig
+from util.i18n import N_
+
 
 def on_genbook_click(frame, href, url):
 	if frame != guiconfig.mainfrm.genbooktext:
@@ -52,7 +54,7 @@ protocol_handler.register_handler("genbook", on_genbook_click)
 protocol_handler.register_hover("genbook", noop)	 
 
 class GenBookFrame(BookFrame):
-	title="Other Books"
+	id=N_("Other Books")
 	use_quickselector = False
 	def __init__(self, parent, book):
 		self.genbookpanel = wx.Panel(parent)

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2008-10-24 10:21+AUS Eastern Daylight Time\n"
+"POT-Creation-Date: 2008-10-24 12:00+AUS Eastern Daylight Time\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -14,117 +14,133 @@ msgstr ""
 "Content-Transfer-Encoding: utf-8\n"
 "Generated-By: pygettext.py 1.5\n"
 
+#: auilayer.py:296
+msgid "Books"
+msgstr "The books tab"
+
+#: auilayer.py:336
+msgid "History"
+msgstr "The history tab"
+
 #: backend/book.py:474
 msgid "commentary"
 msgstr "Other man's words"
 
-#: backend/book.py:481 xrc/auifrm_xrc.py:59
+#: backend/book.py:481 bibleframe.py:33 xrc/auifrm_xrc.py:59
 msgid "Bible"
 msgstr "God's word"
 
-#: bibleframe.py:66 bookframe.py:168
+#: bibleframe.py:68 bookframe.py:169 search/searchpanel.py:149
 msgid "Search"
-msgstr "Search the good book"
+msgstr "Hunt around inside this book"
 
-#: bibleframe.py:71
+#: bibleframe.py:73
 msgid "Harmony"
 msgstr "Parallel passage viewer"
 
-#: bibleframe.py:74
-msgid "Opens the harmony"
-msgstr ""
+#: bibleframe.py:76
+msgid "Open the harmony"
+msgstr "Open th"
 
-#: bibleframe.py:77
+#: bibleframe.py:79
 msgid "Random verse"
 msgstr "Go somewhere new"
 
-#: bibleframe.py:80
+#: bibleframe.py:82
 msgid "Go to a random verse"
 msgstr "Go somewhere new"
 
-#: bibleframe.py:83
+#: bibleframe.py:85
 msgid "Copy verses"
 msgstr "Transport the verses into the clipboard"
 
-#: bibleframe.py:87
+#: bibleframe.py:89
 msgid "Copy verses to other applications"
 msgstr "Zap verses into a different program"
 
-#: bibleframe.py:91 bibleframe.py:140
+#: bibleframe.py:93 bibleframe.py:142
 msgid "Open sticky tooltip"
 msgstr "Open a tooltip of stickyness"
 
-#: bibleframe.py:94
+#: bibleframe.py:96
 msgid "Open a sticky tooltip with the selected verses"
 msgstr "Open a tooltip of stickyness with the verses selected"
 
-#: bibleframe.py:98
+#: bibleframe.py:100
 msgid "Compare verses"
 msgstr "See the differences between them texts"
 
-#: bibleframe.py:101
+#: bibleframe.py:103
 msgid "Open the verse comparison pane to the selected verses"
 msgstr "Zap to the text differentiator with these verses"
 
-#: bibleframe.py:108
+#: bibleframe.py:110
 msgid "Manage Topics"
 msgstr ""
 
-#: bibleframe.py:111
+#: bibleframe.py:113
 msgid "Manages all of the topics and the passages in them."
 msgstr ""
 
-#: bibleframe.py:114
+#: bibleframe.py:116
 msgid "Tag verses"
 msgstr ""
 
-#: bibleframe.py:117
+#: bibleframe.py:119
 msgid "Tags the currently selected verses."
 msgstr ""
 
-#: bibleframe.py:175
+#: bibleframe.py:177
 msgid "Copying selected verses..."
 msgstr "Zapping 'em into the clipboard"
 
-#: bibleframe.py:212
+#: bibleframe.py:214
 msgid "Search in Bible for:"
 msgstr "Run your eyes over the page for this word"
 
-#: bookframe.py:150 mainframe.py:716
+#: bookframe.py:151 mainframe.py:726
 msgid "Show the %s pane"
 msgstr "%s pane: show"
 
-#: bookframe.py:152
+#: bookframe.py:153
 msgid "Hide the %s pane"
 msgstr "%s pane: hide"
 
-#: bookframe.py:161
+#: bookframe.py:162
 msgid "Shows or hides the pane"
 msgstr "pane: toggle"
 
-#: bookframe.py:170
+#: bookframe.py:171
 msgid "Search in this book"
 msgstr "Run your eyes over the book for this word"
 
-#: bookframe.py:181
+#: bookframe.py:182
 msgid "Information..."
 msgstr "Open the metadata..."
 
-#: bookframe.py:184
+#: bookframe.py:185
 msgid "Show information on the current book"
 msgstr ""
 
-#: bookframe.py:225
+#: bookframe.py:226
 msgid "Go to reference"
 msgstr "Zip to this reference"
 
-#: bookframe.py:322
+#: bookframe.py:327
 msgid "Go to this reference"
 msgstr "Zip to this reference"
 
-#: bookframe.py:329
+#: bookframe.py:334
 msgid "Link the %s to the Bible"
 msgstr ""
+
+#: bookframe.py:377
+msgid "Commentary"
+msgstr "Other man's words"
+
+#: bookframe.py:390
+msgid "Dictionary"
+msgstr "Define a word"
 
 #: copyverses.py:133
 msgid "<custom: based on %s>"
@@ -147,6 +163,10 @@ msgstr ""
 #: error_handling.py:79
 msgid "Above exception was ignored\n"
 msgstr "Gurg"
+
+#: genbookframe.py:57
+msgid "Other Books"
+msgstr "Different books"
 
 #: mainframe.py:225
 msgid "Back"
@@ -214,15 +234,15 @@ msgstr "Transport the verses into the clipboard"
 
 #: mainframe.py:288
 msgid "Navigation"
-msgstr ""
+msgstr "A toolbar to move around"
 
 #: mainframe.py:290
 msgid "Zoom"
-msgstr ""
+msgstr "A toolbar to Zoom"
 
 #: mainframe.py:292
 msgid "History toolbar"
-msgstr ""
+msgstr "A toolbar with history"
 
 #: mainframe.py:672 xrc/auifrm_xrc.py:43
 msgid "&Language"
@@ -240,57 +260,57 @@ msgstr "This be a list of windows"
 msgid "Toolbars"
 msgstr "These be the floating strips"
 
-#: mainframe.py:713
+#: mainframe.py:722
 msgid "Show the %s toolbar"
 msgstr "%s toolbar: show"
 
-#: mainframe.py:735 xrc/auifrm_xrc.py:50
+#: mainframe.py:745 xrc/auifrm_xrc.py:50
 msgid "Debug"
 msgstr "For the experts"
 
-#: mainframe.py:793
+#: mainframe.py:803
 msgid "Use Strong's headwords"
 msgstr "Show a word, not a number"
 
-#: mainframe.py:794
+#: mainframe.py:804
 msgid "Display Strong's numbers using the transliterated text"
 msgstr "Show a word for the strong's text, not the number"
 
-#: mainframe.py:799
+#: mainframe.py:809
 msgid "Expand cross-references"
 msgstr ""
 
-#: mainframe.py:800
+#: mainframe.py:810
 msgid "Display cross references partially expanded"
 msgstr ""
 
-#: mainframe.py:805
+#: mainframe.py:815
 msgid "One line per verse"
 msgstr "Each verse by itself"
 
-#: mainframe.py:806
+#: mainframe.py:816
 msgid "Display each verse on its own line."
 msgstr "Put each verse on its own lonesome line"
 
-#: mainframe.py:811
+#: mainframe.py:821
 msgid "Topic Tags"
 msgstr ""
 
-#: mainframe.py:812
+#: mainframe.py:822
 msgid "Display the topics that each verse is tagged with."
 msgstr ""
 
-#: mainframe.py:959
+#: mainframe.py:969
 msgid ""
 "An error occurred on closing:\n"
 "%s"
 msgstr ""
 
-#: mainframe.py:970
+#: mainframe.py:980 mainframe.py:981
 msgid "search "
 msgstr ""
 
-#: mainframe.py:991
+#: mainframe.py:1001
 msgid ""
 "Flexible Bible study software.\n"
 "\t\t\tBuilt Using the Sword Project from crosswire.org\n"
@@ -302,23 +322,23 @@ msgstr ""
 "\t\t\tPython Version be %(sysversion)s\n"
 "\t\t\twxPython Version be %(wxversion)s"
 
-#: mainframe.py:997
+#: mainframe.py:1007
 msgid "BPBible"
 msgstr "BP - God's word"
 
-#: mainframe.py:1001
+#: mainframe.py:1011
 msgid "BPBible website"
 msgstr "Vist the website for this application"
 
-#: mainframe.py:1002
+#: mainframe.py:1012
 msgid "Ben Morgan"
 msgstr "Me"
 
-#: mainframe.py:1002
+#: mainframe.py:1012
 msgid "SWORD library developers"
 msgstr "SWORD devels"
 
-#: mainframe.py:1003
+#: mainframe.py:1013
 msgid ""
 "Icons used are from famfamfam\n"
 "http://www.famfamfam.com/lab/icons/silk\n"
@@ -328,16 +348,26 @@ msgstr ""
 "Thanks be to famfamfam\n"
 "http://www.famfamfam.com/lab/icons/silk\n"
 "and the Tango Desktop Project\n"
-"http://tango.freedesktop.org/Tango_Desktop_Project"
-"for the use of their icons"
+"http://tango.freedesktop.org/Tango_Desktop_Projectfor the use of their icons"
 
-
-#: mainframe.py:1008
+#: mainframe.py:1018
 msgid ""
 "BPBible is licensed under the GPL v2. For more details, refer to the LICENSE."
 "txt file in the application directory"
 msgstr ""
 "This application be GPL v2. See the LICENSE.txt file in the app directory"
+
+#: search/searchpanel.py:964
+msgid "Other Book Search"
+msgstr "Search different books"
+
+#: search/searchpanel.py:1016
+msgid "Dictionary Search"
+msgstr "Search them definitions"
+
+#: search/searchpanel.py:1057
+msgid "Commentary Search"
+msgstr "Search Other man's words"
 
 #: util/i18n.py:39
 msgid "English"
@@ -351,27 +381,31 @@ msgstr "Spaniard lingo"
 msgid "BM test"
 msgstr "Crazy test"
 
-#: versecompare.py:172
+#: versecompare.py:47
+msgid "Version Comparison"
+msgstr "Differentiate texts"
+
+#: versecompare.py:174
 msgid "Set books to compare"
 msgstr "Select the texts to differentiate"
 
-#: versecompare.py:174
+#: versecompare.py:176
 msgid "Set the books this version comparison will use"
 msgstr "Set which texts to differentiate"
 
-#: versecompare.py:183
+#: versecompare.py:185
 msgid "Choose books to compare in the verse comparison window"
 msgstr "Select books to differentiate here"
 
-#: versecompare.py:184
+#: versecompare.py:186
 msgid "Choose books"
 msgstr "Select the texts"
 
-#: versecompare.py:207
+#: versecompare.py:209
 msgid "Choose books to compare"
 msgstr "Select the texts to differentiate"
 
-#: versecompare.py:213
+#: versecompare.py:215
 msgid "View in parallel mode"
 msgstr "Align 'em in columns"
 
