@@ -15,7 +15,11 @@ html_settings.add_item("font_name", "Arial")
 html_settings.add_item("base_text_size", 10, item_type=int)
 html_settings.add_item("zoom_level", 0, item_type=int)
 
-HTML_TEXT = '<body bgcolor="%s"><fontarea basefont="%s" basesize="%s"><div><font color="%s">%s</font></div></fontarea></body>'
+HTML_TEXT = '<body bgcolor="%s"><fontarea basefont="%s" basesize="%s"><font color="%s">%s</font></fontarea></body>'
+INDENT_WITH_WHITESPACE = re.compile(
+	"\s*(<INDENT-BLOCK-(START|END)[^>]*>)\s*",
+	re.I
+)
 
 # some magic zoom constants
 zoom_levels = {-2: 0.75, 
@@ -129,6 +133,7 @@ def get_level(container):
 		
 class LineGroupTagHandler(TagHandler):
 	tags = "INDENT-BLOCK-START,INDENT-BLOCK-END"
+	# TODO 2Ki 19:27 ESV - space before...
 	
 	# sanity check - don't dedent more than we indented
 	# keep the level we are at for the current document
@@ -218,7 +223,7 @@ class CheckTagHandler(TagHandler):
 		parser.GetContainer().InsertCell(
 				wx.html.HtmlWidgetCell(obj, floatwidth))
 			
-		return True
+		return False
 
 from passage_list import lookup_passage_list, lookup_passage_entry
 
@@ -248,7 +253,7 @@ class PassageTagHandler(TagHandler):
 		parser.GetContainer().InsertCell(
 				wx.html.HtmlWidgetCell(passage_tag, floatwidth))
 			
-		return True
+		return False
 
 tag_handlers = [
 	GLinkTagHandler,
@@ -394,12 +399,11 @@ class HtmlBase(wx.html.HtmlWindow):
 			text = string_util.insert_language_font(text, letters, font, size)
 		
 		# now put things back (not sure if this is needed...)
-		text = string_util.htmlify_unicode(text)
+		# text = string_util.htmlify_unicode(text)
 
 		if body_colour is None or text_colour is None:
 			body_colour, text_colour = guiconfig.get_window_colours()
 
-		print "Using font", self.font
 		text = HTML_TEXT % (
 			body_colour, 			
 			self.font, 
@@ -418,6 +422,14 @@ class HtmlBase(wx.html.HtmlWindow):
 			# Jub seems to use it, and it is valid osis, but the osishtmlhref
 			# filters don't get rid of it
 			text = text.replace("&apos;", "&#39;")
+
+			# remove whitespace around indent block starts and ends so that
+			# whitespace doesn't push them to a different line or just 
+			# look nasty
+			text = INDENT_WITH_WHITESPACE.sub(
+				r"\1",
+				text
+			)
 			
 
 		# reset internal state of tag handlers
@@ -451,8 +463,11 @@ class HtmlBase(wx.html.HtmlWindow):
 		if not self._do_scroll_to_current:
 			return
 
-		me = self.Find(self.GetInternalRepresentation(), "#current")
-		self.ScrollTo("current", me)
+		self.scroll_to("current")
+
+	def scroll_to(self, anchor):
+		me = self.Find(self.GetInternalRepresentation(), "#" + anchor)
+		self.ScrollTo(anchor, me)
 		
 	
 	def Find(self, cell, linktext):
