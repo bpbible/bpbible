@@ -25,7 +25,7 @@ class OSISParser(filterutils.ParserBase):
 		self.ref = attributes["osisRef"]
 		idx = self.ref.find(":")
 		if idx != -1:
-			if self.ref[:idx].startswith("Bible"):
+			if not self.ref[:idx].startswith("Bible"):
 				self.ref = None
 				self.success = SW.INHERITED
 				dprint(WARNING, "Different protocol", attributes)			
