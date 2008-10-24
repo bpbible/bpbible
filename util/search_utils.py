@@ -25,7 +25,7 @@ def WriteIndex(index, path = config.index_path, progress=util.noop):
 		continuing = progress((item.bookname, 100*idx/length))
 		if not continuing: return
 		
-		z.writestr("books/" + item.bookname,
+		z.writestr("books/" + item.bookname.encode("utf8"),
 			cPickle.dumps(item, cPickle.HIGHEST_PROTOCOL)
 		)
 	
@@ -63,7 +63,7 @@ def ReadIndex(version, path = config.index_path):
 		for item in index.book_names:
 			index.books.append(
 				cPickle.loads(
-					z.read("books/" + item)
+					z.read("books/" + item.encode("utf8"))
 				)
 			)
 			
@@ -83,11 +83,8 @@ def ReadIndex(version, path = config.index_path):
 	#return cPickle.load(f)
 
 def IndexExists(version, path = config.index_path):
-	return os.path.exists("%s%s.idx" % (path, version)) or \
-			os.path.exists("%s%s.idxz" % (path, version))
+	return os.path.exists("%s%s.idx" % (path, version))
 
-def DeleteIndex(version, path = config.index_path):
+def DeleteIndex(version, path=config.index_path):
 	if os.path.exists("%s%s.idx" % (path, version)):
 		os.remove("%s%s.idx" % (path, version))
-	if os.path.exists("%s%s.idxz" % (path, version)):
-		os.remove("%s%s.idxz" % (path, version))
