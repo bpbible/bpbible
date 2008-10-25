@@ -387,8 +387,6 @@ class AuiLayer(object):
 		
 		for window, title, id, a1, a2 in self.get_aui_items():
 			self.pane_titles[title] = id
-			#print window.Hide()
-				
 
 		for item in self.toolbars:
 			self.pane_titles[_(item[1])] = item[1]

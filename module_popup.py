@@ -26,19 +26,14 @@ class PopupList(virtuallist.VirtualListBox):
 
 	def is_bold(self, item):
 		module = self.modules[item]
-		print module.Name()
 		key = to_str(self.key, module)
 		k = SW.Key(key)
 		module.setKey(k)
-		print "Getting"
 		is_bold = bool(module.getRawEntry())
-		print "Gotten"
 
 		# dictionaries snap to nearest - only give if it is the same
 		if is_bold and isinstance(self.book, (Dictionary, GenBook)):
 			is_bold = module.getKeyText() == key
-
-		print "Goodo"
 
 		return is_bold
 
