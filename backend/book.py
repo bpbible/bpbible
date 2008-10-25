@@ -257,9 +257,12 @@ class Book(object):
 			for heading, canonical in headings:
 				if not raw:
 					if stripped:
-						heading = mod.StripText(heading)
+						heading = mod.StripText(heading).decode(
+							"utf8",
+							"replace"
+						)
 					else:
-						heading = mod.RenderText(heading)
+						heading = render_text(heading)
 
 				heading_dict = dict(heading=heading, canonical=canonical)
 				heading_dict.update(body_dict)
