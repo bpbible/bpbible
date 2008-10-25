@@ -355,7 +355,11 @@ class BibleFrame(VerseKeyedFrame):
 		from_cell = self.m_selection.GetFromCell()
 		to_cell = self.m_selection.GetToCell()
 
-		start_cell = self.GetInternalRepresentation().GetFirstChild()
+		# use the first terminal as:
+		#  - it isn't the one we want (it is probably a font cell)
+		#  - we call next on it right away, so it shouldn't be a container
+		#    otherwise we may miss bits
+		start_cell = self.GetInternalRepresentation().FirstTerminal
 		first = self.FindVerse(from_cell, start_cell=start_cell)
 		
 		last = self.FindVerse(to_cell, start_cell=start_cell)
