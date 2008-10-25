@@ -2,6 +2,7 @@
 #TODO: \n on copy
 #TODO: ($text)$text
 import wx
+import re
 
 from xrc.copyverses_xrc import xrcCopyVerseDialog
 from backend.bibleinterface import biblemgr
@@ -296,6 +297,8 @@ class CopyVerseDialog(xrcCopyVerseDialog):
 		if data is None:
 			data = config.MODULE_MISSING_STRING
 
+		data = re.sub("<indent-block-end[^>]*>", "\n", data)
+		
 		data = string_util.br2nl(data)
 		data = string_util.KillTags(data)
 		data = string_util.amps_to_unicode(data)
