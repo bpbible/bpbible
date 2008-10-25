@@ -9,6 +9,7 @@ from util.configmgr import config_manager
 from util.observerlist import ObserverList
 from module_popup import ModulePopup
 from util.debug import dprint, WARNING
+from util import osutils
 
 # the following three functions borrowed from wxAUI in dockart.cpp
 
@@ -386,6 +387,7 @@ class AuiLayer(object):
 		
 		for window, title, id, a1, a2 in self.get_aui_items():
 			self.pane_titles[title] = id
+			#print window.Hide()
 				
 
 		for item in self.toolbars:
@@ -407,6 +409,7 @@ class AuiLayer(object):
 			
 		else:
 			self.default_set_aui_items_up()
+
 
 
 		self.aui_mgr.Update()
@@ -507,13 +510,29 @@ class AuiLayer(object):
 		frame = frames[0]
 		
 		
-		p = ModulePopup(self, event, rect, frame.book)
+		keytext = frame.reference
+		if not isinstance(keytext, basestring):
+			keytext = keytext.text
+		p = ModulePopup(self, event, rect, frame.book, keytext)
+
+		# use the main frame to grab the mouse wheel events, as wxPopupWindow
+		# cannot have focus, nor any of its children
+		# This isn't needed under gtk, as the scroll wheel will automatically
+		# select the window underneath for scrolling
+		if not osutils.is_gtk():
+			self.SetFocus()
+			self.Bind(wx.EVT_MOUSEWHEEL, p.box.on_mouse_wheel)
+		
 		def on_dismiss(chosen):
 			if not rect.Contains(self.ScreenToClient(wx.GetMousePosition())):
 				self.clear_over_list()
 			
 			if chosen is not None:
-				frame.book.SetModule(p.box.GetString(chosen))
+				frame.book.SetModule(p.box.modules[chosen])
+
+			if not osutils.is_gtk():
+				self.Unbind(wx.EVT_MOUSEWHEEL)
+				
 
 		p.on_dismiss += on_dismiss
 		p.Popup()

@@ -8,7 +8,6 @@ class VirtualListCtrl(wx.ListCtrl, ListCtrlAutoWidthMixin):
 		self.setup()
 	
 	def setup(self):
-
 		# we have to call this as presumably list ctrl doesn't call super
 		# properly
 		ListCtrlAutoWidthMixin.__init__(self)
@@ -16,13 +15,13 @@ class VirtualListCtrl(wx.ListCtrl, ListCtrlAutoWidthMixin):
 		#self.Size = self.Size[0] + 1, self.Size[1]
 		self.cache = {}
 		
+		
 	
 	#def refresh(self, start, end=None):
 	#	if end is None:
 	#		self.RefreshItem(start)
 	#	else:
 	#		self.RefreshItems(start, end)
-	
 	def set_data(self, columns, data=None, length=None):
 		self.ClearAll()
 		self.cache = {}
@@ -53,6 +52,24 @@ class VirtualListCtrl(wx.ListCtrl, ListCtrlAutoWidthMixin):
 	
 	def get_data(self, item, column):
 		return self.data[item][column]
+	
+	#def GetSelection(self):
+	#	return self.GetNextItem(-1, wx.LIST_NEXT_ALL, wx.LIST_STATE_SELECTED)
+
+	#def SetSelection(self, item):
+	#	selection = self.GetSelection()
+	#	if selection != -1:
+	#		self.SetItemState(
+	#			0, 
+	#			wx.LIST_STATE_SELECTED|wx.LIST_STATE_FOCUSED 
+	#		)
+	#	self.SetItemState(item, 
+	#		wx.LIST_STATE_SELECTED|wx.LIST_STATE_FOCUSED,
+	#		wx.LIST_STATE_SELECTED|wx.LIST_STATE_FOCUSED 
+	#	)
+	#
+	#Select = GetSelection
+	
 
 class VirtualListBox(VirtualListCtrl):
 	def __init__(self, parent):
@@ -60,7 +77,18 @@ class VirtualListBox(VirtualListCtrl):
 		
 		width = 200
 		self.ClientSize = (width, 200)
-		#self.set_book(book)
+		self.bold_cache = {}
+		self.attr1 = wx.ListItemAttr()
+		f = self.Font
+		f.SetWeight(wx.FONTWEIGHT_BOLD)
+		self.attr1.SetFont(f)
+		self.Bind(wx.EVT_LIST_CACHE_HINT, self.on_cache_hint)
+	
+	def on_cache_hint(self, event):
+		for item in range(event.CacheFrom, event.CacheTo+1):
+			self.get_is_bold(item)
+		
+		
 		
 		#self.Bind(wx.EVT_SIZE, self.on_size)
 		#self.Size = self.Size[0] + 1, self.Size[1]
@@ -76,6 +104,19 @@ class VirtualListBox(VirtualListCtrl):
 	
 	def set_data(self, data):
 		super(VirtualListBox, self).set_data("0", data, length=len(data))
+	
+	def get_is_bold(self, item):
+		if item not in self.bold_cache:
+			self.bold_cache[item] = self.is_bold(item)
+
+		return self.bold_cache[item]
+
+	def is_bold(self, item):
+		return False
+	
+	def OnGetItemAttr(self, item):
+		if self.get_is_bold(item):
+			return self.attr1
 
 	#def on_size(self, event):
 	#	self.SetColumnWidth(0, self.ClientSize[0])
