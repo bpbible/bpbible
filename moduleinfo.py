@@ -3,8 +3,9 @@ from wx import html
 import re
 
 import displayframe
-from util.unicode import to_unicode_2
+from util.unicode import get_module_encoding
 from util import languages
+from util.i18n import N_
 from gui.htmlbase import html_settings
 
 def get_html_height(module, text):
@@ -58,33 +59,39 @@ def process(info):
 	return info
 
 def try_unicode(text, mod):
+	encodings = ["utf8", "cp1252"]
+	enc = get_module_encoding(mod)
+	i = encodings.index(enc)
 	try:
-		return to_unicode_2(text, mod)
+		return text.decode(enc)
 	except UnicodeDecodeError:
-		# ESV doesn't properly utf-8 copyright symbol in its about
-		# so if we can't convert it to unicode, leave it as it is
-		return text
+		try:
+			# ESV doesn't properly utf-8 copyright symbol in its about
+			# so if we can't convert it to unicode, leave it as it is
+			return text.decode(encodings[not i])
+		except UnicodeDecodeError:
+			return text.decode(enc, "replace")
 
 class ModuleInfo(wx.Dialog):
 	def __init__(self, parent, module):
-		super(ModuleInfo, self).__init__(parent, title="Book Information", 
+		super(ModuleInfo, self).__init__(parent, title=_("Book Information"), 
 			style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER)
 
 		self.module = module
 		panel = wx.Panel(self)
 
 		fields = (
-			("Name", process(try_unicode(module.Name(), module)), -1), 
-			("Description", 
+			(N_("Name"), process(try_unicode(module.Name(), module)), -1), 
+			(N_("Description"), 
 				process(try_unicode(module.Description(), module)), 75),
-			("Language",
+			(N_("Language"),
 				process(try_unicode(
 						languages.get_language_description(module.Lang()), 
 						module)), -1), 
 			
-			("About", process(
+			(N_("About"), process(
 				try_unicode(module.getConfigEntry("About"), module)), 115), 
-			("License", process(try_unicode(
+			(N_("License"), process(try_unicode(
 						module.getConfigEntry("DistributionLicense"), 
 						module
 					)), 75)
@@ -107,7 +114,8 @@ class ModuleInfo(wx.Dialog):
 		gs = wx.FlexGridSizer(len(fields) + 1, 2, 5, 5)
 		gs.AddGrowableCol(1, 1)
 		for id, (item, value, height) in enumerate(fields):
-			label = wx.StaticText(panel, label=item+":", style=wx.ALIGN_RIGHT)
+			label = wx.StaticText(panel, label=_(item)+":", 
+				style=wx.ALIGN_RIGHT)
 			font = label.Font
 			font.Weight = wx.FONTWEIGHT_BOLD
 			label.Font = font
@@ -117,9 +125,18 @@ class ModuleInfo(wx.Dialog):
 			field.SetBorders(1)
 			
 			wx.CallAfter(field.SetPage, value)
+
+			# we get nasty horizontal scrollbars - by sending a size event
+			# they disappear
+			def SendSizeEvent(html):
+				s = wx.SizeEvent(html.Size)
+				s.EventObject = html
+				html.EventHandler.ProcessEvent(s)
+
+			wx.CallAfter(wx.CallAfter, SendSizeEvent, field)
 			if height == -1:
 				w, height = get_html_height(self.module, value)
-				height += 12
+				height += 8
 			
 			gs.AddGrowableRow(id, height)
 

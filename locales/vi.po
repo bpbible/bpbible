@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2008-10-26 21:34+AUS Eastern Daylight Time\n"
+"POT-Creation-Date: 2008-10-26 22:33+AUS Eastern Daylight Time\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -440,6 +440,30 @@ msgid ""
 "txt file in the application directory"
 msgstr ""
 
+#: moduleinfo.py:76
+msgid "Book Information"
+msgstr ""
+
+#: moduleinfo.py:83
+msgid "Name"
+msgstr ""
+
+#: moduleinfo.py:84
+msgid "Description"
+msgstr ""
+
+#: moduleinfo.py:86
+msgid "Language"
+msgstr ""
+
+#: moduleinfo.py:91
+msgid "About"
+msgstr ""
+
+#: moduleinfo.py:93
+msgid "License"
+msgstr ""
+
 #: pathmanager.py:25
 msgid "New"
 msgstr ""
@@ -464,19 +488,19 @@ msgstr ""
 msgid "Commentary Search"
 msgstr ""
 
-#: util/i18n.py:39
+#: util/i18n.py:38
 msgid "English"
 msgstr ""
 
-#: util/i18n.py:40
+#: util/i18n.py:39
 msgid "Spanish"
 msgstr ""
 
-#: util/i18n.py:41
+#: util/i18n.py:40
 msgid "BM test"
 msgstr ""
 
-#: util/i18n.py:42
+#: util/i18n.py:41
 msgid "Vietnamese"
 msgstr ""
 

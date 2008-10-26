@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2008-10-26 21:34+AUS Eastern Daylight Time\n"
+"POT-Creation-Date: 2008-10-26 22:33+AUS Eastern Daylight Time\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -450,6 +450,30 @@ msgid ""
 msgstr ""
 "This application be GPL v2. See the LICENSE.txt file in the app directory"
 
+#: moduleinfo.py:76
+msgid "Book Information"
+msgstr "Metadata on this text"
+
+#: moduleinfo.py:83
+msgid "Name"
+msgstr "And it be called"
+
+#: moduleinfo.py:84
+msgid "Description"
+msgstr "Longer calling of it be"
+
+#: moduleinfo.py:86
+msgid "Language"
+msgstr "Lingo"
+
+#: moduleinfo.py:91
+msgid "About"
+msgstr "Read about this book"
+
+#: moduleinfo.py:93
+msgid "License"
+msgstr "The T&&C be"
+
 #: pathmanager.py:25
 msgid "New"
 msgstr "Add a new one"
@@ -474,19 +498,19 @@ msgstr "Search them definitions"
 msgid "Commentary Search"
 msgstr "Search Other man's words"
 
-#: util/i18n.py:39
+#: util/i18n.py:38
 msgid "English"
 msgstr "Usual Lingo"
 
-#: util/i18n.py:40
+#: util/i18n.py:39
 msgid "Spanish"
 msgstr "Spaniard lingo"
 
-#: util/i18n.py:41
+#: util/i18n.py:40
 msgid "BM test"
 msgstr "Crazy test"
 
-#: util/i18n.py:42
+#: util/i18n.py:41
 msgid "Vietnamese"
 msgstr "Vietnamese lingo"
 
@@ -636,7 +660,7 @@ msgstr "Go on, check it"
 
 #: xrc/harmonyfrm_xrc.py:93
 msgid "Find Bible Reference"
-msgstr "Look up scripture:"
+msgstr "Look up scripture"
 
 #: xrc/install_module_xrc.py:70
 msgid "Install to:"
