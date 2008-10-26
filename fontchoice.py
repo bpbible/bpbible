@@ -65,6 +65,7 @@ class FontChoiceDialog(xrcFontChoiceDialog):
 		names.sort()
 		self.font_face.Clear()
 		self.font_face.AppendItems(names)
+		self.preview.handle_links = False
 
 		#if size is None:
 		#	size = max(wx.NORMAL_FONT.PointSize, 10)

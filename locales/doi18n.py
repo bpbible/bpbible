@@ -8,6 +8,14 @@ python_i18n_paths = [
 	r"\Python25",
 ]
 
+ignore_strings = [
+	r'"<h5>$$heading</h5>"',
+	r'''""
+"\n"
+"$$range ($$version)"''',
+	r'"$$text "',
+	'"DUMMY"'
+]
 for item in python_i18n_paths:
 	tools_path = os.path.expanduser(item) + "/Tools"
 	if os.path.isdir(tools_path):
@@ -15,6 +23,17 @@ for item in python_i18n_paths:
 		break
 else:
 	raise SystemExit("Couldn't find path to Tools directory")
+
+def convert_slashes(text):
+	return re.sub(r"#: (\.[\\/].*)", 
+		lambda s:
+			re.sub(
+			r"\.[\\/]([^ ]*)", 
+			lambda z: z.group(1).replace("\\", "/"), 
+			s.group()
+		),
+		text
+	)
 
 def gather(force=False):
 #	for item in languages:
@@ -26,8 +45,23 @@ def gather(force=False):
 	error = os.system('python %s/pygettext.py -o messages.pot.new -p locales/ -k N_ `find . -name "*.py"`' % python_i18n_path)
 	assert not error, error
 	new_text = open("locales/messages.pot.new").read()
+	# ignore certain strings. Would use -x on pygettext.py, but it doesn't
+	# work!
+	for item in ignore_strings:
+		r = '''\
+#: .*
+msgid %s
+msgstr ""
+
+''' % re.escape(item)
+		new_text, cnt = re.subn(r, "", new_text)
+		assert cnt, `r`
+
+	open("locales/messages.pot.new", "w").write(new_text)
 	new_text = re.sub('"POT-Creation-Date: .*"', "", new_text)
-	if new_text == old_text:
+
+
+	if convert_slashes(new_text) == convert_slashes(old_text):
 		os.remove("locales/messages.pot.new")
 		print "Nothing to do"
 		if not force:
@@ -37,16 +71,8 @@ def gather(force=False):
 	
 	f = open("locales/messages.pot").read()
 		
+	f = convert_slashes(f)
 	# change .\backend\book.py -> backend/book.py
-	f = re.sub(r"#: (\.\\.*)", 
-		lambda s:
-			re.sub(
-			r"\.\\([^ ]*)", 
-			lambda z: z.group().replace("\\", "/"), 
-			s.group()
-		),
-		f
-	)
 	open("locales/messages.pot", "w").write(f)		
 
 

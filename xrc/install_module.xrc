@@ -90,27 +90,5 @@
     <title>Book Installation</title>
     <style>wxDEFAULT_DIALOG_STYLE</style>
   </object>
-  <object class="wxPanel" name="ModuleInfoPanel">
-    <object class="wxBoxSizer">
-      <orient>wxHORIZONTAL</orient>
-      <object class="sizeritem">
-        <object class="wxHtmlWindow" name="module_description" subclass="displayframe.DisplayFrameXRC">
-          <style>wxHW_SCROLLBAR_NEVER</style>
-        </object>
-        <option>1</option>
-        <flag>wxGROW</flag>
-      </object>
-      <object class="sizeritem">
-        <object class="wxBitmapButton" name="info_button">
-          <bitmap stock_id="wxART_INFORMATION"/>
-          <tooltip>View Module information...</tooltip>
-          <help>View Module information...</help>
-          <style>wxBU_AUTODRAW</style>
-        </object>
-        <option>0</option>
-        <flag>wxLEFT|wxRIGHT|wxALIGN_CENTRE</flag>
-        <border>6</border>
-      </object>
-    </object>
-  </object>
+
 </resource>

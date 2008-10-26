@@ -67,8 +67,8 @@ class ErrorDialog(xrcErrorDialog):
 		traceback_text = u"%s%s\n" % (self.traceback_text.Value,
 			''.join(traceback.format_exception(type, value, tb)))
 
-		self.exc_text = _("%sAn error has occurred.\n%s: %s\n") % (
-			self.exc_text, type.__name__, value)
+		self.exc_text = "%s%s\n%s: %s\n" % (
+			self.exc_text, _("An error has occurred."), type.__name__, value)
 
 
 		self.write_to_log(traceback_text)
@@ -76,7 +76,7 @@ class ErrorDialog(xrcErrorDialog):
 		# if this exception is turned off, return immediately
 		exception_id = self.get_exception_id(type, value, tb)
 		if exception_id in errors["errors_to_ignore"]:
-			self.write_to_log(_("Above exception was ignored\n"))
+			self.write_to_log(_("Above exception was ignored") + "\n")
 			return
 	
 		self.collapsed = False

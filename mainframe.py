@@ -970,7 +970,9 @@ class MainFrame(wx.Frame, AuiLayer):
 		except Exception, e:
 			# give notification - we probably have uninstalled our error
 			# handler
-			wx.MessageBox(_("An error occurred on closing:\n%s") % e)
+			wx.MessageBox("%s\n%s" % 
+				(_("An error occurred on closing:"), e)
+			)
 
 			# but let it propagate and print a stack trace
 			raise

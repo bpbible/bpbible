@@ -22,7 +22,7 @@ class PathManagerPanel(wx.Panel):
 		
 		sizer = wx.BoxSizer(wx.VERTICAL)
 		self.panel = MovableListPanel(parent=self, gui_parent=self,
-			copy_text="New")
+			copy_text=_("New"))
 		
 		sizer.Add(self.panel, 1, wx.GROW)
 		#panel2 = wx.Panel(self)
@@ -51,7 +51,7 @@ class PathManagerPanel(wx.Panel):
 		if not name:
 			name=os.getcwd()
 
-		dlg = wx.DirDialog(self, "Choose a directory:",
+		dlg = wx.DirDialog(self, _("Choose a directory:"),
 						  style=wx.DD_DEFAULT_STYLE, defaultPath=name)#|wx.DD_DIR_MUST_EXIST)
 
 		# If the user selects OK, then we process the dialog's data.
@@ -66,12 +66,12 @@ class PathManagerPanel(wx.Panel):
 	def on_template_change(self, selection): pass
 
 	def save(self):
-		busy = wx.BusyInfo("Reading modules...")
+		busy = wx.BusyInfo(_("Reading books..."))
 		biblemgr.set_new_paths([str(a.name) for a in self.templates])
 
 class PathManager(wx.Dialog):
 	def __init__(self, parent):
-		super(PathManager, self).__init__(parent, title="Path manager")
+		super(PathManager, self).__init__(parent, title=_("Path manager"))
 		s = wx.BoxSizer(wx.HORIZONTAL)
 		self.pmp = PathManagerPanel(self)	
 		s.Add(self.pmp, 1, wx.GROW)

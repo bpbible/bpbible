@@ -45,31 +45,6 @@ class xrcModuleInstallDialog(wx.Dialog):
 
 
 
-class xrcModuleInfoPanel(wx.Panel):
-#!XRCED:begin-block:xrcModuleInfoPanel.PreCreate
-    def PreCreate(self, pre):
-        """ This function is called during the class's initialization.
-        
-        Override it for custom setup before the window is created usually to
-        set additional window styles using SetWindowStyle() and SetExtraStyle().
-        """
-        pass
-        
-#!XRCED:end-block:xrcModuleInfoPanel.PreCreate
-
-    def __init__(self, parent):
-        # Two stage creation (see http://wiki.wxpython.org/index.cgi/TwoStageCreation)
-        pre = wx.PrePanel()
-        self.PreCreate(pre)
-        get_resources().LoadOnPanel(pre, parent, "ModuleInfoPanel")
-        self.PostCreate(pre)
-
-        # Define variables for the controls, bind event handlers
-        self.module_description = xrc.XRCCTRL(self, "module_description")
-        self.info_button = xrc.XRCCTRL(self, "info_button")
-
-
-
 
 
 # ------------------------ Resource data ----------------------
@@ -79,3 +54,19 @@ def __init_resources():
     __res = xrc.EmptyXmlResource()
 
     __res.Load('install_module.xrc')
+
+# ----------------------- Gettext strings ---------------------
+
+def __gettext_strings():
+    # This is a dummy function that lists all the strings that are used in
+    # the XRC file in the _("a string") format to be recognized by GNU
+    # gettext utilities (specificaly the xgettext utility) and the
+    # mki18n.py script.  For more information see:
+    # http://wiki.wxpython.org/index.cgi/Internationalization 
+    
+    def _(str): pass
+    
+    _("DUMMY")
+    _("Install to:")
+    _("Book Installation")
+

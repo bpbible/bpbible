@@ -1,33 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <resource version="2.3.0.1">
-  <object class="wxMenuBar" name="frame_1_menubar">
-    <object class="wxMenu" name="File">
-      <label>_File</label>
-      <object class="wxMenuItem" name="randomverse">
-        <label>_Random Verse\tCtrl-R</label>
-      </object>
-      <object class="separator"/>
-      <object class="wxMenuItem" name="wxID_EXIT">
-        <label>_Exit</label>
-      </object>
-    </object>
-    <object class="wxMenu" name="Options">
-      <label>_Options</label>
-      <object class="wxMenuItem" name="swordloc">
-        <label>&amp;Set SWORD Module Location...</label>
-      </object>
-      <object class="wxMenuItem" name="defaultmod">
-        <label>Set current module as &amp;default</label>
-        <enabled>1</enabled>
-      </object>
-    </object>
-    <object class="wxMenu" name="Help">
-      <label>_Help</label>
-      <object class="wxMenuItem" name="wxID_ABOUT">
-        <label>_About</label>
-      </object>
-    </object>
-  </object>
+  
   <object class="wxFrame" name="HarmonyFrame">
     <size>500, 500</size>
     <style>wxDEFAULT_FRAME_STYLE|wxCLIP_CHILDREN</style>
@@ -101,12 +74,11 @@
                 <object class="wxBoxSizer">
                   <orient>wxVERTICAL</orient>
                   <object class="sizeritem">
-                    <option>2</option>
-                    <flag>wxEXPAND</flag>
                     <object class="wxHtmlWindow" name="bible_text" subclass="displayframe.DisplayFrameXRC">
                       <borders>5</borders>
-                      <htmlcode>Sorry, nothing is here yet. Go to &lt;a href='harmony:1'&gt;the first section&lt;/a&gt;.</htmlcode>
                     </object>
+                    <option>2</option>
+                    <flag>wxEXPAND</flag>
                     <minsize>400,250</minsize>
                   </object>
                 </object>

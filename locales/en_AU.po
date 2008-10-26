@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2008-10-24 22:40+AUS Eastern Daylight Time\n"
+"POT-Creation-Date: 2008-10-26 21:34+AUS Eastern Daylight Time\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -14,19 +14,19 @@ msgstr ""
 "Content-Transfer-Encoding: utf-8\n"
 "Generated-By: pygettext.py 1.5\n"
 
-#: auilayer.py:296
+#: auilayer.py:297
 msgid "Books"
 msgstr "The books tab"
 
-#: auilayer.py:336
+#: auilayer.py:337
 msgid "History"
 msgstr "The history tab"
 
-#: backend/book.py:474
+#: backend/book.py:477
 msgid "commentary"
 msgstr "Other man's words"
 
-#: backend/book.py:481 bibleframe.py:34 xrc/auifrm_xrc.py:59
+#: backend/book.py:484 bibleframe.py:34 xrc/auifrm_xrc.py:59
 msgid "Bible"
 msgstr "God's word"
 
@@ -34,7 +34,7 @@ msgstr "God's word"
 msgid "Search"
 msgstr "Hunt around inside this book"
 
-#: bibleframe.py:74
+#: bibleframe.py:74 xrc/harmonyfrm_xrc.py:92
 msgid "Harmony"
 msgstr "Parallel passage viewer"
 
@@ -106,7 +106,7 @@ msgstr "Zapping 'em into the clipboard"
 msgid "Search in Bible for:"
 msgstr "Run your eyes over the page for this word"
 
-#: bookframe.py:151 mainframe.py:726
+#: bookframe.py:151 mainframe.py:730
 msgid "Show the %s pane"
 msgstr "%s pane: show"
 
@@ -128,7 +128,7 @@ msgstr "Open the metadata..."
 
 #: bookframe.py:185
 msgid "Show information on the current book"
-msgstr ""
+msgstr "Display the guff about this book"
 
 #: bookframe.py:226
 msgid "Go to reference"
@@ -140,7 +140,7 @@ msgstr "Zip to this reference"
 
 #: bookframe.py:334
 msgid "Link the %s to the Bible"
-msgstr ""
+msgstr "Hook up the %s to the centre pane"
 
 #: bookframe.py:377
 msgid "Commentary"
@@ -150,9 +150,66 @@ msgstr "Other man's words"
 msgid "Dictionary"
 msgstr "Define a word"
 
-#: copyverses.py:133
+#: copyverses.py:134
 msgid "<custom: based on %s>"
+msgstr "!!!CUSTOM!!! - from %s"
+
+#: displayframe.py:183
+msgid ""
+"Module %s is not installed, so you cannot view details for this strong's "
+"number"
+msgstr "You ain't get the book %s, so you can't see this strong's number info"
+
+#: displayframe.py:193
+msgid "Don't know how to open this morphology type:"
+msgstr "Don't have a clue how to open this morphology type:"
+
+#: displayframe.py:204
+msgid ""
+"Module %s is not installed, so you cannot view details for this "
+"morphological code"
 msgstr ""
+"You ain't get the book %s, so you can't see this morphological code info"
+
+#: displayframe.py:392
+msgid "Select all"
+msgstr "Mark all text as selected"
+
+#: displayframe.py:394
+msgid "Select all the text in the frame"
+msgstr "Mark all the text in the frame as being selected"
+
+#: displayframe.py:397
+msgid "Copy selection (with links)"
+msgstr "Zap marked text, links and all, into clipboard"
+
+#: displayframe.py:400
+msgid "Copy the selected text with links"
+msgstr "Zap marked text, links and all, into clipboard"
+
+#: displayframe.py:404
+msgid "Copy selection (without links)"
+msgstr "Zap marked text, eliminating links, into clipboard"
+
+#: displayframe.py:407
+msgid "Copy the selected text, removing all links"
+msgstr "Zap marked text, eliminating links, into clipboard"
+
+#: displayframe.py:444
+msgid "the selected word"
+msgstr "the word you have selected"
+
+#: displayframe.py:450
+msgid "the selected phrase"
+msgstr "The phrase you've chose"
+
+#: displayframe.py:464
+msgid "Look up %s in the dictionary"
+msgstr "Examine the dictionary for %s"
+
+#: displayframe.py:480
+msgid "Search for %s in the Bible"
+msgstr "Run your eyes over God's word for %s"
 
 #: error_handling.py:26
 msgid "&Details >>"
@@ -162,163 +219,191 @@ msgstr "&Deeeeeeetails >>"
 msgid "<< &Details"
 msgstr ":)"
 
-#: error_handling.py:70
-msgid ""
-"%sAn error has occurred.\n"
-"%s: %s\n"
-msgstr ""
+#: error_handling.py:71
+msgid "An error has occurred."
+msgstr "An problem be with your application"
 
 #: error_handling.py:79
-msgid "Above exception was ignored\n"
+msgid "Above exception was ignored"
 msgstr "Gurg"
 
 #: genbookframe.py:57
 msgid "Other Books"
 msgstr "Different books"
 
-#: mainframe.py:225
+#: gui/movablelist.py:7
+msgid "Copy"
+msgstr "Duplicate"
+
+#: harmony/harmonyframe.py:213
+msgid "Loading harmony"
+msgstr "Reading in the gospel comparator"
+
+#: harmony/harmonyframe.py:264
+msgid "%s is not in this harmony"
+msgstr "Arg. %s be not in here"
+
+#: install_manager/install_module.py:34
+msgid "Are you sure you want to install this book?"
+msgstr "Put this book in your library"
+
+#: install_manager/install_module.py:38
+msgid "Are you sure you want to install these books?"
+msgstr "Put these books in your library"
+
+#: install_manager/install_module.py:48
+msgid "Other..."
+msgstr "Custom path..."
+
+#: install_manager/install_module.py:57 pathmanager.py:54
+msgid "Choose a directory:"
+msgstr "Which directory?"
+
+#: install_manager/install_module.py:89
+msgid "Information"
+msgstr "Open the metadata..."
+
+#: mainframe.py:229
 msgid "Back"
 msgstr "Return to the previous verse"
 
-#: mainframe.py:226
+#: mainframe.py:230
 msgid "Go back a verse"
 msgstr "Return to the previous verse"
 
-#: mainframe.py:229
+#: mainframe.py:233
 msgid "Forward"
 msgstr "Return to the next verse"
 
-#: mainframe.py:230
+#: mainframe.py:234
 msgid "Go forward a verse"
 msgstr "Return to the next verse"
 
-#: mainframe.py:233
+#: mainframe.py:237
 msgid "Zoom In"
 msgstr "Grow"
 
-#: mainframe.py:234
+#: mainframe.py:238
 msgid "Make text bigger"
 msgstr "Enlarge the text"
 
-#: mainframe.py:237
+#: mainframe.py:241
 msgid "Default Zoom"
 msgstr "Back to normal size"
 
-#: mainframe.py:238
+#: mainframe.py:242
 msgid "Return text to default size"
 msgstr "Put text back the way it were"
 
-#: mainframe.py:241
+#: mainframe.py:245
 msgid "Zoom Out"
 msgstr "Shrink"
 
-#: mainframe.py:242
+#: mainframe.py:246
 msgid "Make text smaller"
-msgstr ""
+msgstr "Shrink text"
 
-#: mainframe.py:251
+#: mainframe.py:255
 msgid "Go to verse"
 msgstr "Zip to this reference"
 
-#: mainframe.py:252
+#: mainframe.py:256
 msgid "Go to this verse"
 msgstr "Zip to this reference"
 
-#: mainframe.py:255
+#: mainframe.py:259
 msgid "Bible Search"
 msgstr "Search the good book"
 
-#: mainframe.py:256
+#: mainframe.py:260
 msgid "Search in this Bible"
 msgstr "Run your eyes over the page for this word"
 
-#: mainframe.py:259 xrc/copyverses_xrc.py:80
+#: mainframe.py:263 xrc/copyverses_xrc.py:80
 msgid "Copy Verses"
 msgstr "Transport the verses into the clipboard"
 
-#: mainframe.py:260
+#: mainframe.py:264
 msgid "Open the Copy Verses dialog"
 msgstr "Transport the verses into the clipboard"
 
-#: mainframe.py:288
+#: mainframe.py:292
 msgid "Navigation"
 msgstr "A toolbar to move around"
 
-#: mainframe.py:290
+#: mainframe.py:294
 msgid "Zoom"
 msgstr "A toolbar to Zoom"
 
-#: mainframe.py:292
+#: mainframe.py:296
 msgid "History toolbar"
 msgstr "A toolbar with history"
 
-#: mainframe.py:672 xrc/auifrm_xrc.py:43
+#: mainframe.py:676 xrc/auifrm_xrc.py:43
 msgid "&Language"
 msgstr "&Lingo"
 
-#: mainframe.py:691 xrc/auifrm_xrc.py:46
+#: mainframe.py:695 xrc/auifrm_xrc.py:46
 msgid "&Display"
 msgstr "Toggle them options"
 
-#: mainframe.py:696 xrc/auifrm_xrc.py:49
+#: mainframe.py:700 xrc/auifrm_xrc.py:49
 msgid "&Window"
 msgstr "This be a list of windows"
 
-#: mainframe.py:700 xrc/auifrm_xrc.py:48
+#: mainframe.py:704 xrc/auifrm_xrc.py:48
 msgid "Toolbars"
 msgstr "These be the floating strips"
 
-#: mainframe.py:722
+#: mainframe.py:726
 msgid "Show the %s toolbar"
 msgstr "%s toolbar: show"
 
-#: mainframe.py:745 xrc/auifrm_xrc.py:50
+#: mainframe.py:749 xrc/auifrm_xrc.py:50
 msgid "Debug"
 msgstr "For the experts"
 
-#: mainframe.py:803
+#: mainframe.py:807
 msgid "Use Strong's headwords"
 msgstr "Show a word, not a number"
 
-#: mainframe.py:804
+#: mainframe.py:808
 msgid "Display Strong's numbers using the transliterated text"
 msgstr "Show a word for the strong's text, not the number"
 
-#: mainframe.py:809
+#: mainframe.py:813
 msgid "Expand cross-references"
-msgstr ""
+msgstr "Grow cross-references"
 
-#: mainframe.py:810
+#: mainframe.py:814
 msgid "Display cross references partially expanded"
-msgstr ""
+msgstr "Show cross-references expanded to the 2nd level"
 
-#: mainframe.py:815
+#: mainframe.py:819
 msgid "One line per verse"
 msgstr "Each verse by itself"
 
-#: mainframe.py:816
+#: mainframe.py:820
 msgid "Display each verse on its own line."
 msgstr "Put each verse on its own lonesome line"
 
-#: mainframe.py:821
+#: mainframe.py:825
 msgid "Topic Tags"
 msgstr ""
 
-#: mainframe.py:822
+#: mainframe.py:826
 msgid "Display the topics that each verse is tagged with."
 msgstr ""
 
-#: mainframe.py:969
-msgid ""
-"An error occurred on closing:\n"
-"%s"
-msgstr ""
+#: mainframe.py:974
+msgid "An error occurred on closing:"
+msgstr "This problem be occuring on conclusion:"
 
-#: mainframe.py:980 mainframe.py:981
+#: mainframe.py:986 mainframe.py:987
 msgid "search "
 msgstr ""
 
-#: mainframe.py:1001
+#: mainframe.py:1007
 msgid ""
 "Flexible Bible study software.\n"
 "\t\t\tBuilt Using the Sword Project from crosswire.org\n"
@@ -330,23 +415,23 @@ msgstr ""
 "\t\t\tPython Version be %(sysversion)s\n"
 "\t\t\twxPython Version be %(wxversion)s"
 
-#: mainframe.py:1007
+#: mainframe.py:1013
 msgid "BPBible"
 msgstr "BP - God's word"
 
-#: mainframe.py:1011
+#: mainframe.py:1017
 msgid "BPBible website"
 msgstr "Vist the website for this application"
 
-#: mainframe.py:1012
+#: mainframe.py:1018
 msgid "Ben Morgan"
 msgstr "Me"
 
-#: mainframe.py:1012
+#: mainframe.py:1018
 msgid "SWORD library developers"
 msgstr "SWORD devels"
 
-#: mainframe.py:1013
+#: mainframe.py:1019
 msgid ""
 "Icons used are from famfamfam\n"
 "http://www.famfamfam.com/lab/icons/silk\n"
@@ -358,12 +443,24 @@ msgstr ""
 "and the Tango Desktop Project\n"
 "http://tango.freedesktop.org/Tango_Desktop_Project for the use of their icons"
 
-#: mainframe.py:1018
+#: mainframe.py:1024
 msgid ""
 "BPBible is licensed under the GPL v2. For more details, refer to the LICENSE."
 "txt file in the application directory"
 msgstr ""
 "This application be GPL v2. See the LICENSE.txt file in the app directory"
+
+#: pathmanager.py:25
+msgid "New"
+msgstr "Add a new one"
+
+#: pathmanager.py:69
+msgid "Reading books..."
+msgstr "Slurping up the books"
+
+#: pathmanager.py:74
+msgid "Path manager"
+msgstr "Manage dem paths"
 
 #: search/searchpanel.py:964
 msgid "Other Book Search"
@@ -388,6 +485,10 @@ msgstr "Spaniard lingo"
 #: util/i18n.py:41
 msgid "BM test"
 msgstr "Crazy test"
+
+#: util/i18n.py:42
+msgid "Vietnamese"
+msgstr "Vietnamese lingo"
 
 #: versecompare.py:47
 msgid "Version Comparison"
@@ -533,6 +634,46 @@ msgstr "Choose a font, me hearties"
 msgid "&Guess"
 msgstr "Go on, check it"
 
+#: xrc/harmonyfrm_xrc.py:93
+msgid "Find Bible Reference"
+msgstr "Look up scripture:"
+
+#: xrc/install_module_xrc.py:70
+msgid "Install to:"
+msgstr "Pick the destination:"
+
+#: xrc/install_module_xrc.py:71
+msgid "Book Installation"
+msgstr "Installing book:"
+
+#: xrc/movablelist_xrc.py:71
+msgid "Move item to top"
+msgstr "Zap item up lots"
+
+#: xrc/movablelist_xrc.py:72
+msgid "Move item up"
+msgstr "Zap item up"
+
+#: xrc/movablelist_xrc.py:73
+msgid "Move item down"
+msgstr "Zap item down"
+
+#: xrc/movablelist_xrc.py:74
+msgid "Move item to bottom"
+msgstr "Zap item down lots"
+
+#: xrc/movablelist_xrc.py:75
+msgid "Add a new item"
+msgstr "Create new item"
+
+#: xrc/movablelist_xrc.py:76
+msgid "Edit this item"
+msgstr "Change this item"
+
+#: xrc/movablelist_xrc.py:77
+msgid "Remove this item"
+msgstr "Eliminate this item"
+
 #: xrc/templatemanager_xrc.py:96
 msgid "Template Manager"
 msgstr "Manage dem templates"
@@ -545,27 +686,13 @@ msgstr "The &top bit"
 msgid "&Body"
 msgstr "The &middle bit"
 
-#: xrc/templatemanager_xrc.py:102
-msgid "$$text "
-msgstr ""
-
 #: xrc/templatemanager_xrc.py:103
 msgid "&Footer"
 msgstr "The &End bit"
 
-#: xrc/templatemanager_xrc.py:104
-msgid ""
-"\n"
-"$$range ($$version)"
-msgstr ""
-
 #: xrc/templatemanager_xrc.py:105
 msgid "&Headings"
 msgstr "&The section bits at the top"
-
-#: xrc/templatemanager_xrc.py:106
-msgid "<h5>$$heading</h5>"
-msgstr ""
 
 #: xrc/templatemanager_xrc.py:107
 msgid ""

@@ -32,10 +32,14 @@ class DisplayFrame(HtmlSelectableWindow):
 			logical_parent=None):
 		super(DisplayFrame, self).__init__(parent, style=style)
 		self.logical_parent = logical_parent
+		self.handle_links = True
+		
 
 	def setup(self):
 		if not hasattr(self, "logical_parent"):
 			self.logical_parent = None
+			self.handle_links = True
+			
 		self._tooltip = None
 		self.current_target = None
 		self.mouseout = False
@@ -121,13 +125,13 @@ class DisplayFrame(HtmlSelectableWindow):
 			return
 
 		link = cell.GetLink()
-		if(link): 
+		if link and self.handle_links: 
 			self.LinkClicked(link, cell)
 
 	def OnCellMouseEnter(self, cell, x, y):
 		self.current_target = None
 		
-		if cell.GetLink() is None:
+		if cell.GetLink() is None or not self.handle_links:
 			return
 
 
@@ -176,9 +180,9 @@ class DisplayFrame(HtmlSelectableWindow):
 			type = "Strongs"+type #as module is StrongsHebrew
 			tooltipdata = dictionary.GetReferenceFromMod(type, value)
 			if tooltipdata is None:
-				tooltipdata = ("Module %s is not installed, "
+				tooltipdata = _("Module %s is not installed, "
 				"so you cannot view "
-				"details for this strong's number" %type)
+				"details for this strong's number") %type
 
 			SetText(tooltipdata)
 
@@ -186,8 +190,8 @@ class DisplayFrame(HtmlSelectableWindow):
 			type = url.getParameterValue("type") #Hebrew or greek
 			types = type.split(":", 1)
 			if types[0] not in ("robinson", "Greek"):
-				tooltipdata = ("Don't know how to open this morphology type:"
-					"<br>%s" % type)
+				tooltipdata = _("Don't know how to open this morphology type:")
+				tooltipdata += "<br>%s" % type
 			else:
 				value = url.getParameterValue("value") #strongs number
 				if not type or not value: 
@@ -197,8 +201,8 @@ class DisplayFrame(HtmlSelectableWindow):
 				type = "Robinson" 
 				tooltipdata = dictionary.GetReferenceFromMod(type, value)
 				if tooltipdata is None:
-					tooltipdata = ("Module %s is not installed, so you cannot "
-					"view details for this morphological code" %type)
+					tooltipdata = _("Module %s is not installed, so you "
+					"cannot view details for this morphological code") % type
 
 			SetText(tooltipdata)
 
@@ -384,11 +388,24 @@ class DisplayFrame(HtmlSelectableWindow):
 			(self.make_lookup_text(), IN_POPUP),
 			(Separator, IN_POPUP),
 		
-			(MenuItem("Select all", self.select_all), IN_BOTH),
-			(MenuItem("Copy selection (with links)", self.copy_text_with_links,
-				enabled=lambda:bool(self.m_selection)), IN_BOTH),
-			(MenuItem("Copy selection (without links)", self.copy_text_no_links,
-				enabled=lambda:bool(self.m_selection)), IN_BOTH),
+			(MenuItem(
+				_("Select all"), 
+				self.SelectAll,
+				_("Select all the text in the frame")
+			), IN_BOTH),
+			(MenuItem(
+				_("Copy selection (with links)"), 
+				self.copy_text_with_links,
+				enabled=lambda:bool(self.m_selection),
+				doc=_("Copy the selected text with links")
+				
+			), IN_BOTH),
+			(MenuItem(
+				_("Copy selection (without links)"), 
+				self.copy_text_no_links,
+				enabled=lambda:bool(self.m_selection),
+				doc=_("Copy the selected text, removing all links")
+			), IN_BOTH),
 
 		)
 		return menu_items
@@ -424,13 +441,13 @@ class DisplayFrame(HtmlSelectableWindow):
 
 			if not text:
 				event.Enable(False)
-				event.SetText(lookup_text % "the selected word")
+				event.SetText(lookup_text % _("the selected word"))
 				return
 
 			event.Enable(True)
 			item = "'%s'" % text
 			if text.find(" ") != -1:
-				item = "the selected phrase"
+				item = _("the selected phrase")
 
 			event.SetText(lookup_text % item)
 
@@ -444,7 +461,7 @@ class DisplayFrame(HtmlSelectableWindow):
 		return cell.ConvertToText(None)
 
 	def make_lookup_text(self):
-		update_ui = self._get_text("Look up %s in the dictionary")
+		update_ui = self._get_text(_("Look up %s in the dictionary"))
 
 		def on_lookup_click():
 			"""Lookup the selected text in the dictionary"""
@@ -460,7 +477,7 @@ class DisplayFrame(HtmlSelectableWindow):
 
 
 	def make_search_text(self):
-		update_ui = self._get_text("Search for %s in the Bible")
+		update_ui = self._get_text(_("Search for %s in the Bible"))
 
 		def on_search_click():
 			"""Search for the selected word in the Bible"""
@@ -497,16 +514,10 @@ class DisplayFrame(HtmlSelectableWindow):
 			update_ui=update_ui)
 
 
-	def select_all(self):
-		"""Select all the text in the frame"""
-		self.SelectAll()
-
 	def copy_text_no_links(self):
-		"""Copy the selected text, removing all links"""
 		self.OnCopy(with_links=False)
 
 	def copy_text_with_links(self):
-		"""Copy the selected text with links"""
 		self.OnCopy(with_links=True)
 	
 	def get_actions(self):

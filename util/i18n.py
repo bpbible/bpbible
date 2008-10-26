@@ -8,7 +8,6 @@ Module to support internationalisation and localisation of the interface.
 
 
 import gettext
-import wx
 from util.debug import dprint, WARNING
 from util.configmgr import config_manager
 locale_settings = config_manager.add_section("Locale")
@@ -39,5 +38,7 @@ languages = dict(
 	en=N_("English"),
 	es=N_("Spanish"),
 	en_AU=N_("BM test"),
+	vi=N_("Vietnamese"),
+	
 )
 	

@@ -210,7 +210,7 @@ class HarmonyPanel(xrcHarmonyPanel):
 	def fill_pericope_list(self):
 		if self.harmony.loaded:
 			return
-		busy_info = wx.BusyInfo("Loading harmony")
+		busy_info = wx.BusyInfo(_("Loading harmony"))
 		self.harmony.load()
 		del busy_info
 
@@ -261,7 +261,7 @@ class HarmonyPanel(xrcHarmonyPanel):
 		self.currentverse = ref
 		peri = self.harmony.top.find_reference(ref)
 		if not peri:
-			wx.MessageBox("%s is not in this harmony" % ref)
+			wx.MessageBox(_("%s is not in this harmony") % ref)
 			return
 
 		#peri, gospel = ParseHarmony.reverseindex[index]

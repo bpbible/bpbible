@@ -2,7 +2,10 @@ import wx
 from xrc.movablelist_xrc import *
 
 class MovableListPanel(xrcMovableListPanel):
-	def __init__(self, parent, gui_parent, copy_text="Copy"):
+	def __init__(self, parent, gui_parent, copy_text=None):
+		if copy_text is None:
+			copy_text = _("Copy")
+
 		self.parent = parent
 	
 		super(MovableListPanel, self).__init__(gui_parent)

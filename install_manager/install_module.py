@@ -1,11 +1,8 @@
 import wx
-from xrc.install_module_xrc import xrcModuleInstallDialog, xrcModuleInfoPanel
+from xrc.install_module_xrc import xrcModuleInstallDialog
 from moduleinfo import ModuleInfo
 from backend.bibleinterface import biblemgr
 from util.unicode import to_unicode_2
-
-INSTALL_QUERY_SINGLE = "Are you sure you want to install the following book?"
-INSTALL_QUERY_MANY = "Are you sure you want to install the following books?"
 
 def chop_text(dc, text, max_size):
 	# first check if the text fits with no problems
@@ -31,10 +28,15 @@ class ModuleInstallDialog(xrcModuleInstallDialog):
 	def __init__(self, parent, modules):
 		self.modules = modules
 		super(ModuleInstallDialog, self).__init__(parent)
+		
 		if len(modules) == 1:
-			self.static_text.SetLabel(INSTALL_QUERY_SINGLE)
+			self.static_text.SetLabel(
+				_("Are you sure you want to install this book?")
+			)
 		else:
-			self.static_text.SetLabel(INSTALL_QUERY_MANY)
+			self.static_text.SetLabel(
+				_("Are you sure you want to install these books?")
+			)
 
 		modules_info = VListCtrl(self.modules_info, self.modules)
 		self.modules_info.Sizer.Add(modules_info, 1, wx.GROW)
@@ -43,7 +45,7 @@ class ModuleInstallDialog(xrcModuleInstallDialog):
 		self.Size = 400, 300
 		self.dest_dir = ""
 		self.old_selection = 0
-		self.destination.Items = biblemgr.paths + ["Other..."]
+		self.destination.Items = biblemgr.paths + [_("Other...")]
 		self.destination.Selection = 0
 		self.on_destination_choice(None)
 		self.destination.Bind(wx.EVT_CHOICE, self.on_destination_choice)
@@ -52,7 +54,7 @@ class ModuleInstallDialog(xrcModuleInstallDialog):
 		last_item = self.destination.Count - 1
 		selection = self.destination.Selection
 		if selection == last_item:
-			dlg = wx.DirDialog(self, "Choose a directory:",
+			dlg = wx.DirDialog(self, _("Choose a directory:"),
 				  style=wx.DD_DEFAULT_STYLE,#|wx.DD_DIR_MUST_EXIST, 
 				  defaultPath=self.dest_dir)
 			
@@ -84,7 +86,7 @@ class VListCtrl(wx.VListBox):
 		self.focus_item.Bind(wx.EVT_SET_FOCUS, self.on_focus)
 		
 		#self.button_panel = wx.Panel(self, style=wx.TRANSPARENT_WINDOW)
-		self.info_button = wx.Button(self, label="Information")
+		self.info_button = wx.Button(self, label=_("Information"))
 		self.info_button.Bind(wx.EVT_BUTTON, self.on_info_button)
 		
 		
