@@ -188,6 +188,10 @@ class MainFrame(wx.Frame, AuiLayer):
 		dprint(MESSAGE, "Done first round of setting up")
 		self.drop_target = ModuleDropTarget(self)
 		self.SetDropTarget(self.drop_target)
+		wx.CallAfter(self.Show)
+		if guiconfig.app.splash:
+			wx.CallAfter(guiconfig.app.splash.Destroy)
+		
 		#guiutil.call_after_x(100, self.bibletext.scroll_to_current)
 		
 		# after three goes round the event loop, set timer for 200ms to scroll

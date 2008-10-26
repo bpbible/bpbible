@@ -6,13 +6,10 @@ dprint(MESSAGE, "Importing wx")
 import wx
 dprint(MESSAGE, "importing wx.xrc")
 
-from wx import xrc
 dprint(MESSAGE, "/importing wx")
 
 # make sure contribs can be imported...
 import contrib
-
-import mainframe
 
 import config, guiconfig
 from util import osutils
@@ -26,6 +23,9 @@ import gui.i18n
 
 class MyApp(wx.App):
 	def Initialize(self):
+		# for py2exe
+		import mainframe
+		
 		was_restarted = self.restarting
 		self.starting = self.restarting = False
 		config_manager.load()
@@ -43,12 +43,28 @@ class MyApp(wx.App):
 		#frame.SetIcon(icon_bundle.GetIcon((32,32)))
 
 		self.SetTopWindow(frame)
-		frame.Show(True)
+		frame.Show(False)
 		if was_restarted:
 			frame.Raise()
 		
 	
 	def OnInit(self):
+		picture = 'bible-256x256.png'
+		self.bitmap = wx.BitmapFromImage(
+			wx.Image(config.graphics_path + picture)
+		)
+		
+		#from splashscreen import SplashScreen
+		self.splash = wx.SplashScreen(
+			self.bitmap, 
+			wx.SPLASH_CENTRE_ON_SCREEN|wx.SPLASH_NO_TIMEOUT,
+			0,
+			None,
+			style=wx.FRAME_NO_TASKBAR
+		)
+		self.splash.Show()
+		self.splash.Raise()
+		
 		self.starting = True
 		self.restarting = False
 	
@@ -73,6 +89,7 @@ class MyApp(wx.App):
 		dprint(MESSAGE, "Loaded icon")
 		
 
+		from wx import xrc
 		self.res = xrc.XmlResource(config.xrc_path+"auifrm.xrc" )
 		return True
 	
