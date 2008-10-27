@@ -1,0 +1,562 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="310"
+   height="310"
+   id="svg2841"
+   sodipodi:version="0.32"
+   inkscape:version="0.45.1"
+   version="1.0"
+   sodipodi:docbase="F:\Documents\BPBible\svn\graphics"
+   sodipodi:docname="splashscreen.svg"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape"
+   inkscape:export-filename="F:\Documents\BPBible\svn\graphics\splashscreen.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
+  <defs
+     id="defs2843">
+    <linearGradient
+       id="linearGradient4524">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0.75294119;"
+         offset="0"
+         id="stop4526" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0.60000002;"
+         offset="1"
+         id="stop4528" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient3480">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0"
+         id="stop3482" />
+      <stop
+         id="stop3238"
+         offset="0.69999999"
+         style="stop-color:#e7edf1;stop-opacity:1;" />
+      <stop
+         style="stop-color:#c4d2dc;stop-opacity:1;"
+         offset="0.89999998"
+         id="stop3240" />
+      <stop
+         style="stop-color:#a1b8c8;stop-opacity:1;"
+         offset="1"
+         id="stop3484" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient370">
+      <stop
+         id="stop371"
+         offset="0"
+         style="stop-color:#efe100;stop-opacity:1;" />
+      <stop
+         id="stop372"
+         offset="1"
+         style="stop-color:#f58200;stop-opacity:1;" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient410">
+      <stop
+         id="stop411"
+         offset="0.00000000"
+         style="stop-color:#ff0b00;stop-opacity:1.0000000;" />
+      <stop
+         id="stop412"
+         offset="1.0000000"
+         style="stop-color:#810500;stop-opacity:1.0000000;" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient378">
+      <stop
+         id="stop379"
+         offset="0"
+         style="stop-color:#ffffff;stop-opacity:0.627451;" />
+      <stop
+         id="stop380"
+         offset="1.0000000"
+         style="stop-color:#ffffff;stop-opacity:0.00000000;" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient366">
+      <stop
+         id="stop367"
+         offset="0.00000000"
+         style="stop-color:#d9d9b4;stop-opacity:1.0000000;" />
+      <stop
+         id="stop368"
+         offset="1.0000000"
+         style="stop-color:#a3a36b;stop-opacity:1.0000000;" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient362">
+      <stop
+         id="stop363"
+         offset="0"
+         style="stop-color:#0014d8;stop-opacity:1;" />
+      <stop
+         id="stop364"
+         offset="1"
+         style="stop-color:#000f7f;stop-opacity:1;" />
+    </linearGradient>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3480"
+       id="radialGradient3486"
+       cx="150"
+       cy="150"
+       fx="150"
+       fy="150"
+       r="150"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.3955144,0,0,1.2140981,-59.327156,-51.614667)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient370"
+       id="linearGradient4530"
+       x1="150.00002"
+       y1="280"
+       x2="-34.615269"
+       y2="280"
+       gradientUnits="userSpaceOnUse"
+       spreadMethod="reflect"
+       gradientTransform="matrix(0.9966673,0,0,0.9750051,0.4998998,6.9985855)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4524"
+       id="linearGradient4540"
+       gradientUnits="userSpaceOnUse"
+       spreadMethod="pad"
+       x1="150"
+       y1="260"
+       x2="150"
+       y2="300"
+       gradientTransform="matrix(0.9933333,0,0,0.475,1,137.5)" />
+    <filter
+       inkscape:collect="always"
+       x="-0.028806817"
+       width="1.0576136"
+       y="-0.14383094"
+       height="1.2876619"
+       id="filter4570">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="1.6594637"
+         id="feGaussianBlur4572" />
+    </filter>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient370"
+       id="linearGradient8733"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(2.1104991,0,0,2.7210972,-440.50625,-2089.802)"
+       x1="296.1369"
+       y1="768.0376"
+       x2="230.01286"
+       y2="833.85461" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient378"
+       id="linearGradient8735"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.0747049,0,0,5.3436724,-440.50625,-2089.802)"
+       x1="433.22763"
+       y1="408.78055"
+       x2="504.90137"
+       y2="408.78055" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient366"
+       id="linearGradient8737"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(4.6934493,0,0,1.2235927,-440.50625,-2089.802)"
+       x1="121.73791"
+       y1="1726.7207"
+       x2="116.15244"
+       y2="1719.0306" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient378"
+       id="linearGradient8739"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(2.3756807,0,0,2.4173594,-440.50625,-2425.302)"
+       x1="241.40817"
+       y1="998.6955"
+       x2="243.66159"
+       y2="1051.3652" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient410"
+       id="linearGradient8741"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.7911533,0,0,3.2062423,-439.90714,-2444.4735)"
+       x1="277.49091"
+       y1="794.37476"
+       x2="286.71185"
+       y2="776.55743" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient378"
+       id="linearGradient8743"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.9987608,0,0,2.8732177,-440.50625,-2444.4735)"
+       x1="250.28658"
+       y1="868.11609"
+       x2="252.10155"
+       y2="885.64746" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient378"
+       id="linearGradient8745"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(4.6439631,0,0,1.2366317,-440.50625,-2425.302)"
+       x1="126.13629"
+       y1="1985.5347"
+       x2="115.16805"
+       y2="1976.4353" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient362"
+       id="linearGradient8747"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(2.8181094,0,0,2.0378465,-440.50625,-2089.802)"
+       spreadMethod="reflect"
+       x1="205.99301"
+       y1="1137.6046"
+       x2="211.85287"
+       y2="1082.9424" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient366"
+       id="linearGradient8749"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(3.6299309,0,0,1.5820889,-440.50625,-2089.802)"
+       x1="131.91928"
+       y1="1448.4674"
+       x2="189.13556"
+       y2="1448.4674" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient378"
+       id="linearGradient8751"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(3.8703263,0,0,1.4838209,-440.50625,-2425.302)"
+       x1="143.15617"
+       y1="1700.754"
+       x2="164.79172"
+       y2="1776.3087" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient410"
+       id="linearGradient8753"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(3.2644851,0,0,1.759197,-440.50625,-2425.302)"
+       x1="191.07132"
+       y1="1478.1887"
+       x2="191.07132"
+       y2="1444.9415" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient366"
+       id="linearGradient8755"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(3.6299309,0,0,1.5820889,-440.50625,-2425.302)"
+       x1="140.25737"
+       y1="1696.1609"
+       x2="157.33363"
+       y2="1634.5474" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient378"
+       id="linearGradient8757"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(3.6299309,0,0,1.5820889,-440.50625,-2425.302)"
+       spreadMethod="pad"
+       x1="175.50798"
+       y1="1674.547"
+       x2="167.51932"
+       y2="1666.985" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient378"
+       id="linearGradient8759"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(3.6299309,0,0,1.5820889,-440.50625,-2425.302)"
+       spreadMethod="pad"
+       x1="140.18318"
+       y1="1674.4733"
+       x2="147.68718"
+       y2="1669.3435" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient410"
+       id="linearGradient8761"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(2.1742345,0,0,2.6413321,-440.50625,-2425.302)"
+       x1="222.24202"
+       y1="1010.1295"
+       x2="227.17216"
+       y2="985.21222" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient378"
+       id="linearGradient8763"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(2.3129039,0,0,2.4829712,-440.50625,-2425.302)"
+       x1="211.96373"
+       y1="1048.0908"
+       x2="212.00743"
+       y2="1068.4087" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient378"
+       id="linearGradient8765"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(3.2644851,0,0,1.759197,-440.50625,-2425.302)"
+       x1="196.64761"
+       y1="1437.2679"
+       x2="182.96735"
+       y2="1493.8745" />
+    <filter
+       inkscape:collect="always"
+       id="filter8775">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="3.5671298"
+         id="feGaussianBlur8777" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       id="filter3602">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="3"
+         id="feGaussianBlur3604" />
+    </filter>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#00ff00"
+     borderopacity="1"
+     gridtolerance="10000"
+     guidetolerance="10"
+     objecttolerance="10"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1"
+     inkscape:cx="155"
+     inkscape:cy="155"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     width="310px"
+     height="310px"
+     inkscape:window-width="1247"
+     inkscape:window-height="977"
+     inkscape:window-x="2"
+     inkscape:window-y="-1"
+     showborder="true"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     inkscape:showpageshadow="false"
+     borderlayer="false" />
+  <metadata
+     id="metadata2846">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       inkscape:label="Logo Background"
+       y="5"
+       x="5"
+       height="300"
+       width="300"
+       id="rect3480"
+       style="opacity:0.7;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter3602)" />
+    <rect
+       style="opacity:1;fill:url(#radialGradient3486);fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="Background"
+       width="299"
+       height="260"
+       x="0.5"
+       y="0.5"
+       inkscape:label="Logo Background" />
+    <g
+       id="BPBibleLogoAndShadow"
+       inkscape:label="BPBible Logo and Shadow"
+       transform="translate(2.2207239,-1.9408191)">
+      <path
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2.39642906px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter8775)"
+         d="M 168.31053,11.097572 L 63.935527,34.972572 L 63.935527,158.56632 L 57.060527,161.28507 L 57.060527,193.16007 L 57.185527,193.25382 C 53.613961,200.73787 49.358728,210.03697 40.904278,216.12882 C 46.412154,218.42548 55.302628,215.67062 60.810527,212.34757 C 60.65443,221.38789 60.521261,228.15364 56.966777,240.00382 C 70.666411,238.66952 76.065536,223.36686 80.873028,212.06632 L 137.34178,256.87882 L 257.74803,193.16007 L 257.74803,161.28507 L 193.87303,123.25382 L 200.40428,19.066322 L 168.31053,11.097572 z "
+         id="BPBibleLogoShadow"
+         inkscape:label="BPBible Logo Shadow" />
+      <g
+         transform="matrix(0.9765262,0,0,0.9688971,4.4945319,-9.6381771)"
+         inkscape:label="BPBible Logo"
+         id="BPBibleLogo">
+        <g
+           id="YellowBible"
+           transform="matrix(0.9681267,0,0,0.9681267,15.609399,20.91132)"
+           inkscape:label="Yellow Bible">
+          <path
+             style="fill:url(#linearGradient8733);fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2.39642906px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             id="YellowBible_Covers"
+             d="M 44.695138,23.886242 L 155.08182,-1.5878003 L 189.04696,6.9034667 L 180.55567,142.76398 L 78.660277,185.22055 L 44.695138,159.74675 L 44.695138,23.886242 z "
+             inkscape:label="Yellow Bible's Covers" />
+          <path
+             style="fill:url(#linearGradient8735);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             id="YellowBible_SpineGloss"
+             d="M 48.194116,26.758362 L 48.194092,156.85019 L 79.005315,179.95871 L 79.005339,38.740507 C 63.227706,38.559097 51.686408,31.175939 48.194116,26.758362 z "
+             inkscape:label="Yellow Bible's Spine's Gloss" />
+          <path
+             style="fill:url(#linearGradient8737);fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2.39642906;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:0.19607843"
+             id="YellowBible_PagesBeigeBit"
+             d="M 55.688804,24.678261 C 60.273916,29.328292 67.82444,33.554395 78.340402,33.968018 L 180.83344,5.9563977 L 158.74802,0.64351472 L 55.688804,24.678261 z "
+             inkscape:label="Yellow Bible's Pages (beige bit)" />
+          <path
+             style="fill:url(#linearGradient8739);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             id="YellowBible_FrontCoverGloss"
+             d="M 83.7126,38.826059 L 183.7635,11.267126 L 180.76797,69.979636 C 177.37302,134.28373 106.27897,24.84697 83.7126,108.92161 L 83.7126,38.826059 z "
+             inkscape:label="Yellow Bible's Front Cover's Gloss" />
+          <path
+             style="fill:url(#linearGradient8741);fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2.39642906;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:0.39215686"
+             id="YellowBible_Panel"
+             d="M 45.152401,48.50955 C 53.625071,56.699825 65.910436,62.771657 78.619418,62.489358 L 78.195778,110.78363 C 67.040113,109.65396 51.648113,103.86442 45.576041,94.68562 L 45.152401,48.50955 z "
+             inkscape:label="Yellow Bible's Panel" />
+          <path
+             style="fill:url(#linearGradient8743);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             id="YellowBible_PanelGloss"
+             d="M 48.014312,55.250225 C 53.206583,61.241298 66.150894,66.524225 74.937808,65.925118 C 74.937808,74.71186 76.518014,87.27299 72.226776,90.1614 C 64.092529,95.63604 59.548972,65.465004 48.365269,80.76357 C 47.965856,72.575688 48.413725,63.438104 48.014312,55.250225 z "
+             inkscape:label="Yellow Bible's Panel's Gloss" />
+          <path
+             style="fill:url(#linearGradient8745);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:0.19607843"
+             id="YellowBible_PagesWhiteBit"
+             d="M 55.688804,24.678261 C 60.273916,29.328292 67.82444,33.554395 78.340402,33.968018 L 180.83344,5.9563977 L 158.74802,0.64351472 L 55.688804,24.678261 z "
+             inkscape:label="Yellow Bible's Pages (white bit)" />
+        </g>
+        <g
+           id="BlueBible"
+           transform="matrix(0.9681267,0,0,0.9681267,15.609399,20.91132)"
+           inkscape:label="Blue Bible">
+          <path
+             style="fill:url(#linearGradient8747);fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2.39642906px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             id="BlueBible_Covers"
+             d="M 37.402062,158.54854 L 164.77133,107.6007 L 249.68416,158.54854 L 249.68416,192.5136 L 122.3149,260.44398 L 37.402062,192.5136 L 37.402062,158.54854 z "
+             inkscape:label="Blue Bible's Covers" />
+          <path
+             style="fill:url(#linearGradient8749);fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:4.79285812;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:0.19607843"
+             id="BlueBible_PagesEdges"
+             d="M 248.03913,161.9855 L 122.22661,226.17552 L 39.207483,164.98103 L 38.351599,186.37755 L 122.65456,253.56311 L 248.46709,187.66131 L 248.03913,161.9855 z "
+             inkscape:label="Blue Bible's Pages (Edges)" />
+          <path
+             style="fill:url(#linearGradient8751);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             id="BlueBible_FrontCoverGloss"
+             d="M 47.51873,160.03312 L 164.44141,111.73885 L 241.54256,159.18575 C 226.5742,166.81118 204.29932,177.47457 190.70663,179.51993 C 129.75281,188.69274 149.19058,148.17152 47.51873,160.03312 z "
+             inkscape:label="Blue Bible's Front Cover's Gloss" />
+          <path
+             style="fill:url(#linearGradient8753);fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2.39642906;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:0.39215686"
+             id="BlueBible_Label"
+             d="M 163.99297,116.71 L 126.84832,132.28679 L 195.74565,173.62519 L 231.69208,158.0484 L 163.99297,116.71 z "
+             inkscape:label="Blue Bible's Label" />
+          <path
+             style="fill:url(#linearGradient8755);fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2.39642906;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:0.19607843"
+             id="BlueBible_PagesBeigeBit"
+             d="M 248.03913,161.9855 L 122.22661,226.17552 L 39.207483,164.98103 L 38.351599,186.37755 L 122.65456,253.56311 L 248.46709,187.66131 L 248.03913,161.9855 z "
+             inkscape:label="Blue Bible's Pages (beige bit)" />
+          <path
+             style="fill:url(#linearGradient8757);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:0.19607843"
+             id="BlueBible_PagesSideWhiteBit"
+             d="M 248.03913,161.9855 L 122.22661,226.17552 L 122.65456,253.56311 L 248.46709,187.66131 L 248.03913,161.9855 z "
+             inkscape:label="Blue Bible's Pages (Side, white bit)" />
+          <path
+             style="fill:url(#linearGradient8759);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:0.19607843"
+             id="BlueBible_PagesEndWhiteBit"
+             d="M 122.22661,226.17552 L 39.207483,164.98103 L 38.351599,186.37755 L 122.65456,253.56311 L 122.22661,226.17552 z "
+             inkscape:label="Blue Bible's Pages (End, white bit)" />
+          <path
+             style="fill:url(#linearGradient8761);fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2.39642906;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1"
+             id="BlueBible_Bookmark"
+             d="M 47.12991,180.06296 C 55.17441,186.71329 63.218911,193.36386 71.263412,200.01419 C 61.139913,203.38237 59.403916,240.30079 37.298272,242.47076 C 41.05803,229.83751 41.223144,222.59646 41.388258,212.95874 C 35.562275,216.50138 26.141673,219.44515 20.315715,216.99672 C 36.443059,205.28465 38.191853,182.18931 47.12991,180.06296 z "
+             inkscape:label="Blue Bible's Bookmark" />
+          <path
+             style="fill:url(#linearGradient8763);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             id="BlueBible_BookmarkGloss"
+             d="M 44.750064,185.72907 C 42.490423,187.25967 39.752144,196.32417 36.504287,202.81993 C 44.129677,195.33564 46.927412,219.95919 54.296862,219.34139 C 58.662605,218.97545 61.294147,208.96102 63.513983,203.02554 C 65.569353,197.52981 48.266656,183.34702 44.750064,185.72907 z "
+             inkscape:label="Blue Bible's Bookmark's Gloss" />
+          <path
+             style="fill:url(#linearGradient8765);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.25;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:0.39215686"
+             id="BlueBible_LabelGloss"
+             d="M 163.69341,120.30465 L 133.73805,132.58634 C 162.39534,123.79936 178.68171,146.82784 195.14654,160.14528 C 206.5483,169.36746 230.69356,157.84878 214.01842,150.26001 L 163.69341,120.30465 z "
+             inkscape:label="Blue Bible's Label's Gloss" />
+        </g>
+      </g>
+    </g>
+    <rect
+       style="opacity:1;fill:url(#linearGradient4530);fill-opacity:1.0;fill-rule:evenodd;stroke:#000000;stroke-width:0.99979967;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="BottomBar"
+       width="299.00021"
+       height="39.000202"
+       x="0.49989983"
+       y="260.49991"
+       inkscape:label="Bottom Bar" />
+    <rect
+       y="261"
+       x="1"
+       height="19"
+       width="298"
+       id="BottomBarGloss"
+       style="opacity:1;fill:url(#linearGradient4540);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.183;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       inkscape:label="Bottom Bar's Gloss" />
+    <path
+       transform="scale(1.0000019,0.9999981)"
+       style="font-size:39.71778488px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;filter:url(#filter4570);font-family:Microsoft Sans Serif"
+       d="M 7.6549853,267.65534 L 22.072803,267.65534 C 24.48242,267.68203 26.402168,268.13879 27.832052,269.02561 C 29.261891,269.91248 29.976821,271.7195 29.976846,274.44668 C 29.976821,275.98282 29.771574,277.31349 29.361104,278.4387 C 28.950586,279.56394 27.778899,280.28534 25.846041,280.60289 L 25.846041,280.80167 C 27.646378,280.98673 28.857861,281.55601 29.480495,282.50951 C 30.103081,283.46303 30.414386,284.8133 30.414411,286.56031 C 30.414386,289.5259 29.825108,291.53171 28.646576,292.57774 C 27.467998,293.62377 25.316742,294.14679 22.1928,294.14679 L 7.6549853,294.14679 L 7.6549853,267.65534 z M 19.49105,288.30815 C 20.603734,288.33482 21.524114,288.23563 22.252192,288.01058 C 22.980237,287.78554 23.344268,287.02415 23.344286,285.7264 C 23.344268,284.48199 23.059629,283.74726 22.490368,283.52221 C 21.921073,283.29718 21.080489,283.18465 19.968614,283.18464 L 14.765109,283.14464 L 14.765109,288.30815 L 19.49105,288.30815 z M 19.292267,278.25992 C 19.398917,278.2866 19.505177,278.29993 19.611047,278.29992 C 19.716889,278.29993 19.809412,278.29993 19.888616,278.29992 C 20.736256,278.27327 21.457853,278.16054 22.05341,277.96174 C 22.648933,277.76298 22.946703,277.12097 22.94672,276.03573 C 22.946703,275.08224 22.781253,274.4267 22.450369,274.06911 C 22.119452,273.71157 21.477247,273.53279 20.523751,273.53276 L 14.765109,273.49398 L 14.765109,278.25992 L 19.292267,278.25992 z M 33.642208,267.65534 L 44.009219,267.65534 C 47.954153,267.68203 50.95266,268.18505 53.004749,269.16439 C 55.056795,270.14378 56.082829,272.92391 56.082853,277.50479 C 56.082829,277.8757 56.082829,278.25307 56.082853,278.63688 C 56.082829,279.02072 56.0699,279.39809 56.044066,279.76897 C 56.017376,280.53664 55.931116,281.29117 55.785285,282.03255 C 55.639406,282.77396 55.381433,283.48889 55.011365,284.17734 C 54.375399,285.39591 53.461686,286.21023 52.270222,286.62031 C 51.078718,287.03041 49.821175,287.27545 48.49759,287.35545 C 48.15334,287.35545 47.80244,287.36192 47.44489,287.37484 C 47.087307,287.38778 46.736408,287.39424 46.392189,287.39423 C 46.365508,287.39424 46.345509,287.39424 46.332191,287.39423 C 46.318843,287.39424 46.299247,287.39424 46.273404,287.39423 C 46.061678,287.39424 45.849764,287.39424 45.637663,287.39423 C 45.425533,287.39424 45.213619,287.39424 45.001921,287.39423 L 40.752331,287.35545 L 40.752331,294.14679 L 33.642208,294.14679 L 33.642208,267.65534 z M 45.200704,281.23802 C 46.68348,281.18551 47.649919,280.98714 48.100025,280.64289 C 48.550097,280.29867 48.775142,279.43808 48.775159,278.06114 L 48.775159,277.70357 C 48.775142,276.16827 48.609692,275.08931 48.278808,274.46668 C 47.947891,273.84409 46.948119,273.53279 45.27949,273.53276 L 40.752331,273.49398 L 40.752331,281.23802 L 45.200704,281.23802 z M 58.931269,267.65534 L 73.349086,267.65534 C 75.758703,267.68203 77.678451,268.13879 79.108335,269.02561 C 80.538174,269.91248 81.253105,271.7195 81.253129,274.44668 C 81.253105,275.98282 81.047858,277.31349 80.637387,278.4387 C 80.226869,279.56394 79.055183,280.28534 77.122324,280.60289 L 77.122324,280.80167 C 78.922661,280.98673 80.134144,281.55601 80.756778,282.50951 C 81.379364,283.46303 81.690669,284.8133 81.690694,286.56031 C 81.690669,289.5259 81.101391,291.53171 79.92286,292.57774 C 78.744282,293.62377 76.593025,294.14679 73.469083,294.14679 L 58.931269,294.14679 L 58.931269,267.65534 z M 70.767333,288.30815 C 71.880017,288.33482 72.800397,288.23563 73.528476,288.01058 C 74.256521,287.78554 74.620551,287.02415 74.620569,285.7264 C 74.620551,284.48199 74.335913,283.74726 73.766652,283.52221 C 73.197357,283.29718 72.356773,283.18465 71.244897,283.18464 L 66.041392,283.14464 L 66.041392,288.30815 L 70.767333,288.30815 z M 70.56855,278.25992 C 70.675201,278.2866 70.78146,278.29993 70.88733,278.29992 C 70.993172,278.29993 71.085695,278.29993 71.164899,278.29992 C 72.012539,278.27327 72.734136,278.16054 73.329693,277.96174 C 73.925216,277.76298 74.222986,277.12097 74.223004,276.03573 C 74.222986,275.08224 74.057536,274.4267 73.726653,274.06911 C 73.395735,273.71157 72.75353,273.53279 71.800034,273.53276 L 66.041392,273.49398 L 66.041392,278.25992 L 70.56855,278.25992 z M 90.797129,294.14679 L 84.759705,294.14679 L 84.759705,275.59817 L 90.797129,275.59817 L 90.797129,294.14679 z M 90.797129,272.1825 L 84.759705,272.1825 L 84.759705,267.65534 L 90.797129,267.65534 L 90.797129,272.1825 z M 94.8443,267.69534 L 100.88172,267.69534 L 100.88172,278.25992 L 101.19929,278.25992 C 101.72937,277.20057 102.40471,276.4723 103.2253,276.07512 C 104.04587,275.67798 105.05211,275.4794 106.24401,275.47938 C 108.83868,275.4794 110.67883,276.07514 111.76448,277.26661 C 112.85009,278.45811 113.3929,280.33826 113.39292,282.90707 C 113.3929,283.06546 113.3929,283.21758 113.39292,283.36343 C 113.3929,283.50929 113.3929,283.64848 113.39292,283.78099 C 113.36624,283.91271 113.3529,284.0515 113.35292,284.19734 C 113.3529,284.34321 113.3529,284.4824 113.35292,284.61491 C 113.3529,284.72077 113.3529,284.81996 113.35292,284.91248 C 113.3529,285.00501 113.3529,285.1042 113.35292,285.21005 C 113.30038,287.77888 112.96948,289.94367 112.36022,291.70443 C 111.75093,293.46519 109.73845,294.34557 106.3228,294.34557 C 104.94585,294.34557 103.8073,294.13366 102.90713,293.70983 C 102.00694,293.286 101.3318,292.38562 100.88172,291.00869 L 100.64415,290.9699 L 100.88172,294.14679 L 94.8443,294.14679 L 94.8443,267.69534 z M 100.92172,284.6537 C 100.92171,284.7337 100.92171,284.8133 100.92172,284.89248 C 100.92171,284.97168 100.92171,285.03794 100.92172,285.09126 C 100.92171,285.14379 100.92171,285.18339 100.92172,285.21005 C 100.92171,285.23672 100.93505,285.26339 100.96172,285.29004 C 100.96171,285.39591 100.96171,285.50176 100.96172,285.60761 C 100.96171,285.71348 100.96171,285.806 100.96172,285.88518 C 100.98757,286.97122 101.14615,287.8916 101.43747,288.64632 C 101.72876,289.40106 102.61581,289.77842 104.09861,289.77842 C 105.39634,289.77842 106.25046,289.48045 106.66097,288.8845 C 107.07145,288.28856 107.2767,287.40798 107.27671,286.24275 L 107.27671,284.6537 C 107.2767,283.48929 107.15084,282.44366 106.89915,281.51681 C 106.64742,280.58997 105.81977,280.12655 104.41618,280.12654 C 103.19842,280.12655 102.31158,280.31847 101.75564,280.70228 C 101.19969,281.08612 100.92171,282.21821 100.92172,284.09856 L 100.92172,284.6537 L 100.92172,284.6537 z M 122.60239,294.14679 L 116.56497,294.14679 L 116.56497,267.65534 L 122.60239,267.65534 L 122.60239,294.14679 z M 137.96927,287.95058 L 143.84791,287.95058 C 143.84789,290.86364 143.09983,292.65774 141.60372,293.33287 C 140.10758,294.00801 138.07551,294.34557 135.50751,294.34557 C 131.90598,294.34557 129.42342,293.7365 128.05982,292.51835 C 126.69622,291.3002 126.01442,288.8641 126.01442,285.21005 C 126.01442,281.68853 126.5639,279.18637 127.66286,277.70357 C 128.76182,276.2208 131.15165,275.4794 134.83238,275.47938 C 137.98299,275.4794 140.27323,276.01555 141.70311,277.08783 C 143.13296,278.16014 143.84789,280.39119 143.84791,283.78099 L 143.84791,285.92518 L 131.97184,285.92518 C 131.97183,287.32879 132.12415,288.38795 132.4288,289.10267 C 132.73343,289.81741 133.69341,290.17477 135.30873,290.17477 C 136.15556,290.17477 136.80423,290.03579 137.25474,289.75781 C 137.70522,289.47984 137.9434,288.89077 137.96927,287.99058 L 137.96927,287.95058 z M 138.04926,282.58951 C 138.04925,281.60934 137.83734,280.89421 137.41352,280.44411 C 136.98968,279.99403 136.26142,279.76899 135.22873,279.76897 L 134.91116,279.72897 C 133.61422,279.75565 132.81343,280.0007 132.5088,280.4641 C 132.20415,280.92754 132.05183,281.64894 132.05184,282.62829 L 138.04926,282.58951 L 138.04926,282.58951 z "
+       id="TextBPBibleShadow" />
+    <path
+       transform="scale(1.0000019,0.9999981)"
+       style="font-size:39.71778488px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;font-family:Microsoft Sans Serif"
+       d="M 6.6548947,266.65543 L 21.072712,266.65543 C 23.48233,266.68212 25.402077,267.13888 26.831961,268.0257 C 28.2618,268.91257 28.976731,270.71959 28.976755,273.44677 C 28.976731,274.98291 28.771484,276.31359 28.361013,277.43879 C 27.950495,278.56403 26.778809,279.28543 24.84595,279.60298 L 24.84595,279.80176 C 26.646287,279.98682 27.85777,280.5561 28.480404,281.5096 C 29.10299,282.46312 29.414295,283.81339 29.41432,285.56041 C 29.414295,288.52599 28.825018,290.5318 27.646486,291.57783 C 26.467908,292.62386 24.316651,293.14688 21.192709,293.14688 L 6.6548947,293.14688 L 6.6548947,266.65543 z M 18.490959,287.30824 C 19.603644,287.33491 20.524023,287.23572 21.252102,287.01067 C 21.980147,286.78563 22.344178,286.02424 22.344195,284.72649 C 22.344178,283.48208 22.059539,282.74736 21.490278,282.5223 C 20.920983,282.29727 20.080399,282.18474 18.968523,282.18473 L 13.765018,282.14473 L 13.765018,287.30824 L 18.490959,287.30824 z M 18.292177,277.26001 C 18.398827,277.28669 18.505087,277.30002 18.610956,277.30001 C 18.716798,277.30002 18.809321,277.30002 18.888525,277.30001 C 19.736165,277.27336 20.457763,277.16063 21.053319,276.96184 C 21.648842,276.76307 21.946612,276.12107 21.94663,275.03582 C 21.946612,274.08233 21.781162,273.42679 21.450279,273.06921 C 21.119361,272.71166 20.477156,272.53288 19.523661,272.53286 L 13.765018,272.49407 L 13.765018,277.26001 L 18.292177,277.26001 z M 32.642117,266.65543 L 43.009128,266.65543 C 46.954063,266.68212 49.95257,267.18514 52.004659,268.16448 C 54.056705,269.14387 55.082738,271.924 55.082763,276.50488 C 55.082738,276.87579 55.082738,277.25316 55.082763,277.63697 C 55.082738,278.02081 55.069809,278.39818 55.043976,278.76906 C 55.017285,279.53673 54.931025,280.29126 54.785195,281.03264 C 54.639316,281.77405 54.381342,282.48898 54.011275,283.17744 C 53.375308,284.396 52.461595,285.21032 51.270132,285.6204 C 50.078627,286.0305 48.821084,286.27555 47.4975,286.35554 C 47.153249,286.35554 46.80235,286.36201 46.444799,286.37493 C 46.087217,286.38787 45.736317,286.39433 45.392098,286.39432 C 45.365418,286.39433 45.345418,286.39433 45.3321,286.39432 C 45.318752,286.39433 45.299157,286.39433 45.273314,286.39432 C 45.061587,286.39433 44.849674,286.39433 44.637572,286.39432 C 44.425442,286.39433 44.213529,286.39433 44.001831,286.39432 L 39.752241,286.35554 L 39.752241,293.14688 L 32.642117,293.14688 L 32.642117,266.65543 z M 44.200613,280.23812 C 45.683389,280.18561 46.649828,279.98723 47.099934,279.64298 C 47.550007,279.29876 47.775051,278.43818 47.775069,277.06123 L 47.775069,276.70366 C 47.775051,275.16836 47.609601,274.0894 47.278717,273.46677 C 46.9478,272.84418 45.948029,272.53288 44.279399,272.53286 L 39.752241,272.49407 L 39.752241,280.23812 L 44.200613,280.23812 z M 57.931178,266.65543 L 72.348996,266.65543 C 74.758613,266.68212 76.67836,267.13888 78.108244,268.0257 C 79.538083,268.91257 80.253014,270.71959 80.253039,273.44677 C 80.253014,274.98291 80.047767,276.31359 79.637296,277.43879 C 79.226778,278.56403 78.055092,279.28543 76.122234,279.60298 L 76.122234,279.80176 C 77.92257,279.98682 79.134054,280.5561 79.756687,281.5096 C 80.379273,282.46312 80.690578,283.81339 80.690603,285.56041 C 80.690578,288.52599 80.101301,290.5318 78.922769,291.57783 C 77.744191,292.62386 75.592934,293.14688 72.468993,293.14688 L 57.931178,293.14688 L 57.931178,266.65543 z M 69.767243,287.30824 C 70.879927,287.33491 71.800307,287.23572 72.528385,287.01067 C 73.25643,286.78563 73.620461,286.02424 73.620479,284.72649 C 73.620461,283.48208 73.335822,282.74736 72.766561,282.5223 C 72.197266,282.29727 71.356682,282.18474 70.244806,282.18473 L 65.041301,282.14473 L 65.041301,287.30824 L 69.767243,287.30824 z M 69.56846,277.26001 C 69.67511,277.28669 69.78137,277.30002 69.88724,277.30001 C 69.993081,277.30002 70.085604,277.30002 70.164808,277.30001 C 71.012449,277.27336 71.734046,277.16063 72.329602,276.96184 C 72.925126,276.76307 73.222896,276.12107 73.222913,275.03582 C 73.222896,274.08233 73.057445,273.42679 72.726562,273.06921 C 72.395645,272.71166 71.753439,272.53288 70.799944,272.53286 L 65.041301,272.49407 L 65.041301,277.26001 L 69.56846,277.26001 z M 89.797038,293.14688 L 83.759615,293.14688 L 83.759615,274.59826 L 89.797038,274.59826 L 89.797038,293.14688 z M 89.797038,271.18259 L 83.759615,271.18259 L 83.759615,266.65543 L 89.797038,266.65543 L 89.797038,271.18259 z M 93.84421,266.69543 L 99.881633,266.69543 L 99.881633,277.26001 L 100.1992,277.26001 C 100.72928,276.20066 101.40462,275.4724 102.22521,275.07522 C 103.04578,274.67807 104.05202,274.47949 105.24392,274.47947 C 107.83859,274.47949 109.67874,275.07523 110.76439,276.2667 C 111.85,277.4582 112.39281,279.33835 112.39283,281.90716 C 112.39281,282.06556 112.39281,282.21767 112.39283,282.36352 C 112.39281,282.50938 112.39281,282.64857 112.39283,282.78108 C 112.36615,282.91281 112.35281,283.05159 112.35283,283.19744 C 112.35281,283.3433 112.35281,283.48249 112.35283,283.615 C 112.35281,283.72087 112.35281,283.82006 112.35283,283.91257 C 112.35281,284.0051 112.35281,284.10429 112.35283,284.21014 C 112.30029,286.77897 111.96939,288.94376 111.36013,290.70452 C 110.75083,292.46528 108.73836,293.34566 105.32271,293.34566 C 103.94576,293.34566 102.8072,293.13375 101.90704,292.70992 C 101.00685,292.2861 100.33171,291.38572 99.881633,290.00878 L 99.644063,289.96999 L 99.881633,293.14688 L 93.84421,293.14688 L 93.84421,266.69543 z M 99.921632,283.65379 C 99.921624,283.73379 99.921624,283.81339 99.921632,283.89257 C 99.921624,283.97177 99.921624,284.03803 99.921632,284.09135 C 99.921624,284.14389 99.921624,284.18348 99.921632,284.21014 C 99.921624,284.23681 99.934957,284.26348 99.961631,284.29014 C 99.961623,284.396 99.961623,284.50186 99.961631,284.6077 C 99.961623,284.71357 99.961623,284.80609 99.961631,284.88527 C 99.987481,285.97131 100.14606,286.89169 100.43738,287.64641 C 100.72867,288.40115 101.61572,288.77851 103.09852,288.77851 C 104.39625,288.77851 105.25037,288.48054 105.66088,287.88459 C 106.07136,287.28865 106.27661,286.40807 106.27662,285.24284 L 106.27662,283.65379 C 106.27661,282.48938 106.15075,281.44375 105.89906,280.5169 C 105.64733,279.59007 104.81968,279.12664 103.41609,279.12663 C 102.19833,279.12664 101.31149,279.31856 100.75555,279.70237 C 100.1996,280.08621 99.921624,281.21831 99.921632,283.09865 L 99.921632,283.65379 L 99.921632,283.65379 z M 121.6023,293.14688 L 115.56487,293.14688 L 115.56487,266.65543 L 121.6023,266.65543 L 121.6023,293.14688 z M 136.96918,286.95067 L 142.84782,286.95067 C 142.8478,289.86373 142.09973,291.65783 140.60363,292.33296 C 139.10749,293.0081 137.07542,293.34566 134.50742,293.34566 C 130.90589,293.34566 128.42333,292.73659 127.05973,291.51844 C 125.69613,290.30029 125.01432,287.86419 125.01433,284.21014 C 125.01432,280.68862 125.56381,278.18647 126.66277,276.70366 C 127.76173,275.22089 130.15156,274.47949 133.83229,274.47947 C 136.9829,274.47949 139.27314,275.01564 140.70302,276.08792 C 142.13287,277.16023 142.8478,279.39128 142.84782,282.78108 L 142.84782,284.92527 L 130.97175,284.92527 C 130.97174,286.32888 131.12406,287.38804 131.42871,288.10277 C 131.73334,288.8175 132.69332,289.17486 134.30864,289.17486 C 135.15547,289.17486 135.80414,289.03588 136.25465,288.7579 C 136.70513,288.47993 136.9433,287.89086 136.96918,286.99067 L 136.96918,286.95067 z M 137.04917,281.5896 C 137.04916,280.60943 136.83725,279.8943 136.41343,279.4442 C 135.98959,278.99412 135.26133,278.76908 134.22864,278.76906 L 133.91107,278.72906 C 132.61413,278.75574 131.81334,279.00079 131.50871,279.4642 C 131.20406,279.92763 131.05174,280.64903 131.05175,281.62838 L 137.04917,281.5896 L 137.04917,281.5896 z "
+       id="TextBPBible" />
+    <text
+       xml:space="preserve"
+       style="font-size:16px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="219.16444"
+       y="276.96445"
+       id="TextFlexible"
+       inkscape:label="Text &quot;Flexible&quot;"><tspan
+         sodipodi:role="line"
+         id="tspan6710"
+         x="219.16444"
+         y="276.96445">Flexible</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:16px"
+       x="204.32069"
+       y="294.41388"
+       id="TextBibleStudy"
+       inkscape:label="Text &quot;Bible Study&quot;"><tspan
+         sodipodi:role="line"
+         id="tspan6714"
+         x="204.32069"
+         y="294.41388">Bible Study</tspan></text>
+  </g>
+</svg>

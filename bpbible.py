@@ -49,7 +49,7 @@ class MyApp(wx.App):
 		
 	
 	def OnInit(self):
-		picture = 'bible-256x256.png'
+		picture = 'splashscreen.png'
 		self.bitmap = wx.BitmapFromImage(
 			wx.Image(config.graphics_path + picture)
 		)
@@ -60,7 +60,7 @@ class MyApp(wx.App):
 			wx.SPLASH_CENTRE_ON_SCREEN|wx.SPLASH_NO_TIMEOUT,
 			0,
 			None,
-			style=wx.FRAME_NO_TASKBAR
+			style=wx.FRAME_NO_TASKBAR|wx.BORDER_NONE
 		)
 		self.splash.Show()
 		self.splash.Raise()
