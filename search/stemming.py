@@ -44,8 +44,17 @@ snowball_language_mappings = dict(
 	# wretched -> wretch
 	# wretchedness -> wretched
 	en="english",
-
-	fr="french"
+	de="german",
+	es="spanish",
+	da="danish",
+	nl="dutch",
+	fi="finnish",
+	it="italian",
+	no="norwegian",
+	pt="portuguese",
+	ru="russian",
+	sv="swedish",
+	fr="french",
 )
 
 def get_stemmer(module):
