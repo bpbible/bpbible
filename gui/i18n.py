@@ -18,7 +18,7 @@ def initialize():
 	# before the new one is created, and if we just assign a new
 	# instance to the old Python variable, the old C++ locale will
 	# not be destroyed soon enough, likely causing a crash.	
-	if mylocale:
+	if mylocale is not None:
 		assert sys.getrefcount(mylocale) <= 2
 		del mylocale
 
