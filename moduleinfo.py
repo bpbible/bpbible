@@ -59,6 +59,7 @@ def process(info):
 	return info
 
 def try_unicode(text, mod):
+	if text is None: return ""
 	encodings = ["utf8", "cp1252"]
 	enc = get_module_encoding(mod)
 	i = encodings.index(enc)
