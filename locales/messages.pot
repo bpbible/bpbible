@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2008-10-26 22:33+AUS Eastern Daylight Time\n"
+"POT-Creation-Date: 2008-10-28 23:48+AUS Eastern Daylight Time\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,7 +31,7 @@ msgstr ""
 msgid "Bible"
 msgstr ""
 
-#: bibleframe.py:69 bookframe.py:169 search/searchpanel.py:149
+#: bibleframe.py:69 bookframe.py:169 search/searchpanel.py:150
 msgid "Search"
 msgstr ""
 
@@ -107,7 +107,7 @@ msgstr ""
 msgid "Search in Bible for:"
 msgstr ""
 
-#: bookframe.py:151 mainframe.py:730
+#: bookframe.py:151 mainframe.py:731
 msgid "Show the %s pane"
 msgstr ""
 
@@ -335,71 +335,71 @@ msgstr ""
 msgid "History toolbar"
 msgstr ""
 
-#: mainframe.py:676 xrc/auifrm_xrc.py:43
+#: mainframe.py:677 xrc/auifrm_xrc.py:43
 msgid "&Language"
 msgstr ""
 
-#: mainframe.py:695 xrc/auifrm_xrc.py:46
+#: mainframe.py:696 xrc/auifrm_xrc.py:46
 msgid "&Display"
 msgstr ""
 
-#: mainframe.py:700 xrc/auifrm_xrc.py:49
+#: mainframe.py:701 xrc/auifrm_xrc.py:49
 msgid "&Window"
 msgstr ""
 
-#: mainframe.py:704 xrc/auifrm_xrc.py:48
+#: mainframe.py:705 xrc/auifrm_xrc.py:48
 msgid "Toolbars"
 msgstr ""
 
-#: mainframe.py:726
+#: mainframe.py:727
 msgid "Show the %s toolbar"
 msgstr ""
 
-#: mainframe.py:749 xrc/auifrm_xrc.py:50
+#: mainframe.py:750 xrc/auifrm_xrc.py:50
 msgid "Debug"
 msgstr ""
 
-#: mainframe.py:807
+#: mainframe.py:808
 msgid "Use Strong's headwords"
 msgstr ""
 
-#: mainframe.py:808
+#: mainframe.py:809
 msgid "Display Strong's numbers using the transliterated text"
 msgstr ""
 
-#: mainframe.py:813
+#: mainframe.py:814
 msgid "Expand cross-references"
 msgstr ""
 
-#: mainframe.py:814
+#: mainframe.py:815
 msgid "Display cross references partially expanded"
 msgstr ""
 
-#: mainframe.py:819
+#: mainframe.py:820
 msgid "One line per verse"
 msgstr ""
 
-#: mainframe.py:820
+#: mainframe.py:821
 msgid "Display each verse on its own line."
 msgstr ""
 
-#: mainframe.py:825
+#: mainframe.py:826
 msgid "Topic Tags"
 msgstr ""
 
-#: mainframe.py:826
+#: mainframe.py:827
 msgid "Display the topics that each verse is tagged with."
 msgstr ""
 
-#: mainframe.py:974
+#: mainframe.py:975
 msgid "An error occurred on closing:"
 msgstr ""
 
-#: mainframe.py:986 mainframe.py:987
+#: mainframe.py:987 mainframe.py:988
 msgid "search "
 msgstr ""
 
-#: mainframe.py:1007
+#: mainframe.py:1008
 msgid ""
 "Flexible Bible study software.\n"
 "\t\t\tBuilt Using the Sword Project from crosswire.org\n"
@@ -407,23 +407,23 @@ msgid ""
 "\t\t\twxPython Version: %(wxversion)s"
 msgstr ""
 
-#: mainframe.py:1013
+#: mainframe.py:1014
 msgid "BPBible"
 msgstr ""
 
-#: mainframe.py:1017
+#: mainframe.py:1018
 msgid "BPBible website"
 msgstr ""
 
-#: mainframe.py:1018
+#: mainframe.py:1019
 msgid "Ben Morgan"
 msgstr ""
 
-#: mainframe.py:1018
+#: mainframe.py:1019
 msgid "SWORD library developers"
 msgstr ""
 
-#: mainframe.py:1019
+#: mainframe.py:1020
 msgid ""
 "Icons used are from famfamfam\n"
 "http://www.famfamfam.com/lab/icons/silk\n"
@@ -431,31 +431,55 @@ msgid ""
 "http://tango.freedesktop.org/Tango_Desktop_Project"
 msgstr ""
 
-#: mainframe.py:1024
+#: mainframe.py:1025
 msgid "BPBible is licensed under the GPL v2. For more details, refer to the LICENSE.txt file in the application directory"
 msgstr ""
 
-#: moduleinfo.py:76
+#: module_tree.py:20
+msgid "Bibles"
+msgstr ""
+
+#: module_tree.py:21
+msgid "Commentaries"
+msgstr ""
+
+#: module_tree.py:22
+msgid "Dictionaries"
+msgstr ""
+
+#: module_tree.py:23
+msgid "Other books"
+msgstr ""
+
+#: module_tree.py:32
+msgid "Find Book..."
+msgstr ""
+
+#: module_tree.py:104
+msgid "Show information for %s"
+msgstr ""
+
+#: moduleinfo.py:78
 msgid "Book Information"
 msgstr ""
 
-#: moduleinfo.py:83
+#: moduleinfo.py:85
 msgid "Name"
 msgstr ""
 
-#: moduleinfo.py:84
+#: moduleinfo.py:86
 msgid "Description"
 msgstr ""
 
-#: moduleinfo.py:86
+#: moduleinfo.py:88
 msgid "Language"
 msgstr ""
 
-#: moduleinfo.py:91
+#: moduleinfo.py:93
 msgid "About"
 msgstr ""
 
-#: moduleinfo.py:93
+#: moduleinfo.py:95
 msgid "License"
 msgstr ""
 
@@ -471,31 +495,237 @@ msgstr ""
 msgid "Path manager"
 msgstr ""
 
-#: search/searchpanel.py:964
+#: search/fields.py:32 search/fields.py:39
+msgid "Invalid strong's number %s."
+msgstr ""
+
+#: search/fields.py:64
+msgid "In finding references, the reference must all be in one book"
+msgstr ""
+
+#: search/query_parser.py:607
+msgid "Could not understand string"
+msgstr ""
+
+#: search/search.py:215 search/search.py:221
+msgid "Book '%s' not found!"
+msgstr ""
+
+#: search/search.py:231
+msgid "Only one dash allowed in '%s'"
+msgstr ""
+
+#: search/search.py:320
+msgid ""
+"There seems to be an error in your regular expression.\n"
+"The error message given was: %s"
+msgstr ""
+
+#: search/search.py:335
+msgid "You cannot search on the field %r"
+msgstr ""
+
+#: search/search.py:350
+msgid "Done"
+msgstr ""
+
+#: search/searchpanel.py:250 search/searchpanel.py:661
+#: search/searchpanel.py:680 search/searchpanel.py:751
+#: search/searchpanel.py:767 search/searchpanel.py:801
+msgid "%d references found"
+msgstr ""
+
+#: search/searchpanel.py:261 xrc/search_xrc.py:140
+msgid "&Index"
+msgstr ""
+
+#: search/searchpanel.py:264
+msgid "Unindex"
+msgstr ""
+
+#: search/searchpanel.py:279
+msgid "You don't have a current %s, so you cannot search at the moment"
+msgstr ""
+
+#: search/searchpanel.py:285 search/searchpanel.py:322
+msgid "No current version"
+msgstr ""
+
+#: search/searchpanel.py:296
+msgid "Reading search index..."
+msgstr ""
+
+#: search/searchpanel.py:326
+msgid "Search index does not exist for book %s. Indexing will make search much faster. Create Index?"
+msgstr ""
+
+#: search/searchpanel.py:329
+msgid "Create Index?"
+msgstr ""
+
+#: search/searchpanel.py:348 search/searchpanel.py:540
+#: search/searchpanel.py:781 search/searchpanel.py:811
+#: xrc/search_xrc.py:138
+msgid "&Search"
+msgstr ""
+
+#: search/searchpanel.py:374 xrc/search_xrc.py:141 xrc/search_xrc.py:154
+msgid "Search Options"
+msgstr ""
+
+#: search/searchpanel.py:504
+msgid "&Stop"
+msgstr ""
+
+#: search/searchpanel.py:508 xrc/search_xrc.py:142
+msgid "0 verses found"
+msgstr ""
+
+#: search/searchpanel.py:565 search/searchpanel.py:639
+msgid "Error in search"
+msgstr ""
+
+#: search/searchpanel.py:570 search/searchpanel.py:644
+msgid "The following words were not found in this %s:"
+msgstr ""
+
+#: search/searchpanel.py:573 search/searchpanel.py:647
+msgid "Unknown word"
+msgstr ""
+
+#: search/searchpanel.py:663 search/searchpanel.py:683
+#: search/searchpanel.py:753 search/searchpanel.py:771
+msgid "1 word"
+msgstr ""
+
+#: search/searchpanel.py:664 search/searchpanel.py:684
+#: search/searchpanel.py:754 search/searchpanel.py:772
+msgid "%d words"
+msgstr ""
+
+#: search/searchpanel.py:667 search/searchpanel.py:689
+msgid "%d hits"
+msgstr ""
+
+#: search/searchpanel.py:679 search/searchpanel.py:766
+#: search/searchpanel.py:800
+msgid "1 reference found"
+msgstr ""
+
+#: search/searchpanel.py:688
+msgid "1 hit"
+msgstr ""
+
+#: search/searchpanel.py:785 search/searchpanel.py:818
+msgid "Reference"
+msgstr ""
+
+#: search/searchpanel.py:785 search/searchpanel.py:818
+#: xrc/copyverses_xrc.py:78 xrc/templatemanager_xrc.py:97
+msgid "Preview"
+msgstr ""
+
+#: search/searchpanel.py:797
+msgid "%(version)s search - %(numresults)s"
+msgstr ""
+
+#: search/searchpanel.py:858
+msgid "Processing %s"
+msgstr ""
+
+#: search/searchpanel.py:862
+msgid "Indexing %s"
+msgstr ""
+
+#: search/searchpanel.py:862
+msgid "Preparing"
+msgstr ""
+
+#: search/searchpanel.py:890
+msgid "Writing %s"
+msgstr ""
+
+#: search/searchpanel.py:1007
 msgid "Other Book Search"
 msgstr ""
 
-#: search/searchpanel.py:1016
+#: search/searchpanel.py:1052
+msgid "Entries"
+msgstr ""
+
+#: search/searchpanel.py:1059
 msgid "Dictionary Search"
 msgstr ""
 
-#: search/searchpanel.py:1057
+#: search/searchpanel.py:1100
 msgid "Commentary Search"
 msgstr ""
 
-#: util/i18n.py:38
-msgid "English"
+#: swlib/pysw.py:109 swlib/pysw.py:412
+msgid "There are only %(chapters)d chapters in %(book)s (given %(given)d)"
+msgstr ""
+
+#: swlib/pysw.py:126 swlib/pysw.py:423
+msgid "There are only %(verses)d verses in %(book)s %(chapter)s (given %(given)d)"
+msgstr ""
+
+#: swlib/pysw.py:544 swlib/pysw.py:1029
+msgid "Invalid Reference: %s"
+msgstr ""
+
+#: swlib/pysw.py:1017
+msgid "Invalid empty reference"
+msgstr ""
+
+#: tooltip.py:173
+msgid "Tooltip"
+msgstr ""
+
+#: tooltip.py:212
+msgid "Anchor"
+msgstr ""
+
+#: tooltip.py:213
+msgid "Don't hide this tooltip"
+msgstr ""
+
+#: tooltip.py:216
+msgid "Copy All"
+msgstr ""
+
+#: tooltip.py:217
+msgid "Copy tooltip text (with links)"
+msgstr ""
+
+#: tooltip.py:369 tooltip.py:494
+msgid "Sticky Tooltip"
+msgstr ""
+
+#: tooltip.py:391 tooltip.py:393
+msgid "Stay on top"
+msgstr ""
+
+#: tooltip.py:528
+msgid "Go to verses"
+msgstr ""
+
+#: tooltip.py:530
+msgid "Open this reference"
 msgstr ""
 
 #: util/i18n.py:39
-msgid "Spanish"
+msgid "English"
 msgstr ""
 
 #: util/i18n.py:40
-msgid "BM test"
+msgid "Spanish"
 msgstr ""
 
 #: util/i18n.py:41
+msgid "BM test"
+msgstr ""
+
+#: util/i18n.py:42
 msgid "Vietnamese"
 msgstr ""
 
@@ -603,10 +833,6 @@ msgstr ""
 msgid "Edit Template..."
 msgstr ""
 
-#: xrc/copyverses_xrc.py:78 xrc/templatemanager_xrc.py:97
-msgid "Preview"
-msgstr ""
-
 #: xrc/copyverses_xrc.py:79 xrc/templatemanager_xrc.py:99
 msgid "&Cancel"
 msgstr ""
@@ -681,6 +907,86 @@ msgstr ""
 
 #: xrc/movablelist_xrc.py:77
 msgid "Remove this item"
+msgstr ""
+
+#: xrc/search_xrc.py:135
+msgid "&Find:"
+msgstr ""
+
+#: xrc/search_xrc.py:136
+msgid "Words to search for"
+msgstr ""
+
+#: xrc/search_xrc.py:137
+msgid "Open the Virtual Keyboard"
+msgstr ""
+
+#: xrc/search_xrc.py:139
+msgid "Search for given words now"
+msgstr ""
+
+#: xrc/search_xrc.py:143
+msgid "&Close"
+msgstr ""
+
+#: xrc/search_xrc.py:144
+msgid "Search &Type:"
+msgstr ""
+
+#: xrc/search_xrc.py:145
+msgid "Indexed"
+msgstr ""
+
+#: xrc/search_xrc.py:146
+msgid "Unindexed"
+msgstr ""
+
+#: xrc/search_xrc.py:147
+msgid "Type of search to use"
+msgstr ""
+
+#: xrc/search_xrc.py:148
+msgid "Proximity:"
+msgstr ""
+
+#: xrc/search_xrc.py:149
+msgid "How close should search terms be to each other"
+msgstr ""
+
+#: xrc/search_xrc.py:150
+msgid "Words"
+msgstr ""
+
+#: xrc/search_xrc.py:151
+msgid "Verses"
+msgstr ""
+
+#: xrc/search_xrc.py:152
+msgid "Case sensitive"
+msgstr ""
+
+#: xrc/search_xrc.py:153
+msgid "Match only if case is same"
+msgstr ""
+
+#: xrc/search_xrc.py:155
+msgid "Whole &Bible"
+msgstr ""
+
+#: xrc/search_xrc.py:156
+msgid "&Old Testament"
+msgstr ""
+
+#: xrc/search_xrc.py:157
+msgid "&New Testament"
+msgstr ""
+
+#: xrc/search_xrc.py:159
+msgid "Custom &Range:"
+msgstr ""
+
+#: xrc/search_xrc.py:160
+msgid "Search Range"
 msgstr ""
 
 #: xrc/templatemanager_xrc.py:96

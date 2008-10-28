@@ -29,14 +29,14 @@ class StrongsField(BaseField):
 		if not match:
 			from search import SearchException
 			raise SearchException(
-				"Couldn't parse strong's number %s." % input
+				_("Invalid strong's number %s.") % input
 			)
 
 		prefix, number, extra = match.group(1, 2, 3)
 		number = int(number)
 		if number > 9999:
 			from search import SearchException
-			raise SearchException("Invalid strong's number %s." % input)
+			raise SearchException(_("Invalid strong's number %s.") % input)
 
 		return "%s%04d%s" % (prefix, int(number), extra)
 	
@@ -59,8 +59,11 @@ class RefField(BaseField):
 	def prepare(cls, input):
 		vl = VerseList(input, raiseError=True)
 		assert len(vl) == 1
-		assert vl[0][0].getBookName() == vl[0][-1].getBookName(), \
-			"Booknames should be the same at start and end of list"
+		if vl[0][0].getBookName() == vl[0][-1].getBookName():
+			raise SearchException(
+				_("In finding references, the reference "
+					"must all be in one book")
+		)
 		
 		def get_chapter_verses(versekey):
 			return versekey.verseCount(

@@ -106,9 +106,12 @@ def set_vk_chapter_checked(self, chapter):
 	if 0 < chapter <= chapters:
 		self.Chapter(chapter)
 	else:
-		raise VerseParsingError("There are only %d chapters in %s "
-			"(given %d)" % (chapters,
-			self.getBookName(), chapter))
+		raise VerseParsingError(_("There are only %(chapters)d chapters "
+			"in %(book)s (given %(given)d)") % dict(
+				chapters=chapters, book=self.getBookName(), 
+				given=chapter
+			)
+		)
 	
 def set_vk_verse_checked(self, verse):
 	chapter = self.Chapter()
@@ -120,9 +123,12 @@ def set_vk_verse_checked(self, verse):
 	if 0 < verse <= verses:
 		self.Verse(verse)
 	else:
-		raise VerseParsingError("There are only %d verses in %s %d "
-			"(given %d)" % (verses,
-			self.getBookName(), chapter, verse))
+		raise VerseParsingError(_("There are only %(verses)d verses in "
+			"%(book)s %(chapter)s (given %(given)d)") % dict(
+				verses=verses, book=self.getBookName(),
+				chapter=chapter, given=verse
+			)
+		)
 
 class VK(SW.VerseKey):#, object):
 	"""VK - a wrapper around VerseKey
@@ -403,9 +409,10 @@ def check_vk_bounds(vk):
 	chapter = vk.Chapter()
 
 	if chapter > chapters:
-		raise VerseParsingError("There are only %d chapters in %s "
-			"(given %d)" % (
-				chapters, vk.bookName(testament, book), chapter
+		raise VerseParsingError(_("There are only %(chapters)d chapters "
+			"in %(book)s (given %(given)d)") % dict(
+				chapters=chapters, book=vk.bookName(testament, book), 
+				given=chapter
 			)
 		)
 
@@ -413,9 +420,10 @@ def check_vk_bounds(vk):
 	verses = vk.verseCount(testament, book, chapter)
 	
 	if verse > verses:
-		raise VerseParsingError("There are only %d verses in %s %s "
-			"(given %d)" % (
-				verses, vk.bookName(testament, book), chapter, verse
+		raise VerseParsingError(_("There are only %(verses)d verses in "
+			"%(book)s %(chapter)s (given %(given)d)") % dict(
+				verses=verses, book=vk.bookName(testament, book), 
+				chapter=chapter, given=verse
 			)
 		)
 	
@@ -533,7 +541,7 @@ class VerseList(list):
 		osis_ref = VK.convertToOSIS(args, SW.Key(context))
 		match = re.match(my_re, osis_ref)
 		if not match:
-			raise VerseParsingError, "Invalid Reference: %s" % orig_args
+			raise VerseParsingError, _(u"Invalid Reference: %s") % orig_args
 
 	def RefreshVKs(self, lk, raiseError=False):
 		"""Turns a listkey into a VerseList"""
@@ -1006,7 +1014,7 @@ def GetVerseStr(verse, context = "", raiseError=False):
 	"""Returns a standardized verse string"""
 	if not verse:
 		if raiseError:
-			raise VerseParsingError, "Invalid empty reference"
+			raise VerseParsingError, _("Invalid empty reference")
 			
 		return ""
 		#assert verse
@@ -1018,7 +1026,8 @@ def GetVerseStr(verse, context = "", raiseError=False):
 		raiseError=raiseError)
 	if not vklist: 
 		if raiseError:
-			raise VerseParsingError, u"Invalid Reference: %s" % verse
+			raise VerseParsingError, _(u"Invalid Reference: %s") % verse
+
 		else:
 			return ""
 	

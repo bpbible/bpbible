@@ -631,7 +631,7 @@ class DictionaryIndexedText(IndexedText):
 	def __init__(self, version, start, entries, create_index=True):
 		self.start = start
 		self.entries = entries
-		bookname = start + " (%d entries) " % entries
+		bookname = start# + _(" (%d entries) ") % entries
 		super(DictionaryIndexedText, self).__init__(version, bookname,
 			create_index=create_index)
 	

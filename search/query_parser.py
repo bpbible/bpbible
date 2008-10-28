@@ -602,9 +602,9 @@ class ParseError(Exception):
 
 	def __str__(self):
 		return u"""\
-Could not understand string ``
+%s ``
 %s
-%*s^``""" % (self.string1, self.len, "")
+%*s^``""" % (_("Could not understand string"), self.string1, self.len, "")
 
 def p_error(t):
 	if t is None: 
@@ -631,6 +631,7 @@ def print_regexes(string, verbose=False):
 
 def separate_words(string, wordlist=None, stemming_data=None, stemmer=None,
 		cross_verse_search=True):
+	#TODO: don't stem when case sensitive
 	global cross_verse
 	cross_verse = cross_verse_search
 

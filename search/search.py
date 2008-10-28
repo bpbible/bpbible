@@ -212,13 +212,13 @@ class Index(object):
 			first = BookName(item)
 
 			if not first:
-				raise SearchException, "Book '%s' not found!" % item
+				raise SearchException, _("Book '%s' not found!") % item
 	
 			for index, book in enumerate(self.books):
 				if BookName(book.bookname) == first:
 					return index
 	
-			raise SearchException, "Book '%s' not found!" % first
+			raise SearchException, _("Book '%s' not found!") % first
 		
 		
 		books=[]
@@ -228,7 +228,7 @@ class Index(object):
 		for item in ranges:
 			thisrange = item.split("-")
 			if len(thisrange) > 2:
-				raise SearchException("Only one dash allowed in '%s'" % item)	
+				raise SearchException(_("Only one dash allowed in '%s'") % item)	
 			
 			if("FOO" == thisrange[0].upper()):
 				#EASTEREGG
@@ -317,8 +317,8 @@ class Index(object):
 			wordlist = [(re.compile(e, flags), 0) for e in regexes]
 		except re.error, e:
 			raise SearchException(
-				"There seems to be an error in your regular expression.\n"
-				"The error message given was: %s" % e
+				_("There seems to be an error in your regular expression.\n"
+				"The error message given was: %s") % e
 			)
 		
 		strongs = [[], []]
@@ -332,7 +332,7 @@ class Index(object):
 						break
 				else:
 					raise SearchException(
-						"You cannot search on the field %r" % key
+						_("You cannot search on the field %r") % key
 					)
 				
 		# Do multiword
@@ -347,7 +347,7 @@ class Index(object):
 
 			results += book.find_index(matches)
 		
-		progress(("Done", 100))
+		progress((_("Done"), 100))
 		return results
 	
 	

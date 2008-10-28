@@ -169,12 +169,13 @@ class Tooltip(TooltipBaseMixin, tooltip_parent):
 				wx.FRAME_NO_TASKBAR   | 
 				wx.FRAME_FLOAT_ON_PARENT
 			)
-			super(Tooltip, self).__init__(parent, style=style, title="Tooltip")
+			super(Tooltip, self).__init__(parent, style=style,
+									title=_("Tooltip"))
 		else:
 			super(Tooltip, self).__init__(parent, style)
 			
 		
-		self.interval = 500
+		self.interval = 200
 		self.timer = None
 		self.out_timer = None
 		self.mouse_is_over = True
@@ -208,12 +209,12 @@ class Tooltip(TooltipBaseMixin, tooltip_parent):
 			force_mask = not guiutil.is_xp_styled()
 
 		self.gui_anchor = self.toolbar.AddLabelTool(wx.ID_ANY,  
-			"Anchor", bmp("anchor.png", force_mask=force_mask),
-			shortHelp="Don't hide this tooltip")
+			_("Anchor"), bmp("anchor.png", force_mask=force_mask),
+			shortHelp=_("Don't hide this tooltip"))
 		
 		self.gui_copy = self.toolbar.AddLabelTool(wx.ID_ANY,  
-			"Copy All", bmp("page_copy.png", force_mask=force_mask),
-			shortHelp="Copy tooltip text (with links)")
+			_("Copy All"), bmp("page_copy.png", force_mask=force_mask),
+			shortHelp=_("Copy tooltip text (with links)"))
 			
 
 		self.toolbar.Bind(wx.EVT_TOOL, self.stay_on_top, id=self.gui_anchor.Id)
@@ -365,7 +366,7 @@ class PermanentTooltip(TooltipBaseMixin, pclass):
 
 		super(PermanentTooltip, self).__init__(
 			parent, 
-			title="Sticky Tooltip", 
+			title=_("Sticky Tooltip"), 
 			style=style|wx.STAY_ON_TOP|wx.MINIMIZE_BOX , 
 			tooltip_config=tooltip_config
 		) 
@@ -387,9 +388,9 @@ class PermanentTooltip(TooltipBaseMixin, pclass):
 			self.toolbar.AddSeparator()
 
 		self.gui_anchor = self.toolbar.AddLabelTool(wx.ID_ANY,  
-			"Stay on top",
+			_("Stay on top"),
 			guiutil.bmp("pushpin.gif"),
-			shortHelp="Stay on top", kind=wx.ITEM_CHECK)
+			shortHelp=_("Stay on top"), kind=wx.ITEM_CHECK)
 
 		self.toolbar.Bind(wx.EVT_TOOL, self.toggle_topness, 
 			id=self.gui_anchor.Id)
@@ -490,7 +491,7 @@ class TooltipConfig(object):
 
 	def get_title(self):
 		"""Gets the title to be used on a sticky tooltip."""
-		return "Sticky Tooltip"
+		return _("Sticky Tooltip")
 
 	def get_text(self):
 		"""Returns the actual text to be used for the tooltip."""
@@ -524,9 +525,9 @@ class BibleTooltipConfig(TooltipConfig):
 
 		guiconfig.mainfrm.bible_observers += self.bible_ref_changed
 		self.gui_go = toolbar.AddLabelTool(wx.ID_ANY,  
-			"Go to verses",
+			_("Go to verses"),
 			guiutil.bmp("accept.png"),
-			shortHelp="Open this reference"
+			shortHelp=_("Open this reference")
 		)
 
 		toolbar.Bind(wx.EVT_TOOL, 

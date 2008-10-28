@@ -31,6 +31,7 @@ from util.configmgr import config_manager
 
 from keypad import KeyPad
 from util.i18n import N_
+from util import i18n
 
 
 
@@ -246,7 +247,7 @@ class SearchPanel(xrcSearchPanel):
 		if(guiconfig.mainfrm.is_pane_shown(self.id) and self.has_started):
 			self.check_for_index()
 
-		self.search_label.Label = "0 verses found"
+		self.search_label.Label = _("%d references found") % 0
 		self.versepreview.SetReference(None)
 		
 
@@ -257,10 +258,10 @@ class SearchPanel(xrcSearchPanel):
 	
 	def set_index_available(self, available=True):
 		if not available:
-			self.genindex.SetLabel("&Index")
+			self.genindex.SetLabel(_("&Index"))
 			
 		else:
-			self.genindex.SetLabel("Unindex")
+			self.genindex.SetLabel(_("Unindex"))
 			self.search_button.Enable()
 
 		
@@ -275,12 +276,13 @@ class SearchPanel(xrcSearchPanel):
 
 	def check_for_index(self):
 		self.set_gui_search_type(search_config["indexed_search"])
+		NO_CURRENT_VERSION = _("You don't have a current %s, "
+				"so you cannot search at the moment") % self.book.noun
 		if not search_config["indexed_search"]:
 			self.search_button.Enable(self.book.version is not None)
 			if not self.book.version:
-				wx.MessageBox("You don't have a current %s, "
-				"so you cannot search at the moment" % self.book.noun, 
-				"No current version", parent=self)
+				wx.MessageBox(NO_CURRENT_VERSION,
+				_("No current version"), parent=self)
 			
 			return
 		
@@ -291,7 +293,7 @@ class SearchPanel(xrcSearchPanel):
 			return
 
 		if(self.version and search.IndexExists(self.version)):
-			busy_info = wx.BusyInfo("Reading search index...")
+			busy_info = wx.BusyInfo(_("Reading search index..."))
 			try:
 				self.index = search.ReadIndex(self.version)
 			except Exception, e:
@@ -316,16 +318,16 @@ class SearchPanel(xrcSearchPanel):
 			self.index = None
 		
 			if not self.version:
-				wx.MessageBox("You don't have a current %s version, "
-				"so you cannot search at the moment" % self.book.noun, 
-				"No current version", parent=self)
+				wx.MessageBox(NO_CURRENT_VERSION,
+				_("No current version"), parent=self)
 				return
 			self.set_index_available(False)
 
-			msg = "Search index does not exist for book %s. " \
-				"Indexing will make search much faster. " \
-				"Create Index?" % self.version 
-			create = wx.MessageBox(msg, "Create Index?", wx.YES_NO, parent=self)
+			msg = _("Search index does not exist for book %s. "
+				"Indexing will make search much faster. "
+				"Create Index?") % self.version 
+			create = wx.MessageBox(msg, _("Create Index?"), 
+				wx.YES_NO, parent=self)
 			if create == wx.YES:
 				self.build_index(self.version)
 			else:
@@ -343,7 +345,7 @@ class SearchPanel(xrcSearchPanel):
 		guiconfig.mainfrm.set_bible_ref(item_text, source=SEARCH)
 			
 	def _post_init(self):
-		self.search_button.SetLabel("&Search")
+		self.search_button.SetLabel(_("&Search"))
 	
 		self.search_splitter.SetSashGravity(0.5)
 		self.search_splitter.SetSashPosition(
@@ -367,6 +369,9 @@ class SearchPanel(xrcSearchPanel):
 		self.collapsible_panel.WindowStyle |= wx.CP_NO_TLW_RESIZE
 		self.collapsible_panel.Bind(wx.EVT_COLLAPSIBLEPANE_CHANGED, 
 			self.on_collapse)	
+
+		# XRC doesn't localize the Label
+		self.collapsible_panel.Label = _("Search Options")
 		
 
 		# Do all init here
@@ -434,11 +439,6 @@ class SearchPanel(xrcSearchPanel):
 	def show_keyboard(self, event):
 		assert self.index is not None, "No index in show keyboard"
 
-		# TEMPORARY check
-		if "letters" not in self.index.statistics:	
-			wx.MessageBox("Rebuild your index...")
-			return
-
 		btn = event.GetEventObject()
 		pos = btn.ClientToScreen((btn.Size[0], 0))
 		position = pos, (-btn.Size[0], btn.Size[0])
@@ -501,11 +501,11 @@ class SearchPanel(xrcSearchPanel):
 		try:
 			self.stop = False
 			self.searching = True
-			self.search_button.SetLabel("&Stop")
+			self.search_button.SetLabel(_("&Stop"))
 			
 			key = self.searchkey.GetValue()
 			if not key: 
-				self.search_label.Label = "0 verses found"
+				self.search_label.Label = _("0 verses found")
 
 				wx.CallAfter(self.clear_list)
 				return
@@ -537,7 +537,7 @@ class SearchPanel(xrcSearchPanel):
 		finally:
 			self.show_progress_bar(False)
 			self.searching = False
-			self.search_button.SetLabel("&Search")
+			self.search_button.SetLabel(_("&Search"))
 			
 
 	def perform_search(self, key, scope, case_sensitive):
@@ -562,13 +562,15 @@ class SearchPanel(xrcSearchPanel):
 			)
 
 		except SearchException, myexcept:
-			wx.MessageBox(myexcept.message, "Error in search", parent=self)
+			wx.MessageBox(myexcept.message, _("Error in search"), parent=self)
 			succeeded = False
 
 		except SpellingException, spell:
-			wx.MessageBox(
-				"The following words were not found in this %s:"
-				"\n%s" % (self.book.noun, unicode(spell)), "Unknown word",
+			wx.MessageBox(u"%s\n%s" % (
+				_("The following words were not found in this %s:") 
+					% self.book.noun, 
+				unicode(spell)
+			), _("Unknown word"),
 				parent=self
 			)
 		
@@ -634,15 +636,18 @@ class SearchPanel(xrcSearchPanel):
 			)
 
 		except SearchException, myexcept:
-			wx.MessageBox(myexcept.message, "Error in search", parent=self)
+			wx.MessageBox(myexcept.message, _("Error in search"), parent=self)
 			succeeded = False
-
+		
 		except SpellingException, spell:
-			wx.MessageBox(
-				"The following words were not found in this Bible:"
-				"\n%s" % unicode(spell), "Unknown word", parent=self
+			wx.MessageBox(u"%s\n%s" % (
+				_("The following words were not found in this %s:") 
+					% self.book.noun, 
+				unicode(spell)
+			), _("Unknown word"),
+				parent=self
 			)
-			
+		
 			succeeded = False
 
 		else:
@@ -652,8 +657,15 @@ class SearchPanel(xrcSearchPanel):
 
 		if not succeeded:
 			self.search_label.Label = (
-				"0 verses found, %s, 0 hits" % 
-					string_util.pluralize("word", self.numwords)
+				"%s, %s, %s" % (
+					_("%d references found") % 0, 
+					i18n.ngettext(
+						_("1 word"),
+						_("%d words") % self.numwords,
+						self.numwords
+					),
+					_("%d hits") % 0
+				)
 			)
 				
 			wx.CallAfter(self.clear_list)
@@ -662,10 +674,21 @@ class SearchPanel(xrcSearchPanel):
 		self.search_results = search.RemoveDuplicates(self.search_results)
 		
 		self.search_label.Label = (
-			"%s found, %s, %s" % (
-				string_util.pluralize("reference", len(self.search_results)),
-				string_util.pluralize("word", self.numwords),
-				string_util.pluralize("hit", self.hits),
+			"%s, %s, %s" % (
+				i18n.ngettext(
+					_("1 reference found"), 
+					_("%d references found") % len(self.search_results),
+					len(self.search_results)),
+				i18n.ngettext(
+					_("1 word"),
+					_("%d words") % self.numwords,
+					self.numwords
+				),
+				i18n.ngettext(
+					_("1 hit"),
+					_("%d hits") % self.hits,
+					self.hits
+				)				
 			)
 		)
 		
@@ -724,9 +747,13 @@ class SearchPanel(xrcSearchPanel):
 
 		self.hits = len(self.search_results)
 		if self.hits == 0:
-			self.search_label.Label = (
-				"0 verses found, %s" % 
-					string_util.pluralize("word", self.numwords)
+			self.search_label.Label = "%s, %s" % (
+				_("%d references found") % 0,
+				i18n.ngettext(
+					_("1 word"),
+					_("%d words") % self.numwords,
+					self.numwords
+				),
 			)
 			
 				
@@ -734,22 +761,28 @@ class SearchPanel(xrcSearchPanel):
 			return
 		
 		
-		self.search_label.Label = (
-			"%s found, %s" % (
-				string_util.pluralize("verse", self.hits),
-				string_util.pluralize("word", self.numwords),
-			)
+		self.search_label.Label = "%s, %s" % (
+			i18n.ngettext(
+				_("1 reference found"), 
+				_("%d references found") % self.hits,
+				self.hits
+			),
+			i18n.ngettext(
+				_("1 word"),
+				_("%d words") % self.numwords,
+				self.numwords
+			),
 		)
 		
 		# Update UI
 		self.insert_results()
 
 	def clear_list(self):
-		self.search_button.SetLabel("&Search")
+		self.search_button.SetLabel(_("&Search"))
 		self.show_progress_bar(False)
 
 		#Clear list
-		self.verselist.set_data("Reference Preview".split(), length=0)
+		self.verselist.set_data([_("Reference"), _("Preview")], length=0)
 
 		self.versepreview.regexes = []
 		self.versepreview.strongs = []
@@ -761,20 +794,30 @@ class SearchPanel(xrcSearchPanel):
 		self.set_title()
 	
 	def set_title(self):
-		text = "%s search - %s" % (self.version,
-			string_util.pluralize("result", self.verselist.ItemCount))		
+		text = _("%(version)s search - %(numresults)s") % dict(
+			version=self.version,
+			numresults=i18n.ngettext(
+				_("1 reference found"), 
+				_("%d references found") % self.verselist.ItemCount,
+				self.verselist.ItemCount
+			),
+		)
+		
 		guiconfig.mainfrm.set_pane_title(self.id, text)
 
 	@guiutil.frozen
 	def insert_results(self):
 		text = self.search_results
-		self.search_button.SetLabel("&Search")
+		self.search_button.SetLabel(_("&Search"))
 
 		self.verselist.results = self.search_results
 
 		#Clear list
 		self.clear_list()
-		self.verselist.set_data("Reference Preview".split(), length=len(text))
+		self.verselist.set_data(
+			[_("Reference"), _("Preview")], 
+			length=len(text)
+		)
 		self.set_title()
 
 		self.versepreview.regexes = self.regexes	
@@ -812,11 +855,11 @@ class SearchPanel(xrcSearchPanel):
 	def build_index(self, version):
 		def callback(value):
 			self.progressbar.SetValue(value[1])
-			continuing, skip = p.Update(value[1], "Processing %s" % value[0])
+			continuing, skip = p.Update(value[1], _("Processing %s") % value[0])
 			wx.GetApp().Yield()
 			return continuing
 
-		p = wx.ProgressDialog("Indexing %s" % version, "Preparing", 
+		p = wx.ProgressDialog(_("Indexing %s") % version, _("Preparing"), 
 			parent=self, style=wx.PD_APP_MODAL|wx.PD_CAN_ABORT|wx.PD_AUTO_HIDE )
 
 		p.Size = (400, -1)
@@ -844,7 +887,7 @@ class SearchPanel(xrcSearchPanel):
 				# 0.1 seconds
 				if time.time() - last_time[0] > 0.1:
 					continuing, skip = p.Update(value[1], 
-						"Writing %s" % value[0])
+						_("Writing %s") % value[0])
 				
 					self.progressbar.SetValue(value[1])
 					
@@ -1006,7 +1049,7 @@ class GenbookSearchPanel(SearchPanel):
 		self.options_panel = xrcOptionsPanel(parent)
 
 		# we have entries, not verses
-		self.options_panel.proximity_type.SetString(1, "Entries")
+		self.options_panel.proximity_type.SetString(1, _("Entries"))
 		parent.Sizer.Add(self.options_panel, 1, wx.GROW)
 		
 		self.options_panel.gui_search_type.Bind(

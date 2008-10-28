@@ -120,3 +120,42 @@ def __init_resources():
     __res = xrc.EmptyXmlResource()
 
     __res.Load('search.xrc')
+
+# ----------------------- Gettext strings ---------------------
+
+def __gettext_strings():
+    # This is a dummy function that lists all the strings that are used in
+    # the XRC file in the _("a string") format to be recognized by GNU
+    # gettext utilities (specificaly the xgettext utility) and the
+    # mki18n.py script.  For more information see:
+    # http://wiki.wxpython.org/index.cgi/Internationalization 
+    
+    def _(str): pass
+    
+    _("&Find:")
+    _("Words to search for")
+    _("Open the Virtual Keyboard")
+    _("&Search")
+    _("Search for given words now")
+    _("&Index")
+    _("Search Options")
+    _("0 verses found")
+    _("&Close")
+    _("Search &Type:")
+    _("Indexed")
+    _("Unindexed")
+    _("Type of search to use")
+    _("Proximity:")
+    _("How close should search terms be to each other")
+    _("Words")
+    _("Verses")
+    _("Case sensitive")
+    _("Match only if case is same")
+    _("Search Options")
+    _("Whole &Bible")
+    _("&Old Testament")
+    _("&New Testament")
+    _("DUMMY")
+    _("Custom &Range:")
+    _("Search Range")
+

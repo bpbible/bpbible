@@ -10,7 +10,6 @@ from util import languages
 
 
 class ModuleTree(FilterableTree):
-	blank_text = "Find Book..."
 	def __init__(self, parent):
 		super(ModuleTree, self).__init__(parent, None)
 		
@@ -18,16 +17,20 @@ class ModuleTree(FilterableTree):
 		self.on_category_choice = ObserverList()
 
 		self.module_types = (
-			("Bibles", biblemgr.bible),
-			("Commentaries", biblemgr.commentary),
-			("Dictionaries", biblemgr.dictionary),
-			("Other books", biblemgr.genbook),
+			(_("Bibles"), biblemgr.bible),
+			(_("Commentaries"), biblemgr.commentary),
+			(_("Dictionaries"), biblemgr.dictionary),
+			(_("Other books"), biblemgr.genbook),
 		)
 		
 
 		self.on_selection += self.on_version_tree
 		self.recreate()
-		
+	
+	@property
+	def blank_text(self):
+		return _("Find Book...")
+
 	def bind_events(self):
 		super(ModuleTree, self).bind_events()
 		# ### Nasty hack ###
@@ -98,7 +101,7 @@ class ModuleTree(FilterableTree):
 		menu = wx.Menu()
 		item = menu.Append(
 			wx.ID_ANY, 
-			"Show information for %s" % data.Name()
+			_("Show information for %s") % data.Name()
 		)
 
 		menu.Bind(wx.EVT_MENU, make_event(data), item)

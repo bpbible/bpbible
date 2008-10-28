@@ -18,7 +18,7 @@ localedir = "locales"
 domain = "messages"             # the translation file is messages.mo
 
 def initialize():
-	global langid, mytranslation
+	global langid, mytranslation, ngettext
 	langid = locale_settings["language"]
 	
 	# Set up Python's gettext
@@ -29,6 +29,7 @@ def initialize():
 		dprint(WARNING, "Language not found for python", langid)
 	
 	mytranslation.install(unicode=True)
+	ngettext = mytranslation.ngettext
 
 def N_(text):
 	"""Mark text as i18n'able, but don't translate it yet"""
@@ -39,6 +40,6 @@ languages = dict(
 	es=N_("Spanish"),
 	en_AU=N_("BM test"),
 	vi=N_("Vietnamese"),
-	
+#	as=N_("Assammese"),	
 )
 	
