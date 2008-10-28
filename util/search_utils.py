@@ -34,16 +34,18 @@ def WriteIndex(index, path = config.index_path, progress=util.noop):
 
 	index.book_names = [x.bookname for x in b]
 	
-	continuing = progress(("Index", 100*(length-1)/length))	
-	if not continuing: return
+	try:
+		continuing = progress(("Index", 100*(length-1)/length))	
+		if not continuing: return
 	
-	z.writestr("index", cPickle.dumps(
-		index,
-		cPickle.HIGHEST_PROTOCOL
-	))
+		z.writestr("index", cPickle.dumps(
+			index,
+			cPickle.HIGHEST_PROTOCOL
+		))
+	finally:
+		del index.book_names	
+		index.books = b
 
-	del index.book_names	
-	index.books = b
 	z.close()
 
 	#if search_config["zip_indexes"]:
