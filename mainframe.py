@@ -648,9 +648,10 @@ class MainFrame(wx.Frame, AuiLayer):
 
 	def on_font_choice(self, event):
 		dialog = FontChoiceDialog(self)
-		dialog.ShowModal()
-
-		self.refresh_all_pages()
+		ansa = dialog.ShowModal()
+		dialog.Destroy()
+		if ansa == wx.ID_OK:
+			self.refresh_all_pages()
 
 	def zoom(self, direction):	
 		htmlbase.zoom(direction)

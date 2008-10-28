@@ -147,9 +147,7 @@
                   </object>
                 </object>
                 <object class="button">
-                  <object class="wxButton" name="wxID_CANCEL">
-                    <hidden>1</hidden>
-                  </object>
+                  <object class="wxButton" name="wxID_CANCEL"/>
                 </object>
               </object>
               <option>0</option>

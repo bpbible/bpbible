@@ -212,6 +212,22 @@ class FontChoiceDialog(xrcFontChoiceDialog):
 			pass
 			#preview % tuple(guiconfig.get_window_colours()))
 	
+	def ShowModal(self):
+		old_fonts = (
+			font_settings["default_fonts"], 
+			font_settings["language_fonts"],
+			font_settings["module_fonts"],
+		)
+
+		ansa = super(FontChoiceDialog, self).ShowModal()
+
+		if ansa != wx.ID_OK:
+			(font_settings["default_fonts"], 
+			 font_settings["language_fonts"],			
+			 font_settings["module_fonts"]) = old_fonts
+		
+		return ansa
+
 class FontTree(LanguageModuleTree):
 	def add_first_level_groups(self):
 		self.model.add_child("Default Font", data=DefaultFont)
