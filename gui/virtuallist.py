@@ -24,7 +24,7 @@ class VirtualListCtrl(wx.ListCtrl, ListCtrlAutoWidthMixin):
 	#		self.RefreshItems(start, end)
 	def set_data(self, columns, data=None, length=None):
 		self.ClearAll()
-		self.cache = {}
+		self.cache.clear()
 
 		for id, column in enumerate(columns):
 			self.InsertColumn(id, column)
@@ -42,7 +42,19 @@ class VirtualListCtrl(wx.ListCtrl, ListCtrlAutoWidthMixin):
 		self._doResize()
 
 	def OnGetItemText(self, item, column):
-		key = (item, column) 
+		# It seems that clicking on the dictionary list to dismiss the module 
+		# popup will give error messages about ints being requireed when
+		# looking things up in the cache. By looking up an attribute on self
+		# that doesn't exist, we don't get these problems for some reason
+		# Probably a wx problem, I'd guess.
+		# To reproduce this problem easily, comment out the next two lines and
+		# replace with import cPickle. Otherwise, you will need to scroll down 
+		# to the 257th item (or even further down if you want) 
+		has = hasattr(self, "broken")
+		assert not has, "Don't set broken!"
+
+
+		key = item, column
 		if key in self.cache:
 			return self.cache[key]
 		
