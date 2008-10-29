@@ -279,7 +279,7 @@ class DictionarySelector(wx.Panel):
 if __name__ == '__main__':
 	a=wx.App(0)
 	d=wx.Dialog(None, style=wx.RESIZE_BORDER|wx.DEFAULT_DIALOG_STYLE)
-	biblemgr.dictionary.SetModule("ot1nt2")
+	biblemgr.dictionary.SetModule("BibleCompanion")
 	l=DictionarySelector(d, biblemgr.dictionary)
 	#button = wx.Button(d, pos=(300, 100), label="TEST")
 	#button.Bind(wx.EVT_BUTTON, lambda x:l.choose_item("METAL"))
