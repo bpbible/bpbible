@@ -214,10 +214,14 @@ class MainFrame(wx.Frame, AuiLayer):
 
 	
 	
-		toolbars = [
-			wx.ToolBar(self, wx.ID_ANY, style=toolbar_style) 
-			for i in range(3)
-		]
+		if not guiconfig.use_one_toolbar:# or True:
+			toolbars = [
+				wx.ToolBar(self, wx.ID_ANY, style=toolbar_style) 
+				for i in range(3)
+			]
+		else:
+			tb = self.CreateToolBar(wx.TB_TEXT|wx.TB_FLAT)
+			toolbars = tb, tb, tb
 
 		(self.main_toolbar, self.zoom_toolbar, 
 			self.history_toolbar) = toolbars
@@ -225,28 +229,14 @@ class MainFrame(wx.Frame, AuiLayer):
 		for toolbar in toolbars:
 			toolbar.SetToolBitmapSize((16, 16))
 
-		self.tool_back = self.history_toolbar.AddLabelTool(wx.ID_ANY,  
-			_("Back"), bmp("go-previous.png"),
-			shortHelp=_("Go back a verse"))
-		
-		self.tool_forward = self.history_toolbar.AddLabelTool(wx.ID_ANY,  
-			_("Forward"), bmp("go-next.png"),
-			shortHelp=_("Go forward a verse"))
-			
-		self.tool_zoom_in = self.zoom_toolbar.AddLabelTool(wx.ID_ANY,  
-			_("Zoom In"), bmp("magnifier_zoom_in.png"),
-			shortHelp=_("Make text bigger"))
-			
-		self.tool_zoom_default = self.zoom_toolbar.AddLabelTool(wx.ID_ANY,  
-			_("Default Zoom"), bmp("magnifier.png"),
-			shortHelp=_("Return text to default size"))
-			
-		self.tool_zoom_out = self.zoom_toolbar.AddLabelTool(wx.ID_ANY,  
-			_("Zoom Out"), bmp("magifier_zoom_out.png"),
-			shortHelp=_("Make text smaller"))
-			
-		self.bibleref = versetree.VerseTree(self.main_toolbar)
-		self.bible_observers += self.bibleref.set_current_verse
+		if not guiconfig.use_versetree:
+			self.bibleref = wx.ComboBox(self.main_toolbar, 
+					# TODO: add to this list
+					choices=["Genesis 1:1"],
+						style=wx.TE_PROCESS_ENTER)
+		else:
+			self.bibleref = versetree.VerseTree(self.main_toolbar)
+			self.bible_observers += self.bibleref.set_current_verse
 		
 		self.bibleref.SetSize((140, -1))
 		self.main_toolbar.AddControl(self.bibleref)
@@ -262,6 +252,30 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.tool_copy_verses = self.main_toolbar.AddLabelTool(wx.ID_ANY,  
 			_("Copy Verses"), bmp("page_copy.png"),
 			shortHelp=_("Open the Copy Verses dialog"))
+
+		if guiconfig.use_one_toolbar: self.ToolBar.AddSeparator()
+
+		self.tool_back = self.history_toolbar.AddLabelTool(wx.ID_ANY,  
+			_("Back"), bmp("go-previous.png"),
+			shortHelp=_("Go back a verse"))
+		
+		self.tool_forward = self.history_toolbar.AddLabelTool(wx.ID_ANY,  
+			_("Forward"), bmp("go-next.png"),
+			shortHelp=_("Go forward a verse"))
+			
+		if guiconfig.use_one_toolbar: self.ToolBar.AddSeparator()
+		self.tool_zoom_in = self.zoom_toolbar.AddLabelTool(wx.ID_ANY,  
+			_("Zoom In"), bmp("magnifier_zoom_in.png"),
+			shortHelp=_("Make text bigger"))
+			
+		self.tool_zoom_default = self.zoom_toolbar.AddLabelTool(wx.ID_ANY,  
+			_("Default Zoom"), bmp("magnifier.png"),
+			shortHelp=_("Return text to default size"))
+			
+		self.tool_zoom_out = self.zoom_toolbar.AddLabelTool(wx.ID_ANY,  
+			_("Zoom Out"), bmp("magifier_zoom_out.png"),
+			shortHelp=_("Make text smaller"))
+			
 		
 		#self.zoom_toolbar = xrc.XRCCTRL(self, "zoom_toolbar")
 		#self.main_toolbar = xrc.XRCCTRL(self, "main_toolbar")
@@ -554,11 +568,11 @@ class MainFrame(wx.Frame, AuiLayer):
 		# if it is selected in the drop down tree, go straight there
 		# use callafter so that our text in the control isn't changed straight
 		# back
-		self.bibleref.on_selected_in_tree += lambda text: \
+		if guiconfig.use_versetree:
+			self.bibleref.on_selected_in_tree += lambda text: \
 			wx.CallAfter(self.set_bible_ref, text, source=VERSE_TREE)
-		
-		
-		#self.BibleRef.Bind(wx.EVT_COMBOBOX, self.BibleRefEnter)
+		else:
+			self.bibleref.Bind(wx.EVT_COMBOBOX, self.BibleRefEnter)
 
 		self.Bind(wx.EVT_TOOL, self.on_copy_button, 
 			self.tool_copy_verses)
@@ -719,17 +733,24 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.fill_options_menu()
 		
 		
-		self.windows_menu = self.get_menu(_("&Window"))
+		self.windows_menu = self.get_menu(_("&Windows"))
 		assert self.windows_menu, "Window menu could not be found"
 		
-		for item in self.windows_menu.MenuItems:
+		mi = list(self.windows_menu.MenuItems)
+		for idx, item in enumerate(mi):
 			if item.Label == _("Toolbars"):
 				self.toolbar_menu = item.SubMenu
+				if guiconfig.use_one_toolbar:
+					self.windows_menu.DeleteItem(item)
+					#self.windows_menu.RemoveItem(mi[idx])				
+
 				break
 		else:
 			assert False, "Toolbars menu could not be found"
 		
-				
+		if not guiconfig.use_one_toolbar:
+			self.windows_menu.AppendSeparator()
+			
 		for pane in self.aui_mgr.GetAllPanes():
 			if pane.name in ("Bible",):
 				continue

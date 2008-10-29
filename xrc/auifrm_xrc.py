@@ -46,7 +46,7 @@ def __gettext_strings():
     _("&Display")
     _("Default Layout")
     _("Toolbars")
-    _("&Window")
+    _("&Windows")
     _("Debug")
     _("Html Ide")
     _("WI")

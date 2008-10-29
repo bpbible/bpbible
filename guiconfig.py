@@ -1,4 +1,5 @@
 import wx
+from util import osutils
 
 class DummyMainfrm(object):
 	def hide_tooltips(*args, **kwargs):
@@ -10,6 +11,8 @@ mainfrm = DummyMainfrm()
 app = None
 icons = None
 
+use_versetree = not osutils.is_mac()
+use_one_toolbar = osutils.is_mac()
 def get_colour_set(colour_set):
 	def get_tooltip_colours(html_style=True):
 		colours = [wx.SystemSettings.GetColour(x) for x in colour_set]

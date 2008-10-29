@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2008-10-29 13:54+AUS Eastern Daylight Time\n"
+"POT-Creation-Date: 2008-10-29 17:30+AUS Eastern Daylight Time\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -107,7 +107,7 @@ msgstr ""
 msgid "Search in Bible for:"
 msgstr ""
 
-#: bookframe.py:151 mainframe.py:752
+#: bookframe.py:151 mainframe.py:773
 msgid "Show the %s pane"
 msgstr ""
 
@@ -240,8 +240,8 @@ msgid "%s is not in this harmony"
 msgstr ""
 
 #: install_manager/install_drop_target.py:33
-#: install_manager/install_drop_target.py:56 templatemanager.py:434
-#: templatemanager.py:445
+#: install_manager/install_drop_target.py:56 templatemanager.py:440
+#: templatemanager.py:451
 msgid "Error"
 msgstr ""
 
@@ -305,147 +305,147 @@ msgstr ""
 msgid "Cannot read book metadata in file %s"
 msgstr ""
 
-#: mainframe.py:229
-msgid "Back"
-msgstr ""
-
-#: mainframe.py:230
-msgid "Go back a verse"
-msgstr ""
-
-#: mainframe.py:233
-msgid "Forward"
-msgstr ""
-
-#: mainframe.py:234
-msgid "Go forward a verse"
-msgstr ""
-
-#: mainframe.py:237
-msgid "Zoom In"
-msgstr ""
-
-#: mainframe.py:238
-msgid "Make text bigger"
-msgstr ""
-
-#: mainframe.py:241
-msgid "Default Zoom"
-msgstr ""
-
-#: mainframe.py:242
-msgid "Return text to default size"
-msgstr ""
-
 #: mainframe.py:245
-msgid "Zoom Out"
-msgstr ""
-
-#: mainframe.py:246
-msgid "Make text smaller"
-msgstr ""
-
-#: mainframe.py:255
 msgid "Go to verse"
 msgstr ""
 
-#: mainframe.py:256
+#: mainframe.py:246
 msgid "Go to this verse"
 msgstr ""
 
-#: mainframe.py:259
+#: mainframe.py:249
 msgid "Bible Search"
 msgstr ""
 
-#: mainframe.py:260
+#: mainframe.py:250
 msgid "Search in this Bible"
 msgstr ""
 
-#: mainframe.py:263 xrc/copyverses_xrc.py:80
+#: mainframe.py:253 xrc/copyverses_xrc.py:80
 msgid "Copy Verses"
 msgstr ""
 
-#: mainframe.py:264
+#: mainframe.py:254
 msgid "Open the Copy Verses dialog"
 msgstr ""
 
-#: mainframe.py:292
+#: mainframe.py:259
+msgid "Back"
+msgstr ""
+
+#: mainframe.py:260
+msgid "Go back a verse"
+msgstr ""
+
+#: mainframe.py:263
+msgid "Forward"
+msgstr ""
+
+#: mainframe.py:264
+msgid "Go forward a verse"
+msgstr ""
+
+#: mainframe.py:268
+msgid "Zoom In"
+msgstr ""
+
+#: mainframe.py:269
+msgid "Make text bigger"
+msgstr ""
+
+#: mainframe.py:272
+msgid "Default Zoom"
+msgstr ""
+
+#: mainframe.py:273
+msgid "Return text to default size"
+msgstr ""
+
+#: mainframe.py:276
+msgid "Zoom Out"
+msgstr ""
+
+#: mainframe.py:277
+msgid "Make text smaller"
+msgstr ""
+
+#: mainframe.py:306
 msgid "Navigation"
 msgstr ""
 
-#: mainframe.py:294
+#: mainframe.py:308
 msgid "Zoom"
 msgstr ""
 
-#: mainframe.py:296
+#: mainframe.py:310
 msgid "History toolbar"
 msgstr ""
 
-#: mainframe.py:698 xrc/auifrm_xrc.py:43
+#: mainframe.py:712 xrc/auifrm_xrc.py:43
 msgid "&Language"
 msgstr ""
 
-#: mainframe.py:717 xrc/auifrm_xrc.py:46
+#: mainframe.py:731 xrc/auifrm_xrc.py:46
 msgid "&Display"
 msgstr ""
 
-#: mainframe.py:722 xrc/auifrm_xrc.py:49
-msgid "&Window"
+#: mainframe.py:736 xrc/auifrm_xrc.py:49
+msgid "&Windows"
 msgstr ""
 
-#: mainframe.py:726 xrc/auifrm_xrc.py:48
+#: mainframe.py:741 xrc/auifrm_xrc.py:48
 msgid "Toolbars"
 msgstr ""
 
-#: mainframe.py:748
+#: mainframe.py:769
 msgid "Show the %s toolbar"
 msgstr ""
 
-#: mainframe.py:771 xrc/auifrm_xrc.py:50
+#: mainframe.py:792 xrc/auifrm_xrc.py:50
 msgid "Debug"
 msgstr ""
 
-#: mainframe.py:829
+#: mainframe.py:850
 msgid "Use Strong's headwords"
 msgstr ""
 
-#: mainframe.py:830
+#: mainframe.py:851
 msgid "Display Strong's numbers using the transliterated text"
 msgstr ""
 
-#: mainframe.py:835
+#: mainframe.py:856
 msgid "Expand cross-references"
 msgstr ""
 
-#: mainframe.py:836
+#: mainframe.py:857
 msgid "Display cross references partially expanded"
 msgstr ""
 
-#: mainframe.py:841
+#: mainframe.py:862
 msgid "One line per verse"
 msgstr ""
 
-#: mainframe.py:842
+#: mainframe.py:863
 msgid "Display each verse on its own line."
 msgstr ""
 
-#: mainframe.py:847
+#: mainframe.py:868
 msgid "Topic Tags"
 msgstr ""
 
-#: mainframe.py:848
+#: mainframe.py:869
 msgid "Display the topics that each verse is tagged with."
 msgstr ""
 
-#: mainframe.py:996
+#: mainframe.py:1017
 msgid "An error occurred on closing:"
 msgstr ""
 
-#: mainframe.py:1008 mainframe.py:1009
+#: mainframe.py:1029 mainframe.py:1030
 msgid "search "
 msgstr ""
 
-#: mainframe.py:1029
+#: mainframe.py:1050
 msgid ""
 "Flexible Bible study software.\n"
 "\t\t\tBuilt Using the Sword Project from crosswire.org\n"
@@ -453,23 +453,23 @@ msgid ""
 "\t\t\twxPython Version: %(wxversion)s"
 msgstr ""
 
-#: mainframe.py:1035
+#: mainframe.py:1056
 msgid "BPBible"
 msgstr ""
 
-#: mainframe.py:1039
+#: mainframe.py:1060
 msgid "BPBible website"
 msgstr ""
 
-#: mainframe.py:1040
+#: mainframe.py:1061
 msgid "Ben Morgan"
 msgstr ""
 
-#: mainframe.py:1040
+#: mainframe.py:1061
 msgid "SWORD library developers"
 msgstr ""
 
-#: mainframe.py:1041
+#: mainframe.py:1062
 msgid ""
 "Icons used are from famfamfam\n"
 "http://www.famfamfam.com/lab/icons/silk\n"
@@ -477,7 +477,7 @@ msgid ""
 "http://tango.freedesktop.org/Tango_Desktop_Project"
 msgstr ""
 
-#: mainframe.py:1046
+#: mainframe.py:1067
 msgid "BPBible is licensed under the GPL v2. For more details, refer to the LICENSE.txt file in the application directory"
 msgstr ""
 
@@ -719,19 +719,19 @@ msgstr ""
 msgid "Invalid empty reference"
 msgstr ""
 
-#: templatemanager.py:433
+#: templatemanager.py:439
 msgid "Template '%s' is read only. Try a different name."
 msgstr ""
 
-#: templatemanager.py:438
+#: templatemanager.py:444
 msgid "Template '%s' already exists. Overwrite?"
 msgstr ""
 
-#: templatemanager.py:439
+#: templatemanager.py:445
 msgid "Overwrite?"
 msgstr ""
 
-#: templatemanager.py:444
+#: templatemanager.py:450
 msgid "Template name is already in use. Try a different name."
 msgstr ""
 

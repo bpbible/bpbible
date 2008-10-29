@@ -204,9 +204,8 @@ class AutoCompleteTextBox(object):#(wx.TextCtrl):
 			ratio = (float(self.list.GetItemCount()) /
 					float(self.list.GetCountPerPage()))
 			
-			self.list.Size = (-1, int(self.list.Size[1]*ratio))
+			self.list.Size = (-1, int(self.list.BestSize[1]*ratio))
 			self.popup.Size=(self.list.width,self.list.Size[-1])
-		
 			self.popup.Show()
 
 		sel = 0 #self.list.GetCount()

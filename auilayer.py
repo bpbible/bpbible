@@ -363,7 +363,8 @@ class AuiLayer(object):
 		return default_items
 	
 	def set_aui_items_up(self):
-		self.ToolBar = None#self.main_toolbar
+		if not guiconfig.use_one_toolbar:
+			self.ToolBar = None#self.main_toolbar
 	
 		items = [
 			[self.version_tree, "Books",],
@@ -399,7 +400,8 @@ class AuiLayer(object):
 		if config_manager["BPBible"]["layout"] is not None:
 			layout = config_manager["BPBible"]["layout"]
 			self.create_items(self.get_aui_items(), use_startups=False)
-			self.create_toolbars(self.toolbars)
+			if not guiconfig.use_one_toolbar:
+				self.create_toolbars(self.toolbars)
 			
 			self.load_aui_perspective(layout["perspective"])
 			maximized = layout["maximized"]
@@ -749,5 +751,5 @@ class AuiLayer(object):
 			
 	
 		self.create_items(self.get_aui_items())
-		self.create_toolbars(default_toolbars)		
+		if not guiconfig.use_one_toolbar: self.create_toolbars(default_toolbars)		
 	

@@ -33,8 +33,8 @@
         <object class="wxMenu" name="menu_toolbars">
           <label>Toolbars</label>
         </object>
-        <object class="separator"/>
-        <label>&amp;Window</label>
+        
+        <label>&amp;Windows</label>
       </object>
       <object class="wxMenu" name="gui_debug_menu">
         <label>Debug</label>
