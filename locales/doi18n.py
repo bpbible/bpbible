@@ -22,7 +22,7 @@ for item in python_i18n_paths:
 		python_i18n_path = tools_path + "/i18n"
 		break
 else:
-	raise SystemExit("Couldn't find path to Tools directory")
+	raise Exception("Couldn't find path to Tools directory")
 
 def convert_slashes(text):
 	return re.sub(r"#: (\.[\\/].*)", 
@@ -153,7 +153,7 @@ def main(args):
 	elif "diff" in args:
 		diff()
 	else:
-		raise SystemExit("Try one of gather, confirm, diff or compile")
+		raise Exception("Try one of gather, confirm, diff or compile")
 
 if __name__ == '__main__':
 	main(sys.argv[1:])
