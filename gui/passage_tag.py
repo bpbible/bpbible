@@ -99,6 +99,7 @@ class PassageTag(wx.PyWindow):
 	def _create_bitmap(self):
 		dc = wx.MemoryDC()
 		dc.SetFont(self.Font)
+		dc.SelectObject(wx.EmptyBitmap(1, 1))
 
 		text_width, text_height = dc.GetTextExtent(self._tag_text)
 
