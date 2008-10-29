@@ -215,8 +215,8 @@ class FontChoiceDialog(xrcFontChoiceDialog):
 	def ShowModal(self):
 		old_fonts = (
 			font_settings["default_fonts"], 
-			font_settings["language_fonts"],
-			font_settings["module_fonts"],
+			font_settings["language_fonts"].copy(),
+			font_settings["module_fonts"].copy(),
 		)
 
 		ansa = super(FontChoiceDialog, self).ShowModal()
