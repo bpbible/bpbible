@@ -67,7 +67,8 @@ class TreeItem(object):
 		return TreeItem(self.text, self.data)
 
 	def null_item(self):
-		return TreeItem("No items")	
+		# shouldn't be seen, so no i18n needed
+		return TreeItem("No items")
 
 def model_from_list(items):
 	root = TreeItem("<Hidden root>")
@@ -91,12 +92,6 @@ class SearchCtrl(wx.SearchCtrl):
 		super(SearchCtrl, self).__init__(parent, style=wx.WANTS_CHARS)
 		self.bind_source = self.find_bind_source()
 		self.bind_source.Bind(wx.EVT_KEY_DOWN, self.on_key_down)
-		style = self.WindowStyle
-		
-		if style & wx.SIMPLE_BORDER:
-			style ^= wx.SIMPLE_BORDER
-			self.WindowStyle = style
-		
 
 	def find_bind_source(self):
 		for item in self.Children:
@@ -153,7 +148,7 @@ class FilterableTree(wx.PyPanel):
 
 		sizer = wx.BoxSizer(wx.VERTICAL)
 
-		sizer.Add(self.search, 0, wx.GROW)
+		sizer.Add(self.search, 0, wx.GROW|wx.BOTTOM, 3)
 		sizer.Add(self.tree, 1, wx.GROW)
 		
 		self.SetSizer(sizer)
