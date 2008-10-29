@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2008-10-29 12:23+AUS Eastern Daylight Time\n"
+"POT-Creation-Date: 2008-10-29 13:54+AUS Eastern Daylight Time\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -14,11 +14,11 @@ msgstr ""
 "Content-Transfer-Encoding: utf-8\n"
 "Generated-By: pygettext.py 1.5\n"
 
-#: auilayer.py:297
+#: auilayer.py:301
 msgid "Books"
 msgstr "The books tab"
 
-#: auilayer.py:337
+#: auilayer.py:341
 msgid "History"
 msgstr "The history tab"
 
@@ -243,6 +243,58 @@ msgstr "Reading in the gospel comparator"
 msgid "%s is not in this harmony"
 msgstr "Arg. %s be not in here"
 
+#: install_manager/install_drop_target.py:33
+#: install_manager/install_drop_target.py:56 templatemanager.py:434
+#: templatemanager.py:445
+msgid "Error"
+msgstr "ERROR"
+
+#: install_manager/install_drop_target.py:38
+msgid ""
+"An error occurred while trying to read books. Please report this issue:\n"
+" 1. Press Ctrl-C to copy the error text\n"
+" 2. In the BPBible menu, select Help > Report a problem.\n"
+" 3. In the website that opens, click New Issue, and fill in the details\n"
+"The error given was:"
+msgstr "Oh no. It went wrong."
+"Please report this issue:\n"
+" 1. Press Ctrl-C to copy the error text\n"
+" 2. In the BPBible menu, select Help > Report a problem.\n"
+" 3. In the website that opens, click New Issue, and fill in the details\n"
+"The error given was:"
+
+#: install_manager/install_drop_target.py:45
+msgid "Error reading books"
+msgstr "Error while investigating book contents"
+
+#: install_manager/install_drop_target.py:51
+msgid "The following files do not appear to be installable books:"
+msgstr "Don't appear these files be proper books:"
+
+#: install_manager/install_drop_target.py:53
+msgid "The following file does not appear to be an installable book:"
+msgstr "Don't appear this file be a proper book:"
+
+#: install_manager/install_drop_target.py:68
+msgid ""
+"An error occurred while installing modules.\n"
+"Please make sure that the directory exists, and that you have permission to "
+"write to the directory.\n"
+"The error given was:"
+msgstr ""
+"The errors be occurring...\n"
+"Please ensure that the directory exists, and that you have permission to "
+"write to the directory.\n"
+"The error given was:"
+
+#: install_manager/install_drop_target.py:81
+msgid "Extracting %s"
+msgstr "Pulling %s out"
+
+#: install_manager/install_drop_target.py:82 search/searchpanel.py:862
+msgid "Preparing"
+msgstr "Starting..."
+
 #: install_manager/install_module.py:34
 msgid "Are you sure you want to install this book?"
 msgstr "Put this book in your library"
@@ -262,6 +314,10 @@ msgstr "Which directory?"
 #: install_manager/install_module.py:89
 msgid "Information"
 msgstr "Open the metadata..."
+
+#: install_manager/zipinstaller.py:39
+msgid "Cannot read book metadata in file %s"
+msgstr ""
 
 #: mainframe.py:229
 msgid "Back"
@@ -657,10 +713,6 @@ msgstr "Chewing over %s"
 msgid "Indexing %s"
 msgstr "%s: Indexing"
 
-#: search/searchpanel.py:862
-msgid "Preparing"
-msgstr "Starting..."
-
 #: search/searchpanel.py:890
 msgid "Writing %s"
 msgstr "Dumping %s"
@@ -703,10 +755,6 @@ msgstr "Fatal Error 1302: reference was empty or not supplied"
 #: templatemanager.py:433
 msgid "Template '%s' is read only. Try a different name."
 msgstr "The template '%s' is immutable. Try a different name"
-
-#: templatemanager.py:434 templatemanager.py:445
-msgid "Error"
-msgstr "ERROR"
 
 #: templatemanager.py:438
 msgid "Template '%s' already exists. Overwrite?"
@@ -978,7 +1026,7 @@ msgstr "Eliminate this item"
 
 #: xrc/search_xrc.py:135
 msgid "&Find:"
-msgstr "&Hunt:"
+msgstr "&Hunt for:"
 
 #: xrc/search_xrc.py:136
 msgid "Words to search for"
@@ -1054,7 +1102,7 @@ msgstr "Custom hunting area"
 
 #: xrc/search_xrc.py:160
 msgid "Search Range"
-msgstr "Pick area to hunting in"
+msgstr "Pick area to hunt in"
 
 #: xrc/templatemanager_xrc.py:96
 msgid "Template Manager"

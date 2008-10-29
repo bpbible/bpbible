@@ -30,29 +30,30 @@ class ModuleDropTarget(wx.FileDropTarget):
 				bad_files.append(filename)
 
 			except zipinstaller.BadMetadata, e:
-				wx.MessageBox(e, "Error")
+				wx.MessageBox(e, _("Error"))
 				return
 			
 			except Exception, e:
 				wx.MessageBox(
-					("An error occurred while trying to read books. "
+					_("An error occurred while trying to read books. "
 					"Please report this issue:\n"
 					" 1. Press Ctrl-C to copy the error text\n"
 					" 2. In the BPBible menu, select Help > Report a problem.\n"
 					" 3. In the website that opens, click New Issue, and fill"
 					" in the details\n"
-					"The error given was:\n%s") % traceback.format_exc(), 
-					"Error reading books")
+					"The error given was:")  + "\n" + traceback.format_exc(), 
+					_("Error reading books"))
 				return
 				
 		
 		if bad_files:
 			if len(bad_files) > 1:
-				message = 'The following files do not appear to be installable books:\n'
+				message = _('The following files do not appear to be installable books:')
 			else:
-				message = 'The following file does not appear to be an installable book:\n'
+				message = _('The following file does not appear to be an installable book:')
+			message += "\n"
 			message += "\n".join(bad_files)
-			wx.MessageBox(message, "Error")
+			wx.MessageBox(message, _("Error"))
 
 		else:
 			try:
@@ -64,10 +65,10 @@ class ModuleDropTarget(wx.FileDropTarget):
 				dlg.Destroy()
 			except Exception, e:
 				wx.MessageBox(
-					("An error occurred while installing modules.\n"
+					_("An error occurred while installing modules.\n"
 					"Please make sure that the directory exists, and that you "
 					"have permission to write to the directory.\n"
-					"The error given was:\n%s") % traceback.format_exc(), 
+					"The error given was:") + "\n" + traceback.format_exc(), 
 					"Error installing modules")
 				
 	def install_modules(self, modules, dest_dir):
@@ -77,8 +78,8 @@ class ModuleDropTarget(wx.FileDropTarget):
 	
 		for module in modules:
 			p = wx.ProgressDialog(
-				"Extracting %s" % to_unicode(module.Description(), module),
-				"Preparing", style=wx.PD_APP_MODAL)
+				_("Extracting %s") % to_unicode(module.Description(), module),
+				_("Preparing"), style=wx.PD_APP_MODAL)
 
 			# make it nice and long so that the status text will fit in
 			p.Size = (640, -1)

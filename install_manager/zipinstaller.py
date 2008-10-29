@@ -35,8 +35,8 @@ class ZipInstaller(object):
 		sections = config_parser.sections()
 	
 		if not sections:
-			raise BadMetadata("Cannot read book metadata in file %s" %
-				self.zip_file)
+			raise BadMetadata(
+				_("Cannot read book metadata in file %s") % self.zip_file)
 		
 		if len(sections) > 1:
 			dprint(WARNING, 

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2008-10-29 12:23+AUS Eastern Daylight Time\n"
+"POT-Creation-Date: 2008-10-29 13:54+AUS Eastern Daylight Time\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,11 +15,11 @@ msgstr ""
 "Generated-By: pygettext.py 1.5\n"
 
 
-#: auilayer.py:297
+#: auilayer.py:301
 msgid "Books"
 msgstr ""
 
-#: auilayer.py:337
+#: auilayer.py:341
 msgid "History"
 msgstr ""
 
@@ -239,6 +239,48 @@ msgstr ""
 msgid "%s is not in this harmony"
 msgstr ""
 
+#: install_manager/install_drop_target.py:33
+#: install_manager/install_drop_target.py:56 templatemanager.py:434
+#: templatemanager.py:445
+msgid "Error"
+msgstr ""
+
+#: install_manager/install_drop_target.py:38
+msgid ""
+"An error occurred while trying to read books. Please report this issue:\n"
+" 1. Press Ctrl-C to copy the error text\n"
+" 2. In the BPBible menu, select Help > Report a problem.\n"
+" 3. In the website that opens, click New Issue, and fill in the details\n"
+"The error given was:"
+msgstr ""
+
+#: install_manager/install_drop_target.py:45
+msgid "Error reading books"
+msgstr ""
+
+#: install_manager/install_drop_target.py:51
+msgid "The following files do not appear to be installable books:"
+msgstr ""
+
+#: install_manager/install_drop_target.py:53
+msgid "The following file does not appear to be an installable book:"
+msgstr ""
+
+#: install_manager/install_drop_target.py:68
+msgid ""
+"An error occurred while installing modules.\n"
+"Please make sure that the directory exists, and that you have permission to write to the directory.\n"
+"The error given was:"
+msgstr ""
+
+#: install_manager/install_drop_target.py:81
+msgid "Extracting %s"
+msgstr ""
+
+#: install_manager/install_drop_target.py:82 search/searchpanel.py:862
+msgid "Preparing"
+msgstr ""
+
 #: install_manager/install_module.py:34
 msgid "Are you sure you want to install this book?"
 msgstr ""
@@ -257,6 +299,10 @@ msgstr ""
 
 #: install_manager/install_module.py:89
 msgid "Information"
+msgstr ""
+
+#: install_manager/zipinstaller.py:39
+msgid "Cannot read book metadata in file %s"
 msgstr ""
 
 #: mainframe.py:229
@@ -637,10 +683,6 @@ msgstr ""
 msgid "Indexing %s"
 msgstr ""
 
-#: search/searchpanel.py:862
-msgid "Preparing"
-msgstr ""
-
 #: search/searchpanel.py:890
 msgid "Writing %s"
 msgstr ""
@@ -679,10 +721,6 @@ msgstr ""
 
 #: templatemanager.py:433
 msgid "Template '%s' is read only. Try a different name."
-msgstr ""
-
-#: templatemanager.py:434 templatemanager.py:445
-msgid "Error"
 msgstr ""
 
 #: templatemanager.py:438
