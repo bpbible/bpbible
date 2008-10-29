@@ -156,3 +156,148 @@ def handle(signal, sender, command, source, more, **kwargs):
 
 # install our fixer
 fix_underscore_in_builtin()
+
+class PopupWindow(wx.MiniFrame):
+	def __init__(self, parent, style=wx.NO_BORDER|wx.FRAME_FLOAT_ON_PARENT):
+		super(PopupWindow, self).__init__(parent, style=style)
+#
+#	def Dismiss(self):
+#		print "Dismissing"
+#		if self.child.HasCapture():
+#			self.child.ReleaseMouse()
+#		self.child.Unbind(wx.EVT_LEFT_DOWN)
+#		self.child.Unbind(wx.EVT_KILL_FOCUS)
+#		self.Unbind(wx.EVT_IDLE)
+#		self.Hide()
+#		#self.old_focus.SetFocus()
+
+
+class PopupTransientWindow(PopupWindow):
+	def Position(self, ptOrigin, size):
+		size = wx.Point(*size)
+		ptOrigin = wx.Point(*ptOrigin)
+		sizeScreen = wx.GetDisplaySize()
+		sizeSelf = self.Size
+		
+		# is there enough space to put the popup below the window (where we put it
+		# by default)?
+		y = ptOrigin.y + size.y
+		if ( y + sizeSelf.y > sizeScreen.y ):
+		    # check if there is enough space above
+		    if ( ptOrigin.y > sizeSelf.y ):
+		        # do position the control above the window
+		        y -= size.y + sizeSelf.y;
+		    #else: not enough space below nor above, leave below
+		
+		# now check left/right too
+		x = ptOrigin.x;
+		        
+		if ( wx.GetApp().GetLayoutDirection() == wx.Layout_RightToLeft ):
+		    # shift the window to the left instead of the right.
+		    x -= size.x;
+		    x -= sizeSelf.x;        # also shift it by window width.
+		else:
+		    x += size.x;
+		
+		
+		if ( x + sizeSelf.x > sizeScreen.x ):
+		    # check if there is enough space to the left
+		    if ( ptOrigin.x > sizeSelf.x ):
+		        # do position the control to the left
+		        x -= size.x + sizeSelf.x;
+		    #else: not enough space there neither, leave in default position
+		
+		#BM: do we need this flag below? it isn't defined
+		self.Move((x, y))#, wx.SIZE_NO_ADJUSTMENTS); 
+
+	#	print "positioning at", pos1, pos2
+	#	self.SetPosition(pos1)
+	
+	def Popup(self):
+		self.old_focus = wx.Window.FindFocus()
+		print "Showing"
+		self.child = self.Children[0]
+		self.child.Bind(wx.EVT_KILL_FOCUS, self.OnKillFocus)
+		self.child.Bind(wx.EVT_LEFT_DOWN, self.OnLeftDown)
+
+		self.Bind(wx.EVT_IDLE, self.OnIdle)
+
+		self.child.CaptureMouse()
+		self.Show()
+	
+	def OnIdle(self, event):
+		event.Skip()
+		if self.IsShown():
+			pos = self.child.ScreenToClient(wx.GetMousePosition())
+			rect = wx.RectS(self.child.Size)
+			if rect.Contains(pos):
+				if self.child.HasCapture():	
+					print "Releasing"
+					self.child.ReleaseMouse()
+			else:
+				if not self.child.HasCapture():
+					print "Capturing"
+					self.child.CaptureMouse()
+		
+	def OnKillFocus(self, event):
+		event.GetWindow()
+		while win:
+			if win == self:
+				return
+			win = win.Parent
+		self.Dismiss()
+
+	def Dismiss(self):
+		print "Dismissing"
+		if self.child.HasCapture():
+			self.child.ReleaseMouse()
+		self.child.Unbind(wx.EVT_LEFT_DOWN)
+		self.child.Unbind(wx.EVT_KILL_FOCUS)
+		self.Unbind(wx.EVT_IDLE)
+		self.Hide()
+		#self.old_focus.SetFocus()
+
+	def OnLeftDown(self, event):
+		print "Left down"
+		if self.ProcessLeftDown(event):
+			return
+		
+		win = event.GetEventObject()
+		if win.Rect.Contains(event.Position):
+			event.Skip()
+		else:
+			# do the coords translation now as after DismissAndNotify()
+			# m_popup may be destroyed
+			event2 = wx.MouseEvent()
+			event2.__dict__ = event.__dict__.copy()
+			                                                                
+			event2.m_x, event2.m_y = self.ClientToScreen((event2.m_x, event2.m_y))
+			                                                                
+			# clicking outside a popup dismisses it
+			self.Dismiss()
+			                                                                
+			# dismissing a tooltip shouldn't waste a click, i.e. you
+			# should be able to dismiss it and press the button with the
+			# same click, so repost this event to the window beneath us
+			winUnder = wx.FindWindowAtPoint(event2.GetPosition())
+			if ( winUnder ):
+			    # translate the event coords to the ones of the window
+			    # which is going to get the event
+			    event2.m_x, event2.m_y = winUnder.ScreenToClient((event2.m_x, event2.m_y))
+			                                                                
+			    event2.SetEventObject(winUnder);
+			    wx.PostEvent(winUnder, event2);
+	
+	def ProcessLeftDown(self, event):
+		self.Dismiss()	
+		return False
+
+
+if osutils.is_mac():
+	# mac doesn't implement these
+	wx.PopupTransientWindow = PopupTransientWindow
+	wx.PopupWindow = PopupWindow
+
+	hasNativePopupWindows = False
+else:
+	hasNativePopupWindows = True
