@@ -148,9 +148,13 @@ class FilterableTree(wx.PyPanel):
 
 		sizer = wx.BoxSizer(wx.VERTICAL)
 
-		sizer.Add(self.search, 0, wx.GROW|wx.BOTTOM, 3)
-		sizer.Add(self.tree, 1, wx.GROW)
-		
+		if osutils.is_mac():
+			sizer.Add(self.search, 0, wx.GROW|wx.ALL, 3)
+			sizer.Add(self.tree, 1, wx.GROW|wx.TOP, 6)
+		else:
+			sizer.Add(self.search, 0, wx.GROW|wx.BOTTOM, 3)
+			sizer.Add(self.tree, 1, wx.GROW)
+
 		self.SetSizer(sizer)
 		self.expansion_state = None
 		self.bind_events()
