@@ -217,9 +217,13 @@ class DockArt(wx.aui.PyAuiDockArt):
 
 		# clipping doesn't seem to be done here. So draw all or nothing
 		if clipping_rect and clipping_rect.ContainsRect(drop_arrow_rect):
+			fg_old = window.ForegroundColour
+			window.ForegroundColour = dc.GetTextForeground()
+		
 			wx.RendererNative.Get().DrawDropArrow(
 				window, dc, drop_arrow_rect, 0
 			)
+			window.ForegroundColour = fg_old
 	
 
 mouse_over = {}
