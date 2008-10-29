@@ -140,16 +140,20 @@ def diff():
 import util.i18n
 languages = [language for language in util.i18n.languages]
 #["en", "ne", "abc", "es"]
-if __name__ == '__main__':
-	if "gather" in sys.argv:
-		gather("force" in sys.argv)
 
-	elif "confirm" in sys.argv:
+def main(args):
+	if "gather" in args:
+		gather("force" in args)
+
+	elif "confirm" in args:
 		confirm()
 
-	elif "compile" in sys.argv:
+	elif "compile" in args:
 		compile()
-	elif "diff" in sys.argv:
+	elif "diff" in args:
 		diff()
 	else:
 		raise SystemExit("Try one of gather, confirm, diff or compile")
+
+if __name__ == '__main__':
+	main(sys.argv[1:])

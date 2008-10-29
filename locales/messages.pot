@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2008-10-28 23:48+AUS Eastern Daylight Time\n"
+"POT-Creation-Date: 2008-10-29 12:23+AUS Eastern Daylight Time\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,7 +27,7 @@ msgstr ""
 msgid "commentary"
 msgstr ""
 
-#: backend/book.py:484 bibleframe.py:34 xrc/auifrm_xrc.py:59
+#: backend/book.py:484 bibleframe.py:34 xrc/auifrm_xrc.py:65
 msgid "Bible"
 msgstr ""
 
@@ -107,7 +107,7 @@ msgstr ""
 msgid "Search in Bible for:"
 msgstr ""
 
-#: bookframe.py:151 mainframe.py:731
+#: bookframe.py:151 mainframe.py:752
 msgid "Show the %s pane"
 msgstr ""
 
@@ -335,71 +335,71 @@ msgstr ""
 msgid "History toolbar"
 msgstr ""
 
-#: mainframe.py:677 xrc/auifrm_xrc.py:43
+#: mainframe.py:698 xrc/auifrm_xrc.py:43
 msgid "&Language"
 msgstr ""
 
-#: mainframe.py:696 xrc/auifrm_xrc.py:46
+#: mainframe.py:717 xrc/auifrm_xrc.py:46
 msgid "&Display"
 msgstr ""
 
-#: mainframe.py:701 xrc/auifrm_xrc.py:49
+#: mainframe.py:722 xrc/auifrm_xrc.py:49
 msgid "&Window"
 msgstr ""
 
-#: mainframe.py:705 xrc/auifrm_xrc.py:48
+#: mainframe.py:726 xrc/auifrm_xrc.py:48
 msgid "Toolbars"
 msgstr ""
 
-#: mainframe.py:727
+#: mainframe.py:748
 msgid "Show the %s toolbar"
 msgstr ""
 
-#: mainframe.py:750 xrc/auifrm_xrc.py:50
+#: mainframe.py:771 xrc/auifrm_xrc.py:50
 msgid "Debug"
 msgstr ""
 
-#: mainframe.py:808
+#: mainframe.py:829
 msgid "Use Strong's headwords"
 msgstr ""
 
-#: mainframe.py:809
+#: mainframe.py:830
 msgid "Display Strong's numbers using the transliterated text"
 msgstr ""
 
-#: mainframe.py:814
+#: mainframe.py:835
 msgid "Expand cross-references"
 msgstr ""
 
-#: mainframe.py:815
+#: mainframe.py:836
 msgid "Display cross references partially expanded"
 msgstr ""
 
-#: mainframe.py:820
+#: mainframe.py:841
 msgid "One line per verse"
 msgstr ""
 
-#: mainframe.py:821
+#: mainframe.py:842
 msgid "Display each verse on its own line."
 msgstr ""
 
-#: mainframe.py:826
+#: mainframe.py:847
 msgid "Topic Tags"
 msgstr ""
 
-#: mainframe.py:827
+#: mainframe.py:848
 msgid "Display the topics that each verse is tagged with."
 msgstr ""
 
-#: mainframe.py:975
+#: mainframe.py:996
 msgid "An error occurred on closing:"
 msgstr ""
 
-#: mainframe.py:987 mainframe.py:988
+#: mainframe.py:1008 mainframe.py:1009
 msgid "search "
 msgstr ""
 
-#: mainframe.py:1008
+#: mainframe.py:1029
 msgid ""
 "Flexible Bible study software.\n"
 "\t\t\tBuilt Using the Sword Project from crosswire.org\n"
@@ -407,23 +407,23 @@ msgid ""
 "\t\t\twxPython Version: %(wxversion)s"
 msgstr ""
 
-#: mainframe.py:1014
+#: mainframe.py:1035
 msgid "BPBible"
 msgstr ""
 
-#: mainframe.py:1018
+#: mainframe.py:1039
 msgid "BPBible website"
 msgstr ""
 
-#: mainframe.py:1019
+#: mainframe.py:1040
 msgid "Ben Morgan"
 msgstr ""
 
-#: mainframe.py:1019
+#: mainframe.py:1040
 msgid "SWORD library developers"
 msgstr ""
 
-#: mainframe.py:1020
+#: mainframe.py:1041
 msgid ""
 "Icons used are from famfamfam\n"
 "http://www.famfamfam.com/lab/icons/silk\n"
@@ -431,7 +431,7 @@ msgid ""
 "http://tango.freedesktop.org/Tango_Desktop_Project"
 msgstr ""
 
-#: mainframe.py:1025
+#: mainframe.py:1046
 msgid "BPBible is licensed under the GPL v2. For more details, refer to the LICENSE.txt file in the application directory"
 msgstr ""
 
@@ -677,6 +677,26 @@ msgstr ""
 msgid "Invalid empty reference"
 msgstr ""
 
+#: templatemanager.py:433
+msgid "Template '%s' is read only. Try a different name."
+msgstr ""
+
+#: templatemanager.py:434 templatemanager.py:445
+msgid "Error"
+msgstr ""
+
+#: templatemanager.py:438
+msgid "Template '%s' already exists. Overwrite?"
+msgstr ""
+
+#: templatemanager.py:439
+msgid "Overwrite?"
+msgstr ""
+
+#: templatemanager.py:444
+msgid "Template name is already in use. Try a different name."
+msgstr ""
+
 #: tooltip.py:173
 msgid "Tooltip"
 msgstr ""
@@ -790,26 +810,50 @@ msgid "WI"
 msgstr ""
 
 #: xrc/auifrm_xrc.py:53
-msgid "&Help"
+msgid "gather"
 msgstr ""
 
 #: xrc/auifrm_xrc.py:54
-msgid "BPBible Website"
+msgid "diff"
 msgstr ""
 
 #: xrc/auifrm_xrc.py:55
-msgid "Documentation..."
+msgid "confirm"
 msgstr ""
 
 #: xrc/auifrm_xrc.py:56
-msgid "Report a problem..."
+msgid "compile"
 msgstr ""
 
 #: xrc/auifrm_xrc.py:57
-msgid "Download books..."
+msgid "Restart"
 msgstr ""
 
 #: xrc/auifrm_xrc.py:58
+msgid "Locale"
+msgstr ""
+
+#: xrc/auifrm_xrc.py:59
+msgid "&Help"
+msgstr ""
+
+#: xrc/auifrm_xrc.py:60
+msgid "BPBible Website"
+msgstr ""
+
+#: xrc/auifrm_xrc.py:61
+msgid "Documentation..."
+msgstr ""
+
+#: xrc/auifrm_xrc.py:62
+msgid "Report a problem..."
+msgstr ""
+
+#: xrc/auifrm_xrc.py:63
+msgid "Download books..."
+msgstr ""
+
+#: xrc/auifrm_xrc.py:64
 msgid "&About..."
 msgstr ""
 

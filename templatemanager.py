@@ -16,9 +16,6 @@ import cPickle as pickle
 
 from util.debug import *
 
-READONLY_MESSAGE = "Template '%s' is read only. Try a different name."
-OVERWRITE_MESSAGE = "Template '%s' already exists. Overwrite?"
-TEMPLATE_EXISTS = "Template name is already in use. Try a different name."
 PREVIEW_VERSES = "Genesis 1:1-2"
 default_templates = [
 	Template(name="Default", 
@@ -139,7 +136,8 @@ class AutoCompleteTextBox(object):#(wx.TextCtrl):
 		self.SetItems(items.copy())
 	
 	def KillFocus(self, event):
-		self.DismissPopup()
+		if wx.Window.FindFocus() not in (self.list, self.popup, self.textbox):
+			self.DismissPopup()
 		event.Skip()
 
 	
@@ -164,8 +162,7 @@ class AutoCompleteTextBox(object):#(wx.TextCtrl):
 
 		point = self.textbox.PointFromPosition(self.textbox.GetCurrentPos())
 		point = self.textbox.ClientToScreen(point)		
-		if wx.Platform == '__WXMSW__':
-		
+		if wx.Platform == '__WXMSW__' and guiutil.hasNativePopupWindows:
 			point = guiconfig.mainfrm.ScreenToClient(point)
 
 		linetext, column = self.textbox.GetCurLine()
@@ -433,15 +430,19 @@ class TemplateManager(xrcTemplateManager):
 				name = te.GetValue()
 				if overwrite and self.template_exists(name):
 					if self.get_template(name).readonly:
-						wx.MessageBox(READONLY_MESSAGE % name, "Error", 
+						wx.MessageBox(_("Template '%s' is read only. Try a "
+						"different name.") % name, _("Error"), 
 							wx.OK|wx.ICON_ERROR)
 					else:
-						ansa = wx.MessageBox(OVERWRITE_MESSAGE % name,
-						"Overwrite?" , wx.YES_NO|wx.ICON_QUESTION)
+						ansa = wx.MessageBox(
+						_("Template '%s' already exists. Overwrite?") % name,
+						_("Overwrite?") , wx.YES_NO|wx.ICON_QUESTION)
 						if ansa == wx.YES:
 							return name
 				elif self.template_exists(name, template):
-					wx.MessageBox(TEMPLATE_EXISTS, "Error", wx.OK|wx.ICON_ERROR)		
+					wx.MessageBox(
+					_("Template name is already in use. Try a different name."),
+					_("Error"), wx.OK|wx.ICON_ERROR)		
 												
 				else: 
 					return name

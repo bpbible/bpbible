@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2008-10-28 23:48+AUS Eastern Daylight Time\n"
+"POT-Creation-Date: 2008-10-29 12:23+AUS Eastern Daylight Time\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,7 +26,7 @@ msgstr "The history tab"
 msgid "commentary"
 msgstr "Other man's words"
 
-#: backend/book.py:484 bibleframe.py:34 xrc/auifrm_xrc.py:59
+#: backend/book.py:484 bibleframe.py:34 xrc/auifrm_xrc.py:65
 msgid "Bible"
 msgstr "God's word"
 
@@ -40,7 +40,7 @@ msgstr "Parallel passage viewer"
 
 #: bibleframe.py:77
 msgid "Open the harmony"
-msgstr "Open th"
+msgstr "Open the parallel passage viewer"
 
 #: bibleframe.py:80 xrc/guess_verse_xrc.py:67
 msgid "Guess the Verse"
@@ -106,7 +106,7 @@ msgstr "Zapping 'em into the clipboard"
 msgid "Search in Bible for:"
 msgstr "Run your eyes over the page for this word"
 
-#: bookframe.py:151 mainframe.py:731
+#: bookframe.py:151 mainframe.py:752
 msgid "Show the %s pane"
 msgstr "%s pane: show"
 
@@ -339,71 +339,71 @@ msgstr "A toolbar to Zoom"
 msgid "History toolbar"
 msgstr "A toolbar with history"
 
-#: mainframe.py:677 xrc/auifrm_xrc.py:43
+#: mainframe.py:698 xrc/auifrm_xrc.py:43
 msgid "&Language"
 msgstr "&Lingo"
 
-#: mainframe.py:696 xrc/auifrm_xrc.py:46
+#: mainframe.py:717 xrc/auifrm_xrc.py:46
 msgid "&Display"
 msgstr "Toggle them options"
 
-#: mainframe.py:701 xrc/auifrm_xrc.py:49
+#: mainframe.py:722 xrc/auifrm_xrc.py:49
 msgid "&Window"
 msgstr "This be a list of windows"
 
-#: mainframe.py:705 xrc/auifrm_xrc.py:48
+#: mainframe.py:726 xrc/auifrm_xrc.py:48
 msgid "Toolbars"
 msgstr "These be the floating strips"
 
-#: mainframe.py:727
+#: mainframe.py:748
 msgid "Show the %s toolbar"
 msgstr "%s toolbar: show"
 
-#: mainframe.py:750 xrc/auifrm_xrc.py:50
+#: mainframe.py:771 xrc/auifrm_xrc.py:50
 msgid "Debug"
 msgstr "For the experts"
 
-#: mainframe.py:808
+#: mainframe.py:829
 msgid "Use Strong's headwords"
 msgstr "Show a word, not a number"
 
-#: mainframe.py:809
+#: mainframe.py:830
 msgid "Display Strong's numbers using the transliterated text"
 msgstr "Show a word for the strong's text, not the number"
 
-#: mainframe.py:814
+#: mainframe.py:835
 msgid "Expand cross-references"
 msgstr "Grow cross-references"
 
-#: mainframe.py:815
+#: mainframe.py:836
 msgid "Display cross references partially expanded"
 msgstr "Show cross-references expanded to the 2nd level"
 
-#: mainframe.py:820
+#: mainframe.py:841
 msgid "One line per verse"
 msgstr "Each verse by itself"
 
-#: mainframe.py:821
+#: mainframe.py:842
 msgid "Display each verse on its own line."
 msgstr "Put each verse on its own lonesome line"
 
-#: mainframe.py:826
+#: mainframe.py:847
 msgid "Topic Tags"
 msgstr ""
 
-#: mainframe.py:827
+#: mainframe.py:848
 msgid "Display the topics that each verse is tagged with."
 msgstr ""
 
-#: mainframe.py:975
+#: mainframe.py:996
 msgid "An error occurred on closing:"
 msgstr "This problem be occuring on conclusion:"
 
-#: mainframe.py:987 mainframe.py:988
+#: mainframe.py:1008 mainframe.py:1009
 msgid "search "
 msgstr ""
 
-#: mainframe.py:1008
+#: mainframe.py:1029
 msgid ""
 "Flexible Bible study software.\n"
 "\t\t\tBuilt Using the Sword Project from crosswire.org\n"
@@ -415,23 +415,23 @@ msgstr ""
 "\t\t\tPython Version be %(sysversion)s\n"
 "\t\t\twxPython Version be %(wxversion)s"
 
-#: mainframe.py:1014
+#: mainframe.py:1035
 msgid "BPBible"
 msgstr "BP - God's word"
 
-#: mainframe.py:1018
+#: mainframe.py:1039
 msgid "BPBible website"
 msgstr "Vist the website for this application"
 
-#: mainframe.py:1019
+#: mainframe.py:1040
 msgid "Ben Morgan"
 msgstr "Me"
 
-#: mainframe.py:1019
+#: mainframe.py:1040
 msgid "SWORD library developers"
 msgstr "SWORD devels"
 
-#: mainframe.py:1020
+#: mainframe.py:1041
 msgid ""
 "Icons used are from famfamfam\n"
 "http://www.famfamfam.com/lab/icons/silk\n"
@@ -443,7 +443,7 @@ msgstr ""
 "and the Tango Desktop Project\n"
 "http://tango.freedesktop.org/Tango_Desktop_Project for the use of their icons"
 
-#: mainframe.py:1025
+#: mainframe.py:1046
 msgid ""
 "BPBible is licensed under the GPL v2. For more details, refer to the LICENSE."
 "txt file in the application directory"
@@ -700,6 +700,26 @@ msgstr "WRONG: %s"
 msgid "Invalid empty reference"
 msgstr "Fatal Error 1302: reference was empty or not supplied"
 
+#: templatemanager.py:433
+msgid "Template '%s' is read only. Try a different name."
+msgstr "The template '%s' is immutable. Try a different name"
+
+#: templatemanager.py:434 templatemanager.py:445
+msgid "Error"
+msgstr "ERROR"
+
+#: templatemanager.py:438
+msgid "Template '%s' already exists. Overwrite?"
+msgstr "Template:'%s' already exists. Trample on top of it?"
+
+#: templatemanager.py:439
+msgid "Overwrite?"
+msgstr "Trample?"
+
+#: templatemanager.py:444
+msgid "Template name is already in use. Try a different name."
+msgstr "This template name is already there. Try a different name."
+
 #: tooltip.py:173
 msgid "Tooltip"
 msgstr "TipTool"
@@ -813,26 +833,50 @@ msgid "WI"
 msgstr "Show me the widget inspector"
 
 #: xrc/auifrm_xrc.py:53
+msgid "gather"
+msgstr "Gather the text that be here"
+
+#: xrc/auifrm_xrc.py:54
+msgid "diff"
+msgstr "Diff with the text that was there"
+
+#: xrc/auifrm_xrc.py:55
+msgid "confirm"
+msgstr "Overwrite with the new text"
+
+#: xrc/auifrm_xrc.py:56
+msgid "compile"
+msgstr "Crunch it into the correct form"
+
+#: xrc/auifrm_xrc.py:57
+msgid "Restart"
+msgstr "Restart the application"
+
+#: xrc/auifrm_xrc.py:58
+msgid "Locale"
+msgstr "Fiddle with languages"
+
+#: xrc/auifrm_xrc.py:59
 msgid "&Help"
 msgstr "&Arrghh"
 
-#: xrc/auifrm_xrc.py:54
+#: xrc/auifrm_xrc.py:60
 msgid "BPBible Website"
 msgstr "Vist the website for this application"
 
-#: xrc/auifrm_xrc.py:55
+#: xrc/auifrm_xrc.py:61
 msgid "Documentation..."
 msgstr "How things work..."
 
-#: xrc/auifrm_xrc.py:56
+#: xrc/auifrm_xrc.py:62
 msgid "Report a problem..."
 msgstr "Say what be wrong in here..."
 
-#: xrc/auifrm_xrc.py:57
+#: xrc/auifrm_xrc.py:63
 msgid "Download books..."
 msgstr "Get more reading material"
 
-#: xrc/auifrm_xrc.py:58
+#: xrc/auifrm_xrc.py:64
 msgid "&About..."
 msgstr "&Read all about these there scurvy knaves"
 

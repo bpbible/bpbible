@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <resource version="2.3.0.1">
-  
-  
-  
   <object class="wxFrame" name="MainFrame" subclass="mainframe.MainFrameXRC">
     <object class="wxMenuBar" name="frame_1_menubar">
       <object class="wxMenu" name="file">
@@ -47,6 +44,25 @@
         <object class="wxMenuItem" name="gui_widget_inspector">
           <label>WI</label>
           <accel>F6</accel>
+        </object>
+        <object class="wxMenu" name="gui_locale_menu">
+          <object class="wxMenuItem" name="gui_locale_gather">
+            <label>gather</label>
+          </object>
+          <object class="wxMenuItem" name="gui_locale_diff">
+            <label>diff</label>
+          </object>
+          <object class="wxMenuItem" name="gui_locale_confirm">
+            <label>confirm</label>
+          </object>
+          <object class="wxMenuItem" name="gui_locale_compile">
+            <label>compile</label>
+          </object>
+          <object class="separator"/>
+          <object class="wxMenuItem" name="gui_locale_restart">
+            <label>Restart</label>
+          </object>
+          <label>Locale</label>
         </object>
       </object>
       <object class="wxMenu" name="help">

@@ -514,9 +514,17 @@ class MainFrame(wx.Frame, AuiLayer):
 		
 		self.Bind(wx.EVT_MENU, self.on_widget_inspector, 
 			id=xrc.XRCID('gui_widget_inspector'))
-			
-						
-			
+		
+		self.locales_menu_lookup = {}
+		for item in "gather diff compile confirm".split():
+			id = xrc.XRCID('gui_locale_%s' % item)
+			self.Bind(wx.EVT_MENU, self.on_locale_menu, 
+				id=id)
+
+			self.locales_menu_lookup[id] = item
+
+		self.Bind(wx.EVT_MENU, self.on_locale_restart, 
+			id=xrc.XRCID('gui_locale_restart'))
 		
 		self.Bind(wx.EVT_MENU, id = wx.ID_EXIT, handler = self.ExitClick)
 		self.Bind(wx.EVT_MENU, id = wx.ID_ABOUT, handler = self.AboutClick)
@@ -604,6 +612,19 @@ class MainFrame(wx.Frame, AuiLayer):
 	def show_history(self):
 		self.show_panel("History")
 		
+	def on_locale_menu(self, event):
+		from locales.doi18n import main
+		text = self.locales_menu_lookup[event.Id]
+		
+		main([text])
+
+	def on_locale_restart(self, event):
+		import gettext
+
+		# kill gettext's cache
+		gettext._translations.clear()
+
+		self.restart()
 		
 	#def history_moved(self, history_item):
 	#	self.set_bible_ref(history_item.ref, source=HISTORY)
