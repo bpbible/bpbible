@@ -33,7 +33,6 @@
                         <object class="sizeritem">
                           <object class="wxCheckBox" name="gui_use_default_font">
                             <label>Use default font</label>
-                            <hidden>1</hidden>
                           </object>
                           <flag>wxRIGHT</flag>
                           <border>6</border>
@@ -102,14 +101,6 @@
                         <object class="sizeritem">
                           <object class="wxStaticText">
                             <label>Preview:</label>
-                            <font>
-                              <size>10</size>
-                              <style>normal</style>
-                              <weight>normal</weight>
-                              <underlined>0</underlined>
-                              <family>swiss</family>
-                              <face>Arial</face>
-                            </font>
                           </object>
                         </object>
                         <object class="sizeritem">
