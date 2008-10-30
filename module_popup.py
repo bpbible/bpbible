@@ -70,9 +70,10 @@ class ModulePopup(wx.PopupTransientWindow):
 		# depending on available screen space...
 		btn = event.EventObject
 		
-		pos = btn.ClientToScreen(rect.BottomLeft) + (0, 1)
 		self.SetSize(panel.GetSize())# - (0, size_combo)
-		self.Position(pos, (0, 0))#win.Size[1]))
+		pos = btn.ClientToScreen(rect.TopRight)
+		self.Position(pos, (-rect.Width, rect.Height))
+		
 		self.on_dismiss = ObserverList()
 
 	def ProcessLeftDown(self, evt):

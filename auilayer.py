@@ -517,7 +517,21 @@ class AuiLayer(object):
 		keytext = frame.reference
 		if not isinstance(keytext, basestring):
 			keytext = keytext.text
-		p = ModulePopup(self, event, rect, frame.book, keytext)
+
+		# find the intersection of the clipping rect and the actual rect
+		# this will be the actual rectangle the user can see.
+		r = wx.RectPP(
+			(
+				max(rect[0], clipping_rect[0]),
+				max(rect[1], clipping_rect[1]),
+			),
+			(
+				min(rect.Right, clipping_rect.Right),
+				min(rect.Bottom, clipping_rect.Bottom),
+			)
+		)
+			
+		p = ModulePopup(self, event, r, frame.book, keytext)
 
 		# use the main frame to grab the mouse wheel events, as wxPopupWindow
 		# cannot have focus, nor any of its children
@@ -528,7 +542,9 @@ class AuiLayer(object):
 			self.Bind(wx.EVT_MOUSEWHEEL, p.box.on_mouse_wheel)
 		
 		def on_dismiss(chosen):
-			if not rect.Contains(self.ScreenToClient(wx.GetMousePosition())):
+			if not r.Contains(
+				self.ScreenToClient(wx.GetMousePosition())
+			):
 				self.clear_over_list()
 			
 			if chosen is not None:
