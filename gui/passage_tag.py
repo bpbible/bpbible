@@ -7,6 +7,15 @@ from passage_list import lookup_passage_list
 from tooltip import TooltipConfig
 
 TAG_COLOUR = (255, 0, 0)
+_rgbSelectOuter = wx.Colour(170, 200, 245)
+_rgbSelectInner = wx.Colour(230, 250, 250)
+_rgbSelectTop = wx.Colour(210, 240, 250)
+_rgbSelectBottom = wx.Colour(185, 215, 250)
+_rgbNoFocusTop = wx.Colour(250, 250, 250)
+_rgbNoFocusBottom = wx.Colour(235, 235, 235)
+_rgbNoFocusOuter = wx.Colour(220, 220, 220)
+_rgbNoFocusInner = wx.Colour(245, 245, 245)
+
 
 def on_passage_tag_hover(frame, href, url, x, y):
 	passage_list = _get_passage_list_from_href(href)
@@ -112,11 +121,12 @@ class PassageTag(wx.PyWindow):
 		dc.Clear()
 
 		# set up the dc
-		dc.Background = wx.WHITE_BRUSH
-		dc.Pen = wx.BLACK_PEN
-		dc.Brush = wx.Brush(TAG_COLOUR)
+		#dc.Background = wx.WHITE_BRUSH
+		#dc.Pen = wx.BLACK_PEN
+		#dc.Brush = wx.Brush(TAG_COLOUR)
 
-		dc.DrawRoundedRectangle(0, 0, width, height, 5)
+		#dc.DrawRoundedRectangle(0, 0, width, height, 5)
+		self.DrawVistaRectangle(dc, wx.Rect(0, 0, width, height), True)
 		dc.DrawText(self._tag_text, self.border, self.border)
 		
 		# assign the resultant bitmap
@@ -124,6 +134,64 @@ class PassageTag(wx.PyWindow):
 		self.bmp = bmp
 		
 		self.SetSize((width, height))
+
+	# taken from wx.lib.customtreectrl
+	def DrawVistaRectangle(self, dc, rect, hasfocus):
+		"""Draw the selected item(s) with the Windows Vista style."""
+
+		if hasfocus:
+			
+			outer = _rgbSelectOuter
+			inner = _rgbSelectInner
+			top = _rgbSelectTop
+			bottom = _rgbSelectBottom
+
+		else:
+			
+			outer = _rgbNoFocusOuter
+			inner = _rgbNoFocusInner
+			top = _rgbNoFocusTop
+			bottom = _rgbNoFocusBottom
+
+		oldpen = dc.GetPen()
+		oldbrush = dc.GetBrush()
+
+		bdrRect = wx.Rect(*rect.Get())
+		filRect = wx.Rect(*rect.Get())
+		filRect.Deflate(1,1)
+		
+		r1, g1, b1 = int(top.Red()), int(top.Green()), int(top.Blue())
+		r2, g2, b2 = int(bottom.Red()), int(bottom.Green()), int(bottom.Blue())
+
+		flrect = float(filRect.height)
+		if flrect < 1:
+			flrect = self._lineHeight
+
+		rstep = float((r2 - r1)) / flrect
+		gstep = float((g2 - g1)) / flrect
+		bstep = float((b2 - b1)) / flrect
+
+		rf, gf, bf = 0, 0, 0
+		dc.SetPen(wx.TRANSPARENT_PEN)
+		
+		for y in xrange(filRect.y, filRect.y + filRect.height):
+			currCol = (r1 + rf, g1 + gf, b1 + bf)
+			dc.SetBrush(wx.Brush(currCol, wx.SOLID))
+			dc.DrawRectangle(filRect.x, y, filRect.width, 1)
+			rf = rf + rstep
+			gf = gf + gstep
+			bf = bf + bstep
+		
+		dc.SetBrush(wx.TRANSPARENT_BRUSH)
+		dc.SetPen(wx.Pen(outer))
+		dc.DrawRoundedRectangleRect(bdrRect, 3)
+		bdrRect.Deflate(1, 1)
+		dc.SetPen(wx.Pen(inner))
+		dc.DrawRoundedRectangleRect(bdrRect, 2)
+
+		dc.SetPen(oldpen)
+		dc.SetBrush(oldbrush)
+		
 
 	def on_paint(self, event):
 		wx.BufferedPaintDC(self, self.bmp)
