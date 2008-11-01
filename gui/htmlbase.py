@@ -133,7 +133,8 @@ def get_level(container):
 		
 class LineGroupTagHandler(TagHandler):
 	tags = "INDENT-BLOCK-START,INDENT-BLOCK-END"
-	# TODO 2Ki 19:27 ESV - space before...
+	# TEST CASE for if we change to using tables: 
+	# Hebrews 3:10 is in the middle of poetic text, but not to the side...
 	
 	# sanity check - don't dedent more than we indented
 	# keep the level we are at for the current document
@@ -158,6 +159,13 @@ class LineGroupTagHandler(TagHandler):
 
 			container.SetIndent(indent * parser.GetCharWidth(), 
 				html.HTML_INDENT_LEFT)
+		
+			if tag.HasParam("source") and tag.GetParam("source") == "lg":
+				container.SetIndent(0.5* parser.GetCharHeight(), 
+					html.HTML_INDENT_TOP)
+				container.SetIndent(0.5*parser.GetCharHeight(), 
+					html.HTML_INDENT_BOTTOM)
+				
 		
 			parser.OpenContainer()
 			parser.OpenContainer()
