@@ -12,7 +12,7 @@ class HtmlIde(xrcHtmlIde):
 		self.html_window.SetPage(self.html_src.Value)
 
 if __name__ == '__main__':
-	a = wx.App()
+	a = wx.App(0)
 	f = HtmlIde(None)
 	f.Show()
 	a.MainLoop()
