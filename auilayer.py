@@ -615,6 +615,11 @@ class AuiLayer(object):
 	
 	@guiutil.frozen
 	def load_default_perspective(self, event):
+		maximized = self.get_maximized_pane()
+		if maximized:
+			self.restore_maximized_pane(maximized)
+		
+		
 		for item in self.aui_mgr.AllPanes:
 			self.aui_mgr.DetachPane(item.window)
 		
