@@ -63,7 +63,7 @@ class SmartBody(object):
 		re.IGNORECASE
 	)
 	
-	empty_versenumber = re.compile("<small><sup></sup></small></glink>\s?")
+	empty_versenumber = re.compile("<glink href=[^>]+><small><sup></sup></small></glink>\s?")
 	
 	def __init__(self, body, verse_per_line=True):
 		self.body = body
