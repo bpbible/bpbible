@@ -131,6 +131,74 @@ def get_level(container):
 	
 	return level
 		
+class IndentAreaTagHandler(TagHandler):
+	tags = "INDENT-AREA-START,INDENT-AREA-END"
+	def HandleTag2(self, tag):
+		parser = self.GetParser()
+
+		if tag.GetName() == "INDENT-AREA-START":
+			print "opening"
+			container = parser.OpenContainer()
+			
+			container.SetIndent(0.5* parser.GetCharHeight(), 
+				html.HTML_INDENT_TOP)
+				
+			container.SetIndent(0.5*parser.GetCharHeight(), 
+				html.HTML_INDENT_BOTTOM)
+					
+			
+			parser.OpenContainer()
+			parser.OpenContainer()
+		else:
+			print "Closing"
+			parser.CloseContainer()
+			parser.CloseContainer()
+			parser.CloseContainer()
+			
+		return False
+
+class HighlightTagHandler(TagHandler):
+	tags = "HIGHLIGHT-START,HIGHLIGHT-END"
+	# TEST CASE for if we change to using tables: 
+	# Hebrews 3:10 is in the middle of poetic text, but not to the side...
+	
+	# sanity check - don't dedent more than we indented
+	# keep the level we are at for the current document
+	
+	### don't try loading more than one file at once with this tag handler...	
+	indent_level = 0
+
+
+	@classmethod
+	def clear(cls):
+		cls.indent_level = 0
+
+	def HandleTag2(self, tag):
+		parser = self.GetParser()
+
+		if tag.GetName() == "HIGHLIGHT-START":
+			self.oldclr = parser.GetActualColor()
+			assert tag.HasParam("COLOUR"), "No colour for highlight"
+			colour = tag.GetParam("COLOUR")
+
+			parser.SetActualColor(colour)
+			parser.GetContainer().InsertCell(html.HtmlColourCell(colour))
+			
+			parser.GetContainer().InsertCell(
+				html.HtmlFontCell(parser.CreateCurrentFont())
+			)
+
+		else:
+			parser.SetActualColor(self.oldclr)
+			parser.GetContainer().InsertCell(html.HtmlColourCell(self.oldclr))
+			parser.GetContainer().InsertCell(
+				html.HtmlFontCell(parser.CreateCurrentFont())
+			)
+			
+		
+			
+		return False
+
 class LineGroupTagHandler(TagHandler):
 	tags = "INDENT-BLOCK-START,INDENT-BLOCK-END"
 	# TEST CASE for if we change to using tables: 
@@ -266,9 +334,11 @@ class PassageTagHandler(TagHandler):
 tag_handlers = [
 	GLinkTagHandler,
 	HighlightedTagHandler,
+	HighlightTagHandler,
 	CheckTagHandler,
 	PassageTagHandler,
 	LineGroupTagHandler,
+	IndentAreaTagHandler,
 	FontAreaTagHandler
 ]
 for item in tag_handlers:
@@ -377,6 +447,81 @@ class HtmlBase(wx.html.HtmlWindow):
 			wx.CallAfter(finish)
 		
 		
+	def convert_lgs(self, text):
+		blocks = []
+		#def extractor(text):
+		#	t = '<block id="%d">' % len(blocks)
+		#	blocks.append(text.group(1))
+		#	return t
+
+		parts = []
+		for item in re.finditer(
+			r'<indent-block-(start|end) source="lg"( width="5")? />', text
+		):
+			parts.append((item.group(1), item.span()))
+
+		if not parts:
+			return text
+		
+		if parts[0][0] == "end":
+			parts.insert(0, ("start", (0, 0)))
+		
+		if parts[-1][0] == "start":
+			parts.append(("end", (len(text), len(text))))
+
+		if len(parts) % 2 != 0:
+			dprint(ERROR, "Num of parts is odd!!", parts)
+			return text
+
+		blocks = [[False, text[:parts[0][1][0]]]]
+		for a in range(len(parts)/2):
+			f_type, (f_start, f_end) = parts[2*a]
+			e_type, (e_start, e_end) = parts[2*a+1]
+			if f_type != "start" or e_type != "end":
+				dprint(ERROR, "Start or end in wrong spot!!!", parts)
+				return text
+
+			
+			blocks.append([True, text[f_end:e_start]])
+			if a == len(parts)/2 - 1:
+				next_end = len(text)
+			else:
+				next_end = parts[2*a+2][1][0]
+
+			blocks.append([False, text[e_end:next_end]])
+		
+		#start = 
+		#end = '(.*?)(<indent-block-end source="lg" />)'
+		#
+
+		#s = re.compile(start + end[:-1] + "|$)", re.S)
+		#s2 = re.compile(end, re.S)
+		#
+		#text, num = s.subn(
+		#	extractor,
+		#	text
+		#)
+
+		#text = s2.sub(
+		#	extractor,
+		#	text
+		#)
+
+		for block in blocks:
+			if not block[0]:
+				continue
+
+			block[1] = """<indent-area-start /><table cellspacing=0 cellpadding=0 width=100%%><tr><td width=60px></td><td>%s</td></tr></table><indent-area-end />""" % (
+			re.sub(
+				r'(^|<(indent-block-end|/h6|br|/p)((>)|(/>)|( [^>]*>)))\s*((<indent-block-start source="l"[^>]+>)?\s*)(<glink href="nbible:[^"]*"><small><sup>\d*</sup></small></glink>)',
+		r"\1</td></tr><tr><td valign=top align=center width=60px>\9</td><td>\7",
+		block[1]
+			)
+			)
+		
+		return re.sub("<br /></td>", "</td>", 
+			u''.join(text for is_lg, text in blocks))
+		
 	def set_page(self, text, raw=False, text_colour=None, body_colour=None):
 		"""Set the page with the given text and colour. 
 		
@@ -388,6 +533,7 @@ class HtmlBase(wx.html.HtmlWindow):
 
 		# remove all &#1243;'s which will stop our language recognition
 		text = string_util.amps_to_unicode(text, replace_specials=False)
+		text = self.convert_lgs(text)
 
 		import fontchoice
 		# put greek and hebrew in their fonts

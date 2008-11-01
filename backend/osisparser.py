@@ -193,7 +193,7 @@ class OSISParser(filterutils.ParserBase):
 			indent = 2
 			if attributes["type"] == "x-declares":
 				indent = 5
-			self.buf += '<indent-block-start width="%s"/>' % indent
+			self.buf += '<indent-block-start source="l" width="%s"/>' % indent
 		else:
 			self.success = SW.INHERITED
 

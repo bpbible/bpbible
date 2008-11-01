@@ -125,9 +125,9 @@ dictionary_template = VerseTemplate(
 )
 
 
-body = (u"<glink href='nbible:$reference#current'>"
-		u"<small><sup>$versenumber</sup></small></glink> "
-		u"<font color = 'green'>$text</font> $tags")
+body = (u'<glink href="nbible:$reference#current">'
+		u'<small><sup>$versenumber</sup></small></glink> '
+		u'<highlight-start colour="#008000">$text<highlight-end /> $tags')
 
 current_verse_template = SmartVerseTemplate(body)
 
