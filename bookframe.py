@@ -91,9 +91,7 @@ class BookFrame(DisplayFrame):
 			wx.WXK_F5: self.chapter_back,
 			(wx.WXK_F5, wx.MOD_CMD): self.restore_pane,
 			(wx.WXK_F10, wx.MOD_CMD): self.maximize_pane,
-			
-
-			
+			ord("S"): self.search_quickly,
 		})
 
 		if self.use_quickselector:
@@ -193,6 +191,20 @@ class BookFrame(DisplayFrame):
 		search_panel = self.get_search_panel_for_frame()
 		assert search_panel, "Search panel not found for %s" % self
 		search_panel.show()
+
+	def search_quickly(self):
+		qs = QuickSelector(self.get_window(), 
+			title=_("Search for:"))
+
+		qs.pseudo_modal(self.search_quickly_finished)
+	
+	def search_quickly_finished(self, qs, ansa):
+		if ansa == wx.OK:
+			search_panel = self.get_search_panel_for_frame()
+			assert search_panel, "Search panel not found for %s" % self
+			search_panel.search_and_show(qs.text)
+
+		qs.Destroy()
 			
 	def has_module(self):
 		return self.book.mod is not None
@@ -226,7 +238,7 @@ class BookFrame(DisplayFrame):
 			title=_("Go to reference"))
 
 		qs.pseudo_modal(self.go_quickly_finished)
-	
+
 	def open_tooltip(self, ref):
 		tooltip = BiblicalPermanentTooltip(guiconfig.mainfrm, ref=ref)
 

@@ -221,12 +221,6 @@ class BibleFrame(VerseKeyedFrame):
 	def notify(self, reference, source=BIBLEFRAME):
 		#event = BibleEvent(ref=reference, source=source)
 		self.observers(reference, source)
-
-	def search_quickly(self):
-		qs = QuickSelector(self.get_window(), 
-			title=_("Search in Bible for:"))
-
-		qs.pseudo_modal(self.search_quickly_finished)
  
 	def manage_topics(self):
 		from manage_topics_frame import ManageTopicsFrame
@@ -236,12 +230,6 @@ class BibleFrame(VerseKeyedFrame):
 	def tag_verses(self):
 		from tag_passage_dialog import tag_passage
 		tag_passage(self, self.get_quick_selected())
-	
-	def search_quickly_finished(self, qs, ansa):
-		if ansa == wx.OK:
-			guiconfig.mainfrm.search_panel.search_and_show(qs.text)
-
-		qs.Destroy()
 	
 	@guiutil.frozen
 	def SetReference(self, ref, context=None, raw=None):
