@@ -233,10 +233,16 @@ class PassageListManager(_BasePassageList):
 		
 		Returns the topic that was found.
 		"""
-		current_topic = self
-		for index in path:
-			current_topic = current_topic.subtopics[index]
-		return current_topic
+		try:
+			current_topic = self
+			for index in path:
+				current_topic = current_topic.subtopics[index]
+			return current_topic
+		except IndexError:
+			# If the path no longer exists, then return the manager.
+			# This means that the last selected topic will be the top-level
+			# manager, equivalent to if there was no last selected topic.
+			return self
 
 	def get_path(self):
 		return []
