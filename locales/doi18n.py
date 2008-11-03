@@ -3,6 +3,11 @@ import sys
 import shutil
 import re
 
+def system(path):
+	err = os.system(path)
+	if err:
+		raise Exception("Running %r gave return error %s" % (path, err))
+
 python_i18n_paths = [
 	"~/Python-2.5.2",
 	r"\Python25",
@@ -42,8 +47,8 @@ def gather(force=False):
 	old_text = open("locales/messages.pot").read()
 	old_text = re.sub('"POT-Creation-Date: .*"', "", old_text)
 	
-	error = os.system('python %s/pygettext.py -o messages.pot.new -p locales/ -k N_ `find . -name "*.py"`' % python_i18n_path)
-	assert not error, error
+	system('python %s/pygettext.py -o messages.pot.new -p locales/ -k N_ `find . -name "*.py"`' % python_i18n_path)
+
 	new_text = open("locales/messages.pot.new").read()
 	# ignore certain strings. Would use -x on pygettext.py, but it doesn't
 	# work!
@@ -91,11 +96,9 @@ msgstr ""
 
 
 
-		err = os.system(
+		err = system(
 			"msgmerge -D locales/ %s.po messages.pot -o locales/%s.po.new" % (				item, item
 		))
-
-		assert not err, err
 		
 		check("locales/%s.po.new" % item)
 		
@@ -105,8 +108,7 @@ def compile():
 		check("locales/%s.po" % item)
 		if not os.path.isdir("locales/%s/LC_MESSAGES" % item):
 			os.makedirs("locales/%s/LC_MESSAGES" % item)
-		err = os.system("python %s/msgfmt.py -o locales/%s/LC_MESSAGES/messages.mo locales/%s.po" % (python_i18n_path, item, item))
-		assert not err, err
+		err = system("python %s/msgfmt.py -o locales/%s/LC_MESSAGES/messages.mo locales/%s.po" % (python_i18n_path, item, item))
 
 def confirm():
 	for item in languages:
@@ -134,8 +136,7 @@ def diff():
 	for item in languages:
 		if os.path.exists("locales/%s.po.new" % item):
 			print "Language:", item
-			err = os.system("python %s/Scripts/diff.py -u locales/%s.po locales/%s.po.new" % (tools_path, item, item))
-			assert not err, err
+			err = system("python %s/Scripts/diff.py -u locales/%s.po locales/%s.po.new" % (tools_path, item, item))
 
 import util.i18n
 languages = [language for language in util.i18n.languages]
