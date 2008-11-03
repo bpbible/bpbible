@@ -95,22 +95,6 @@ ModDrv=RawLD
 """, 
 		all_entries
 	),
-	dictionary_stress_test=(
-		"modules/%(modulename)s",
-		"/%(modulename)s",
-		SW.RawLD4,
-		SW.Key,
-		"""\
-[%(modulename)s]
-DataPath=./modules/%(modulename)s/%(modulename)s
-Description=A stress test with 100,000 entries
-SourceType=Plaintext
-Encoding=%(sword_encoding)s
-ModDrv=RawLD4
-""", 
-		stress_test
-	),
-	
 	bible=(
 		"modules/%(modulename)s",
 		"",
@@ -128,6 +112,28 @@ ModDrv=RawText
 	),
 	
 )
+
+import sys
+
+do_stresstest = "stresstest" in sys.argv
+if do_stresstest:
+	items["dictionary_stress_test"]=(
+		"modules/%(modulename)s",
+		"/%(modulename)s",
+		SW.RawLD4,
+		SW.Key,
+		"""\
+[%(modulename)s]
+DataPath=./modules/%(modulename)s/%(modulename)s
+Description=A stress test with 100,000 entries
+SourceType=Plaintext
+Encoding=%(sword_encoding)s
+ModDrv=RawLD4
+""", 
+		stress_test
+	)
+	
+
 
 if not os.path.exists("mods.d"):
 	os.mkdir("mods.d")
@@ -161,7 +167,8 @@ for item, (mod_dir, mod_extra, driver, key_type, conf, entries) in items.items()
 			os.makedirs(module_dir)
 
 		print module_dir + module_extra		
-		assert driver.createModule(module_dir + module_extra) == '\x00', \
+		result = driver.createModule(module_dir + module_extra) 
+		assert result == '\x00', \
 			"Failed creating module"
 
 		

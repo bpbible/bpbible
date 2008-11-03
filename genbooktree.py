@@ -126,7 +126,8 @@ class GenBookTree(LazyTreeCombo):
 						tk.previousSibling()
 					
 					# now try in the children
-					assert tk.firstChild(), \
+					result = tk.firstChild()
+					assert result, \
 						"Couldn't get child even though should have a child"
 
 					if tree_item != tree.RootItem: 

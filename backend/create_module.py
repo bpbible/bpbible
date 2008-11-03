@@ -31,7 +31,8 @@ class ModuleCreator(object):
 			os.makedirs(module_dir)
 			
 
-		assert driver.createModule(path) == '\x00', \
+		result = driver.createModule(path)
+		assert result == '\x00', \
 			"Failed creating module"
 		
 
