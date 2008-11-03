@@ -1,6 +1,7 @@
 """Utility functions."""
 import sys
 import time
+import cProfile
 
 def noop(*args, **kwargs):
 	"""Do nothing."""
@@ -16,9 +17,20 @@ def timeit(f, *args, **kwargs):
 		for a in xrange(times):
 			last_result = f(*args, **kwargs)
 
+		return last_result
+
 	finally:
 		print "%s took %f time" % (f.__name__, time.time() - t)
-		return last_result
+
+def profile(callable, *args, **kwargs):
+	prof = cProfile.Profile()
+	sort = kwargs.pop("sort", -1)
+
+	result = None
+	try:
+		return prof.runcall(callable, *args, **kwargs)
+	finally:
+		prof.print_stats(sort)
 
 	
 class classproperty(object):
