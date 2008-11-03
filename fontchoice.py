@@ -5,6 +5,7 @@ from util.unicode import to_str, to_unicode
 from backend.bibleinterface import biblemgr
 from xrc.fontchoice_xrc import *
 import guiconfig
+import config
 from gui import htmlbase
 from util.configmgr import config_manager
 from module_tree import LanguageModuleTree
@@ -189,6 +190,10 @@ class FontChoiceDialog(xrcFontChoiceDialog):
 		#self.preview.font 
 		# self.preview.SetStandardFonts(self.font_size.Value, 
 		#	self.font_face.StringSelection, "")
+		if self.mod is None:
+			self.preview.SetPage(config.MODULE_MISSING_STRING)
+			return
+
 		try:
 			books = [biblemgr.bible, biblemgr.commentary, 
 				biblemgr.dictionary, biblemgr.genbook]
