@@ -43,7 +43,7 @@ class MyApp(wx.App):
 		#frame.SetIcon(icon_bundle.GetIcon((32,32)))
 
 		self.SetTopWindow(frame)
-		frame.Show(False)
+		frame.Show(osutils.is_gtk())
 		if was_restarted:
 			frame.Raise()
 		
@@ -54,16 +54,22 @@ class MyApp(wx.App):
 			wx.Image(config.graphics_path + picture)
 		)
 		
-		#from splashscreen import SplashScreen
-		self.splash = wx.SplashScreen(
-			self.bitmap, 
-			wx.SPLASH_CENTRE_ON_SCREEN|wx.SPLASH_NO_TIMEOUT,
-			0,
-			None,
-			style=wx.FRAME_NO_TASKBAR|wx.BORDER_NONE
-		)
-		self.splash.Show()
-		self.splash.Raise()
+		# the splashscreen isn't working under GTK (inhibits application
+		# startup)
+		if osutils.is_gtk():
+			self.splash = None
+		
+		else:
+			from splashscreen import SplashScreen
+			self.splash = wx.SplashScreen(
+				self.bitmap, 
+				wx.SPLASH_CENTRE_ON_SCREEN|wx.SPLASH_NO_TIMEOUT,
+				0,
+				None,
+				style=wx.FRAME_NO_TASKBAR|wx.BORDER_NONE
+			)
+			self.splash.Show()
+			self.splash.Raise()
 		
 		self.starting = True
 		self.restarting = False
