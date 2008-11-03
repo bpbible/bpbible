@@ -327,7 +327,7 @@ class Index(object):
 				for field in all_fields:
 					if key == field.field_name:
 						strongs[idx].append(
-							(key, field.prepare(value))
+							(field.field_to_use, field.prepare(value))
 						)
 						break
 				else:
@@ -429,7 +429,7 @@ class DictionaryIndex(GenBookIndex):
 			entry_size = 200
 			for a in range(0, len(topics), entry_size):
 				continuing = progress((topics[a], 
-							99*a/len(topics)))
+							95*a/len(topics)))
 
 				
 				self.books.append(self.booktype(self.version, 
@@ -440,6 +440,7 @@ class DictionaryIndex(GenBookIndex):
 					
 
 			if self.booktype.gatherstatistics:
+				progress(("Processing index"), 99)
 				self.GatherStatistics()
 				
 		finally:

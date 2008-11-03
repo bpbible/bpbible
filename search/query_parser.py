@@ -40,6 +40,12 @@ Fields can have dashes and colons in (unlike usual words)
 >>> query.get_field_values()
 ('ref', 'Gen3:15-Gen3:19')
 
+They can also have spaces in if they have quotes around them:
+>>> query = parse('ref:"Genesis 3:15 - Genesis 3:19"')
+>>> query.get_field_values()
+('ref', 'Genesis 3:15 - Genesis 3:19')
+
+
 Groups provide alternatives:
 >>> print_regexes('(LORD, GOD) good')
 (\bLORD\b|\bGOD\b)
@@ -293,6 +299,11 @@ class Inclusion(GroupOfObjects): pass
 
 cross_verse = True
 
+class WordsWithDashWords(GroupOfObjects): 
+	def to_regex(self):
+		return " ".join(self.item_to_regex(item) for item in self.items)
+
+
 class Words(GroupOfObjects): 
 	def to_regex(self):
 		delimiter = r"\s"
@@ -507,7 +518,8 @@ def p_query_part(p):
 #	p[0] = Query(p[1])
 
 def p_field(p):
-	'''field : word FIELD word-with-dash'''
+	'''field : word FIELD word-with-dash
+			 | word FIELD phrase-with-dash'''
 	p[0] = Field(p[1], p[3])
 
 def p_word_with_dash_dash(p):
@@ -519,6 +531,12 @@ def p_word_with_dash_dash(p):
 def p_word_with_dash(p):
 	'''word-with-dash : word'''
 	p[0] = p[1]
+
+def p_word_with_dash_as_dash(p):
+	'''word-with-dash : MINUS
+					  | FIELD'''
+	p[0] = p[1]
+	
 	
 
 def p_word_and_item(p):
@@ -558,6 +576,10 @@ def p_phrase(p):
 	'''phrase : QUOTE words QUOTE'''
 	p[0] = p[2]
 
+def p_phrase_width_dash(p):
+	'''phrase-with-dash : QUOTE words-with-dash QUOTE'''
+	p[0] = (p[2])
+
 def p_words(p):
 	'''words : words separators word'''
 	p[0] = p[1] + p[3]
@@ -572,6 +594,22 @@ def p_words_leading_junk(p):
 
 def p_words_trailing_junk(p):
 	'''words : words separators'''
+	p[0] = p[1]	
+
+def p_words_with_dash(p):
+	'''words-with-dash : words-with-dash separators word-with-dash'''
+	p[0] = p[1] + p[3]
+
+def p_words_with_dash_as_word(p):
+	'''words-with-dash : word-with-dash'''
+	p[0] = WordsWithDashWords(p[1])
+
+def p_words_with_dash_leading_junk(p):
+	'''words-with-dash : separators words-with-dash'''
+	p[0] = p[2]
+
+def p_words_with_dash_trailing_junk(p):
+	'''words-with-dash : words-with-dash separators'''
 	p[0] = p[1]	
 
 def p_wildcard(p):

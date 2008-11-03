@@ -1,6 +1,8 @@
 import process_text
+import query_parser
 from swlib.pysw import SW, VerseList
 import re
+from util import classproperty
 
 class BaseField(object):
 	field_name = None
@@ -19,6 +21,10 @@ class BaseField(object):
 	@classmethod
 	def prepare(cls, input):
 		return input
+	
+	@classproperty
+	def field_to_use(cls):
+		return cls.field_name
 
 class StrongsField(BaseField):
 	field_name = "strongs"
@@ -40,7 +46,45 @@ class StrongsField(BaseField):
 
 		return "%s%04d%s" % (prefix, int(number), extra)
 	
+	def finalize(self):
+		return super(StrongsField, self).finalize().replace(
+			process_text.ParseOSIS.FIELD_SEPARATOR.decode("utf-8"),
+			":"
+		).replace(
+			process_text.ParseOSIS.DASH.decode("utf-8"),
+			"-"
+		)
+		
 
+	
+class MorphField(BaseField):
+	field_to_use = "strongs"
+	field_name = "morph"
+
+	@classmethod
+	def prepare(cls, input):
+		# if we are given a key
+		# e.g. morph:robinson:VP-NA,
+		# then use it verbatim
+		# Otherwise, just put a : before to ensure that it is a morph term
+		if ":" in input:
+			key, value = input.split(":", 1)
+		else:
+			key = ""
+			value = input
+		
+
+		#value = query_parser.expand_wildcards(value)
+
+		# NOTE: we work here on the remarkably naive assumption that we don't
+		# need to check that there is no morphology key which ends in this
+		# morphology key. Otherwise, we would have to put a \b at the start,
+		# which takes ~8 times longer.
+		# If this ever becomes important, we can add a special start character
+		# before morphs and use that instead of \b
+		ret = r"%s:%s\b" % (key, value)
+		return ret
+			
 class RefField(BaseField):
 	field_name = "ref"
 	
@@ -130,4 +174,4 @@ class KeyField(BaseField):
 #.replace(
 #		)
 	
-all_fields = RefField, KeyField, StrongsField, 
+all_fields = RefField, KeyField, StrongsField, MorphField 

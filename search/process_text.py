@@ -155,6 +155,8 @@ class ParseOSIS(ParseBase):
 	strongs_off = False
 
 	FIELD_SEPARATOR = u"\uFDD1".encode("utf-8")
+	DASH = u"\uFDD2".encode("utf-8")
+	
 	strongs_cache = {"": []}
 	morph_cache = {"": []}
 	MORPH_MAPPING = {
@@ -210,7 +212,7 @@ class ParseOSIS(ParseBase):
 					continue
 
 				m_items.append("%s%s%s" % (self.MORPH_MAPPING[type], 
-					self.FIELD_SEPARATOR, item))
+					self.FIELD_SEPARATOR, item.replace("-", self.DASH)))
 
 			self.morph_cache[m] = m_items
 
@@ -242,7 +244,7 @@ class ParseOSIS(ParseBase):
 		mapping["w"] = handle_w
 	
 def init_fields():
-	start_cnt = cnt = ord(u'\uFDD2')
+	start_cnt = cnt = ord(u'\uFDD3')
 	for field in fields.all_fields:
 		chr = unichr(cnt)
 		assert chr != '\uFDEF', "Hit top of range"
