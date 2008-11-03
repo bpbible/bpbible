@@ -321,7 +321,7 @@ class DisplayFrame(HtmlSelectableWindow):
 					context=context)
 
 				data = '<hr>'.join(
-					self.process_html_for_module(module, ref)
+					process_html_for_module(module, ref)
 					for ref in refs
 				)
 
