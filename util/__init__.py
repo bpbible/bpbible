@@ -38,7 +38,7 @@ class classproperty(object):
 		self._data = data
 
 	def __get__(self, obj, objtype):
-		return self._data(obj)
+		return self._data(objtype)
 	
 class overridableproperty(object):
 	"""

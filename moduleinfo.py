@@ -7,11 +7,11 @@ from util.unicode import get_module_encoding
 from util import languages
 from util.i18n import N_
 from gui.htmlbase import html_settings
+import gui.fonts
 
 def get_html_height(module, text):
-	import fontchoice
 
-	default, (font, size, in_gui) = fontchoice.get_module_font_params(module)
+	default, (font, size, in_gui) = gui.fonts.get_module_font_params(module)
 	dc = wx.MemoryDC()
 	bmp = wx.EmptyBitmap(1, 1)
 	dc.SelectObject(bmp)

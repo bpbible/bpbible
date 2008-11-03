@@ -10,21 +10,41 @@ import config
 
 
 
+from swlib.pysw import GetBestRange
 from backend.bibleinterface import biblemgr
 from backend.verse_template import VerseTemplate
 from util import osutils
 from tooltip import Tooltip, tooltip_settings
 from gui import htmlbase
 from gui.menu import MenuItem, Separator
-from gui.htmlbase import HtmlSelectableWindow
+from gui.htmlbase import HtmlSelectableWindow, convert_language, convert_lgs
 from gui import guiutil
 from util.debug import dprint, WARNING, TOOLTIP
 from protocols import protocol_handler
 from events import LINK_CLICKED
 
+from gui import fonts
+
 IN_POPUP = 1
 IN_MENU = 2
 IN_BOTH = IN_POPUP | IN_MENU
+
+def process_html_for_module(module, text):
+	# process lgs individually for each block.
+	# this stops lgs flowing on to the next block
+	text = convert_lgs(text)
+
+	language_code, (font, size, gui) = \
+		fonts.get_font_params(module)
+
+	text = convert_language(text, language_code)
+		
+	# now put it in the right font				
+	text = '<fontarea basefont="%s" basesize="%s">%s</fontarea>' % (
+		font, size, text
+	)
+	return text
+				
 
 
 class DisplayFrame(HtmlSelectableWindow):
@@ -51,6 +71,7 @@ class DisplayFrame(HtmlSelectableWindow):
 		self.Bind(wx.EVT_ENTER_WINDOW, self.MouseIn)
 		
 		hover = protocol_handler.register_hover
+		# TODO: move these out somewhere else
 		hover("bible", self.on_hover_bible)
 		hover("nbible", lambda *args, **kwargs:None)
 		hover("", self.on_hover)
@@ -149,12 +170,7 @@ class DisplayFrame(HtmlSelectableWindow):
 
 	@staticmethod
 	def on_hover(frame, href, url, x, y):
-		def SetText(data):
-			#set tooltip text
-			if(data.endswith("<hr>")):
-				data = data[:-4]
-			frame.tooltip.SetText(data)
-
+		SetText = frame.tooltip.SetText
 
 		if url.getHostName() != "passagestudy.jsp":
 			return
@@ -229,7 +245,7 @@ class DisplayFrame(HtmlSelectableWindow):
 				template = VerseTemplate(header="<a href='nbible:$range'>"
 				"<b>$range</b></a><br>", 
 				body = "<font color = 'blue'><sup><small>$versenumber"
-				"</small></sup></font> $text", footer = "<hr>")
+				"</small></sup></font> $text")
 				try:
 					#no footnotes
 					if tooltip_settings["plain_xrefs"]:
@@ -251,7 +267,10 @@ class DisplayFrame(HtmlSelectableWindow):
 						reflist = reflist.split("; ")
 						#get refs
 						verselist = bible.GetReferencesFromMod(module, reflist)
-						data += ''.join(verselist)
+						data += '<hr>'.join(
+							process_html_for_module(module, ref)
+							for ref in refs
+						)
 
 					SetText(data)
 
@@ -279,7 +298,6 @@ class DisplayFrame(HtmlSelectableWindow):
 				header="<a href='bible:$range'><b>$range</b></a><br>", 
 				body = "<font color = 'blue'><sup><small>$versenumber"
 				"</small></sup></font> $text", 
-				footer = "<hr>"
 			)
 
 			try:
@@ -297,11 +315,15 @@ class DisplayFrame(HtmlSelectableWindow):
 				if not isinstance(context, basestring):
 					context = "%s" % context
 
+				
 				#get refs
 				refs = bible.GetReferencesFromMod(module, value, 
 					context=context)
 
-				data = "".join(refs)
+				data = '<hr>'.join(
+					self.process_html_for_module(module, ref)
+					for ref in refs
+				)
 
 				#set tooltip text
 				SetText(data)
@@ -429,9 +451,20 @@ class DisplayFrame(HtmlSelectableWindow):
 		return ((self.make_search_text(), self.make_lookup_text(), Separator) + 
 			self.get_menu_items())
 
-	def _get_text(self, lookup_text):
+	def _get_text(self, lookup_text, is_search=False):
 		def update_ui(event):
 			text = self.SelectionToText()
+
+			if not text and is_search:
+				# only display text reference if 
+				cell = self.FindCell(*self.popup_position)
+				link = cell.GetLink()
+				if link:
+					match = re.match(u'n?bible:(.*)(#.*)?', link.GetHref())
+					if match:
+						text = GetBestRange(match.group(1))
+						event.SetText(lookup_text % text)
+						return
 
 			if not text:
 				text = self.get_clicked_cell_text()
@@ -477,12 +510,15 @@ class DisplayFrame(HtmlSelectableWindow):
 
 
 	def make_search_text(self):
-		update_ui = self._get_text(_("Search for %s in the Bible"))
+		update_ui = self._get_text(
+			_("Search for %s in the Bible"),
+			is_search=True)
 
 		def on_search_click():
 			"""Search for the selected word in the Bible"""
 			cell = self.FindCell(*self.popup_position)
 			link = cell.GetLink()
+			print link
 			strongs_number = None
 			text = None
 			if link:
@@ -495,7 +531,20 @@ class DisplayFrame(HtmlSelectableWindow):
 						strongs_number += extra[1:]
 			
 					text = "strongs:" + strongs_number
-			
+				
+				if not text:
+					print link.GetHref()
+					match = re.match(u'passagestudy.jsp\?action=showMorph&'
+						'type=(\w*)(:|%3A)[^&]+&value=([\w-]+)', link.GetHref())
+					if match:
+						module, value = match.group(1, 3)
+						text = "morph:%s:%s" % (module, value)
+
+				if not text:
+					match = re.match(u'n?bible:(.*)(#.*)?', link.GetHref())
+					if match:
+						text = 'ref:"%s"' % match.group(1)
+
 			if not text:
 				text = self.SelectionToText()
 				if not text:
@@ -529,11 +578,10 @@ class DisplayFrame(HtmlSelectableWindow):
 		return actions
 
 	def SetPage(self, *args, **kwargs):
-		import fontchoice
 		assert hasattr(self, "mod"), self
 
 		self.language_code, (self.font, self.size, gui) = \
-			fontchoice.get_font_params(self.mod)
+			fonts.get_font_params(self.mod)
 
 		super(DisplayFrame, self).SetPage(*args, **kwargs)
 	

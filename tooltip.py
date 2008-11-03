@@ -2,7 +2,7 @@ import wx
 from wx import html
 from backend.verse_template import VerseTemplate
 import config, guiconfig
-from gui import htmlbase
+import displayframe
 from backend.bibleinterface import biblemgr
 from swlib.pysw import SW, VerseParsingError, GetBestRange
 
@@ -548,21 +548,19 @@ class BibleTooltipConfig(TooltipConfig):
 			template = VerseTemplate(
 				header = "<a href='nbible:$range'><b>$range</b></a><br>", 
 				body = "<font color='blue'><sup><small>$versenumber"
-				"</small></sup></font> $text ", 
-				footer = "<hr>")
+				"</small></sup></font> $text ")
 			#no footnotes
 			if tooltip_settings["plain_xrefs"]:
 				biblemgr.temporary_state(biblemgr.plainstate)
 			#apply template
 			biblemgr.bible.templatelist.append(template)
 
-			text = "".join(biblemgr.bible.GetReferences(self.references) or [])
+			text = "<hr>".join(
+				displayframe.process_html_for_module(biblemgr.bible.mod, item) 
+				for item in biblemgr.bible.GetReferences(self.references)
+			)
 
-			if text.endswith("<hr>"):
-				return text[:-4]
-
-			else:
-				return text
+			return text
 
 		finally:
 			if tooltip_settings["plain_xrefs"]:

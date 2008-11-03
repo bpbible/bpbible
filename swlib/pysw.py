@@ -196,7 +196,7 @@ class VK(SW.VerseKey):#, object):
 		SW.VerseKey.__init__(self, *key)
 
 	@classproperty
-	def books(self): return books
+	def books(cls): return books
 
 	def __cmp___(self, other): return self.compare(other)
 	def __lt__( self, other): return self.compare(other)<0

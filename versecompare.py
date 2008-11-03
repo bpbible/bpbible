@@ -17,9 +17,6 @@ from swlib.pysw import GetBestRange, SW, VK
 from util.unicode import to_str
 
 from util.i18n import N_
-import fontchoice
-
-
 
 verse_comparison_settings = config_manager.add_section("Verse Comparison")
 verse_comparison_settings.add_item(
@@ -69,24 +66,6 @@ class VerseCompareFrame(LinkedFrame):
 		self.gui_reference.currentverse = ref
 		self.update_title()
 	
-	def process_html_for_module(self, module, text):
-		print type(text)
-		# process lgs individually for each block.
-		# this stops lgs flowing on to the next block
-		text = self.convert_lgs(text)
-
-		language_code, (font, size, gui) = \
-			fontchoice.get_font_params(module)
-
-		text = self.convert_language(text, language_code)
-			
-		# now put it in the right font				
-		text = '<fontarea basefont="%s" basesize="%s">%s</fontarea>' % (
-			font, size, text
-		)
-		return text
-				
-	
 
 	def get_parallel_text(self, ref, context):		
 		vk = SW.VerseKey()
@@ -104,7 +83,7 @@ class VerseCompareFrame(LinkedFrame):
 					))
 				))
 				
-				text.append(self.process_html_for_module(item, 
+				text.append(process_html_for_module(item, 
 					u"<th><b><a href='%s:%s'>"
 					"%s</a></b></th>" % (BIBLE_VERSION_PROTOCOL, name, name))
 				)
@@ -140,7 +119,7 @@ class VerseCompareFrame(LinkedFrame):
 						headings.safe_substitute(heading_dict)
 				
 				t += "<sup>%(versenumber)d</sup> %(text)s" % body_dict
-				t = self.process_html_for_module(module, t)
+				t = process_html_for_module(module, t)
 
 				text.append(t)
 				
@@ -173,7 +152,7 @@ class VerseCompareFrame(LinkedFrame):
 					self.book.mod = item
 					# We exclude tags since otherwise the same tags appear in
 					# every version, which isn't very sensible.
-					text += self.process_html_for_module(item, 
+					text += process_html_for_module(item, 
 						self.book.GetReference(ref, display_tags=False)
 					)
 
