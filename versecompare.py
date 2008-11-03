@@ -11,8 +11,7 @@ from backend.bibleinterface import biblemgr
 from protocols import protocol_handler
 from util import noop
 from util.configmgr import config_manager
-from displayframe import IN_POPUP
-
+from displayframe import IN_POPUP, process_html_for_module
 from swlib.pysw import GetBestRange, SW, VK
 from util.unicode import to_str
 
