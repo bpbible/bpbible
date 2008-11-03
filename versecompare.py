@@ -17,6 +17,7 @@ from swlib.pysw import GetBestRange, SW, VK
 from util.unicode import to_str
 
 from util.i18n import N_
+import fontchoice
 
 
 
@@ -68,6 +69,25 @@ class VerseCompareFrame(LinkedFrame):
 		self.gui_reference.currentverse = ref
 		self.update_title()
 	
+	def process_html_for_module(self, module, text):
+		print type(text)
+		# process lgs individually for each block.
+		# this stops lgs flowing on to the next block
+		text = self.convert_lgs(text)
+
+		language_code, (font, size, gui) = \
+			fontchoice.get_font_params(module)
+
+		text = self.convert_language(text, language_code)
+			
+		# now put it in the right font				
+		text = '<fontarea basefont="%s" basesize="%s">%s</fontarea>' % (
+			font, size, text
+		)
+		return text
+				
+	
+
 	def get_parallel_text(self, ref, context):		
 		vk = SW.VerseKey()
 		verselist = vk.ParseVerseList(to_str(ref), to_str(context), True)
@@ -84,8 +104,10 @@ class VerseCompareFrame(LinkedFrame):
 					))
 				))
 				
-				text.append(u"<th><b><a href='%s:%s'>"
+				text.append(self.process_html_for_module(item, 
+					u"<th><b><a href='%s:%s'>"
 					"%s</a></b></th>" % (BIBLE_VERSION_PROTOCOL, name, name))
+				)
 
 		text.append("</tr>")
 		
@@ -112,13 +134,15 @@ class VerseCompareFrame(LinkedFrame):
 
 				text.append("<td>")
 				
+				t = ""
 				for heading_dict in headings:
-					text.append(biblemgr.bible.templatelist[-1].\
-						headings.safe_substitute(heading_dict))
+					t += biblemgr.bible.templatelist[-1].\
+						headings.safe_substitute(heading_dict)
 				
-				#TODO: put per-language font support in here
-				# especially greek/hebrew with overrides
-				text.append("<sup>%(versenumber)d</sup> %(text)s"%body_dict)
+				t += "<sup>%(versenumber)d</sup> %(text)s" % body_dict
+				t = self.process_html_for_module(module, t)
+
+				text.append(t)
 				
 				text.append("</td>")
 						
@@ -149,7 +173,9 @@ class VerseCompareFrame(LinkedFrame):
 					self.book.mod = item
 					# We exclude tags since otherwise the same tags appear in
 					# every version, which isn't very sensible.
-					text += self.book.GetReference(ref, display_tags=False)
+					text += self.process_html_for_module(item, 
+						self.book.GetReference(ref, display_tags=False)
+					)
 
 		finally:
 			self.book.mod = mod

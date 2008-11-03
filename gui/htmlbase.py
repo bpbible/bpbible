@@ -137,7 +137,6 @@ class IndentAreaTagHandler(TagHandler):
 		parser = self.GetParser()
 
 		if tag.GetName() == "INDENT-AREA-START":
-			print "opening"
 			container = parser.OpenContainer()
 			
 			container.SetIndent(0.5* parser.GetCharHeight(), 
@@ -150,7 +149,6 @@ class IndentAreaTagHandler(TagHandler):
 			parser.OpenContainer()
 			parser.OpenContainer()
 		else:
-			print "Closing"
 			parser.CloseContainer()
 			parser.CloseContainer()
 			parser.CloseContainer()
@@ -522,18 +520,9 @@ class HtmlBase(wx.html.HtmlWindow):
 		return re.sub("<br /></td>", "</td>", 
 			u''.join(text for is_lg, text in blocks))
 		
-	def set_page(self, text, raw=False, text_colour=None, body_colour=None):
-		"""Set the page with the given text and colour. 
-		
-		Either or neither of text_colour and body_colour can be specified"""
-		self.top_left_cell = None
-	
-		#text = text.replace("<small>", "<font size=-1>")
-		#text = text.replace("</small>", "</font>")
-
+	def convert_language(self, text, language_code):
 		# remove all &#1243;'s which will stop our language recognition
 		text = string_util.amps_to_unicode(text, replace_specials=False)
-		text = self.convert_lgs(text)
 
 		import fontchoice
 		# put greek and hebrew in their fonts
@@ -545,18 +534,33 @@ class HtmlBase(wx.html.HtmlWindow):
 			("he", string_util.hebrew, ("he",)),
 		):
 			# if we are, say, a greek book, don't take greek out specially
-			if self.language_code in dont_use_for:
+			if language_code in dont_use_for:
 				continue
 
 			default, (font, size, use_in_gui) = \
 				fontchoice.get_language_font_params(lang_code)
 			text = string_util.insert_language_font(text, letters, font, size)
+
+		return text
 		
+	
+	def set_page(self, text, raw=False, text_colour=None, body_colour=None):
+		"""Set the page with the given text and colour. 
+		
+		Either or neither of text_colour and body_colour can be specified"""
+		self.top_left_cell = None
+	
+		#text = text.replace("<small>", "<font size=-1>")
+		#text = text.replace("</small>", "</font>")
+
 		# now put things back (not sure if this is needed...)
 		# text = string_util.htmlify_unicode(text)
 
 		if body_colour is None or text_colour is None:
 			body_colour, text_colour = guiconfig.get_window_colours()
+
+		text = self.convert_lgs(text)
+		text = self.convert_language(text, self.language_code)
 
 		text = HTML_TEXT % (
 			body_colour, 			
