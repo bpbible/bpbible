@@ -39,6 +39,7 @@ def __gettext_strings():
     
     _("&Set Sword Paths...")
     _("Install books...")
+    _("Manage books...")
     _("Set fonts...")
     _("&Language")
     _("&Exit")

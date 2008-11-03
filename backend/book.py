@@ -7,10 +7,13 @@ from util import observerlist
 from util import classproperty
 from util.debug import dprint, WARNING, ERROR
 from util.unicode import to_str, to_unicode
+import os
 
 import config
 
 #ERR_OK = '\x00'
+class FileSaveException(Exception):
+	pass
 
 class Book(object):
 	type = None
@@ -467,7 +470,50 @@ class Book(object):
 				featureBegin += 1
 
 		return feature in self.features
+	
+	def get_cipher_code(self, mod):
+		"""Return the cipher key for the module.
+		This will be empty if locked, non-empty if unlocked and None if not
+		enciphered"""
+		return mod.getConfigEntry("CipherKey")
+
+	def unlock(self, mod, key):
+		assert self.get_cipher_code(mod) != None
+		cm = mod.getConfigMap()
+		cm[SW.Buf("CipherKey")] = SW.Buf(key)
+
+		mgr = self.get_mgr(mod)
+		mgr.setCipherKey(mod.Name(), key)
+
+		conf = self.get_config(mod)
+		conf.set(mod.Name(), "CipherKey", key)
+		conf.Save()
+
+		# send a refresh through for this book
+		# TODO: do this better
+		self.observers(self.mod)
 		
+		conf = self.get_config(mod)
+		if conf.get(mod.Name(), "CipherKey") != key:
+			raise FileSaveException(
+				_("Couldn't save cipher key. You will have to set it again when you restart"))
+
+		
+	def get_mgr(self, mod):
+		for path, mgr in self.parent.mgrs:				
+			if mod.this in [m.this for m in mgr.getModules().values()]:
+				return mgr
+
+		return None
+	
+	def get_config(self, mod):
+		pp = mod.getConfigEntry("PrefixPath")
+		pp += "mods.d/%s.conf" % mod.Name().lower()
+		
+		# make sure it exists
+		os.stat(pp)
+		
+		return SW.Config(pp)		
 				
 class Commentary(Book):
 	type = "Commentaries"

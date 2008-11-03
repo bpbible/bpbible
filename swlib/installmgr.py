@@ -218,7 +218,8 @@ class InstallMgr(object):
 		if self.transport:
 			self.transport.terminate()
 
-	def removeModule(self, manager, moduleName):
+	@staticmethod
+	def removeModule(manager, moduleName):
 		"""Physically deletes a module from the hard disk
 
 		Returns True if module couldn't be found, False otherwise"""
@@ -251,6 +252,7 @@ class InstallMgr(object):
 
 			else: 	
 				#remove all files in DataPath directory
+				FileMgr.removeDir(modDir)
 				
 				# BM: this could be a bit ticklish...
 				# I hope I have copied the correct behaviour

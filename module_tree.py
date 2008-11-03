@@ -7,6 +7,8 @@ from util.unicode import to_unicode
 
 from moduleinfo import ModuleInfo
 from util import languages
+from wx.lib.customtreectrl import CustomTreeCtrl, \
+	TR_AUTO_CHECK_CHILD, TR_AUTO_CHECK_PARENT, TR_HAS_VARIABLE_ROW_HEIGHT
 
 
 class ModuleTree(FilterableTree):
@@ -77,19 +79,13 @@ class ModuleTree(FilterableTree):
 			self.create()
 		
 	def version_tree_tooltip(self, event):
-		item = event.Item
+		item = event.GetItem()
 		data = self.tree.GetPyData(item)
 		if isinstance(data.data, SW.Module):
 			event.SetToolTip(to_unicode(data.data.Description(), data.data))
 		
 	def version_tree_menu(self, event):
-		def make_event(module):	
-			def show_information(event):
-				ModuleInfo(self, module).ShowModal()
-
-			return show_information
-	
-		item = event.Item
+		item = event.GetItem()
 		if not item:
 			return
 
@@ -99,13 +95,23 @@ class ModuleTree(FilterableTree):
 			return
 
 		menu = wx.Menu()
-		item = menu.Append(
+		self.tree.PopupMenu(menu, event.GetPoint())
+	
+	def add_menu_items(self, menu):
+		def make_event(module):	
+			def show_information(event):
+				ModuleInfo(self, module).ShowModal()
+
+			return show_information
+	
+		
+		item = menu.Append(		
 			wx.ID_ANY, 
 			_("Show information for %s") % data.Name()
 		)
 
 		menu.Bind(wx.EVT_MENU, make_event(data), item)
-		self.tree.PopupMenu(menu, event.Point)
+	
 	
 	def add_first_level_groups(self):
 		for text, book in self.module_types:
@@ -116,21 +122,37 @@ class ModuleTree(FilterableTree):
 		for module in modules: 
 			self.add_module(tree_item, module)
 	
-	def add_module(self, tree_item, module):
-		tree_item.add_child("%s - %s" % 
-			(module.Name(), to_unicode(module.Description(), module)),
-			data=module
-		)
+	def add_module(self, tree_item, module, inactive_description=""):
+		text = "%s - %s" % (
+			module.Name(), to_unicode(module.Description(), module))
+		
+		if biblemgr.modules[module.Name()].this != module.this:
+			text += inactive_description
+
+		tree_item.add_child(text, data=module)
 	
 class PathModuleTree(ModuleTree):
+	def CreateTreeCtrl(self, parent, style):
+		tree = wx.lib.customtreectrl.CustomTreeCtrl(parent, 
+			style=style^wx.TR_LINES_AT_ROOT|TR_AUTO_CHECK_CHILD|TR_AUTO_CHECK_PARENT|TR_HAS_VARIABLE_ROW_HEIGHT)
+
+		#tree.EnableSelectionGradient(False)
+		#tree.EnableSelectionVista(True)
+		return tree
+	
+	def AppendItemToTree(self, parent, text):
+		return self.tree.AppendItem(parent, text, ct_type=1)
+		
+	
 	def add_first_level_groups(self):
-		for path, mgr in biblemgr.mgrs:
+		for path, mgr in reversed(biblemgr.mgrs):
 			self.model.add_child(path, data=mgr)
 	
 	def add_children(self, tree_item):
 		for mod in sorted(tree_item.data.getModules().values(), 
 							key=lambda mod:mod.Name()):
-			self.add_module(tree_item, mod)
+			self.add_module(tree_item, mod, "\nThis book is not active as it "
+			"is shadowed by a book in a different path")
 	
 class LanguageModuleTree(ModuleTree):
 	def add_first_level_groups(self):
@@ -154,8 +176,11 @@ class LanguageModuleTree(ModuleTree):
 			self.add_module(tree_item, mod)
 	
 if __name__ == '__main__':
+	from util import i18n
+	i18n.initialize()
+
 	a = wx.App(0)
 	f = wx.Frame(None)
-	tree = LanguageModuleTree(f)
+	tree = PathModuleTree(f)
 	f.Show()
 	a.MainLoop()

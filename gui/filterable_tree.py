@@ -128,7 +128,7 @@ class FilterableTree(wx.PyPanel):
 
 		self.bound = False
 		
-		self.tree = wx.TreeCtrl(self, 
+		self.tree = self.CreateTreeCtrl(self,
 			style=wx.TR_HAS_BUTTONS   |
 				  wx.TR_LINES_AT_ROOT |
 				  wx.TR_HIDE_ROOT
@@ -159,12 +159,14 @@ class FilterableTree(wx.PyPanel):
 		self.expansion_state = None
 		self.bind_events()
 		
+	def CreateTreeCtrl(self, parent, style):
+		return wx.TreeCtrl(parent, style=style)		
 	
 	def select_without_event(self, item):
 		self.tree.Unbind(wx.EVT_TREE_SEL_CHANGED)
 		self.tree.SelectItem(item)
 		self.tree.Bind(wx.EVT_TREE_SEL_CHANGED, 
-			lambda evt:self.on_selection(evt.Item))
+			lambda evt:self.on_selection(evt.GetItem()))
 		
 	def on_key_down(self, event):
 		selection = self.tree.GetSelection()
@@ -183,6 +185,9 @@ class FilterableTree(wx.PyPanel):
 			self.on_selection(selection)
 		else:
 			event.Skip()
+	
+	def AppendItemToTree(self, parent, text):
+		return self.tree.AppendItem(parent, text)
 
 	def create(self, model=None):
 		self.unbind_events()
@@ -196,7 +201,7 @@ class FilterableTree(wx.PyPanel):
 		self.tree.SetPyData(root, model)
 		
 		def add(parent, model_item):
-			child = self.tree.AppendItem(parent, model_item.text)
+			child = self.AppendItemToTree(parent, model_item.text)
 			self.tree.SetPyData(child, model_item)
 			
 			for item in model_item.children:
@@ -212,7 +217,7 @@ class FilterableTree(wx.PyPanel):
 	def bind_events(self):
 		self.bound = True
 		self.tree.Bind(wx.EVT_TREE_SEL_CHANGED, 
-			lambda evt:self.on_selection(evt.Item))
+			lambda evt:self.on_selection(evt.GetItem()))
 		
 	
 	def unbind_events(self):

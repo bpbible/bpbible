@@ -9,6 +9,9 @@
         <object class="wxMenuItem" name="installmodule">
           <label>Install books...</label>
         </object>
+        <object class="wxMenuItem" name="manage_books">
+          <label>Manage books...</label>
+        </object>
         <object class="wxMenuItem" name="fontchoice">
           <label>Set fonts...</label>
         </object>
@@ -33,7 +36,6 @@
         <object class="wxMenu" name="menu_toolbars">
           <label>Toolbars</label>
         </object>
-        
         <label>&amp;Windows</label>
       </object>
       <object class="wxMenu" name="gui_debug_menu">

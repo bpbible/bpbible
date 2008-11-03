@@ -505,7 +505,7 @@ class SearchPanel(xrcSearchPanel):
 			
 			key = self.searchkey.GetValue()
 			if not key: 
-				self.search_label.Label = _("0 verses found")
+				self.search_label.Label = _("%d references found") % 0
 
 				wx.CallAfter(self.clear_list)
 				return

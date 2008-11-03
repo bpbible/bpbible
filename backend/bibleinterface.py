@@ -191,7 +191,8 @@ class BibleInterface(object):
 
 		if path_changed is None:
 			self.mgrs = []
-			self.write_paths(paths)
+			if paths:
+				self.write_paths(paths)
 
 		self.on_before_reload(self)
 		self.make_managers(path_changed)
@@ -231,7 +232,8 @@ class BibleInterface(object):
 		# so that the strong's numbers are set up
 		
 		self.on_after_reload(self)
-		
+	
+	reload = set_new_paths		
 			
 	def make_managers(self, path_changed=None):
 		#if hasattr(self, "dictionary"):

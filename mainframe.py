@@ -37,6 +37,8 @@ import config
 import guiconfig
 from module_tree import ModuleTree
 from pathmanager import PathManager
+from module_manager import ModuleManagerDialog
+
 
 dprint(MESSAGE, "Importing gui")
 from gui import htmlbase
@@ -516,6 +518,9 @@ class MainFrame(wx.Frame, AuiLayer):
 		
 		self.Bind(wx.EVT_MENU, self.on_install_module,
 			id=xrc.XRCID('installmodule'))
+		self.Bind(wx.EVT_MENU, self.on_manage_books,
+			id=xrc.XRCID('manage_books'))
+			
 		
 		self.Bind(wx.EVT_MENU, self.load_default_perspective, 
 			id=xrc.XRCID('menu_default_layout'))
@@ -660,6 +665,9 @@ class MainFrame(wx.Frame, AuiLayer):
 	def on_path_manager(self, event):
 		PathManager(self).ShowModal()
 	
+	def on_manage_books(self, event):
+		ModuleManagerDialog(self).ShowModal()
+
 	def on_install_module(self, event):
 		fd = wx.FileDialog(self, 
 			wildcard="Installable books (*.zip)|*.zip",

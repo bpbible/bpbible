@@ -1,0 +1,58 @@
+<?xml version="1.0" ?>
+<resource>
+  <object class="wxDialog" name="ModuleManagerDialog">
+    <object class="wxBoxSizer">
+      <orient>wxVERTICAL</orient>
+      <object class="sizeritem">
+        <object class="wxBoxSizer">
+          <object class="sizeritem">
+            <object class="wxPanel" name="filterable_tree_holder">
+              <object class="wxBoxSizer">
+                <orient>wxVERTICAL</orient>
+              </object>
+            </object>
+            <option>1</option>
+            <flag>wxTOP|wxBOTTOM|wxLEFT|wxGROW</flag>
+            <border>6</border>
+          </object>
+          <object class="sizeritem">
+            <object class="wxBoxSizer">
+              <object class="sizeritem">
+                <object class="wxButton" name="gui_delete">
+                  <label>Delete</label>
+                </object>
+                <flag>wxBOTTOM</flag>
+                <border>6</border>
+              </object>
+              
+              <object class="sizeritem">
+                <object class="wxButton" name="gui_unlock">
+                  <label>Unlock</label>
+                </object>
+              </object>
+              
+              <orient>wxVERTICAL</orient>
+            </object>
+            <flag>wxALL</flag>
+            <border>6</border>
+          </object>
+          <orient>wxHORIZONTAL</orient>
+        </object>
+        <option>1</option>
+        <flag>wxGROW</flag>
+      </object>
+      <object class="sizeritem">
+        <object class="wxStdDialogButtonSizer">
+          <object class="button">
+            <object class="wxButton" name="wxID_OK"/>
+          </object>
+        </object>
+        <flag>wxBOTTOM|wxLEFT|wxRIGHT|wxGROW</flag>
+        <border>6</border>
+      </object>
+    </object>
+    <size>400,300</size>
+    <title>Manage books</title>
+    <style>wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxRESIZE_BOX|wxDIALOG_MODAL</style>
+  </object>
+</resource>
