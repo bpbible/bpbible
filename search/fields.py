@@ -59,7 +59,8 @@ class RefField(BaseField):
 	def prepare(cls, input):
 		vl = VerseList(input, raiseError=True)
 		assert len(vl) == 1
-		if vl[0][0].getBookName() == vl[0][-1].getBookName():
+		if vl[0][0].getBookName() != vl[0][-1].getBookName():
+			from search import SearchException		
 			raise SearchException(
 				_("In finding references, the reference "
 					"must all be in one book")
