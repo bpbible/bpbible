@@ -60,7 +60,7 @@ class MyApp(wx.App):
 			self.splash = None
 		
 		else:
-			from splashscreen import SplashScreen
+			#from splashscreen import SplashScreen
 			self.splash = wx.SplashScreen(
 				self.bitmap, 
 				wx.SPLASH_CENTRE_ON_SCREEN|wx.SPLASH_NO_TIMEOUT,
