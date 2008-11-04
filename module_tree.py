@@ -95,9 +95,10 @@ class ModuleTree(FilterableTree):
 			return
 
 		menu = wx.Menu()
+		self.add_menu_items(data, menu)
 		self.tree.PopupMenu(menu, event.GetPoint())
 	
-	def add_menu_items(self, menu):
+	def add_menu_items(self, data, menu):
 		def make_event(module):	
 			def show_information(event):
 				ModuleInfo(self, module).ShowModal()
@@ -134,7 +135,7 @@ class ModuleTree(FilterableTree):
 class PathModuleTree(ModuleTree):
 	def CreateTreeCtrl(self, parent, style):
 		tree = wx.lib.customtreectrl.CustomTreeCtrl(parent, 
-			style=style^wx.TR_LINES_AT_ROOT|TR_AUTO_CHECK_CHILD|TR_AUTO_CHECK_PARENT|TR_HAS_VARIABLE_ROW_HEIGHT)
+			style=style^wx.TR_LINES_AT_ROOT|TR_AUTO_CHECK_CHILD|TR_AUTO_CHECK_PARENT|TR_HAS_VARIABLE_ROW_HEIGHT|wx.SUNKEN_BORDER)
 
 		#tree.EnableSelectionGradient(False)
 		#tree.EnableSelectionVista(True)
