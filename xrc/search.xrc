@@ -103,8 +103,7 @@
                     </object>
                     <object class="sizeritem">
                       <object class="wxStaticText" name="search_label">
-                        <label>0 verses found</label>
-                        <style/>
+                        <label>0 references found</label>
                       </object>
                       <flag>wxTOP|wxGROW</flag>
                       <border>3</border>

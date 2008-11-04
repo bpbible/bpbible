@@ -139,7 +139,7 @@ def __gettext_strings():
     _("Search for given words now")
     _("&Index")
     _("Search Options")
-    _("0 verses found")
+    _("0 references found")
     _("&Close")
     _("Search &Type:")
     _("Indexed")
