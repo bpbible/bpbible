@@ -8,6 +8,7 @@ import guiconfig
 import re
 from util.configmgr import config_manager
 from util.debug import dprint, ERROR, MESSAGE, WARNING
+from util import osutils
 from gui import fonts
 
 
@@ -427,7 +428,7 @@ def convert_lgs(text):
 
 		block[1] = """<indent-area-start /><table cellspacing=0 cellpadding=0 width=100%%><tr><td width=60px></td><td>%s</td></tr></table><indent-area-end />""" % (
 		re.sub(
-			r'(^|<(indent-block-end|/h6|br|/p)((>)|(/>)|( [^>]*>)))\s*((<indent-block-start source="l"[^>]+>)?\s*)(<glink href="nbible:[^"]*"><small><sup>\d*</sup></small></glink>)',
+			r'(^|<(indent-block-end|/h6|br|/p)((>)|(/>)|( [^>]*>)))\s*((<indent-block-start source="l"[^>]+>)?\s*)(<glink href="nbible:[^"]*"[^>]*><small><sup>\d*</sup></small></glink>)',
 	r"\1</td></tr><tr><td valign=top align=center width=60px>\9</td><td>\7",
 	block[1]
 		)
@@ -502,7 +503,7 @@ class HtmlBase(wx.html.HtmlWindow):
 		# even though the size hasn't changed. 
 		# Don't skip the event, or wxHtml will try to handle it 
 		# (i.e. scroll to top of window)
-		if HtmlBase.loading_a_page and not HtmlBase.override_loading_a_page:
+		if osutils.is_gtk() and HtmlBase.loading_a_page and not HtmlBase.override_loading_a_page:
 			return
 		
 		c = self.top_left_cell

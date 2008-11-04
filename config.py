@@ -71,6 +71,8 @@ if sword_paths_file[-1] not in "\\/" and sword_paths_file[-1] not in "\\/":
 sword_paths_file += "sword.conf"
 
 raw = False
+
+#TODO: i18n for the next 3
 name = "BPBible"
 
 MODULE_MISSING_STRING= """<b>This book is not set.</b><br>
@@ -125,7 +127,7 @@ dictionary_template = VerseTemplate(
 )
 
 
-body = (u'<glink href="nbible:$reference#current">'
+body = (u'<glink href="nbible:$reference#current" colour="#008000">'
 		u'<small><sup>$versenumber</sup></small></glink> '
 		u'<highlight-start colour="#008000">$text<highlight-end /> $tags')
 
