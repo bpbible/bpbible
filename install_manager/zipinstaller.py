@@ -15,7 +15,8 @@ class BadMetadata(Exception):
 
 class MultiMap(dict):
 	def items(self):
-		for item, values in self.iteritems():
+		for item, values in sorted(
+			self.iteritems(), key=lambda(key, value): key):
 			for value in values:
 				yield SW.Buf(item), SW.Buf(value)
 	
