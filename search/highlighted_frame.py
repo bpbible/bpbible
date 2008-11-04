@@ -1,6 +1,7 @@
 import re
 import unicodedata
 
+import wx
 from backend.verse_template import VerseTemplate
 from backend.book import Bible
 from util.string_util import KillTags, ReplaceUnicode, replace_amp, htmlify_unicode, remove_amps
@@ -236,7 +237,9 @@ def highlight_section(results, start, end, start_tag, end_tag):
 		
 
 def highlight(string1, string2, is_bible, regexes, strongs=(),
-		start_tag='<b><font color="#008800">', end_tag='</font></b>'):
+		start_tag='<a href="#highlight" name="highlight"></a>'
+		'<b><font color="#008800">', 
+		end_tag='</font></b>'):
 	"""Highlight string2 with the regular expressions regexes, being matched
 	on string1
 
@@ -282,6 +285,7 @@ def highlight(string1, string2, is_bible, regexes, strongs=(),
 		for tokens in results:
 			for idx, token in enumerate(tokens):
 				# highlight strong's numbers...	
+				# TODO: scroll to these?
 				token = glink_matcher.sub(					
 					r'<b><glink colour="#008800"\1\2\3>\4</glink></b>',
 					token)
@@ -373,6 +377,11 @@ class HighlightedDisplayFrame(ReferenceDisplayFrame):
 		#	#replace common values
 		#	data = ReplaceUnicode(data)
 		self.SetPage("%s" % data)
+		
+		# don't give error if this doesn't work
+		d = wx.LogNull()
+		self.ScrollToAnchor("highlight")
+		self.ScrollLines(-1)
 
 if __name__ == '__main__':
 	string1 = u"abcd TE ST\u03b6"
