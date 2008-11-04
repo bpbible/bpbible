@@ -185,14 +185,14 @@ class OSISParser(filterutils.ParserBase):
 		if attributes.get("eID"):
 			return self.end_l()
 
-		if attributes.get("type") in ("x-indent", "x-declares"):
+		if attributes.get("type") in ("x-indent", "x-declares", "x-secondary"):
 			if self.in_indent:
 				dprint(WARNING, "Nested indented l's", self.u.key.getText())
 
 			self.in_indent = True
 			indent = 2
 			if attributes["type"] == "x-declares":
-				indent = 5
+				indent = 6
 			self.buf += '<indent-block-start source="l" width="%s"/>' % indent
 		else:
 			self.success = SW.INHERITED
