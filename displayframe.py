@@ -458,13 +458,14 @@ class DisplayFrame(HtmlSelectableWindow):
 			if not text and is_search:
 				# only display text reference if 
 				cell = self.FindCell(*self.popup_position)
-				link = cell.GetLink()
-				if link:
-					match = re.match(u'n?bible:(.*)(#.*)?', link.GetHref())
-					if match:
-						text = GetBestRange(match.group(1))
-						event.SetText(lookup_text % text)
-						return
+				if cell:
+					link = cell.GetLink()
+					if link:
+						match = re.match(u'n?bible:(.*)(#.*)?', link.GetHref())
+						if match:
+							text = GetBestRange(match.group(1))
+							event.SetText(lookup_text % text)
+							return
 
 			if not text:
 				text = self.get_clicked_cell_text()
@@ -518,7 +519,6 @@ class DisplayFrame(HtmlSelectableWindow):
 			"""Search for the selected word in the Bible"""
 			cell = self.FindCell(*self.popup_position)
 			link = cell.GetLink()
-			print link
 			strongs_number = None
 			text = None
 			if link:
@@ -541,7 +541,7 @@ class DisplayFrame(HtmlSelectableWindow):
 						text = "morph:%s:%s" % (module, value)
 
 				if not text:
-					match = re.match(u'n?bible:(.*)(#.*)?', link.GetHref())
+					match = re.match(u'n?bible:([^#]*)(#.*)?', link.GetHref())
 					if match:
 						text = 'ref:"%s"' % match.group(1)
 
