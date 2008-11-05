@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2008-11-05 13:20+SE Asia Standard Time\n"
-"PO-Revision-Date: 2008-11-05 14:07+0700\n"
+"PO-Revision-Date: 2008-11-05 17:00+0700\n"
 "Last-Translator: Daniel Owens <dh_owens@yahoo.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -371,39 +371,39 @@ msgstr "Đi tới một câu"
 
 #: mainframe.py:270
 msgid "Zoom In"
-msgstr ""
+msgstr "Thu Lớn"
 
 #: mainframe.py:271
 msgid "Make text bigger"
-msgstr ""
+msgstr "Làm văn bản lớn hơn"
 
 #: mainframe.py:274
 msgid "Default Zoom"
-msgstr ""
+msgstr "Thu Phóng Mặc Định"
 
 #: mainframe.py:275
 msgid "Return text to default size"
-msgstr ""
+msgstr "Làm cho văn bản có cỡ mặc định"
 
 #: mainframe.py:278
 msgid "Zoom Out"
-msgstr ""
+msgstr "Thu Nhỏ"
 
 #: mainframe.py:279
 msgid "Make text smaller"
-msgstr ""
+msgstr "Làm văn bản nhỏ hơn"
 
 #: mainframe.py:308
 msgid "Navigation"
-msgstr ""
+msgstr "Sự Đi Lại"
 
 #: mainframe.py:310
 msgid "Zoom"
-msgstr ""
+msgstr "Thu Phóng"
 
 #: mainframe.py:312
 msgid "History toolbar"
-msgstr ""
+msgstr "Thanh công cụ lịch sử"
 
 #: mainframe.py:720
 #: xrc/auifrm_xrc.py:44
@@ -423,11 +423,11 @@ msgstr "&Các Cửa Sổ"
 #: mainframe.py:749
 #: xrc/auifrm_xrc.py:49
 msgid "Toolbars"
-msgstr ""
+msgstr "Các Thanh Công Cụ"
 
 #: mainframe.py:777
 msgid "Show the %s toolbar"
-msgstr ""
+msgstr "Hiện thanh công cụ %s"
 
 #: mainframe.py:800
 #: xrc/auifrm_xrc.py:51
@@ -436,39 +436,39 @@ msgstr "Chỉnh Lỗi"
 
 #: mainframe.py:858
 msgid "Use Strong's headwords"
-msgstr ""
+msgstr "Dùng số Strong"
 
 #: mainframe.py:859
 msgid "Display Strong's numbers using the transliterated text"
-msgstr ""
+msgstr "Hiện số Strong sử dụng văn bản được chuyển chữ"
 
 #: mainframe.py:864
 msgid "Expand cross-references"
-msgstr ""
+msgstr "Mở rộng địa chỉ Kinh Thánh liên quan"
 
 #: mainframe.py:865
 msgid "Display cross references partially expanded"
-msgstr ""
+msgstr "Hiện một phần của địa chỉ Kinh Thánh liên quan"
 
 #: mainframe.py:870
 msgid "One line per verse"
-msgstr ""
+msgstr "Một câu một dòng"
 
 #: mainframe.py:871
 msgid "Display each verse on its own line."
-msgstr ""
+msgstr "Hiện từng câu trong dòng riêng"
 
 #: mainframe.py:876
 msgid "Topic Tags"
-msgstr ""
+msgstr "Thẻ Chủ Đề"
 
 #: mainframe.py:877
 msgid "Display the topics that each verse is tagged with."
-msgstr ""
+msgstr "Hiện chủ đề của từng câu"
 
 #: mainframe.py:1025
 msgid "An error occurred on closing:"
-msgstr ""
+msgstr "Lỗi lầm đã xảy ra khi đóng:"
 
 #: mainframe.py:1037
 #: mainframe.py:1038
@@ -482,6 +482,10 @@ msgid ""
 "\t\t\tPython Version: %(sysversion)s\n"
 "\t\t\twxPython Version: %(wxversion)s"
 msgstr ""
+"Nghiên Cứu Kinh Thánh Linh Động.\n"
+"\t\t\tSử dụng Dư Án Gươm của crosswire.org\n"
+"\t\t\tPython Version: %(sysversion)s\n"
+"\t\t\twxPython Version: %(wxversion)s"
 
 #: mainframe.py:1064
 msgid "BPBible"
@@ -497,7 +501,7 @@ msgstr "Ben Morgan"
 
 #: mainframe.py:1069
 msgid "SWORD library developers"
-msgstr ""
+msgstr "Người soạn ứng dụng của Thư Viện Gươm"
 
 #: mainframe.py:1070
 msgid ""
@@ -668,11 +672,11 @@ msgstr ""
 #: search/searchpanel.py:261
 #: xrc/search_xrc.py:140
 msgid "&Index"
-msgstr ""
+msgstr "&Chỉ Số"
 
 #: search/searchpanel.py:264
 msgid "Unindex"
-msgstr ""
+msgstr "Xoá Chỉ Số"
 
 #: search/searchpanel.py:279
 msgid "You don't have a current %s, so you cannot search at the moment"
@@ -693,7 +697,7 @@ msgstr ""
 
 #: search/searchpanel.py:329
 msgid "Create Index?"
-msgstr ""
+msgstr "Tạo chỉ số không?"
 
 #: search/searchpanel.py:348
 #: search/searchpanel.py:540
@@ -767,7 +771,7 @@ msgstr ""
 #: xrc/copyverses_xrc.py:78
 #: xrc/templatemanager_xrc.py:97
 msgid "Preview"
-msgstr ""
+msgstr "Xem Thử"
 
 #: search/searchpanel.py:797
 msgid "%(version)s search - %(numresults)s"
@@ -868,11 +872,11 @@ msgstr ""
 
 #: tooltip.py:528
 msgid "Go to verses"
-msgstr ""
+msgstr "Đi tới các câu"
 
 #: tooltip.py:530
 msgid "Open this reference"
-msgstr ""
+msgstr "Mở địa chỉ này"
 
 #: util/i18n.py:39
 msgid "English"
@@ -884,7 +888,7 @@ msgstr "Tiếng Tây Ban Nha"
 
 #: util/i18n.py:41
 msgid "BM test"
-msgstr ""
+msgstr "Kiểm Tra BM"
 
 #: util/i18n.py:42
 msgid "Vietnamese"
@@ -948,35 +952,35 @@ msgstr ""
 
 #: xrc/auifrm_xrc.py:52
 msgid "Html Ide"
-msgstr ""
+msgstr "Html Ide"
 
 #: xrc/auifrm_xrc.py:53
 msgid "WI"
-msgstr ""
+msgstr "WI"
 
 #: xrc/auifrm_xrc.py:54
 msgid "gather"
-msgstr ""
+msgstr "gather"
 
 #: xrc/auifrm_xrc.py:55
 msgid "diff"
-msgstr ""
+msgstr "diff"
 
 #: xrc/auifrm_xrc.py:56
 msgid "confirm"
-msgstr ""
+msgstr "confirm"
 
 #: xrc/auifrm_xrc.py:57
 msgid "compile"
-msgstr ""
+msgstr "compile"
 
 #: xrc/auifrm_xrc.py:58
 msgid "Restart"
-msgstr "Lại Khởi Đầu"
+msgstr "Restart"
 
 #: xrc/auifrm_xrc.py:59
 msgid "Locale"
-msgstr ""
+msgstr "Locale"
 
 #: xrc/auifrm_xrc.py:60
 msgid "&Help"
@@ -988,15 +992,15 @@ msgstr "Trang Web BPBible"
 
 #: xrc/auifrm_xrc.py:62
 msgid "Documentation..."
-msgstr ""
+msgstr "Tài liệu giúp đỡ..."
 
 #: xrc/auifrm_xrc.py:63
 msgid "Report a problem..."
-msgstr ""
+msgstr "Báo cáo nan đề..."
 
 #: xrc/auifrm_xrc.py:64
 msgid "Download books..."
-msgstr ""
+msgstr "Tải về sách..."
 
 #: xrc/auifrm_xrc.py:65
 msgid "&About..."
@@ -1004,36 +1008,36 @@ msgstr "&Về..."
 
 #: xrc/copyverses_xrc.py:73
 msgid "&Reference"
-msgstr ""
+msgstr "&Địa chỉ"
 
 #: xrc/copyverses_xrc.py:74
 msgid "&Template"
-msgstr ""
+msgstr "&Mẫu"
 
 #: xrc/copyverses_xrc.py:75
 msgid "&Save template"
-msgstr ""
+msgstr "&Lựu Mẫu"
 
 #: xrc/copyverses_xrc.py:76
 msgid "&Load Template"
-msgstr ""
+msgstr "&Mở Mẫu"
 
 #: xrc/copyverses_xrc.py:77
 msgid "Edit Template..."
-msgstr ""
+msgstr "Sửa Mẫu..."
 
 #: xrc/copyverses_xrc.py:79
 #: xrc/templatemanager_xrc.py:99
 msgid "&Cancel"
-msgstr ""
+msgstr "&Huỷ"
 
 #: xrc/fontchoice_xrc.py:71
 msgid "Use default font"
-msgstr ""
+msgstr "Dùng phông chữ mặc định"
 
 #: xrc/fontchoice_xrc.py:72
 msgid "Use this font in the user interface"
-msgstr ""
+msgstr "Dùng phông chữ này trong ứng dụng"
 
 #: xrc/fontchoice_xrc.py:73
 msgid "Font:"
@@ -1045,7 +1049,7 @@ msgstr "Cỡ Phông Chữ"
 
 #: xrc/fontchoice_xrc.py:75
 msgid "Preview:"
-msgstr ""
+msgstr "Xem thử"
 
 #: xrc/fontchoice_xrc.py:76
 #: xrc/templatemanager_xrc.py:98
@@ -1054,31 +1058,31 @@ msgstr "&Ok"
 
 #: xrc/fontchoice_xrc.py:77
 msgid "Font Choice"
-msgstr ""
+msgstr "Chọn Phông Chữ"
 
 #: xrc/guess_verse_xrc.py:66
 msgid "&Guess"
-msgstr ""
+msgstr "&Đoán"
 
 #: xrc/harmonyfrm_xrc.py:93
 msgid "Find Bible Reference"
-msgstr ""
+msgstr "Tìm Địa Chỉ Kinh Thánh"
 
 #: xrc/install_module_xrc.py:70
 msgid "Install to:"
-msgstr ""
+msgstr "Cài tại:"
 
 #: xrc/install_module_xrc.py:71
 msgid "Book Installation"
-msgstr ""
+msgstr "Cài Sách"
 
 #: xrc/module_manager_xrc.py:67
 msgid "Delete"
-msgstr ""
+msgstr "Xoá"
 
 #: xrc/module_manager_xrc.py:68
 msgid "Unlock"
-msgstr ""
+msgstr "Mở Khoá"
 
 #: xrc/module_manager_xrc.py:69
 msgid "Manage books"
@@ -1086,47 +1090,47 @@ msgstr "Quản lý sách"
 
 #: xrc/movablelist_xrc.py:71
 msgid "Move item to top"
-msgstr ""
+msgstr "Chuyển lên đầu"
 
 #: xrc/movablelist_xrc.py:72
 msgid "Move item up"
-msgstr ""
+msgstr "Chuyển lên"
 
 #: xrc/movablelist_xrc.py:73
 msgid "Move item down"
-msgstr ""
+msgstr "Chuyển xuống"
 
 #: xrc/movablelist_xrc.py:74
 msgid "Move item to bottom"
-msgstr ""
+msgstr "Chuyển xuống cuối"
 
 #: xrc/movablelist_xrc.py:75
 msgid "Add a new item"
-msgstr ""
+msgstr "Thêm tiết mục"
 
 #: xrc/movablelist_xrc.py:76
 msgid "Edit this item"
-msgstr ""
+msgstr "Sửa tiết mục này"
 
 #: xrc/movablelist_xrc.py:77
 msgid "Remove this item"
-msgstr ""
+msgstr "Xoá tiết mục này"
 
 #: xrc/search_xrc.py:135
 msgid "&Find:"
-msgstr ""
+msgstr "&Tìm:"
 
 #: xrc/search_xrc.py:136
 msgid "Words to search for"
-msgstr ""
+msgstr "Từ ngũ để tìm kiếm"
 
 #: xrc/search_xrc.py:137
 msgid "Open the Virtual Keyboard"
-msgstr ""
+msgstr "Mở bàn phím ảo"
 
 #: xrc/search_xrc.py:139
 msgid "Search for given words now"
-msgstr ""
+msgstr "Tìm kiếm từ ngữ ngay bây giờ"
 
 #: xrc/search_xrc.py:142
 msgid "0 references found"
@@ -1138,27 +1142,27 @@ msgstr "&Đóng"
 
 #: xrc/search_xrc.py:144
 msgid "Search &Type:"
-msgstr ""
+msgstr "&Loại Tìm Kiếm"
 
 #: xrc/search_xrc.py:145
 msgid "Indexed"
-msgstr ""
+msgstr "Được Chỉ Số"
 
 #: xrc/search_xrc.py:146
 msgid "Unindexed"
-msgstr ""
+msgstr "Chưa Được Chỉ Số"
 
 #: xrc/search_xrc.py:147
 msgid "Type of search to use"
-msgstr ""
+msgstr "Dùng Loại Tìm Kiếm Nào"
 
 #: xrc/search_xrc.py:148
 msgid "Proximity:"
-msgstr ""
+msgstr "Khoảng cách giữa từ:"
 
 #: xrc/search_xrc.py:149
 msgid "How close should search terms be to each other"
-msgstr ""
+msgstr "Từ ngữ tìm kiếm có thể xa cách nhau bao nhiêu từ"
 
 #: xrc/search_xrc.py:150
 msgid "Words"
@@ -1170,11 +1174,11 @@ msgstr "Các Câu"
 
 #: xrc/search_xrc.py:152
 msgid "Case sensitive"
-msgstr ""
+msgstr "So sánh chữ hoa/thường"
 
 #: xrc/search_xrc.py:153
 msgid "Match only if case is same"
-msgstr ""
+msgstr "Chỉ tìm khi từ có đúng hình thức (hoa/thường)"
 
 #: xrc/search_xrc.py:155
 msgid "Whole &Bible"
@@ -1190,31 +1194,31 @@ msgstr "&Tân Ước"
 
 #: xrc/search_xrc.py:159
 msgid "Custom &Range:"
-msgstr ""
+msgstr "&Phạm Vị Đặc Biệt"
 
 #: xrc/search_xrc.py:160
 msgid "Search Range"
-msgstr ""
+msgstr "Phạm Vi Tìm Kiếm"
 
 #: xrc/templatemanager_xrc.py:96
 msgid "Template Manager"
-msgstr ""
+msgstr "Quản Lý Mẫu"
 
 #: xrc/templatemanager_xrc.py:100
 msgid "&Header"
-msgstr ""
+msgstr "&Đầu Trang"
 
 #: xrc/templatemanager_xrc.py:101
 msgid "&Body"
-msgstr ""
+msgstr "&Nội Dung"
 
 #: xrc/templatemanager_xrc.py:103
 msgid "&Footer"
-msgstr ""
+msgstr "&Chân Trang"
 
 #: xrc/templatemanager_xrc.py:105
 msgid "&Headings"
-msgstr ""
+msgstr "&Tiêu Đề"
 
 #: xrc/templatemanager_xrc.py:107
 msgid ""
