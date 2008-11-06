@@ -167,7 +167,7 @@ class Book(object):
 		):
 			# if we have exceeded the verse limit, body_dict will be None
 			if body_dict is None:
-				verses.append(config.MAX_VERSES_EXCEEDED % max_verses)
+				verses.append(config.MAX_VERSES_EXCEEDED() % max_verses)
 				break
 
 			body_dict.update(d)

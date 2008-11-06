@@ -603,7 +603,7 @@ class BibleTooltipConfig(TooltipConfig):
 			return ref
 		
 		except VerseParsingError, e:
-			wx.MessageBox(e.message, config.name)
+			wx.MessageBox(e.message, config.name())
 	
 	def bible_ref_changed(self, event):
 		if event.settings_changed:

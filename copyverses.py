@@ -295,7 +295,7 @@ class CopyVerseDialog(xrcCopyVerseDialog):
 
 		data = biblemgr.bible.GetReference(self.reference.GetValue())
 		if data is None:
-			data = config.MODULE_MISSING_STRING
+			data = config.MODULE_MISSING_STRING()
 
 		data = re.sub("<indent-block-end[^>]*>", "\n", data)
 		

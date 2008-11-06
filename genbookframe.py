@@ -82,7 +82,7 @@ class GenBookFrame(BookFrame):
 		
 		if isinstance(ref, basestring) and ref == "<empty>":
 			if self.book.mod is None:
-				data = config.MODULE_MISSING_STRING
+				data = config.MODULE_MISSING_STRING()
 			else:
 				data = """This book is empty"""
 

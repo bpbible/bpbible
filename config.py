@@ -73,9 +73,11 @@ sword_paths_file += "sword.conf"
 raw = False
 
 #TODO: i18n for the next 3
-name = "BPBible"
+def name():
+	return _("BPBible")
 
-MODULE_MISSING_STRING= """<b>This book is not set.</b><br>
+def MODULE_MISSING_STRING():
+	return _("""<b>This book is not set.</b><br>
 This may be because you do not have any of this type of book installed.
 <p> If you don't have any of this type of book, first download them from <a
 href="http://www.crosswire.org/sword/modules/index.jsp">http://www.crosswire.org/sword/modules/index.jsp</a>.<br>
@@ -83,10 +85,11 @@ Then to install them, either drag them onto BPBible, or go <code>File >
 Install Books...</code> and select the books.
 <p> If you have already have SWORD books installed, go to <code>File >
 Set SWORD Paths</code> and add the path where the books are installed to the book search paths.
-"""
+""")
 
-MAX_VERSES_EXCEEDED = """<p><b>[Reference clipped as the maximum verse limit (%d verses) has been exceeded.
-<br>This probably means the reference was invalid]</b>"""
+def MAX_VERSES_EXCEEDED():
+	return _("""<p><b>[Reference clipped as the maximum verse limit (%d verses) has been exceeded.
+<br>This probably means the reference was invalid]</b>""")
 
 BIBLE_VERSION_PROTOCOL = "set_bible_version"
 

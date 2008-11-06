@@ -133,7 +133,7 @@ class VerseCompareFrame(LinkedFrame):
 		text.append("</table>")
 		
 		if was_clipped:
-			text.append(config.MAX_VERSES_EXCEEDED % 176)
+			text.append(config.MAX_VERSES_EXCEEDED() % 177)
 		
 
 		return ''.join(text)

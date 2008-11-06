@@ -48,7 +48,7 @@ class BookFrame(DisplayFrame):
 			return ref
 		
 		except VerseParsingError, e:
-			wx.MessageBox(e.message, config.name)
+			wx.MessageBox(e.message, config.name())
 		
 	def get_verified_multi_verses(self, ref):
 		try:
@@ -57,7 +57,7 @@ class BookFrame(DisplayFrame):
 			return ref
 		
 		except VerseParsingError, e:
-			wx.MessageBox(e.message, config.name)	
+			wx.MessageBox(e.message, config.name())	
 		
 
 
@@ -68,7 +68,7 @@ class BookFrame(DisplayFrame):
 		self.reference = ref
 		text = self.book.GetReference(ref, context=context, raw=raw)#bible text
 		if text is None:
-			data = config.MODULE_MISSING_STRING
+			data = config.MODULE_MISSING_STRING()
 		else:
 			data = text
 			data = data.replace("<!P>","</p><p>")
@@ -485,7 +485,7 @@ class DictionaryFrame(BookFrame):
 
 		text = self.book.GetReference(ref, context=context, raw=raw)#bible text
 		if text is None:
-			data = config.MODULE_MISSING_STRING
+			data = config.MODULE_MISSING_STRING()
 		else:
 			data = ref_text + text
 			data = data.replace("<!P>","</p><p>")

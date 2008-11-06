@@ -7,10 +7,9 @@ from util.debug import dprint, MESSAGE, ERROR, is_debugging
 import wx
 from wx import xrc 
 
-from wx.lib.wordwrap import wordwrap
-
 dprint(MESSAGE, "importing sword")
 from swlib import pysw
+from swlib.pysw import SW
 dprint(MESSAGE, "/importing sword")
 
 dprint(MESSAGE, "Other imports")
@@ -88,7 +87,7 @@ XRC_DIRECTORY = 'xrc'
 class MainFrame(wx.Frame, AuiLayer):
 	"""MainFrame: The main frame containing everything."""
 	def __init__(self, parent):
-		super(MainFrame, self).__init__(self, parent, -1, config.name, 
+		super(MainFrame, self).__init__(self, parent, -1, config.name(), 
 		wx.DefaultPosition, size=(1024, 768))
 		
 		self.setup()
@@ -1045,7 +1044,7 @@ class MainFrame(wx.Frame, AuiLayer):
 				self.set_bible_ref(self.bibleref.GetValue(),
 					source=BIBLE_REF_ENTER)
 			except pysw.VerseParsingError, e:
-				wx.MessageBox(e.message, config.name)
+				wx.MessageBox(e.message, config.name())
 
 	def ExitClick(self, event):
 		self.Close()
@@ -1054,24 +1053,42 @@ class MainFrame(wx.Frame, AuiLayer):
 		wxversion = wx.VERSION_STRING
 		wxversiondata = ", ".join(wx.PlatformInfo[1:])
 		sysversion = sys.version.split()[0]
-		name = config.name
+		v = SW.cvar.SWVersion_currentVersion
+		swversion = v.getText()
+		
+		name = config.name()
 		text = _("""Flexible Bible study software.
 			Built Using the Sword Project from crosswire.org
 			Python Version: %(sysversion)s
-			wxPython Version: %(wxversion)s""").expandtabs(0) %locals()
+			wxPython Version: %(wxversion)s
+			SWORD Version: %(swversion)s""").expandtabs(0) %locals()
 
 		info = wx.AboutDialogInfo()
-		info.Name = _("BPBible")
-		info.Version = "0.3.1"
+		info.Name = config.name()
+		info.Version = "0.3.9.6"
 		info.Description = text#, 350, wx.ClientDC(self))
 		info.WebSite = ("bpbible.com", 
 						_("BPBible website"))
-		info.Developers = [_("Ben Morgan"), _("SWORD library developers")]
+		info.Developers = [
+			_("BPBible development team"), 
+			_("SWORD library developers"),
+		]
+
+		# mark these strings for translation
+		N_("Developers")
+		N_("Artists")
+		N_("Translators")
+
+		translator = _("translator-credits")
+		if translator != "translator-credits":
+			info.AddTranslator(translator)
+
 		info.Artists = [_("Icons used are from famfamfam\n"
 			"http://www.famfamfam.com/lab/icons/silk\n"
 			"and the Tango Desktop Project\n"
 			"http://tango.freedesktop.org/Tango_Desktop_Project")]
 
+		from wx.lib.wordwrap import wordwrap
 		info.License = wordwrap(_("BPBible is licensed under the GPL v2. "
 			"For more details, refer to the LICENSE.txt file in the "
 			"application directory"), 330, wx.ClientDC(self))
@@ -1130,7 +1147,7 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.all_observers()
 	
 	def set_title(self, event):
-		self.SetTitle(config.title_str % dict(name=config.name, 
+		self.SetTitle(config.title_str % dict(name=config.name(), 
 											 verse=event.ref))
 	
 	def set_bible_ref(self, ref, source, settings_changed=False):

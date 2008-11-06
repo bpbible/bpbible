@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2008-11-04 00:15+AUS Eastern Daylight Time\n"
+"POT-Creation-Date: 2008-11-06 17:51+AUS Eastern Daylight Time\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -107,7 +107,7 @@ msgstr ""
 msgid "Copying selected verses..."
 msgstr "Zapping 'em into the clipboard"
 
-#: bookframe.py:149 mainframe.py:781
+#: bookframe.py:149 mainframe.py:780
 msgid "Show the %s pane"
 msgstr "%s pane: show"
 
@@ -155,6 +155,33 @@ msgstr "Other man's words"
 msgid "Dictionary"
 msgstr "Define a word"
 
+#: config.py:77
+msgid "BPBible"
+msgstr "BP - God's word"
+
+#: config.py:80
+msgid ""
+"<b>This book is not set.</b><br>\n"
+"This may be because you do not have any of this type of book installed.\n"
+"<p> If you don't have any of this type of book, first download them from <a\n"
+"href=\"http://www.crosswire.org/sword/modules/index.jsp\">http://www."
+"crosswire.org/sword/modules/index.jsp</a>.<br>\n"
+"Then to install them, either drag them onto BPBible, or go <code>File >\n"
+"Install Books...</code> and select the books.\n"
+"<p> If you have already have SWORD books installed, go to <code>File >\n"
+"Set SWORD Paths</code> and add the path where the books are installed to the "
+"book search paths.\n"
+msgstr ""
+"<h1>No books here!!!</h1>\n"
+"Read the manual to find out how to put books in here"
+
+#: config.py:91
+msgid ""
+"<p><b>[Reference clipped as the maximum verse limit (%d verses) has been "
+"exceeded.\n"
+"<br>This probably means the reference was invalid]</b>"
+msgstr "!!!Too much. Too much. Only %d verse have been shown"
+
 #: copyverses.py:134
 msgid "<custom: based on %s>"
 msgstr "!!!CUSTOM!!! - from %s"
@@ -200,19 +227,19 @@ msgstr "Zap marked text, eliminating links, into clipboard"
 msgid "Copy the selected text, removing all links"
 msgstr "Zap marked text, eliminating links, into clipboard"
 
-#: displayframe.py:477
+#: displayframe.py:478
 msgid "the selected word"
 msgstr "the word you have selected"
 
-#: displayframe.py:483
+#: displayframe.py:484
 msgid "the selected phrase"
 msgstr "The phrase you've chose"
 
-#: displayframe.py:497
+#: displayframe.py:498
 msgid "Look up %s in the dictionary"
 msgstr "Examine the dictionary for %s"
 
-#: displayframe.py:514
+#: displayframe.py:515
 msgid "Search for %s in the Bible"
 msgstr "Run your eyes over God's word for %s"
 
@@ -320,179 +347,193 @@ msgstr "Which directory?"
 msgid "Information"
 msgstr "Open the metadata..."
 
-#: install_manager/zipinstaller.py:39
+#: install_manager/zipinstaller.py:40
 msgid "Cannot read book metadata in file %s"
 msgstr "Arg. The book metadata be broken in file %s"
 
-#: mainframe.py:247
+#: mainframe.py:246
 msgid "Go to verse"
 msgstr "Zip to this reference"
 
-#: mainframe.py:248
+#: mainframe.py:247
 msgid "Go to this verse"
 msgstr "Zip to this reference"
 
-#: mainframe.py:251
+#: mainframe.py:250
 msgid "Bible Search"
 msgstr "Search the good book"
 
-#: mainframe.py:252
+#: mainframe.py:251
 msgid "Search in this Bible"
 msgstr "Run your eyes over the page for this word"
 
-#: mainframe.py:255 xrc/copyverses_xrc.py:80
+#: mainframe.py:254 xrc/copyverses_xrc.py:80
 msgid "Copy Verses"
 msgstr "Transport the verses into the clipboard"
 
-#: mainframe.py:256
+#: mainframe.py:255
 msgid "Open the Copy Verses dialog"
 msgstr "Transport the verses into the clipboard"
 
-#: mainframe.py:261
+#: mainframe.py:260
 msgid "Back"
 msgstr "Return to the previous verse"
 
-#: mainframe.py:262
+#: mainframe.py:261
 msgid "Go back a verse"
 msgstr "Return to the previous verse"
 
-#: mainframe.py:265
+#: mainframe.py:264
 msgid "Forward"
 msgstr "Return to the next verse"
 
-#: mainframe.py:266
+#: mainframe.py:265
 msgid "Go forward a verse"
 msgstr "Return to the next verse"
 
-#: mainframe.py:270
+#: mainframe.py:269
 msgid "Zoom In"
 msgstr "Grow"
 
-#: mainframe.py:271
+#: mainframe.py:270
 msgid "Make text bigger"
 msgstr "Enlarge the text"
 
-#: mainframe.py:274
+#: mainframe.py:273
 msgid "Default Zoom"
 msgstr "Back to normal size"
 
-#: mainframe.py:275
+#: mainframe.py:274
 msgid "Return text to default size"
 msgstr "Put text back the way it were"
 
-#: mainframe.py:278
+#: mainframe.py:277
 msgid "Zoom Out"
 msgstr "Shrink"
 
-#: mainframe.py:279
+#: mainframe.py:278
 msgid "Make text smaller"
 msgstr "Shrink text"
 
-#: mainframe.py:308
+#: mainframe.py:307
 msgid "Navigation"
 msgstr "A toolbar to move around"
 
-#: mainframe.py:310
+#: mainframe.py:309
 msgid "Zoom"
 msgstr "A toolbar to Zoom"
 
-#: mainframe.py:312
+#: mainframe.py:311
 msgid "History toolbar"
 msgstr "A toolbar with history"
 
-#: mainframe.py:720 xrc/auifrm_xrc.py:44
+#: mainframe.py:719 xrc/auifrm_xrc.py:44
 msgid "&Language"
 msgstr "&Lingo"
 
-#: mainframe.py:739 xrc/auifrm_xrc.py:47
+#: mainframe.py:738 xrc/auifrm_xrc.py:47
 msgid "&Display"
 msgstr "Toggle them options"
 
-#: mainframe.py:744 xrc/auifrm_xrc.py:50
+#: mainframe.py:743 xrc/auifrm_xrc.py:50
 msgid "&Windows"
 msgstr "This be a list of windows"
 
-#: mainframe.py:749 xrc/auifrm_xrc.py:49
+#: mainframe.py:748 xrc/auifrm_xrc.py:49
 msgid "Toolbars"
 msgstr "These be the floating strips"
 
-#: mainframe.py:777
+#: mainframe.py:776
 msgid "Show the %s toolbar"
 msgstr "%s toolbar: show"
 
-#: mainframe.py:800 xrc/auifrm_xrc.py:51
+#: mainframe.py:799 xrc/auifrm_xrc.py:51
 msgid "Debug"
 msgstr "For the experts"
 
-#: mainframe.py:858
+#: mainframe.py:857
 msgid "Use Strong's headwords"
 msgstr "Show a word, not a number"
 
-#: mainframe.py:859
+#: mainframe.py:858
 msgid "Display Strong's numbers using the transliterated text"
 msgstr "Show a word for the strong's text, not the number"
 
-#: mainframe.py:864
+#: mainframe.py:863
 msgid "Expand cross-references"
 msgstr "Grow cross-references"
 
-#: mainframe.py:865
+#: mainframe.py:864
 msgid "Display cross references partially expanded"
 msgstr "Show cross-references expanded to the 2nd level"
 
-#: mainframe.py:870
+#: mainframe.py:869
 msgid "One line per verse"
 msgstr "Each verse by itself"
 
-#: mainframe.py:871
+#: mainframe.py:870
 msgid "Display each verse on its own line."
 msgstr "Put each verse on its own lonesome line"
 
-#: mainframe.py:876
+#: mainframe.py:875
 msgid "Topic Tags"
 msgstr ""
 
-#: mainframe.py:877
+#: mainframe.py:876
 msgid "Display the topics that each verse is tagged with."
 msgstr ""
 
-#: mainframe.py:1025
+#: mainframe.py:1024
 msgid "An error occurred on closing:"
 msgstr "This problem be occuring on conclusion:"
 
-#: mainframe.py:1037 mainframe.py:1038
+#: mainframe.py:1036 mainframe.py:1037
 msgid "search "
 msgstr ""
 
-#: mainframe.py:1058
+#: mainframe.py:1060
 msgid ""
 "Flexible Bible study software.\n"
 "\t\t\tBuilt Using the Sword Project from crosswire.org\n"
 "\t\t\tPython Version: %(sysversion)s\n"
-"\t\t\twxPython Version: %(wxversion)s"
+"\t\t\twxPython Version: %(wxversion)s\n"
+"\t\t\tSWORD Version: %(swversion)s"
 msgstr ""
 "Flexibubble Bible study software.\n"
 "\t\t\tBuilt with the Sword Project from crosswire.org\n"
 "\t\t\tPython Version be %(sysversion)s\n"
-"\t\t\twxPython Version be %(wxversion)s"
+"\t\t\twxPython Version be %(wxversion)s\n"
+"\t\t\tSWORD Version: %(swversion)s"
 
-#: mainframe.py:1064
-msgid "BPBible"
-msgstr "BP - God's word"
-
-#: mainframe.py:1068
+#: mainframe.py:1071
 msgid "BPBible website"
 msgstr "Vist the website for this application"
 
-#: mainframe.py:1069
-msgid "Ben Morgan"
-msgstr "Me"
+#: mainframe.py:1073
+msgid "BPBible development team"
+msgstr "The BPBible coders"
 
-#: mainframe.py:1069
+#: mainframe.py:1074
 msgid "SWORD library developers"
 msgstr "SWORD devels"
 
-#: mainframe.py:1070
+#: mainframe.py:1078
+msgid "Developers"
+msgstr "Coders"
+
+#: mainframe.py:1079
+msgid "Artists"
+msgstr "Picture makers"
+
+#: mainframe.py:1080
+msgid "Translators"
+msgstr "Translingofiers"
+
+#: mainframe.py:1082
+msgid "translator-credits"
+msgstr "Translated dutifully by BM"
+
+#: mainframe.py:1086
 msgid ""
 "Icons used are from famfamfam\n"
 "http://www.famfamfam.com/lab/icons/silk\n"
@@ -504,7 +545,7 @@ msgstr ""
 "and the Tango Desktop Project\n"
 "http://tango.freedesktop.org/Tango_Desktop_Project for the use of their icons"
 
-#: mainframe.py:1075
+#: mainframe.py:1092
 msgid ""
 "BPBible is licensed under the GPL v2. For more details, refer to the LICENSE."
 "txt file in the application directory"
@@ -586,7 +627,7 @@ msgstr "Different books"
 msgid "Find Book..."
 msgstr "Look for a book..."
 
-#: module_tree.py:110
+#: module_tree.py:111
 msgid "Show information for %s"
 msgstr "Display the guff about this book %s"
 

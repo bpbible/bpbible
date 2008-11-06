@@ -140,7 +140,7 @@ class FontChoiceDialog(xrcFontChoiceDialog):
 		# self.preview.SetStandardFonts(self.font_size.Value, 
 		#	self.font_face.StringSelection, "")
 		if self.mod is None:
-			self.preview.SetPage(config.MODULE_MISSING_STRING)
+			self.preview.SetPage(config.MODULE_MISSING_STRING())
 			return
 
 		try:
