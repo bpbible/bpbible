@@ -8,9 +8,13 @@ from util.observerlist import ObserverList
 
 class KeyPad(wx.PopupTransientWindow):
 	COLUMNS = 16
-	def __init__(self, parent, keys, position):
+	def __init__(self, parent, keys, position, font=None):
 		super(KeyPad, self).__init__(parent, style=wx.NO_BORDER)
+
 		panel = wx.Panel(self, style=wx.RAISED_BORDER)
+		if font:
+			panel.SetFont(font)
+		
 		sizer = wx.GridSizer(len(keys)/self.COLUMNS, self.COLUMNS, 1, 1)
 		for key in sorted(keys):
 			button = wx.Button(panel, label=key, style=wx.BU_EXACTFIT)

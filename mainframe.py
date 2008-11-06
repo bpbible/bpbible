@@ -42,6 +42,7 @@ from module_manager import ModuleManagerDialog
 dprint(MESSAGE, "Importing gui")
 from gui import htmlbase
 from gui import guiutil
+from gui import fonts
 from gui.guiutil import bmp
 from gui.menu import Separator
 from gui.htmlbase import HtmlBase
@@ -147,6 +148,8 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.on_close += lambda: \
 			biblemgr.on_after_reload.remove(self.on_modules_reloaded)
 		
+		fonts.fonts_changed += self.refresh_all_pages
+
 		
 		
 		#self.Freeze()
@@ -693,7 +696,7 @@ class MainFrame(wx.Frame, AuiLayer):
 		ansa = dialog.ShowModal()
 		dialog.Destroy()
 		if ansa == wx.ID_OK:
-			self.refresh_all_pages()
+			fonts.fonts_changed()
 
 	def zoom(self, direction):	
 		htmlbase.zoom(direction)

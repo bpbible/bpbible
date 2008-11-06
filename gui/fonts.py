@@ -2,6 +2,8 @@ import wx
 from swlib.pysw import SW
 from util.configmgr import config_manager
 from util import osutils
+from util.observerlist import ObserverList
+from backend.bibleinterface import biblemgr
 
 
 font_settings = config_manager.add_section("Font")
@@ -55,3 +57,17 @@ def get_default_font(module_or_language):
 		return default_fonts()[1]
 	
 	return _default_font()
+
+def get_module_gui_font(module, default_to_None=False):
+	default, (face, size, use_in_gui) = get_module_font_params(module)
+	if use_in_gui:
+		font  = wx.FFont(size, wx.FONTFAMILY_ROMAN, face=face)
+	else:
+		if default_to_None:
+			font = None
+		else:
+			font = wx.NORMAL_FONT
+	
+	return font#use_in_gui, font
+
+fonts_changed = ObserverList()

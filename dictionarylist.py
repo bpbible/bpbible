@@ -10,6 +10,8 @@ from gui.virtuallist import VirtualListBox
 from gui.guiutil import bmp
 from util import osutils
 
+from gui import fonts
+
 _disabled = False#True
 
 class DateConverter(object):
@@ -232,6 +234,16 @@ class DictionarySelector(wx.Panel):
 
 		self.SetSizerAndFit(sizer)
 		self.item_changed = ObserverList()
+		fonts.fonts_changed += self.set_font
+	
+	def set_font(self):
+		font = fonts.get_module_gui_font(self.list.book.mod)
+		print font.FaceName, font.PointSize
+
+		self.list.Font = font
+		self.text_entry.text.Font = font
+		self.Layout()
+		
 
 	def on_text(self, event):
 		# unbind the selected event so that we don't go into an infinite loop
@@ -266,6 +278,9 @@ class DictionarySelector(wx.Panel):
 		was_devotion = self.text_entry.is_calendar
 		self.text_entry.show_calendar(book.has_feature("DailyDevotion"))
 		self.list.set_book(book)
+
+		self.set_font()
+	
 
 		# if we are changing to a devotion, and weren't a devotion,
 		# set it to today

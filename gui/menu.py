@@ -7,7 +7,7 @@ class Separator:
 class MenuItem(object):
 	def __init__(self, text, action, doc=None, enabled=lambda:True,
 			update_text=lambda:None, update_ui=None, accelerator=None,
-			id=wx.ID_ANY):
+			id=wx.ID_ANY, font=None):
 		self.text = text
 		self.action = action
 		#self.window = window
@@ -25,6 +25,7 @@ class MenuItem(object):
 		self.update_ui = update_ui
 		self.accelerator = accelerator
 		self.id = id
+		self.font = font
 	
 	def create_item(self, window, menu, pos=None, is_popup=False):
 		if pos is None:
@@ -34,6 +35,8 @@ class MenuItem(object):
 		if self.accelerator and not is_popup:
 			text += "\t%s"%self.accelerator
 		item = menu.Append(self.id, text, self.doc)
+		if self.font is not None:
+			item.SetFont(self.font)
 
 		if self.action:
 			window.Bind(wx.EVT_MENU, lambda evt:self.action(), item)

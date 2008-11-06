@@ -26,6 +26,7 @@ from gui import guiutil
 from util.debug import dprint, WARNING, is_debugging
 from gui import virtuallist
 from gui import reference_display_frame
+from gui import fonts
 from events import SEARCH
 from util.configmgr import config_manager
 
@@ -174,6 +175,8 @@ class SearchPanel(xrcSearchPanel):
 		
 		self.verselist.parent = self
 		self.versepreview.parent = self
+
+		fonts.fonts_changed += self.set_font
 	
 	def on_create(self, event=None):
 		self.Unbind(wx.EVT_WINDOW_CREATE)
@@ -239,8 +242,8 @@ class SearchPanel(xrcSearchPanel):
 	
 	def set_version(self, version):
 		self.version = version
-		
 
+		self.set_font()
 		self.genindex.Enable(version is not None)
 		
 
@@ -255,6 +258,17 @@ class SearchPanel(xrcSearchPanel):
 
 		self.set_title()
 		self.has_started = True
+	
+	def set_font(self):
+		module = self.book.parent.get_module(self.version)
+		assert module
+		
+		font = fonts.get_module_gui_font(module)
+
+		self.verselist.Font = font
+		self.versepreview.Font = font
+		self.searchkey.Font = font
+
 	
 	def set_index_available(self, available=True):
 		if not available:
@@ -442,7 +456,13 @@ class SearchPanel(xrcSearchPanel):
 		btn = event.GetEventObject()
 		pos = btn.ClientToScreen((btn.Size[0], 0))
 		position = pos, (-btn.Size[0], btn.Size[0])
-		kp = KeyPad(self, self.index.statistics["letters"], position)
+		module = self.book.parent.get_module(self.version)
+		assert module
+		
+		font = fonts.get_module_gui_font(module, default_to_None=True)
+		
+		kp = KeyPad(self, self.index.statistics["letters"], position, font)
+		
 		
 		def press_key(key):
 			if osutils.is_msw():

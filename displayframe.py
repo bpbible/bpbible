@@ -506,8 +506,11 @@ class DisplayFrame(HtmlSelectableWindow):
 			text = self.strip_text(text)
 			guiconfig.mainfrm.UpdateDictionaryUI(text)
 
+		assert hasattr(self, "mod"), self		
+		font = fonts.get_module_gui_font(self.mod, default_to_None=True)
+		
 		return MenuItem("Dictionary lookup", on_lookup_click, 
-			update_ui=update_ui)
+			update_ui=update_ui, font=font)
 
 
 	def make_search_text(self):
@@ -559,8 +562,10 @@ class DisplayFrame(HtmlSelectableWindow):
 
 			guiconfig.mainfrm.search_panel.search_and_show(text)
 
+		assert hasattr(self, "mod"), self		
+		font = fonts.get_module_gui_font(self.mod, default_to_None=True)
 		return MenuItem("Search on word", on_search_click, 
-			update_ui=update_ui)
+			update_ui=update_ui, font=font)
 
 
 	def copy_text_no_links(self):

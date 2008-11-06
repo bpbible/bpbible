@@ -22,6 +22,8 @@ class FontChoiceDialog(xrcFontChoiceDialog):
 		self.font_size.Bind(wx.EVT_SPINCTRL, self.on_font_changed)
 		self.gui_use_default_font.Bind(wx.EVT_CHECKBOX, 
 			lambda evt: self.on_use_default_font(evt.Checked()))
+		self.gui_use_in_ui.Bind(wx.EVT_CHECKBOX, self.on_font_changed)
+			
 		
 		self.tree = FontTree(self.filterable_tree_holder)
 		self.tree.on_module_choice += self.on_module_choice
@@ -46,20 +48,21 @@ class FontChoiceDialog(xrcFontChoiceDialog):
 	
 	def on_use_default_font(self, checked):
 		if checked:
-			font, size, use_in_gui = fonts.get_default_font(self.tree_item)
-			self.set_font_params(font, size)
 			if self.tree_item == DefaultFont:
 				font_settings["default_fonts"] = None
 			else:
 				if self.item_to_set in self.item_section:
 					del self.item_section[self.item_to_set]
-				
-		
-	def set_font_params(self, font, size):
+			
+			font, size, use_in_gui = fonts.get_default_font(self.tree_item)
+			self.set_font_params(font, size, use_in_gui)
+
+	def set_font_params(self, font, size, use_in_gui):
 		if not self.font_face.SetStringSelection(font):
 			self.font_face.SetSelection(0)
 
 		self.font_size.SetValue(size)
+		self.gui_use_in_ui.SetValue(use_in_gui)
 		self.update_preview()
 		
 
@@ -71,8 +74,9 @@ class FontChoiceDialog(xrcFontChoiceDialog):
 		self.update_preview()
 
 	def on_item_choice(self, data, parent_data, font_details_getter):
+		self.font_details_getter = font_details_getter
 		default, (font, size, use_in_gui) = font_details_getter(data)
-		self.set_font_params(font, size)
+		self.set_font_params(font, size, use_in_gui)
 		self.tree_item = data
 		
 		self.on_use_default_font(default)
