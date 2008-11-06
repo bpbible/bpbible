@@ -100,6 +100,11 @@ Books to be deleted:""") + '\n' +
 		checked_modules = [x for x in iterate(root)
 			if isinstance(x.GetData().data, SW.Module)]
 
+		if not checked_modules:
+			selection = self.tree.tree.GetSelection()
+			if selection and isinstance(selection.GetData().data, SW.Module):
+				checked_modules = selection,
+
 		return checked_modules
 
 if __name__ == '__main__':
