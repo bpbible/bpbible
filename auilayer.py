@@ -628,9 +628,11 @@ class AuiLayer(object):
 		self.on_changed()
 
 	def load_aui_perspective(self, perspective):
+		aui_items = self.get_aui_items()
+		
 		def get_caption(match):
 			n = match.group(2)
-			for frame, caption, name, dummy, dummy in self.get_aui_items():
+			for frame, caption, name, dummy, dummy in aui_items:
 				if name == n:
 					break
 			else:
@@ -649,6 +651,20 @@ class AuiLayer(object):
 			get_caption, perspective)
 
 		self.aui_mgr.LoadPerspective(perspective)
+
+		# If a pane doesn't exist in this perspective, we need to set it up
+		# now
+		for frame, caption, name, always, setup in aui_items:
+			if re.search("name=%s;" % name, perspective):
+				continue
+
+			pane = self.aui_mgr.GetPane(name)
+			assert pane.IsOk()
+			for item in always + setup:
+				getattr(pane, item[0])(*item[1:])
+
+				
+			
 		self.on_changed()
 	
 	def on_changed(self):
