@@ -162,8 +162,8 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 
 	def _handle_accelerators(self, event):
 		"""Handle the keyboard shortcuts required by the frame."""
-		event.Skip()
 		if event.GetModifiers() != wx.MOD_CMD:
+			event.Skip()
 			return
 
 		actions = {
@@ -173,11 +173,11 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		}
 		# It appears that the KeyCode we get is the index of the letter in
 		# the alphabet for some reason.
-		char = event.KeyCode + ord('a') - 1
+		char = chr(event.KeyCode + ord('a') - 1)
 		try:
 			actions[char]()
 		except KeyError:
-			pass
+			event.Skip()
 	
 	def _show_topic_context_menu(self, event):
 		"""Shows the context menu for a topic in the topic tree."""
