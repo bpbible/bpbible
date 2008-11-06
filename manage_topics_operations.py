@@ -63,7 +63,9 @@ class ClipboardData(object):
 		self._keep_original = keep_original
 
 	def paste(self, to_topic):
+		# XXX: This will allow you to create a circular data structure.
 		from_topic = self._item.parent
+		self._check_circularity(to_topic)
 		if from_topic is to_topic:
 			return
 
@@ -77,6 +79,21 @@ class ClipboardData(object):
 			if not self._keep_original:
 				from_topic.remove_subtopic(self._item)
 			to_topic.add_subtopic(self._item)
+
+	def _check_circularity(self, to_topic):
+		if self._type == PASSAGE_SELECTED:
+			return
+		topic_parent = to_topic
+		while topic_parent is not None:
+			if topic_parent is self._item:
+				raise CircularDataException()
+			topic_parent = topic_parent.parent
+
+class CircularDataException(Exception):
+	"""This exception is raised when the topic manager detects circular data,
+	typically because the user has attempted to copy or move a topic to one
+	of its children.
+	"""
 
 def _test():
 	"""
@@ -118,6 +135,14 @@ def _test():
 	... 	operations_manager_context.selected_passage = None
 	... 	operations_manager_context.selected_topic = topic
 	... 	operations_manager.cut()
+	... 	operations_manager_context.selected_topic = target_topic
+	... 	operations_manager.paste()
+	...
+	>>> def _copy_topic(topic, target_topic, operations_manager_context=operations_manager_context, operations_manager=operations_manager):
+	... 	operations_manager_context.is_passage_selected = False
+	... 	operations_manager_context.selected_passage = None
+	... 	operations_manager_context.selected_topic = topic
+	... 	operations_manager.copy()
 	... 	operations_manager_context.selected_topic = target_topic
 	... 	operations_manager.paste()
 	...
@@ -169,6 +194,44 @@ def _test():
 	Topic 'topic1 > topic2': add subtopic observer called.
 	>>> topic2.subtopics
 	[<PassageList 'topic3'>]
+
+	>>> _copy_topic(topic3, manager)
+	Topic 'None': add subtopic observer called.
+	>>> manager.subtopics
+	[<PassageList 'topic1'>, <PassageList 'topic3'>]
+	>>> new_topic = manager.subtopics[1]
+	>>> new_topic.name = "topic3 (test to see it was a genuine copy)"
+	>>> topic3.name
+	'topic3'
+	>>> _copy_topic(topic1, new_topic)
+	>>> new_topic.subtopics
+	[<PassageList 'topic1'>]
+	>>> new_topic.subtopics[0].passages
+	[PassageEntry('Genesis 3:5', '')]
+	>>> new_topic.subtopics[0].passages[0].comment = "test comment"
+	>>> new_topic.subtopics[0].passages
+	[PassageEntry('Genesis 3:5', 'test comment')]
+	>>> topic1.passages
+	[PassageEntry('Genesis 3:5', '')]
+	>>> new_topic.subtopics[0].subtopics[0]
+	<PassageList 'topic2'>
+	>>> new_topic.subtopics[0].subtopics[0].name = "xyz"
+	>>> new_topic.subtopics[0].subtopics[0]
+	<PassageList 'xyz'>
+	>>> topic2.name
+	'topic2'
+	>>> topic3.subtopics
+	[]
+
+	Check copying or moving a topic into one of its children fails.
+	>>> _copy_topic(topic1, topic3)
+	Traceback (most recent call last):
+	  File ...
+	CircularDataException
+	>>> _move_topic(topic1, topic3)
+	Traceback (most recent call last):
+	  File ...
+	CircularDataException
 
 	>>> _copy_passage(passage1, topic2)
 	Topic 'topic1 > topic2': add passage observer called.

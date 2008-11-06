@@ -124,6 +124,17 @@ class _BasePassageList(object):
 				return topic
 
 		return self.add_empty_subtopic(topic_name)
+
+	def clone(self):
+		"""Makes a clean copy of this passage list (including its passages
+		and subtopics) and returns it.
+		"""
+		new_list = PassageList(name=self.name, description=self.description)
+		for topic in self.subtopics:
+			new_list.add_subtopic(topic.clone())
+		for passage in self.passages:
+			new_list.add_passage(passage.clone())
+		return new_list
 	
 	def __eq__(self, other):
 		try:
