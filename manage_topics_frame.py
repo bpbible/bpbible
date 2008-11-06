@@ -6,7 +6,7 @@ from passage_entry_dialog import PassageEntryDialog
 from topic_creation_dialog import TopicCreationDialog
 from xrc.manage_topics_xrc import xrcManageTopicsFrame
 from manage_topics_operations import (ManageTopicsOperations,
-		PASSAGE_SELECTED, TOPIC_SELECTED)
+		CircularDataException, PASSAGE_SELECTED, TOPIC_SELECTED)
 
 class ManageTopicsFrame(xrcManageTopicsFrame):
 	def __init__(self, parent):
@@ -178,6 +178,9 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 			actions[char]()
 		except KeyError:
 			event.Skip()
+		except CircularDataException:
+			wx.MessageBox("Cannot copy the topic to one of its children.",
+					"Copy Topic", wx.OK | wx.ICON_ERROR, self)
 	
 	def _show_topic_context_menu(self, event):
 		"""Shows the context menu for a topic in the topic tree."""
