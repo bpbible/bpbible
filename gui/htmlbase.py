@@ -499,6 +499,14 @@ class HtmlBase(wx.html.HtmlWindow):
 		event.Skip()
 	
 	def on_size(self, event):
+		if event.GetSize() == (1, 0):
+			# sometimes putting the commentary pane at the right side between
+			# a topmost other books frame and a bottom dictionary pane
+			# will end up with the commentary getting a (1, 0)
+			# size event before the proper one
+			# this ends up with the text laid out wrong, so supress this event
+			return
+
 		# Under GTK, we are getting extra size events when html is loaded,
 		# even though the size hasn't changed. 
 		# Don't skip the event, or wxHtml will try to handle it 
