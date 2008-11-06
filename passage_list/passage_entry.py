@@ -15,6 +15,7 @@ class PassageEntry(object):
 		self._set_passage(passage)
 		self._comment = comment
 		self.observers = ObserverList()
+		self.parent = None
 
 		global _passage_entry_id_dict
 		_passage_entry_id_dict[self.get_id()] = self

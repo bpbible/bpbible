@@ -4,6 +4,7 @@ TOPIC_SELECTED = 2
 class ManageTopicsOperations(object):
 	def __init__(self, context):
 		self._context = context
+		self._clipboard_data = None
 
 	def add_subtopic(self, subtopic):
 		self._context.get_selected_topic().add_subtopic(subtopic)
@@ -20,6 +21,26 @@ class ManageTopicsOperations(object):
 				self._context.get_selected_passage()
 			)
 
+	def cut(self):
+		self._setup_clipboard(keep_original=False)
+
+	def copy(self):
+		self._setup_clipboard(keep_original=True)
+
+	def _setup_clipboard(self, keep_original):
+		item, type = self._context.get_selected_item()
+		if not item:
+			return
+
+		self._clipboard_data = ClipboardData(
+				item, type, keep_original=keep_original)
+
+	def paste(self):
+		if not self._clipboard_data:
+			return
+
+		self._clipboard_data.paste(self._context.get_selected_topic())
+
 	def move_passage(self, from_topic, passage, to_topic):
 		from_topic.remove_passage(passage)
 		to_topic.add_passage(passage)
@@ -29,6 +50,33 @@ class ManageTopicsOperations(object):
 
 	def set_topic_name(self, name):
 		self._context.get_selected_topic().name = name
+
+class ClipboardData(object):
+	"""This class manages the item that is currently in the clipboard.
+
+	It includes support for pasting the currently copied item into a different
+	topic.
+	"""
+	def __init__(self, item, type, keep_original):
+		self._item = item
+		self._type = type
+		self._keep_original = keep_original
+
+	def paste(self, to_topic):
+		from_topic = self._item.parent
+		if from_topic is to_topic:
+			return
+
+		if self._keep_original:
+			self._item = self._item.clone()
+		if self._type == PASSAGE_SELECTED:
+			if not self._keep_original:
+				from_topic.remove_passage(self._item)
+			to_topic.add_passage(self._item)
+		else:
+			if not self._keep_original:
+				from_topic.remove_subtopic(self._item)
+			to_topic.add_subtopic(self._item)
 
 def _test():
 	"""
@@ -57,10 +105,29 @@ def _test():
 	... 	operations_manager_context.selected_topic = topic
 	... 	operations_manager.remove_passage()
 	...
-	>>> def _move_passage(topic, passage, operations_manager_context=operations_manager_context, operations_manager=operations_manager):
+	>>> def _move_passage(passage, target_topic, operations_manager_context=operations_manager_context, operations_manager=operations_manager):
+	... 	operations_manager_context.is_passage_selected = True
 	... 	operations_manager_context.selected_passage = passage
+	... 	operations_manager_context.selected_topic = None
+	... 	operations_manager.cut()
+	... 	operations_manager_context.selected_topic = target_topic
+	... 	operations_manager.paste()
+	...
+	>>> def _move_topic(topic, target_topic, operations_manager_context=operations_manager_context, operations_manager=operations_manager):
+	... 	operations_manager_context.is_passage_selected = False
+	... 	operations_manager_context.selected_passage = None
 	... 	operations_manager_context.selected_topic = topic
-	... 	operations_manager.remove_passage()
+	... 	operations_manager.cut()
+	... 	operations_manager_context.selected_topic = target_topic
+	... 	operations_manager.paste()
+	...
+	>>> def _copy_passage(passage, target_topic, operations_manager_context=operations_manager_context, operations_manager=operations_manager):
+	... 	operations_manager_context.is_passage_selected = True
+	... 	operations_manager_context.selected_passage = passage
+	... 	operations_manager_context.selected_topic = None
+	... 	operations_manager.copy()
+	... 	operations_manager_context.selected_topic = target_topic
+	... 	operations_manager.paste()
 	...
 	>>> def _set_topic_name(topic, name, operations_manager_context=operations_manager_context, operations_manager=operations_manager):
 	... 	operations_manager_context.selected_topic = topic
@@ -87,20 +154,35 @@ def _test():
 	>>> _add_passage(topic2, passage1)
 	Topic 'topic1 > topic2': add passage observer called.
 
-	#>>> _move_passage(topic2, passage1, topic1)
+	>>> _move_passage(passage1, topic1)
 	Topic 'topic1 > topic2': remove passage observer called.
 	Topic 'topic1': add passage observer called.
-	#>>> topic1.passages
+	>>> topic1.passages
 	[PassageEntry('Genesis 3:5', '')]
-	#>>> topic2.passages
+	>>> topic2.passages
 	[]
-	#>>> _copy_passage(topic1, passage1, topic2)
+	>>> passage1.parent
+	<PassageList 'topic1'>
+
+	>>> _move_topic(topic3, topic2)
+	Topic 'None': remove subtopic observer called.
+	Topic 'topic1 > topic2': add subtopic observer called.
+	>>> topic2.subtopics
+	[<PassageList 'topic3'>]
+
+	>>> _copy_passage(passage1, topic2)
 	Topic 'topic1 > topic2': add passage observer called.
-	#>>> passage1.comment = "Test comment (to check it was a genuine copy)"
-	#>>> topic1.passages
+	>>> passage1.comment = "Test comment (to check it was a genuine copy)"
+	>>> topic1.passages
 	[PassageEntry('Genesis 3:5', 'Test comment (to check it was a genuine copy)')]
-	#>>> topic2.passages
+	>>> topic2.passages
 	[PassageEntry('Genesis 3:5', '')]
+
+	Check moving to the same topic does nothing.
+	>>> _move_passage(topic1.passages[0], topic1)
+	>>> topic1.passages
+	[PassageEntry('Genesis 3:5', 'Test comment (to check it was a genuine copy)')]
+
 	>>> _set_topic_name(topic1, "topic1 (new name)")
 	Topic 'topic1 (new name)': name changed observer called.
 	"""

@@ -5,7 +5,8 @@ from passage_list import get_primary_passage_list_manager, PassageEntry
 from passage_entry_dialog import PassageEntryDialog
 from topic_creation_dialog import TopicCreationDialog
 from xrc.manage_topics_xrc import xrcManageTopicsFrame
-from manage_topics_operations import ManageTopicsOperations
+from manage_topics_operations import (ManageTopicsOperations,
+		PASSAGE_SELECTED, TOPIC_SELECTED)
 
 class ManageTopicsFrame(xrcManageTopicsFrame):
 	def __init__(self, parent):
@@ -17,6 +18,8 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 				context=self._operations_context
 			)
 		self._selected_topic = None
+		self.item_selected_type = TOPIC_SELECTED
+		self.selected_passage = None
 		self._init_passage_list_ctrl_headers()
 		self._setup_passage_list_ctrl()
 		self._setup_topic_tree()
@@ -32,6 +35,15 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		self.topic_tree.Bind(wx.EVT_TREE_ITEM_MENU, self._show_topic_context_menu)
 		self.passage_list_ctrl.Bind(wx.EVT_LIST_ITEM_SELECTED, self._passage_selected)
 		self.passage_list_ctrl.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self._passage_activated)
+
+		# Trap the events with the topic tree and the passage list when they
+		# get focus, so that we can know which one last got focus for our
+		# copy and paste operations.
+		self.topic_tree.Bind(wx.EVT_SET_FOCUS, self._topic_tree_got_focus)
+		self.passage_list_ctrl.Bind(wx.EVT_SET_FOCUS, self._passage_list_got_focus)
+
+		self.passage_list_ctrl.Bind(wx.EVT_CHAR, self._handle_accelerators)
+		self.topic_tree.Bind(wx.EVT_CHAR, self._handle_accelerators)
 
 	def _setup_topic_tree(self):
 		root = self.topic_tree.AddRoot("Topics")
@@ -147,6 +159,25 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		if not event.IsEditCancelled():
 			topic = self.topic_tree.GetPyData(event.GetItem())
 			topic.name = event.GetLabel()
+
+	def _handle_accelerators(self, event):
+		"""Handle the keyboard shortcuts required by the frame."""
+		event.Skip()
+		if event.GetModifiers() != wx.MOD_CMD:
+			return
+
+		actions = {
+			"c":	self._operations_manager.copy,
+			"x":	self._operations_manager.cut,
+			"v":	self._operations_manager.paste,
+		}
+		# It appears that the KeyCode we get is the index of the letter in
+		# the alphabet for some reason.
+		char = event.KeyCode + ord('a') - 1
+		try:
+			actions[char]()
+		except KeyError:
+			pass
 	
 	def _show_topic_context_menu(self, event):
 		"""Shows the context menu for a topic in the topic tree."""
@@ -220,6 +251,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 
 	def _passage_selected(self, event):
 		passage_entry = self._selected_topic.passages[event.GetIndex()]
+		self.selected_passage = passage_entry
 		# Do nothing.
 
 	def _passage_activated(self, event):
@@ -230,6 +262,14 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		"""Selects the entry in the list control with the given index."""
 		state = wx.LIST_STATE_SELECTED | wx.LIST_STATE_FOCUSED
 		self.passage_list_ctrl.SetItemState(index, state, state)
+
+	def _topic_tree_got_focus(self, event):
+		self.item_selected_type = TOPIC_SELECTED
+		event.Skip()
+
+	def _passage_list_got_focus(self, event):
+		self.item_selected_type = PASSAGE_SELECTED
+		event.Skip()
 
 class OperationsContext(object):
 	"""Provides a context for passage list manager operations.
@@ -245,7 +285,12 @@ class OperationsContext(object):
 		return self._frame._selected_topic
 
 	def get_selected_passage(self):
-		pass
+		return self._frame.selected_passage
 
 	def get_selected_item(self):
-		pass
+		item_selected_type = self._frame.item_selected_type
+		if item_selected_type == PASSAGE_SELECTED:
+			item = self.get_selected_passage()
+		elif item_selected_type == TOPIC_SELECTED:
+			item = self.get_selected_topic()
+		return (item, item_selected_type)

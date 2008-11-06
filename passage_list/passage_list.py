@@ -60,6 +60,7 @@ class _BasePassageList(object):
 	def add_passage(self, passage):
 		"""Adds the given passage to the end of the list of passages."""
 		self.passages.append(passage)
+		passage.parent = self
 		self.add_passage_observers(passage)
 	
 	def insert_passage(self, passage, index):
