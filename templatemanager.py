@@ -454,7 +454,16 @@ class TemplateManager(xrcTemplateManager):
 	def read_templates(self):
 		try:
 			f = open(template_file, "rb")
-			self.templates = pickle.load(f)
+			data = f.read()
+			
+			# issue 26			
+			# upgrade templates from 0.3 to 0.4
+			data = data.replace(
+				"(cutil.util\nTemplate",
+				"(cbackend.verse_template\nTemplate"
+			)
+
+			self.templates = pickle.loads(data)
 		except Exception, e:
 			dprint(WARNING, "Template loading exception", e)
 			#try:
@@ -502,7 +511,7 @@ class TemplateManager(xrcTemplateManager):
 		biblemgr.bible.templatelist.pop()
 
 		if data is None:
-			data = config.MODULE_MISSING_STRING
+			data = config.MODULE_MISSING_STRING()
 		
 		self.gui_preview.book = biblemgr.bible
 		self.gui_preview.SetPage(data)
