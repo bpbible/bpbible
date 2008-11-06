@@ -72,9 +72,10 @@ sword_paths_file += "sword.conf"
 
 raw = False
 
-#TODO: i18n for the next 3
 def name():
 	return _("BPBible")
+
+version = "0.3.9.6"
 
 def MODULE_MISSING_STRING():
 	return _("""<b>This book is not set.</b><br>

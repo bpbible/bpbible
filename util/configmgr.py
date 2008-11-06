@@ -1,9 +1,10 @@
-from ConfigParser import RawConfigParser
+from ConfigParser import RawConfigParser, NoOptionError, NoSectionError
 from observerlist import ObserverList
-from debug import dprint, WARNING
+from debug import dprint, WARNING, MESSAGE
 import os
 import cPickle as pickle
 import config
+from swlib.pysw import SW
 	
 class ConfigSection(object):
 	def __init__(self, section):
@@ -53,6 +54,8 @@ class ConfigManager(object):
 		self.sections = {}
 		self.add_section("Internal")
 		self["Internal"].add_item("path", write_path)
+		self["Internal"].add_item("version", config.version)
+		
 		self.before_save = ObserverList()
 		
 	
@@ -94,8 +97,20 @@ class ConfigManager(object):
 	
 	def load(self, paths=(os.path.expanduser('~/bpbible/data.cfg'),)):
 		config_parser = RawConfigParser()
-		config_parser.read(self["Internal"]["path"])
-		config_parser.read(paths)
+		loaded = config_parser.read(self["Internal"]["path"])
+		loaded += config_parser.read(paths)
+		if config_parser.has_option("Internal", "version"):
+			version = config_parser.get("Internal", "version")
+
+		elif loaded:
+			version = "0.3"
+
+		else:
+			version = config.version
+		
+		if SW.Version(version) < SW.Version(config.version):
+			self.upgrade(config_parser, SW.Version(version))
+
 		for section_name in config_parser.sections():
 			if section_name not in self.sections:
 				dprint(WARNING, "Skipping unknown section '%s'" % section_name)
@@ -121,6 +136,31 @@ class ConfigManager(object):
 
 				section[option] = type_reader(section_name, option)
 
+		self["Internal"]["version"] = config.version
+	
+	def upgrade(self, config_parser, version_from):
+		dprint(MESSAGE, "Upgrading from", version_from.getText())
+		if version_from <= SW.Version("0.3"):
+			self._upgrade_03_to_04(config_parser)
+
+	def _upgrade_03_to_04(self, config_parser):
+		try:
+			# upgrade font
+			font = config_parser.get("Html", "font_name")
+			size = config_parser.getint("Html", "base_text_size")
+			
+			# only upgrade if it wasn't the same
+			if font != "Arial" or size != 10:
+				if not config_parser.has_section("Font"):
+					config_parser.add_section("Font")
+
+				config_parser.set("Font", "default_fonts", pickle.dumps(
+					(font, int(size), False)
+				))
+
+		except (NoSectionError, NoOptionError):
+			pass
+		
 def _test():
 	"""\
 >>> config = ConfigManager(write_path="data.conf")

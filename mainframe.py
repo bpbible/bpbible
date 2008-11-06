@@ -1065,7 +1065,7 @@ class MainFrame(wx.Frame, AuiLayer):
 
 		info = wx.AboutDialogInfo()
 		info.Name = config.name()
-		info.Version = "0.3.9.6"
+		info.Version = config.version
 		info.Description = text#, 350, wx.ClientDC(self))
 		info.WebSite = ("bpbible.com", 
 						_("BPBible website"))

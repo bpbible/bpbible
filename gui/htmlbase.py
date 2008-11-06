@@ -13,8 +13,6 @@ from gui import fonts
 
 
 html_settings = config_manager.add_section("Html")
-html_settings.add_item("font_name", "Arial")
-html_settings.add_item("base_text_size", 10, item_type=int)
 html_settings.add_item("zoom_level", 0, item_type=int)
 
 HTML_TEXT = '<body bgcolor="%s"><fontarea basefont="%s" basesize="%s"><font color="%s">%s</font></fontarea></body>'
