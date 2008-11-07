@@ -461,7 +461,8 @@ class DisplayFrame(HtmlSelectableWindow):
 				if cell:
 					link = cell.GetLink()
 					if link:
-						match = re.match(u'n?bible:(.*)(#.*)?', link.GetHref())
+						match = re.match(u'n?bible:([^#]*)(#.*)?', 
+							link.GetHref())
 						if match:
 							text = GetBestRange(match.group(1))
 							event.SetText(lookup_text % text)
@@ -536,7 +537,6 @@ class DisplayFrame(HtmlSelectableWindow):
 					text = "strongs:" + strongs_number
 				
 				if not text:
-					print link.GetHref()
 					match = re.match(u'passagestudy.jsp\?action=showMorph&'
 						'type=(\w*)(:|%3A)[^&]+&value=([\w-]+)', link.GetHref())
 					if match:
