@@ -50,55 +50,46 @@ class ManageTopicsOperations(object):
 		if not self._clipboard_data:
 			return
 
-		self._clipboard_data.paste(self._context.get_selected_topic())
+		self.do_copy(self._clipboard_data.item,
+				self._clipboard_data.type,
+				self._context.get_selected_topic(),
+				self._clipboard_data.keep_original)
 
-	def move_passage(self, from_topic, passage, to_topic):
-		from_topic.remove_passage(passage)
-		to_topic.add_passage(passage)
+	def do_copy(self, item, type, to_topic, keep_original):
+		from_topic = item.parent
+		self._check_circularity(to_topic, item)
+		if from_topic is to_topic:
+			return
 
-	def copy_passage(self, from_topic, passage, to_topic):
-		to_topic.add_passage(passage.clone())
+		if keep_original:
+			item = item.clone()
+		if type == PASSAGE_SELECTED:
+			if not keep_original:
+				from_topic.remove_passage(item)
+			to_topic.add_passage(item)
+		else:
+			if not keep_original:
+				from_topic.remove_subtopic(item)
+			to_topic.add_subtopic(item)
+
+	def _check_circularity(self, to_topic, item):
+		if type == PASSAGE_SELECTED:
+			return
+		topic_parent = to_topic
+		while topic_parent is not None:
+			if topic_parent is item:
+				raise CircularDataException()
+			topic_parent = topic_parent.parent
 
 	def set_topic_name(self, name):
 		self._context.get_selected_topic().name = name
 
 class ClipboardData(object):
-	"""This class manages the item that is currently in the clipboard.
-
-	It includes support for pasting the currently copied item into a different
-	topic.
-	"""
+	"""This class manages the item that is currently in the clipboard."""
 	def __init__(self, item, type, keep_original):
-		self._item = item
-		self._type = type
-		self._keep_original = keep_original
-
-	def paste(self, to_topic):
-		# XXX: This will allow you to create a circular data structure.
-		from_topic = self._item.parent
-		self._check_circularity(to_topic)
-		if from_topic is to_topic:
-			return
-
-		if self._keep_original:
-			self._item = self._item.clone()
-		if self._type == PASSAGE_SELECTED:
-			if not self._keep_original:
-				from_topic.remove_passage(self._item)
-			to_topic.add_passage(self._item)
-		else:
-			if not self._keep_original:
-				from_topic.remove_subtopic(self._item)
-			to_topic.add_subtopic(self._item)
-
-	def _check_circularity(self, to_topic):
-		if self._type == PASSAGE_SELECTED:
-			return
-		topic_parent = to_topic
-		while topic_parent is not None:
-			if topic_parent is self._item:
-				raise CircularDataException()
-			topic_parent = topic_parent.parent
+		self.item = item
+		self.type = type
+		self.keep_original = keep_original
 
 class CircularDataException(Exception):
 	"""This exception is raised when the topic manager detects circular data,

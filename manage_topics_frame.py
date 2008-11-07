@@ -33,6 +33,8 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		self.topic_tree.Bind(wx.EVT_TREE_ITEM_GETTOOLTIP, self._get_topic_tool_tip)
 		self.topic_tree.Bind(wx.EVT_TREE_END_LABEL_EDIT, self._end_topic_label_edit)
 		self.topic_tree.Bind(wx.EVT_TREE_BEGIN_LABEL_EDIT, self._begin_topic_label_edit)
+		self.topic_tree.Bind(wx.EVT_TREE_BEGIN_DRAG, self._topic_tree_begin_drag)
+		self.topic_tree.Bind(wx.EVT_TREE_END_DRAG, self._topic_tree_end_drag)
 		
 		self.topic_tree.Bind(wx.EVT_TREE_ITEM_MENU, self._show_topic_context_menu)
 		self.passage_list_ctrl.Bind(wx.EVT_LIST_ITEM_SELECTED, self._passage_selected)
@@ -170,6 +172,24 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 			topic = self.topic_tree.GetPyData(event.GetItem())
 			topic.name = event.GetLabel()
 
+	def _topic_tree_begin_drag(self, event):
+		"""This event is used to enable dragging topics so that they can be
+		copied or moved.
+		"""
+		if event.GetItem() != self.topic_tree.RootItem:
+			event.Allow()
+		self._drag_item = self.topic_tree.GetPyData(event.GetItem())
+	
+	def _topic_tree_end_drag(self, event):
+		"""This event is used to finish the dragging of a tree node."""
+		if target_topic is self._drag_item:
+			return
+		target_topic = self.topic_tree.GetPyData(event.GetItem())
+		self._safe_paste(lambda: self._operations_manager.do_copy(
+				self._drag_item, TOPIC_SELECTED,
+				target_topic, keep_original=False)
+			)
+
 	def _on_char(self, event):
 		"""Handles all keyboard shortcuts."""
 		guiutil.dispatch_keypress(self._get_actions(), event)
@@ -239,12 +259,14 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		
 		self.PopupMenu(menu)
 
-	def _safe_paste(self):
+	def _safe_paste(self, operation=None):
 		"""A wrapper around the operations manager paste operation that
 		catches the CircularDataException and displays an error message.
 		"""
+		if operation is None:
+			operation = self._operations_manager.paste
 		try:
-			self._operations_manager.paste()
+			operation()
 		except CircularDataException:
 			wx.MessageBox("Cannot copy the topic to one of its children.",
 					"Copy Topic", wx.OK | wx.ICON_ERROR, self)
