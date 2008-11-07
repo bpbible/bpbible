@@ -5,6 +5,7 @@ from passage_list import get_primary_passage_list_manager, PassageEntry
 from passage_entry_dialog import PassageEntryDialog
 from topic_creation_dialog import TopicCreationDialog
 from xrc.manage_topics_xrc import xrcManageTopicsFrame
+from gui import guiutil
 from manage_topics_operations import (ManageTopicsOperations,
 		CircularDataException, PASSAGE_SELECTED, TOPIC_SELECTED)
 
@@ -42,8 +43,8 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		self.topic_tree.Bind(wx.EVT_SET_FOCUS, self._topic_tree_got_focus)
 		self.passage_list_ctrl.Bind(wx.EVT_SET_FOCUS, self._passage_list_got_focus)
 
-		self.passage_list_ctrl.Bind(wx.EVT_CHAR, self._handle_accelerators)
-		self.topic_tree.Bind(wx.EVT_CHAR, self._handle_accelerators)
+		self.passage_list_ctrl.Bind(wx.EVT_KEY_UP, self._on_char)
+		self.topic_tree.Bind(wx.EVT_KEY_UP, self._on_char)
 
 		# Not yet supported: "undo_tool", "redo_tool".
 		for tool in ("cut_tool", "copy_tool", "paste_tool", "delete_tool"):
@@ -167,29 +168,24 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 			topic = self.topic_tree.GetPyData(event.GetItem())
 			topic.name = event.GetLabel()
 
-	def _handle_accelerators(self, event):
-		"""Handle the keyboard shortcuts required by the frame."""
-		if not event.GetModifiers() and event.KeyCode == wx.WXK_DELETE:
-			self._operations_manager.delete()
-		if event.GetModifiers() != wx.MOD_CMD:
-			event.Skip()
-			return
-
-		actions = {
-			"c":	self._operations_manager.copy,
-			"x":	self._operations_manager.cut,
-			"v":	self._operations_manager.paste,
-		}
-		# It appears that the KeyCode we get is the index of the letter in
-		# the alphabet for some reason.
-		char = chr(event.KeyCode + ord('a') - 1)
+	def _on_char(self, event):
+		"""Handles all keyboard shortcuts."""
 		try:
-			actions[char]()
-		except KeyError:
-			event.Skip()
+			guiutil.dispatch_keypress(self._get_actions(), event)
 		except CircularDataException:
 			wx.MessageBox("Cannot copy the topic to one of its children.",
 					"Copy Topic", wx.OK | wx.ICON_ERROR, self)
+
+	def _get_actions(self):
+		"""Returns a list of actions to be used when handling keyboard
+		shortcuts.
+		"""
+		return {
+			(ord("C"), wx.MOD_CMD): self._operations_manager.copy,
+			(ord("X"), wx.MOD_CMD): self._operations_manager.cut,
+			(ord("V"), wx.MOD_CMD): self._operations_manager.paste,
+			wx.WXK_DELETE: self._operations_manager.delete,
+		}
 
 	def _perform_toolbar_action(self, event, tool_id):
 		"""Performs the action requested from the toolbar."""
