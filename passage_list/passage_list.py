@@ -77,7 +77,7 @@ class _BasePassageList(object):
 		try:
 			index = self.passages.index(passage)
 			del self.passages[index]
-			self.remove_passage_observers(passage)
+			self.remove_passage_observers(passage, index)
 		except ValueError:
 			raise MissingPassageError(passage)
 	

@@ -21,6 +21,17 @@ class ManageTopicsOperations(object):
 				self._context.get_selected_passage()
 			)
 
+	# XXX: Deleting a topic doesn't remove its tags from the current window.
+	def delete(self):
+		item, type = self._context.get_selected_item()
+		if not item:
+			return
+
+		if type == PASSAGE_SELECTED:
+			self.remove_passage()
+		else:
+			self.remove_subtopic()
+
 	def cut(self):
 		self._setup_clipboard(keep_original=False)
 
@@ -110,17 +121,19 @@ def _test():
 	... 	operations_manager.add_subtopic(topic2)
 	...
 	>>> def _remove_subtopic(topic2, operations_manager_context=operations_manager_context, operations_manager=operations_manager):
+	... 	operations_manager_context.is_passage_selected = False
 	... 	operations_manager_context.selected_topic = topic2
-	... 	operations_manager.remove_subtopic()
+	... 	operations_manager.delete()
 	...
 	>>> def _add_passage(topic, passage, operations_manager_context=operations_manager_context, operations_manager=operations_manager):
 	... 	operations_manager_context.selected_topic = topic
 	... 	operations_manager.add_passage(passage)
 	...
 	>>> def _remove_passage(topic, passage, operations_manager_context=operations_manager_context, operations_manager=operations_manager):
+	... 	operations_manager_context.is_passage_selected = True
 	... 	operations_manager_context.selected_passage = passage
 	... 	operations_manager_context.selected_topic = topic
-	... 	operations_manager.remove_passage()
+	... 	operations_manager.delete()
 	...
 	>>> def _move_passage(passage, target_topic, operations_manager_context=operations_manager_context, operations_manager=operations_manager):
 	... 	operations_manager_context.is_passage_selected = True
@@ -178,6 +191,10 @@ def _test():
 	Topic 'topic1': add subtopic observer called.
 	>>> _add_passage(topic2, passage1)
 	Topic 'topic1 > topic2': add passage observer called.
+
+	Check that removing works when no subtopics or passages are selected.
+	>>> _remove_subtopic(None)
+	>>> _remove_passage(topic2, None)
 
 	>>> _move_passage(passage1, topic1)
 	Topic 'topic1 > topic2': remove passage observer called.

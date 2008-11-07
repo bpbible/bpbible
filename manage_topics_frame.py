@@ -45,8 +45,8 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		self.passage_list_ctrl.Bind(wx.EVT_CHAR, self._handle_accelerators)
 		self.topic_tree.Bind(wx.EVT_CHAR, self._handle_accelerators)
 
-		# Not yet supported: "delete_tool", "undo_tool", "redo_tool".
-		for tool in ("cut_tool", "copy_tool", "paste_tool"):
+		# Not yet supported: "undo_tool", "redo_tool".
+		for tool in ("cut_tool", "copy_tool", "paste_tool", "delete_tool"):
 			handler = lambda event, tool=tool: self._perform_toolbar_action(event, tool)
 			self.toolbar.Bind(wx.EVT_TOOL, handler, id=wx.xrc.XRCID(tool))
 
@@ -92,8 +92,10 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 
 		if old_topic is not None:
 			old_topic.add_passage_observers -= self._insert_topic_passage
+			old_topic.remove_passage_observers -= self._remove_topic_passage
 		if self._selected_topic is not None:
 			self._selected_topic.add_passage_observers += self._insert_topic_passage
+			self._selected_topic.remove_passage_observers += self._remove_topic_passage
 
 		self.Title = self._get_title()
 		event.Skip()
@@ -167,6 +169,8 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 
 	def _handle_accelerators(self, event):
 		"""Handle the keyboard shortcuts required by the frame."""
+		if not event.GetModifiers() and event.KeyCode == wx.WXK_DELETE:
+			self._operations_manager.delete()
 		if event.GetModifiers() != wx.MOD_CMD:
 			event.Skip()
 			return
@@ -194,7 +198,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 			"copy_tool":	self._operations_manager.copy,
 			"cut_tool":		self._operations_manager.cut,
 			"paste_tool":	self._operations_manager.paste,
-			#"delete_tool":	self._operations_manager.delete,
+			"delete_tool":	self._operations_manager.delete,
 			#"undo_tool":	self._operations_manager.undo,
 			#"redo_tool":	self._operations_manager.redo,
 		}
@@ -217,7 +221,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 
 		item = menu.Append(wx.ID_ANY, "Delete &Topic")
 		self.Bind(wx.EVT_MENU,
-				lambda e: self._operations_manager.remove_subtopic(),
+				lambda e: self._operations_manager.delete(),
 				id=item.Id)
 		
 		self.PopupMenu(menu)
@@ -240,6 +244,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		self._remove_observers(self._manager)
 		if self._selected_topic is not None:
 			self._selected_topic.add_passage_observers -= self._insert_topic_passage
+			self._selected_topic.remove_passage_observers -= self._remove_topic_passage
 		self._manager.save()
 		event.Skip()
 	
@@ -269,6 +274,15 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 			index = self._selected_topic.passages.index(passage_entry)
 		self.passage_list_ctrl.InsertStringItem(index, str(passage_entry))
 		self.passage_list_ctrl.SetStringItem(index, 1, passage_entry.comment)
+
+	def _remove_topic_passage(self, passage_entry, index):
+		self.passage_list_ctrl.DeleteItem(index)
+		if not passage_entry.parent.passages:
+			self.selected_passage = None
+		else:
+			if len(passage_entry.parent.passages) == index:
+				index -= 1
+			self._select_list_entry_by_index(index)
 
 	def _passage_selected(self, event):
 		passage_entry = self._selected_topic.passages[event.GetIndex()]
