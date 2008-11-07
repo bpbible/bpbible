@@ -36,6 +36,7 @@ class xrcManageTopicsFrame(wx.Frame):
         self.PostCreate(pre)
 
         # Define variables for the controls, bind event handlers
+        self.toolbar = xrc.XRCCTRL(self, "toolbar")
         self.topic_tree = xrc.XRCCTRL(self, "topic_tree")
         self.passage_list_ctrl = xrc.XRCCTRL(self, "passage_list_ctrl")
 

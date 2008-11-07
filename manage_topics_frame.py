@@ -45,6 +45,11 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		self.passage_list_ctrl.Bind(wx.EVT_CHAR, self._handle_accelerators)
 		self.topic_tree.Bind(wx.EVT_CHAR, self._handle_accelerators)
 
+		# Not yet supported: "delete_tool", "undo_tool", "redo_tool".
+		for tool in ("cut_tool", "copy_tool", "paste_tool"):
+			handler = lambda event, tool=tool: self._perform_toolbar_action(event, tool)
+			self.toolbar.Bind(wx.EVT_TOOL, handler, id=wx.xrc.XRCID(tool))
+
 	def _setup_topic_tree(self):
 		root = self.topic_tree.AddRoot("Topics")
 		self.topic_tree.SetPyData(root, self._manager)
@@ -181,6 +186,19 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		except CircularDataException:
 			wx.MessageBox("Cannot copy the topic to one of its children.",
 					"Copy Topic", wx.OK | wx.ICON_ERROR, self)
+
+	def _perform_toolbar_action(self, event, tool_id):
+		"""Performs the action requested from the toolbar."""
+		event.Skip()
+		actions = {
+			"copy_tool":	self._operations_manager.copy,
+			"cut_tool":		self._operations_manager.cut,
+			"paste_tool":	self._operations_manager.paste,
+			#"delete_tool":	self._operations_manager.delete,
+			#"undo_tool":	self._operations_manager.undo,
+			#"redo_tool":	self._operations_manager.redo,
+		}
+		actions[tool_id]()
 	
 	def _show_topic_context_menu(self, event):
 		"""Shows the context menu for a topic in the topic tree."""
