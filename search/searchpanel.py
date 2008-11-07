@@ -260,14 +260,18 @@ class SearchPanel(xrcSearchPanel):
 		self.has_started = True
 	
 	def set_font(self):
+		if self.version is None:
+			return
+
 		module = self.book.parent.get_module(self.version)
 		assert module
 		
 		font = fonts.get_module_gui_font(module)
 
 		self.verselist.Font = font
-		self.versepreview.Font = font
 		self.searchkey.Font = font
+		self.panel_1.Layout()
+		
 
 	
 	def set_index_available(self, available=True):
@@ -334,6 +338,8 @@ class SearchPanel(xrcSearchPanel):
 			if not self.version:
 				wx.MessageBox(NO_CURRENT_VERSION,
 				_("No current version"), parent=self)
+				self.show_keyboard_button(shown=False)
+				
 				return
 			self.set_index_available(False)
 

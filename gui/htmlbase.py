@@ -557,6 +557,8 @@ class HtmlBase(wx.html.HtmlWindow):
 		
 		Either or neither of text_colour and body_colour can be specified"""
 		self.top_left_cell = None
+
+		assert isinstance(text, basestring), text
 	
 		#text = text.replace("<small>", "<font size=-1>")
 		#text = text.replace("</small>", "</font>")

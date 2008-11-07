@@ -81,6 +81,8 @@ class BibleFrame(VerseKeyedFrame):
 				self.show_guess_verse, 
 				accelerator="Ctrl-Shift-G",
 				doc=_("Play Guess the Verse"),
+				enabled=self.has_module, 
+				
 			), IN_MENU),
 			
 			(MenuItem(
@@ -281,7 +283,7 @@ class BibleFrame(VerseKeyedFrame):
 			config.current_verse_template, context, raw=raw)
 
 		if chapter is None:
-			data = config.MODULE_MISSING_STRING
+			data = config.MODULE_MISSING_STRING()
 			self.SetPage(data, raw=raw)
 			
 			

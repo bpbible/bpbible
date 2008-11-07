@@ -237,8 +237,10 @@ class DictionarySelector(wx.Panel):
 		fonts.fonts_changed += self.set_font
 	
 	def set_font(self):
+		if self.list.book.mod is None:
+			return
+
 		font = fonts.get_module_gui_font(self.list.book.mod)
-		print font.FaceName, font.PointSize
 
 		self.list.Font = font
 		self.text_entry.text.Font = font
