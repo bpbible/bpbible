@@ -164,6 +164,7 @@ class Book(object):
 		for body_dict, headings in self.GetReference_yield(
 			verselist, max_verses, raw, stripped,
 			exclude_topic_tag=exclude_topic_tag,
+			display_tags=display_tags,
 		):
 			# if we have exceeded the verse limit, body_dict will be None
 			if body_dict is None:
@@ -193,7 +194,8 @@ class Book(object):
 		
 			
 	def GetReference_yield(self, verselist, max_verses=177, 
-			raw=False, stripped=False, module=None, exclude_topic_tag=None):
+			raw=False, stripped=False, module=None, exclude_topic_tag=None,
+			display_tags=True):
 		"""GetReference_yield: 
 			yield the body dictionary and headings dictinoary
 			for each reference.
@@ -238,7 +240,7 @@ class Book(object):
 			
 			# XXX: This needs to be done better than this.  Move into
 			# subclass somehow.
-			if isinstance(self, Bible):
+			if isinstance(self, Bible) and display_tags:
 				tags = self.insert_tags(versekey, exclude_topic_tag)
 			else:
 				tags = ""
