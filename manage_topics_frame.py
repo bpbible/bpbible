@@ -1,6 +1,5 @@
 import wx
-from gui.drag_and_drop_tree import DragAndDrop
-from wx.lib.mixins import treemixin
+from wx.lib.mixins.listctrl import ListCtrlAutoWidthMixin
 import guiconfig
 from events import TOPIC_LIST
 from passage_list import get_primary_passage_list_manager, PassageEntry
@@ -16,6 +15,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 	def __init__(self, parent):
 		super(ManageTopicsFrame, self).__init__(parent)
 		attach_unknown_control("topic_tree", lambda parent: TopicTree(self, parent), self)
+		attach_unknown_control("passage_list_ctrl", PassageListCtrl, self)
 		self.SetIcons(guiconfig.icons)
 		self._manager = get_primary_passage_list_manager()
 		self._operations_context = OperationsContext(self)
@@ -497,6 +497,19 @@ class TopicTree(wx.TreeCtrl):
 				children.extend(self._get_item_children(child, True))
 			child, cookie = self.GetNextChild(item, cookie)
 		return children
+
+class PassageListCtrl(wx.ListCtrl, ListCtrlAutoWidthMixin):
+	"""A list control for the passage list in the topic manager.
+
+	This is included so that we can get the auto width mixin for the list
+	control, meaning that the comment will be resized to take all the
+	available space.
+	"""
+	def __init__(self, parent):
+		wx.ListCtrl.__init__(self, parent,
+			style=wx.LC_REPORT | wx.LC_SINGLE_SEL,
+		)
+		ListCtrlAutoWidthMixin.__init__(self)
 
 class OperationsContext(object):
 	"""Provides a context for passage list manager operations.

@@ -34,8 +34,7 @@
         <object class="wxSplitterWindow" name="splitter">
           <object class="unknown" name="topic_tree">
           </object>
-          <object class="wxListCtrl" name="passage_list_ctrl">
-            <style>wxLC_REPORT|wxLC_SINGLE_SEL</style>
+          <object class="unknown" name="passage_list_ctrl">
           </object>
           <orientation>vertical</orientation>
           <sashpos>180</sashpos>
