@@ -2,6 +2,9 @@ from distutils.core import setup
 import py2exe
 import os
 import sys
+import contrib
+import config
+from util.i18n import languages
 
 if "py2exe" not in sys.argv:
 	sys.argv.append('py2exe')
@@ -37,26 +40,35 @@ manifestVersion="1.0">
 #os.system("del /s *.*~")
 
 
+if "compressed" in sys.argv:
+	options = {"py2exe": {"compressed": 1,
+						  "optimize": 1,
+						  "bundle_files": 1
+			  }}
+	sys.argv.remove("compressed")
+	zipfile=None
+else:
+	options = {"py2exe": {"optimize": 1}}
+	zipfile="library.zip"
+
 if(setup(
-    options = {"py2exe": #{"compressed": 1,
-                          {"optimize": 1,
-              #            "bundle_files": 1}
-			  }},
+	options = options,
 	
 	windows = [
 		{
 			"script":('bpbible.py'),#,'mainfrm.xrc','search.xrc'),
 			"icon_resources":[(1, "graphics/bpbible.ico")],
-            "other_resources": [(24,1,manifest)],
+			"other_resources": [(24,1,manifest)],
 			"description": "BPBible - Flexible Bible Study",
-        	"version": "0.3.1",
-        	"name": "BPBible",
+			"version": config.version,
+			"name": "BPBible",
 		}
 	],
-	#zipfile=None,
+	zipfile=zipfile,
 )):
 	import os
-	subdirs = r"xrc graphics harmony resources resources\locales.d".split()
+	subdirs = r"xrc graphics harmony resources resources\locales.d locales".split()
+	subdirs += ["locales\%s\LC_MESSAGES\\" % l for l in languages]
 	for subdir in subdirs:
 		os.system(r"if not exist dist\%s mkdir dist\%s" % (subdir, subdir))
 
@@ -68,3 +80,7 @@ if(setup(
 	os.system("copy harmony\\compositeGospel.1.3.xml.harm dist\\harmony")
 	os.system("copy LICENSE.txt dist\\")
 	os.system(r"copy resources\locales.d\bpbible.conf dist\resources\locales.d")
+
+	for item in languages:
+		os.system("copy locales\%s\LC_MESSAGES\messages.mo "
+		"dist\locales\%s\LC_MESSAGES\messages.mo" % (item, item))

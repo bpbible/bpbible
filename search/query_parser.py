@@ -141,6 +141,7 @@ import re
 # make sure contrib is imported for ply
 import contrib
 import ply.lex as lex
+import util
 
 import string
 
@@ -452,7 +453,9 @@ def t_error(t):
 	t.lexer.skip(1)
 	
 # Build the lexer
-lex.lex(reflags=re.UNICODE)
+lex.lex(optimize=True,#util.is_py2exe(), 
+	reflags=re.UNICODE)
+	
 
 
 def p_multi_query(p):
@@ -728,8 +731,13 @@ def separate_words(string, wordlist=None, stemming_data=None, stemmer=None,
 	return regexes, fields
 		
 
+if util.is_py2exe():
+	# explicitly note the dependency
+	import parsetab
+	import lextab
+
 import ply.yacc as yacc
-yacc.yacc()
+yacc.yacc(optimize=util.is_py2exe())
 
 def _test():
 	import doctest as d
