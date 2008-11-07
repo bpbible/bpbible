@@ -31,7 +31,7 @@
     </object>
     <object class="wxBoxSizer">
       <object class="sizeritem">
-        <object class="wxSplitterWindow">
+        <object class="wxSplitterWindow" name="splitter">
           <object class="wxTreeCtrl" name="topic_tree">
             <style>wxTR_EDIT_LABELS|wxTR_HAS_BUTTONS|wxTR_LINES_AT_ROOT</style>
           </object>
@@ -39,6 +39,7 @@
             <style>wxLC_REPORT|wxLC_SINGLE_SEL</style>
           </object>
           <orientation>vertical</orientation>
+          <sashpos>180</sashpos>
           <style>wxSP_NOBORDER</style>
         </object>
         <option>5</option>

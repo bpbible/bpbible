@@ -25,6 +25,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		self._setup_passage_list_ctrl()
 		self._setup_topic_tree()
 		self._bind_events()
+		self.Size = (650, 500)
 
 	def _bind_events(self):
 		self.Bind(wx.EVT_CLOSE, self._on_close)
