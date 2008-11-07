@@ -36,6 +36,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		self.topic_tree.Bind(wx.EVT_TREE_ITEM_MENU, self._show_topic_context_menu)
 		self.passage_list_ctrl.Bind(wx.EVT_LIST_ITEM_SELECTED, self._passage_selected)
 		self.passage_list_ctrl.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self._passage_activated)
+		self.passage_list_ctrl.Bind(wx.EVT_LIST_ITEM_RIGHT_CLICK, self._show_passage_context_menu)
 
 		# Trap the events with the topic tree and the passage list when they
 		# get focus, so that we can know which one last got focus for our
@@ -215,6 +216,25 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 				lambda e: self._create_passage(),
 				id=item.Id)
 
+		menu.AppendSeparator()
+		
+		item = menu.Append(wx.ID_ANY, "Cu&t")
+		self.Bind(wx.EVT_MENU,
+				lambda e: self._operations_manager.cut,
+				id=item.Id)
+
+		item = menu.Append(wx.ID_ANY, "&Copy")
+		self.Bind(wx.EVT_MENU,
+				lambda e: self._operations_manager.copy,
+				id=item.Id)
+
+		item = menu.Append(wx.ID_ANY, "&Paste")
+		self.Bind(wx.EVT_MENU,
+				lambda e: self._operations_manager.paste,
+				id=item.Id)
+
+		menu.AppendSeparator()
+		
 		item = menu.Append(wx.ID_ANY, "Delete &Topic")
 		self.Bind(wx.EVT_MENU,
 				lambda e: self._operations_manager.delete(),
@@ -293,6 +313,42 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		"""Selects the entry in the list control with the given index."""
 		state = wx.LIST_STATE_SELECTED | wx.LIST_STATE_FOCUSED
 		self.passage_list_ctrl.SetItemState(index, state, state)
+	
+	def _show_passage_context_menu(self, event):
+		"""Shows the context menu for a topic in the topic tree."""
+		self.selected_passage = self._selected_topic.passages[event.GetIndex()]
+		menu = wx.Menu()
+		
+		item = menu.Append(wx.ID_ANY, "&Open")
+		self.Bind(wx.EVT_MENU,
+				lambda e: self._passage_activated(event),
+				id=item.Id)
+		
+		menu.AppendSeparator()
+		
+		item = menu.Append(wx.ID_ANY, "Cu&t")
+		self.Bind(wx.EVT_MENU,
+				lambda e: self._operations_manager.cut,
+				id=item.Id)
+
+		item = menu.Append(wx.ID_ANY, "&Copy")
+		self.Bind(wx.EVT_MENU,
+				lambda e: self._operations_manager.copy,
+				id=item.Id)
+
+		item = menu.Append(wx.ID_ANY, "&Paste")
+		self.Bind(wx.EVT_MENU,
+				lambda e: self._operations_manager.paste,
+				id=item.Id)
+
+		menu.AppendSeparator()
+		
+		item = menu.Append(wx.ID_ANY, "&Delete")
+		self.Bind(wx.EVT_MENU,
+				lambda e: self._operations_manager.delete,
+				id=item.Id)
+		
+		self.PopupMenu(menu)
 
 	def _topic_tree_got_focus(self, event):
 		self.item_selected_type = TOPIC_SELECTED
