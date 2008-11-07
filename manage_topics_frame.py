@@ -1,10 +1,13 @@
 import wx
+from gui.drag_and_drop_tree import DragAndDrop
+from wx.lib.mixins import treemixin
 import guiconfig
 from events import TOPIC_LIST
 from passage_list import get_primary_passage_list_manager, PassageEntry
 from passage_entry_dialog import PassageEntryDialog
 from topic_creation_dialog import TopicCreationDialog
 from xrc.manage_topics_xrc import xrcManageTopicsFrame
+from xrc.xrc_util import attach_unknown_control
 from gui import guiutil
 from manage_topics_operations import (ManageTopicsOperations,
 		CircularDataException, PASSAGE_SELECTED, TOPIC_SELECTED)
@@ -12,6 +15,7 @@ from manage_topics_operations import (ManageTopicsOperations,
 class ManageTopicsFrame(xrcManageTopicsFrame):
 	def __init__(self, parent):
 		super(ManageTopicsFrame, self).__init__(parent)
+		attach_unknown_control("topic_tree", lambda parent: TopicTree(self, parent), self)
 		self.SetIcons(guiconfig.icons)
 		self._manager = get_primary_passage_list_manager()
 		self._operations_context = OperationsContext(self)
@@ -33,8 +37,6 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		self.topic_tree.Bind(wx.EVT_TREE_ITEM_GETTOOLTIP, self._get_topic_tool_tip)
 		self.topic_tree.Bind(wx.EVT_TREE_END_LABEL_EDIT, self._end_topic_label_edit)
 		self.topic_tree.Bind(wx.EVT_TREE_BEGIN_LABEL_EDIT, self._begin_topic_label_edit)
-		self.topic_tree.Bind(wx.EVT_TREE_BEGIN_DRAG, self._topic_tree_begin_drag)
-		self.topic_tree.Bind(wx.EVT_TREE_END_DRAG, self._topic_tree_end_drag)
 		
 		self.topic_tree.Bind(wx.EVT_TREE_ITEM_MENU, self._show_topic_context_menu)
 		self.passage_list_ctrl.Bind(wx.EVT_LIST_ITEM_SELECTED, self._passage_selected)
@@ -91,8 +93,20 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		return tree_item
 
 	def _selected_topic_changed(self, event):
+		# Topic nodes are selected as they are dragged past, but we shouldn't
+		# change the selected topic and passage list until the dragging has
+		# been finished.
+		if self.topic_tree._dragging:
+			event.Skip()
+			return
+
 		old_topic = self._selected_topic
-		self._selected_topic = self._get_tree_selected_topic()
+		selected_topic = self._get_tree_selected_topic()
+		if selected_topic is None:
+			event.Skip()
+			return
+
+		self._selected_topic = selected_topic
 		self._setup_passage_list_ctrl()
 
 		if old_topic is not None:
@@ -171,24 +185,6 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		if not event.IsEditCancelled():
 			topic = self.topic_tree.GetPyData(event.GetItem())
 			topic.name = event.GetLabel()
-
-	def _topic_tree_begin_drag(self, event):
-		"""This event is used to enable dragging topics so that they can be
-		copied or moved.
-		"""
-		if event.GetItem() != self.topic_tree.RootItem:
-			event.Allow()
-		self._drag_item = self.topic_tree.GetPyData(event.GetItem())
-	
-	def _topic_tree_end_drag(self, event):
-		"""This event is used to finish the dragging of a tree node."""
-		if target_topic is self._drag_item:
-			return
-		target_topic = self.topic_tree.GetPyData(event.GetItem())
-		self._safe_paste(lambda: self._operations_manager.do_copy(
-				self._drag_item, TOPIC_SELECTED,
-				target_topic, keep_original=False)
-			)
 
 	def _on_char(self, event):
 		"""Handles all keyboard shortcuts."""
@@ -386,6 +382,121 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 	def _passage_list_got_focus(self, event):
 		self.item_selected_type = PASSAGE_SELECTED
 		event.Skip()
+
+class TopicTree(wx.TreeCtrl):
+	"""A tree control that handles dragging and dropping for topics.
+	
+	This contains code taken from the DragAndDrop tree mixin, but adapted to
+	the topic tree (the DragAndDrop mixin doesn't work when you want to use
+	the root node), and it selected the nodes it was being dragged past,
+	meaning that the passage list kept changing.
+	"""
+	def __init__(self, topic_frame, *args, **kwargs):
+		style = wx.TR_EDIT_LABELS | wx.TR_HAS_BUTTONS | wx.TR_LINES_AT_ROOT
+		kwargs["style"] = style
+		self._topic_frame = topic_frame
+		super(TopicTree, self).__init__(*args, **kwargs)
+		self.Bind(wx.EVT_TREE_BEGIN_DRAG, self.on_begin_drag)
+		self._drag_item = None
+		self._dragging = False
+
+	def on_begin_drag(self, event):
+		# We allow only one item to be dragged at a time, to keep it simple
+		self._drag_item = event.GetItem()
+		if self._drag_item and self._drag_item != self.GetRootItem():
+			self.start_dragging()
+			event.Allow()
+		else:
+			event.Veto()
+
+	def on_end_drag(self, event):
+		self.stop_dragging()
+		drop_target = event.GetItem()
+		if not drop_target:
+			drop_target = None
+		if self.is_valid_drop_target(drop_target):
+			self.UnselectAll()
+			if drop_target is not None:
+				self.SelectItem(drop_target)
+			self.on_drop(drop_target, self._drag_item)
+
+	def on_dragging(self, event):
+		if not event.Dragging():
+			self.stop_dragging()
+			return
+		item, flags = self.HitTest(wx.Point(event.GetX(), event.GetY()))
+		if not item:
+			item = None
+		if self.is_valid_drop_target(item):
+			self.set_cursor_to_dragging()
+		else:
+			self.set_cursor_to_dropping_impossible()
+		if flags & wx.TREE_HITTEST_ONITEMBUTTON:
+			self.Expand(item)
+		if self.GetSelections() != [item]:
+			self.UnselectAll()
+			if item:
+				self.SelectItem(item)
+		event.Skip()
+		
+	def start_dragging(self):
+		self._dragging = True
+		self.Bind(wx.EVT_MOTION, self.on_dragging)
+		self.Bind(wx.EVT_TREE_END_DRAG, self.on_end_drag)
+		self.set_cursor_to_dragging()
+
+	def stop_dragging(self):
+		self._dragging = False
+		self.Unbind(wx.EVT_MOTION)
+		self.Unbind(wx.EVT_TREE_END_DRAG)
+		self.reset_cursor()
+		self.UnselectAll()
+		self.SelectItem(self._drag_item)
+
+	def set_cursor_to_dragging(self):
+		self.SetCursor(wx.StockCursor(wx.CURSOR_HAND))
+		
+	def set_cursor_to_dropping_impossible(self):
+		self.SetCursor(wx.StockCursor(wx.CURSOR_NO_ENTRY))
+		
+	def reset_cursor(self):
+		self.SetCursor(wx.NullCursor)
+
+	def is_valid_drop_target(self, drop_target):
+		if not drop_target: 
+			return False
+		else:
+			all_children = self._get_item_children(self._drag_item, recursively=True)
+			parent = self.GetItemParent(self._drag_item) 
+			return drop_target not in [self._drag_item, parent] + all_children
+
+	def on_drop(self, drop_target, drag_target):
+		drag_topic = self.GetPyData(drag_target)
+		drop_topic = self.GetPyData(drop_target)
+		if drag_topic is drop_topic:
+			return
+		parent = self.GetParent()
+		self._topic_frame._safe_paste(
+			lambda: self._topic_frame._operations_manager.do_copy(
+				drag_topic, TOPIC_SELECTED,
+				drop_topic, keep_original=False
+			)
+		)
+
+	def _get_item_children(self, item=None, recursively=False):
+		""" Return the children of item as a list. """
+		if not item:
+			item = self.GetRootItem()
+			if not item:
+				return []
+		children = []
+		child, cookie = self.GetFirstChild(item)
+		while child:
+			children.append(child)
+			if recursively:
+				children.extend(self._get_item_children(child, True))
+			child, cookie = self.GetNextChild(item, cookie)
+		return children
 
 class OperationsContext(object):
 	"""Provides a context for passage list manager operations.

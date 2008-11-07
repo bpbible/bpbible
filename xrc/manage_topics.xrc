@@ -32,8 +32,7 @@
     <object class="wxBoxSizer">
       <object class="sizeritem">
         <object class="wxSplitterWindow" name="splitter">
-          <object class="wxTreeCtrl" name="topic_tree">
-            <style>wxTR_EDIT_LABELS|wxTR_HAS_BUTTONS|wxTR_LINES_AT_ROOT</style>
+          <object class="unknown" name="topic_tree">
           </object>
           <object class="wxListCtrl" name="passage_list_ctrl">
             <style>wxLC_REPORT|wxLC_SINGLE_SEL</style>
