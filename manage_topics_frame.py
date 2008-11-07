@@ -171,11 +171,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 
 	def _on_char(self, event):
 		"""Handles all keyboard shortcuts."""
-		try:
-			guiutil.dispatch_keypress(self._get_actions(), event)
-		except CircularDataException:
-			wx.MessageBox("Cannot copy the topic to one of its children.",
-					"Copy Topic", wx.OK | wx.ICON_ERROR, self)
+		guiutil.dispatch_keypress(self._get_actions(), event)
 
 	def _get_actions(self):
 		"""Returns a list of actions to be used when handling keyboard
@@ -184,7 +180,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		return {
 			(ord("C"), wx.MOD_CMD): self._operations_manager.copy,
 			(ord("X"), wx.MOD_CMD): self._operations_manager.cut,
-			(ord("V"), wx.MOD_CMD): self._operations_manager.paste,
+			(ord("V"), wx.MOD_CMD): self._safe_paste,
 			wx.WXK_DELETE: self._operations_manager.delete,
 		}
 
@@ -194,13 +190,13 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		actions = {
 			"copy_tool":	self._operations_manager.copy,
 			"cut_tool":		self._operations_manager.cut,
-			"paste_tool":	self._operations_manager.paste,
+			"paste_tool":	self._safe_paste,
 			"delete_tool":	self._operations_manager.delete,
 			#"undo_tool":	self._operations_manager.undo,
 			#"redo_tool":	self._operations_manager.redo,
 		}
 		actions[tool_id]()
-	
+
 	def _show_topic_context_menu(self, event):
 		"""Shows the context menu for a topic in the topic tree."""
 		self._selected_topic = self.topic_tree.GetPyData(event.Item)
@@ -230,7 +226,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 
 		item = menu.Append(wx.ID_ANY, "&Paste")
 		self.Bind(wx.EVT_MENU,
-				lambda e: self._operations_manager.paste,
+				lambda e: self._safe_paste,
 				id=item.Id)
 
 		menu.AppendSeparator()
@@ -242,6 +238,16 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		
 		self.PopupMenu(menu)
 
+	def _safe_paste(self):
+		"""A wrapper around the operations manager paste operation that
+		catches the CircularDataException and displays an error message.
+		"""
+		try:
+			self._operations_manager.paste()
+		except CircularDataException:
+			wx.MessageBox("Cannot copy the topic to one of its children.",
+					"Copy Topic", wx.OK | wx.ICON_ERROR, self)
+	
 	def _create_topic(self, topic):
 		dialog = TopicCreationDialog(self, topic)
 		
@@ -338,7 +344,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 
 		item = menu.Append(wx.ID_ANY, "&Paste")
 		self.Bind(wx.EVT_MENU,
-				lambda e: self._operations_manager.paste,
+				lambda e: self._safe_paste,
 				id=item.Id)
 
 		menu.AppendSeparator()
