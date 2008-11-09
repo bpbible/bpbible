@@ -21,6 +21,12 @@ class ManageTopicsOperations(object):
 				self._context.get_selected_passage()
 			)
 
+	def move_current_passage(self, new_index):
+		passage = self._context.get_selected_passage()
+		topic = passage.parent
+		topic.remove_passage(passage)
+		topic.insert_passage(passage, new_index)
+
 	# XXX: Deleting a topic doesn't remove its tags from the current window.
 	def delete(self):
 		item, type = self._context.get_selected_item()
@@ -105,6 +111,7 @@ def _test():
 	>>> topic2 = _test_create_topic("topic2")
 	>>> topic3 = _test_create_topic("topic3")
 	>>> passage1 = _test_create_passage("gen 3:5")
+	>>> passage2 = _test_create_passage("gen 5:5")
 	>>> operations_manager_context = DummyOperationsManagerContext()
 	>>> operations_manager = ManageTopicsOperations(context=operations_manager_context)
 	>>> def _add_subtopic(topic1, topic2, operations_manager_context=operations_manager_context, operations_manager=operations_manager):
@@ -133,6 +140,11 @@ def _test():
 	... 	operations_manager.cut()
 	... 	operations_manager_context.selected_topic = target_topic
 	... 	operations_manager.paste()
+	...
+	>>> def _move_current_passage(passage, new_index, operations_manager_context=operations_manager_context, operations_manager=operations_manager):
+	... 	operations_manager_context.selected_passage = passage
+	... 	operations_manager_context.selected_topic = passage.parent
+	... 	operations_manager.move_current_passage(new_index)
 	...
 	>>> def _move_topic(topic, target_topic, operations_manager_context=operations_manager_context, operations_manager=operations_manager):
 	... 	operations_manager_context.is_passage_selected = False
@@ -253,6 +265,15 @@ def _test():
 	>>> _move_passage(topic1.passages[0], topic1)
 	>>> topic1.passages
 	[PassageEntry('Genesis 3:5', 'Test comment (to check it was a genuine copy)')]
+	>>> _add_passage(topic1, passage2)
+	Topic 'topic1': add passage observer called.
+	>>> topic1.passages
+	[PassageEntry('Genesis 3:5', 'Test comment (to check it was a genuine copy)'), PassageEntry('Genesis 5:5', '')]
+	>>> _move_current_passage(passage2, 0)
+	Topic 'topic1': remove passage observer called.
+	Topic 'topic1': add passage observer called.
+	>>> topic1.passages
+	[PassageEntry('Genesis 5:5', ''), PassageEntry('Genesis 3:5', 'Test comment (to check it was a genuine copy)')]
 
 	>>> _set_topic_name(topic1, "topic1 (new name)")
 	Topic 'topic1 (new name)': name changed observer called.
