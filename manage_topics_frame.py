@@ -25,6 +25,9 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 			)
 		self._operations_manager.undo_available_changed_observers \
 				+= self._undo_available_changed
+		self._operations_manager.paste_available_changed_observers \
+				+= self._paste_available_changed
+		self._paste_available_changed()
 		self._undo_available_changed()
 		self._selected_topic = None
 		self.item_selected_type = TOPIC_SELECTED
@@ -236,6 +239,11 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 				self._operations_manager.can_undo)
 		self.toolbar.EnableTool(wx.xrc.XRCID("redo_tool"),
 				self._operations_manager.can_redo)
+
+	def _paste_available_changed(self):
+		"""Enables or disables the paste toolbar button."""
+		self.toolbar.EnableTool(wx.xrc.XRCID("paste_tool"),
+				self._operations_manager.can_paste)
 
 	def _show_topic_context_menu(self, event):
 		"""Shows the context menu for a topic in the topic tree."""

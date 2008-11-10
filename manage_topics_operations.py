@@ -10,6 +10,7 @@ class ManageTopicsOperations(object):
 		self._actions = []
 		self._undone_actions = []
 		self.undo_available_changed_observers = ObserverList()
+		self.paste_available_changed_observers = ObserverList()
 
 	def insert_item(self, item, type, index=None):
 		parent_topic = self._context.get_selected_topic()
@@ -40,6 +41,7 @@ class ManageTopicsOperations(object):
 
 		self._clipboard_data = ClipboardData(
 				item, type, keep_original=keep_original)
+		self.paste_available_changed_observers()
 
 	def paste(self):
 		if not self._clipboard_data:
@@ -49,6 +51,17 @@ class ManageTopicsOperations(object):
 				self._clipboard_data.type,
 				self._context.get_selected_topic(),
 				self._clipboard_data.keep_original)
+
+		# It doesn't make sense to cut an object and then paste it in more
+		# than one place, whereas it probably does make sense to copy it
+		# and paste it in more than one place.
+		if not self._clipboard_data.keep_original:
+			self._clipboard_data = None
+		self.paste_available_changed_observers()
+
+	@property
+	def can_paste(self):
+		return self._clipboard_data is not None
 
 	def do_copy(self, item, type, to_topic, keep_original):
 		self._check_circularity(to_topic, item)
@@ -264,6 +277,10 @@ def _test():
 	Traceback (most recent call last):
 	  File ...
 	OperationNotAvailableError
+
+	>>> operations_manager.can_paste
+	False
+
 	>>> def _add_subtopic(topic1, topic2, operations_manager_context=operations_manager_context, operations_manager=operations_manager):
 	... 	operations_manager_context.selected_topic = topic1
 	... 	operations_manager.insert_item(topic2, TOPIC_SELECTED)
@@ -381,14 +398,23 @@ def _test():
 	>>> passage1.parent
 	<PassageList 'topic1'>
 
+	Make sure that moving works, and that it doesn't allow you to paste after
+	a move (though it does allow pasting after a copy).
 	>>> _move_topic(topic3, topic2)
 	Topic 'None': remove subtopic observer called.
 	Topic 'topic1 > topic2': add subtopic observer called.
+	>>> operations_manager.can_paste
+	False
+	>>> operations_manager.cut()
+	>>> operations_manager.can_paste
+	True
 	>>> topic2.subtopics
 	[<PassageList 'topic3'>]
 
 	>>> _copy_topic(topic3, manager)
 	Topic 'None': add subtopic observer called.
+	>>> operations_manager.can_paste
+	True
 	>>> manager.subtopics
 	[<PassageList 'topic1'>, <PassageList 'topic3'>]
 	>>> new_topic = manager.subtopics[1]
