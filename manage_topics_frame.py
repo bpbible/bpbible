@@ -54,7 +54,8 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		self.topic_tree.Bind(wx.EVT_KEY_UP, self._on_char)
 
 		# Not yet supported: "undo_tool", "redo_tool".
-		for tool in ("cut_tool", "copy_tool", "paste_tool", "delete_tool"):
+		for tool in ("cut_tool", "copy_tool", "paste_tool",
+				"delete_tool", "undo_tool", "redo_tool"):
 			handler = lambda event, tool=tool: self._perform_toolbar_action(event, tool)
 			self.toolbar.Bind(wx.EVT_TOOL, handler, id=wx.xrc.XRCID(tool))
 
@@ -200,6 +201,8 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 			(ord("X"), wx.MOD_CMD): self._operations_manager.cut,
 			(ord("V"), wx.MOD_CMD): self._safe_paste,
 			wx.WXK_DELETE: self._operations_manager.delete,
+			(ord("Z"), wx.MOD_CMD): self._operations_manager.undo,
+			(ord("Y"), wx.MOD_CMD): self._operations_manager.redo,
 		}
 
 	def _perform_toolbar_action(self, event, tool_id):
@@ -210,8 +213,8 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 			"cut_tool":		self._operations_manager.cut,
 			"paste_tool":	self._safe_paste,
 			"delete_tool":	self._operations_manager.delete,
-			#"undo_tool":	self._operations_manager.undo,
-			#"redo_tool":	self._operations_manager.redo,
+			"undo_tool":	self._operations_manager.undo,
+			"redo_tool":	self._operations_manager.redo,
 		}
 		actions[tool_id]()
 
@@ -279,7 +282,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		passage_entry = PassageEntry(None)
 		dialog = PassageEntryDialog(self, passage_entry)
 		if dialog.ShowModal() == wx.ID_OK:
-			self._operations_manager.add_passage(passage_entry)
+			self._operations_manager.insert_item(passage_entry, PASSAGE_SELECTED)
 		dialog.Destroy()
 	
 	def _on_close(self, event):

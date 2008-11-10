@@ -59,10 +59,16 @@ class _BasePassageList(object):
 	
 	def add_passage(self, passage):
 		"""Adds the given passage to the end of the list of passages."""
-		self.insert_passage(passage, len(self.passages))
+		self.insert_passage(passage, index=None)
 	
 	def insert_passage(self, passage, index):
-		"""Inserts the given passage into the list of passages."""
+		"""Inserts the given passage into the list of passages.
+		
+		index: The index to insert the passage before.
+			If this is None, then the passage will be appended to the list.
+		"""
+		if index is None:
+			index = len(self.passages)
 		self.passages.insert(index, passage)
 		passage.parent = self
 		self.add_passage_observers(passage)

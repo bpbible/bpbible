@@ -5,27 +5,16 @@ class ManageTopicsOperations(object):
 	def __init__(self, context):
 		self._context = context
 		self._clipboard_data = None
+		self._actions = []
+		self._undone_actions = []
 
-	def add_subtopic(self, subtopic):
-		self._context.get_selected_topic().add_subtopic(subtopic)
-
-	def remove_subtopic(self):
-		subtopic = self._context.get_selected_topic()
-		subtopic.parent.remove_subtopic(subtopic)
-
-	def add_passage(self, passage):
-		self._context.get_selected_topic().add_passage(passage)
-
-	def remove_passage(self):
-		self._context.get_selected_topic().remove_passage(
-				self._context.get_selected_passage()
-			)
+	def insert_item(self, item, type, index=None):
+		parent_topic = self._context.get_selected_topic()
+		self._perform_action(InsertAction(parent_topic, item, type, index))
 
 	def move_current_passage(self, new_index):
 		passage = self._context.get_selected_passage()
-		topic = passage.parent
-		topic.remove_passage(passage)
-		topic.insert_passage(passage, new_index)
+		self._perform_action(ReorderPassageAction(passage, new_index))
 
 	# XXX: Deleting a topic doesn't remove its tags from the current window.
 	def delete(self):
@@ -33,10 +22,7 @@ class ManageTopicsOperations(object):
 		if not item:
 			return
 
-		if type == PASSAGE_SELECTED:
-			self.remove_passage()
-		else:
-			self.remove_subtopic()
+		self._perform_action(DeleteAction(item, type))
 
 	def cut(self):
 		self._setup_clipboard(keep_original=False)
@@ -62,21 +48,32 @@ class ManageTopicsOperations(object):
 				self._clipboard_data.keep_original)
 
 	def do_copy(self, item, type, to_topic, keep_original):
-		from_topic = item.parent
 		self._check_circularity(to_topic, item)
-		if from_topic is to_topic:
+		if item.parent is to_topic:
 			return
 
-		if keep_original:
-			item = item.clone()
-		if type == PASSAGE_SELECTED:
-			if not keep_original:
-				from_topic.remove_passage(item)
-			to_topic.add_passage(item)
-		else:
-			if not keep_original:
-				from_topic.remove_subtopic(item)
-			to_topic.add_subtopic(item)
+		self._perform_action(CopyAction(item, type, to_topic, keep_original))
+
+	def undo(self):
+		"""Undoes the most recently performed action."""
+		recent_action = self._actions.pop()
+		recent_action.undo_action()
+		self._undone_actions.append(recent_action)
+
+	def redo(self):
+		"""Redoes the most recently undone action."""
+		undone_action = self._undone_actions.pop()
+		undone_action.perform_action()
+		self._actions.append(undone_action)
+
+	def _perform_action(self, action):
+		"""Performs the given action.
+		
+		The performed action is added to the list of performed actions, and
+		can be undone later.
+		"""
+		action.perform_action()
+		self._actions.append(action)
 
 	def _check_circularity(self, to_topic, item):
 		if type == PASSAGE_SELECTED:
@@ -89,6 +86,122 @@ class ManageTopicsOperations(object):
 
 	def set_topic_name(self, name):
 		self._context.get_selected_topic().name = name
+
+class Action(object):
+	"""This class performs an action on a topic or passage.
+
+	The action is stored so that it can later be undone.
+	"""
+	def __init__(self):
+		self._action_performed = False
+
+	def perform_action(self):
+		"""Performs the action.
+
+		Override _perform_action to make an action, since this does error
+		checking.
+		"""
+		assert not self._action_performed
+		self._action_performed = True
+		self._perform_action()
+
+	def _perform_action(self):
+		"""Actually performs the action."""
+
+	def undo_action(self):
+		"""Undoes the action that has been done."""
+		assert self._action_performed
+		self._action_performed = False
+		self._undo_action()
+
+	def _undo_action(self):
+		"""Actually undoes the action.
+
+		Attempts to get an action to reverse the action and then performs
+		that action.
+		"""
+		self._get_reverse_action().perform_action()
+
+class CompositeAction(Action):
+	"""This class performs and undoes a collection of individual actions.
+
+	This can be used to implement actions on lists of items.
+	It is also used to implement actions like copy and move in terms of
+	primitives like insert and delete.
+	"""
+	def __init__(self, actions):
+		super(CompositeAction, self).__init__()
+		self._actions = actions
+
+	def _perform_action(self):
+		for action in self._actions:
+			action.perform_action()
+
+	def _undo_action(self):
+		reversed_actions = self._actions[:]
+		reversed_actions.reverse()
+		for action in reversed_actions:
+			action.undo_action()
+
+class DeleteAction(Action):
+	"""This action deletes a topic or passage."""
+	def __init__(self, item, type):
+		super(DeleteAction, self).__init__()
+		self.item = item
+		self.type = type
+
+	def _perform_action(self):
+		self.parent_topic = self.item.parent
+		if self.type == PASSAGE_SELECTED:
+			self.index = self.parent_topic.passages.index(self.item)
+			self.parent_topic.remove_passage(self.item)
+		else:
+			self.index = self.parent_topic.subtopics.index(self.item)
+			self.parent_topic.remove_subtopic(self.item)
+
+	def _get_reverse_action(self):
+		return InsertAction(self.parent_topic, self.item, self.type, self.index)
+
+class InsertAction(Action):
+	"""This action inserts a topic or passage at the given index of the given
+	parent topic.
+	"""
+	def __init__(self, parent_topic, item, type, index):
+		super(InsertAction, self).__init__()
+		self.parent_topic = parent_topic
+		self.item = item
+		self.type = type
+		self.index = index
+
+	def _perform_action(self):
+		if self.type == PASSAGE_SELECTED:
+			self.parent_topic.insert_passage(self.item, self.index)
+		else:
+			# XXX: This doesn't use the supplied index.
+			self.parent_topic.add_subtopic(self.item)
+
+	def _get_reverse_action(self):
+		return DeleteAction(self.item, self.type)
+
+class CopyAction(CompositeAction):
+	"""This action copies or moves a passage to a new topic."""
+	def __init__(self, item, type, to_topic, keep_original):
+		actions = []
+		if keep_original:
+			item = item.clone()
+		else:
+			actions.append(DeleteAction(item, type))
+		actions.append(InsertAction(to_topic, item, type, index=None))
+		super(CopyAction, self).__init__(actions)
+
+class ReorderPassageAction(CompositeAction):
+	"""This action moves a passage to a different index in the current topic."""
+	def __init__(self, passage, new_index):
+		topic = passage.parent
+		super(ReorderPassageAction, self).__init__([
+				DeleteAction(passage, PASSAGE_SELECTED),
+				InsertAction(topic, passage, PASSAGE_SELECTED, new_index)
+			])
 
 class ClipboardData(object):
 	"""This class manages the item that is currently in the clipboard."""
@@ -116,7 +229,7 @@ def _test():
 	>>> operations_manager = ManageTopicsOperations(context=operations_manager_context)
 	>>> def _add_subtopic(topic1, topic2, operations_manager_context=operations_manager_context, operations_manager=operations_manager):
 	... 	operations_manager_context.selected_topic = topic1
-	... 	operations_manager.add_subtopic(topic2)
+	... 	operations_manager.insert_item(topic2, TOPIC_SELECTED)
 	...
 	>>> def _remove_subtopic(topic2, operations_manager_context=operations_manager_context, operations_manager=operations_manager):
 	... 	operations_manager_context.is_passage_selected = False
@@ -125,7 +238,7 @@ def _test():
 	...
 	>>> def _add_passage(topic, passage, operations_manager_context=operations_manager_context, operations_manager=operations_manager):
 	... 	operations_manager_context.selected_topic = topic
-	... 	operations_manager.add_passage(passage)
+	... 	operations_manager.insert_item(passage, PASSAGE_SELECTED)
 	...
 	>>> def _remove_passage(topic, passage, operations_manager_context=operations_manager_context, operations_manager=operations_manager):
 	... 	operations_manager_context.is_passage_selected = True
@@ -176,6 +289,10 @@ def _test():
 	...
 	>>> _add_subtopic(manager, topic1)
 	Topic 'None': add subtopic observer called.
+	>>> operations_manager.undo()
+	Topic 'None': remove subtopic observer called.
+	>>> operations_manager.redo()
+	Topic 'None': add subtopic observer called.
 	>>> _add_subtopic(topic1, topic2)
 	Topic 'topic1': add subtopic observer called.
 	>>> _add_passage(topic2, passage1)
@@ -187,6 +304,10 @@ def _test():
 	>>> topic2.passages
 	[]
 	>>> _remove_subtopic(topic2)
+	Topic 'topic1': remove subtopic observer called.
+	>>> operations_manager.undo()
+	Topic 'topic1': add subtopic observer called.
+	>>> operations_manager.redo()
 	Topic 'topic1': remove subtopic observer called.
 	>>> _add_subtopic(manager, topic3)
 	Topic 'None': add subtopic observer called.
@@ -200,6 +321,12 @@ def _test():
 	>>> _remove_passage(topic2, None)
 
 	>>> _move_passage(passage1, topic1)
+	Topic 'topic1 > topic2': remove passage observer called.
+	Topic 'topic1': add passage observer called.
+	>>> operations_manager.undo()
+	Topic 'topic1': remove passage observer called.
+	Topic 'topic1 > topic2': add passage observer called.
+	>>> operations_manager.redo()
 	Topic 'topic1 > topic2': remove passage observer called.
 	Topic 'topic1': add passage observer called.
 	>>> topic1.passages
@@ -255,6 +382,10 @@ def _test():
 
 	>>> _copy_passage(passage1, topic2)
 	Topic 'topic1 > topic2': add passage observer called.
+	>>> operations_manager.undo()
+	Topic 'topic1 > topic2': remove passage observer called.
+	>>> operations_manager.redo()
+	Topic 'topic1 > topic2': add passage observer called.
 	>>> passage1.comment = "Test comment (to check it was a genuine copy)"
 	>>> topic1.passages
 	[PassageEntry('Genesis 3:5', 'Test comment (to check it was a genuine copy)')]
@@ -270,6 +401,12 @@ def _test():
 	>>> topic1.passages
 	[PassageEntry('Genesis 3:5', 'Test comment (to check it was a genuine copy)'), PassageEntry('Genesis 5:5', '')]
 	>>> _move_current_passage(passage2, 0)
+	Topic 'topic1': remove passage observer called.
+	Topic 'topic1': add passage observer called.
+	>>> operations_manager.undo()
+	Topic 'topic1': remove passage observer called.
+	Topic 'topic1': add passage observer called.
+	>>> operations_manager.redo()
 	Topic 'topic1': remove passage observer called.
 	Topic 'topic1': add passage observer called.
 	>>> topic1.passages
