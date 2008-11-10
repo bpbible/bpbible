@@ -1,3 +1,5 @@
+from util.observerlist import ObserverList
+
 PASSAGE_SELECTED = 1
 TOPIC_SELECTED = 2
 
@@ -7,6 +9,7 @@ class ManageTopicsOperations(object):
 		self._clipboard_data = None
 		self._actions = []
 		self._undone_actions = []
+		self.undo_available_changed_observers = ObserverList()
 
 	def insert_item(self, item, type, index=None):
 		parent_topic = self._context.get_selected_topic()
@@ -56,15 +59,29 @@ class ManageTopicsOperations(object):
 
 	def undo(self):
 		"""Undoes the most recently performed action."""
+		if not self.can_undo:
+			raise OperationNotAvailableError()
 		recent_action = self._actions.pop()
 		recent_action.undo_action()
 		self._undone_actions.append(recent_action)
+		self.undo_available_changed_observers()
 
 	def redo(self):
 		"""Redoes the most recently undone action."""
+		if not self.can_redo:
+			raise OperationNotAvailableError()
 		undone_action = self._undone_actions.pop()
 		undone_action.perform_action()
 		self._actions.append(undone_action)
+		self.undo_available_changed_observers()
+
+	@property
+	def can_undo(self):
+		return bool(self._actions)
+
+	@property
+	def can_redo(self):
+		return bool(self._undone_actions)
 
 	def _perform_action(self, action):
 		"""Performs the given action.
@@ -74,6 +91,8 @@ class ManageTopicsOperations(object):
 		"""
 		action.perform_action()
 		self._actions.append(action)
+		self._undone_actions = []
+		self.undo_available_changed_observers()
 
 	def _check_circularity(self, to_topic, item):
 		if type == PASSAGE_SELECTED:
@@ -216,6 +235,12 @@ class CircularDataException(Exception):
 	of its children.
 	"""
 
+class OperationNotAvailableError(Exception):
+	"""This exception is raised when the topic manager detects circular data,
+	typically because the user has attempted to copy or move a topic to one
+	of its children.
+	"""
+
 def _test():
 	"""
 	>>> from passage_list import PassageListManager
@@ -227,6 +252,18 @@ def _test():
 	>>> passage2 = _test_create_passage("gen 5:5")
 	>>> operations_manager_context = DummyOperationsManagerContext()
 	>>> operations_manager = ManageTopicsOperations(context=operations_manager_context)
+	>>> operations_manager.can_undo
+	False
+	>>> operations_manager.can_redo
+	False
+	>>> operations_manager.undo()
+	Traceback (most recent call last):
+	  File ...
+	OperationNotAvailableError
+	>>> operations_manager.redo()
+	Traceback (most recent call last):
+	  File ...
+	OperationNotAvailableError
 	>>> def _add_subtopic(topic1, topic2, operations_manager_context=operations_manager_context, operations_manager=operations_manager):
 	... 	operations_manager_context.selected_topic = topic1
 	... 	operations_manager.insert_item(topic2, TOPIC_SELECTED)
@@ -291,8 +328,16 @@ def _test():
 	Topic 'None': add subtopic observer called.
 	>>> operations_manager.undo()
 	Topic 'None': remove subtopic observer called.
+	>>> operations_manager.can_undo
+	False
+	>>> operations_manager.can_redo
+	True
 	>>> operations_manager.redo()
 	Topic 'None': add subtopic observer called.
+	>>> operations_manager.can_undo
+	True
+	>>> operations_manager.can_redo
+	False
 	>>> _add_subtopic(topic1, topic2)
 	Topic 'topic1': add subtopic observer called.
 	>>> _add_passage(topic2, passage1)
@@ -411,6 +456,23 @@ def _test():
 	Topic 'topic1': add passage observer called.
 	>>> topic1.passages
 	[PassageEntry('Genesis 5:5', ''), PassageEntry('Genesis 3:5', 'Test comment (to check it was a genuine copy)')]
+
+	Check that you can't redo an action after undoing and doing a different
+	action.
+	>>> _remove_passage(topic1, topic1.passages[0])
+	Topic 'topic1': remove passage observer called.
+	>>> operations_manager.undo()
+	Topic 'topic1': add passage observer called.
+	>>> operations_manager.can_redo
+	True
+	>>> topic1.passages
+	[PassageEntry('Genesis 5:5', ''), PassageEntry('Genesis 3:5', 'Test comment (to check it was a genuine copy)')]
+	>>> _remove_passage(topic1, topic1.passages[1])
+	Topic 'topic1': remove passage observer called.
+	>>> topic1.passages
+	[PassageEntry('Genesis 5:5', '')]
+	>>> operations_manager.can_redo
+	False
 
 	>>> _set_topic_name(topic1, "topic1 (new name)")
 	Topic 'topic1 (new name)': name changed observer called.

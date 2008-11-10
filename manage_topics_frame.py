@@ -23,6 +23,9 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		self._operations_manager = ManageTopicsOperations(
 				context=self._operations_context
 			)
+		self._operations_manager.undo_available_changed_observers \
+				+= self._undo_available_changed
+		self._undo_available_changed()
 		self._selected_topic = None
 		self.item_selected_type = TOPIC_SELECTED
 		self.selected_passage = None
@@ -196,7 +199,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		"""Returns a list of actions to be used when handling keyboard
 		shortcuts.
 		"""
-		return {
+		actions = {
 			(ord("C"), wx.MOD_CMD): self._operations_manager.copy,
 			(ord("X"), wx.MOD_CMD): self._operations_manager.cut,
 			(ord("V"), wx.MOD_CMD): self._safe_paste,
@@ -204,6 +207,13 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 			(ord("Z"), wx.MOD_CMD): self._operations_manager.undo,
 			(ord("Y"), wx.MOD_CMD): self._operations_manager.redo,
 		}
+
+		if not self._operations_manager.can_undo:
+			del actions[(ord("Z"), wx.MOD_CMD)]
+		if not self._operations_manager.can_redo:
+			del actions[(ord("Y"), wx.MOD_CMD)]
+
+		return actions
 
 	def _perform_toolbar_action(self, event, tool_id):
 		"""Performs the action requested from the toolbar."""
@@ -217,6 +227,15 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 			"redo_tool":	self._operations_manager.redo,
 		}
 		actions[tool_id]()
+
+	def _undo_available_changed(self):
+		"""Enables or disables the undo and redo toolbar buttons,
+		based on whether these actions are available.
+		"""
+		self.toolbar.EnableTool(wx.xrc.XRCID("undo_tool"),
+				self._operations_manager.can_undo)
+		self.toolbar.EnableTool(wx.xrc.XRCID("redo_tool"),
+				self._operations_manager.can_redo)
 
 	def _show_topic_context_menu(self, event):
 		"""Shows the context menu for a topic in the topic tree."""
