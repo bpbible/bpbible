@@ -67,8 +67,12 @@ class ErrorDialog(xrcErrorDialog):
 		traceback_text = u"%s%s\n" % (self.traceback_text.Value,
 			''.join(traceback.format_exception(type, value, tb)))
 
+		try:
+			val = "%s" % value
+		except UnicodeEncodeError, e:
+			val = "<UNPRINTABLE EXCEPTION VALUE (%r), %s>" % (value, e)
 		self.exc_text = "%s%s\n%s: %s\n" % (
-			self.exc_text, _("An error has occurred."), type.__name__, value)
+			self.exc_text, _("An error has occurred."), type.__name__, val)
 
 
 		self.write_to_log(traceback_text)
