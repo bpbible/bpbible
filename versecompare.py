@@ -62,7 +62,7 @@ class VerseCompareFrame(LinkedFrame):
 		
 		self.SetPage(text_func(ref, context))
 
-		self.gui_reference.SetValue(ref)
+		self.gui_reference.SetValue(pysw.internal_to_user(ref))
 		self.gui_reference.currentverse = ref
 		self.update_title()
 	

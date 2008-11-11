@@ -1,4 +1,4 @@
-from swlib.pysw import SW
+import Sword as SW
 from debug import dprint, WARNING
 
 def to_unicode(text, mod=None):

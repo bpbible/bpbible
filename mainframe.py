@@ -577,7 +577,8 @@ class MainFrame(wx.Frame, AuiLayer):
 		# back
 		if guiconfig.use_versetree:
 			self.bibleref.on_selected_in_tree += lambda text: \
-			wx.CallAfter(self.set_bible_ref, text, source=VERSE_TREE)
+			wx.CallAfter(self.set_bible_ref, text, 
+				userInput=True, source=VERSE_TREE)
 		else:
 			self.bibleref.Bind(wx.EVT_COMBOBOX, self.BibleRefEnter)
 

@@ -1,6 +1,8 @@
 import wx.combo
 import wx
-from swlib.pysw import GetVerseStr, BookData, ChapterData, VK, VerseParsingError
+from swlib.pysw import GetVerseStr, BookData, ChapterData
+from swlib.pysw import VK, UserVK, VerseParsingError
+from swlib import pysw
 from gui.treecombo import LazyTreeCombo
 		
 class VerseTree(LazyTreeCombo):
@@ -21,7 +23,7 @@ class VerseTree(LazyTreeCombo):
 		
 		self.tree.DeleteChildren(self.tree.RootItem)
 		
-		self.tree.SetPyData(self.root, (VK.books, False))
+		self.tree.SetPyData(self.root, (UserVK.books, False))
 		self.AddItems(self.root)
 		#self.set_value(self.tree.GetFirstChild(self.root)[0])
 
@@ -33,12 +35,13 @@ class VerseTree(LazyTreeCombo):
 		return isinstance(data, (BookData, ChapterData))
 
 	def format_tree(self, item):
+		print `self.get_data(item)`
 		return "%s" % self.get_data(item)
 	
 	def format_combo(self, item):
 		data = self.get_data(item)
 		if isinstance(data, BookData):
-			return data.bookname
+			return "%s" % data
 
 		elif isinstance(data, ChapterData):
 			parent_data = self.get_data(self.tree.GetItemParent(item))
@@ -47,20 +50,21 @@ class VerseTree(LazyTreeCombo):
 		parent = self.tree.GetItemParent(item)
 		parent_data = self.get_data(parent)
 		grandparent_data = self.get_data(self.tree.GetItemParent(parent))
+		print `grandparent_data`
 
-		return "%s %s:%s " % (grandparent_data.bookname, parent_data, data)
+		return "%s %s:%s " % (grandparent_data, parent_data, data)
 	
 	def set_current_verse(self, event):
 		self.currentverse = event.ref
-		self.SetText(event.ref)		
+		self.SetText(pysw.internal_to_user(event.ref))
 
 	def get_tree_item(self):
 		text = self.GetValue()
 		was_book = False
-		for book in VK.books:
+		for book in UserVK.books:
 			if ("%s" % book) == text:
 				was_book = True
-				self.currentverse = text
+				self.currentverse = book.bookname
 				break
 		else:
 			try:
@@ -74,7 +78,7 @@ class VerseTree(LazyTreeCombo):
 					return self.tree.GetFirstChild(self.root)[0]
 					
 
-		verse_key = VK(self.currentverse)
+		verse_key = UserVK(VK(self.currentverse))
 
 		book, chapter = verse_key.getBookName(), verse_key.Chapter()
 		verse = verse_key.Verse()

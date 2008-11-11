@@ -91,10 +91,10 @@ else:
 locale_mgr = SW.LocaleMgr.getSystemLocaleMgr()
 locale_mgr.loadConfigDir("resources/locales.d")
 
-if locale_mgr.getLocale("bpbible"):
-	locale_mgr.setDefaultLocaleName("bpbible")
-else:
-	dprint(WARNING, "bpbible locale not found")
+#if locale_mgr.getLocale("bpbible"):
+#	locale_mgr.setDefaultLocaleName("bpbible")
+#else:
+#	dprint(WARNING, "bpbible locale not found")
 
 
 class VerseParsingError(Exception): pass
@@ -469,6 +469,11 @@ class UserVK(EncodedVK):
 		return process_dash_hack(
 			super(UserVK, self).getRangeText(), locale_dash_hack
 		)
+	
+	@classproperty
+	def books(cls): 
+		return localized_books
+		
 
 class AbbrevVK(EncodedVK):
 	def __init__(self, arg=None):
@@ -1028,6 +1033,10 @@ class BookData(object):
 	def __len__(self):
 		return len(self.chapters)
 	
+	#@property
+	#def ChapterData(self):
+	#	return ChapterData
+	
 	def __iter__(self):
 		for item in range(len(self.chapters)):
 			yield ChapterData(
@@ -1035,6 +1044,13 @@ class BookData(object):
 				i_vk.verseCount(self.testament, self.booknumber, item + 1),
 			)
 
+class LocalizedBookData(BookData):
+	def __str__(self):
+		#print locale.translate(self.bookname)
+		return process_dash_hack(
+			locale.translate(self.bookname), locale_dash_hack
+		)
+		
 class ChapterData(object):
 	"""A class so that we can tell it is chapter data"""
 	def __init__(self, chapter_number, chapter_length):
@@ -1051,6 +1067,7 @@ class ChapterData(object):
 		return "%s" % self.chapter_number
 
 books = []
+localized_books = []
 i_vk = VK()
 i_vk.Book(1)
 
@@ -1059,16 +1076,22 @@ while not i_vk.Error():
 	b = ord(i_vk.Book())
 	n = i_vk.bookName(t, b)
 	books.append(BookData(n, t, b))
+	localized_books.append(LocalizedBookData(n, t, b))
+	
 	i_vk.Book(ord(i_vk.Book()) + 1)
 
-for book in books:
+for book, localized_book in zip(books, localized_books):
 	for chapter in range(i_vk.chapterCount(book.testament, book.booknumber)):
-		book.chapters.append(
-			ChapterData(chapter+1, 
+		c = ChapterData(chapter+1, 
 				i_vk.verseCount(book.testament, book.booknumber, chapter+1)
-			)
 		)
+
+		book.chapters.append(c)
+		localized_book.chapters.append(c)
+		
+		
 del book
+del localized_book
 del chapter
 
 locale_changed = ObserverList()
@@ -1134,7 +1157,7 @@ def change_locale(lang, abbrev_lang):
 		
 	locale_changed(locale, lang, abbrev_locale, abbrev_lang)
 
-change_locale("en_AU", "abbrev")#"ko", "ko_abbrev")
+change_locale("bpbible", "abbr")#en_AU", "abbrev")#"ko", "ko_abbrev")
 u_vk = UserVK()
 a_vk = AbbrevVK()
 

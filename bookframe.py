@@ -397,7 +397,7 @@ class CommentaryFrame(LinkedFrame):
 	def SetReference(self, ref, context = None):
 		super(CommentaryFrame, self).SetReference(ref)
 		
-		self.gui_reference.SetValue(ref)
+		self.gui_reference.SetValue(pysw.internal_to_user(ref))
 		self.gui_reference.currentverse = ref
 		
 class DictionaryFrame(BookFrame):
