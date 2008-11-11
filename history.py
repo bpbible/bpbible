@@ -127,7 +127,6 @@ class HistoryTree(wx.TreeCtrl):
 		self.Bind(wx.EVT_TREE_SEL_CHANGED, self.on_tree_selected)
 	
 		self.rebuild_tree()
-		#self.Bind(wx.EVT_TREE_ITEM_ACTIVATED, self.on_tree_selected)
 		
 		
 	
@@ -160,6 +159,7 @@ class HistoryTree(wx.TreeCtrl):
 		new_tree_item = self.AppendItem(parent, text=item.ref)
 		if item == self.history.current_item:
 			self.SetItemBold(new_tree_item)
+			self.current_tree_item = new_tree_item
 
 		self.SetPyData(new_tree_item, item)
 		self.build_tree(item, new_tree_item)
@@ -198,6 +198,10 @@ class HistoryTree(wx.TreeCtrl):
 		while id:
 			self.ExpandAllChildren(id)
 			id, cookie = self.GetNextChild(root, cookie)
+
+		# Stop freezing the UI so that we can scroll to the current item.
+		del freeze
+		self.ScrollTo(self.current_tree_item)
 		
 		self.Bind(wx.EVT_TREE_SEL_CHANGED, self.on_tree_selected)
 	
@@ -217,6 +221,8 @@ def _test_HistoryTree():
 	h.back()
 	
 	h.new_location("Gen 3:20")
+	for x in range(1, 30):
+		h.new_location("Gen 3:%s" % x)
 	ht = HistoryTree(f, h)
 	f.Show()
 	a.MainLoop()
