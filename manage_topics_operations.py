@@ -1,4 +1,5 @@
 from util.observerlist import ObserverList
+from passage_list import InvalidPassageError, MultiplePassagesError
 
 PASSAGE_SELECTED = 1
 TOPIC_SELECTED = 2
@@ -27,6 +28,15 @@ class ManageTopicsOperations(object):
 			return
 
 		self._perform_action(DeleteAction(item, type))
+
+	def set_topic_name(self, name):
+		item, type = self._context.get_selected_item()
+		assert type == TOPIC_SELECTED
+		self.set_item_details(name, item.description)
+
+	def set_item_details(self, name, description):
+		item, type = self._context.get_selected_item()
+		self._perform_action(SetItemDetailsAction(item, type, name, description))
 
 	def cut(self):
 		self._setup_clipboard(keep_original=False)
@@ -115,9 +125,6 @@ class ManageTopicsOperations(object):
 			if topic_parent is item:
 				raise CircularDataException()
 			topic_parent = topic_parent.parent
-
-	def set_topic_name(self, name):
-		self._context.get_selected_topic().name = name
 
 class Action(object):
 	"""This class performs an action on a topic or passage.
@@ -214,6 +221,35 @@ class InsertAction(Action):
 
 	def _get_reverse_action(self):
 		return DeleteAction(self.item, self.type)
+
+class SetItemDetailsAction(Action):
+	def __init__(self, item, type, name, description):
+		super(SetItemDetailsAction, self).__init__()
+		self.item = item
+		self.type = type
+		self.name = name
+		self.description = description
+
+	def _perform_action(self):
+		if self.type == PASSAGE_SELECTED:
+			self.old_name = str(self.item)
+			self.old_description = self.item.comment
+			exception = None
+			try:
+				self.item.passage = self.name
+			except (InvalidPassageError, MultiplePassagesError), e:
+				exception = e
+			self.item.comment = self.description
+			if exception is not None:
+				raise exception
+		else:
+			self.old_name = self.item.name
+			self.old_description = self.item.description
+			self.item.name = self.name
+			self.item.description = self.description
+
+	def _get_reverse_action(self):
+		return SetItemDetailsAction(self.item, self.type, self.old_name, self.old_description)
 
 class CopyAction(CompositeAction):
 	"""This action copies or moves a passage to a new topic."""
@@ -339,7 +375,18 @@ def _test():
 	...
 	>>> def _set_topic_name(topic, name, operations_manager_context=operations_manager_context, operations_manager=operations_manager):
 	... 	operations_manager_context.selected_topic = topic
+	... 	operations_manager_context.is_passage_selected = False
 	... 	operations_manager.set_topic_name(name)
+	...
+	>>> def _set_topic_details(topic, name, description, operations_manager_context=operations_manager_context, operations_manager=operations_manager):
+	... 	operations_manager_context.selected_topic = topic
+	... 	operations_manager_context.is_passage_selected = False
+	... 	operations_manager.set_item_details(name, description)
+	...
+	>>> def _set_passage_details(passage_entry, passage, comment, operations_manager_context=operations_manager_context, operations_manager=operations_manager):
+	... 	operations_manager_context.selected_passage = passage_entry
+	... 	operations_manager_context.is_passage_selected = True
+	... 	operations_manager.set_item_details(passage, comment)
 	...
 	>>> _add_subtopic(manager, topic1)
 	Topic 'None': add subtopic observer called.
@@ -458,6 +505,7 @@ def _test():
 	>>> operations_manager.redo()
 	Topic 'topic1 > topic2': add passage observer called.
 	>>> passage1.comment = "Test comment (to check it was a genuine copy)"
+	Passage 'Genesis 3:5': comment changed observer called.
 	>>> topic1.passages
 	[PassageEntry('Genesis 3:5', 'Test comment (to check it was a genuine copy)')]
 	>>> topic2.passages
@@ -500,8 +548,43 @@ def _test():
 	>>> operations_manager.can_redo
 	False
 
+	>>> _set_topic_details(topic1, "topic1", "New description.")
+	Topic 'topic1': description changed observer called.
+	>>> topic1.name
+	'topic1'
+	>>> topic1.description
+	'New description.'
 	>>> _set_topic_name(topic1, "topic1 (new name)")
 	Topic 'topic1 (new name)': name changed observer called.
+
+	>>> _set_passage_details(passage2, "Gen 5:5", "comment")
+	Passage 'Genesis 5:5': comment changed observer called.
+	>>> operations_manager.undo()
+	Passage 'Genesis 5:5': comment changed observer called.
+	>>> operations_manager.redo()
+	Passage 'Genesis 5:5': comment changed observer called.
+	>>> str(passage2)
+	'Genesis 5:5'
+	>>> passage2.comment
+	'comment'
+	>>> _set_passage_details(passage2, "Gen 9:5", "new comment")
+	Passage 'Genesis 9:5': passage changed observer called.
+	Passage 'Genesis 9:5': comment changed observer called.
+	>>> str(passage2)
+	'Genesis 9:5'
+	>>> passage2.comment
+	'new comment'
+
+	Check setting an invalid passage will throw an exception, but will
+	also set the comment correctly.
+	>>> _set_passage_details(passage2, "garbled verse 9:5", "newer comment")
+	Traceback (most recent call last):
+	  File ...
+	InvalidPassageError
+	>>> str(passage2)
+	'Genesis 9:5'
+	>>> passage2.comment
+	'newer comment'
 	"""
 	import manage_topics_operations, doctest	
 	print doctest.testmod(manage_topics_operations)
@@ -533,13 +616,23 @@ def _test_create_topic(name="", description="", create_function=None):
 	topic.add_subtopic_observers += _topic_observer("add subtopic", topic)
 	topic.remove_subtopic_observers += _topic_observer("remove subtopic", topic)
 	topic.name_changed_observers += _topic_observer("name changed", topic)
+	topic.description_changed_observers += _topic_observer("description changed", topic)
 	return topic
 
-_test_create_passage = PassageEntry
+def _test_create_passage(passage="", comment=""):
+	passage = PassageEntry(passage, comment)
+	passage.passage_changed_observers += _passage_observer("passage changed", passage)
+	passage.comment_changed_observers += _passage_observer("comment changed", passage)
+	return passage
 
 def _topic_observer(operation, topic):
 	def __observer(*args, **kwargs):
 		print "Topic '%s': %s observer called." % (topic.full_name, operation)
+	return __observer
+
+def _passage_observer(operation, passage):
+	def __observer(*args, **kwargs):
+		print "Passage '%s': %s observer called." % (passage, operation)
 	return __observer
 
 if __name__ == "__main__":

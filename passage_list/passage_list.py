@@ -14,10 +14,12 @@ class _BasePassageList(object):
 	contains_passages = True
 
 	def __init__(self, description=""):
-		self.description = description
+		self._description = description
 		self.parent = None
 		self.name_changed_observers = ObserverList()
+		self.description_changed_observers = ObserverList()
 		self.subtopics = []
+		self._name = ""
 		self.add_subtopic_observers = ObserverList()
 		self.remove_subtopic_observers = ObserverList()
 
@@ -157,10 +159,18 @@ class PassageList(_BasePassageList):
 		self._name = name
 
 	def set_name(self, name):
-		self._name = name
-		self.name_changed_observers(name)
+		if name != self._name:
+			self._name = name
+			self.name_changed_observers(name)
 
 	name = property(lambda self: self._name, set_name)
+
+	def set_description(self, description):
+		if description != self._description:
+			self._description = description
+			self.description_changed_observers(description)
+	
+	description = property(lambda self: self._description, set_description)
 	
 	def get_topic_trail(self):
 		return self.parent.topic_trail + (self.name,)
@@ -228,6 +238,8 @@ class PassageListManager(_BasePassageList):
 	def __init__(self, filename=None):
 		super(PassageListManager, self).__init__()
 		self.filename = filename
+		self.name = "Topics"
+		self.description = ""
 
 	def save(self):
 		"""Saves this passage list manager to its file.

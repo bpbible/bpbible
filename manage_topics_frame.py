@@ -3,7 +3,8 @@ from wx.lib.mixins.listctrl import ListCtrlAutoWidthMixin
 import guiconfig
 from events import TOPIC_LIST
 from passage_list import (get_primary_passage_list_manager,
-		lookup_passage_entry, PassageEntry)
+		lookup_passage_entry, PassageEntry,
+		InvalidPassageError, MultiplePassagesError)
 from passage_entry_dialog import PassageEntryDialog
 from topic_creation_dialog import TopicCreationDialog
 from xrc.manage_topics_xrc import xrcManageTopicsFrame
@@ -31,7 +32,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		self._undo_available_changed()
 		self._selected_topic = None
 		self.item_selected_type = TOPIC_SELECTED
-		self.selected_passage = None
+		self._selected_passage = None
 		self._init_passage_list_ctrl_headers()
 		self._setup_passage_list_ctrl()
 		self._setup_topic_tree()
@@ -58,6 +59,9 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 
 		self.passage_list_ctrl.Bind(wx.EVT_KEY_UP, self._on_char)
 		self.topic_tree.Bind(wx.EVT_KEY_UP, self._on_char)
+
+		for control in self.item_details_panel.Children:
+			control.Bind(wx.EVT_KILL_FOCUS, self._item_details_panel_lost_focus)
 
 		# Not yet supported: "undo_tool", "redo_tool".
 		for tool in ("cut_tool", "copy_tool", "paste_tool",
@@ -114,18 +118,30 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 			event.Skip()
 			return
 
-		self._selected_topic = selected_topic
+		self.selected_topic = selected_topic
 		self._setup_passage_list_ctrl()
 
 		if old_topic is not None:
 			old_topic.add_passage_observers -= self._insert_topic_passage
 			old_topic.remove_passage_observers -= self._remove_topic_passage
-		if self._selected_topic is not None:
-			self._selected_topic.add_passage_observers += self._insert_topic_passage
-			self._selected_topic.remove_passage_observers += self._remove_topic_passage
+			for passage_entry in old_topic.passages:
+				passage_entry.passage_changed_observers -= self._change_passage_passage
+				passage_entry.comment_changed_observers -= self._change_passage_comment
+		if self.selected_topic is not None:
+			self.selected_topic.add_passage_observers += self._insert_topic_passage
+			self.selected_topic.remove_passage_observers += self._remove_topic_passage
 
 		self.Title = self._get_title()
 		event.Skip()
+
+	def get_selected_topic(self):
+		return self._selected_topic
+
+	def set_selected_topic(self, new_topic):
+		self._selected_topic = new_topic
+		self._change_item_details_topic(new_topic)
+
+	selected_topic = property(get_selected_topic, set_selected_topic)
 
 	def _find_topic(self, tree_item, topic):
 		if self.topic_tree.GetPyData(tree_item) is topic:
@@ -140,7 +156,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 
 	def _get_title(self):
 		"""Gets a title for the frame, based on the currently selected topic."""
-		topic = self._selected_topic
+		topic = self.selected_topic
 		title = "Manage Topics"
 		if topic is not self._manager:
 			title = "%s - %s" % (topic.full_name, title)
@@ -153,6 +169,10 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 
 		parent_list.remove_subtopic_observers.add_observer(
 				self._remove_topic_node,
+				(parent_node,))
+
+		parent_list.name_changed_observers.add_observer(
+				self._rename_topic_node,
 				(parent_node,))
 
 		for subtopic in parent_list.subtopics:
@@ -169,6 +189,9 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 	def _remove_topic_node(self, parent_node, topic):
 		topic_node = self._find_topic(parent_node, topic)
 		self.topic_tree.Delete(topic_node)
+
+	def _rename_topic_node(self, parent_node, new_name):
+		self.topic_tree.SetItemText(parent_node, new_name)
 	
 	def _get_topic_tool_tip(self, event):
 		"""Gets the description for a topic.
@@ -192,7 +215,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		"""
 		if not event.IsEditCancelled():
 			topic = self.topic_tree.GetPyData(event.GetItem())
-			topic.name = event.GetLabel()
+			self._operations_manager.set_topic_name(event.GetLabel())
 
 	def _on_char(self, event):
 		"""Handles all keyboard shortcuts."""
@@ -247,12 +270,12 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 
 	def _show_topic_context_menu(self, event):
 		"""Shows the context menu for a topic in the topic tree."""
-		self._selected_topic = self.topic_tree.GetPyData(event.Item)
+		self.selected_topic = self.topic_tree.GetPyData(event.Item)
 		menu = wx.Menu()
 		
 		item = menu.Append(wx.ID_ANY, "&New Topic")
 		self.Bind(wx.EVT_MENU,
-				lambda e: self._create_topic(self._selected_topic),
+				lambda e: self._create_topic(self.selected_topic),
 				id=item.Id)
 		
 		item = menu.Append(wx.ID_ANY, "Add &Passage")
@@ -314,9 +337,9 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 	
 	def _on_close(self, event):
 		self._remove_observers(self._manager)
-		if self._selected_topic is not None:
-			self._selected_topic.add_passage_observers -= self._insert_topic_passage
-			self._selected_topic.remove_passage_observers -= self._remove_topic_passage
+		if self.selected_topic is not None:
+			self.selected_topic.add_passage_observers -= self._insert_topic_passage
+			self.selected_topic.remove_passage_observers -= self._remove_topic_passage
 		self._manager.save()
 		event.Skip()
 	
@@ -332,23 +355,35 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 
 	def _setup_passage_list_ctrl(self):
 		self.passage_list_ctrl.DeleteAllItems()
-		if self._selected_topic is None:
+		if self.selected_topic is None:
 			return
 
-		for index, passage_entry in enumerate(self._selected_topic.passages):
+		for index, passage_entry in enumerate(self.selected_topic.passages):
 			self._insert_topic_passage(passage_entry, index)
 
-		if self._selected_topic.passages:
+		if self.selected_topic.passages:
 			self._select_list_entry_by_index(0)
 
 	def _insert_topic_passage(self, passage_entry, index=None):
 		if index is None:
-			index = self._selected_topic.passages.index(passage_entry)
+			index = self.selected_topic.passages.index(passage_entry)
+		passage_entry.passage_changed_observers.add_observer(self._change_passage_passage, (passage_entry,))
+		passage_entry.comment_changed_observers.add_observer(self._change_passage_comment, (passage_entry,))
 		self.passage_list_ctrl.InsertStringItem(index, str(passage_entry))
 		self.passage_list_ctrl.SetStringItem(index, 1, passage_entry.comment)
 
+	def _change_passage_passage(self, passage_entry, new_passage):
+		index = self.selected_topic.passages.index(passage_entry)
+		self.passage_list_ctrl.SetStringItem(index, 0, str(passage_entry))
+
+	def _change_passage_comment(self, passage_entry, new_comment):
+		index = self.selected_topic.passages.index(passage_entry)
+		self.passage_list_ctrl.SetStringItem(index, 1, new_comment)
+
 	def _remove_topic_passage(self, passage_entry, index):
 		self.passage_list_ctrl.DeleteItem(index)
+		passage_entry.passage_changed_observers -= self._change_passage_passage
+		passage_entry.comment_changed_observers -= self._change_passage_comment
 		if not passage_entry.parent.passages:
 			self.selected_passage = None
 		else:
@@ -357,12 +392,21 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 			self._select_list_entry_by_index(index)
 
 	def _passage_selected(self, event):
-		passage_entry = self._selected_topic.passages[event.GetIndex()]
+		passage_entry = self.selected_topic.passages[event.GetIndex()]
 		self.selected_passage = passage_entry
 		# Do nothing.
 
+	def get_selected_passage(self):
+		return self._selected_passage
+
+	def set_selected_passage(self, new_passage):
+		self._selected_passage = new_passage
+		self._change_item_details_passage(new_passage)
+
+	selected_passage = property(get_selected_passage, set_selected_passage)
+
 	def _passage_activated(self, event):
-		passage_entry = self._selected_topic.passages[event.GetIndex()]
+		passage_entry = self.selected_topic.passages[event.GetIndex()]
 		guiconfig.mainfrm.set_bible_ref(str(passage_entry), source=TOPIC_LIST)
 
 	def _select_list_entry_by_index(self, index):
@@ -371,8 +415,8 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		self.passage_list_ctrl.SetItemState(index, state, state)
 	
 	def _show_passage_context_menu(self, event):
-		"""Shows the context menu for a topic in the topic tree."""
-		self.selected_passage = self._selected_topic.passages[event.GetIndex()]
+		"""Shows the context menu for a passage in the passage list."""
+		self.selected_passage = self.selected_topic.passages[event.GetIndex()]
 		menu = wx.Menu()
 		
 		item = menu.Append(wx.ID_ANY, "&Open")
@@ -408,11 +452,47 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 
 	def _topic_tree_got_focus(self, event):
 		self.item_selected_type = TOPIC_SELECTED
+		self._change_item_details_topic(self.selected_topic)
 		event.Skip()
 
 	def _passage_list_got_focus(self, event):
 		self.item_selected_type = PASSAGE_SELECTED
+		self._change_item_details_passage(self.selected_passage)
 		event.Skip()
+
+	def _change_item_details_topic(self, new_topic):
+		if new_topic is None:
+			return
+
+		self.name_label.Label = "Name:"
+		self.name_edit.Value = new_topic.name
+		self.description_label.Label = "Description:"
+		self.description_edit.Value = new_topic.description
+
+	def _change_item_details_passage(self, new_passage):
+		if new_passage is None or self.FindFocus() is self.topic_tree:
+			return
+
+		self.name_label.Label = "Passage:"
+		self.name_edit.Value = str(new_passage)
+		self.description_label.Label = "Comment:"
+		self.description_edit.Value = new_passage.comment
+
+	def _item_details_panel_lost_focus(self, event):
+		event.Skip()
+		if self.FindFocus() in self.item_details_panel.Children:
+			return
+		try:
+			name = self.name_edit.Value
+			description = self.description_edit.Value
+			self._operations_manager.set_item_details(name, description)
+		except InvalidPassageError:
+			wx.MessageBox("Unrecognised passage `%s'." % name,
+					"", wx.OK | wx.ICON_INFORMATION, self)
+		except MultiplePassagesError:
+			wx.MessageBox("Passage `%s' contains multiple passages.\n"
+					"Only one verse or verse range can be entered." % name,
+					"", wx.OK | wx.ICON_INFORMATION, self)
 
 # Specifies what type of dragging is currently happening with the topic tree.
 # This is needed since it has to select and unselect topics when dragging and
@@ -594,7 +674,7 @@ class PassageListCtrl(wx.ListCtrl, ListCtrlAutoWidthMixin):
 	def _start_drag(self, event):
 		"""Starts the drag and registers a drop source for the passage."""
 		self._drag_index = event.GetIndex()
-		passage_entry = self._topic_frame._selected_topic.passages[self._drag_index]
+		passage_entry = self._topic_frame.selected_topic.passages[self._drag_index]
 		id = passage_entry.get_id()
 
 		data = wx.CustomDataObject("PassageEntry")
@@ -672,7 +752,7 @@ class OperationsContext(object):
 
 	def get_selected_topic(self):
 		#return self._frame._get_tree_selected_topic()
-		return self._frame._selected_topic
+		return self._frame.selected_topic
 
 	def get_selected_passage(self):
 		return self._frame.selected_passage
@@ -684,3 +764,9 @@ class OperationsContext(object):
 		elif item_selected_type == TOPIC_SELECTED:
 			item = self.get_selected_topic()
 		return (item, item_selected_type)
+
+if __name__ == "__main__":
+	app = wx.App(0)
+	frame = ManageTopicsFrame(None)
+	frame.Show()
+	app.MainLoop()

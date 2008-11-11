@@ -38,8 +38,11 @@ class xrcManageTopicsFrame(wx.Frame):
         # Define variables for the controls, bind event handlers
         self.toolbar = xrc.XRCCTRL(self, "toolbar")
         self.splitter = xrc.XRCCTRL(self, "splitter")
-        self.topic_tree = xrc.XRCCTRL(self, "topic_tree")
-        self.passage_list_ctrl = xrc.XRCCTRL(self, "passage_list_ctrl")
+        self.item_details_panel = xrc.XRCCTRL(self, "item_details_panel")
+        self.name_label = xrc.XRCCTRL(self, "name_label")
+        self.name_edit = xrc.XRCCTRL(self, "name_edit")
+        self.description_label = xrc.XRCCTRL(self, "description_label")
+        self.description_edit = xrc.XRCCTRL(self, "description_edit")
 
 
 

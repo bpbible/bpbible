@@ -12,9 +12,11 @@ class PassageEntry(object):
 	The passage entry is included in a passage entry list.
 	"""
 	def __init__(self, passage, comment=""):
+		self.passage_changed_observers = ObserverList()
+		self.comment_changed_observers = ObserverList()
+		self._passage = None
 		self._set_passage(passage)
 		self._comment = comment
-		self.observers = ObserverList()
 		self.parent = None
 
 		global _passage_entry_id_dict
@@ -44,7 +46,7 @@ class PassageEntry(object):
 		old_passage = self._passage
 		self._set_passage(passage)
 		if self._passage != old_passage:
-			self._notify()
+			self.passage_changed_observers(self._passage)
 	
 	def _set_passage(self, passage):
 		"""Sets the passage without notifying that the passage has changed."""
@@ -61,10 +63,7 @@ class PassageEntry(object):
 	def set_comment(self, comment):
 		if self._comment != comment:
 			self._comment = comment
-			self._notify()
-	
-	def _notify(self):
-		self.observers()
+			self.comment_changed_observers(comment)
 	
 	comment = property(get_comment, set_comment,
 			doc="The comment on the passage entry.")
