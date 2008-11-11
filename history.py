@@ -121,6 +121,7 @@ class HistoryTree(wx.TreeCtrl):
 		style = wx.TR_HIDE_ROOT|wx.TR_DEFAULT_STYLE
 		if not use_history_as_tree:
 			style |= wx.TR_NO_LINES
+		self.current_tree_item = None
 		super(HistoryTree, self).__init__(parent, style=style)
 		self.history.on_history_changed += \
 			lambda item:wx.CallAfter(self.rebuild_tree, item)
@@ -201,7 +202,8 @@ class HistoryTree(wx.TreeCtrl):
 
 		# Stop freezing the UI so that we can scroll to the current item.
 		del freeze
-		self.ScrollTo(self.current_tree_item)
+		if self.current_tree_item:
+			self.ScrollTo(self.current_tree_item)
 		
 		self.Bind(wx.EVT_TREE_SEL_CHANGED, self.on_tree_selected)
 	
