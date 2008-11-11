@@ -62,18 +62,13 @@ class GLinkTagHandler(TagHandler):
 		parser = self.GetParser()
 
 		if tag.HasParam("HREF"):
-			#oldlnk = parser.GetLink()
 			oldclr = parser.GetActualColor()
 
 			name = tag.GetParam("HREF")
 
-			target = ""
 			colour = config_manager["Filter"]["strongs_colour"]
 			if tag.HasParam("COLOUR"):
 				colour = tag.GetParam("COLOUR")
-
-			if (tag.HasParam("TARGET")):
-				target = tag.GetParam("TARGET")
 
 			parser.SetActualColor(colour)
 			parser.GetContainer().InsertCell(html.HtmlColourCell(colour))
@@ -81,11 +76,11 @@ class GLinkTagHandler(TagHandler):
 			parser.GetContainer().InsertCell(
 				html.HtmlFontCell(parser.CreateCurrentFont())
 			)
-			parser.SetLink(name)#, target))
+			parser.SetLink(name)
 
 			self.ParseInner(tag)
 
-			parser.SetLink("")#oldlnk.GetHref())
+			parser.SetLink("")
 			parser.GetContainer().InsertCell(
 				html.HtmlFontCell(parser.CreateCurrentFont())
 			)
