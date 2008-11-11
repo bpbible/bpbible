@@ -1,4 +1,3 @@
-#from swlib.pysw import *
 import re
 import passage_list
 from swlib.pysw import VK, SW, GetBestRange, GetVerseStr, TOP
@@ -83,23 +82,23 @@ class Book(object):
 	@staticmethod
 	def get_template_options():
 		items = {
-			"$":			"A $ sign", 
-			"range":		"The range of verses", 
-			"version":		"The version this is taken from",
-			"description":	"A description of the version",
+			"$":			_("A $ sign"), 
+			"range":		_("The range of verses"), 
+			"version":		_("The version this is taken from"),
+			"description":	_("A description of the version"),
 		}
 
 		body_items = {			
-			"text":			"The text of a verse",
-			"versenumber":	"The versenumber",
-			"reference": 	"The reference for each verse",
-			"bookname":		"The name of the current book",
-			"bookabbrev":	"A shorter abbreviation of the book name",
-			"chapternumber":"The number of the chapter in the book"
+			"text":			_("The text of a verse"),
+			"versenumber":	_("The verse number"),
+			"reference": 	_("The reference for each verse"),
+			"bookname":		_("The name of the current book"),
+			"bookabbrev":	_("A shorter abbreviation of the book name"),
+			"chapternumber":_("The number of the chapter in the book")
 		}
 
 		heading_items = {
-			"heading":		"The text of the heading"
+			"heading":		_("The text of the heading")
 		}
 
 		body_items.update(items)
