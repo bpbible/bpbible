@@ -599,7 +599,8 @@ class BibleTooltipConfig(TooltipConfig):
 
 	def get_verified_multi_verses(self, ref, context):
 		try:
-			ref = GetBestRange(ref, context, raiseError=True)
+			ref = GetBestRange(ref, context, raiseError=True, 
+				userInput=True,	userOutput=False)
 			return ref
 		
 		except VerseParsingError, e:

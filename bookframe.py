@@ -7,7 +7,8 @@ import versetree
 
 
 from swlib.pysw import VK, VerseParsingError
-from swlib.pysw import GetVerseStr, GetBookChapter, GetBestRange
+from swlib.pysw import GetVerseStr, GetBestRange
+from swlib import pysw
 from util.unicode import to_str, to_unicode
 from gui import guiutil
 import config
@@ -44,7 +45,7 @@ class BookFrame(DisplayFrame):
 	def get_verified_one_verse(self, ref):
 		try:
 			ref = GetVerseStr(ref, self.reference, 
-				raiseError=True)
+				raiseError=True, userInput=True, userOutput=False)
 			return ref
 		
 		except VerseParsingError, e:
@@ -53,7 +54,7 @@ class BookFrame(DisplayFrame):
 	def get_verified_multi_verses(self, ref):
 		try:
 			ref = GetBestRange(ref, self.reference, 
-				raiseError=True)
+				raiseError=True, userInput=True, userOutput=False)
 			return ref
 		
 		except VerseParsingError, e:
@@ -216,7 +217,7 @@ class BookFrame(DisplayFrame):
 		m = guiconfig.mainfrm
 		p = m.get_pane_for_frame(self)
 		version = self.book.version
-		ref = self.reference
+		ref = pysw.internal_to_user(self.reference)
 		
 		text = "%s - %s (%s)" % (self.title, ref, version)
 		m.set_pane_title(p.name, text)
@@ -240,7 +241,8 @@ class BookFrame(DisplayFrame):
 		qs.pseudo_modal(self.go_quickly_finished)
 
 	def open_tooltip(self, ref):
-		tooltip = BiblicalPermanentTooltip(guiconfig.mainfrm, ref=ref)
+		tooltip = BiblicalPermanentTooltip(guiconfig.mainfrm,
+			ref=pysw.internal_to_user(ref))
 
 		tooltip.ShowTooltip()
 	

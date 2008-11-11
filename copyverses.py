@@ -15,6 +15,8 @@ import guiconfig
 import config
 from gui import guiutil
 from util.configmgr import config_manager
+from swlib import pysw
+from swlib.pysw import GetBestRange
 
 #class CopyVerseDialog(xrcCopyVerseDialog):
 #	def __init__(self, parent, settings):
@@ -94,13 +96,7 @@ class CopyVerseDialog(xrcCopyVerseDialog):
 				item.StyleSetForeground(style, text_colour)
 			
 			item.SetCaretForeground(text_colour)
-			
 
-
-			
-			
-
-		self.Bind(wx.EVT_CLOSE, self.OnClose)
 		self.wxID_CANCEL.Bind(wx.EVT_BUTTON, 
 					lambda x:self.EndModal(wx.ID_CANCEL))
 
@@ -232,26 +228,22 @@ class CopyVerseDialog(xrcCopyVerseDialog):
 		
 		self.fill_templates(template.name)
 
+	def get_internal_reference(self):
+		return GetBestRange(self.reference.GetValue(), 
+				userInput=True, userOutput=False)
+		
 	def update(self, event=None):
 		if event: 
 			event.Skip()
 
-		text = self.GetText()
+		text = self.GetText(self.get_internal_reference())
 		self.preview.SetPage(text.replace("\n", "<br />"))
 
-	def copy_verses(self, text):
-		# set the reference
-		self.reference.SetValue(text)
-		
-		# update the text
-		self.update()
-	
-		# copy verses
-		self.CopyVerses()
-	
 	def ShowModal(self, text):
 		# set the reference
-		self.reference.SetValue(text)
+		self.reference.SetValue(
+			GetBestRange(text, userInput=False, userOutput=True)
+		)
 		
 		# update the text
 		self.update()
@@ -259,7 +251,7 @@ class CopyVerseDialog(xrcCopyVerseDialog):
 		ansa = super(CopyVerseDialog, self).ShowModal()
 
 		if ansa == wx.ID_OK:
-			self.CopyVerses()
+			self.copy_verses(self.get_internal_reference())
 			if self.is_custom:
 				config_manager["BPBible"]["copy_verse"] = (
 					self.based_on, 
@@ -278,11 +270,12 @@ class CopyVerseDialog(xrcCopyVerseDialog):
 
 		return ansa
 
-	def CopyVerses(self):
+	def copy_verses(self, ref):
 		print "Updating..."	
-		guiutil.copy(self.GetText())
+		guiutil.copy(self.GetText(ref))
 
-	def GetText(self):
+	def GetText(self, ref):
+		print ref
 		template = VerseTemplate(header=self.template_panel.header.GetText(),
 			body=self.template_panel.body.GetText(), 
 			footer=self.template_panel.footer.GetText())
@@ -292,8 +285,8 @@ class CopyVerseDialog(xrcCopyVerseDialog):
 
 		#apply template
 		biblemgr.bible.templatelist.append(template)
-
-		data = biblemgr.bible.GetReference(self.reference.GetValue())
+		
+		data = biblemgr.bible.GetReference(ref)
 		if data is None:
 			data = config.MODULE_MISSING_STRING()
 
@@ -309,11 +302,6 @@ class CopyVerseDialog(xrcCopyVerseDialog):
 		return data
 	
 
-	def OnClose(self, event):
-		if(self.GetReturnCode()==wx.ID_OK):
-			self.CopyVerses()
-		self.Destroy()
-		
 	#@classmethod
 	#def show_dialog(cls, parent=None):
 	#	"""Copy verses to other applications"""

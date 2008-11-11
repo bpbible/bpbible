@@ -360,7 +360,7 @@ class SearchPanel(xrcSearchPanel):
 		
 	
 	def go_to_reference(self, idx):
-		item_text = self.verselist.GetItemText(idx)
+		item_text = self.verselist.results[idx]
 		
 		guiconfig.mainfrm.set_bible_ref(item_text, source=SEARCH)
 			
@@ -976,7 +976,7 @@ class SearchPanel(xrcSearchPanel):
 		
 
 	def search_list_format_text(self, text):
-		return GetBestRange(text, abbrev=True)		
+		return GetBestRange(text, abbrev=True, userInput=False, userOutput=True)
 
 class SearchList(virtuallist.VirtualListCtrlXRC):
 	def __init__(self):

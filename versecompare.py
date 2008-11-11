@@ -13,6 +13,7 @@ from util import noop
 from util.configmgr import config_manager
 from displayframe import IN_POPUP, process_html_for_module
 from swlib.pysw import GetBestRange, SW, VK
+from swlib import pysw
 from util.unicode import to_str
 
 from util.i18n import N_
@@ -161,13 +162,10 @@ class VerseCompareFrame(LinkedFrame):
 
 		return text
 
-	def notify(self, reference, source=None):
-		self.SetReference(reference)
-	
 	def update_title(self, shown=None):
 		m = guiconfig.mainfrm
 		p = m.get_pane_for_frame(self)
-		ref = self.reference
+		ref = pysw.internal_to_user(self.reference)
 		text = "%s - %s" % (self.title, ref)
 		m.set_pane_title(p.name, text)
 		

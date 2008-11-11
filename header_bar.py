@@ -1,5 +1,6 @@
 import wx
 from swlib import pysw
+from swlib.pysw import SW
 from backend import chapter_headings
 from protocols import protocol_handler
 from displayframe import DisplayFrame
@@ -14,7 +15,8 @@ def on_headings_hover(frame, href, url, x, y):
 		url = SW.URL(href)
 	
 	ref = url.getHostName()
-	ref = pysw.GetBookChapter(ref)
+	# print ref
+
 	frame.tooltip.tooltip_config = ChapterHeadingsTooltipConfig(ref)
 
 	frame.tooltip.Start()
@@ -26,7 +28,7 @@ class ChapterHeadingsTooltipConfig(TooltipConfig):
 
 	def get_text(self):
 		html = '<font size=+1><b><a href="nbible:%s">%s</a></b></font>' % (self.ref, self.ref)
-		vk = pysw.VK((self.ref, self.ref))
+		vk = pysw.UserVK((self.ref, self.ref))
 		html += ": %d verses<br>" % len(vk)
 	
 		html += "<ul>"
@@ -56,12 +58,13 @@ class ChapterItem(wx.Panel):
 	# how much border around the text do we want?
 	border = 3
 
-	def __init__(self, parent, chapter, display=None, is_current=False):
+	def __init__(self, parent, internal, display=None, is_current=False):
 		super(ChapterItem, self).__init__(parent)
 		
-		self.chapter = chapter
+		self.internal_text = internal
+		self.chapter = pysw.internal_to_user(internal)
 		if display is None:
-			self.display = chapter
+			self.display = self.chapter
 		else:
 			self.display = display
 		self.is_current = is_current
@@ -77,14 +80,15 @@ class ChapterItem(wx.Panel):
 			lambda evt:wx.CallAfter(self.on_enter, evt.X, evt.Y))
 		self.Bind(wx.EVT_LEAVE_WINDOW, self.on_leave)
 		self.Bind(wx.EVT_LEFT_UP, lambda evt: 
-			self.Parent.on_click(self.chapter)
+			self.Parent.on_click(self.internal_text)
 		)
 		
 
 		# draw our bitmapped version, and set our size based on it
 		self.draw()
 	
-	def set_chapter(self, chapter, display=None):
+	def set_chapter(self, chapter, internal_text, display=None):
+		self.internal_text = internal_text
 		if self.chapter == chapter:
 			return
 
@@ -102,8 +106,9 @@ class ChapterItem(wx.Panel):
 		if self.Parent.tooltip.target == self:
 			return
 
+		# print self.internal_text
 		protocol_handler.on_hover(self.Parent, 
-			"headings:%s" % self.chapter, x, y)
+			"headings:%s" % self.internal_text, x, y)
 
 	def on_leave(self, event):
 		self.Parent.current_target = None
@@ -125,7 +130,8 @@ class ChapterItem(wx.Panel):
 		dc.SetFont(self.Font)
 		
 		# get the size of the text
-		text = str(self.display)
+		# print `self.display`
+		text = self.display
 		text_width, text_height = dc.GetTextExtent(text)
 
 		# and of the window
@@ -198,10 +204,10 @@ class Line(wx.Window):
 		dc.Clear()
 	
 class HeaderBar(wx.Panel):
-	def __init__(self, parent, current_chapter, style=wx.NO_BORDER):
+	def __init__(self, parent, i_current_chapter, style=wx.NO_BORDER):
 		super(HeaderBar, self).__init__(parent, style=style)
 		
-		self.current_chapter = current_chapter
+		self.i_current_chapter = i_current_chapter
 		self.Bind(wx.EVT_SIZE, self.on_size)
 		self.on_click = ObserverList()
 		
@@ -231,39 +237,54 @@ class HeaderBar(wx.Panel):
 	
 	
 	def create_item(self):
-		self.item = ChapterItem(self, self.current_chapter, is_current=True)
+		self.item = ChapterItem(self, self.i_current_chapter, is_current=True)
 		self.item.Position = 0, 0
 		font = self.item.Font
 		font.SetWeight(wx.FONTWEIGHT_BOLD)
 		#font.PointSize += 2
 		self.item.Font = font
+
+		chapter, c, internal = self.get_next_chapter(
+			self.i_current_chapter, dir=0, short=False
+		)
 		
-	def set_current_chapter(self, chapter):
+		# print chapter, internal
+		self.item.set_chapter(chapter, internal)
+		
+		
+	def set_current_chapter(self, chapter, internal):
 		guiutil.FreezeUI(self)
+		# print `chapter`, `internal`
 	
 		# stop tooltip
 		self.tooltip.Stop()
 
 		# set new current item
-		self.current_chapter = chapter
-		self.item.set_chapter(chapter)
+		self.i_current_chapter = internal
+		chapter, c, internal = self.get_next_chapter(
+			self.i_current_chapter, dir=0, short=False
+		)
+		
+		self.item.set_chapter(chapter, internal)
 		
 		# and refresh everything else
 		self.on_size()
 
-	def get_next_chapter(self, book_chapter, dir=1, short=True):
-		vk = pysw.VK(book_chapter)
-		vk.chapter += dir
-		if vk.Error():
-			return None, None
+	def get_next_chapter(self, i_book_chapter, dir=1, short=True):
+		internal = pysw.VK(i_book_chapter)
 
 		if short:
-			items = (vk.getBookAbbrev(), vk.chapter)
+			key_type = pysw.AbbrevVK
 		else:
-			items = (vk.getBookName(), vk.chapter)
-			
+			key_type = pysw.UserVK
 
-		return ("%s %s" % items), vk.chapter
+		internal.chapter += dir
+		if internal.Error():
+			return None, None, None
+		
+		vk = key_type(internal)
+
+		return vk.get_book_chapter(), vk.chapter, internal.get_book_chapter()
 
 	def on_size(self, event=None):
 		guiutil.FreezeUI(self)
@@ -287,8 +308,8 @@ class HeaderBar(wx.Panel):
 			items = self.items[not is_left]
 
 			while not break_next:
-				next_chapter, chapter_number = \
-					self.get_next_chapter(last_item.chapter, dir)
+				next_chapter, chapter_number, internal_text = \
+					self.get_next_chapter(last_item.internal_text, dir)
 
 				# if there is no next chapter, we have reached the start or
 				# end of the Bible, so stop
@@ -308,15 +329,15 @@ class HeaderBar(wx.Panel):
 				# if we've run out of items on this side, start creating new
 				# ones
 				if not items:
-					next_item = ChapterItem(self, next_chapter)
+					next_item = ChapterItem(self, internal_text)
 					#, chapter_number)
-					next_item.set_chapter(next_chapter)
+					next_item.set_chapter(next_chapter, internal_text)
 					
 
 				# Otherwise, remove the old ones from the list and move on
 				else:
 					next_item = items.pop(0)
-					next_item.set_chapter(next_chapter)#, chapter_number)
+					next_item.set_chapter(next_chapter, internal_text)#, chapter_number)
 
 				# find the item's position
 				break_next = self.position_item(next_item, last_item, is_left)

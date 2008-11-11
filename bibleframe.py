@@ -3,6 +3,7 @@ import random
 import wx
 
 from swlib.pysw import VK, GetVerseStr, GetBookChapter, GetBestRange
+from swlib import pysw
 from bookframe import VerseKeyedFrame
 from displayframe import IN_BOTH, IN_MENU, IN_POPUP
 from gui.htmlbase import linkiter, eq
@@ -32,7 +33,6 @@ bible_settings.add_item("verse_per_line", False, item_type=bool)
 
 class BibleFrame(VerseKeyedFrame):
 	id = N_("Bible")
-	html_header = False
 
 	def __init__(self, parent):
 		self.panel = wx.Panel(parent)
@@ -209,7 +209,7 @@ class BibleFrame(VerseKeyedFrame):
 		m = guiconfig.mainfrm
 		p = m.get_pane_for_frame(self)
 		version = self.book.version
-		ref = self.reference
+		ref = pysw.internal_to_user(self.reference)
 		text = "%s (%s)" % (ref, version)
 		
 		m.set_pane_title(p.name, text)
@@ -217,8 +217,8 @@ class BibleFrame(VerseKeyedFrame):
 	
 	def random_verse(self):
 		randomnum = random.randint(1, 31102)
-		text = VK("Gen 1:%d" % randomnum).text
-		self.notify(text, source=RANDOM_VERSE)
+		ref = pysw.internal_to_user("Gen 1:%d" % randomnum)
+		self.notify(ref, source=RANDOM_VERSE)
 	
 	def notify(self, reference, source=BIBLEFRAME):
 		#event = BibleEvent(ref=reference, source=source)
@@ -243,41 +243,10 @@ class BibleFrame(VerseKeyedFrame):
 		self.reference = GetVerseStr(ref)
 
 		chapter = GetBookChapter(self.reference)
-		self.header_bar.set_current_chapter(chapter)
+		self.header_bar.set_current_chapter(
+			pysw.internal_to_user(chapter), chapter
+		)
 		data = ''
-
-		if self.html_header:		
-			data += '<table width="100%" VALIGN=CENTER ><tr>'
-			vk = VK(self.reference)
-			vk.chapter -= 1
-			d = lambda:{"ref":GetBookChapter(vk.text),
-				"graphics":config.graphics_path}
-
-			if not vk.Error():
-				data += ('<td align="LEFT" valign=CENTER>'
-						 '<a href="headings:%(ref)s">'
-						 '<img src="%(graphics)sgo-previous.png">&nbsp;'
-						 '%(ref)s</a></td>'
-				) % d()
-			else:
-				data += '<td align=LEFT>'+ '&nbsp;'*15 + '</td>'
-						
-
-			data += "<td align=CENTER><center>%s</center></td>" % \
-					"<h3>%s</h3>" % chapter
-			
-			vk = VK(self.reference)
-			vk.chapter += 1
-			if not vk.Error():
-				data += ('<td align="RIGHT" valign=CENTER>'
-						 '<a href="headings:%(ref)s">%(ref)s&nbsp;'
-						 '<img src="%(graphics)sgo-next.png">'
-						 '</a></td>'
-				) % d()
-			else:
-				data += '<td align=RIGHT>'+ '&nbsp;'*15 + '</td>'
-
-			data += "</tr></table>\n"
 
 		chapter = self.book.GetChapter(ref, self.reference,
 			config.current_verse_template, context, raw=raw)

@@ -112,8 +112,8 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.zoomlevel = 0
 
 		self.bible_observers = ObserverList([
-					lambda event: self.bibletext.SetReference(event.ref),
-					self.set_title
+			lambda event: self.bibletext.SetReference(event.ref),
+			self.set_title
 		
 		])
 
@@ -1001,7 +1001,8 @@ class MainFrame(wx.Frame, AuiLayer):
 			name = self.get_pane_for_frame(frame).name 
 			self.aui_callbacks[name] = frame.update_title
 
-		self.set_bible_ref(settings["bibleref"], LOADING_SETTINGS)
+		self.set_bible_ref(settings["bibleref"], LOADING_SETTINGS,
+				userInput=False)
 		self.DictionaryListSelected()
 		self.version_tree.recreate()
 
@@ -1045,7 +1046,7 @@ class MainFrame(wx.Frame, AuiLayer):
 		else:
 			try:
 				self.set_bible_ref(self.bibleref.GetValue(),
-					source=BIBLE_REF_ENTER)
+					source=BIBLE_REF_ENTER, userInput=True)
 			except pysw.VerseParsingError, e:
 				wx.MessageBox(e.message, config.name())
 
@@ -1151,9 +1152,10 @@ class MainFrame(wx.Frame, AuiLayer):
 	
 	def set_title(self, event):
 		self.SetTitle(config.title_str % dict(name=config.name(), 
-											 verse=event.ref))
+											 verse=pysw.internal_to_user(event.ref)))
 	
-	def set_bible_ref(self, ref, source, settings_changed=False):
+	def set_bible_ref(self, ref, source, settings_changed=False, 
+			userInput=False):
 		"""Sets the current Bible reference to the given reference.
 
 		This will trigger a Bible reference update event.
@@ -1162,10 +1164,12 @@ class MainFrame(wx.Frame, AuiLayer):
 		source: The source of the change in Bible reference.
 			The possible sources are defined in events.py.
 		settings_changed: This is true if the settings have been changed.
+		userInput: was this user input (i.e. using user locale)?
 		"""
-		self.currentverse = pysw.GetVerseStr(ref, self.currentverse,
-			raiseError=True)
-		
+		self.currentverse = pysw.GetVerseStr(
+			ref, self.currentverse, raiseError=True, 
+			userInput=userInput
+		)
 		
 		self.UpdateBibleUI(source, settings_changed)
 

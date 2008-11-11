@@ -67,7 +67,7 @@ class VerseTree(LazyTreeCombo):
 				# try updating verse based on user text
 				# if we fail, just use old text (assuming there is any)
 				self.currentverse = GetVerseStr(text, self.currentverse,
-					raiseError=True)
+					raiseError=True, userInput=True, userOutput=False)
 
 			except VerseParsingError:
 				if not self.currentverse:

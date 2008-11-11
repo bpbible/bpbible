@@ -3,6 +3,7 @@ from util.observerlist import ObserverList
 from gui.guiutil import FreezeUI
 from events import HISTORY
 import guiconfig
+from swlib import pysw
 
 use_history_as_tree = False
 
@@ -15,6 +16,10 @@ class HistoryItem(object):
 	def trim(self, child):
 		assert child in self.children, "Can't trim item when not in children"
 		self.remove(child)
+	
+	@property
+	def user_ref(self):
+		return pysw.internal_to_user(self.ref)
 
 class History(object):
 	"""Manages history
@@ -157,7 +162,7 @@ class HistoryTree(wx.TreeCtrl):
 		wx.CallAfter(self.rebuild_tree)
 
 	def create_item(self, parent, item):
-		new_tree_item = self.AppendItem(parent, text=item.ref)
+		new_tree_item = self.AppendItem(parent, text=item.user_ref)
 		if item == self.history.current_item:
 			self.SetItemBold(new_tree_item)
 			self.current_tree_item = new_tree_item
