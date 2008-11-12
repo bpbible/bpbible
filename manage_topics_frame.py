@@ -6,7 +6,6 @@ from passage_list import (get_primary_passage_list_manager,
 		lookup_passage_entry, PassageEntry,
 		InvalidPassageError, MultiplePassagesError)
 from passage_entry_dialog import PassageEntryDialog
-from topic_creation_dialog import TopicCreationDialog
 from xrc.manage_topics_xrc import xrcManageTopicsFrame
 from xrc.xrc_util import attach_unknown_control
 from gui import guiutil
@@ -321,11 +320,10 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 					_("Copy Topic"), wx.OK | wx.ICON_ERROR, self)
 	
 	def _create_topic(self, topic):
-		dialog = TopicCreationDialog(self, topic)
-		
-		# show it modally so we can destroy it afterwards
-		dialog.ShowModal()
-		dialog.Destroy()
+		new_topic = self._operations_manager.add_new_topic()
+		self._set_selected_topic(new_topic)
+		self.name_edit.SetFocus()
+		self.name_edit.SetSelection(-1, -1)
 	
 	def _create_passage(self):
 		passage_entry = PassageEntry(None)

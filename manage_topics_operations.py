@@ -1,5 +1,5 @@
 from util.observerlist import ObserverList
-from passage_list import (BasePassageList, PassageEntry,
+from passage_list import (BasePassageList, PassageList, PassageEntry,
 		InvalidPassageError, MultiplePassagesError)
 
 class ManageTopicsOperations(object):
@@ -10,11 +10,18 @@ class ManageTopicsOperations(object):
 		self._undone_actions = []
 		self.undo_available_changed_observers = ObserverList()
 		self.paste_available_changed_observers = ObserverList()
+		self._merge_next_edit_action = False
 
 	def insert_item(self, item, index=None):
 		parent_topic = self._context.get_selected_topic()
 		item = self._context.get_wrapper(item)
 		self._perform_action(InsertAction(parent_topic, item, index))
+
+	def add_new_topic(self):
+		parent_topic = self._context.get_selected_topic()
+		action = AddNewTopicAction(parent_topic)
+		self._perform_action(action, merge_next_edit_action=True)
+		return action.topic
 
 	def move_current_passage(self, new_index):
 		passage = self._context.get_selected_passage()
@@ -113,16 +120,20 @@ class ManageTopicsOperations(object):
 	def can_redo(self):
 		return bool(self._undone_actions)
 
-	def _perform_action(self, action):
+	def _perform_action(self, action, merge_next_edit_action=False):
 		"""Performs the given action.
 		
 		The performed action is added to the list of performed actions, and
 		can be undone later.
 		"""
 		action.perform_action()
-		self._actions.append(action)
-		self._undone_actions = []
-		self.undo_available_changed_observers()
+		if self._merge_next_edit_action and isinstance(action, SetItemDetailsAction):
+			pass
+		else:
+			self._actions.append(action)
+			self._undone_actions = []
+			self.undo_available_changed_observers()
+		self._merge_next_edit_action = merge_next_edit_action
 
 class Action(object):
 	"""This class performs an action on a topic or passage.
@@ -209,6 +220,20 @@ class InsertAction(Action):
 
 	def _get_reverse_action(self):
 		return DeleteAction(self.item)
+
+class AddNewTopicAction(Action):
+	def __init__(self, parent_topic):
+		super(AddNewTopicAction, self).__init__()
+		self.parent_topic = parent_topic
+		self.topic = PassageList(
+				name="New Topic", description=""
+			)
+
+	def _perform_action(self):
+		self.parent_topic.add_subtopic(self.topic)
+
+	def _get_reverse_action(self):
+		return DeleteAction(_get_wrapper(self.topic))
 
 class SetItemDetailsAction(Action):
 	def __init__(self, item, name, description):
@@ -334,6 +359,10 @@ def _test():
 	... 	operations_manager.copy()
 	... 	operations_manager_context.set_selected_topic(target_topic)
 	... 	operations_manager.paste()
+	...
+	>>> def _add_new_topic(parent_topic, operations_manager_context=operations_manager_context, operations_manager=operations_manager):
+	... 	operations_manager_context.set_selected_topic(parent_topic)
+	... 	return operations_manager.add_new_topic()
 	...
 	>>> def _copy_passage(passage, target_topic, operations_manager_context=operations_manager_context, operations_manager=operations_manager):
 	... 	operations_manager_context.set_selected_passage(passage)
@@ -550,6 +579,24 @@ def _test():
 	'Genesis 9:5'
 	>>> passage2.comment
 	'newer comment'
+
+	Check creating a new topic.  This must create a default topic, but then
+	combine it with the next edit item action if necessary so that undo
+	undoes the new topic action, not the "edit the new topic that was
+	created" action.
+	>>> new_topic = _add_new_topic(topic1)
+	Topic 'topic1 (new name)': add subtopic observer called.
+	>>> _set_topic_details(new_topic, "New Topic Name", "description")
+	>>> new_topic.name
+	'New Topic Name'
+	>>> new_topic.description
+	'description'
+	>>> operations_manager.undo()
+	Topic 'topic1 (new name)': remove subtopic observer called.
+	>>> operations_manager.redo()
+	Topic 'topic1 (new name)': add subtopic observer called.
+	>>> topic1.subtopics
+	[<PassageList 'topic2'>, <PassageList 'New Topic Name'>]
 	"""
 	import manage_topics_operations, doctest	
 	print doctest.testmod(manage_topics_operations)
@@ -574,15 +621,18 @@ class BaseOperationsContext(object):
 		return self.get_wrapper(item)
 
 	def get_wrapper(self, item):
-		if not item:
-			return None
+		return _get_wrapper(item)
 
-		if isinstance(item, PassageEntry):
-			return PassageWrapper(item)
-		elif isinstance(item, BasePassageList):
-			return TopicWrapper(item)
-		else:
-			return item
+def _get_wrapper(item):
+	if not item:
+		return None
+
+	if isinstance(item, PassageEntry):
+		return PassageWrapper(item)
+	elif isinstance(item, BasePassageList):
+		return TopicWrapper(item)
+	else:
+		return item
 
 class PassageWrapper(object):
 	def __init__(self, passage):
