@@ -105,7 +105,7 @@ class BookFrame(DisplayFrame):
 	
 	def maximize_pane(self, to=True):
 		main = guiconfig.mainfrm
-		pane = main.get_pane_for_frame(self)
+		pane = self.aui_pane
 		maximized_pane = main.get_maximized_pane()
 		if to:
 			if not maximized_pane:
@@ -139,13 +139,16 @@ class BookFrame(DisplayFrame):
 		guiconfig.mainfrm.show_panel(pane.name, not pane.IsShown())
 	
 	def is_hidable(self):
-		pane = guiconfig.mainfrm.get_pane_for_frame(self)
+		return self.aui_pane.HasCloseButton()
 
-		return pane.HasCloseButton()
+	@property
+	def aui_pane(self):
+		"""Gets the AUI pane for this frame."""
+		return guiconfig.mainfrm.get_pane_for_frame(self)
 
 	def get_menu_items(self):
 		def set_text():
-			pane = guiconfig.mainfrm.get_pane_for_frame(self)
+			pane = self.aui_pane
 			if not pane.IsShown():
 				return _("Show the %s pane") % pane.name
 			else:
@@ -212,6 +215,9 @@ class BookFrame(DisplayFrame):
 	
 	def show_module_information(self):
 		ModuleInfo(guiconfig.mainfrm, self.book.mod).ShowModal()
+
+	def on_shown(self, shown=None):
+		self.update_title(shown)
 		
 	def update_title(self, shown=None):
 		m = guiconfig.mainfrm
@@ -309,6 +315,12 @@ class LinkedFrame(VerseKeyedFrame):
 	def __init__(self, parent):
 		self.panel = wx.Panel(parent)
 		self.linked = False
+		# This reference is set to the latest reference that should be
+		# displayed.  If the pane is hidden then it will not have been
+		# displayed.
+		self.latest_reference = ""
+		# True if the settings have changed since the pane was hidden.
+		self.settings_changed = False
 		super(LinkedFrame, self).__init__(self.panel)
 
 		self.create_toolbar()
@@ -373,13 +385,27 @@ class LinkedFrame(VerseKeyedFrame):
 		if self.linked:
 			self.notify(guiconfig.mainfrm.currentverse)
 	
+	def on_shown(self, shown=None):
+		if shown:
+			if self.linked and self.latest_reference != self.reference:
+				self.notify(self.latest_reference)
+			elif self.settings_changed:
+				self.refresh()
+				self.settings_changed = False
+		super(LinkedFrame, self).on_shown(shown)
+
 	def bible_ref_changed(self, event):
 		# only update if we are linked, and it isn't just a settings change
 		if self.linked and not event.settings_changed:
-			self.notify(event.ref)
+			self.latest_reference = event.ref
+			if self.aui_pane.IsShown():
+				self.notify(event.ref)
 
 		elif event.settings_changed:
-			self.refresh()
+ 			if self.aui_pane.IsShown():
+				self.refresh()
+			else:
+				self.settings_changed = True
 
 	def get_window(self):
 		return self.panel

@@ -5,7 +5,7 @@ import re
 import fields
 from util.debug import dprint, WARNING
 import string
-from swlib.pysw import SW, vk, TOP
+from swlib.pysw import SW, TOP
 
 
 import htmlentitydefs

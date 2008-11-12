@@ -95,7 +95,7 @@ class ConfigManager(object):
 		
 		config_parser.write(open(self["Internal"]["path"], "w"))
 	
-	def load(self, paths=(os.path.expanduser('~/bpbible/data.cfg'),)):
+	def load(self, paths=()):
 		config_parser = RawConfigParser()
 		loaded = config_parser.read(self["Internal"]["path"])
 		loaded += config_parser.read(paths)
@@ -186,7 +186,8 @@ Harmony.last_harmony changed from None to 'Robinson'
 	import doctest
 	doctest.testmod()
 
-config_manager = ConfigManager(write_path = config.data_path + "data.conf")
+config_file = os.path.join(config.data_path, "data.conf")
+config_manager = ConfigManager(write_path=config_file)
 
 if __name__ == '__main__':
 	_test()

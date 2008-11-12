@@ -75,24 +75,7 @@ class MyApp(wx.App):
 		self.restarting = False
 	
 		dprint(MESSAGE, "App Init")
-		
-		wx.InitAllImageHandlers()
-
-		icon_bundle = wx.IconBundle()
-		for item in "16 32 48 64 128".split():
-			path = config.graphics_path
-			icon = wx.Image("%(path)sbible-%(item)sx%(item)s.png" % locals())
-			if icon.IsOk():
-				# on windows 2000, transparency is 1 bit, so convert it 
-				# to one bit
-				if osutils.is_win2000():
-					icon.ConvertAlphaToMask()
-
-				bmp = wx.BitmapFromImage(icon)
-				icon_bundle.AddIcon(wx.IconFromBitmap(bmp))
-
-		guiconfig.icons = icon_bundle
-		dprint(MESSAGE, "Loaded icon")
+		guiconfig.load_icons()
 		
 
 		from wx import xrc

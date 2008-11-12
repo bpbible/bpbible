@@ -3,7 +3,7 @@ from util.observerlist import ObserverList
 
 _passage_list_id_dict = {}
 
-class _BasePassageList(object):
+class BasePassageList(object):
 	"""This provides the basic passage list functionality.
 
 	This functionality is used by both passage lists and the passage list
@@ -151,7 +151,7 @@ class _BasePassageList(object):
 		except:
 			return False
 
-class PassageList(_BasePassageList):
+class PassageList(BasePassageList):
 	contains_passages = True
 
 	def __init__(self, name, description=""):
@@ -229,7 +229,7 @@ def _create_passage_list(name, description, passages, subtopics):
 	
 	return passage_list
 
-class PassageListManager(_BasePassageList):
+class PassageListManager(BasePassageList):
 	"""This class provides the root passage list manager.
 
 	A passage list manager must be associated with a file name, and the

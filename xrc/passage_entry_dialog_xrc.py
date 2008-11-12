@@ -52,3 +52,19 @@ def __init_resources():
     __res = xrc.EmptyXmlResource()
 
     __res.Load('passage_entry_dialog.xrc')
+
+# ----------------------- Gettext strings ---------------------
+
+def __gettext_strings():
+    # This is a dummy function that lists all the strings that are used in
+    # the XRC file in the _("a string") format to be recognized by GNU
+    # gettext utilities (specificaly the xgettext utility) and the
+    # mki18n.py script.  For more information see:
+    # http://wiki.wxpython.org/index.cgi/Internationalization 
+    
+    def _(str): pass
+    
+    _("&Passage: ")
+    _("&Comment:")
+    _("Edit Passage")
+

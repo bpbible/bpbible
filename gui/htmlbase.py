@@ -750,6 +750,7 @@ class HtmlSelectableWindow(HtmlBase):
 		super(HtmlSelectableWindow, self).__init__(parent,id,pos,size,style)  
 		#self.buffer = wx.TextCtrl(self)
 		#self.buffer.Hide()
+		self.m_selection = None
 		self.setup()
 
 	def setup(self):

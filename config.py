@@ -8,7 +8,8 @@ from ConfigParser import RawConfigParser, NoSectionError, NoOptionError
 paths_file = "paths.ini"
 
 # Set defaults
-data_path = "data/"
+home_dir = os.path.expanduser('~')
+data_path = os.path.join(home_dir, '.bpbible') + os.path.sep
 xrc_path = "xrc/"
 graphics_path = "graphics/"
 index_path = "./"

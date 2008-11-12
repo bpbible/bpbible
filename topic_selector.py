@@ -110,7 +110,7 @@ class TopicSelector(wx.TextCtrl):
 
 	def _update_topic_text(self):
 		if self._selected_topic is None:
-			self.ChangeValue("None")
+			self.ChangeValue(_("None"))
 		else:
 			self.ChangeValue(self._selected_topic.full_name)
 

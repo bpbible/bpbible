@@ -5,29 +5,35 @@
       <object class="tool" name="cut_tool">
         <bitmap>..\graphics\edit-cut.png</bitmap>
         <tooltip>Cut</tooltip>
+        <label>Cut</label>
       </object>
       <object class="tool" name="copy_tool">
         <bitmap>..\graphics\edit-copy.png</bitmap>
         <tooltip>Copy</tooltip>
+        <label>Copy</label>
       </object>
       <object class="tool" name="paste_tool">
         <bitmap>..\graphics\edit-paste.png</bitmap>
         <tooltip>Paste</tooltip>
+        <label>Paste</label>
       </object>
       <object class="tool" name="delete_tool">
         <bitmap>..\graphics\delete.png</bitmap>
         <tooltip>Delete</tooltip>
+        <label>Delete</label>
       </object>
       <object class="separator"/>
       <object class="tool" name="undo_tool">
         <bitmap>..\graphics\arrow_undo.png</bitmap>
         <tooltip>Undo previous action</tooltip>
+        <label>Undo</label>
       </object>
       <object class="tool" name="redo_tool">
         <bitmap>..\graphics\arrow_redo.png</bitmap>
         <tooltip>Redoes the last undone action</tooltip>
+        <label>Redo</label>
       </object>
-      <style>wxTB_FLAT|wxTB_NODIVIDER</style>
+      <style>wxTB_FLAT|wxTB_TEXT|wxTB_NODIVIDER</style>
     </object>
     <object class="wxBoxSizer">
       <object class="sizeritem">

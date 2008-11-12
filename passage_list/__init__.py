@@ -1,8 +1,9 @@
 """\
 This package contains all the classes used for passage lists.
 """
-from passage_list import PassageList, PassageListManager, load_from_file, \
-		load_default_passage_lists, InvalidPassageListError, lookup_passage_list
+from passage_list import BasePassageList, PassageList, PassageListManager, \
+		load_from_file, load_default_passage_lists, \
+		InvalidPassageListError, lookup_passage_list
 from passage_entry import PassageEntry, InvalidPassageError, \
 		MultiplePassagesError, lookup_passage_entry
 from settings import Settings

@@ -1,8 +1,6 @@
 from util.observerlist import ObserverList
-from passage_list import InvalidPassageError, MultiplePassagesError
-
-PASSAGE_SELECTED = 1
-TOPIC_SELECTED = 2
+from passage_list import (BasePassageList, PassageEntry,
+		InvalidPassageError, MultiplePassagesError)
 
 class ManageTopicsOperations(object):
 	def __init__(self, context):
@@ -13,30 +11,32 @@ class ManageTopicsOperations(object):
 		self.undo_available_changed_observers = ObserverList()
 		self.paste_available_changed_observers = ObserverList()
 
-	def insert_item(self, item, type, index=None):
+	def insert_item(self, item, index=None):
 		parent_topic = self._context.get_selected_topic()
-		self._perform_action(InsertAction(parent_topic, item, type, index))
+		item = self._context.get_wrapper(item)
+		self._perform_action(InsertAction(parent_topic, item, index))
 
 	def move_current_passage(self, new_index):
 		passage = self._context.get_selected_passage()
+		passage = self._context.get_wrapper(passage)
 		self._perform_action(ReorderPassageAction(passage, new_index))
 
 	# XXX: Deleting a topic doesn't remove its tags from the current window.
 	def delete(self):
-		item, type = self._context.get_selected_item()
+		item = self._context.get_new_selected_item()
 		if not item:
 			return
 
-		self._perform_action(DeleteAction(item, type))
+		self._perform_action(DeleteAction(item))
 
 	def set_topic_name(self, name):
-		item, type = self._context.get_selected_item()
-		assert type == TOPIC_SELECTED
+		assert not self._context.is_passage_selected()
+		item = self._context.get_new_selected_item()
 		self.set_item_details(name, item.description)
 
 	def set_item_details(self, name, description):
-		item, type = self._context.get_selected_item()
-		self._perform_action(SetItemDetailsAction(item, type, name, description))
+		item = self._context.get_new_selected_item()
+		self._perform_action(SetItemDetailsAction(item, name, description))
 
 	def cut(self):
 		self._setup_clipboard(keep_original=False)
@@ -45,12 +45,12 @@ class ManageTopicsOperations(object):
 		self._setup_clipboard(keep_original=True)
 
 	def _setup_clipboard(self, keep_original):
-		item, type = self._context.get_selected_item()
+		item = self._context.get_new_selected_item()
 		if not item:
 			return
 
 		self._clipboard_data = ClipboardData(
-				item, type, keep_original=keep_original)
+				item, keep_original=keep_original)
 		self.paste_available_changed_observers()
 
 	def paste(self):
@@ -58,7 +58,6 @@ class ManageTopicsOperations(object):
 			return
 
 		self.do_copy(self._clipboard_data.item,
-				self._clipboard_data.type,
 				self._context.get_selected_topic(),
 				self._clipboard_data.keep_original)
 
@@ -73,12 +72,20 @@ class ManageTopicsOperations(object):
 	def can_paste(self):
 		return self._clipboard_data is not None
 
-	def do_copy(self, item, type, to_topic, keep_original):
-		self._check_circularity(to_topic, item)
+	def do_copy(self, item, to_topic, keep_original):
+		"""Performs the actual copy operation as an action.
+
+		If a topic is copied to one of its children, a CircularDataException
+		will be thrown.
+		"""
+		item = self._context.get_wrapper(item)
+		if item.is_child_topic(to_topic):
+			raise CircularDataException()
+
 		if item.parent is to_topic:
 			return
 
-		self._perform_action(CopyAction(item, type, to_topic, keep_original))
+		self._perform_action(CopyAction(item, to_topic, keep_original))
 
 	def undo(self):
 		"""Undoes the most recently performed action."""
@@ -116,15 +123,6 @@ class ManageTopicsOperations(object):
 		self._actions.append(action)
 		self._undone_actions = []
 		self.undo_available_changed_observers()
-
-	def _check_circularity(self, to_topic, item):
-		if type == PASSAGE_SELECTED:
-			return
-		topic_parent = to_topic
-		while topic_parent is not None:
-			if topic_parent is item:
-				raise CircularDataException()
-			topic_parent = topic_parent.parent
 
 class Action(object):
 	"""This class performs an action on a topic or passage.
@@ -184,82 +182,65 @@ class CompositeAction(Action):
 
 class DeleteAction(Action):
 	"""This action deletes a topic or passage."""
-	def __init__(self, item, type):
+	def __init__(self, item):
 		super(DeleteAction, self).__init__()
 		self.item = item
-		self.type = type
 
 	def _perform_action(self):
 		self.parent_topic = self.item.parent
-		if self.type == PASSAGE_SELECTED:
-			self.index = self.parent_topic.passages.index(self.item)
-			self.parent_topic.remove_passage(self.item)
-		else:
-			self.index = self.parent_topic.subtopics.index(self.item)
-			self.parent_topic.remove_subtopic(self.item)
+		self.index = self.item.find_index()
+		self.item.remove_from_parent()
 
 	def _get_reverse_action(self):
-		return InsertAction(self.parent_topic, self.item, self.type, self.index)
+		return InsertAction(self.parent_topic, self.item, self.index)
 
 class InsertAction(Action):
 	"""This action inserts a topic or passage at the given index of the given
 	parent topic.
 	"""
-	def __init__(self, parent_topic, item, type, index):
+	def __init__(self, parent_topic, item, index):
 		super(InsertAction, self).__init__()
 		self.parent_topic = parent_topic
 		self.item = item
-		self.type = type
 		self.index = index
 
 	def _perform_action(self):
-		if self.type == PASSAGE_SELECTED:
-			self.parent_topic.insert_passage(self.item, self.index)
-		else:
-			# XXX: This doesn't use the supplied index.
-			self.parent_topic.add_subtopic(self.item)
+		self.item.insert_into_topic(self.parent_topic, self.index)
 
 	def _get_reverse_action(self):
-		return DeleteAction(self.item, self.type)
+		return DeleteAction(self.item)
 
 class SetItemDetailsAction(Action):
-	def __init__(self, item, type, name, description):
+	def __init__(self, item, name, description):
 		super(SetItemDetailsAction, self).__init__()
 		self.item = item
-		self.type = type
 		self.name = name
 		self.description = description
 
 	def _perform_action(self):
-		if self.type == PASSAGE_SELECTED:
-			self.old_name = str(self.item)
-			self.old_description = self.item.comment
-			exception = None
-			try:
-				self.item.passage = self.name
-			except (InvalidPassageError, MultiplePassagesError), e:
-				exception = e
-			self.item.comment = self.description
-			if exception is not None:
-				raise exception
-		else:
-			self.old_name = self.item.name
-			self.old_description = self.item.description
+		self.old_name = self.item.name
+		self.old_description = self.item.name
+		exception = None
+		try:
 			self.item.name = self.name
-			self.item.description = self.description
+		except (InvalidPassageError, MultiplePassagesError), e:
+			exception = e
+		self.item.description = self.description
+		if exception is not None:
+			raise exception
 
 	def _get_reverse_action(self):
-		return SetItemDetailsAction(self.item, self.type, self.old_name, self.old_description)
+		return SetItemDetailsAction(self.item, self.old_name, self.old_description)
 
 class CopyAction(CompositeAction):
 	"""This action copies or moves a passage to a new topic."""
-	def __init__(self, item, type, to_topic, keep_original):
+	def __init__(self, item, to_topic, keep_original):
 		actions = []
 		if keep_original:
 			item = item.clone()
 		else:
-			actions.append(DeleteAction(item, type))
-		actions.append(InsertAction(to_topic, item, type, index=None))
+			actions.append(DeleteAction(item))
+		actions.append(InsertAction(to_topic, item, index=None))
 		super(CopyAction, self).__init__(actions)
 
 class ReorderPassageAction(CompositeAction):
@@ -267,15 +248,14 @@ class ReorderPassageAction(CompositeAction):
 	def __init__(self, passage, new_index):
 		topic = passage.parent
 		super(ReorderPassageAction, self).__init__([
-				DeleteAction(passage, PASSAGE_SELECTED),
-				InsertAction(topic, passage, PASSAGE_SELECTED, new_index)
+				DeleteAction(passage),
+				InsertAction(topic, passage, new_index)
 			])
 
 class ClipboardData(object):
 	"""This class manages the item that is currently in the clipboard."""
-	def __init__(self, item, type, keep_original):
+	def __init__(self, item, keep_original):
 		self.item = item
-		self.type = type
 		self.keep_original = keep_original
 
 class CircularDataException(Exception):
@@ -318,74 +298,59 @@ def _test():
 	False
 
 	>>> def _add_subtopic(topic1, topic2, operations_manager_context=operations_manager_context, operations_manager=operations_manager):
-	... 	operations_manager_context.selected_topic = topic1
-	... 	operations_manager.insert_item(topic2, TOPIC_SELECTED)
+	... 	operations_manager_context.set_selected_topic(topic1)
+	... 	operations_manager.insert_item(topic2)
 	...
-	>>> def _remove_subtopic(topic2, operations_manager_context=operations_manager_context, operations_manager=operations_manager):
-	... 	operations_manager_context.is_passage_selected = False
-	... 	operations_manager_context.selected_topic = topic2
+	>>> def _remove_subtopic(topic, operations_manager_context=operations_manager_context, operations_manager=operations_manager):
+	... 	operations_manager_context.set_selected_topic(topic)
 	... 	operations_manager.delete()
 	...
 	>>> def _add_passage(topic, passage, operations_manager_context=operations_manager_context, operations_manager=operations_manager):
-	... 	operations_manager_context.selected_topic = topic
-	... 	operations_manager.insert_item(passage, PASSAGE_SELECTED)
+	... 	operations_manager_context.set_selected_topic(topic)
+	... 	operations_manager.insert_item(passage)
 	...
 	>>> def _remove_passage(topic, passage, operations_manager_context=operations_manager_context, operations_manager=operations_manager):
-	... 	operations_manager_context.is_passage_selected = True
-	... 	operations_manager_context.selected_passage = passage
-	... 	operations_manager_context.selected_topic = topic
+	... 	operations_manager_context.set_selected_passage(passage)
 	... 	operations_manager.delete()
 	...
 	>>> def _move_passage(passage, target_topic, operations_manager_context=operations_manager_context, operations_manager=operations_manager):
-	... 	operations_manager_context.is_passage_selected = True
-	... 	operations_manager_context.selected_passage = passage
-	... 	operations_manager_context.selected_topic = None
+	... 	operations_manager_context.set_selected_passage(passage)
 	... 	operations_manager.cut()
-	... 	operations_manager_context.selected_topic = target_topic
+	... 	operations_manager_context.set_selected_topic(target_topic)
 	... 	operations_manager.paste()
 	...
 	>>> def _move_current_passage(passage, new_index, operations_manager_context=operations_manager_context, operations_manager=operations_manager):
-	... 	operations_manager_context.selected_passage = passage
-	... 	operations_manager_context.selected_topic = passage.parent
+	... 	operations_manager_context.set_selected_passage(passage)
 	... 	operations_manager.move_current_passage(new_index)
 	...
 	>>> def _move_topic(topic, target_topic, operations_manager_context=operations_manager_context, operations_manager=operations_manager):
-	... 	operations_manager_context.is_passage_selected = False
-	... 	operations_manager_context.selected_passage = None
-	... 	operations_manager_context.selected_topic = topic
+	... 	operations_manager_context.set_selected_topic(topic)
 	... 	operations_manager.cut()
-	... 	operations_manager_context.selected_topic = target_topic
+	... 	operations_manager_context.set_selected_topic(target_topic)
 	... 	operations_manager.paste()
 	...
 	>>> def _copy_topic(topic, target_topic, operations_manager_context=operations_manager_context, operations_manager=operations_manager):
-	... 	operations_manager_context.is_passage_selected = False
-	... 	operations_manager_context.selected_passage = None
-	... 	operations_manager_context.selected_topic = topic
+	... 	operations_manager_context.set_selected_topic(topic)
 	... 	operations_manager.copy()
-	... 	operations_manager_context.selected_topic = target_topic
+	... 	operations_manager_context.set_selected_topic(target_topic)
 	... 	operations_manager.paste()
 	...
 	>>> def _copy_passage(passage, target_topic, operations_manager_context=operations_manager_context, operations_manager=operations_manager):
-	... 	operations_manager_context.is_passage_selected = True
-	... 	operations_manager_context.selected_passage = passage
-	... 	operations_manager_context.selected_topic = None
+	... 	operations_manager_context.set_selected_passage(passage)
 	... 	operations_manager.copy()
-	... 	operations_manager_context.selected_topic = target_topic
+	... 	operations_manager_context.set_selected_topic(target_topic)
 	... 	operations_manager.paste()
 	...
 	>>> def _set_topic_name(topic, name, operations_manager_context=operations_manager_context, operations_manager=operations_manager):
-	... 	operations_manager_context.selected_topic = topic
-	... 	operations_manager_context.is_passage_selected = False
+	... 	operations_manager_context.set_selected_topic(topic)
 	... 	operations_manager.set_topic_name(name)
 	...
 	>>> def _set_topic_details(topic, name, description, operations_manager_context=operations_manager_context, operations_manager=operations_manager):
-	... 	operations_manager_context.selected_topic = topic
-	... 	operations_manager_context.is_passage_selected = False
+	... 	operations_manager_context.set_selected_topic(topic)
 	... 	operations_manager.set_item_details(name, description)
 	...
 	>>> def _set_passage_details(passage_entry, passage, comment, operations_manager_context=operations_manager_context, operations_manager=operations_manager):
-	... 	operations_manager_context.selected_passage = passage_entry
-	... 	operations_manager_context.is_passage_selected = True
+	... 	operations_manager_context.set_selected_passage(passage_entry)
 	... 	operations_manager.set_item_details(passage, comment)
 	...
 	>>> _add_subtopic(manager, topic1)
@@ -591,21 +556,146 @@ def _test():
 
 from passage_list import PassageList, PassageEntry
 
-class DummyOperationsManagerContext(object):
+class BaseOperationsContext(object):
+	def get_selected_topic(self):
+		raise NotImplementedError()
+
+	def get_selected_passage(self):
+		raise NotImplementedError()
+
+	def is_passage_selected(self):
+		raise NotImplementedError()
+
+	def get_new_selected_item(self):
+		if self.is_passage_selected():
+			item = self.get_selected_passage()
+		else:
+			item = self.get_selected_topic()
+		return self.get_wrapper(item)
+
+	def get_wrapper(self, item):
+		if not item:
+			return None
+
+		if isinstance(item, PassageEntry):
+			return PassageWrapper(item)
+		elif isinstance(item, BasePassageList):
+			return TopicWrapper(item)
+		else:
+			return item
+
+class PassageWrapper(object):
+	def __init__(self, passage):
+		self._passage = passage
+
+	def get_name(self):
+		return str(self._passage)
+
+	def set_name(self, passage):
+		self._passage.passage = passage
+
+	name = property(get_name, set_name)
+
+	def get_description(self):
+		return self._passage.comment
+
+	def set_description(self, comment):
+		self._passage.comment = comment
+
+	description = property(get_description, set_description)
+
+	@property
+	def parent(self):
+		return self._passage.parent
+
+	def insert_into_topic(self, parent_topic, index):
+		parent_topic.insert_passage(self._passage, index)
+
+	def is_child_topic(self, topic):
+		return False
+
+	def find_index(self):
+		return self._passage.parent.passages.index(self._passage)
+
+	def remove_from_parent(self):
+		self._passage.parent.remove_passage(self._passage)
+
+	def clone(self):
+		return PassageWrapper(self._passage.clone())
+
+class TopicWrapper(object):
+	def __init__(self, topic):
+		self._topic = topic
+
+	def get_name(self):
+		return self._topic.name
+
+	def set_name(self, name):
+		self._topic.name = name
+
+	name = property(get_name, set_name)
+
+	def get_description(self):
+		return self._topic.description
+
+	def set_description(self, description):
+		self._topic.description = description
+
+	description = property(get_description, set_description)
+
+	@property
+	def parent(self):
+		return self._topic.parent
+
+	def insert_into_topic(self, parent_topic, index):
+		# XXX: This doesn't use the supplied index.
+		parent_topic.add_subtopic(self._topic)
+
+	def is_child_topic(self, topic):
+		"""Checks if the given topic is a child of this topic.
+
+		If this is the case, then we can't copy to the given topic.
+		"""
+		topic_parent = topic
+		while topic_parent is not None:
+			if topic_parent is self._topic:
+				return True
+			topic_parent = topic_parent.parent
+		return False
+
+	def find_index(self):
+		return self._topic.parent.subtopics.index(self._topic)
+
+	def remove_from_parent(self):
+		self._topic.parent.remove_subtopic(self._topic)
+
+	def clone(self):
+		return TopicWrapper(self._topic.clone())
+
+class DummyOperationsManagerContext(BaseOperationsContext):
 	"""Provides a dummy context, to be used in testing."""
 	def __init__(self):
 		self.selected_topic = None
 		self.selected_passage = None
-		self.is_passage_selected = False
+		self._is_passage_selected = False
 
 	get_selected_topic = lambda self: self.selected_topic
 	get_selected_passage = lambda self: self.selected_passage
 
-	def get_selected_item(self):
-		if self.is_passage_selected:
-			return (self.selected_passage, PASSAGE_SELECTED)
-		else:
-			return (self.selected_topic, TOPIC_SELECTED)
+	def set_selected_topic(self, topic):
+		self.selected_topic = topic
+		self._is_passage_selected = False
+
+	def set_selected_passage(self, passage):
+		self.selected_passage = passage
+		self._is_passage_selected = True
+
+	def is_passage_selected(self):
+		return self._is_passage_selected
+
+	@property
+	def parent(self):
+		return self._passage.parent
 
 def _test_create_topic(name="", description="", create_function=None):
 	if create_function is None:

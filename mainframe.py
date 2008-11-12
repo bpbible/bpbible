@@ -114,7 +114,6 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.bible_observers = ObserverList([
 			lambda event: self.bibletext.SetReference(event.ref),
 			self.set_title
-		
 		])
 
 		self.all_observers = ObserverList([
@@ -124,7 +123,6 @@ class MainFrame(wx.Frame, AuiLayer):
 			),
 
 			lambda:self.dictionarytext.reload(),
-			lambda:self.genbooktext.reload()
 		])
 
 		biblemgr.bible.observers += self.bible_version_changed
@@ -453,7 +451,6 @@ class MainFrame(wx.Frame, AuiLayer):
 			self.on_close += remove_observer
 			version_changed()
 			
-		# TODO: only refresh if settings are changed
 		self.bible_observers += self.search_panel.versepreview.RefreshUI
 
 	def create_aui_items(self):
@@ -727,9 +724,15 @@ class MainFrame(wx.Frame, AuiLayer):
 			assert False, "Language menu could not be found"
 		
 		self.language_mapping = {}
-		for text, display_name in util.i18n.languages.items():
+		for text, (display_name, locale, abbrev) in util.i18n.languages.items():
+			key = display_name.encode(pysw.locale_encoding)
+			trans = pysw.locale.translate(key)
+			if key == trans:
+				trans = display_name
+
 			menu_item = language_menu.AppendRadioItem(
-				wx.ID_ANY, _(display_name), 
+				wx.ID_ANY,  
+				trans.decode(pysw.locale_encoding),
 			)
 			menu_item.Check(text == util.i18n.locale_settings["language"])
 
@@ -823,15 +826,19 @@ class MainFrame(wx.Frame, AuiLayer):
 				self.options_menu.FindItemByPosition(0)
 			)
 
+		self.options_map = {}
+		self.options_map = {}
 		options = biblemgr.get_options()
 		for option, values in options:
-			help_text = biblemgr.get_tip(option)
+			help_text = pysw.locale.translate(
+				biblemgr.get_tip(option)).decode(pysw.locale_encoding)
 		
+			option_trans = pysw.locale.translate(
+				option).decode(pysw.locale_encoding)
+
 			if set(values) == set(("Off", "On")):
 				item = self.options_menu.AppendCheckItem(
-					wx.ID_ANY, 
-					option, 
-					help=help_text
+					wx.ID_ANY, option_trans, help=help_text
 				)
 
 				if biblemgr.options[option] == "On":
@@ -843,15 +850,24 @@ class MainFrame(wx.Frame, AuiLayer):
 				
 			
 				for value in values:
-					item = sub_menu.AppendRadioItem(wx.ID_ANY, value, 
+					item = sub_menu.AppendRadioItem(wx.ID_ANY, 
+					pysw.locale.translate(value).decode(pysw.locale_encoding),
 						help=help_text)
+					
 					if biblemgr.options[option] == value:
 						item.Check()
+					
+					self.options_map[item.Id] = value
+						
 					self.Bind(wx.EVT_MENU, self.on_option, item)
 				
-				item = self.options_menu.AppendSubMenu(sub_menu, option, 
+				item = self.options_menu.AppendSubMenu(sub_menu, option_trans, 
 					help=help_text)
+					
 				self.Bind(wx.EVT_MENU, self.on_option, item)
+				
+			self.options_map[item.Id] = option
+				
 
 		if options:
 			self.options_menu.AppendSeparator()
@@ -925,14 +941,18 @@ class MainFrame(wx.Frame, AuiLayer):
 		#if not menuitem: return
 		option_menu = menuitem.GetMenu()
 		if option_menu == self.options_menu:
-			biblemgr.set_option(menuitem.Text, event.Checked()) 
+			
+			biblemgr.set_option(self.options_map[menuitem.Id], event.Checked()) 
 			self.UpdateBibleUI(settings_changed=True, source=SETTINGS_CHANGED)
 			
 			return
 			
 		for item in self.options_menu.MenuItems: 
 			if item.GetSubMenu() == option_menu:
-				biblemgr.set_option(item.Text, menuitem.Text) 
+				biblemgr.set_option(
+					self.options_map[item.Id], 
+					self.options_map[menuitem.Id]
+				) 
 				self.UpdateBibleUI(
 					settings_changed=True,
 					source=SETTINGS_CHANGED
@@ -1000,7 +1020,7 @@ class MainFrame(wx.Frame, AuiLayer):
 
 		for frame in self.frames:
 			name = self.get_pane_for_frame(frame).name 
-			self.aui_callbacks[name] = frame.update_title
+			self.aui_callbacks[name] = frame.on_shown
 
 		self.set_bible_ref(settings["bibleref"], LOADING_SETTINGS,
 				userInput=False)

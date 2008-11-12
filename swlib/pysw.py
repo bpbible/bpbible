@@ -89,7 +89,7 @@ else:
 # *only* after we've set the system string mgr can we set the system 
 # locale mgr...
 locale_mgr = SW.LocaleMgr.getSystemLocaleMgr()
-locale_mgr.loadConfigDir("resources/locales.d")
+locale_mgr.loadConfigDir("locales/locales.d")
 
 #if locale_mgr.getLocale("bpbible"):
 #	locale_mgr.setDefaultLocaleName("bpbible")
@@ -469,6 +469,9 @@ class UserVK(EncodedVK):
 		return process_dash_hack(
 			super(UserVK, self).getRangeText(), locale_dash_hack
 		)
+	
+	def __str__(self): return self.getRangeText()
+		
 	
 	@classproperty
 	def books(cls): 
@@ -1049,7 +1052,7 @@ class LocalizedBookData(BookData):
 		#print locale.translate(self.bookname)
 		return process_dash_hack(
 			locale.translate(self.bookname), locale_dash_hack
-		)
+		).decode(locale_encoding)
 		
 class ChapterData(object):
 	"""A class so that we can tell it is chapter data"""
@@ -1104,24 +1107,10 @@ def get_dash_hack(locale):
 			with_dash = locale.translate(b.name)
 			if with_dash != b.name:
 				lookup[b.name] = with_dash
-				print b.name, "->", with_dash
-	
-	return lookup
-
-	desc = locale.getDescription()
-	section = re.search(r"\(dash-hack:([^\)]*)\)", desc)
-	if not section:
-		return {}
-	
-	# print section.group(1)
-	
-	lookup = {}
-	for key, value in re.findall("([^=]*)=([^,]*),?", section.group(1)):
-		lookup[key] = value
 	
 	return lookup
 		
-def change_locale(lang, abbrev_lang):
+def change_locale(lang, abbrev_lang, additional=None):
 	global locale, locale_lang, locale_encoding, locale_dash_hack
 	global abbrev_locale, abbrev_locale_lang, abbrev_locale_encoding
 	global abbrev_locale_dash_hack
@@ -1131,6 +1120,7 @@ def change_locale(lang, abbrev_lang):
 		[x.c_str() for x in locale_mgr.getAvailableLocales()])
 		locale_lang = lang
 		locale_encoding = "ascii"
+		locale = SW.Locale("")		
 		locale_dash_hack = {}
 		
 	
@@ -1140,6 +1130,9 @@ def change_locale(lang, abbrev_lang):
 		locale_dash_hack = get_dash_hack(locale)
 
 	
+	if additional:
+		locale.augment(additional)
+
 	abbrev_locale = locale_mgr.getLocale(abbrev_lang)
 	if abbrev_locale:
 		abbrev_locale_lang = abbrev_lang
@@ -1152,12 +1145,14 @@ def change_locale(lang, abbrev_lang):
 		[x.c_str() for x in locale_mgr.getAvailableLocales()])
 		abbrev_locale_lang = locale_lang
 		abbrev_locale_encoding = locale_encoding
-		abbrev_locale_dash_hack = locale_dash_hack
-		
+		abbrev_locale_dash_hack = {}
+		abbrev_locale = locale
+	
 		
 	locale_changed(locale, lang, abbrev_locale, abbrev_lang)
 
 change_locale("bpbible", "abbr")#en_AU", "abbrev")#"ko", "ko_abbrev")
+
 u_vk = UserVK()
 a_vk = AbbrevVK()
 

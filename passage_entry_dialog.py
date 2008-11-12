@@ -37,12 +37,12 @@ class PassageValidator(wx.PyValidator):
 			return True
 		except InvalidPassageError:
 			self._showInformation(window,
-					"Unrecognised passage `%s'." % passage)
+					_("Unrecognised passage `%s'.") % passage)
 			return False
 		except MultiplePassagesError:
 			self._showInformation(window,
-					"Passage `%s' contains multiple passages.\n" \
-					"Only one verse or verse range can be entered." \
+					_("Passage `%s' contains multiple passages.\n" \
+					"Only one verse or verse range can be entered.") \
 					% passage)
 			return False
 	

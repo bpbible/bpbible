@@ -22,6 +22,8 @@ class ReferenceDisplayFrame(DisplayFrameXRC):
 		self._RefreshUI(*args, **kwargs)
 
 	def RefreshUI(self, event):
+		if not event.settings_changed:
+			return
 		self._RefreshUI()
 
 	def _RefreshUI(self, *args, **kwargs):

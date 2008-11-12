@@ -1,5 +1,7 @@
 import wx
+import config
 from util import osutils
+from util.debug import dprint, MESSAGE
 
 class DummyMainfrm(object):
 	def hide_tooltips(*args, **kwargs):
@@ -30,3 +32,23 @@ get_tooltip_colours = get_colour_set(
 get_window_colours = get_colour_set(
 	(wx.SYS_COLOUR_WINDOW, wx.SYS_COLOUR_WINDOWTEXT)
 )
+		
+
+def load_icons():
+	global icons
+	wx.InitAllImageHandlers()
+
+	icons = wx.IconBundle()
+	for item in "16 32 48 64 128".split():
+		path = config.graphics_path
+		icon = wx.Image("%(path)sbible-%(item)sx%(item)s.png" % locals())
+		if icon.IsOk():
+			# on windows 2000, transparency is 1 bit, so convert it 
+			# to one bit
+			if osutils.is_win2000():
+				icon.ConvertAlphaToMask()
+
+			bmp = wx.BitmapFromImage(icon)
+			icons.AddIcon(wx.IconFromBitmap(bmp))
+
+	dprint(MESSAGE, "Loaded icon")

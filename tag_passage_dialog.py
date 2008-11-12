@@ -18,7 +18,7 @@ class TagPassageDialog(xrcTagPassageDialog):
 		self.topic_selector.selected_topic = passage_list.settings.last_selected_topic
 		self.topic_selector.SetFocus()
 		self._bindEvents()
-		self.Title = "Tag %s" % self._passage_entry
+		self.Title = _("Tag %s") % self._passage_entry
 
 	def _bindEvents(self):
 		self.Bind(wx.EVT_BUTTON, self._on_ok_button_clicked, self.wxID_OK)
