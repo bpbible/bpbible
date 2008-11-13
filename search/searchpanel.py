@@ -29,6 +29,7 @@ from gui import reference_display_frame
 from gui import fonts
 from events import SEARCH
 from util.configmgr import config_manager
+from manage_topics_frame import ManageTopicsFrame
 
 from keypad import KeyPad
 from util.i18n import N_
@@ -158,6 +159,7 @@ class SearchPanel(xrcSearchPanel):
 		wx.CallAfter(self.on_create)
 
 		self.search_results = []
+		self.save_results_button.Hide()
 
 		self.searching = False
 		self.index = None
@@ -813,6 +815,7 @@ class SearchPanel(xrcSearchPanel):
 		self.versepreview.regexes = []
 		self.versepreview.strongs = []
 		self.versepreview.SetReference(None)
+		self.save_results_button.Disable()
 
 		#insert columns
 		#self.verselist.InsertColumn(0, "Reference")
@@ -852,6 +855,7 @@ class SearchPanel(xrcSearchPanel):
 		]
 		
 		self.versepreview.SetReference(text[0])
+		self.save_results_button.Enable()
 		
 		
 		
@@ -1028,6 +1032,22 @@ class SearchList(virtuallist.VirtualListCtrlXRC):
 		finally:
 			biblemgr.restore_state()
 			self.parent.book.templatelist.pop()
+
+class BibleSearchPanel(SearchPanel):
+	def __init__(self, parent):
+		super(BibleSearchPanel, self).__init__(parent)
+		self.save_results_button.Show()
+
+	def _post_init(self):
+		super(BibleSearchPanel, self)._post_init()
+		self.save_results_button.Bind(wx.EVT_BUTTON, self._save_results)
+
+	def _save_results(self, event):
+		manage_topics_frame = ManageTopicsFrame(guiconfig.mainfrm)
+		manage_topics_frame.Show()
+		manage_topics_frame.save_search_results(
+				self.searchkey.Value, self.search_results
+			)
 
 class GenbookSearchPanel(SearchPanel):
 	id = N_("Other Book Search")

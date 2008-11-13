@@ -47,7 +47,7 @@ from gui.guiutil import bmp
 from gui.menu import Separator
 from gui.htmlbase import HtmlBase
 
-from search.searchpanel import (SearchPanel, GenbookSearchPanel,
+from search.searchpanel import (BibleSearchPanel, GenbookSearchPanel,
 								 DictionarySearchPanel, CommentarySearchPanel)
 
 from fontchoice import FontChoiceDialog 
@@ -416,7 +416,7 @@ class MainFrame(wx.Frame, AuiLayer):
 
 
 	def create_searchers(self):
-		self.search_panel = SearchPanel(self)
+		self.search_panel = BibleSearchPanel(self)
 		self.genbook_search_panel = GenbookSearchPanel(self)
 		self.dictionary_search_panel = DictionarySearchPanel(self)
 		self.commentary_search_panel = CommentarySearchPanel(self)

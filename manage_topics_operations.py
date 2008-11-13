@@ -17,9 +17,9 @@ class ManageTopicsOperations(object):
 		item = self._context.get_wrapper(item)
 		self._perform_action(InsertAction(parent_topic, item, index))
 
-	def add_new_topic(self):
+	def add_new_topic(self, creation_function=None):
 		parent_topic = self._context.get_selected_topic()
-		action = AddNewTopicAction(parent_topic)
+		action = AddNewTopicAction(parent_topic, creation_function)
 		self._perform_action(action, merge_next_edit_action=True)
 		return action.topic
 
@@ -222,12 +222,14 @@ class InsertAction(Action):
 		return DeleteAction(self.item)
 
 class AddNewTopicAction(Action):
-	def __init__(self, parent_topic):
+	def __init__(self, parent_topic, creation_function):
 		super(AddNewTopicAction, self).__init__()
 		self.parent_topic = parent_topic
-		self.topic = PassageList(
-				name="New Topic", description=""
-			)
+		if creation_function is None:
+			creation_function = lambda: PassageList(
+					name="New Topic", description=""
+				)
+		self.topic = creation_function()
 
 	def _perform_action(self):
 		self.parent_topic.add_subtopic(self.topic)
@@ -360,9 +362,9 @@ def _test():
 	... 	operations_manager_context.set_selected_topic(target_topic)
 	... 	operations_manager.paste()
 	...
-	>>> def _add_new_topic(parent_topic, operations_manager_context=operations_manager_context, operations_manager=operations_manager):
+	>>> def _add_new_topic(parent_topic, creation_function=None, operations_manager_context=operations_manager_context, operations_manager=operations_manager):
 	... 	operations_manager_context.set_selected_topic(parent_topic)
-	... 	return operations_manager.add_new_topic()
+	... 	return operations_manager.add_new_topic(creation_function)
 	...
 	>>> def _copy_passage(passage, target_topic, operations_manager_context=operations_manager_context, operations_manager=operations_manager):
 	... 	operations_manager_context.set_selected_passage(passage)
@@ -597,6 +599,14 @@ def _test():
 	Topic 'topic1 (new name)': add subtopic observer called.
 	>>> topic1.subtopics
 	[<PassageList 'topic2'>, <PassageList 'New Topic Name'>]
+
+	Test that the creation function works.
+	>>> new_topic = _add_new_topic(topic1, lambda: PassageList(name="abc", description="description"))
+	Topic 'topic1 (new name)': add subtopic observer called.
+	>>> new_topic.name
+	'abc'
+	>>> new_topic.description
+	'description'
 	"""
 	import manage_topics_operations, doctest	
 	print doctest.testmod(manage_topics_operations)

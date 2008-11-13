@@ -3,7 +3,7 @@ from wx.lib.mixins.listctrl import ListCtrlAutoWidthMixin
 import guiconfig
 from events import TOPIC_LIST
 from passage_list import (get_primary_passage_list_manager,
-		lookup_passage_entry, PassageEntry,
+		lookup_passage_entry, PassageList, PassageEntry,
 		InvalidPassageError, MultiplePassagesError)
 from passage_entry_dialog import PassageEntryDialog
 from xrc.manage_topics_xrc import xrcManageTopicsFrame
@@ -319,11 +319,22 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 			wx.MessageBox(_("Cannot copy the topic to one of its children."),
 					_("Copy Topic"), wx.OK | wx.ICON_ERROR, self)
 	
-	def _create_topic(self, topic):
-		new_topic = self._operations_manager.add_new_topic()
+	def _create_topic(self, topic, creation_function=None):
+		new_topic = self._operations_manager.add_new_topic(creation_function)
 		self._set_selected_topic(new_topic)
 		self.name_edit.SetFocus()
 		self.name_edit.SetSelection(-1, -1)
+
+	def save_search_results(self, search_string, search_results):
+		assert search_string
+		self._set_selected_topic(self._manager)
+		self.topic_tree.SetFocus()
+		name = u"Search: %s" % search_string
+		description = u"Results from the search `%s'." % search_string
+
+		self._create_topic(self._manager,
+				lambda: PassageList.create_from_verse_list(name, search_results, description)
+			)
 	
 	def _create_passage(self):
 		passage_entry = PassageEntry(None)

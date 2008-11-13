@@ -74,7 +74,6 @@
                     </object>
                     <object class="sizeritem">
                       <object class="wxBoxSizer">
-                        <orient>wxHORIZONTAL</orient>
                         <object class="sizeritem">
                           <object class="wxCollapsiblePane" name="collapsible_panel">
                             <object class="panewindow">
@@ -97,16 +96,37 @@
                           <flag>wxGROW</flag>
                           <border>0</border>
                         </object>
+                        <orient>wxHORIZONTAL</orient>
                       </object>
                       <flag>wxTOP|wxGROW</flag>
                       <border>6</border>
                     </object>
+                    
                     <object class="sizeritem">
-                      <object class="wxStaticText" name="search_label">
-                        <label>0 references found</label>
+                      <object class="wxBoxSizer">
+                        <object class="sizeritem">
+                          <object class="wxStaticText" name="search_label">
+                            <label>0 references found</label>
+                          </object>
+                          <flag>wxALIGN_CENTRE_VERTICAL|wxALIGN_CENTRE_HORIZONTAL</flag>
+                          <border>6</border>
+                        </object>
+                        <object class="spacer">
+                          <size>6</size>
+                          <option>1</option>
+                          <flag>wxGROW</flag>
+                        </object>
+                        <object class="sizeritem">
+                          <object class="wxButton" name="save_results_button">
+                            <label>Save Results</label>
+                          </object>
+                          <border>6</border>
+                        </object>
+                        <orient>wxHORIZONTAL</orient>
                       </object>
-                      <flag>wxTOP|wxGROW</flag>
-                      <border>3</border>
+                      <option>1</option>
+                      <flag>wxALL|wxGROW</flag>
+                      <border>6</border>
                     </object>
                   </object>
                 </object>
