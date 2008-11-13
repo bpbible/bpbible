@@ -736,7 +736,7 @@ class VerseList(list):
 				check_vk_bounds(v)
 
 				if userInput != userOutput or userOutput:
-					assert userInput
+					#assert userInput
 
 					# we need to do this carefully
 					# if we just copy across the bounds get mussed when they
