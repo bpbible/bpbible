@@ -238,7 +238,6 @@ class PassageListManager(BasePassageList):
 	def __init__(self, filename=None):
 		super(PassageListManager, self).__init__()
 		self.filename = filename
-		self.name = "Topics"
 		self.description = ""
 
 	def save(self):
@@ -248,15 +247,19 @@ class PassageListManager(BasePassageList):
 		"""
 		_save_to_xml_file(self, self.filename)
 
+	def get_name(self):
+		return _("Topics")
+
+	name = property(get_name, lambda new_name: None)
+
 	def get_topic_trail(self):
 		return ()
 
 	topic_trail = property(get_topic_trail)
 
-	def get_full_name(self):
-		return "None"
-
-	full_name = property(get_full_name)
+	@property
+	def full_name(self):
+		return _("None")
 
 	def find_topic_by_path(self, path):
 		"""Finds the topic in this manager with the given path.
