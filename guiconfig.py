@@ -8,6 +8,8 @@ class DummyMainfrm(object):
 		pass
 	
 	lost_focus = True
+	from util.observerlist import ObserverList
+	on_close = ObserverList()
 
 mainfrm = DummyMainfrm()
 app = None
