@@ -791,6 +791,7 @@ class PassageDetailsPanel(xrcPassageDetailsPanel):
 		self.passage = new_passage
 		self.passage_text.Value = str(new_passage)
 		self.comment_text.Value = new_passage.comment
+		self.passage_preview.SetReference(str(new_passage))
 
 	def focus(self):
 		"""Sets the focus on this panel for editing."""
@@ -806,6 +807,7 @@ class PassageDetailsPanel(xrcPassageDetailsPanel):
 			passage = self.passage_text.Value
 			comment = self.comment_text.Value
 			self._operations_manager.set_passage_details(self.passage, passage, comment)
+			self.passage_preview.SetReference(str(self.passage))
 		except InvalidPassageError:
 			wx.MessageBox(_("Unrecognised passage `%s'.") % passage,
 					"", wx.OK | wx.ICON_INFORMATION, self)

@@ -29,11 +29,18 @@
         <ratio>1</ratio>
       </object>
       <cols>2</cols>
-      <rows>2</rows>
+      <rows>3</rows>
       <vgap>6</vgap>
       <hgap>6</hgap>
       <growablecols>1</growablecols>
       <growablerows>1</growablerows>
+      <object class="spacer"/>
+      <object class="sizeritem">
+        <object class="wxHtmlWindow" name="passage_preview" subclass="gui.reference_display_frame.ReferenceDisplayFrame"/>
+        <option>1</option>
+        <flag>wxGROW</flag>
+        <ratio>1</ratio>
+      </object>
     </object>
   </object>
 </resource>

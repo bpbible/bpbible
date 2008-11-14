@@ -38,6 +38,7 @@ class xrcPassageDetailsPanel(wx.Panel):
         # Define variables for the controls, bind event handlers
         self.passage_text = xrc.XRCCTRL(self, "passage_text")
         self.comment_text = xrc.XRCCTRL(self, "comment_text")
+        self.passage_preview = xrc.XRCCTRL(self, "passage_preview")
 
 
 
