@@ -38,7 +38,61 @@ class xrcManageTopicsFrame(wx.Frame):
         # Define variables for the controls, bind event handlers
         self.toolbar = xrc.XRCCTRL(self, "toolbar")
         self.splitter = xrc.XRCCTRL(self, "splitter")
+        self.passage_list_pane = xrc.XRCCTRL(self, "passage_list_pane")
         self.item_details_panel = xrc.XRCCTRL(self, "item_details_panel")
+
+
+
+class xrcTopicDetailsPanel(wx.Panel):
+#!XRCED:begin-block:xrcTopicDetailsPanel.PreCreate
+    def PreCreate(self, pre):
+        """ This function is called during the class's initialization.
+        
+        Override it for custom setup before the window is created usually to
+        set additional window styles using SetWindowStyle() and SetExtraStyle().
+        """
+        pass
+        
+#!XRCED:end-block:xrcTopicDetailsPanel.PreCreate
+
+    def __init__(self, parent):
+        # Two stage creation (see http://wiki.wxpython.org/index.cgi/TwoStageCreation)
+        pre = wx.PrePanel()
+        self.PreCreate(pre)
+        get_resources().LoadOnPanel(pre, parent, "TopicDetailsPanel")
+        self.PostCreate(pre)
+
+        # Define variables for the controls, bind event handlers
+        self.name_label = xrc.XRCCTRL(self, "name_label")
+        self.name_text = xrc.XRCCTRL(self, "name_text")
+        self.description_label = xrc.XRCCTRL(self, "description_label")
+        self.description_text = xrc.XRCCTRL(self, "description_text")
+
+
+
+class xrcPassageDetailsPanel(wx.Panel):
+#!XRCED:begin-block:xrcPassageDetailsPanel.PreCreate
+    def PreCreate(self, pre):
+        """ This function is called during the class's initialization.
+        
+        Override it for custom setup before the window is created usually to
+        set additional window styles using SetWindowStyle() and SetExtraStyle().
+        """
+        pass
+        
+#!XRCED:end-block:xrcPassageDetailsPanel.PreCreate
+
+    def __init__(self, parent):
+        # Two stage creation (see http://wiki.wxpython.org/index.cgi/TwoStageCreation)
+        pre = wx.PrePanel()
+        self.PreCreate(pre)
+        get_resources().LoadOnPanel(pre, parent, "PassageDetailsPanel")
+        self.PostCreate(pre)
+
+        # Define variables for the controls, bind event handlers
+        self.passage_text = xrc.XRCCTRL(self, "passage_text")
+        self.comment_text = xrc.XRCCTRL(self, "comment_text")
+        self.passage_preview = xrc.XRCCTRL(self, "passage_preview")
 
 
 
@@ -76,4 +130,8 @@ def __gettext_strings():
     _("Redoes the last undone action")
     _("Redo")
     _("Manage Topics")
+    _("Name:")
+    _("Description:")
+    _("Passage:")
+    _("Comment:")
 

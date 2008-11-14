@@ -6,7 +6,8 @@ from passage_list import (get_primary_passage_list_manager,
 		lookup_passage_entry, PassageList, PassageEntry,
 		InvalidPassageError, MultiplePassagesError)
 from passage_entry_dialog import PassageEntryDialog
-from xrc.manage_topics_xrc import xrcManageTopicsFrame
+from xrc.manage_topics_xrc import (xrcManageTopicsFrame,
+		xrcPassageDetailsPanel, xrcTopicDetailsPanel)
 from xrc.xrc_util import attach_unknown_control
 from gui import guiutil
 from manage_topics_operations import (ManageTopicsOperations,
@@ -471,10 +472,12 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 				self.item_details_panel, self._operations_manager
 			)
 		self.topic_details_panel.Hide()
+		self.item_details_panel.Sizer.Add(self.topic_details_panel, 1, wx.GROW)
 		self.passage_details_panel = PassageDetailsPanel(
 				self.item_details_panel, self._operations_manager
 			)
 		self.passage_details_panel.Hide()
+		self.item_details_panel.Sizer.Add(self.passage_details_panel, 1, wx.GROW)
 
 	def _change_topic_details(self, new_topic):
 		if new_topic is None:
@@ -492,11 +495,16 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 
 	def _switch_item_details_current_panel(self, new_panel):
 		"""Makes the given panel the currently displayed item details panel."""
+		# Avoid dead object errors.
+		if not self:
+			return
+
 		assert new_panel in self.item_details_panel.Children
 		for window in self.item_details_panel.Children:
 			if window is not new_panel:
 				window.Hide()
 		new_panel.Show()
+		self.passage_list_pane.Sizer.Layout()
 
 # Specifies what type of dragging is currently happening with the topic tree.
 # This is needed since it has to select and unselect topics when dragging and
@@ -743,7 +751,6 @@ class TopicPassageDropTarget(wx.PyDropTarget):
 			self._topic_tree.on_drop_passage(passage_entry, x, y, result)
 		return result
 
-from xrc.topic_details_panel_xrc import xrcTopicDetailsPanel
 class TopicDetailsPanel(xrcTopicDetailsPanel):
 	def __init__(self, parent, operations_manager):
 		super(TopicDetailsPanel, self).__init__(parent)
@@ -775,7 +782,6 @@ class TopicDetailsPanel(xrcTopicDetailsPanel):
 		description = self.description_text.Value
 		self._operations_manager.set_topic_details(self.topic, name, description)
 
-from xrc.passage_details_panel_xrc import xrcPassageDetailsPanel
 class PassageDetailsPanel(xrcPassageDetailsPanel):
 	def __init__(self, parent, operations_manager):
 		super(PassageDetailsPanel, self).__init__(parent)
