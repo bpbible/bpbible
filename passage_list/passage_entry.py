@@ -11,6 +11,9 @@ class PassageEntry(object):
 	
 	The passage entry is included in a passage entry list.
 	"""
+	__table__ = "passage"
+	__fields_to_store__ = ["passage", "comment", "order_number", "parent"]
+
 	def __init__(self, passage, comment=""):
 		self.passage_changed_observers = ObserverList()
 		self.comment_changed_observers = ObserverList()
@@ -21,6 +24,8 @@ class PassageEntry(object):
 
 		global _passage_entry_id_dict
 		_passage_entry_id_dict[self.get_id()] = self
+		self.order_number = 0
+		self.id = None
 	
 	def contains_verse(self, verse):
 		if self.passage.isBoundSet():
@@ -119,6 +124,9 @@ class PassageEntry(object):
 		try:
 			return self.passage == other.passage \
 					and self.comment == other.comment
+			# For help in debugging.
+			#import sys
+			#sys.stderr.write("%s, passages equal: %s, comment equal: %s\n" % (self, self.passage == other.passage, self.comment == other.comment))
 		except:
 			return False
 

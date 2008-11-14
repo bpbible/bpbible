@@ -1,5 +1,6 @@
 from passage_entry import PassageEntry
 from util.observerlist import ObserverList
+import sqlite
 
 _passage_list_id_dict = {}
 
@@ -12,6 +13,8 @@ class BasePassageList(object):
 	being added.
 	"""
 	contains_passages = True
+	__table__ = "topic"
+	__fields_to_store__ = ["name", "description", "order_number", "parent"]
 
 	def __init__(self, description=""):
 		self._description = description
@@ -29,11 +32,34 @@ class BasePassageList(object):
 		self.passages = []
 		self.add_passage_observers = ObserverList()
 		self.remove_passage_observers = ObserverList()
+		self.id = None
+		self.order_number = 0
 	
 	def add_subtopic(self, subtopic):
 		"""Adds the given sub-topic to the end of the list of sub-topics."""
-		self.subtopics.append(subtopic)
+		self.insert_subtopic(subtopic, index=None)
+	
+	def insert_subtopic(self, subtopic, index):
+		"""Inserts the given subtopic into the list of subtopics.
+		
+		index: The index to insert the subtopic before.
+			If this is None, then the subtopic will be appended to the list.
+		"""
+		if index is None:
+			index = len(self.subtopics)
+		if self.subtopics:
+			if index < len(self.subtopics):
+				subtopic.order_number = self.subtopics[index].order_number
+				for later_subtopic in self.subtopics[index:]:
+					later_subtopic.order_number += 1
+				sqlite.connection.execute("UPDATE topic SET order_number = order_number + 1 WHERE parent = ? AND order_number >= ?", (self.id, subtopic.order_number))
+			else:
+				subtopic.order_number = self.subtopics[-1].order_number + 1
+		#print self.subtopics, index
+		self.subtopics.insert(index, subtopic)
 		subtopic.parent = self
+		sqlite.save_or_update_item(subtopic)
+		#print self.subtopics, index, subtopic.id
 		self.add_subtopic_observers(subtopic)
 	
 	def add_empty_subtopic(self, name, description=""):
@@ -55,6 +81,7 @@ class BasePassageList(object):
 		try:
 			index = self.subtopics.index(topic)
 			del self.subtopics[index]
+			sqlite.remove_item(topic)
 			self.remove_subtopic_observers(topic)
 		except ValueError:
 			raise MissingTopicError(topic)
@@ -71,8 +98,17 @@ class BasePassageList(object):
 		"""
 		if index is None:
 			index = len(self.passages)
+		if self.passages:
+			if index < len(self.passages):
+				passage.order_number = self.passages[index].order_number
+				for later_passage in self.passages[index:]:
+					later_passage.order_number += 1
+				sqlite.connection.execute("UPDATE passage SET order_number = order_number + 1 WHERE parent = ? AND order_number >= ?", (self.id, passage.order_number))
+			else:
+				passage.order_number = self.passages[-1].order_number + 1
 		self.passages.insert(index, passage)
 		passage.parent = self
+		sqlite.save_or_update_item(passage)
 		self.add_passage_observers(passage)
 
 	def remove_passage(self, passage):
@@ -85,6 +121,7 @@ class BasePassageList(object):
 		try:
 			index = self.passages.index(passage)
 			del self.passages[index]
+			sqlite.remove_item(passage)
 			self.remove_passage_observers(passage, index)
 		except ValueError:
 			raise MissingPassageError(passage)
@@ -138,6 +175,7 @@ class BasePassageList(object):
 		and subtopics) and returns it.
 		"""
 		new_list = PassageList(name=self.name, description=self.description)
+		sqlite.save_or_update_item(new_list)
 		for topic in self.subtopics:
 			new_list.add_subtopic(topic.clone())
 		for passage in self.passages:
@@ -148,6 +186,12 @@ class BasePassageList(object):
 		try:
 			return self.subtopics == other.subtopics \
 					and self.passages == other.passages
+
+			# For help in debugging.
+			#import sys
+			#sys.stderr.write("%s, subtopics equal: %s, passages equal: %s\n" % (self.full_name, self.subtopics == other.subtopics, self.passages == other.passages))
+			#sys.stderr.write("Subtopic " + str(self.subtopics) + " " + str(other.subtopics) + "\n")
+			#sys.stderr.write("Passage " + str(self.passages) + " " + str(other.passages) + "\n")
 		except:
 			return False
 
@@ -230,27 +274,35 @@ def _create_passage_list(name, description, passages, subtopics):
 	return passage_list
 
 class PassageListManager(BasePassageList):
-	"""This class provides the root passage list manager.
-
-	A passage list manager must be associated with a file name, and the
-	save() method will save the file.
-	"""
-	def __init__(self, filename=None):
+	"""This class provides the root passage list manager."""
+	def __init__(self):
 		super(PassageListManager, self).__init__()
-		self.filename = filename
 		self.description = ""
 
 	def save(self):
-		"""Saves this passage list manager to its file.
-		
-		This relies on the manager having an associated file name.
+		"""Saves this passage list manager to its file."""
+		sqlite.save()
+
+	def save_item(self, item):
+		"""Saves changes to the given item."""
+		if isinstance(item, BasePassageList):
+			sqlite.store_topic(item)
+		else:
+			sqlite.save_or_update_item(item)
+
+	def close(self):
+		"""To be called when the application is closed, to close the
+		connection.
 		"""
-		_save_to_xml_file(self, self.filename)
+		global _global_passage_list_manager
+		_global_passage_list_manager = None
+		sqlite.close()
 
 	def get_name(self):
-		return _("Topics")
+		return "Topics"
+		#return _("Topics")
 
-	name = property(get_name, lambda new_name: None)
+	name = property(get_name, lambda self, new_name: None)
 
 	def get_topic_trail(self):
 		return ()
@@ -259,7 +311,8 @@ class PassageListManager(BasePassageList):
 
 	@property
 	def full_name(self):
-		return _("None")
+		#return _("None")
+		return "None"
 
 	def find_topic_by_path(self, path):
 		"""Finds the topic in this manager with the given path.
@@ -322,144 +375,18 @@ def _create_manager(lists, passages):
 
 import config
 
-DEFAULT_FILENAME = config.data_path + "passages"
+DEFAULT_FILENAME = config.data_path + "passages.sqlite"
 
-sample_xml = """
-<passage_list version="1">
-	<topic name="Topic Name">
-		<topic name="Subtopic">
-			<description>Some description.</description>
-		</topic>
-		<passage reference="Matthew 2:2">
-			<comment>A comment.</comment>
-		</passage>
-	</topic>
-</passage_list>
-"""
+_global_passage_list_manager = None
 
-import xml.dom.minidom
-
-def load_from_xml_file(filename):
-	"""Loads a PassageFileManager from the given file name, and returns it.
-	
-	If it is unable to load from the given file, then it raises an
-	InvalidPassageListError.
-	"""
-	try:
-		dom = xml.dom.minidom.parse(filename)
-	except Exception, e:
-		raise InvalidPassageListError(e)
-	manager = _handle_passage_list(dom)
-	manager.filename = filename
-	return manager
-
-load_from_file = load_from_xml_file
-
-def _handle_passage_list(dom):
-	version = dom.documentElement.getAttribute("version")
-	assert version == "1"
-	return _create_manager(_handle_subtopics(dom.documentElement),
-			_handle_passages(dom.documentElement))
-
-def _handle_subtopics(topic):
-	return [_handle_topic(subtopic)
-			for subtopic in topic.childNodes
-			if subtopic.tagName == "topic"]
-
-def _handle_topic(topic):
-	name = topic.getAttribute("name")
-	description = _get_element_text(topic, "description")
-	subtopics = _handle_subtopics(topic)
-	passages = _handle_passages(topic)
-	return _create_passage_list(name, description, passages, subtopics)
-
-def _handle_passages(topic):
-	return [_handle_passage(passage)
-			for passage in topic.childNodes
-			if passage.tagName == "passage"]
-
-def _handle_passage(passage):
-	reference = passage.getAttribute("reference")
-	comment = _get_element_text(passage, "comment")
-	return PassageEntry(reference, comment)
-
-def _get_element_text(parent, tag_name):
-	"""Gets all the text in the first element of the parent with the given
-	tag name.
-	Returns "" if there is no element with the given tag name.
-	"""
-	tag_nodes = parent.getElementsByTagName(tag_name)
-	if not tag_nodes:
-		return ""
-
-	return _get_text(tag_nodes[0].childNodes)
-
-def _get_text(nodes):
-	return "".join(node.data for node in nodes
-			if node.nodeType == node.TEXT_NODE)
-
-def _save_to_xml_file(list, filename):
-	dom = _get_passage_list_manager_dom(list)
-	file = open(filename, "w")
-	dom.writexml(file)
-	file.close()
-
-def _get_passage_list_manager_dom(list):
-	doc = _create_xml_doc()
-	top_element = doc.documentElement
-	top_element.setAttribute("version", "1")
-	_xml_for_subtopics(list, doc, top_element)
-	_xml_for_passages(list, doc, top_element)
-	return doc
-
-def _create_xml_doc():
-	impl = xml.dom.minidom.getDOMImplementation()
-	return impl.createDocument(None, "passage_list", None)
-
-def _xml_for_subtopics(topic, doc, parent):
-	for subtopic in topic.subtopics:
-		parent.appendChild(_xml_for_topic(subtopic, doc))
-
-def _xml_for_topic(topic, doc):
-	element = doc.createElement("topic")
-	element.setAttribute("name", topic.name)
-	element.setAttribute("display_tag", "true")
-	element.appendChild(_create_text_element(doc, "description", topic.description))
-	_xml_for_subtopics(topic, doc, element)
-	_xml_for_passages(topic, doc, element)
-	return element
-
-def _xml_for_passages(topic, doc, parent):
-	for passage in topic.passages:
-		parent.appendChild(_xml_for_passage(passage, doc))
-
-def _xml_for_passage(passage_entry, doc):
-	element = doc.createElement("passage")
-	element.setAttribute("reference", str(passage_entry))
-	element.appendChild(_create_text_element(doc, "comment", passage_entry.comment))
-	return element
-
-def _create_text_element(doc, tag_name, text):
-	"""Creates an element with the given tag name containing the given text,
-	and returns it.
-	"""
-	element = doc.createElement(tag_name)
-	element.appendChild(doc.createTextNode(text))
-	return element
-
-def load_default_passage_lists(filename=DEFAULT_FILENAME):
-	"""Attempts to load the passage lists from the given file name.
-
-	If it is unable to load them, then it returns an empty passage list
-	manager.
-	"""
-	try:
-		return load_from_file(filename)
-	except InvalidPassageListError:
-		return PassageListManager(filename)
-
-class InvalidPassageListError(Exception):
-	"""This exception is thrown when the passage list cannot be loaded."""
+def get_primary_passage_list_manager(filename=DEFAULT_FILENAME):
+	"""Gets the primary passage list manager for the application."""
+	global _global_passage_list_manager
+	if _global_passage_list_manager is None:
+		_global_passage_list_manager = sqlite.load_manager(filename)
+		import guiconfig
+		guiconfig.mainfrm.on_close += _global_passage_list_manager.close
+	return _global_passage_list_manager
 
 class MissingTopicError(Exception):
 	"""This exception is thrown when an operation is performed on a topic

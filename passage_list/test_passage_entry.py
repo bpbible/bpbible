@@ -68,36 +68,5 @@ class TestPassageEntry(unittest.TestCase):
 	def _setPassage(self, passage):
 		self._passage_entry.passage = passage
 
-class TestPassageEntryListener(unittest.TestCase):
-	def setUp(self):
-		self._passage_entry = PassageEntry("gen 2:2 - 4")
-		self._num_times_observer_called = 0
-		self._passage_entry.observers += self._passageEntryChanged
-
-	def testChangingPassageShouldNotify(self):
-		self._passage_entry.passage = "gen 2:2"
-		self._checkHasChanged()
-
-	def testChangingCommentShouldNotify(self):
-		self._passage_entry.comment = "comment"
-		self._checkHasChanged()
-
-	def testSettingSamePassageShouldNotNotify(self):
-		self._passage_entry.passage = "gen 2:2 - 4"
-		self._checkHasNotChanged()
-
-	def testSettingSameCommentShouldNotNotify(self):
-		self._passage_entry.comment = ""
-		self._checkHasNotChanged()
-
-	def _checkHasChanged(self):
-		self.assertEqual(self._num_times_observer_called, 1)
-
-	def _checkHasNotChanged(self):
-		self.assertEqual(self._num_times_observer_called, 0)
-	
-	def _passageEntryChanged(self):
-		self._num_times_observer_called += 1
-
 if __name__ == "__main__":
 	unittest.main()

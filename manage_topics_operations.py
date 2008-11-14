@@ -3,8 +3,9 @@ from passage_list import (BasePassageList, PassageList, PassageEntry,
 		InvalidPassageError, MultiplePassagesError)
 
 class ManageTopicsOperations(object):
-	def __init__(self, context):
+	def __init__(self, passage_list_manager, context):
 		self._context = context
+		self._passage_list_manager = passage_list_manager
 		self._clipboard_data = None
 		self._actions = []
 		self._undone_actions = []
@@ -27,6 +28,7 @@ class ManageTopicsOperations(object):
 		passage = self._context.get_selected_passage()
 		passage = self._context.get_wrapper(passage)
 		self._perform_action(ReorderPassageAction(passage, new_index))
+		self._passage_list_manager.save()
 
 	# XXX: Deleting a topic doesn't remove its tags from the current window.
 	def delete(self):
@@ -43,7 +45,9 @@ class ManageTopicsOperations(object):
 
 	def set_item_details(self, name, description):
 		item = self._context.get_new_selected_item()
-		self._perform_action(SetItemDetailsAction(item, name, description))
+		self._perform_action(SetItemDetailsAction(
+				self._passage_list_manager, item, name, description
+			))
 
 	def cut(self):
 		self._setup_clipboard(keep_original=False)
@@ -100,6 +104,7 @@ class ManageTopicsOperations(object):
 			raise OperationNotAvailableError()
 		recent_action = self._actions.pop()
 		recent_action.undo_action()
+		self._passage_list_manager.save()
 		self._undone_actions.append(recent_action)
 		self.undo_available_changed_observers()
 
@@ -109,6 +114,7 @@ class ManageTopicsOperations(object):
 			raise OperationNotAvailableError()
 		undone_action = self._undone_actions.pop()
 		undone_action.perform_action()
+		self._passage_list_manager.save()
 		self._actions.append(undone_action)
 		self.undo_available_changed_observers()
 
@@ -127,6 +133,7 @@ class ManageTopicsOperations(object):
 		can be undone later.
 		"""
 		action.perform_action()
+		self._passage_list_manager.save()
 		if self._merge_next_edit_action and isinstance(action, SetItemDetailsAction):
 			pass
 		else:
@@ -238,11 +245,12 @@ class AddNewTopicAction(Action):
 		return DeleteAction(_get_wrapper(self.topic))
 
 class SetItemDetailsAction(Action):
-	def __init__(self, item, name, description):
+	def __init__(self, manager, item, name, description):
 		super(SetItemDetailsAction, self).__init__()
 		self.item = item
 		self.name = name
 		self.description = description
+		self.manager = manager
 
 	def _perform_action(self):
 		self.old_name = self.item.name
@@ -253,11 +261,13 @@ class SetItemDetailsAction(Action):
 		except (InvalidPassageError, MultiplePassagesError), e:
 			exception = e
 		self.item.description = self.description
+		# XXX: Remove this reference to wrapped.
+		self.manager.save_item(self.item.wrapped)
 		if exception is not None:
 			raise exception
 
 	def _get_reverse_action(self):
-		return SetItemDetailsAction(self.item, self.old_name, self.old_description)
+		return SetItemDetailsAction(self.manager, self.item, self.old_name, self.old_description)
 
 class CopyAction(CompositeAction):
 	"""This action copies or moves a passage to a new topic."""
@@ -299,15 +309,29 @@ class OperationNotAvailableError(Exception):
 
 def _test():
 	"""
-	>>> from passage_list import PassageListManager
-	>>> manager = _test_create_topic(create_function=PassageListManager)
+	>>> __builtins__['_'] = lambda x: x
+	>>> from passage_list import get_primary_passage_list_manager
+	>>> import os
+	>>> filename = "passages_test.sqlite"
+	>>> try:
+	... 	os.remove(filename)
+	... except OSError:
+	... 	pass
+	...
+	>>> manager = get_primary_passage_list_manager(filename)
+	>>> _add_topic_observers(manager)
+	>>> manager.subtopics
+	[]
+	>>> manager.passages
+	[]
 	>>> topic1 = _test_create_topic("topic1")
 	>>> topic2 = _test_create_topic("topic2")
 	>>> topic3 = _test_create_topic("topic3")
 	>>> passage1 = _test_create_passage("gen 3:5")
 	>>> passage2 = _test_create_passage("gen 5:5")
 	>>> operations_manager_context = DummyOperationsManagerContext()
-	>>> operations_manager = ManageTopicsOperations(context=operations_manager_context)
+	>>> operations_manager = ManageTopicsOperations(manager, context=operations_manager_context)
+	>>> manager = get_primary_passage_list_manager(filename)
 	>>> operations_manager.can_undo
 	False
 	>>> operations_manager.can_redo
@@ -384,6 +408,7 @@ def _test():
 	... 	operations_manager_context.set_selected_passage(passage_entry)
 	... 	operations_manager.set_item_details(passage, comment)
 	...
+
 	>>> _add_subtopic(manager, topic1)
 	Topic 'None': add subtopic observer called.
 	>>> operations_manager.undo()
@@ -464,6 +489,7 @@ def _test():
 	>>> new_topic.name = "topic3 (test to see it was a genuine copy)"
 	>>> topic3.name
 	'topic3'
+	>>> new_topic.name = "topic3"
 	>>> _copy_topic(topic1, new_topic)
 	>>> new_topic.subtopics
 	[<PassageList 'topic1'>]
@@ -474,11 +500,13 @@ def _test():
 	[PassageEntry('Genesis 3:5', 'test comment')]
 	>>> topic1.passages
 	[PassageEntry('Genesis 3:5', '')]
+	>>> new_topic.subtopics[0].passages[0].comment = ""
 	>>> new_topic.subtopics[0].subtopics[0]
 	<PassageList 'topic2'>
 	>>> new_topic.subtopics[0].subtopics[0].name = "xyz"
 	>>> new_topic.subtopics[0].subtopics[0]
 	<PassageList 'xyz'>
+	>>> new_topic.subtopics[0].subtopics[0].name = "topic2"
 	>>> topic2.name
 	'topic2'
 	>>> topic3.subtopics
@@ -506,15 +534,17 @@ def _test():
 	[PassageEntry('Genesis 3:5', 'Test comment (to check it was a genuine copy)')]
 	>>> topic2.passages
 	[PassageEntry('Genesis 3:5', '')]
+	>>> passage1.comment = ""
+	Passage 'Genesis 3:5': comment changed observer called.
 
 	Check moving to the same topic does nothing.
 	>>> _move_passage(topic1.passages[0], topic1)
 	>>> topic1.passages
-	[PassageEntry('Genesis 3:5', 'Test comment (to check it was a genuine copy)')]
+	[PassageEntry('Genesis 3:5', '')]
 	>>> _add_passage(topic1, passage2)
 	Topic 'topic1': add passage observer called.
 	>>> topic1.passages
-	[PassageEntry('Genesis 3:5', 'Test comment (to check it was a genuine copy)'), PassageEntry('Genesis 5:5', '')]
+	[PassageEntry('Genesis 3:5', ''), PassageEntry('Genesis 5:5', '')]
 	>>> _move_current_passage(passage2, 0)
 	Topic 'topic1': remove passage observer called.
 	Topic 'topic1': add passage observer called.
@@ -525,7 +555,7 @@ def _test():
 	Topic 'topic1': remove passage observer called.
 	Topic 'topic1': add passage observer called.
 	>>> topic1.passages
-	[PassageEntry('Genesis 5:5', ''), PassageEntry('Genesis 3:5', 'Test comment (to check it was a genuine copy)')]
+	[PassageEntry('Genesis 5:5', ''), PassageEntry('Genesis 3:5', '')]
 
 	Check that you can't redo an action after undoing and doing a different
 	action.
@@ -536,7 +566,7 @@ def _test():
 	>>> operations_manager.can_redo
 	True
 	>>> topic1.passages
-	[PassageEntry('Genesis 5:5', ''), PassageEntry('Genesis 3:5', 'Test comment (to check it was a genuine copy)')]
+	[PassageEntry('Genesis 5:5', ''), PassageEntry('Genesis 3:5', '')]
 	>>> _remove_passage(topic1, topic1.passages[1])
 	Topic 'topic1': remove passage observer called.
 	>>> topic1.passages
@@ -607,6 +637,58 @@ def _test():
 	'abc'
 	>>> new_topic.description
 	'description'
+	>>> manager.save()
+	>>> manager.close()
+	>>> from passage_list import sqlite
+	>>> loaded_manager = sqlite.load_manager(filename)
+	>>> loaded_manager.subtopics
+	[<PassageList u'topic1 (new name)'>, <PassageList u'topic3'>]
+	>>> manager.subtopics
+	[<PassageList 'topic1 (new name)'>, <PassageList 'topic3'>]
+
+	>>> loaded_manager == manager
+	True
+	
+	>>> manager.close()
+
+	>>> filename2 = "passages_test2.sqlite"
+	>>> try:
+	... 	os.remove(filename2)
+	... except OSError, e:
+	... 	pass
+	...
+	>>> manager = get_primary_passage_list_manager(filename2)
+	>>> manager.subtopics
+	[]
+	>>> manager.passages
+	[]
+	>>> operations_manager._passage_list_manager = manager
+	>>> from passage_list import PassageList
+	>>> topic1 = PassageList("topic1")
+	>>> _add_subtopic(manager, topic1)
+	>>> topic2 = PassageList("topic2")
+	>>> _add_subtopic(topic1, topic2)
+	>>> passage1 = PassageEntry("gen 3:3 - 7")
+	>>> passage2 = PassageEntry("gen 3:7 - 21")
+	>>> _add_passage(topic1, passage1)
+	>>> _add_passage(topic1, passage2)
+	>>> _remove_passage(topic1, passage1)
+	>>> _set_topic_details(topic1, "New Topic Name", "description")
+	>>> _set_passage_details(passage1, "Genesis 3:3", "description")
+	
+	>>> _copy_topic(topic2, manager)
+	>>> _remove_subtopic(topic2)
+
+	>>> _copy_topic(topic1, manager.subtopics[1])
+
+	>>> _remove_subtopic(topic1)
+
+	>>> operations_manager.undo()
+	>>> manager.close()
+	>>> loaded_manager = sqlite.load_manager(filename2)
+
+	>>> manager == loaded_manager
+	True
 	"""
 	import manage_topics_operations, doctest	
 	print doctest.testmod(manage_topics_operations)
@@ -647,6 +729,7 @@ def _get_wrapper(item):
 class PassageWrapper(object):
 	def __init__(self, passage):
 		self._passage = passage
+		self.wrapped = passage
 
 	def get_name(self):
 		return str(self._passage)
@@ -686,6 +769,7 @@ class PassageWrapper(object):
 class TopicWrapper(object):
 	def __init__(self, topic):
 		self._topic = topic
+		self.wrapped = topic
 
 	def get_name(self):
 		return self._topic.name
@@ -708,8 +792,7 @@ class TopicWrapper(object):
 		return self._topic.parent
 
 	def insert_into_topic(self, parent_topic, index):
-		# XXX: This doesn't use the supplied index.
-		parent_topic.add_subtopic(self._topic)
+		parent_topic.insert_subtopic(self._topic, index)
 
 	def is_child_topic(self, topic):
 		"""Checks if the given topic is a child of this topic.
@@ -761,13 +844,16 @@ def _test_create_topic(name="", description="", create_function=None):
 	if create_function is None:
 		create_function = lambda: PassageList(name, description)
 	topic = create_function()
+	_add_topic_observers(topic)
+	return topic
+
+def _add_topic_observers(topic):
 	topic.add_passage_observers += _topic_observer("add passage", topic)
 	topic.remove_passage_observers += _topic_observer("remove passage", topic)
 	topic.add_subtopic_observers += _topic_observer("add subtopic", topic)
 	topic.remove_subtopic_observers += _topic_observer("remove subtopic", topic)
 	topic.name_changed_observers += _topic_observer("name changed", topic)
 	topic.description_changed_observers += _topic_observer("description changed", topic)
-	return topic
 
 def _test_create_passage(passage="", comment=""):
 	passage = PassageEntry(passage, comment)

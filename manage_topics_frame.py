@@ -21,6 +21,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		self._manager = get_primary_passage_list_manager()
 		self._operations_context = OperationsContext(self)
 		self._operations_manager = ManageTopicsOperations(
+				passage_list_manager=self._manager,
 				context=self._operations_context
 			)
 		self._operations_manager.undo_available_changed_observers \
