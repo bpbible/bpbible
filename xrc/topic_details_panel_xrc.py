@@ -16,8 +16,8 @@ def get_resources():
 
 
 
-class xrcManageTopicsFrame(wx.Frame):
-#!XRCED:begin-block:xrcManageTopicsFrame.PreCreate
+class xrcTopicDetailsPanel(wx.Panel):
+#!XRCED:begin-block:xrcTopicDetailsPanel.PreCreate
     def PreCreate(self, pre):
         """ This function is called during the class's initialization.
         
@@ -26,19 +26,20 @@ class xrcManageTopicsFrame(wx.Frame):
         """
         pass
         
-#!XRCED:end-block:xrcManageTopicsFrame.PreCreate
+#!XRCED:end-block:xrcTopicDetailsPanel.PreCreate
 
     def __init__(self, parent):
         # Two stage creation (see http://wiki.wxpython.org/index.cgi/TwoStageCreation)
-        pre = wx.PreFrame()
+        pre = wx.PrePanel()
         self.PreCreate(pre)
-        get_resources().LoadOnFrame(pre, parent, "ManageTopicsFrame")
+        get_resources().LoadOnPanel(pre, parent, "TopicDetailsPanel")
         self.PostCreate(pre)
 
         # Define variables for the controls, bind event handlers
-        self.toolbar = xrc.XRCCTRL(self, "toolbar")
-        self.splitter = xrc.XRCCTRL(self, "splitter")
-        self.item_details_panel = xrc.XRCCTRL(self, "item_details_panel")
+        self.name_label = xrc.XRCCTRL(self, "name_label")
+        self.name_text = xrc.XRCCTRL(self, "name_text")
+        self.description_label = xrc.XRCCTRL(self, "description_label")
+        self.description_text = xrc.XRCCTRL(self, "description_text")
 
 
 
@@ -50,7 +51,7 @@ def __init_resources():
     global __res
     __res = xrc.EmptyXmlResource()
 
-    __res.Load('manage_topics.xrc')
+    __res.Load('topic_details_panel.xrc')
 
 # ----------------------- Gettext strings ---------------------
 
@@ -63,17 +64,6 @@ def __gettext_strings():
     
     def _(str): pass
     
-    _("Cut")
-    _("Cut")
-    _("Copy")
-    _("Copy")
-    _("Paste")
-    _("Paste")
-    _("Delete")
-    _("Delete")
-    _("Undo previous action")
-    _("Undo")
-    _("Redoes the last undone action")
-    _("Redo")
-    _("Manage Topics")
+    _("Name:")
+    _("Description:")
 

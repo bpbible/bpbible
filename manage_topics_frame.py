@@ -33,6 +33,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		self._selected_topic = None
 		self.is_passage_selected = False
 		self._selected_passage = None
+		self._setup_item_details_panel()
 		self._init_passage_list_ctrl_headers()
 		self._setup_passage_list_ctrl()
 		self._setup_topic_tree()
@@ -59,9 +60,6 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 
 		self.passage_list_ctrl.Bind(wx.EVT_KEY_UP, self._on_char)
 		self.topic_tree.Bind(wx.EVT_KEY_UP, self._on_char)
-
-		for control in self.item_details_panel.Children:
-			control.Bind(wx.EVT_KILL_FOCUS, self._item_details_panel_lost_focus)
 
 		for tool in ("cut_tool", "copy_tool", "paste_tool",
 				"delete_tool", "undo_tool", "redo_tool"):
@@ -138,7 +136,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 
 	def set_selected_topic(self, new_topic):
 		self._selected_topic = new_topic
-		self._change_item_details_topic(new_topic)
+		self._change_topic_details(new_topic)
 
 	selected_topic = property(get_selected_topic, set_selected_topic)
 
@@ -214,7 +212,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		"""
 		if not event.IsEditCancelled():
 			topic = self.topic_tree.GetPyData(event.GetItem())
-			self._operations_manager.set_topic_name(event.GetLabel())
+			self._operations_manager.set_topic_name(topic, event.GetLabel())
 
 	def _on_char(self, event):
 		"""Handles all keyboard shortcuts."""
@@ -323,8 +321,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 	def _create_topic(self, topic, creation_function=None):
 		new_topic = self._operations_manager.add_new_topic(creation_function)
 		self._set_selected_topic(new_topic)
-		self.name_edit.SetFocus()
-		self.name_edit.SetSelection(-1, -1)
+		self.topic_details_panel.focus()
 
 	def save_search_results(self, search_string, search_results):
 		assert search_string
@@ -410,7 +407,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 
 	def set_selected_passage(self, new_passage):
 		self._selected_passage = new_passage
-		self._change_item_details_passage(new_passage)
+		self._change_passage_details(new_passage)
 
 	selected_passage = property(get_selected_passage, set_selected_passage)
 
@@ -461,47 +458,45 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 
 	def _topic_tree_got_focus(self, event):
 		self.is_passage_selected = False
-		self._change_item_details_topic(self.selected_topic)
+		self._change_topic_details(self.selected_topic)
 		event.Skip()
 
 	def _passage_list_got_focus(self, event):
 		self.is_passage_selected = True
-		self._change_item_details_passage(self.selected_passage)
+		self._change_passage_details(self.selected_passage)
 		event.Skip()
 
-	def _change_item_details_topic(self, new_topic):
+	def _setup_item_details_panel(self):
+		self.topic_details_panel = TopicDetailsPanel(
+				self.item_details_panel, self._operations_manager
+			)
+		self.topic_details_panel.Hide()
+		self.passage_details_panel = PassageDetailsPanel(
+				self.item_details_panel, self._operations_manager
+			)
+		self.passage_details_panel.Hide()
+
+	def _change_topic_details(self, new_topic):
 		if new_topic is None:
 			return
 
-		self.name_label.Label = _("Name:")
-		self.name_edit.Value = new_topic.name
-		self.description_label.Label = _("Description:")
-		self.description_edit.Value = new_topic.description
+		self.topic_details_panel.set_topic(new_topic)
+		self._switch_item_details_current_panel(self.topic_details_panel)
 
-	def _change_item_details_passage(self, new_passage):
+	def _change_passage_details(self, new_passage):
 		if new_passage is None or self.FindFocus() is self.topic_tree:
 			return
 
-		self.name_label.Label = _("Passage:")
-		self.name_edit.Value = str(new_passage)
-		self.description_label.Label = _("Comment:")
-		self.description_edit.Value = new_passage.comment
+		self.passage_details_panel.set_passage(new_passage)
+		self._switch_item_details_current_panel(self.passage_details_panel)
 
-	def _item_details_panel_lost_focus(self, event):
-		event.Skip()
-		if self.FindFocus() in self.item_details_panel.Children:
-			return
-		try:
-			name = self.name_edit.Value
-			description = self.description_edit.Value
-			self._operations_manager.set_item_details(name, description)
-		except InvalidPassageError:
-			wx.MessageBox(_("Unrecognised passage `%s'.") % name,
-					"", wx.OK | wx.ICON_INFORMATION, self)
-		except MultiplePassagesError:
-			wx.MessageBox(_("Passage `%s' contains multiple passages.\n"
-					"Only one verse or verse range can be entered.") % name,
-					"", wx.OK | wx.ICON_INFORMATION, self)
+	def _switch_item_details_current_panel(self, new_panel):
+		"""Makes the given panel the currently displayed item details panel."""
+		assert new_panel in self.item_details_panel.Children
+		for window in self.item_details_panel.Children:
+			if window is not new_panel:
+				window.Hide()
+		new_panel.Show()
 
 # Specifies what type of dragging is currently happening with the topic tree.
 # This is needed since it has to select and unselect topics when dragging and
@@ -747,6 +742,77 @@ class TopicPassageDropTarget(wx.PyDropTarget):
 			passage_entry = lookup_passage_entry(passage_id)
 			self._topic_tree.on_drop_passage(passage_entry, x, y, result)
 		return result
+
+from xrc.topic_details_panel_xrc import xrcTopicDetailsPanel
+class TopicDetailsPanel(xrcTopicDetailsPanel):
+	def __init__(self, parent, operations_manager):
+		super(TopicDetailsPanel, self).__init__(parent)
+		self.topic = None
+		self.name_text.Bind(wx.EVT_KILL_FOCUS, self._lost_focus)
+		self.description_text.Bind(wx.EVT_KILL_FOCUS, self._lost_focus)
+		self._operations_manager = operations_manager
+
+	def set_topic(self, new_topic):
+		"""Sets a new topic to edit with this panel."""
+		if new_topic is self.topic:
+			return
+
+		self.topic = new_topic
+		self.name_text.Value = new_topic.name
+		self.description_text.Value = new_topic.description
+
+	def focus(self):
+		"""Sets the focus on this panel for editing."""
+		self.name_text.SetFocus()
+		self.name_text.SetSelection(-1, -1)
+
+	def _lost_focus(self, event):
+		if not self.topic:
+			event.Skip()
+			return
+
+		name = self.name_text.Value
+		description = self.description_text.Value
+		self._operations_manager.set_topic_details(self.topic, name, description)
+
+from xrc.passage_details_panel_xrc import xrcPassageDetailsPanel
+class PassageDetailsPanel(xrcPassageDetailsPanel):
+	def __init__(self, parent, operations_manager):
+		super(PassageDetailsPanel, self).__init__(parent)
+		self.passage = None
+		self.passage_text.Bind(wx.EVT_KILL_FOCUS, self._lost_focus)
+		self.comment_text.Bind(wx.EVT_KILL_FOCUS, self._lost_focus)
+		self._operations_manager = operations_manager
+
+	def set_passage(self, new_passage):
+		if new_passage is self.passage:
+			return
+
+		self.passage = new_passage
+		self.passage_text.Value = str(new_passage)
+		self.comment_text.Value = new_passage.comment
+
+	def focus(self):
+		"""Sets the focus on this panel for editing."""
+		self.passage_text.SetFocus()
+		self.passage_text.SetSelection(-1, -1)
+
+	def _lost_focus(self, event):
+		if not self.passage:
+			event.Skip()
+			return
+
+		try:
+			passage = self.passage_text.Value
+			comment = self.comment_text.Value
+			self._operations_manager.set_passage_details(self.passage, passage, comment)
+		except InvalidPassageError:
+			wx.MessageBox(_("Unrecognised passage `%s'.") % passage,
+					"", wx.OK | wx.ICON_INFORMATION, self)
+		except MultiplePassagesError:
+			wx.MessageBox(_("Passage `%s' contains multiple passages.\n"
+					"Only one verse or verse range can be entered.") % passage,
+					"", wx.OK | wx.ICON_INFORMATION, self)
 
 class OperationsContext(BaseOperationsContext):
 	"""Provides a context for passage list manager operations.

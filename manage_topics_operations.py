@@ -38,15 +38,17 @@ class ManageTopicsOperations(object):
 
 		self._perform_action(DeleteAction(item))
 
-	def set_topic_name(self, name):
-		assert not self._context.is_passage_selected()
-		item = self._context.get_new_selected_item()
-		self.set_item_details(name, item.description)
+	def set_topic_name(self, topic, name):
+		self.set_topic_details(topic, name, topic.description)
 
-	def set_item_details(self, name, description):
-		item = self._context.get_new_selected_item()
-		self._perform_action(SetItemDetailsAction(
-				self._passage_list_manager, item, name, description
+	def set_topic_details(self, topic, name, description):
+		self._perform_action(SetTopicDetailsAction(
+				self._passage_list_manager, topic, name, description
+			))
+
+	def set_passage_details(self, passage_entry, passage, comment):
+		self._perform_action(SetPassageDetailsAction(
+				self._passage_list_manager, passage_entry, passage, comment
 			))
 
 	def cut(self):
@@ -134,7 +136,7 @@ class ManageTopicsOperations(object):
 		"""
 		action.perform_action()
 		self._passage_list_manager.save()
-		if self._merge_next_edit_action and isinstance(action, SetItemDetailsAction):
+		if self._merge_next_edit_action and isinstance(action, (SetPassageDetailsAction, SetTopicDetailsAction)):
 			pass
 		else:
 			self._actions.append(action)
@@ -244,30 +246,47 @@ class AddNewTopicAction(Action):
 	def _get_reverse_action(self):
 		return DeleteAction(_get_wrapper(self.topic))
 
-class SetItemDetailsAction(Action):
-	def __init__(self, manager, item, name, description):
-		super(SetItemDetailsAction, self).__init__()
-		self.item = item
+class SetPassageDetailsAction(Action):
+	def __init__(self, manager, passage_entry, passage, comment):
+		super(SetPassageDetailsAction, self).__init__()
+		self.passage_entry = passage_entry
+		self.passage = passage
+		self.comment = comment
+		self.manager = manager
+
+	def _perform_action(self):
+		self.old_passage = self.passage_entry.passage
+		self.old_comment = self.passage_entry.comment
+		exception = None
+		try:
+			self.passage_entry.passage = self.passage
+		except (InvalidPassageError, MultiplePassagesError), e:
+			exception = e
+		self.passage_entry.comment = self.comment
+		self.manager.save_item(self.passage_entry)
+		if exception is not None:
+			raise exception
+
+	def _get_reverse_action(self):
+		return SetPassageDetailsAction(self.manager, self.passage_entry, self.old_passage, self.old_comment)
+
+class SetTopicDetailsAction(Action):
+	def __init__(self, manager, topic, name, description):
+		super(SetTopicDetailsAction, self).__init__()
+		self.topic = topic
 		self.name = name
 		self.description = description
 		self.manager = manager
 
 	def _perform_action(self):
-		self.old_name = self.item.name
-		self.old_description = self.item.name
-		exception = None
-		try:
-			self.item.name = self.name
-		except (InvalidPassageError, MultiplePassagesError), e:
-			exception = e
-		self.item.description = self.description
-		# XXX: Remove this reference to wrapped.
-		self.manager.save_item(self.item.wrapped)
-		if exception is not None:
-			raise exception
+		self.old_name = self.topic.name
+		self.old_description = self.topic.name
+		self.topic.name = self.name
+		self.topic.description = self.description
+		self.manager.save_item(self.topic)
 
 	def _get_reverse_action(self):
-		return SetItemDetailsAction(self.manager, self.item, self.old_name, self.old_description)
+		return SetTopicDetailsAction(self.manager, self.topic, self.old_name, self.old_description)
 
 class CopyAction(CompositeAction):
 	"""This action copies or moves a passage to a new topic."""
@@ -397,16 +416,13 @@ def _test():
 	... 	operations_manager.paste()
 	...
 	>>> def _set_topic_name(topic, name, operations_manager_context=operations_manager_context, operations_manager=operations_manager):
-	... 	operations_manager_context.set_selected_topic(topic)
-	... 	operations_manager.set_topic_name(name)
+	... 	operations_manager.set_topic_name(topic, name)
 	...
 	>>> def _set_topic_details(topic, name, description, operations_manager_context=operations_manager_context, operations_manager=operations_manager):
-	... 	operations_manager_context.set_selected_topic(topic)
-	... 	operations_manager.set_item_details(name, description)
+	... 	operations_manager.set_topic_details(topic, name, description)
 	...
 	>>> def _set_passage_details(passage_entry, passage, comment, operations_manager_context=operations_manager_context, operations_manager=operations_manager):
-	... 	operations_manager_context.set_selected_passage(passage_entry)
-	... 	operations_manager.set_item_details(passage, comment)
+	... 	operations_manager.set_passage_details(passage_entry, passage, comment)
 	...
 
 	>>> _add_subtopic(manager, topic1)

@@ -16,8 +16,8 @@ def get_resources():
 
 
 
-class xrcManageTopicsFrame(wx.Frame):
-#!XRCED:begin-block:xrcManageTopicsFrame.PreCreate
+class xrcPassageDetailsPanel(wx.Panel):
+#!XRCED:begin-block:xrcPassageDetailsPanel.PreCreate
     def PreCreate(self, pre):
         """ This function is called during the class's initialization.
         
@@ -26,19 +26,18 @@ class xrcManageTopicsFrame(wx.Frame):
         """
         pass
         
-#!XRCED:end-block:xrcManageTopicsFrame.PreCreate
+#!XRCED:end-block:xrcPassageDetailsPanel.PreCreate
 
     def __init__(self, parent):
         # Two stage creation (see http://wiki.wxpython.org/index.cgi/TwoStageCreation)
-        pre = wx.PreFrame()
+        pre = wx.PrePanel()
         self.PreCreate(pre)
-        get_resources().LoadOnFrame(pre, parent, "ManageTopicsFrame")
+        get_resources().LoadOnPanel(pre, parent, "PassageDetailsPanel")
         self.PostCreate(pre)
 
         # Define variables for the controls, bind event handlers
-        self.toolbar = xrc.XRCCTRL(self, "toolbar")
-        self.splitter = xrc.XRCCTRL(self, "splitter")
-        self.item_details_panel = xrc.XRCCTRL(self, "item_details_panel")
+        self.passage_text = xrc.XRCCTRL(self, "passage_text")
+        self.comment_text = xrc.XRCCTRL(self, "comment_text")
 
 
 
@@ -50,7 +49,7 @@ def __init_resources():
     global __res
     __res = xrc.EmptyXmlResource()
 
-    __res.Load('manage_topics.xrc')
+    __res.Load('passage_details_panel.xrc')
 
 # ----------------------- Gettext strings ---------------------
 
@@ -63,17 +62,6 @@ def __gettext_strings():
     
     def _(str): pass
     
-    _("Cut")
-    _("Cut")
-    _("Copy")
-    _("Copy")
-    _("Paste")
-    _("Paste")
-    _("Delete")
-    _("Delete")
-    _("Undo previous action")
-    _("Undo")
-    _("Redoes the last undone action")
-    _("Redo")
-    _("Manage Topics")
+    _("&Passage: ")
+    _("&Comment:")
 
