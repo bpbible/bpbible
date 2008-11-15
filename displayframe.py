@@ -242,8 +242,8 @@ class DisplayFrame(HtmlSelectableWindow):
 
 			elif type == "x":
 				#make this plain
-				template = VerseTemplate(header="<a href='nbible:$range'>"
-				"<b>$range</b></a><br>", 
+				template = VerseTemplate(
+				header="<a href='nbible:$internal_range'><b>$range</b></a><br>",
 				body = "<font color = 'blue'><sup><small>$versenumber"
 				"</small></sup></font> $text")
 				try:
@@ -295,7 +295,7 @@ class DisplayFrame(HtmlSelectableWindow):
 			#template = VerseTemplate(header = "$range<br>", 
 			#body = '<font color = "blue"><small><sup>$versenumber</sup></small></font> $text')
 			template = VerseTemplate(
-				header="<a href='bible:$range'><b>$range</b></a><br>", 
+				header="<a href='bible:$internal_range'><b>$range</b></a><br>", 
 				body = "<font color = 'blue'><sup><small>$versenumber"
 				"</small></sup></font> $text", 
 			)

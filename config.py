@@ -150,7 +150,7 @@ use_system_inactive_caption_colour = False
 
 # templates
 body = (
-u'<glink href="nbible:$reference">'
+u'<glink href="nbible:$internal_reference">'
 u'<small><sup>$versenumber</sup></small></glink> $text $tags')
 
 
@@ -167,7 +167,7 @@ dictionary_template = VerseTemplate(
 )
 
 
-body = (u'<glink href="nbible:$reference#current" colour="#008000">'
+body = (u'<glink href="nbible:$internal_reference#current" colour="#008000">'
 		u'<small><sup>$versenumber</sup></small></glink> '
 		u'<highlight-start colour="#008000">$text<highlight-end /> $tags')
 

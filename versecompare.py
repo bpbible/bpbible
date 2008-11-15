@@ -62,7 +62,7 @@ class VerseCompareFrame(LinkedFrame):
 		
 		self.SetPage(text_func(ref, context))
 
-		self.gui_reference.SetValue(pysw.internal_to_user(ref))
+		self.gui_reference.SetValue(pysw.GetBestRange(ref, userOutput=True))
 		self.gui_reference.currentverse = ref
 		self.update_title()
 	
@@ -165,7 +165,7 @@ class VerseCompareFrame(LinkedFrame):
 	def update_title(self, shown=None):
 		m = guiconfig.mainfrm
 		p = m.get_pane_for_frame(self)
-		ref = pysw.internal_to_user(self.reference)
+		ref = pysw.GetBestRange(self.reference, userOutput=True)
 		text = "%s - %s" % (self.title, ref)
 		m.set_pane_title(p.name, text)
 		
@@ -225,8 +225,6 @@ class VerseCompareFrame(LinkedFrame):
 		self.toolbar.Bind(wx.EVT_TOOL, self.on_parallel_toggle, 
 			id=self.gui_parallel.Id)
 
-		self
-	
 		self.toolbar.Bind(wx.EVT_TOOL, lambda evt:self.set_versions(),
 			id=self.gui_book_choice.Id)
 	

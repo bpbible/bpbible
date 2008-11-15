@@ -1,6 +1,7 @@
 import re
 import passage_list
 from swlib.pysw import VK, SW, GetBestRange, GetVerseStr, TOP
+from swlib import pysw
 from backend.verse_template import VerseTemplate
 from util import observerlist
 from util import classproperty
@@ -141,7 +142,10 @@ class Book(object):
 		old_headings = self.vk.Headings(headings)
 
 		verselist = self.vk.ParseVerseList(to_str(ref), to_str(lastverse), True)
-		rangetext = GetBestRange(verselist.getRangeText())
+		rangetext = GetBestRange(verselist.getRangeText(), 
+			userInput=False, userOutput=True)
+		internal_rangetext = GetBestRange(verselist.getRangeText())
+			
 		if rangetext == "":
 			self.vk.Headings(old_headings)
 			#if invalid reference, return empty string
@@ -153,6 +157,7 @@ class Book(object):
 		
 		description = to_unicode(self.mod.Description(), self.mod)
 		d = dict(range=rangetext, 
+				 internal_range=internal_rangetext,
 				 version=self.mod.Name(), 
 				 description=description)
 
@@ -174,7 +179,7 @@ class Book(object):
 			
 			t = template
 
-			if specialref == body_dict["reference"]:
+			if specialref == body_dict["internal_reference"]:
 				t = specialtemplate
 
 			verse = u""
@@ -223,7 +228,8 @@ class Book(object):
 			versekey = VK.castTo(key)
 			#if(self.headings):
 			#	versekey.Headings(1)
-			reference = versekey.getText()
+			internal_reference = versekey.getText()
+			reference = pysw.internal_to_user(internal_reference)
 
 
 
@@ -251,11 +257,12 @@ class Book(object):
 						  bookabbrev = versekey.getBookAbbrev(),
 						  bookname = versekey.getBookName(),
 						  reference = reference,
+						  internal_reference = internal_reference,
 						  tags = tags,
 			)	
 
 					  
-			headings = self.get_headings(reference, mod)
+			headings = self.get_headings(internal_reference, mod)
 			versekey = VK.castTo(key)
 			heading_dicts = []
 			for heading, canonical in headings:

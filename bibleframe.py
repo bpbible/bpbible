@@ -217,7 +217,7 @@ class BibleFrame(VerseKeyedFrame):
 	
 	def random_verse(self):
 		randomnum = random.randint(1, 31102)
-		ref = pysw.internal_to_user("Gen 1:%d" % randomnum)
+		ref = VK("Gen 1:%d" % randomnum).text
 		self.notify(ref, source=RANDOM_VERSE)
 	
 	def notify(self, reference, source=BIBLEFRAME):

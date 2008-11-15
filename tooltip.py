@@ -31,7 +31,6 @@ class TooltipBaseMixin(object):
 		super(TooltipBaseMixin, self).__init__(*args, **kwargs)
 
 		self.set_tooltip_config(tooltip_config, update=False)
-		self.references = [""]
 	
 	def show_bible_refs(self, href, url, x, y):
 		# don't show a tooltip if there is no bible
@@ -541,13 +540,14 @@ class BibleTooltipConfig(TooltipConfig):
 		guiconfig.mainfrm.bible_observers -= self.bible_ref_changed
 
 	def get_title(self):
-		return "; ".join(self.references)
+		return "; ".join(GetBestRange(ref, userOutput=True) 
+			for ref in self.references)
 
 	def get_text(self):
 		try:
 			template = VerseTemplate(
-				header = "<a href='nbible:$range'><b>$range</b></a><br>", 
-				body = "<font color='blue'><sup><small>$versenumber"
+				header="<a href='nbible:$internal_range'><b>$range</b></a><br>",
+				body="<font color='blue'><sup><small>$versenumber"
 				"</small></sup></font> $text ")
 			#no footnotes
 			if tooltip_settings["plain_xrefs"]:
@@ -590,7 +590,9 @@ class BibleTooltipConfig(TooltipConfig):
 
 		self.references = references
 
-		reference_strings = '|'.join(self.references)
+		reference_strings = '|'.join(
+			GetBestRange(ref, userOutput=True) for ref in self.references
+		)
 		if self.gui_reference:
 			self.gui_reference.ChangeValue(reference_strings)
 		

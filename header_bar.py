@@ -27,8 +27,11 @@ class ChapterHeadingsTooltipConfig(TooltipConfig):
 		self.ref = ref
 
 	def get_text(self):
-		html = '<font size=+1><b><a href="nbible:%s">%s</a></b></font>' % (self.ref, self.ref)
 		vk = pysw.UserVK((self.ref, self.ref))
+		html = '<font size=+1><b><a href="nbible:%s">%s</a></b></font>' % (
+			self.ref, vk.get_book_chapter()
+		)
+	
 		html += ": %d verses<br>" % len(vk)
 	
 		html += "<ul>"

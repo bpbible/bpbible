@@ -453,7 +453,7 @@ class UserVK(EncodedVK):
 			self.set_text(arg)
 
 	def getBookAbbrev(self):
-		return AbbrevVK(self).getBookName().decode(self.encoding)	
+		return AbbrevVK(self).getBookName()#.decode(self.encoding)	
 	
 	def getBookName(self):
 		return process_dash_hack(
@@ -471,6 +471,12 @@ class UserVK(EncodedVK):
 		)
 	
 	def __str__(self): return self.getRangeText()
+	def __repr__(self): 
+		return u"%s(%s)" % (
+			unicode(self.__class__.__name__), 
+			repr(self.getRangeText())
+		)
+	
 		
 	
 	@classproperty
@@ -513,7 +519,6 @@ class AbbrevVK(EncodedVK):
 def check_vk_bounds(vk):	
 	"""Check that a given VK was in bounds. Autonormalize should be turned off
 	before calling this method"""
-	#print vk.getText()
 	#if vk.isBoundSet():
 	#	check_vk_bounds(vk.UpperBound())
 	#	check_vk_bounds(vk.LowerBound())
@@ -526,8 +531,7 @@ def check_vk_bounds(vk):
 	if chapter > chapters:
 		raise VerseParsingError(_("There are only %(chapters)d chapters "
 			"in %(book)s (given %(given)d)") % dict(
-				chapters=chapters, book=vk.bookName(testament, book), 
-				given=chapter
+				chapters=chapters, book=vk.getBookName(), given=chapter
 			)
 		)
 
@@ -537,7 +541,7 @@ def check_vk_bounds(vk):
 	if verse > verses:
 		raise VerseParsingError(_("There are only %(verses)d verses in "
 			"%(book)s %(chapter)s (given %(given)d)") % dict(
-				verses=verses, book=vk.bookName(testament, book), 
+				verses=verses, book=vk.getBookName(), 
 				chapter=chapter, given=verse
 			)
 		)
@@ -587,7 +591,7 @@ class VerseList(list):
 	
 
 	def __init__(self, args=None, context="", expand=True, raiseError=False,
-				userInput=False, userOutput=False):
+				userInput=False):
 		converted = False
 
 		if(isinstance(args, (list, tuple))):
@@ -639,6 +643,7 @@ class VerseList(list):
 						self.TestForError(s, context, orig_args)
 					finally:
 						vk.AutoNormalize(an)
+
 			finally:
 				if locale_changed:
 					if old != locale:
@@ -646,13 +651,7 @@ class VerseList(list):
 						
 
 		if(isinstance(args, SW.ListKey)):
-			if userOutput:
-				KeyType = UserVK
-			else:
-				KeyType = VK
-
-			self.RefreshVKs(args, raiseError=raiseError, KeyType=KeyType,
-			userInput=userInput, userOutput=userOutput)
+			self.RefreshVKs(args, raiseError=raiseError, userInput=userInput)
 
 		else:
 			raise TypeError, `args`
@@ -700,8 +699,7 @@ class VerseList(list):
 		if not match:
 			raise VerseParsingError(_(u"Invalid Reference: %s") % orig_args)
 
-	def RefreshVKs(self, lk, raiseError=False, KeyType=VK, 
-		userInput=False, userOutput=False):
+	def RefreshVKs(self, lk, raiseError=False,userInput=False):
 		"""Turns a listkey into a VerseList"""
 		#TODO: error
 		l=[]
@@ -715,42 +713,40 @@ class VerseList(list):
 				continue
 			v=SW.VerseKey.castTo(a)
 			if not v:
+				#1 verse only
 				key = get_a_key(userInput)
 
-				#1 verse only
 				t = a.getText()
 				if "-" in t:
 					t = t.replace("-", "")
 
 				if not raiseError:
-					key.text = t
+					key.text = t.decode(key.encoding)
 				else:
 					key.AutoNormalize(False)
 					key.set_text_checked(t)
 					key.AutoNormalize(True)
 
-				v = KeyType(key)
+				v = VK(key)
 					
 
 			else:
 				check_vk_bounds(v)
 
-				if userInput != userOutput or userOutput:
-					#assert userInput
-
+				if userInput:
 					# we need to do this carefully
 					# if we just copy across the bounds get mussed when they
 					# have dashes. We don't want this happening, so set the
 					# bounds separately.
 					# Use VerseKey's getText so we don't worry about unicode
-					v = KeyType((
+					v = VK((
 						SW.VerseKey.getText(VK(v.LowerBound())),
 						SW.VerseKey.getText(VK(v.UpperBound())),
 					))
 				
 				else:
 					# if we stay inside, just use a straight copy
-					v=KeyType(v)
+					v = VK(v)
 					
 			self.append(v)
 			
@@ -799,7 +795,7 @@ class VerseList(list):
 		return False
 
 
-	def GetBestRange(self, short=False):#text, context=""):
+	def GetBestRange(self, short=False, userOutput=False):#text, context=""):
 		"""
 		>>> from swlib.pysw import GetBestRange
 		>>> GetBestRange("Gen 3:16")
@@ -874,6 +870,8 @@ class VerseList(list):
 		"""
 		
 		def getdetails(versekey):
+			if userOutput:
+				versekey = UserVK(versekey)
 			if short: 
 				book = versekey.getBookAbbrev()
 			else: 
@@ -1011,7 +1009,7 @@ class VerseList(list):
 		
 		"""
 	
-		return "VerseList([%s])" % ", ".join(map(repr, self))
+		return u"VerseList([%s])" % u", ".join(repr(item) for item in self)
 
 	def __str__(self): return self.GetBestRange() #Text()
 
@@ -1049,7 +1047,6 @@ class BookData(object):
 
 class LocalizedBookData(BookData):
 	def __str__(self):
-		#print locale.translate(self.bookname)
 		return process_dash_hack(
 			locale.translate(self.bookname).decode(locale_encoding), 
 			locale_dash_hack
@@ -1346,8 +1343,8 @@ def BookName(text):
 def GetBestRange(text, context="", abbrev=False, raiseError=False,
 		userInput=False, userOutput=False):
 	vl = VerseList(text, context=context, raiseError=raiseError,
-		userInput=userInput, userOutput=userOutput)
-	return vl.GetBestRange(abbrev)
+		userInput=userInput)
+	return vl.GetBestRange(abbrev, userOutput=userOutput)
 
 class Searcher(SW.Searcher):
 	def __init__(self, book, userdata = None):
