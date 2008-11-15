@@ -1,10 +1,17 @@
 from distutils.core import setup
 import py2exe
 import os
+import re
 import sys
 import contrib
 import config
 from util.i18n import languages
+
+version = sys.argv[-1]
+if re.findall("^([0-9]+\.)*[0-9]+$", version):
+	del sys.argv[-1]
+else:
+	version = "None"
 
 if "py2exe" not in sys.argv:
 	sys.argv.append('py2exe')
@@ -60,7 +67,7 @@ if(setup(
 			"icon_resources":[(1, "graphics/bpbible.ico")],
 			"other_resources": [(24,1,manifest)],
 			"description": "BPBible - Flexible Bible Study",
-			"version": config.version,
+			"version": version,
 			"name": "BPBible",
 		}
 	],

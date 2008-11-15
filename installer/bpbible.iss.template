@@ -1,23 +1,19 @@
 ; Directions for use
 ; ==================
+; (NB: These instructions are encapsulated by the make_release.py script).
 ; 1. Download BPBible from SVN (or whereever). Run "python setup.py py2exe".
 ;    This will compile BPBible for Windows.
 ; 2. Copy gdiplus.dll from the wxWidgets folder (e.g. wx-2.8-msw-unicode\wx\
 ;    gdiplus.dll) to this folder (installer\gdiplus.dll)
-; 3. Update the version number (from 0.3.1).  Change AppVerName, AppVersion,
-;    VersionInfoTextVersion, VersionInfoVersion and OutputBaseFilename.
-;    In Vim, you can just do :%s/0.3.1/{new version}/g
-;    NOTE: if you add another number (e.g. 0.2.1) you will need to update
-;          the VersionInfoVersion line manually
-; 4. You may need to update any paths that have changed for the
+; 3. You may need to update any paths that have changed for the
 ;    [UninstallFiles] section - an official change may be being made for
 ;    the location of *.idx files and per-user setting may become (semi)
 ;    standard. (%APPDATA% is {userappdata})
-; 5. Run InnoSetup and compile this file!
+; 4. Run InnoSetup and compile this file!
 
 [Setup]
 AppName=BPBible
-AppVerName=BPBible 0.3.1
+AppVerName=BPBible $APP_VERSION
 AppPublisher=Benjamin Morgan
 AppPublisherURL=http://BPBible.com/
 AppSupportURL=http://BPBible.com/
@@ -25,18 +21,18 @@ AppUpdatesURL=http://BPBible.com/
 AppReadmeFile={app}\README.txt
 AppCopyright=© 2008 Benjamin Morgan
 AppId=BPBible
-AppVersion=0.3.1
+AppVersion=$APP_VERSION
 VersionInfoCompany=BPBible
 VersionInfoCopyright=© 2008 Benjamin Morgan
 VersionInfoDescription=BPBible is a flexible Bible Study tool...
-VersionInfoTextVersion=0.3.1
-VersionInfoVersion=0.3.1.0.0
+VersionInfoTextVersion=$APP_VERSION
+VersionInfoVersion=$APP_VERSION.0.0.0.0
 DefaultDirName={pf}\BPBible
 DefaultGroupName=BPBible
 AllowNoIcons=yes
 InfoBeforeFile=Info.rtf
 OutputDir=.
-OutputBaseFilename=bpbible-0.3.1-setup
+OutputBaseFilename=bpbible-$APP_VERSION-setup
 SetupIconFile=..\graphics\bpbible.ico
 SolidCompression=yes
 Compression=lzma/ultra
@@ -102,5 +98,7 @@ Type: files; Name: "{app}\paths.ini"
 Type: files; Name: "{app}\sword.conf"
 ;BPBible data
 Type: files; Name: "{app}\data\data.conf"
+Type: files; Name: "{userappdata}\bpbible\data.conf"
 ;Search indexes
 Type: files; Name: "{app}\*.idx"
+Type: files; Name: "{userappdata}\bpbible\indexes\*.idx"

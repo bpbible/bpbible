@@ -13,12 +13,17 @@ from contrib import googlecode_upload
 
 make_release = False
 new_version = None
+py2exe_opts = ""
 
 def handle_args():
-	opts, args = getopt.getopt(sys.argv[1:], "r", ["make-release"])
+	opts, args = getopt.getopt(sys.argv[1:], "r", ["make-release", "compress"])
 	if ('-r', '') in opts or ('--make-release', '') in opts:
 		global make_release
 		make_release = True
+
+	if ('--compress', '') in opts:
+		global py2exe_opts
+		py2exe_opts += " compressed "
 
 	if len(args) != 1:
 		sys.stderr.write("Usage: make_release.py [-r] <version number>")
@@ -28,9 +33,6 @@ def handle_args():
 	new_version = args[0]
 
 handle_args()
-
-iss_file = os.path.join("installer", "bpbible.iss")
-filenames = "mainframe.py make_py2exe.py " + iss_file
 
 svn_base = "https://bpbible.googlecode.com/svn"
 svn_trunk = "%s/trunk" % svn_base
@@ -42,6 +44,7 @@ class DictWrapper(object):
 
 src_dist = DictWrapper(
 	file="bpbible-%s-src.zip" % new_version,
+	dir="bpbible-%s" % new_version,
 	summary="BPBible %s source code" % new_version,
 	labels=["Type-Source", "OpSys-All", "Featured"],
 )
@@ -52,49 +55,42 @@ installer = DictWrapper(
 	labels=["Type-Installer", "OpSys-Windows", "Featured"],
 )
 
-def find_current_version():
-	return [line.replace("AppVersion=", "").strip()
-			for line in open(iss_file, "r").xreadlines()
-			if line.startswith("AppVersion=")][0]
+def maybe_make_dir(dir):
+	if not os.path.exists(dir):
+		os.mkdir(dir)
 
-current_version = find_current_version()
+maybe_make_dir("dist")
+maybe_make_dir("%s" % src_dist.dir)
 
-print "Current version:", current_version
+paths_conf = """\
+[BPBiblePaths]
+DataPath = $DATADIR
+IndexPath = $DATADIR/indexes
+"""
+open("%s/paths.ini" % src_dist.dir, "w").write(paths_conf)
+open("dist/paths.ini", "w").write(paths_conf)
+
+from config import bpbible_configuration, release_settings
+release_settings["version"] = new_version
+release_settings["is_released"] = True
+bpbible_configuration.save("%s/bpbible.conf" % src_dist.dir)
+bpbible_configuration.save("dist/bpbible.conf")
 
 def main():
-	update_version_numbers(current_version, new_version)
 	build_src_dist(src_dist.file)
 	build_installer()
 	
 	if not make_release:
 		return
 
-	checkin_release()
+	tag_release()
 	build_src_dist(src_dist.file)
 	upload_release()
 
-	print "Make sure you deprecate old releases."
-	print "Remember to announce the release."
-
-def update_version_numbers(current_version, new_version):
-	print "Updating the version number in files: %s" % filenames
-	for filename in filenames.split():
-		do_replace(filename, current_version, new_version)
-
-def do_replace(filename, old_string, new_string):
-	file = open(filename, "rb")
-	contents = file.read()
-	file.close()
-	file = open(filename, "wb")
-	file.write(contents.replace(old_string, new_string))
-	file.close()
-
-def checkin_release():
+def tag_release():
 	if not make_release:
 		return
 
-	print "Checking in the changes for the release."
-	os.system("svn ci -m \"Updated version numbers for %(new_version)s.\" %(filenames)s" % globals())
 	print "Tagging the release."
 	os.system("svn cp -m \"Tagged release %(new_version)s\""
 			" %(svn_trunk)s %(svn_release_tag)s" % globals())
@@ -102,14 +98,14 @@ def checkin_release():
 def build_src_dist(zip_file):
 	print "Building the source distribution."
 	if make_release:
-		os.system("svn export %s bpbible" % svn_release_tag)
+		os.system("svn export --force %s %s" % (svn_release_tag, src_dist.dir))
 	else:
-		os.system("svn export . bpbible")
+		os.system("svn export --force . %s" % src_dist.dir)
 	os.system("zip -r %s bpbible" % zip_file)
 
 def build_installer():
 	print "Building the binary distribution."
-	os.system("python make_py2exe.py")
+	os.system("python make_py2exe.py %s %s" % (py2exe_opts, new_version))
 
 	import wx
 	wx_dir = os.path.dirname(wx.__file__)
@@ -117,6 +113,9 @@ def build_installer():
 	os.system("copy %s installer" % os.path.join(wx_dir, "msvcp71.dll"))
 
 	print "Creating the installer."
+	iss_file = os.path.join("installer", "bpbible.iss")
+	iss_contents = open("%s.template" % iss_file, "r").read().replace("$APP_VERSION", new_version)
+	open(iss_file, "w").write(iss_contents)
 	os.system("iscc %s" % iss_file)
 
 def upload_release():
@@ -127,6 +126,9 @@ def upload_release():
 	user_name, password = get_credentials()
 	do_upload(user_name, password, installer)
 	do_upload(user_name, password, src_dist)
+
+	print "Make sure you deprecate old releases."
+	print "Remember to announce the release."
 
 def do_upload(user_name, password, options):
 	status, reason, url = googlecode_upload.upload(options.file, "bpbible", user_name, password,

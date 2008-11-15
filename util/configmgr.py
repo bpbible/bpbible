@@ -72,7 +72,9 @@ class ConfigManager(object):
 	def __getitem__(self, item):
 		return self.sections[item]
 	
-	def save(self):
+	def save(self, filename=None):
+		if filename is None:
+			filename = self.write_path
 		self.before_save()
 		config_parser = RawConfigParser()
 		#config_parser.readfp(
@@ -94,11 +96,11 @@ class ConfigManager(object):
 
 				config_parser.set(section_name, item, type_process(value))
 		
-		directory = os.path.dirname(self.write_path)
+		directory = os.path.dirname(filename)
 		if not os.path.exists(directory):
 			os.makedirs(directory)
 		
-		config_parser.write(open(self.write_path, "w"))
+		config_parser.write(open(filename, "w"))
 	
 	def load(self, paths=()):
 		config_parser = RawConfigParser()
