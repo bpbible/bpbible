@@ -1,3 +1,4 @@
+import os
 import sys
 import wx
 
@@ -26,3 +27,18 @@ def is_win2000():
 	
 	return False
 
+def get_user_data_dir():
+	"""Gets the user data directory for BPBible for the current platform.
+
+	This copies the wxWidgets wxStandardPaths::GetUserDataDir(),
+	which we cannot easily use because it relies on the application being
+	instantiated before it is used.
+	"""
+	appname = "bpbible"
+	home_dir = os.path.expanduser('~')
+	if is_msw():
+		return os.path.join(os.environ["APPDATA"], appname)
+	elif is_mac():
+		return os.path.join(home_dir, "Library", "Application Support", appname)
+	else:
+		return os.path.join(home_dir, ".%s" % bpbible)

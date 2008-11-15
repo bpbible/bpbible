@@ -8,8 +8,7 @@ from ConfigParser import RawConfigParser, NoSectionError, NoOptionError
 paths_file = "paths.ini"
 
 # Set defaults
-home_dir = os.path.expanduser('~')
-data_path = os.path.join(home_dir, '.bpbible') + os.path.sep
+data_path = "data/"
 xrc_path = "xrc/"
 graphics_path = "graphics/"
 index_path = "./"
@@ -26,20 +25,45 @@ IndexPath = .
 SwordPath = .
 
 If the paths do not exist, they will be ignored.
+If the paths include $DATADIR, it will be replaced with the wx user data dir
+for the appropriate platform.
 """
+
+from util import osutils
+user_data_dir = osutils.get_user_data_dir()
+
+def get_path_if_exists(path, alternate_path):
+	"""Expands the given path and checks if it exists.
+
+	If it does, then it is returned.
+	Otherwise, alternate_path is returned.
+	"""
+	if "$DATADIR" in path:
+		path = path.replace("$DATADIR", user_data_dir)
+		if not os.path.exists(path):
+			os.makedirs(path)
+
+	if os.path.isdir(path):
+		return path
+	else:
+		return alternate_path
+
 if os.path.isfile(paths_file):
 	try:
 		paths_file_parser = RawConfigParser()
 		paths_file_parser.read([paths_file])
-		v = paths_file_parser.get("BPBiblePaths", "DataPath")
-		if os.path.isdir(v):
-			data_path = v
-		v = paths_file_parser.get("BPBiblePaths", "IndexPath")
-		if os.path.isdir(v):
-			index_path = v
-		v = paths_file_parser.get("BPBiblePaths", "SwordPath")
-		if os.path.isdir(v):
-			sword_paths_file = v
+		data_path = get_path_if_exists(
+				paths_file_parser.get("BPBiblePaths", "DataPath"),
+				data_path
+			)
+		index_path = get_path_if_exists(
+				paths_file_parser.get("BPBiblePaths", "IndexPath"),
+				index_path
+			)
+		sword_paths_file = get_path_if_exists(
+				paths_file_parser.get("BPBiblePaths", "SwordPath"),
+				sword_paths_file
+			)
 	except (NoSectionError, NoOptionError):
 		pass
 
