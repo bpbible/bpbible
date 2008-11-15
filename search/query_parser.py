@@ -453,7 +453,7 @@ def t_error(t):
 	t.lexer.skip(1)
 	
 # Build the lexer
-lex.lex(optimize=True,#util.is_py2exe(), 
+lex.lex(optimize=True,
 	reflags=re.UNICODE)
 	
 
@@ -737,7 +737,8 @@ if util.is_py2exe():
 	import lextab
 
 import ply.yacc as yacc
-yacc.yacc(optimize=util.is_py2exe())
+import config
+yacc.yacc(optimize=config.is_release())
 
 def _test():
 	import doctest as d

@@ -100,8 +100,6 @@ raw = False
 def name():
 	return _("BPBible")
 
-version = "0.3.9.6"
-
 def MODULE_MISSING_STRING():
 	return _("""<b>This book is not set.</b><br>
 This may be because you do not have any of this type of book installed.
@@ -116,6 +114,19 @@ Set SWORD Paths</code> and add the path where the books are installed to the boo
 def MAX_VERSES_EXCEEDED():
 	return _("""<p><b>[Reference clipped as the maximum verse limit (%d verses) has been exceeded.
 <br>This probably means the reference was invalid]</b>""")
+
+from util.configmgr import ConfigManager
+bpbible_configuration = ConfigManager("bpbible.conf")
+release_settings = bpbible_configuration.add_section("Release")
+release_settings.add_item("version", "DEV", item_type=str)
+release_settings.add_item("is_released", False, item_type=bool)
+bpbible_configuration.load()
+
+version = release_settings["version"]
+
+def is_release():
+	"""Checks if this is a released version of BPBible."""
+	return release_settings["is_released"]
 
 BIBLE_VERSION_PROTOCOL = "set_bible_version"
 

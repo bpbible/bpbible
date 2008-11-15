@@ -5,6 +5,11 @@ import os
 import cPickle as pickle
 import config
 from swlib.pysw import SW
+
+# This is the version of the configuration file, and should be updated
+# whenever there is a need to because the configuration changed (though it
+# might as well be kept roughly in sync with version numbers).
+CONFIG_VERSION = "0.4"
 	
 class ConfigSection(object):
 	def __init__(self, section):
@@ -54,7 +59,7 @@ class ConfigManager(object):
 		self.sections = {}
 		self.add_section("Internal")
 		self.write_path = write_path
-		self["Internal"].add_item("version", config.version)
+		self["Internal"].add_item("version", CONFIG_VERSION)
 		
 		self.before_save = ObserverList()
 		
@@ -106,9 +111,9 @@ class ConfigManager(object):
 			version = "0.3"
 
 		else:
-			version = config.version
+			version = CONFIG_VERSION
 		
-		if SW.Version(version) < SW.Version(config.version):
+		if SW.Version(version) < SW.Version(CONFIG_VERSION):
 			self.upgrade(config_parser, SW.Version(version))
 
 		for section_name in config_parser.sections():
@@ -136,7 +141,7 @@ class ConfigManager(object):
 
 				section[option] = type_reader(section_name, option)
 
-		self["Internal"]["version"] = config.version
+		self["Internal"]["version"] = CONFIG_VERSION
 	
 	def upgrade(self, config_parser, version_from):
 		dprint(MESSAGE, "Upgrading from", version_from.getText())

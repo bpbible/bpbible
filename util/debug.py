@@ -4,7 +4,6 @@ debug.py - basic logging facilities
 
 import sys
 import time
-import util
 
 __all__ = ["MESSAGE", "WARNING", "ERROR", "dprint", "is_debugging", "TOOLTIP",
 "INSTALL_ZIP"]
@@ -19,10 +18,11 @@ level = 0
 def is_debugging():
 	"""Are we debugging? 
 	
-	This is true if we are not py2exe'd or we have -d flag.
+	This is true if we are not in release mode or we have the -d flag.
 	TODO: work out some better way to change "py2exe'd" to "released"
 	"""
-	return not util.is_py2exe() or "-d" in sys.argv
+	import config
+	return not config.is_release() or "-d" in sys.argv
 
 def dprint(errorlevel, message, *args):
 	if errorlevel >= level:	
