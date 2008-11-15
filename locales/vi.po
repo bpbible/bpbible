@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2008-11-05 13:20+SE Asia Standard Time\n"
-"PO-Revision-Date: 2008-11-05 17:00+0700\n"
+"POT-Creation-Date: 2008-11-06 16:43+SE Asia Standard Time\n"
+"PO-Revision-Date: 2008-11-06 16:49+0700\n"
 "Last-Translator: Daniel Owens <dh_owens@yahoo.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -113,7 +113,7 @@ msgid "Copying selected verses..."
 msgstr "Đang chép câu được chọn"
 
 #: bookframe.py:149
-#: mainframe.py:781
+#: mainframe.py:780
 msgid "Show the %s pane"
 msgstr "Hiện cửa %s"
 
@@ -160,6 +160,28 @@ msgstr "Sách Giải Nghĩa"
 #: bookframe.py:402
 msgid "Dictionary"
 msgstr "Từ Điển"
+
+#: config.py:76
+msgid "BPBible"
+msgstr "BPBible"
+
+#: config.py:81
+msgid ""
+"<b>This book is not set.</b><br>\n"
+"This may be because you do not have any of this type of book installed.\n"
+"<p> If you don't have any of this type of book, first download them from <a\n"
+"href=\"http://www.crosswire.org/sword/modules/index.jsp\">http://www.crosswire.org/sword/modules/index.jsp</a>.<br>\n"
+"Then to install them, either drag them onto BPBible, or go <code>File >\n"
+"Install Books...</code> and select the books.\n"
+"<p> If you have already have SWORD books installed, go to <code>File >\n"
+"Set SWORD Paths</code> and add the path where the books are installed to the book search paths.\n"
+msgstr ""
+
+#: config.py:92
+msgid ""
+"<p><b>[Reference clipped as the maximum verse limit (%d verses) has been exceeded.\n"
+"<br>This probably means the reference was invalid]</b>"
+msgstr ""
 
 #: copyverses.py:134
 msgid "<custom: based on %s>"
@@ -328,182 +350,195 @@ msgstr "Thông Tin"
 msgid "Cannot read book metadata in file %s"
 msgstr "Không đọc được siêu dự liệu trong tập tin %s"
 
-#: mainframe.py:247
+#: mainframe.py:246
 msgid "Go to verse"
 msgstr "Tới câu"
 
-#: mainframe.py:248
+#: mainframe.py:247
 msgid "Go to this verse"
 msgstr "Tới câu này"
 
-#: mainframe.py:251
+#: mainframe.py:250
 msgid "Bible Search"
 msgstr "Tìm Kiếm trong Kinh Thánh"
 
-#: mainframe.py:252
+#: mainframe.py:251
 msgid "Search in this Bible"
 msgstr "Tìm Kiếm trong cuốn Kinh Thánh này"
 
-#: mainframe.py:255
+#: mainframe.py:254
 #: xrc/copyverses_xrc.py:80
 msgid "Copy Verses"
 msgstr "Chép Các Câu"
 
-#: mainframe.py:256
+#: mainframe.py:255
 msgid "Open the Copy Verses dialog"
 msgstr "Mở hộp thoại Chép Các Câu"
 
-#: mainframe.py:261
+#: mainframe.py:260
 msgid "Back"
 msgstr "Quay Lại"
 
-#: mainframe.py:262
+#: mainframe.py:261
 msgid "Go back a verse"
 msgstr "Quay lại một câu"
 
-#: mainframe.py:265
+#: mainframe.py:264
 msgid "Forward"
 msgstr "Đi Tới"
 
-#: mainframe.py:266
+#: mainframe.py:265
 msgid "Go forward a verse"
 msgstr "Đi tới một câu"
 
-#: mainframe.py:270
+#: mainframe.py:269
 msgid "Zoom In"
 msgstr "Thu Lớn"
 
-#: mainframe.py:271
+#: mainframe.py:270
 msgid "Make text bigger"
 msgstr "Làm văn bản lớn hơn"
 
-#: mainframe.py:274
+#: mainframe.py:273
 msgid "Default Zoom"
 msgstr "Thu Phóng Mặc Định"
 
-#: mainframe.py:275
+#: mainframe.py:274
 msgid "Return text to default size"
 msgstr "Làm cho văn bản có cỡ mặc định"
 
-#: mainframe.py:278
+#: mainframe.py:277
 msgid "Zoom Out"
 msgstr "Thu Nhỏ"
 
-#: mainframe.py:279
+#: mainframe.py:278
 msgid "Make text smaller"
 msgstr "Làm văn bản nhỏ hơn"
 
-#: mainframe.py:308
+#: mainframe.py:307
 msgid "Navigation"
 msgstr "Sự Đi Lại"
 
-#: mainframe.py:310
+#: mainframe.py:309
 msgid "Zoom"
 msgstr "Thu Phóng"
 
-#: mainframe.py:312
+#: mainframe.py:311
 msgid "History toolbar"
 msgstr "Thanh công cụ lịch sử"
 
-#: mainframe.py:720
+#: mainframe.py:719
 #: xrc/auifrm_xrc.py:44
 msgid "&Language"
 msgstr "&Ngôn Ngữ"
 
-#: mainframe.py:739
+#: mainframe.py:738
 #: xrc/auifrm_xrc.py:47
 msgid "&Display"
 msgstr "&Biểu Hiện"
 
-#: mainframe.py:744
+#: mainframe.py:743
 #: xrc/auifrm_xrc.py:50
 msgid "&Windows"
 msgstr "&Các Cửa Sổ"
 
-#: mainframe.py:749
+#: mainframe.py:748
 #: xrc/auifrm_xrc.py:49
 msgid "Toolbars"
 msgstr "Các Thanh Công Cụ"
 
-#: mainframe.py:777
+#: mainframe.py:776
 msgid "Show the %s toolbar"
 msgstr "Hiện thanh công cụ %s"
 
-#: mainframe.py:800
+#: mainframe.py:799
 #: xrc/auifrm_xrc.py:51
 msgid "Debug"
 msgstr "Chỉnh Lỗi"
 
-#: mainframe.py:858
+#: mainframe.py:857
 msgid "Use Strong's headwords"
 msgstr "Dùng số Strong"
 
-#: mainframe.py:859
+#: mainframe.py:858
 msgid "Display Strong's numbers using the transliterated text"
 msgstr "Hiện số Strong sử dụng văn bản được chuyển chữ"
 
-#: mainframe.py:864
+#: mainframe.py:863
 msgid "Expand cross-references"
 msgstr "Mở rộng địa chỉ Kinh Thánh liên quan"
 
-#: mainframe.py:865
+#: mainframe.py:864
 msgid "Display cross references partially expanded"
 msgstr "Hiện một phần của địa chỉ Kinh Thánh liên quan"
 
-#: mainframe.py:870
+#: mainframe.py:869
 msgid "One line per verse"
 msgstr "Một câu một dòng"
 
-#: mainframe.py:871
+#: mainframe.py:870
 msgid "Display each verse on its own line."
 msgstr "Hiện từng câu trong dòng riêng"
 
-#: mainframe.py:876
+#: mainframe.py:875
 msgid "Topic Tags"
 msgstr "Thẻ Chủ Đề"
 
-#: mainframe.py:877
+#: mainframe.py:876
 msgid "Display the topics that each verse is tagged with."
 msgstr "Hiện chủ đề của từng câu"
 
-#: mainframe.py:1025
+#: mainframe.py:1024
 msgid "An error occurred on closing:"
 msgstr "Lỗi lầm đã xảy ra khi đóng:"
 
+#: mainframe.py:1036
 #: mainframe.py:1037
-#: mainframe.py:1038
 msgid "search "
 msgstr "tìm kiếm"
 
-#: mainframe.py:1058
+#: mainframe.py:1060
 msgid ""
 "Flexible Bible study software.\n"
 "\t\t\tBuilt Using the Sword Project from crosswire.org\n"
 "\t\t\tPython Version: %(sysversion)s\n"
-"\t\t\twxPython Version: %(wxversion)s"
+"\t\t\twxPython Version: %(wxversion)s\n"
+"\t\t\tSWORD Version: %(swversion)s"
 msgstr ""
-"Nghiên Cứu Kinh Thánh Linh Động.\n"
+"Phần Mềm Nghiên Cứu Kinh Thánh Linh Động.\n"
 "\t\t\tSử dụng Dư Án Gươm của crosswire.org\n"
 "\t\t\tPython Version: %(sysversion)s\n"
-"\t\t\twxPython Version: %(wxversion)s"
+"\t\t\twxPython Version: %(wxversion)s\t\t\tSWORD Version: %(swversion)s"
 
-#: mainframe.py:1064
-msgid "BPBible"
-msgstr "BPBible"
-
-#: mainframe.py:1068
+#: mainframe.py:1071
 msgid "BPBible website"
 msgstr "Trang Web BPBible"
 
-#: mainframe.py:1069
-msgid "Ben Morgan"
-msgstr "Ben Morgan"
+#: mainframe.py:1073
+msgid "BPBible development team"
+msgstr ""
 
-#: mainframe.py:1069
+#: mainframe.py:1074
 msgid "SWORD library developers"
 msgstr "Người soạn ứng dụng của Thư Viện Gươm"
 
-#: mainframe.py:1070
+#: mainframe.py:1078
+msgid "Developers"
+msgstr ""
+
+#: mainframe.py:1079
+msgid "Artists"
+msgstr ""
+
+#: mainframe.py:1080
+msgid "Translators"
+msgstr ""
+
+#: mainframe.py:1082
+msgid "translator-credits"
+msgstr ""
+
+#: mainframe.py:1086
 msgid ""
 "Icons used are from famfamfam\n"
 "http://www.famfamfam.com/lab/icons/silk\n"
@@ -511,7 +546,7 @@ msgid ""
 "http://tango.freedesktop.org/Tango_Desktop_Project"
 msgstr ""
 
-#: mainframe.py:1075
+#: mainframe.py:1092
 msgid "BPBible is licensed under the GPL v2. For more details, refer to the LICENSE.txt file in the application directory"
 msgstr ""
 
@@ -533,11 +568,11 @@ msgstr ""
 
 #: module_manager.py:34
 msgid "Confirm book deletion"
-msgstr ""
+msgstr "Xác nhận bạn muốn xoá sách"
 
 #: module_manager.py:46
 msgid "Please select a book to unlock"
-msgstr ""
+msgstr "Làm ơn chọn sách để mở khoá"
 
 #: module_manager.py:47
 msgid "Select a book"
@@ -549,15 +584,15 @@ msgstr ""
 
 #: module_manager.py:57
 msgid "Not locked"
-msgstr ""
+msgstr "Không khoá"
 
 #: module_manager.py:62
 msgid "Unlock code for %s"
-msgstr ""
+msgstr "Mã số mở khoá cho %s"
 
 #: module_manager.py:63
 msgid "Unlock code"
-msgstr ""
+msgstr "Mã số mở khoá"
 
 #: module_manager.py:75
 msgid "Couldn't find config file. Error given was:"
@@ -1225,4 +1260,7 @@ msgid ""
 "Use $$text for the text of a verse, $$versenum for the\n"
 "verse number and $$reference for the reference"
 msgstr ""
+
+#~ msgid "Ben Morgan"
+#~ msgstr "Ben Morgan"
 
