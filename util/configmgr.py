@@ -53,7 +53,7 @@ class ConfigManager(object):
 	def __init__(self, write_path=None):
 		self.sections = {}
 		self.add_section("Internal")
-		self["Internal"].add_item("path", write_path)
+		self.write_path = write_path
 		self["Internal"].add_item("version", config.version)
 		
 		self.before_save = ObserverList()
@@ -89,15 +89,15 @@ class ConfigManager(object):
 
 				config_parser.set(section_name, item, type_process(value))
 		
-		directory = os.path.dirname(self["Internal"]["path"])
+		directory = os.path.dirname(self.write_path)
 		if not os.path.exists(directory):
 			os.makedirs(directory)
 		
-		config_parser.write(open(self["Internal"]["path"], "w"))
+		config_parser.write(open(self.write_path, "w"))
 	
 	def load(self, paths=()):
 		config_parser = RawConfigParser()
-		loaded = config_parser.read(self["Internal"]["path"])
+		loaded = config_parser.read(self.write_path)
 		loaded += config_parser.read(paths)
 		if config_parser.has_option("Internal", "version"):
 			version = config_parser.get("Internal", "version")
