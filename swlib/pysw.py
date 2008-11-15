@@ -1051,8 +1051,9 @@ class LocalizedBookData(BookData):
 	def __str__(self):
 		#print locale.translate(self.bookname)
 		return process_dash_hack(
-			locale.translate(self.bookname), locale_dash_hack
-		).decode(locale_encoding)
+			locale.translate(self.bookname).decode(locale_encoding), 
+			locale_dash_hack
+		)
 		
 class ChapterData(object):
 	"""A class so that we can tell it is chapter data"""
@@ -1104,9 +1105,9 @@ def get_dash_hack(locale):
 	for testament in range(locale.getNumBookGroupings()):
 		for book in range(locale.getNumBooks(testament)):
 			b = locale.getBook(testament, book)
-			with_dash = locale.translate(b.name)
-			if with_dash != b.name:
-				lookup[b.name] = with_dash
+			with_dash = locale.translate(b.name).decode(locale_encoding)
+			if with_dash != b.name.decode(locale_encoding):
+				lookup[b.name.decode(locale_encoding)] = with_dash
 	
 	return lookup
 		
@@ -1151,7 +1152,7 @@ def change_locale(lang, abbrev_lang, additional=None):
 		
 	locale_changed(locale, lang, abbrev_locale, abbrev_lang)
 
-change_locale("bpbible", "abbr")#en_AU", "abbrev")#"ko", "ko_abbrev")
+change_locale("bpbible", "abbr")
 
 u_vk = UserVK()
 a_vk = AbbrevVK()
