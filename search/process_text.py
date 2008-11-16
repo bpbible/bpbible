@@ -1,5 +1,6 @@
 import xml.dom.minidom as m
 import xml.etree.cElementTree as etree
+import xml.etree.ElementTree
 from cStringIO import StringIO
 import re
 import fields
