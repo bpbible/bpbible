@@ -74,7 +74,7 @@ if(setup(
 	zipfile=zipfile,
 )):
 	import os
-	subdirs = r"xrc graphics harmony resources resources\locales.d locales".split()
+	subdirs = r"xrc graphics harmony resources locales\locales.d locales".split()
 	subdirs += ["locales\%s\LC_MESSAGES\\" % l for l in languages]
 	for subdir in subdirs:
 		os.system(r"if not exist dist\%s mkdir dist\%s" % (subdir, subdir))
@@ -86,8 +86,11 @@ if(setup(
 	os.system("copy harmony\\robertson.harm dist\\harmony")
 	os.system("copy harmony\\compositeGospel.1.3.xml.harm dist\\harmony")
 	os.system("copy LICENSE.txt dist\\")
-	os.system(r"copy resources\locales.d\bpbible.conf dist\resources\locales.d")
+	os.system(r"copy locales\locales.d\*.conf dist\locales\locales.d")
+	os.system(r"copy resources\*.tab dist\resources")
+	os.system(r"copy resources\*.data dist\resources")
 
 	for item in languages:
 		os.system("copy locales\%s\LC_MESSAGES\messages.mo "
 		"dist\locales\%s\LC_MESSAGES\messages.mo" % (item, item))
+		os.system("copy locales\%s\locale.conf dist\locales\%s\locale.conf" % (item, item))
