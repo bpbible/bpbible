@@ -14,9 +14,10 @@ from contrib import googlecode_upload
 make_release = False
 new_version = None
 py2exe_opts = ""
+show_splashscreen = True
 
 def handle_args():
-	opts, args = getopt.getopt(sys.argv[1:], "r", ["make-release", "compress"])
+	opts, args = getopt.getopt(sys.argv[1:], "r", ["make-release", "compress", "no-splashscreen"])
 	if ('-r', '') in opts or ('--make-release', '') in opts:
 		global make_release
 		make_release = True
@@ -24,6 +25,10 @@ def handle_args():
 	if ('--compress', '') in opts:
 		global py2exe_opts
 		py2exe_opts += " compressed "
+
+	if ('--no-splashscreen', '') in opts:
+		global show_splashscreen
+		show_splashscreen = False
 
 	if len(args) != 1:
 		sys.stderr.write("Usage: make_release.py [-r] <version number>")
@@ -70,9 +75,10 @@ IndexPath = $DATADIR/indexes
 open("%s/paths.ini" % src_dist.dir, "w").write(paths_conf)
 open("dist/paths.ini", "w").write(paths_conf)
 
-from config import bpbible_configuration, release_settings
+from config import bpbible_configuration, release_settings, splashscreen_settings
 release_settings["version"] = new_version
 release_settings["is_released"] = True
+splashscreen_settings["show"] = show_splashscreen
 bpbible_configuration.save("%s/bpbible.conf" % src_dist.dir)
 bpbible_configuration.save("dist/bpbible.conf")
 

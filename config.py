@@ -73,11 +73,11 @@ Call BPBible like this:
 python bpbible.py --data-path=data --index-path=. --sword-path=.
 """
 try:
-	opts, all = getopt.getopt(sys.argv[1:], "d", ["data-path=", "index-path=", "sword-path="])
+	opts, all = getopt.getopt(sys.argv[1:], "d", ["data-path=", "index-path=", "sword-path=", "no-splashscreen"])
 except getopt.GetoptError:
-	opts = None
+	opts = []
 
-if opts != None:
+if opts:
 	for o, v in opts:
 		if o == "--data-path" and os.path.isdir(v):
 			data_path = v
@@ -120,6 +120,8 @@ bpbible_configuration = ConfigManager("bpbible.conf")
 release_settings = bpbible_configuration.add_section("Release")
 release_settings.add_item("version", "DEV", item_type=str)
 release_settings.add_item("is_released", False, item_type=bool)
+splashscreen_settings = bpbible_configuration.add_section("SplashScreen")
+splashscreen_settings.add_item("show", True, item_type=bool)
 bpbible_configuration.load()
 
 version = release_settings["version"]
@@ -127,6 +129,17 @@ version = release_settings["version"]
 def is_release():
 	"""Checks if this is a released version of BPBible."""
 	return release_settings["is_released"]
+
+def show_splashscreen():
+	# the splashscreen isn't working under GTK (inhibits application
+	# startup)
+	if osutils.is_gtk():
+		return False
+
+	if ("--no-splashscreen", "") in opts:
+		return False
+
+	return splashscreen_settings["show"]
 
 BIBLE_VERSION_PROTOCOL = "set_bible_version"
 

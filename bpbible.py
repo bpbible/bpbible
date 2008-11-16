@@ -49,27 +49,7 @@ class MyApp(wx.App):
 		
 	
 	def OnInit(self):
-		picture = 'splashscreen.png'
-		self.bitmap = wx.BitmapFromImage(
-			wx.Image(config.graphics_path + picture)
-		)
-		
-		# the splashscreen isn't working under GTK (inhibits application
-		# startup)
-		if osutils.is_gtk():
-			self.splash = None
-		
-		else:
-			#from splashscreen import SplashScreen
-			self.splash = wx.SplashScreen(
-				self.bitmap, 
-				wx.SPLASH_CENTRE_ON_SCREEN|wx.SPLASH_NO_TIMEOUT,
-				0,
-				None,
-				style=wx.FRAME_NO_TASKBAR|wx.BORDER_NONE
-			)
-			self.splash.Show()
-			self.splash.Raise()
+		self.ShowSplashScreen()
 		
 		self.starting = True
 		self.restarting = False
@@ -81,6 +61,25 @@ class MyApp(wx.App):
 		from wx import xrc
 		self.res = xrc.XmlResource(config.xrc_path+"auifrm.xrc" )
 		return True
+
+	def ShowSplashScreen(self):
+		if not config.show_splashscreen():
+			self.splash = None
+			return
+
+		picture = 'splashscreen.png'
+		bitmap = wx.BitmapFromImage(
+			wx.Image(config.graphics_path + picture)
+		)
+		self.splash = wx.SplashScreen(
+			bitmap, 
+			wx.SPLASH_CENTRE_ON_SCREEN|wx.SPLASH_NO_TIMEOUT,
+			0,
+			None,
+			style=wx.FRAME_NO_TASKBAR|wx.BORDER_NONE
+		)
+		self.splash.Show()
+		self.splash.Raise()
 	
 
 
