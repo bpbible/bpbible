@@ -226,7 +226,7 @@ class BibleFrame(VerseKeyedFrame):
  
 	def manage_topics(self):
 		from manage_topics_frame import ManageTopicsFrame
-		frame = ManageTopicsFrame(self)
+		frame = ManageTopicsFrame(guiconfig.mainfrm)
 		frame.Show()
 
 	def tag_verses(self):

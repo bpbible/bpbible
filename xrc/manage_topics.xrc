@@ -33,6 +33,7 @@
         <tooltip>Redoes the last undone action</tooltip>
         <label>Redo</label>
       </object>
+      <bitmapsize>16,16</bitmapsize>
       <style>wxTB_FLAT|wxTB_TEXT|wxTB_NODIVIDER</style>
     </object>
     <object class="wxBoxSizer">
@@ -56,8 +57,6 @@
                 <object class="wxPanel" name="item_details_panel">
                   <object class="wxBoxSizer">
                     <orient>wxVERTICAL</orient>
-                  
-                    
                   </object>
                 </object>
                 <option>0</option>
