@@ -21,7 +21,7 @@ from query_parser import separate_words
 from stemming import get_stemmer
 
 from highlighted_frame import HighlightedDisplayFrame
-from swlib.pysw import TK, VK, GetBestRange, Searcher, SWREGEX
+from swlib.pysw import TK, VK, UserVK, GetBestRange, Searcher, SWREGEX
 from gui import guiutil
 from util.debug import dprint, WARNING, is_debugging
 from gui import virtuallist
@@ -71,8 +71,8 @@ class RangePanel(xrcRangePanel):
 		
 		self.biblebooks = []
 
-		for book in VK.books:
-			bookname = book.bookname
+		for book in UserVK.books:
+			bookname = unicode(book)
 			self.biblebooks.append(bookname)
 			self.range_top.Append(bookname)
 			self.range_bottom.Append(bookname)
@@ -300,6 +300,7 @@ class SearchPanel(xrcSearchPanel):
 				"so you cannot search at the moment") % self.book.noun
 		if not search_config["indexed_search"]:
 			self.search_button.Enable(self.book.version is not None)
+			self.set_index_available(search.IndexExists(self.version))
 			if not self.book.version:
 				wx.MessageBox(NO_CURRENT_VERSION,
 				_("No current version"), parent=self)

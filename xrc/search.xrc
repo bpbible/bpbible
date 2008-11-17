@@ -101,7 +101,6 @@
                       <flag>wxTOP|wxGROW</flag>
                       <border>6</border>
                     </object>
-                    
                     <object class="sizeritem">
                       <object class="wxBoxSizer">
                         <object class="sizeritem">
@@ -125,7 +124,7 @@
                         <orient>wxHORIZONTAL</orient>
                       </object>
                       <option>1</option>
-                      <flag>wxALL|wxGROW</flag>
+                      <flag>wxGROW</flag>
                       <border>6</border>
                     </object>
                   </object>

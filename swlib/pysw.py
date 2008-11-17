@@ -1095,6 +1095,22 @@ del book
 del localized_book
 del chapter
 
+SW.abbrev.__len__ = SW.abbrev.getAbbrevCount
+SW.abbrev.__getitem__ = SW.abbrev.getAbbrevData
+SW.abbrev.__cmp__ = lambda a, b: cmp(a.ab, b)
+
+def find_bookidx(name):
+	if not name: return None
+	import bisect
+	name = name.replace("-", "").upper().strip().encode(locale_encoding)
+	abbrevs = locale.getBookAbbrevs()
+	d = bisect.bisect_left(abbrevs, name)
+	if abbrevs[d].ab.startswith(name):
+		return abbrevs[d].book - 1
+	
+	return None
+	
+
 locale_changed = ObserverList()
 
 def get_dash_hack(locale):

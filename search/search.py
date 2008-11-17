@@ -10,6 +10,7 @@ from util import search_utils
 from util.search_utils import *
 import util
 from swlib.pysw import SW, BookName, VK, TOP
+from swlib import pysw
 import os
 import re
 import string
@@ -208,18 +209,6 @@ class Index(object):
 		"matt-john, genesis" -> Genesis and Gospels
 		"matt-twinkle" -> SearchException("Book 'twinkle' not found")"""
 		
-		def lookup_book(item):
-			first = BookName(item)
-
-			if not first:
-				raise SearchException, _("Book '%s' not found!") % item
-	
-			for index, book in enumerate(self.books):
-				if BookName(book.bookname) == first:
-					return index
-	
-			raise SearchException, _("Book '%s' not found!") % first
-		
 		
 		books=[]
 
@@ -227,24 +216,45 @@ class Index(object):
 
 		for item in ranges:
 			thisrange = item.split("-")
-			if len(thisrange) > 2:
-				raise SearchException(_("Only one dash allowed in '%s'") % item)	
-			
 			if("FOO" == thisrange[0].upper()):
 				#EASTEREGG
 				raise SearchException, "Would that be first or second foo?"
 
-		
-			f = lookup_book(thisrange[0])
+			for idx in range(len(thisrange)+1):
+				# look for a split point
+				# We go through every split point and see if it makes sense
+				# with a dash there.
+				b1 = ''.join(thisrange[:idx+1])
+				b2 = ''.join(thisrange[idx+1:])
+				
+				bookidx_1 = pysw.find_bookidx(b1)
+				bookidx_2 = pysw.find_bookidx(b2)
+				
+				# if neither are book names (both empty, or something) keep on
+				if bookidx_1 is None and bookidx_2 is None:
+					continue
+				
+				# one bookname didn't match at all - it wasn't just empty
+				if (bookidx_1 is None and b1) or (bookidx_2 is None and b2):
+					continue
+				
+				if bookidx_1 is None:
+					f = bookidx_2
+					l = f
+				else:
+					f = bookidx_1
+					if bookidx_2:
+						l = bookidx_2
+					else:
+						l = f
 
-			if len(thisrange) == 2:
-				l = lookup_book(thisrange[1])
+				break
 
-			else: 
-				l = f
-
-			if l < f: 
-				l, f = f, l
+			else:
+				raise SearchException(
+					_("Couldn't understand book search range '%s'") 
+					% searchrange
+				)	
 
 			for number in range(f, l+1):
 				if number not in books:
