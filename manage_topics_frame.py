@@ -32,6 +32,9 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		self._paste_available_changed()
 		self._undo_available_changed()
 		self._selected_topic = None
+		# The topic that currently has passages displayed in the passage list
+		# control.
+		self._passage_list_topic = None
 		self.is_passage_selected = False
 		self._selected_passage = None
 		self._setup_item_details_panel()
@@ -110,7 +113,6 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 			event.Skip()
 			return
 
-		old_topic = self._selected_topic
 		selected_topic = self._get_tree_selected_topic()
 		if selected_topic is None:
 			event.Skip()
@@ -118,16 +120,6 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 
 		self.selected_topic = selected_topic
 		self._setup_passage_list_ctrl()
-
-		if old_topic is not None:
-			old_topic.add_passage_observers -= self._insert_topic_passage
-			old_topic.remove_passage_observers -= self._remove_topic_passage
-			for passage_entry in old_topic.passages:
-				passage_entry.passage_changed_observers -= self._change_passage_passage
-				passage_entry.comment_changed_observers -= self._change_passage_comment
-		if self.selected_topic is not None:
-			self.selected_topic.add_passage_observers += self._insert_topic_passage
-			self.selected_topic.remove_passage_observers += self._remove_topic_passage
 
 		self.Title = self._get_title()
 		event.Skip()
@@ -344,9 +336,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 	
 	def _on_close(self, event):
 		self._remove_observers(self._manager)
-		if self.selected_topic is not None:
-			self.selected_topic.add_passage_observers -= self._insert_topic_passage
-			self.selected_topic.remove_passage_observers -= self._remove_topic_passage
+		self._remove_passage_list_observers()
 		self._manager.save()
 		event.Skip()
 	
@@ -361,23 +351,56 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		self.passage_list_ctrl.InsertColumn(1, _("Comment"))
 
 	def _setup_passage_list_ctrl(self):
+		self._remove_passage_list_observers()
 		self.passage_list_ctrl.DeleteAllItems()
-		if self.selected_topic is None:
+		self._passage_list_topic = self.selected_topic
+		if self._passage_list_topic is None:
 			return
 
+		self._add_passage_list_observers()
 		for index, passage_entry in enumerate(self.selected_topic.passages):
 			self._insert_topic_passage(passage_entry, index)
 
 		if self.selected_topic.passages:
 			self._select_list_entry_by_index(0)
 
+	def _add_passage_list_observers(self):
+		self._passage_list_topic.add_passage_observers += self._insert_topic_passage
+		self._passage_list_topic.remove_passage_observers += self._remove_topic_passage
+
+	def _remove_passage_list_observers(self):
+		if self._passage_list_topic is None:
+			return
+
+		self._passage_list_topic.add_passage_observers -= self._insert_topic_passage
+		self._passage_list_topic.remove_passage_observers -= self._remove_topic_passage
+		for passage in self._passage_list_topic.passages:
+			self._remove_passage_list_passage_observers(passage)
+
 	def _insert_topic_passage(self, passage_entry, index=None):
 		if index is None:
-			index = self.selected_topic.passages.index(passage_entry)
-		passage_entry.passage_changed_observers.add_observer(self._change_passage_passage, (passage_entry,))
-		passage_entry.comment_changed_observers.add_observer(self._change_passage_comment, (passage_entry,))
+			index = self._passage_list_topic.passages.index(passage_entry)
+		self._add_passage_list_passage_observers(passage_entry)
 		self.passage_list_ctrl.InsertStringItem(index, str(passage_entry))
 		self.passage_list_ctrl.SetStringItem(index, 1, passage_entry.comment)
+
+	def _remove_topic_passage(self, passage_entry, index):
+		self.passage_list_ctrl.DeleteItem(index)
+		self._remove_passage_list_passage_observers(passage_entry)
+		if not passage_entry.parent.passages:
+			self.selected_passage = None
+		else:
+			if len(passage_entry.parent.passages) == index:
+				index -= 1
+			self._select_list_entry_by_index(index)
+
+	def _add_passage_list_passage_observers(self, passage_entry):
+		passage_entry.passage_changed_observers.add_observer(self._change_passage_passage, (passage_entry,))
+		passage_entry.comment_changed_observers.add_observer(self._change_passage_comment, (passage_entry,))
+
+	def _remove_passage_list_passage_observers(self, passage_entry):
+		passage_entry.passage_changed_observers -= self._change_passage_passage
+		passage_entry.comment_changed_observers -= self._change_passage_comment
 
 	def _change_passage_passage(self, passage_entry, new_passage):
 		index = self.selected_topic.passages.index(passage_entry)
@@ -386,17 +409,6 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 	def _change_passage_comment(self, passage_entry, new_comment):
 		index = self.selected_topic.passages.index(passage_entry)
 		self.passage_list_ctrl.SetStringItem(index, 1, new_comment)
-
-	def _remove_topic_passage(self, passage_entry, index):
-		self.passage_list_ctrl.DeleteItem(index)
-		passage_entry.passage_changed_observers -= self._change_passage_passage
-		passage_entry.comment_changed_observers -= self._change_passage_comment
-		if not passage_entry.parent.passages:
-			self.selected_passage = None
-		else:
-			if len(passage_entry.parent.passages) == index:
-				index -= 1
-			self._select_list_entry_by_index(index)
 
 	def _passage_selected(self, event):
 		passage_entry = self.selected_topic.passages[event.GetIndex()]
