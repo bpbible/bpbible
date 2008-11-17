@@ -41,4 +41,4 @@ def get_user_data_dir():
 	elif is_mac():
 		return os.path.join(home_dir, "Library", "Application Support", appname)
 	else:
-		return os.path.join(home_dir, ".%s" % bpbible)
+		return os.path.join(home_dir, ".%s" % appname)
