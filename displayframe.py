@@ -464,7 +464,9 @@ class DisplayFrame(HtmlSelectableWindow):
 						match = re.match(u'n?bible:([^#]*)(#.*)?', 
 							link.GetHref())
 						if match:
-							text = GetBestRange(match.group(1))
+							text = GetBestRange(
+								match.group(1),
+								userOutput=True)
 							event.SetText(lookup_text % text)
 							return
 
@@ -546,7 +548,9 @@ class DisplayFrame(HtmlSelectableWindow):
 				if not text:
 					match = re.match(u'n?bible:([^#]*)(#.*)?', link.GetHref())
 					if match:
-						text = 'ref:"%s"' % match.group(1)
+						text = 'ref:"%s"' % GetBestRange(
+							match.group(1),
+							userOutput=True)
 
 			if not text:
 				text = self.SelectionToText()

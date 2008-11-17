@@ -101,7 +101,7 @@ class RefField(BaseField):
 	
 	@classmethod
 	def prepare(cls, input):
-		vl = VerseList(input, raiseError=True)
+		vl = VerseList(input, raiseError=True, userInput=True)
 		assert len(vl) == 1
 		if vl[0][0].getBookName() != vl[0][-1].getBookName():
 			from search import SearchException		

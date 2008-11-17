@@ -5,7 +5,7 @@ from harmony import read_harmony
 #import ParseHarmony
 import glob
 import wx
-#from swlib.pysw import GetBestRange
+from swlib.pysw import GetBestRange
 from wx import xrc
 import backend.bibleinterface as BI
 from backend.verse_template import VerseTemplate
@@ -400,7 +400,7 @@ class HarmonyPanel(xrcHarmonyPanel):
 			<th align=center valign=center>
 				<b>%s</b>
 			</th>
-			""" % ref
+			""" % GetBestRange(ref, userOutput=True)
 		
 		verses += "\t</tr>\n"
 		

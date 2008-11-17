@@ -12,6 +12,8 @@ from gui import guiutil
 from manage_topics_operations import (ManageTopicsOperations,
 		CircularDataException, BaseOperationsContext)
 
+from swlib.pysw import GetBestRange
+
 class ManageTopicsFrame(xrcManageTopicsFrame):
 	def __init__(self, parent):
 		super(ManageTopicsFrame, self).__init__(parent)
@@ -379,7 +381,8 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		if index is None:
 			index = self._passage_list_topic.passages.index(passage_entry)
 		self._add_passage_list_passage_observers(passage_entry)
-		self.passage_list_ctrl.InsertStringItem(index, str(passage_entry))
+		self.passage_list_ctrl.InsertStringItem(index, 
+			GetBestRange(str(passage_entry), userOutput=True, short=True))
 		self.passage_list_ctrl.SetStringItem(index, 1, passage_entry.comment)
 
 	def _remove_topic_passage(self, passage_entry, index):
