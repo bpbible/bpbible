@@ -450,7 +450,7 @@ class DictionaryIndex(GenBookIndex):
 					
 
 			if self.booktype.gatherstatistics:
-				progress(("Processing index"), 99)
+				progress(("Processing index", 99))
 				self.GatherStatistics()
 				
 		finally:
