@@ -28,6 +28,9 @@ class PassageEntry(object):
 		self.id = None
 	
 	def contains_verse(self, verse):
+		if not self.passage:
+			return False
+
 		if self.passage.isBoundSet():
 			lower_bound = self.passage.LowerBound()
 			upper_bound = self.passage.UpperBound()
@@ -74,6 +77,9 @@ class PassageEntry(object):
 			doc="The comment on the passage entry.")
 	
 	def _parse_passage_str(self, passage):
+		if not passage:
+			return None
+
 		passages = VerseList(passage)
 		if len(passages) == 1:
 			return passages[0]

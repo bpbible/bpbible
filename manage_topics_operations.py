@@ -46,10 +46,10 @@ class ManageTopicsOperations(object):
 				self._passage_list_manager, topic, name, description
 			))
 
-	def set_passage_details(self, passage_entry, passage, comment):
+	def set_passage_details(self, passage_entry, passage, comment, allow_undo=True):
 		self._perform_action(SetPassageDetailsAction(
 				self._passage_list_manager, passage_entry, passage, comment
-			))
+			), allow_undo=allow_undo)
 
 	def cut(self):
 		self._setup_clipboard(keep_original=False)
@@ -128,7 +128,7 @@ class ManageTopicsOperations(object):
 	def can_redo(self):
 		return bool(self._undone_actions)
 
-	def _perform_action(self, action, merge_next_edit_action=False):
+	def _perform_action(self, action, merge_next_edit_action=False, allow_undo=True):
 		"""Performs the given action.
 		
 		The performed action is added to the list of performed actions, and
@@ -136,9 +136,9 @@ class ManageTopicsOperations(object):
 		"""
 		action.perform_action()
 		self._passage_list_manager.save()
-		if self._merge_next_edit_action and isinstance(action, (SetPassageDetailsAction, SetTopicDetailsAction)):
-			pass
-		else:
+		merge_action = (self._merge_next_edit_action
+				and isinstance(action, SetTopicDetailsAction))
+		if not merge_action and allow_undo:
 			self._actions.append(action)
 			self._undone_actions = []
 			self.undo_available_changed_observers()

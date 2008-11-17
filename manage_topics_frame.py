@@ -5,7 +5,6 @@ from events import TOPIC_LIST
 from passage_list import (get_primary_passage_list_manager,
 		lookup_passage_entry, PassageList, PassageEntry,
 		InvalidPassageError, MultiplePassagesError)
-from passage_entry_dialog import PassageEntryDialog
 from xrc.manage_topics_xrc import (xrcManageTopicsFrame,
 		xrcPassageDetailsPanel, xrcTopicDetailsPanel)
 from xrc.xrc_util import attach_unknown_control
@@ -270,7 +269,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		
 		item = menu.Append(wx.ID_ANY, _("Add &Passage"))
 		self.Bind(wx.EVT_MENU,
-				lambda e: self._create_passage(),
+				lambda e: self._create_passage(self.selected_topic),
 				id=item.Id)
 
 		menu.AppendSeparator()
@@ -327,12 +326,11 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 				lambda: PassageList.create_from_verse_list(name, search_results, description)
 			)
 	
-	def _create_passage(self):
-		passage_entry = PassageEntry(None)
-		dialog = PassageEntryDialog(self, passage_entry)
-		if dialog.ShowModal() == wx.ID_OK:
-			self._operations_manager.insert_item(passage_entry)
-		dialog.Destroy()
+	def _create_passage(self, topic):
+		self._set_selected_topic(topic)
+		passage = PassageEntry(None)
+		self._change_passage_details(passage)
+		self.passage_details_panel.begin_create_passage(topic, passage)
 	
 	def _on_close(self, event):
 		self._remove_observers(self._manager)
@@ -499,7 +497,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		self._switch_item_details_current_panel(self.topic_details_panel)
 
 	def _change_passage_details(self, new_passage):
-		if new_passage is None or self.FindFocus() is self.topic_tree:
+		if new_passage is None:
 			return
 
 		self.passage_details_panel.set_passage(new_passage)
@@ -801,15 +799,33 @@ class PassageDetailsPanel(xrcPassageDetailsPanel):
 		self.passage_text.Bind(wx.EVT_KILL_FOCUS, self._lost_focus)
 		self.comment_text.Bind(wx.EVT_KILL_FOCUS, self._lost_focus)
 		self._operations_manager = operations_manager
+		self._creating_passage = False
+		self._parent_topic = None
 
 	def set_passage(self, new_passage):
 		if new_passage is self.passage:
 			return
 
 		self.passage = new_passage
-		self.passage_text.Value = str(new_passage)
+		reference = str(new_passage)
+		self.passage_text.Value = reference
 		self.comment_text.Value = new_passage.comment
-		self.passage_preview.SetReference(str(new_passage))
+		self.passage_preview.SetReference(reference)
+
+	def begin_create_passage(self, parent_topic, passage):
+		self._creating_passage = True
+		self._parent_topic = parent_topic
+		self.set_passage(passage)
+		self.focus()
+
+	def _create_passage(self):
+		assert self._creating_passage
+		self._creating_passage = False
+		self._parent_topic = None
+		if not str(self.passage):
+			return
+
+		self._operations_manager.insert_item(self.passage)
 
 	def focus(self):
 		"""Sets the focus on this panel for editing."""
@@ -824,7 +840,8 @@ class PassageDetailsPanel(xrcPassageDetailsPanel):
 		try:
 			passage = self.passage_text.Value
 			comment = self.comment_text.Value
-			self._operations_manager.set_passage_details(self.passage, passage, comment)
+			allow_undo = not self._creating_passage
+			self._operations_manager.set_passage_details(self.passage, passage, comment, allow_undo)
 			self.passage_preview.SetReference(str(self.passage))
 		except InvalidPassageError:
 			wx.MessageBox(_("Unrecognised passage `%s'.") % passage,
@@ -833,6 +850,9 @@ class PassageDetailsPanel(xrcPassageDetailsPanel):
 			wx.MessageBox(_("Passage `%s' contains multiple passages.\n"
 					"Only one verse or verse range can be entered.") % passage,
 					"", wx.OK | wx.ICON_INFORMATION, self)
+
+		if self._creating_passage and self.FindFocus() not in self.Children:
+			self._create_passage()
 
 class OperationsContext(BaseOperationsContext):
 	"""Provides a context for passage list manager operations.
