@@ -2,7 +2,7 @@ from gui.reference_display_frame import ReferenceDisplayFrame
 from backend.verse_template import VerseTemplate
 from xrc.guess_verse_xrc import xrcGuessVerseFrame
 import random
-from swlib.pysw import VK
+from swlib.pysw import VK, UserVK
 import wx
 
 class GuessVerseFrame(xrcGuessVerseFrame):
@@ -26,10 +26,18 @@ class GuessVerseFrame(xrcGuessVerseFrame):
 	def on_guess(self, event):
 		won = self.key.getBookName() == self.books.StringSelection
 		if won:
-			wx.MessageBox("Yay", self.key.text)
+			wx.MessageBox(
+				_("Yes, you are right. The verse was %s")
+					% UserVK(self.key).text,
+				_("Correct")
+			)
+
 			self.new_guess()
 		else:
-			wx.MessageBox("Nay")
+			wx.MessageBox(
+				_("No, you are wrong. Try again."), 
+				_("Try again.")
+			)
 
 if __name__ == '__main__':
 	a = wx.App(0)

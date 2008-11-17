@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2008-11-17 13:19+SE Asia Standard Time\n"
+"POT-Creation-Date: 2008-11-17 20:24+AUS Eastern Daylight Time\n"
 "PO-Revision-Date: 2008-11-17 13:19+0700\n"
 "Last-Translator: Daniel Owens <dh_owens@yahoo.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -130,7 +130,7 @@ msgstr "So sánh các câu"
 msgid "Open the verse comparison pane to the selected verses"
 msgstr "Mở cửa so sánh câu tại câu lựa chọn"
 
-#: bibleframe.py:120 manage_topics_frame.py:158 xrc/manage_topics_xrc.py:132
+#: bibleframe.py:120 manage_topics_frame.py:149 xrc/manage_topics_xrc.py:132
 msgid "Manage Topics"
 msgstr "Quản lý Chủ đề"
 
@@ -319,6 +319,22 @@ msgstr "Ngoại lệ ở trên bị ứng dụng bỏ qua"
 #: genbookframe.py:57
 msgid "Other Books"
 msgstr "Sách Khác"
+
+#: guess_verse.py:30
+msgid "Yes, you are right. The verse was %s"
+msgstr ""
+
+#: guess_verse.py:32
+msgid "Correct"
+msgstr ""
+
+#: guess_verse.py:38
+msgid "No, you are wrong. Try again."
+msgstr ""
+
+#: guess_verse.py:39
+msgid "Try again."
+msgstr ""
 
 #: gui/movablelist.py:7 xrc/manage_topics_xrc.py:122
 #: xrc/manage_topics_xrc.py:123
@@ -610,63 +626,63 @@ msgstr ""
 "BPBible có giấy phép GPL v2. Để biết thêm chi tiết, xem tập tin LICENSE.txt "
 "trong danh mục application"
 
-#: manage_topics_frame.py:71
+#: manage_topics_frame.py:73
 msgid "Topics"
 msgstr "Các Chủ Đề"
 
-#: manage_topics_frame.py:274
+#: manage_topics_frame.py:265
 msgid "&New Topic"
 msgstr "Chủ đề &Mới"
 
-#: manage_topics_frame.py:279
+#: manage_topics_frame.py:270
 msgid "Add &Passage"
 msgstr "Thêm &Phân Đoạn"
 
-#: manage_topics_frame.py:286 manage_topics_frame.py:436
+#: manage_topics_frame.py:277 manage_topics_frame.py:446
 msgid "Cu&t"
 msgstr "Cắ&t"
 
-#: manage_topics_frame.py:291 manage_topics_frame.py:441
+#: manage_topics_frame.py:282 manage_topics_frame.py:451
 msgid "&Copy"
 msgstr "&Chép"
 
-#: manage_topics_frame.py:296 manage_topics_frame.py:446
+#: manage_topics_frame.py:287 manage_topics_frame.py:456
 msgid "&Paste"
 msgstr "&Dán"
 
-#: manage_topics_frame.py:303
+#: manage_topics_frame.py:294
 msgid "Delete &Topic"
 msgstr "Xoá &Chủ Đề"
 
-#: manage_topics_frame.py:319
+#: manage_topics_frame.py:310
 msgid "Cannot copy the topic to one of its children."
 msgstr "Không thể chép chủ đề sang con của nó."
 
-#: manage_topics_frame.py:320
+#: manage_topics_frame.py:311
 msgid "Copy Topic"
 msgstr "Chép Chủ Đề"
 
-#: manage_topics_frame.py:360
+#: manage_topics_frame.py:348
 msgid "Passage"
 msgstr "Phân Đoạn"
 
-#: manage_topics_frame.py:361
+#: manage_topics_frame.py:349
 msgid "Comment"
 msgstr "Lời Giải Nghĩa"
 
-#: manage_topics_frame.py:429
+#: manage_topics_frame.py:439
 msgid "&Open"
 msgstr "&Mở"
 
-#: manage_topics_frame.py:453
+#: manage_topics_frame.py:463
 msgid "&Delete"
 msgstr "&Xoá"
 
-#: manage_topics_frame.py:818 passage_entry_dialog.py:40
+#: manage_topics_frame.py:847
 msgid "Unrecognised passage `%s'."
 msgstr "Phân đoạn '%s' không được nhận biết."
 
-#: manage_topics_frame.py:821 passage_entry_dialog.py:44
+#: manage_topics_frame.py:850
 msgid ""
 "Passage `%s' contains multiple passages.\n"
 "Only one verse or verse range can be entered."
@@ -804,11 +820,11 @@ msgstr "Không hiểu được dòng"
 msgid "Book '%s' not found!"
 msgstr "Sách '%s' không được tìm thấy!"
 
-#: search/search.py:231
+#: search/search.py:232
 msgid "Only one dash allowed in '%s'"
 msgstr "Chỉ được phép cho vào một nét gạch trong '%s'"
 
-#: search/search.py:320
+#: search/search.py:321
 msgid ""
 "There seems to be an error in your regular expression.\n"
 "The error message given was: %s"
@@ -816,11 +832,11 @@ msgstr ""
 "Hình như có lỗi lầm trong biểu thức chính quy của bạn.\n"
 "Lỗi lầm là: %s"
 
-#: search/search.py:335
+#: search/search.py:336
 msgid "You cannot search on the field %r"
 msgstr "Bạn không thể tìm thấy trong trường %r"
 
-#: search/search.py:350
+#: search/search.py:351
 msgid "Done"
 msgstr "Xong"
 
@@ -959,7 +975,7 @@ msgstr "Chỉ có %(chapters)d chương trong %(book)s (khi có %(given)d)"
 #: swlib/pysw.py:131 swlib/pysw.py:542
 msgid ""
 "There are only %(verses)d verses in %(book)s %(chapter)s (given %(given)d)"
-msgstr "Chỉ có %(verses)d câu trong %(book)s (khi có %(given)d)"
+msgstr "Chỉ có %(verses)d câu trong %(book)s %(chapter)s (khi có %(given)d)"
 
 #: swlib/pysw.py:700 swlib/pysw.py:1292
 msgid "Invalid Reference: %s"
@@ -1290,18 +1306,6 @@ msgstr "Sửa tiết mục này"
 msgid "Remove this item"
 msgstr "Xoá tiết mục này"
 
-#: xrc/passage_entry_dialog_xrc.py:67
-msgid "&Passage: "
-msgstr "&Phân Đoạn:"
-
-#: xrc/passage_entry_dialog_xrc.py:68 xrc/tag_passage_dialog_xrc.py:70
-msgid "&Comment:"
-msgstr "&Lời Giải Nghĩa:"
-
-#: xrc/passage_entry_dialog_xrc.py:69
-msgid "Edit Passage"
-msgstr "Sửa Phân Đoạn"
-
 #: xrc/search_xrc.py:136
 msgid "&Find:"
 msgstr "&Tìm:"
@@ -1402,6 +1406,10 @@ msgstr "&Mới"
 msgid "Creates a new topic."
 msgstr "Tạo ra chủ đề mới"
 
+#: xrc/tag_passage_dialog_xrc.py:70
+msgid "&Comment:"
+msgstr "&Lời Giải Nghĩa:"
+
 #: xrc/tag_passage_dialog_xrc.py:71
 msgid "Tag Passage"
 msgstr "Đánh dấu phân đoạn"
@@ -1449,6 +1457,12 @@ msgstr "&Mô Tả:"
 #: xrc/topic_creation_dialog_xrc.py:70
 msgid "Create New Topic"
 msgstr "Tạo Ra Chủ Đề Mới"
+
+#~ msgid "&Passage: "
+#~ msgstr "&Phân Đoạn:"
+
+#~ msgid "Edit Passage"
+#~ msgstr "Sửa Phân Đoạn"
 
 #~ msgid "English"
 #~ msgstr "Tiếng Anh"
