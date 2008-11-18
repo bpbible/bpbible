@@ -381,8 +381,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		if index is None:
 			index = self._passage_list_topic.passages.index(passage_entry)
 		self._add_passage_list_passage_observers(passage_entry)
-		self.passage_list_ctrl.InsertStringItem(index, 
-			GetBestRange(str(passage_entry), userOutput=True, short=True))
+		self.passage_list_ctrl.InsertStringItem(index, _passage_str(passage_entry, short=True))
 		self.passage_list_ctrl.SetStringItem(index, 1, passage_entry.comment)
 
 	def _remove_topic_passage(self, passage_entry, index):
@@ -405,7 +404,8 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 
 	def _change_passage_passage(self, passage_entry, new_passage):
 		index = self.selected_topic.passages.index(passage_entry)
-		self.passage_list_ctrl.SetStringItem(index, 0, str(passage_entry))
+		self.passage_list_ctrl.SetStringItem(index, 0,
+				_passage_str(passage_entry, short=True))
 
 	def _change_passage_comment(self, passage_entry, new_comment):
 		index = self.selected_topic.passages.index(passage_entry)
@@ -518,6 +518,12 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 				window.Hide()
 		new_panel.Show()
 		self.passage_list_pane.Sizer.Layout()
+
+def _passage_str(passage_entry, short=False):
+	"""Gets a string for the given passage for user output."""
+	return str(passage_entry)
+	# XXX: Commented out because it is orders of magnitude too slow.
+	#return GetBestRange(passage_entry.passage.text, userOutput=True, abbrev=short)
 
 # Specifies what type of dragging is currently happening with the topic tree.
 # This is needed since it has to select and unselect topics when dragging and
@@ -810,10 +816,9 @@ class PassageDetailsPanel(xrcPassageDetailsPanel):
 			return
 
 		self.passage = new_passage
-		reference = str(new_passage)
-		self.passage_text.Value = reference
+		self.passage_text.Value = _passage_str(new_passage, short=False)
 		self.comment_text.Value = new_passage.comment
-		self.passage_preview.SetReference(reference)
+		self.passage_preview.SetReference(str(new_passage))
 
 	def begin_create_passage(self, parent_topic, passage):
 		self._creating_passage = True
@@ -825,7 +830,7 @@ class PassageDetailsPanel(xrcPassageDetailsPanel):
 		assert self._creating_passage
 		self._creating_passage = False
 		self._parent_topic = None
-		if not str(self.passage):
+		if not self.passage.passage:
 			return
 
 		self._operations_manager.insert_item(self.passage)
