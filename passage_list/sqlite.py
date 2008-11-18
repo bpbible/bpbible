@@ -102,7 +102,7 @@ def store_topic(topic):
 	save_children = topic.id is None
 	save_or_update_item(topic)
 	if save_children:
-		for subtopic in topic.subtopic:
+		for subtopic in topic.subtopics:
 			store_topic(topic)
 		for passage in topic.passages:
 			save_or_update_item(passage)

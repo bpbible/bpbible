@@ -58,7 +58,7 @@ class BasePassageList(object):
 		#print self.subtopics, index
 		self.subtopics.insert(index, subtopic)
 		subtopic.parent = self
-		sqlite.save_or_update_item(subtopic)
+		sqlite.store_topic(subtopic)
 		#print self.subtopics, index, subtopic.id
 		self.add_subtopic_observers(subtopic)
 	

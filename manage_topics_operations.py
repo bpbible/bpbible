@@ -528,6 +528,17 @@ def _test():
 	>>> topic3.subtopics
 	[]
 
+	>>> _set_passage_details(passage2, str(passage2), '')
+	>>> passage2.comment
+	''
+	>>> new_topic = PassageList.create_from_verse_list("Test", ["gen %s" % number for number in range(1, 51)])
+	>>> _add_subtopic(manager, new_topic)
+	Topic 'None': add subtopic observer called.
+	>>> len(new_topic.passages)
+	50
+	>>> manager.subtopics
+	[<PassageList 'topic1'>, <PassageList 'topic3'>, <PassageList 'Test'>]
+
 	Check copying or moving a topic into one of its children fails.
 	>>> _copy_topic(topic1, topic3)
 	Traceback (most recent call last):
@@ -658,9 +669,9 @@ def _test():
 	>>> from passage_list import sqlite
 	>>> loaded_manager = sqlite.load_manager(filename)
 	>>> loaded_manager.subtopics
-	[<PassageList u'topic1 (new name)'>, <PassageList u'topic3'>]
+	[<PassageList u'topic1 (new name)'>, <PassageList u'topic3'>, <PassageList u'Test'>]
 	>>> manager.subtopics
-	[<PassageList 'topic1 (new name)'>, <PassageList 'topic3'>]
+	[<PassageList 'topic1 (new name)'>, <PassageList 'topic3'>, <PassageList 'Test'>]
 
 	>>> loaded_manager == manager
 	True
