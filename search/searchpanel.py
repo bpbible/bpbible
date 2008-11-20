@@ -1045,10 +1045,11 @@ class BibleSearchPanel(SearchPanel):
 
 	def _save_results(self, event):
 		manage_topics_frame = ManageTopicsFrame(guiconfig.mainfrm)
-		manage_topics_frame.Show()
 		manage_topics_frame.save_search_results(
 				self.searchkey.Value, self.search_results
 			)
+		manage_topics_frame.Show()
+			
 
 class GenbookSearchPanel(SearchPanel):
 	id = N_("Other Book Search")
