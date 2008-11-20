@@ -177,12 +177,12 @@ class VK(SW.VerseKey):#, object):
 	"""
 
 	encoding = "ascii"
-	def __init__(self, key=()):
+	def __init__(self, key=(), raiseError=True):
 		if isinstance(key, basestring):
 			#if not KeyExists(key):
 			#	raise VerseParsingError, key
 			SW.VerseKey.__init__(self, key.encode(self.encoding))
-			if self.Error():
+			if raiseError and self.Error():
 				raise VerseParsingError, key
 			return
 			
@@ -194,11 +194,11 @@ class VK(SW.VerseKey):#, object):
 		if len(key)==2:
 			#isinstance(key, tuple):
 			top, bottom=key
-			if not KeyExists(top):
-				raise VerseParsingError, top
-		
-			if not KeyExists(bottom):
-				raise VerseParsingError, bottom
+			if raiseError:
+				if not KeyExists(top):
+					raise VerseParsingError, top
+				if not KeyExists(bottom):
+					raise VerseParsingError, bottom
 
 		SW.VerseKey.__init__(self, *key)
 
@@ -727,11 +727,12 @@ class VerseList(list):
 					key.set_text_checked(t)
 					key.AutoNormalize(True)
 
-				v = VK(key)
+				v = VK(key, raiseError=False)
 					
 
 			else:
-				check_vk_bounds(v)
+				if raiseError:
+					check_vk_bounds(v)
 
 				if userInput:
 					# we need to do this carefully
@@ -742,11 +743,11 @@ class VerseList(list):
 					v = VK((
 						SW.VerseKey.getText(VK(v.LowerBound())),
 						SW.VerseKey.getText(VK(v.UpperBound())),
-					))
+					), raiseError=False)
 				
 				else:
 					# if we stay inside, just use a straight copy
-					v = VK(v)
+					v = VK(v, raiseError=False)
 					
 			self.append(v)
 			
@@ -870,12 +871,18 @@ class VerseList(list):
 		"""
 		
 		def getdetails(versekey):
+			#if userOutput:
+			#	versekey = UserVK(versekey)
 			if userOutput:
-				versekey = UserVK(versekey)
-			if short: 
-				book = versekey.getBookAbbrev()
-			else: 
-				book = versekey.getBookName()
+				if short:
+					book = abbrev_locale.translate(vk.getBookName()).decode(abbrev_locale_encoding)
+				else:
+					book = locale.translate(vk.getBookName()).decode(locale_encoding)
+			else:
+				if short: 
+					book = versekey.getBookAbbrev()
+				else: 
+					book = versekey.getBookName()
 
 			chapter = versekey.Chapter()
 			verse = versekey.Verse()
