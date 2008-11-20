@@ -18,9 +18,6 @@ from util.configmgr import config_manager
 import util.i18n
 import gui.i18n
 
-
-#from search import mySearchPanel
-
 class MyApp(wx.App):
 	def Initialize(self):
 		# for py2exe
@@ -40,7 +37,6 @@ class MyApp(wx.App):
 
 
 		frame.SetIcons(guiconfig.icons)
-		#frame.SetIcon(icon_bundle.GetIcon((32,32)))
 
 		self.SetTopWindow(frame)
 		frame.Show(osutils.is_gtk())
