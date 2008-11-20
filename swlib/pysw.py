@@ -672,6 +672,8 @@ class VerseList(list):
 		>>> from swlib import pysw
 		>>> pysw.VerseList("Gen 3:3-5").TestForError("Gen 3:15", "3", "Gen 3:15")
 		>>> pysw.VerseList("Gen 3:3-5").TestForError("Gen 3:15", "3", "Gen 3:15")
+		>>> import __builtin__
+		>>> __builtin__._ = lambda x: x # don't let it smash _ - we need it
 		>>> pysw.VerseList("Gen 3:3-5").TestForError("Matt en 3:15", "5", "Matt en 3:15")
 		Traceback (most recent call last):
 		  File "<stdin>", line 1, in <module>
@@ -816,7 +818,9 @@ class VerseList(list):
 		>>> GetBestRange("Gen 3-Matt 5", abbrev=True)
 		'Gen 3-Matt 5'
 		>>> GetBestRange("Psa 58:0-1") # a bit of a dodgy case
-		'Psalms 57:11-58:1'
+		... # TODO: is this correct? 
+		... #should we need headings on for this to work?
+		'Psalms 58:0-1'
 		>>> GetBestRange("Matthew 24v27-30,44")
 		'Matthew 24:27-30,44'
 		>>> GetBestRange("Matthew 24 27")
@@ -862,22 +866,26 @@ class VerseList(list):
 		... # TODO this is interpreted by SWORD as verse 5, not chapter 5
 		... GetBestRange("Gen 4:1,Genesis 5")
 		'Genesis 4:1,Genesis 5'
+		>>> GetBestRange("1 Chr 2:5-2 Chr 3:9", userOutput=True)
+		u'1 Chronicles 2:5-2 Chronicles 3:9'
 		>>> GetBestRange("1 Chr 2:5-2 Chr 3:9")
-		'1 Chronicles 2:5-2 Chronicles 3:9'
-		>>> GetBestRange("v5")
-		'Revelation 1:5'
+		'I Chronicles 2:5-II Chronicles 3:9'
+		>>> GetBestRange("v5", userOutput=True)
+		u'Revelation 1:5'
 		>>> GetBestRange("Gen.4.5")
 		'Genesis 4:5'
 		"""
 		
 		def getdetails(versekey):
-			#if userOutput:
-			#	versekey = UserVK(versekey)
 			if userOutput:
 				if short:
-					book = abbrev_locale.translate(vk.getBookName()).decode(abbrev_locale_encoding)
+					book = abbrev_locale.translate(
+						versekey.getBookName()
+					).decode(abbrev_locale_encoding)
 				else:
-					book = locale.translate(vk.getBookName()).decode(locale_encoding)
+					book = locale.translate(
+						versekey.getBookName()
+					).decode(locale_encoding)
 			else:
 				if short: 
 					book = versekey.getBookAbbrev()
@@ -895,14 +903,20 @@ class VerseList(list):
 
 			return book, chapter, verse, chapter_verses
 
-		#take details of first and last of each VK
-		l2 = [[getdetails(vk) for vk in (item[0], item[-1])] for item in self]
-				
+		def get_bounds_details(vk):
+			if vk.isBoundSet():
+				return getdetails(vk.LowerBound()), getdetails(vk.UpperBound())
+
+			d = getdetails(vk)
+			return d, d
+
 		# book, chapter, verse
 		lastbook, lastchapter, lastverse = None, None, None
 		range = ""
 
-		for item in l2:
+		for vk in self:
+			item = get_bounds_details(vk)
+			# take details of first and last for each VK
 			((book1, chapter1, verse1, verse_count1), 
 			 (book2, chapter2, verse2, verse_count2)) = item
 
@@ -1404,3 +1418,5 @@ class Searcher(SW.Searcher):
 		return strings.split("; ")
 
 
+# allow reloading
+sys.SW_dont_do_stringmgr = True
