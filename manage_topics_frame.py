@@ -261,6 +261,10 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 
 	def _show_topic_context_menu(self, event):
 		"""Shows the context menu for a topic in the topic tree."""
+		if not event.Item:
+			event.Skip()
+			return
+
 		self.selected_topic = self.topic_tree.GetPyData(event.Item)
 		menu = wx.Menu()
 		
@@ -298,7 +302,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 				lambda e: self._operations_manager.delete(),
 				id=item.Id)
 		
-		self.PopupMenu(menu)
+		self.topic_tree.PopupMenu(menu)
 
 	def _safe_paste(self, operation=None):
 		"""A wrapper around the operations manager paste operation that
@@ -321,8 +325,8 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		assert search_string
 		self._set_selected_topic(self._manager)
 		self.topic_tree.SetFocus()
-		name = u"Search: %s" % search_string
-		description = u"Results from the search `%s'." % search_string
+		name = _(u"Search: %s") % search_string
+		description = _(u"Results from the search `%s'.") % search_string
 
 		self._create_topic(self._manager,
 				lambda: PassageList.create_from_verse_list(name, search_results, description)
@@ -350,6 +354,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		self.passage_list_ctrl.InsertColumn(0, _("Passage"))
 		self.passage_list_ctrl.InsertColumn(1, _("Comment"))
 
+	@guiutil.frozen
 	def _setup_passage_list_ctrl(self):
 		self._remove_passage_list_observers()
 		self.passage_list_ctrl.DeleteAllItems()
@@ -468,7 +473,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 				lambda e: self._operations_manager.delete,
 				id=item.Id)
 		
-		self.PopupMenu(menu)
+		self.passage_list_ctrl.PopupMenu(menu)
 
 	def _topic_tree_got_focus(self, event):
 		self.is_passage_selected = False
@@ -521,9 +526,9 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 
 def _passage_str(passage_entry, short=False):
 	"""Gets a string for the given passage for user output."""
-	return str(passage_entry)
+	#return str(passage_entry)
 	# XXX: Commented out because it is orders of magnitude too slow.
-	#return GetBestRange(passage_entry.passage.text, userOutput=True, abbrev=short)
+	return GetBestRange(passage_entry.passage.text, userOutput=True, abbrev=short)
 
 # Specifies what type of dragging is currently happening with the topic tree.
 # This is needed since it has to select and unselect topics when dragging and
