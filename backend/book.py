@@ -134,7 +134,12 @@ class Book(object):
 			lastverse = ""
 
 		if display_tags is None:
-			display_tags = passage_list.settings.display_tags
+			# if we don't have tags in, don't calculate them as it can be
+			# expensive
+			if "$tags" not in template.body.template:
+				display_tags = False
+			else:
+				display_tags = passage_list.settings.display_tags
 	
 		if end_ref:
 			ref += " - " + end_ref

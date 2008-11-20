@@ -111,8 +111,11 @@ class SmartBody(object):
 		return self.incl_whitespace_br_start.sub(r"\g<ws>", 
 			self.incl_whitespace_br_end.sub(r"\g<ws>", text)
 		)
+	
+	@property
+	def template(self):
+		return self.body.template
 		
-
 class SmartVerseTemplate(VerseTemplate):
 	def __init__(self, *args, **kwargs):
 		super(SmartVerseTemplate, self).__init__(*args, **kwargs)
