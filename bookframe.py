@@ -150,9 +150,9 @@ class BookFrame(DisplayFrame):
 		def set_text():
 			pane = self.aui_pane
 			if not pane.IsShown():
-				return _("Show the %s pane") % pane.name
+				return _("Show the %s pane") % self.title
 			else:
-				return _("Hide the %s pane") % pane.name
+				return _("Hide the %s pane") % self.title
 
 		extras = ()
 		if self.is_hidable():
