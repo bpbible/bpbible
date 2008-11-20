@@ -11,6 +11,7 @@ from displayframe import DisplayFrameXRC
 from util import osutils
 from gui import fonts
 from gui.fonts import font_settings
+from swlib import pysw
 
 DefaultFont = object()
 
@@ -181,8 +182,12 @@ class FontChoiceDialog(xrcFontChoiceDialog):
 					self.mod.setSkipConsecutiveLinks(old)
 
 				ref = self.mod.getKeyText()
+				if book in (biblemgr.bible, biblemgr.commentary):
+					ref = pysw.internal_to_user(ref)
+				else:
+					ref = to_unicode(ref, self.mod)
 				self.preview.SetPage("%s (%s)<br>%s" % (
-					to_unicode(ref, self.mod), self.mod.Name(), text
+					ref, self.mod.Name(), text
 				))
 				
 		finally:
