@@ -12,7 +12,7 @@ from gui import guiutil
 from manage_topics_operations import (ManageTopicsOperations,
 		CircularDataException, BaseOperationsContext)
 
-from swlib.pysw import GetBestRange
+from swlib.pysw import VerseList
 
 class ManageTopicsFrame(xrcManageTopicsFrame):
 	def __init__(self, parent):
@@ -528,7 +528,7 @@ def _passage_str(passage_entry, short=False):
 	"""Gets a string for the given passage for user output."""
 	#return str(passage_entry)
 	# XXX: Commented out because it is orders of magnitude too slow.
-	return GetBestRange(passage_entry.passage.text, userOutput=True, abbrev=short)
+	return VerseList([passage_entry.passage]).GetBestRange(userOutput=True, short=short)
 
 # Specifies what type of dragging is currently happening with the topic tree.
 # This is needed since it has to select and unselect topics when dragging and
