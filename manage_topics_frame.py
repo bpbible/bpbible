@@ -392,10 +392,10 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 	def _remove_topic_passage(self, passage_entry, index):
 		self.passage_list_ctrl.DeleteItem(index)
 		self._remove_passage_list_passage_observers(passage_entry)
-		if not passage_entry.parent.passages:
+		if not self._passage_list_topic.passages:
 			self.selected_passage = None
 		else:
-			if len(passage_entry.parent.passages) == index:
+			if len(self._passage_list_topic.passages) == index:
 				index -= 1
 			self._select_list_entry_by_index(index)
 
