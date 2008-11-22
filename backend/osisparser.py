@@ -184,15 +184,30 @@ class OSISParser(filterutils.ParserBase):
 	def start_l(self, attributes):
 		if attributes.get("eID"):
 			return self.end_l()
+		
+		mapping = {
+			# usual poetry indent in ESV
+			"x-indent": 2,
 
-		if attributes.get("type") in ("x-indent", "x-declares", "x-secondary"):
+			# extra indent - 1 Tim 3:16 (ESV) for example
+			"x-indent-2": 4,
+
+			# declares lines - Declares the Lord, Says the Lord, etc.
+			"x-declares": 6,
+			
+			# doxology - Amen and Amen - Psalms 41:13, 72:19, 89:52 in ESV 
+			"x-psalm-doxology": 6,
+
+			# usual poetry indent in WEB
+			"x-secondary": 2,
+		}
+			
+		indent = mapping.get(attributes.get("type"), 0)
+		if indent:
 			if self.in_indent:
 				dprint(WARNING, "Nested indented l's", self.u.key.getText())
 
 			self.in_indent = True
-			indent = 2
-			if attributes["type"] == "x-declares":
-				indent = 6
 			self.buf += '<indent-block-start source="l" width="%s"/>' % indent
 		else:
 			self.success = SW.INHERITED
