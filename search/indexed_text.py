@@ -47,6 +47,7 @@ class IndexedText(object):
 		
 		key = self.get_key(module)
 		key.Persist(1)
+		
 		module.setKey(key)
 		if not entries:
 			module.setPosition(TOP)
@@ -73,7 +74,13 @@ class IndexedText(object):
 		
 		# try and do smart parsing
 		content = None
-		if ord(module.Markup()) == SW.FMT_OSIS:
+
+		processor = {
+			SW.FMT_OSIS: process_text.ParseOSIS,
+			SW.FMT_THML: process_text.ParseThML,
+		}.get(ord(module.Markup()), None)
+
+		if processor:
 			xml_items = [
 				"<KeyedEntry key='%s'>%s</KeyedEntry>" % i for i in	items
 			]
@@ -86,7 +93,7 @@ class IndexedText(object):
 				]
 
 			try:
-				content = process_text.ParseOSIS().parse(
+				content = processor().parse(
 					xml_token.join(xml_items)
 				)
 
@@ -198,10 +205,6 @@ class IndexedText(object):
 			start, end = match.span()
 			self.index.append((ind, start, end-start))
 			module.increment(1)
-
-		if not ord(module.Error()):
-			print "BAD", key
-			print module.getKeyText()
 		
 	def find_index(self, mylist):
 		"""Turn a sorted list of begin, end pairs into references using 
