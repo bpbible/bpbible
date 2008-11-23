@@ -820,6 +820,8 @@ class PassageDetailsPanel(xrcPassageDetailsPanel):
 		if new_passage is self.passage:
 			return
 
+		self._save_passage()
+
 		self.passage = new_passage
 		self.passage_text.Value = _passage_str(new_passage, short=False)
 		self.comment_text.Value = new_passage.comment
@@ -850,6 +852,16 @@ class PassageDetailsPanel(xrcPassageDetailsPanel):
 			event.Skip()
 			return
 
+		self._save_passage()
+
+		if self._creating_passage and self.FindFocus() not in self.Children:
+			self._create_passage()
+
+	def _save_passage(self):
+		"""Saves the current passage."""
+		if self.passage is None:
+			return
+
 		try:
 			passage = self.passage_text.Value
 			comment = self.comment_text.Value
@@ -863,9 +875,6 @@ class PassageDetailsPanel(xrcPassageDetailsPanel):
 			wx.MessageBox(_("Passage `%s' contains multiple passages.\n"
 					"Only one verse or verse range can be entered.") % passage,
 					"", wx.OK | wx.ICON_INFORMATION, self)
-
-		if self._creating_passage and self.FindFocus() not in self.Children:
-			self._create_passage()
 
 class OperationsContext(BaseOperationsContext):
 	"""Provides a context for passage list manager operations.
