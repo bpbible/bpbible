@@ -221,7 +221,7 @@ class IndexedText(object):
 		for idx, (key_value, start, length) in enumerate(self.index):
 			# find in index
 			# mylist must be sorted
-			while start + length > begin:
+			while start + length >= begin:
 				# loop here because search phrase may be
 				# multiple times in one verse, so we get all
 				n = 1
