@@ -455,8 +455,9 @@ class DictionaryIndex(GenBookIndex):
 		
 		
 		try:
-			topics = self.book.GetTopics()
 			self.book.SetModule(mod, notify=False)
+			topics = self.book.GetTopics()
+			
 			mod = self.book.mod
 
 			self.book.templatelist.append(template)
