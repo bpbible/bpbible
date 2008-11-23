@@ -213,9 +213,11 @@ def ellipsize(refs, last_text="", ellipsis=None):
 			left_over = 0
 
 		for item in refs[:ellipsis]:
-			ref = pysw.VerseList(item, last_text).GetBestRange(True)
+			internal_ref = pysw.VerseList(item, last_text).GetBestRange(True)
+			ref = pysw.VerseList(item, last_text).GetBestRange(True,
+				userOutput=True)
 			last_text = ref
-			buf.append('<a href="bible:%(ref)s">%(ref)s</a>'% locals())
+			buf.append('<a href="bible:%(internal_ref)s">%(ref)s</a>'% locals())
 		if(left_over):
 			url = "?values=%d" % left_over
 			e = "<b><a href="
@@ -231,9 +233,12 @@ def ellipsize(refs, last_text="", ellipsis=None):
 	
 	# DEFAULT BEHAVIOUR
 	for item in refs:
-		ref = pysw.VerseList(item, last_text).GetBestRange(True)
+		ref = pysw.VerseList(item, last_text).GetBestRange(True,
+			userOutput=True)
+		internal_ref = pysw.VerseList(item, last_text).GetBestRange(True)
+		
 		last_text = ref
-		buf.append('<a href="bible:%(ref)s">%(ref)s</a>'% locals())
+		buf.append('<a href="bible:%(internal_ref)s">%(ref)s</a>'% locals())
 
 	if ellipsis and left_over:
 		buf.append(e)
@@ -259,4 +264,4 @@ def ellipsize(refs, last_text="", ellipsis=None):
 	else:
 		i = " ".join(buf)
 
-	return " <small>%s</small> " % i
+	return " <small>%s</small> " % i.encode("utf8")
