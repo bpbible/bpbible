@@ -793,6 +793,8 @@ class TopicDetailsPanel(xrcTopicDetailsPanel):
 		if new_topic is self.topic:
 			return
 
+		self._save_topic()
+
 		self.topic = new_topic
 		self.name_text.Value = new_topic.name
 		self.description_text.Value = new_topic.description
@@ -805,6 +807,13 @@ class TopicDetailsPanel(xrcTopicDetailsPanel):
 	def _lost_focus(self, event):
 		if not self.topic:
 			event.Skip()
+			return
+
+		self._save_topic()
+
+	def _save_topic(self)
+		"""Save the current topic."""
+		if not self.topic:
 			return
 
 		name = self.name_text.Value
