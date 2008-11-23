@@ -5,12 +5,13 @@ import wx
 from backend.verse_template import VerseTemplate
 from backend.book import Bible
 from util.string_util import KillTags, ReplaceUnicode, replace_amp, htmlify_unicode, remove_amps
-from util.debug import dprint, ERROR
+from util.debug import dprint, ERROR, WARNING
 
 from search import removeformatting
 
 from backend.bibleinterface import biblemgr
 from gui.reference_display_frame import ReferenceDisplayFrame
+from swlib.pysw import SW
 
 #TODO: highlight Aenon - AE joined up, that is - in KJV
 
@@ -25,8 +26,13 @@ regex = r"""
 		(action=showRef[^>]*>)  	 | # a reference - don't include text
 		([^>]*>.*?</a>) 		 	   # or another sword link and contents	
 	))								 |
+	(\(<a\ href="passagestudy.jsp\?
+		action=showMorph 			   # a morph link and text with brackets
+		([^>]*>.*?</a>) 		 	   
+	\)) 							 |
+	
 	(<h6\ class="heading"\ 
-		canonical="false">.*?</h6>)	 | # a heading (not canonical) and contents	
+		canonical="false">.*?</h6>)	 | # a heading (not canonical) and contents
 	(<[^>]+>)						 | # any other html tag - not contents
 	(&(?P<amps>[^;]*);)				 | # a html escape
 	(.)							  	   # anything else
@@ -133,8 +139,8 @@ def unite(string1, string2, is_bible):
 			# however, as it has been replaced by a space, we have put it in
 			# as representing a space. If we come across another separator, 
 			# stick the diacritic onto the previous one
-			if (len(result) > 2 
-				and len(result[-1]) == 1 
+			if (len(result) > 2
+				and len(result[-1]) == 1
 				and is_mark(result[-1][0])):
 				result[-2].append(result[-1][0])
 				result[-1] = []
@@ -239,7 +245,7 @@ def highlight_section(results, start, end, start_tag, end_tag):
 		last_upto = upto
 		
 
-def highlight(string1, string2, is_bible, regexes, strongs=(),
+def highlight(string1, string2, is_bible, regexes, fields=(),
 		start_tag='<a href="#highlight" name="highlight"></a>'
 		'<b><font color="#008800">', 
 		end_tag='</font></b>'):
@@ -267,36 +273,64 @@ def highlight(string1, string2, is_bible, regexes, strongs=(),
 			dprint(ERROR, "Regular expression not matched against plain text",
 				regex.pattern, string1)
 	
-	for strong in strongs:
-		match = re.match("([GH])(\d+)(\w?)", strong)
-		assert match, "couldn't interpret strong's number for highlighting"
-		prefix, number, extra = match.group(1, 2, 3)
-		lang = ["Hebrew", "Greek"][prefix=="G"]
-		number = str(int(number))
-		if extra:
-			number += "!%s" % extra
+	for key, value in fields:
+		if key == "strongs":
+			match = re.match("([GH])(\d+)(\w?)", value)
+			assert match, "couldn't interpret strong's number for highlighting"
+			prefix, number, extra = match.group(1, 2, 3)
+			lang = ["Hebrew", "Greek"][prefix=="G"]
+			number = str(int(number))
+			if extra:
+				number += "!%s" % extra
 
-		href = r"passagestudy.jsp\?action=showStrongs&type=%s" \
-			"&value=0*%s(?:!\w)?"	% (lang, number)
-		glink_matcher = re.compile(
-			'^<glink([^>]*)(href="%s")([^>]*)>([^<]*)</glink>$' % href
-		)
-		strongs_matcher = re.compile(
-			'^(&lt;<a [^>]*href="%s"[^>]*>)([^<]*)(</a>&gt;)$' % href
-		)
+			href = r"passagestudy.jsp\?action=showStrongs&type=%s" \
+				"&value=0*%s(?:!\w)?"	% (lang, number)
+			glink_matcher = re.compile(
+				'^<glink([^>]*)(href="%s")([^>]*)>([^<]*)</glink>$' % href
+			)
+			strongs_matcher = re.compile(
+				'^(&lt;<a [^>]*href="%s"[^>]*>)([^<]*)(</a>&gt;)$' % href
+			)
 
-		for tokens in results:
-			for idx, token in enumerate(tokens):
-				# highlight strong's numbers...	
-				# TODO: scroll to these?
-				token = glink_matcher.sub(					
-					r'<b><glink colour="#008800"\1\2\3>\4</glink></b>',
-					token)
+			for tokens in results:
+				for idx, token in enumerate(tokens):
+					# highlight strong's numbers...
+					# TODO: scroll to these?
+					token = glink_matcher.sub(
+						r'<b><glink colour="#008800"\1\2\3>\4</glink></b>',
+						token)
 
-				tokens[idx] = strongs_matcher.sub(
-					r'<b><font color="#008800">\1<font color="#008800">\2</font>\3</font></b>',
-					token)
-					
+					tokens[idx] = strongs_matcher.sub(
+						r'<b><font color="#008800">\1<font color="#008800">\2</font>\3</font></b>',
+						token)
+
+		elif key == "morph":
+			parts = value.split(":", 1)
+			if len(parts) != 2:
+				dprint(WARNING, "Not two parts in split. Skipping")
+				continue
+
+			k, v = parts
+			if k == "Robinson":
+				k = "(?:Robinson|Greek)"
+
+			v = SW.URL.encode(str(v)).c_str()
+
+			d = r'^(\(<a href="passagestudy.jsp\?action=showMorph&type=%s[^&]*&value=%s">)([^<]*)(</a>\))$' % (k, v)			
+
+			count = 0
+			morph_matcher = re.compile(d)
+			for tokens in results:
+				for idx, token in enumerate(tokens):
+					tokens[idx], c = morph_matcher.subn(
+						r'<b><font color="#008800">\1<font color="#008800">\2</font>\3</font></b>',
+						token
+					)
+					count += c
+
+			if count == 0:
+				dprint(WARNING, "Didn't highlight morph - are they on?", value)
+
 	
 	replacements = {
 		'<' : '&lt;',
@@ -316,7 +350,7 @@ def highlight(string1, string2, is_bible, regexes, strongs=(),
 class HighlightedDisplayFrame(ReferenceDisplayFrame):
 	def __init__(self):
 		self.regexes = []
-		self.strongs = []
+		self.fields = []
 		self.parent = None
 		super(HighlightedDisplayFrame, self).__init__()
 
@@ -368,9 +402,9 @@ class HighlightedDisplayFrame(ReferenceDisplayFrame):
 		content = content.replace("\n", " ")
 		content = removeformatting(content)
 
-		data = highlight(content, data, 
+		data = highlight(content, data,
 			is_bible=self.parent.book.mod.Type() == Bible.type,
-			regexes=self.regexes, strongs=self.strongs, 
+			regexes=self.regexes, fields=self.fields,
 			)
 		
 		# XXX: This replace should be done for us by the backend Bible

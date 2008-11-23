@@ -814,7 +814,7 @@ class SearchPanel(xrcSearchPanel):
 		self.verselist.set_data([_("Reference"), _("Preview")], length=0)
 
 		self.versepreview.regexes = []
-		self.versepreview.strongs = []
+		self.versepreview.fields = []
 		self.versepreview.SetReference(None)
 		self.save_results_button.Disable()
 
@@ -851,9 +851,7 @@ class SearchPanel(xrcSearchPanel):
 		self.set_title()
 
 		self.versepreview.regexes = self.regexes	
-		self.versepreview.strongs = [
-			value for key, value in self.fields if key == "strongs"
-		]
+		self.versepreview.fields = self.fields
 		
 		self.versepreview.SetReference(text[0])
 		self.save_results_button.Enable()
