@@ -664,19 +664,23 @@ def _test():
 	'abc'
 	>>> new_topic.description
 	'description'
+	>>> _remove_subtopic(new_topic)
+	Topic 'topic1 (new name)': remove subtopic observer called.
+	>>> _remove_subtopic(manager.subtopics[1])
+	Topic 'None': remove subtopic observer called.
 	>>> manager.save()
 	>>> manager.close()
 	>>> from passage_list import sqlite
 	>>> loaded_manager = sqlite.load_manager(filename)
 	>>> loaded_manager.subtopics
-	[<PassageList u'topic1 (new name)'>, <PassageList u'topic3'>, <PassageList u'Test'>]
+	[<PassageList u'topic1 (new name)'>, <PassageList u'Test'>]
 	>>> manager.subtopics
-	[<PassageList 'topic1 (new name)'>, <PassageList 'topic3'>, <PassageList 'Test'>]
+	[<PassageList 'topic1 (new name)'>, <PassageList 'Test'>]
 
 	>>> loaded_manager == manager
 	True
 	
-	>>> manager.close()
+	>>> loaded_manager.close()
 
 	>>> filename2 = "passages_test2.sqlite"
 	>>> try:

@@ -296,7 +296,7 @@ class PassageListManager(BasePassageList):
 		"""
 		global _global_passage_list_manager
 		_global_passage_list_manager = None
-		sqlite.close()
+		sqlite.close(self)
 
 	def get_name(self):
 		return "Topics"

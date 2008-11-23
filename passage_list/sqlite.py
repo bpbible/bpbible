@@ -156,9 +156,38 @@ def update_query(table, column_values, id):
 def save():
 	connection.commit()
 
-def close():
+def close(manager):
 	global connection
+	remove_deleted_records(manager)
 	connection.commit()
-	connection.execute("VACUUM")
+	# SQLite 3 documentation says that without this vacuum, the file will
+	# never grow smaller.
+	# However, vacuuming takes too long, and it does appear to grow smaller
+	# anyway, so we don't do it.
+	#connection.execute("VACUUM")
 	connection.close()
 	connection = None
+
+def remove_deleted_records(manager):
+	"""Removes all records in the database that have been deleted.
+
+	We don't want to remove them at the time because it would make undo a
+	little more complex.
+	"""
+	connection.execute("DELETE FROM passage WHERE parent IS NULL")
+	ids = [row[0] for row in connection.execute(
+			"SELECT id FROM topic WHERE parent IS NULL and id != ?", (manager.id,)
+		)]
+	while ids:
+		if len(ids) == 1:
+			id_condition = "= %s" % ids[0]
+		else:
+			id_condition = "IN (%s)" % ",".join(str(id) for id in ids)
+		# Deletes all children of deleted topics and all their children.
+		# This is essentially emulating cascading delete.
+		connection.execute("DELETE FROM topic WHERE id %s" % id_condition)
+		connection.execute("DELETE FROM passage WHERE parent %s" % id_condition)
+		ids = connection.execute("SELECT id FROM topic WHERE parent %s" % id_condition).fetchall()
+		ids = [row[0] for row in connection.execute(
+				"SELECT id FROM topic WHERE parent %s" % id_condition
+			)]
