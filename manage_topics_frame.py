@@ -788,6 +788,11 @@ class TopicDetailsPanel(xrcTopicDetailsPanel):
 		self.description_text.Bind(wx.EVT_KILL_FOCUS, self._lost_focus)
 		self._operations_manager = operations_manager
 
+	def Show(self, show=True):
+		super(TopicDetailsPanel, self).Show(show)
+		if not show:
+			self._save_topic()
+
 	def set_topic(self, new_topic):
 		"""Sets a new topic to edit with this panel."""
 		if new_topic is self.topic:
@@ -811,7 +816,7 @@ class TopicDetailsPanel(xrcTopicDetailsPanel):
 
 		self._save_topic()
 
-	def _save_topic(self)
+	def _save_topic(self):
 		"""Save the current topic."""
 		if not self.topic:
 			return
@@ -829,6 +834,11 @@ class PassageDetailsPanel(xrcPassageDetailsPanel):
 		self._operations_manager = operations_manager
 		self._creating_passage = False
 		self._parent_topic = None
+
+	def Show(self, show=True):
+		super(PassageDetailsPanel, self).Show(show)
+		if not show:
+			self._save_passage()
 
 	def set_passage(self, new_passage):
 		if new_passage is self.passage:
