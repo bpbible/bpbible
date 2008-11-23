@@ -97,7 +97,9 @@ locale_mgr.loadConfigDir("locales/locales.d")
 #	dprint(WARNING, "bpbible locale not found")
 
 
-class VerseParsingError(Exception): pass
+class VerseParsingError(Exception): 
+	def __str__(self):
+		return self.message
 
 def KeyExists(key_text, base_key=None):
 	if base_key is None:
