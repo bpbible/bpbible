@@ -319,6 +319,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		new_topic = self._operations_manager.add_new_topic(creation_function)
 		self._set_selected_topic(new_topic)
 		self.topic_details_panel.focus()
+		self.topic_details_panel.combine_action = True
 
 	def save_search_results(self, search_string, search_results):
 		assert search_string
@@ -785,7 +786,10 @@ class TopicDetailsPanel(xrcTopicDetailsPanel):
 		self.topic = None
 		self.name_text.Bind(wx.EVT_KILL_FOCUS, self._lost_focus)
 		self.description_text.Bind(wx.EVT_KILL_FOCUS, self._lost_focus)
+		self.old_name = u""
+		self.old_description = u""
 		self._operations_manager = operations_manager
+		self.combine_action = False
 
 	def Show(self, show=True):
 		super(TopicDetailsPanel, self).Show(show)
@@ -797,7 +801,11 @@ class TopicDetailsPanel(xrcTopicDetailsPanel):
 		if new_topic is self.topic:
 			return
 
+		self.old_name = new_topic.name
+		self.old_description = new_topic.description
+
 		self._save_topic()
+		self.combine_action = False
 
 		self.topic = new_topic
 		self.name_text.Value = new_topic.name
@@ -822,7 +830,11 @@ class TopicDetailsPanel(xrcTopicDetailsPanel):
 
 		name = self.name_text.Value
 		description = self.description_text.Value
-		self._operations_manager.set_topic_details(self.topic, name, description)
+		if name != self.old_name or description != self.old_description:
+			self._operations_manager.set_topic_details(self.topic, name, description, self.combine_action)
+			self.old_name = name
+			self.old_description = description
+			self._combine_action = True
 
 class PassageDetailsPanel(xrcPassageDetailsPanel):
 	def __init__(self, parent, operations_manager):
@@ -830,11 +842,13 @@ class PassageDetailsPanel(xrcPassageDetailsPanel):
 		self.passage = None
 		self.last_passage_text = u""
 		self.passage_verse_key = None
+		self.old_comment_text = u""
 		self.passage_text.Bind(wx.EVT_KILL_FOCUS, self._lost_focus)
 		self.comment_text.Bind(wx.EVT_KILL_FOCUS, self._lost_focus)
 		self._operations_manager = operations_manager
 		self._creating_passage = False
 		self._parent_topic = None
+		self._combine_action = False
 
 	def Show(self, show=True):
 		super(PassageDetailsPanel, self).Show(show)
@@ -846,10 +860,12 @@ class PassageDetailsPanel(xrcPassageDetailsPanel):
 			return
 
 		self._save_passage()
+		self._combine_action = False
 
 		self.passage = new_passage
 		passage_text =  _passage_str(new_passage, short=False)
 		self.last_passage_text = passage_text
+		self.old_comment_text = new_passage.comment
 		self.passage_verse_key = new_passage.passage
 		self.passage_text.Value = passage_text
 		self.comment_text.Value = new_passage.comment
@@ -869,6 +885,7 @@ class PassageDetailsPanel(xrcPassageDetailsPanel):
 		self._operations_manager.insert_item(self.passage, parent_topic=self._parent_topic)
 		self._creating_passage = False
 		self._parent_topic = None
+		self.combine_action = True
 
 	def focus(self):
 		"""Sets the focus on this panel for editing."""
@@ -893,10 +910,14 @@ class PassageDetailsPanel(xrcPassageDetailsPanel):
 
 		passage_changed = self._parse_passage_str()
 		comment = self.comment_text.Value
-		allow_undo = not self._creating_passage
-		self._operations_manager.set_passage_details(
-				self.passage, self.passage_verse_key, comment, allow_undo
-			)
+		if passage_changed or comment != self.old_comment_text:
+			self.old_comment_text = comment
+			allow_undo = not self._creating_passage
+			combine_action = self._combine_action and allow_undo
+			self._combine_action = True
+			self._operations_manager.set_passage_details(
+					self.passage, self.passage_verse_key, comment, allow_undo, combine_action,
+				)
 		if self._creating_passage and passage_changed:
 			self._create_passage()
 		return passage_changed

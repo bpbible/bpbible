@@ -11,7 +11,6 @@ class ManageTopicsOperations(object):
 		self._undone_actions = []
 		self.undo_available_changed_observers = ObserverList()
 		self.paste_available_changed_observers = ObserverList()
-		self._merge_next_edit_action = False
 
 	def insert_item(self, item, index=None, parent_topic=None):
 		if parent_topic is None:
@@ -22,7 +21,7 @@ class ManageTopicsOperations(object):
 	def add_new_topic(self, creation_function=None):
 		parent_topic = self._context.get_selected_topic()
 		action = AddNewTopicAction(parent_topic, creation_function)
-		self._perform_action(action, merge_next_edit_action=True)
+		self._perform_action(action)
 		return action.topic
 
 	def move_current_passage(self, new_index):
@@ -39,18 +38,18 @@ class ManageTopicsOperations(object):
 
 		self._perform_action(DeleteAction(item))
 
-	def set_topic_name(self, topic, name):
+	def set_topic_name(self, topic, name, combine_action=False):
 		self.set_topic_details(topic, name, topic.description)
 
-	def set_topic_details(self, topic, name, description):
+	def set_topic_details(self, topic, name, description, combine_action=False):
 		self._perform_action(SetTopicDetailsAction(
 				self._passage_list_manager, topic, name, description
-			))
+			), combine_action=combine_action)
 
-	def set_passage_details(self, passage_entry, passage, comment, allow_undo=True):
+	def set_passage_details(self, passage_entry, passage, comment, allow_undo=True, combine_action=False):
 		self._perform_action(SetPassageDetailsAction(
 				self._passage_list_manager, passage_entry, passage, comment
-			), allow_undo=allow_undo)
+			), allow_undo=allow_undo, combine_action=combine_action)
 
 	def cut(self):
 		self._setup_clipboard(keep_original=False)
@@ -129,7 +128,7 @@ class ManageTopicsOperations(object):
 	def can_redo(self):
 		return bool(self._undone_actions)
 
-	def _perform_action(self, action, merge_next_edit_action=False, allow_undo=True):
+	def _perform_action(self, action, allow_undo=True, combine_action=False):
 		"""Performs the given action.
 		
 		The performed action is added to the list of performed actions, and
@@ -137,13 +136,15 @@ class ManageTopicsOperations(object):
 		"""
 		action.perform_action()
 		self._passage_list_manager.save()
-		merge_action = (self._merge_next_edit_action
-				and isinstance(action, SetTopicDetailsAction))
-		if not merge_action and allow_undo:
+		if combine_action:
+			assert self._actions
+			self._actions[-1].combine_action(action)
+			allow_undo = False
+
+		if allow_undo:
 			self._actions.append(action)
 			self._undone_actions = []
 			self.undo_available_changed_observers()
-		self._merge_next_edit_action = merge_next_edit_action
 
 class Action(object):
 	"""This class performs an action on a topic or passage.
@@ -179,6 +180,12 @@ class Action(object):
 		that action.
 		"""
 		self._get_reverse_action().perform_action()
+
+	def combine_action(self, action):
+		"""Combines the given action with this action.
+		
+		Note that this just ignores the action.
+		"""
 
 class CompositeAction(Action):
 	"""This class performs and undoes a collection of individual actions.
@@ -255,6 +262,13 @@ class SetPassageDetailsAction(Action):
 		self.comment = comment
 		self.manager = manager
 
+	def combine_action(self, action):
+		if not isinstance(action, SetPassageDetailsAction):
+			return
+
+		self.passage = action.passage
+		self.comment = action.comment
+
 	def _perform_action(self):
 		self.old_passage = self.passage_entry.passage
 		self.old_comment = self.passage_entry.comment
@@ -278,6 +292,13 @@ class SetTopicDetailsAction(Action):
 		self.name = name
 		self.description = description
 		self.manager = manager
+
+	def combine_action(self, action):
+		if not isinstance(action, SetTopicDetailsAction):
+			return
+
+		self.name = action.name
+		self.description = action.description
 
 	def _perform_action(self):
 		self.old_name = self.topic.name
@@ -331,6 +352,7 @@ def _test():
 	"""
 	>>> __builtins__['_'] = lambda x: x
 	>>> from passage_list import get_primary_passage_list_manager
+	>>> from swlib.pysw import VK
 	>>> import os
 	>>> filename = "passages_test.sqlite"
 	>>> try:
@@ -419,11 +441,11 @@ def _test():
 	>>> def _set_topic_name(topic, name, operations_manager_context=operations_manager_context, operations_manager=operations_manager):
 	... 	operations_manager.set_topic_name(topic, name)
 	...
-	>>> def _set_topic_details(topic, name, description, operations_manager_context=operations_manager_context, operations_manager=operations_manager):
-	... 	operations_manager.set_topic_details(topic, name, description)
+	>>> def _set_topic_details(topic, name, description, combine_action=False, operations_manager_context=operations_manager_context, operations_manager=operations_manager):
+	... 	operations_manager.set_topic_details(topic, name, description, combine_action=combine_action)
 	...
-	>>> def _set_passage_details(passage_entry, passage, comment, operations_manager_context=operations_manager_context, operations_manager=operations_manager):
-	... 	operations_manager.set_passage_details(passage_entry, passage, comment)
+	>>> def _set_passage_details(passage_entry, passage, comment, combine_action=False, operations_manager_context=operations_manager_context, operations_manager=operations_manager):
+	... 	operations_manager.set_passage_details(passage_entry, passage, comment, combine_action=combine_action)
 	...
 
 	>>> _add_subtopic(manager, topic1)
@@ -646,11 +668,12 @@ def _test():
 	created" action.
 	>>> new_topic = _add_new_topic(topic1)
 	Topic 'topic1 (new name)': add subtopic observer called.
-	>>> _set_topic_details(new_topic, "New Topic Name", "description")
+	>>> _set_topic_details(new_topic, "New Topic Name (1)", "description", combine_action=True)
 	>>> new_topic.name
-	'New Topic Name'
+	'New Topic Name (1)'
 	>>> new_topic.description
 	'description'
+	>>> _set_topic_details(new_topic, "New Topic Name", "description", combine_action=True)
 	>>> operations_manager.undo()
 	Topic 'topic1 (new name)': remove subtopic observer called.
 	>>> operations_manager.redo()
@@ -665,6 +688,35 @@ def _test():
 	'abc'
 	>>> new_topic.description
 	'description'
+
+	>>> _set_passage_details(passage1, VK("gen 8:8"), "comment.", combine_action=False)
+	Passage 'Genesis 8:8': passage changed observer called.
+	Passage 'Genesis 8:8': comment changed observer called.
+	>>> _set_passage_details(passage1, VK("gen 8:8"), "comment 2.", combine_action=True)
+	Passage 'Genesis 8:8': comment changed observer called.
+	>>> operations_manager.undo()
+	Passage 'Genesis 3:5': passage changed observer called.
+	Passage 'Genesis 3:5': comment changed observer called.
+	>>> new_passage = PassageEntry(VK("gen 9:2"))
+	>>> _add_passage(manager.subtopics[2], new_passage)
+	>>> _set_passage_details(new_passage, VK("gen 8:8"), "", combine_action=True)
+	>>> _set_passage_details(new_passage, VK("gen 8:8"), "comment.", combine_action=True)
+	>>> _set_passage_details(new_passage, VK("gen 8:8"), "comment 2.", combine_action=False)
+	>>> str(new_passage)
+	'Genesis 8:8'
+	>>> new_passage.comment
+	'comment 2.'
+	>>> operations_manager.undo()
+	>>> str(new_passage)
+	'Genesis 8:8'
+	>>> new_passage.comment
+	'comment.'
+	>>> manager.subtopics[2].passages[-1]
+	PassageEntry('Genesis 8:8', 'comment.')
+	>>> operations_manager.undo()
+	>>> manager.subtopics[2].passages[-1]
+	PassageEntry('Genesis 50:1 - 26', '')
+
 	>>> _remove_subtopic(new_topic)
 	Topic 'topic1 (new name)': remove subtopic observer called.
 	>>> _remove_subtopic(manager.subtopics[1])
