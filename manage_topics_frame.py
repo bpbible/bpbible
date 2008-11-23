@@ -3,8 +3,7 @@ from wx.lib.mixins.listctrl import ListCtrlAutoWidthMixin
 import guiconfig
 from events import TOPIC_LIST
 from passage_list import (get_primary_passage_list_manager,
-		lookup_passage_entry, PassageList, PassageEntry,
-		InvalidPassageError, MultiplePassagesError)
+		lookup_passage_entry, PassageList, PassageEntry)
 from xrc.manage_topics_xrc import (xrcManageTopicsFrame,
 		xrcPassageDetailsPanel, xrcTopicDetailsPanel)
 from xrc.xrc_util import attach_unknown_control
@@ -829,6 +828,8 @@ class PassageDetailsPanel(xrcPassageDetailsPanel):
 	def __init__(self, parent, operations_manager):
 		super(PassageDetailsPanel, self).__init__(parent)
 		self.passage = None
+		self.last_passage_text = u""
+		self.passage_verse_key = None
 		self.passage_text.Bind(wx.EVT_KILL_FOCUS, self._lost_focus)
 		self.comment_text.Bind(wx.EVT_KILL_FOCUS, self._lost_focus)
 		self._operations_manager = operations_manager
@@ -847,7 +848,10 @@ class PassageDetailsPanel(xrcPassageDetailsPanel):
 		self._save_passage()
 
 		self.passage = new_passage
-		self.passage_text.Value = _passage_str(new_passage, short=False)
+		passage_text =  _passage_str(new_passage, short=False)
+		self.last_passage_text = passage_text
+		self.passage_verse_key = new_passage.passage
+		self.passage_text.Value = passage_text
 		self.comment_text.Value = new_passage.comment
 		self.passage_preview.SetReference(str(new_passage))
 
@@ -859,12 +863,12 @@ class PassageDetailsPanel(xrcPassageDetailsPanel):
 
 	def _create_passage(self):
 		assert self._creating_passage
+		assert self.passage_verse_key
+		assert self.passage.passage
+
+		self._operations_manager.insert_item(self.passage, parent_topic=self._parent_topic)
 		self._creating_passage = False
 		self._parent_topic = None
-		if not self.passage.passage:
-			return
-
-		self._operations_manager.insert_item(self.passage)
 
 	def focus(self):
 		"""Sets the focus on this panel for editing."""
@@ -876,29 +880,52 @@ class PassageDetailsPanel(xrcPassageDetailsPanel):
 			event.Skip()
 			return
 
-		self._save_passage()
-
-		if self._creating_passage and self.FindFocus() not in self.Children:
-			self._create_passage()
+		if self._save_passage():
+			self.passage_preview.SetReference(str(self.passage))
 
 	def _save_passage(self):
-		"""Saves the current passage."""
+		"""Saves the current passage.
+		
+		Returns true if the internal passage has changed.
+		"""
 		if self.passage is None:
-			return
+			return False
 
-		try:
-			passage = self.passage_text.Value
-			comment = self.comment_text.Value
-			allow_undo = not self._creating_passage
-			self._operations_manager.set_passage_details(self.passage, passage, comment, allow_undo)
-			self.passage_preview.SetReference(str(self.passage))
-		except InvalidPassageError:
-			wx.MessageBox(_("Unrecognised passage `%s'.") % passage,
+		passage_changed = self._parse_passage_str()
+		comment = self.comment_text.Value
+		allow_undo = not self._creating_passage
+		self._operations_manager.set_passage_details(
+				self.passage, self.passage_verse_key, comment, allow_undo
+			)
+		if self._creating_passage and passage_changed:
+			self._create_passage()
+		return passage_changed
+
+	def _parse_passage_str(self):
+		"""Parses the current passage string into a verse key, displaying an
+		error if the passage is unrecognised or there is more than one verse
+		range in it.
+
+		Returns True if the internal verse key has changed.
+		"""
+		passage_text = self.passage_text.Value
+		if passage_text == self.last_passage_text:
+			return False 
+		self.last_passage_text = passage_text
+
+		passages = VerseList(passage_text, userInput=True)
+		if len(passages) == 1:
+			self.passage_verse_key = passages[0]
+			return True
+		elif len(passages) > 1:
+			wx.MessageBox(_(u"Passage `%s' contains multiple passages.\n"
+					"Only one verse or verse range can be entered.") % passage_text,
 					"", wx.OK | wx.ICON_INFORMATION, self)
-		except MultiplePassagesError:
-			wx.MessageBox(_("Passage `%s' contains multiple passages.\n"
-					"Only one verse or verse range can be entered.") % passage,
+			return False
+		else:
+			wx.MessageBox(_(u"Unrecognised passage `%s'.") % passage_text,
 					"", wx.OK | wx.ICON_INFORMATION, self)
+			return False
 
 class OperationsContext(BaseOperationsContext):
 	"""Provides a context for passage list manager operations.

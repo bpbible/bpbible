@@ -13,8 +13,9 @@ class ManageTopicsOperations(object):
 		self.paste_available_changed_observers = ObserverList()
 		self._merge_next_edit_action = False
 
-	def insert_item(self, item, index=None):
-		parent_topic = self._context.get_selected_topic()
+	def insert_item(self, item, index=None, parent_topic=None):
+		if parent_topic is None:
+			parent_topic = self._context.get_selected_topic()
 		item = self._context.get_wrapper(item)
 		self._perform_action(InsertAction(parent_topic, item, index))
 
