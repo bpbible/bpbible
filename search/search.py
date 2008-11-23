@@ -91,6 +91,19 @@ def printx(x):
 	print x
 	return True
 
+class BadBook(Exception):
+	def __init__(self, index, errors):
+		errors = [
+			_("A problem was detected with this book while indexing it:")
+		] + list(errors) + ['',
+			_("Check whether there is a newer version of this book which "
+			"might fix this problem.")
+		]
+
+		super(BadBook, self).__init__('\n'.join(errors))
+		self.index = index
+	
+
 class Index(object):
 	def __init__(self, version, progress=printx, booktype=VerseIndexedText):
 		self.version = version
@@ -108,7 +121,18 @@ class Index(object):
 		#self.text = ""
 		self.statistics = {}
 		self.GenerateIndex(self.version, progress)
+		self.check_for_errors()
 
+	def check_for_errors(self):
+		errors = []
+		for item in self.books:
+			for i in item.errors_on_collection:
+				if i not in errors:
+					errors.append(i)
+			
+		if errors:
+			raise BadBook(self, errors)
+	
 	def GenerateIndex(self, mod, progress = lambda x:x):
 		"""Index.GenerateIndex - Collates book indexes"""
 		#text = ""

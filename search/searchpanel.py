@@ -897,14 +897,18 @@ class SearchPanel(xrcSearchPanel):
 		p.Show()
 		#self.show_progress_bar()
 
+		error = None
 		try:
 			#create index
 			try:
 				self.index = self.index_type(version, callback)
 			except search.Cancelled:
 				self.show_keyboard_button(False)
-			
 				return None
+
+			except search.BadBook, e:
+				self.index = e.index
+				error = unicode(e)
 			
 			self.set_index_available(True)
 			self.show_keyboard_button()
@@ -932,8 +936,12 @@ class SearchPanel(xrcSearchPanel):
 			
 			last_time = [time.time()]
 			self.index.WriteIndex(progress=index_callback)
+			
 
 		finally:
+			if error:
+				wx.MessageBox(unicode(error), "Error on indexing", parent=self)
+		
 			#self.show_progress_bar(False)
 			p.Hide()
 			p.Destroy()

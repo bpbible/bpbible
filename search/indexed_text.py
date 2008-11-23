@@ -2,8 +2,9 @@ from backend.bibleinterface import biblemgr
 from swlib.pysw import VK, TOP, SW, TK
 import re
 import sys
-from util.debug import dprint, WARNING, ERROR
+from util.debug import dprint, WARNING, ERROR, is_debugging
 from util.unicode import to_unicode, to_str
+
 
 from query_parser import removeformatting
 import process_text
@@ -20,6 +21,7 @@ class IndexedText(object):
 		self.bookname = bookname or version
 		self.version = version
 		module = self.load_module(version)
+		self.errors_on_collection = []
 		if create_index:
 			self.collect_text(module)
 	
@@ -32,7 +34,6 @@ class IndexedText(object):
 		MAGIC_TOKEN = u"\uFDD0"
 
 		xml_token = "&#%d;" % ord(MAGIC_TOKEN)
-
 		items = []
 
 		old_key = module.getKey()
@@ -90,6 +91,11 @@ class IndexedText(object):
 				)
 
 			except Exception, e:
+				self.errors_on_collection.append(
+					_(
+					"Invalid XML found: Searching on fields may not work or "
+					"may not display all matches.")
+				)
 				import traceback
 				traceback.print_exc()
 				print self.get_key(module).getText()
@@ -108,6 +114,26 @@ class IndexedText(object):
 		self.text = re.sub("\s*%s\s*" % MAGIC_TOKEN, "\n", content)
 		self.text, self.field_data = self.extract_strongs(self.text)
 
+		if self.text.count('\n') + 1 != len(items):
+			# it is possible that decoding the utf8 of the book above
+			# may lead to problems which will gobble up our magic token
+			# so we check that we have the expected number here. If we don't,
+			# scream, as it may lead to incorrect results
+			self.errors_on_collection.append(
+				_("Invalid encoding: Searching may not work or may "
+				"display the wrong results")
+			)
+			
+			if is_debugging():
+				for k, item in items:
+					try:
+						# TODO: sword ThMLPlain filter outputs &...; as
+						# latin1, not utf-8. This makes big problems...
+						module.StripText(item).decode("utf-8")
+					except UnicodeDecodeError:
+						self.errors_on_collection.append(k)
+
+		
 		self.create_index_against_text(module, key)
 
 		module.setKey(old_key)
@@ -172,6 +198,10 @@ class IndexedText(object):
 			start, end = match.span()
 			self.index.append((ind, start, end-start))
 			module.increment(1)
+
+		if not ord(module.Error()):
+			print "BAD", key
+			print module.getKeyText()
 		
 	def find_index(self, mylist):
 		"""Turn a sorted list of begin, end pairs into references using 
