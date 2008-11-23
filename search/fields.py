@@ -3,6 +3,7 @@ import query_parser
 from swlib.pysw import SW, VerseList
 import re
 from util import classproperty
+from util.debug import dprint, WARNING
 
 class BaseField(object):
 	field_name = None
@@ -102,7 +103,12 @@ class RefField(BaseField):
 	@classmethod
 	def prepare(cls, input):
 		vl = VerseList(input, raiseError=True, userInput=True)
-		assert len(vl) == 1
+		if len(vl) != 1:
+			dprint(
+				WARNING, 
+				"Multiple results in search ref: verselist. Taking first",
+				vl
+			)
 		if vl[0][0].getBookName() != vl[0][-1].getBookName():
 			from search import SearchException		
 			raise SearchException(
