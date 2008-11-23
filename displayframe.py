@@ -10,7 +10,7 @@ import config
 
 
 
-from swlib.pysw import GetBestRange
+from swlib.pysw import GetBestRange, SW, VerseList
 from backend.bibleinterface import biblemgr
 from backend.verse_template import VerseTemplate
 from util import osutils
@@ -464,12 +464,22 @@ class DisplayFrame(HtmlSelectableWindow):
 						match = re.match(u'n?bible:([^#]*)(#.*)?', 
 							link.GetHref())
 						if match:
-							text = GetBestRange(
-								match.group(1),
+							text = GetBestRange(match.group(1),
 								userOutput=True)
+
+
+						match = re.match(
+							u'passagestudy.jsp\?action=showRef&type=scripRef&'
+							'value=([^&]*)&module=.*', link.GetHref())
+						if match:
+							text = GetBestRange(
+								SW.URL.decode(str(match.group(1))).c_str(),
+								userOutput=True)
+						
+						if text:
 							event.SetText(lookup_text % text)
 							return
-
+								
 			if not text:
 				text = self.get_clicked_cell_text()
 
@@ -540,17 +550,34 @@ class DisplayFrame(HtmlSelectableWindow):
 				
 				if not text:
 					match = re.match(u'passagestudy.jsp\?action=showMorph&'
-						'type=(\w*)(:|%3A)[^&]+&value=([\w-]+)', link.GetHref())
+						'type=(\w*)((:|%3A)[^&]+)?&value=([\w-]+)',
+						link.GetHref())
 					if match:
-						module, value = match.group(1, 3)
+						module, value = match.group(1, 4)
+						if module == "Greek": module = "Robinson"
 						text = "morph:%s:%s" % (module, value)
 
 				if not text:
 					match = re.match(u'n?bible:([^#]*)(#.*)?', link.GetHref())
 					if match:
-						text = 'ref:"%s"' % GetBestRange(
-							match.group(1),
+						vl = VerseList(match.group(1))	
+
+						# only search on the first item or range
+						text = 'ref:"%s"' % VerseList([vl[0]]).GetBestRange(
 							userOutput=True)
+				if not text:
+					match = re.match(
+						u'passagestudy.jsp\?action=showRef&type=scripRef&'
+						'value=([^&]*)&module=.*', link.GetHref())
+					if match:
+						vl = VerseList(
+							SW.URL.decode(str(match.group(1))).c_str()
+						)
+
+						# only search on the first item or range				
+						text = 'ref:"%s"' % VerseList([vl[0]]).GetBestRange(
+							userOutput=True)
+							
 
 			if not text:
 				text = self.SelectionToText()
@@ -559,8 +586,10 @@ class DisplayFrame(HtmlSelectableWindow):
 
 				text = self.strip_text(text)
 
+				# get rid of a few special characters
+				text = re.sub(r'[\()"/:\-]', '', text)
+
 				# if this is a phrase, put quotes around it.
-				# In the future, it may be wise to set the type to phrase
 				if " " in text:
 					text = '"%s"' % text
 
