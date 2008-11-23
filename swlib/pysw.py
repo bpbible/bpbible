@@ -880,13 +880,20 @@ class VerseList(list):
 		
 		def getdetails(versekey):
 			if userOutput:
+				# translate twice so that we get our -'s in
+				# the first translate puts it into user locale
+				# the second translate puts dashes in
 				if short:
 					book = abbrev_locale.translate(
-						versekey.getBookName()
+						abbrev_locale.translate(
+							versekey.getBookName()
+						)
 					).decode(abbrev_locale_encoding)
 				else:
 					book = locale.translate(
-						versekey.getBookName()
+						locale.translate(
+							versekey.getBookName()
+						)
 					).decode(locale_encoding)
 			else:
 				if short: 
