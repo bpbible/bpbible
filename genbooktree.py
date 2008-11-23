@@ -1,7 +1,7 @@
 import wx.combo
 import wx
 import sys
-from swlib.pysw import *
+from swlib.pysw import TK, ImmutableTK
 from gui.treecombo import LazyTreeCombo
 		
 class GenBookTree(LazyTreeCombo):
