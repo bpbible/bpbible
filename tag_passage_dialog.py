@@ -5,7 +5,6 @@ import passage_list.settings
 from xrc.tag_passage_dialog_xrc import xrcTagPassageDialog
 from xrc.xrc_util import attach_unknown_control
 from topic_selector import TopicSelector
-from topic_creation_dialog import TopicCreationDialog
 import guiconfig
 import events
 
@@ -22,20 +21,11 @@ class TagPassageDialog(xrcTagPassageDialog):
 
 	def _bindEvents(self):
 		self.Bind(wx.EVT_BUTTON, self._on_ok_button_clicked, self.wxID_OK)
-		self.Bind(wx.EVT_BUTTON, self._on_new_tag_clicked, self.new_tag_button)
 		self.topic_selector.return_pressed_observers += self.comment_text.SetFocus
 	
 	def _on_ok_button_clicked(self, event):
 		if self._topic_is_selected():
 			event.Skip()
-
-	def _on_new_tag_clicked(self, event):
-		dialog = TopicCreationDialog(self)
-		dialog.call_on_selection = self._on_new_tag_created
-		dialog.Show()
-
-	def _on_new_tag_created(self, passage_list):
-		self.topic_selector.selected_topic = passage_list
 
 	def _topic_is_selected(self):
 		return self.topic_selector.selected_topic is not None

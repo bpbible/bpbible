@@ -12,26 +12,16 @@
             <flag>wxALIGN_CENTRE_VERTICAL</flag>
             <border>6</border>
           </object>
+          
+          
+          
+          <cols>2</cols>
           <object class="sizeritem">
-            <object class="wxBoxSizer">
-              <object class="sizeritem">
-                <object class="unknown" name="topic_selector">
-                  <focused>1</focused>
-                </object>
-                <flag>wxRIGHT|wxGROW</flag>
-                <border>6</border>
-              </object>
-              <object class="sizeritem">
-                <object class="wxButton" name="new_tag_button">
-                  <label>&amp;New</label>
-                  <tooltip>Creates a new topic.</tooltip>
-                </object>
-                <flag>wxADJUST_MINSIZE</flag>
-              </object>
-              <orient>wxHORIZONTAL</orient>
+            <object class="unknown" name="topic_selector">
+              <focused>1</focused>
             </object>
-            <flag>wxALL|wxGROW</flag>
-            <border>0</border>
+            <option>1</option>
+            <flag>wxGROW</flag>
           </object>
           <object class="sizeritem">
             <object class="wxStaticText">
@@ -43,12 +33,9 @@
             <object class="wxTextCtrl" name="comment_text">
               <style>wxTE_MULTILINE</style>
             </object>
+            <option>1</option>
             <flag>wxGROW</flag>
-            <border>6</border>
-            <minsize>120</minsize>
-            <ratio>1</ratio>
           </object>
-          <cols>2</cols>
           <rows>2</rows>
           <vgap>6</vgap>
           <hgap>6</hgap>
