@@ -21,7 +21,7 @@ regex = r"""
 	
 	%s								   # if we are in a bible, exclude text
 									   # from cross-reference links
-	(<a\ href="passagestudy.jsp?(
+	(<a\ href="passagestudy.jsp\?(
 		(action=showRef[^>]*>)  	 | # a reference - don't include text
 		([^>]*>.*?</a>) 		 	   # or another sword link and contents	
 	))								 |
@@ -148,6 +148,9 @@ def unite(string1, string2, is_bible):
 		except StopIteration:
 			dprint(ERROR, "Didn't match token in first string", token1,
 				string1, string2, list(iter1))
+			global s1, s2
+			s1 = string1
+			s2 = string2
 
 			return []
 
