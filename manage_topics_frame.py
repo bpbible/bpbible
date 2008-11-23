@@ -525,9 +525,14 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		self.passage_list_pane.Sizer.Layout()
 
 def _passage_str(passage_entry, short=False):
-	"""Gets a string for the given passage for user output."""
-	#return str(passage_entry)
-	# XXX: Commented out because it is orders of magnitude too slow.
+	"""Gets a string for the given passage for user output.
+
+	If the passage is invalid or not specified, then it will return
+	an empty string.  This is needed when creating a new passage.
+	"""
+	if not passage_entry.passage:
+		return u""
+
 	return VerseList([passage_entry.passage]).GetBestRange(userOutput=True, short=short)
 
 # Specifies what type of dragging is currently happening with the topic tree.
