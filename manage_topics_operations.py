@@ -815,22 +815,6 @@ class PassageWrapper(object):
 		self._passage = passage
 		self.wrapped = passage
 
-	def get_name(self):
-		return str(self._passage)
-
-	def set_name(self, passage):
-		self._passage.passage = passage
-
-	name = property(get_name, set_name)
-
-	def get_description(self):
-		return self._passage.comment
-
-	def set_description(self, comment):
-		self._passage.comment = comment
-
-	description = property(get_description, set_description)
-
 	@property
 	def parent(self):
 		return self._passage.parent
@@ -854,22 +838,6 @@ class TopicWrapper(object):
 	def __init__(self, topic):
 		self._topic = topic
 		self.wrapped = topic
-
-	def get_name(self):
-		return self._topic.name
-
-	def set_name(self, name):
-		self._topic.name = name
-
-	name = property(get_name, set_name)
-
-	def get_description(self):
-		return self._topic.description
-
-	def set_description(self, description):
-		self._topic.description = description
-
-	description = property(get_description, set_description)
 
 	@property
 	def parent(self):
