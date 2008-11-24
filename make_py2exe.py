@@ -5,7 +5,7 @@ import re
 import sys
 import contrib
 import config
-from util.i18n import languages
+from util.i18n import find_languages
 
 version = sys.argv[-1]
 if re.findall("^([0-9]+\.)*[0-9]+$", version):
@@ -58,6 +58,7 @@ else:
 	options = {"py2exe": {"optimize": 1}}
 	zipfile="library.zip"
 
+languages = find_languages(is_release=True)
 if(setup(
 	options = options,
 	

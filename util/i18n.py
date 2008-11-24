@@ -7,6 +7,7 @@ Module to support internationalisation and localisation of the interface.
 # python ~/Python-2.5.2/Tools/i18n/pygettext.py -p locales/ -k N_ `find . -name "*.py"`
 
 
+import config
 import gettext
 from util.debug import dprint, WARNING
 from util.configmgr import config_manager
@@ -52,9 +53,12 @@ def N_(text):
 ##	as=N_("Assammese"),	
 #)
 	
-def find_languages():
+def find_languages(is_release=False):
 	languages = {}
 	for item in os.listdir("locales"):
+		if "en_au" in item.lower() and is_release:
+			continue
+
 		if os.path.isdir("locales/" + item) and item != "locales.d" and \
 			os.path.exists("locales/%s/locale.conf" % item):
 			conf = SW.Config("locales/%s/locale.conf" % item)
@@ -66,4 +70,4 @@ def find_languages():
 	
 	return languages
 
-languages = find_languages()
+languages = find_languages(config.is_release())
