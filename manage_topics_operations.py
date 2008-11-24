@@ -36,7 +36,7 @@ class ManageTopicsOperations(object):
 		if not item:
 			return
 
-		self._perform_action(DeleteAction(item))
+		self._perform_action(DeleteAction, action_item=item)
 
 	def set_topic_name(self, topic, name, combine_action=False):
 		self.set_topic_details(topic, name, topic.description)
@@ -92,13 +92,25 @@ class ManageTopicsOperations(object):
 		will be thrown.
 		"""
 		item = self._context.get_wrapper(item)
-		if item.is_child_topic(to_topic):
-			raise CircularDataException()
+		try:
+			if item.is_child_topic(to_topic):
+				raise CircularDataException()
+		# Lists of passages do not have a method is_child_topic.
+		except AttributeError:
+			pass
 
-		if item.parent is to_topic:
+		if isinstance(item, list):
+			parent = item[0].parent
+		else:
+			parent = item.parent
+
+		if parent is to_topic:
 			return
 
-		self._perform_action(CopyAction(item, to_topic, keep_original))
+		self._perform_action(
+				lambda actual_item: CopyAction(actual_item, to_topic, keep_original),
+				action_item=item,
+			)
 
 	def undo(self):
 		"""Undoes the most recently performed action."""
@@ -128,12 +140,20 @@ class ManageTopicsOperations(object):
 	def can_redo(self):
 		return bool(self._undone_actions)
 
-	def _perform_action(self, action, allow_undo=True, combine_action=False):
+	def _perform_action(self, action, action_item=None, allow_undo=True, combine_action=False):
 		"""Performs the given action.
 		
 		The performed action is added to the list of performed actions, and
 		can be undone later.
+		If the action is callable, then it will be called with the item.
+		This is useful for building up a list of items in actual_item and
+		creating a composite action.
 		"""
+		if callable(action):
+			if isinstance(action_item, list):
+				action = CompositeAction([action(item) for item in action_item])
+			else:
+				action = action(action_item)
 		action.perform_action()
 		self._passage_list_manager.save()
 		if combine_action:
@@ -402,7 +422,7 @@ def _test():
 	... 	operations_manager_context.set_selected_topic(topic)
 	... 	operations_manager.insert_item(passage)
 	...
-	>>> def _remove_passage(topic, passage, operations_manager_context=operations_manager_context, operations_manager=operations_manager):
+	>>> def _remove_passage(passage, operations_manager_context=operations_manager_context, operations_manager=operations_manager):
 	... 	operations_manager_context.set_selected_passage(passage)
 	... 	operations_manager.delete()
 	...
@@ -468,7 +488,7 @@ def _test():
 	Topic 'topic1 > topic2': add passage observer called.
 	>>> topic2.passages
 	[PassageEntry('Genesis 3:5', '')]
-	>>> _remove_passage(topic2, passage1)
+	>>> _remove_passage(passage1)
 	Topic 'topic1 > topic2': remove passage observer called.
 	>>> topic2.passages
 	[]
@@ -487,7 +507,7 @@ def _test():
 
 	Check that removing works when no subtopics or passages are selected.
 	>>> _remove_subtopic(None)
-	>>> _remove_passage(topic2, None)
+	>>> _remove_passage(None)
 
 	>>> _move_passage(passage1, topic1)
 	Topic 'topic1 > topic2': remove passage observer called.
@@ -609,7 +629,7 @@ def _test():
 
 	Check that you can't redo an action after undoing and doing a different
 	action.
-	>>> _remove_passage(topic1, topic1.passages[0])
+	>>> _remove_passage(topic1.passages[0])
 	Topic 'topic1': remove passage observer called.
 	>>> operations_manager.undo()
 	Topic 'topic1': add passage observer called.
@@ -617,7 +637,7 @@ def _test():
 	True
 	>>> topic1.passages
 	[PassageEntry('Genesis 5:5', ''), PassageEntry('Genesis 3:5', '')]
-	>>> _remove_passage(topic1, topic1.passages[1])
+	>>> _remove_passage(topic1.passages[1])
 	Topic 'topic1': remove passage observer called.
 	>>> topic1.passages
 	[PassageEntry('Genesis 5:5', '')]
@@ -680,6 +700,68 @@ def _test():
 	Topic 'topic1 (new name)': add subtopic observer called.
 	>>> topic1.subtopics
 	[<PassageList 'topic2'>, <PassageList 'New Topic Name'>]
+
+	Check operations work over multiple passages.
+	>>> topic_zzz = _test_create_topic(name="ZZZ")
+	>>> topic_zzz2 = _test_create_topic(name="ZZZ2")
+	>>> _add_subtopic(manager, topic_zzz)
+	Topic 'None': add subtopic observer called.
+	>>> _add_subtopic(manager, topic_zzz2)
+	Topic 'None': add subtopic observer called.
+	>>> _add_passage(topic_zzz, PassageEntry(VK("ex 2:2")))
+	Topic 'ZZZ': add passage observer called.
+	>>> _add_passage(topic_zzz, PassageEntry(VK("ex 2:3")))
+	Topic 'ZZZ': add passage observer called.
+	>>> _add_passage(topic_zzz, PassageEntry(VK("ex 2:4")))
+	Topic 'ZZZ': add passage observer called.
+	>>> topic_zzz.passages
+	[PassageEntry('Exodus 2:2', ''), PassageEntry('Exodus 2:3', ''), PassageEntry('Exodus 2:4', '')]
+	>>> passage_subset = [topic_zzz.passages[0], topic_zzz.passages[2]]
+	>>> _remove_passage(passage_subset)
+	Topic 'ZZZ': remove passage observer called.
+	Topic 'ZZZ': remove passage observer called.
+	>>> topic_zzz.passages
+	[PassageEntry('Exodus 2:3', '')]
+	>>> operations_manager.undo()
+	Topic 'ZZZ': add passage observer called.
+	Topic 'ZZZ': add passage observer called.
+	>>> _copy_passage(passage_subset, topic_zzz2)
+	Topic 'ZZZ2': add passage observer called.
+	Topic 'ZZZ2': add passage observer called.
+	>>> _move_passage(passage_subset, topic_zzz2)
+	Topic 'ZZZ': remove passage observer called.
+	Topic 'ZZZ2': add passage observer called.
+	Topic 'ZZZ': remove passage observer called.
+	Topic 'ZZZ2': add passage observer called.
+	>>> topic_zzz.passages
+	[PassageEntry('Exodus 2:3', '')]
+	>>> topic_zzz2.passages
+	[PassageEntry('Exodus 2:2', ''), PassageEntry('Exodus 2:4', ''), PassageEntry('Exodus 2:2', ''), PassageEntry('Exodus 2:4', '')]
+	>>> _set_passage_details(topic_zzz2.passages[0], VK("lev 3:3"), "")
+	>>> topic_zzz2.passages
+	[PassageEntry('Leviticus 3:3', ''), PassageEntry('Exodus 2:4', ''), PassageEntry('Exodus 2:2', ''), PassageEntry('Exodus 2:4', '')]
+	>>> operations_manager.undo()
+	>>> operations_manager.undo()
+	Topic 'ZZZ2': remove passage observer called.
+	Topic 'ZZZ': add passage observer called.
+	Topic 'ZZZ2': remove passage observer called.
+	Topic 'ZZZ': add passage observer called.
+	>>> operations_manager.undo()
+	Topic 'ZZZ2': remove passage observer called.
+	Topic 'ZZZ2': remove passage observer called.
+	>>> topic_zzz.passages
+	[PassageEntry('Exodus 2:2', ''), PassageEntry('Exodus 2:3', ''), PassageEntry('Exodus 2:4', '')]
+
+	Check that they work over no passages too:
+	>>> _remove_passage([])
+	>>> _move_passage([], topic_zzz2)
+	>>> _copy_passage([], topic_zzz2)
+
+	Clean up afterwards
+	>>> _remove_subtopic(topic_zzz)
+	Topic 'None': remove subtopic observer called.
+	>>> _remove_subtopic(topic_zzz2)
+	Topic 'None': remove subtopic observer called.
 
 	Test that the creation function works.
 	>>> new_topic = _add_new_topic(topic1, lambda: PassageList(name="abc", description="description"))
@@ -756,7 +838,7 @@ def _test():
 	>>> passage2 = PassageEntry("gen 3:7 - 21")
 	>>> _add_passage(topic1, passage1)
 	>>> _add_passage(topic1, passage2)
-	>>> _remove_passage(topic1, passage1)
+	>>> _remove_passage(passage1)
 	>>> _set_topic_details(topic1, "New Topic Name", "description")
 	>>> _set_passage_details(passage1, "Genesis 3:3", "description")
 	
@@ -807,6 +889,11 @@ def _get_wrapper(item):
 		return PassageWrapper(item)
 	elif isinstance(item, BasePassageList):
 		return TopicWrapper(item)
+	elif isinstance(item, list):
+		if len(item) == 1:
+			return _get_wrapper(item[0])
+		else:
+			return [_get_wrapper(subitem) for subitem in item]
 	else:
 		return item
 

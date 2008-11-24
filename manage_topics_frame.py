@@ -36,7 +36,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		# control.
 		self._passage_list_topic = None
 		self.is_passage_selected = False
-		self._selected_passage = None
+		self.selected_passages = []
 		self._setup_item_details_panel()
 		self._init_passage_list_ctrl_headers()
 		self._setup_passage_list_ctrl()
@@ -52,7 +52,8 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		self.topic_tree.Bind(wx.EVT_TREE_BEGIN_LABEL_EDIT, self._begin_topic_label_edit)
 		
 		self.topic_tree.Bind(wx.EVT_TREE_ITEM_MENU, self._show_topic_context_menu)
-		self.passage_list_ctrl.Bind(wx.EVT_LIST_ITEM_SELECTED, self._passage_selected)
+		self.passage_list_ctrl.Bind(wx.EVT_LIST_ITEM_SELECTED, self._passage_selection_changed)
+		self.passage_list_ctrl.Bind(wx.EVT_LIST_ITEM_DESELECTED, self._passage_selection_changed)
 		self.passage_list_ctrl.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self._passage_activated)
 		self.passage_list_ctrl.Bind(wx.EVT_LIST_ITEM_RIGHT_CLICK, self._show_passage_context_menu)
 
@@ -219,7 +220,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 			(ord("C"), wx.MOD_CMD): self._operations_manager.copy,
 			(ord("X"), wx.MOD_CMD): self._operations_manager.cut,
 			(ord("V"), wx.MOD_CMD): self._safe_paste,
-			wx.WXK_DELETE: self._operations_manager.delete,
+			wx.WXK_DELETE: self._delete,
 			(ord("Z"), wx.MOD_CMD): self._operations_manager.undo,
 			(ord("Y"), wx.MOD_CMD): self._operations_manager.redo,
 		}
@@ -238,7 +239,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 			"copy_tool":	self._operations_manager.copy,
 			"cut_tool":		self._operations_manager.cut,
 			"paste_tool":	self._safe_paste,
-			"delete_tool":	self._operations_manager.delete,
+			"delete_tool":	self._delete,
 			"undo_tool":	self._operations_manager.undo,
 			"redo_tool":	self._operations_manager.redo,
 		}
@@ -298,7 +299,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		
 		item = menu.Append(wx.ID_ANY, _("Delete &Topic"))
 		self.Bind(wx.EVT_MENU,
-				lambda e: self._operations_manager.delete(),
+				lambda e: self._delete,
 				id=item.Id)
 		
 		self.topic_tree.PopupMenu(menu)
@@ -310,10 +311,15 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		if operation is None:
 			operation = self._operations_manager.paste
 		try:
-			operation()
+			guiutil.frozen(operation)()
 		except CircularDataException:
 			wx.MessageBox(_("Cannot copy the topic to one of its children."),
 					_("Copy Topic"), wx.OK | wx.ICON_ERROR, self)
+
+	@guiutil.frozen
+	def _delete(self):
+		"""Deletes the currently selected item while keeping the GUI frozen."""
+		self._operations_manager.delete()
 	
 	def _create_topic(self, topic, creation_function=None):
 		new_topic = self._operations_manager.add_new_topic(creation_function)
@@ -335,7 +341,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 	def _create_passage(self, topic):
 		self._set_selected_topic(topic)
 		passage = PassageEntry(None)
-		self._change_passage_details(passage)
+		self._change_passage_details([passage])
 		self.passage_details_panel.begin_create_passage(topic, passage)
 	
 	def _on_close(self, event):
@@ -366,8 +372,9 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		for index, passage_entry in enumerate(self.selected_topic.passages):
 			self._insert_topic_passage(passage_entry, index)
 
-		if self.selected_topic.passages:
-			self._select_list_entry_by_index(0)
+		# No longer needed, since we allow multiple selection.
+		#if self.selected_topic.passages:
+		#	self._select_list_entry_by_index(0)
 
 	def _add_passage_list_observers(self):
 		self._passage_list_topic.add_passage_observers += self._insert_topic_passage
@@ -392,12 +399,17 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 	def _remove_topic_passage(self, passage_entry, index):
 		self.passage_list_ctrl.DeleteItem(index)
 		self._remove_passage_list_passage_observers(passage_entry)
-		if not self._passage_list_topic.passages:
-			self.selected_passage = None
-		else:
-			if len(self._passage_list_topic.passages) == index:
-				index -= 1
-			self._select_list_entry_by_index(index)
+		# XXX: This means the whole selection is being rebuilt every time
+		# selection changes (e.g. when an item is deleted).  Though we freeze
+		# the GUI this can't be efficient.
+		# This is the last passage to be removed.
+		if not self.selected_passages:
+			if not self._passage_list_topic.passages:
+				self.selected_passages = []
+			else:
+				if len(self._passage_list_topic.passages) == index:
+					index -= 1
+				self._select_list_entry_by_index(index)
 
 	def _add_passage_list_passage_observers(self, passage_entry):
 		passage_entry.passage_changed_observers.add_observer(self._change_passage_passage, (passage_entry,))
@@ -416,19 +428,31 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		index = self.selected_topic.passages.index(passage_entry)
 		self.passage_list_ctrl.SetStringItem(index, 1, new_comment)
 
-	def _passage_selected(self, event):
-		passage_entry = self.selected_topic.passages[event.GetIndex()]
-		self.selected_passage = passage_entry
-		# Do nothing.
+	def _passage_selection_changed(self, event):
+		self._change_selected_passages()
 
-	def get_selected_passage(self):
-		return self._selected_passage
+	def _change_selected_passages(self):
+		self.selected_passages = self._find_selected_passages()
+		self._change_passage_details(self.selected_passages)
 
-	def set_selected_passage(self, new_passage):
-		self._selected_passage = new_passage
-		self._change_passage_details(new_passage)
+	def _find_selected_passages(self):
+		topic_passages = self._passage_list_topic.passages
+		selected_passages = []
+		index = -1
+		while 1:
+			index = self.passage_list_ctrl.GetNextItem(
+					index, wx.LIST_NEXT_ALL, wx.LIST_STATE_SELECTED,
+				)
+			if index == -1:
+				break
 
-	selected_passage = property(get_selected_passage, set_selected_passage)
+			try:
+				selected_passages.append(topic_passages[index])
+			# Sometimes (when deleting, etc.) it has indices that are valid
+			# list indices but not passage indices.  Just ignore these.
+			except IndexError:
+				pass
+		return selected_passages
 
 	def _passage_activated(self, event):
 		passage_entry = self.selected_topic.passages[event.GetIndex()]
@@ -441,7 +465,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 	
 	def _show_passage_context_menu(self, event):
 		"""Shows the context menu for a passage in the passage list."""
-		self.selected_passage = self.selected_topic.passages[event.GetIndex()]
+		self._change_selected_passages()
 		menu = wx.Menu()
 		
 		item = menu.Append(wx.ID_ANY, _("&Open"))
@@ -470,7 +494,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		
 		item = menu.Append(wx.ID_ANY, _("&Delete"))
 		self.Bind(wx.EVT_MENU,
-				lambda e: self._operations_manager.delete,
+				lambda e: self._delete,
 				id=item.Id)
 		
 		self.passage_list_ctrl.PopupMenu(menu)
@@ -482,7 +506,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 
 	def _passage_list_got_focus(self, event):
 		self.is_passage_selected = True
-		self._change_passage_details(self.selected_passage)
+		self._change_passage_details(self.selected_passages)
 		event.Skip()
 
 	def _setup_item_details_panel(self):
@@ -504,12 +528,14 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		self.topic_details_panel.set_topic(new_topic)
 		self._switch_item_details_current_panel(self.topic_details_panel)
 
-	def _change_passage_details(self, new_passage):
-		if new_passage is None:
+	def _change_passage_details(self, selected_passages):
+		if not selected_passages:
 			return
-
-		self.passage_details_panel.set_passage(new_passage)
-		self._switch_item_details_current_panel(self.passage_details_panel)
+		elif len(selected_passages) == 1:
+			self.passage_details_panel.set_passage(selected_passages[0])
+			self._switch_item_details_current_panel(self.passage_details_panel)
+		else:
+			self.passage_details_panel.Hide()
 
 	def _switch_item_details_current_panel(self, new_panel):
 		"""Makes the given panel the currently displayed item details panel."""
@@ -675,7 +701,7 @@ class TopicTree(wx.TreeCtrl):
 		drop_topic = self.GetPyData(drop_target)
 		keep_original = (drag_result != wx.DragMove)
 		self._topic_frame._operations_manager.do_copy(
-				passage_entry, drop_topic, keep_original
+				self._topic_frame.selected_passages, drop_topic, keep_original
 			)
 
 	def _get_item_children(self, item=None, recursively=False):
@@ -701,8 +727,9 @@ class PassageListCtrl(wx.ListCtrl, ListCtrlAutoWidthMixin):
 	available space.
 	"""
 	def __init__(self, parent, topic_frame):
+		# Multiple selection list control.
 		wx.ListCtrl.__init__(self, parent,
-			style=wx.LC_REPORT | wx.LC_SINGLE_SEL,
+			style=wx.LC_REPORT,
 		)
 		ListCtrlAutoWidthMixin.__init__(self)
 		self.Bind(wx.EVT_LIST_BEGIN_DRAG, self._start_drag)
@@ -961,7 +988,7 @@ class OperationsContext(BaseOperationsContext):
 		return self._frame.selected_topic
 
 	def get_selected_passage(self):
-		return self._frame.selected_passage
+		return self._frame.selected_passages
 
 	def is_passage_selected(self):
 		return self._frame.is_passage_selected
