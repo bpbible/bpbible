@@ -458,6 +458,30 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		passage_entry = self.selected_topic.passages[event.GetIndex()]
 		guiconfig.mainfrm.set_bible_ref(str(passage_entry), source=TOPIC_LIST)
 
+	def select_passages(self, passages, focused_passage):
+		"""Selects the given passages in the passage list control.
+
+		Sets the given passage to be the passage on which keyboard focus is.
+		"""
+		topic_passages = self._passage_list_topic.passages
+		passage_indexes = [topic_passages.index(passage) for passage in passages]
+		focused_passage_index = topic_passages.index(focused_passage)
+
+		index = -1
+		while 1:
+			index = self.passage_list_ctrl.GetNextItem(index)
+			if index == -1:
+				break
+
+			current_state = self.passage_list_ctrl.GetItemState(index, wx.LIST_STATE_SELECTED)
+			if index in passage_indexes:
+				state = wx.LIST_STATE_SELECTED
+				if index == focused_passage_index:
+					state |= wx.LIST_STATE_FOCUSED
+				self.passage_list_ctrl.SetItemState(index, state, state)
+			elif current_state & wx.LIST_STATE_SELECTED:
+				self.passage_list_ctrl.SetItemState(index, 0, wx.LIST_STATE_SELECTED)
+
 	def _select_list_entry_by_index(self, index):
 		"""Selects the entry in the list control with the given index."""
 		state = wx.LIST_STATE_SELECTED | wx.LIST_STATE_FOCUSED
@@ -681,7 +705,7 @@ class TopicTree(wx.TreeCtrl):
 			)
 		)
 
-	def on_drop_passage(self, passage_entry, x, y, drag_result):
+	def on_drop_passage(self, x, y, drag_result):
 		"""Drops the given passage onto the topic with the given x and y
 		coordinates in the tree.
 		The drag result specifies whether the passage should be copied or
@@ -741,6 +765,7 @@ class PassageListCtrl(wx.ListCtrl, ListCtrlAutoWidthMixin):
 		"""Starts the drag and registers a drop source for the passage."""
 		self._drag_index = event.GetIndex()
 		passage_entry = self._topic_frame.selected_topic.passages[self._drag_index]
+		self.drag_passage_entry = passage_entry
 		id = passage_entry.get_id()
 
 		data = wx.CustomDataObject("PassageEntry")
@@ -749,14 +774,17 @@ class PassageListCtrl(wx.ListCtrl, ListCtrlAutoWidthMixin):
 		drop_source.SetData(data)
 		result = drop_source.DoDragDrop(wx.Drag_DefaultMove)
 
+	@guiutil.frozen
 	def _handle_drop(self, x, y, drag_result):
 		"""Handles moving the passage to the new location."""
 		index, flags = self.HitTest(wx.Point(x, y))
 		if index == wx.NOT_FOUND or index == self._drag_index:
 			return
 
+		selected_passages = self._topic_frame.selected_passages
 		# XXX: This does not handle copying the passage.
 		self._topic_frame._operations_manager.move_current_passage(new_index=index)
+		self._topic_frame.select_passages(selected_passages, self.drag_passage_entry)
 
 class PassageListDropTarget(wx.PyDropTarget):
 	"""Allows passages to be reordered in the current topic.
@@ -802,9 +830,7 @@ class TopicPassageDropTarget(wx.PyDropTarget):
 
 	def OnData(self, x, y, result):
 		if self.GetData():
-			passage_id = int(self.data.GetData())
-			passage_entry = lookup_passage_entry(passage_id)
-			self._topic_tree.on_drop_passage(passage_entry, x, y, result)
+			self._topic_tree.on_drop_passage(x, y, result)
 		return result
 
 class TopicDetailsPanel(xrcTopicDetailsPanel):

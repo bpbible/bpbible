@@ -25,9 +25,19 @@ class ManageTopicsOperations(object):
 		return action.topic
 
 	def move_current_passage(self, new_index):
-		passage = self._context.get_selected_passage()
-		passage = self._context.get_wrapper(passage)
-		self._perform_action(ReorderPassageAction(passage, new_index))
+		passages = self._context.get_selected_passage()
+		if not passages:
+			return
+
+		topic_passages = passages[0].parent.passages
+
+		actions = []
+		for passage in passages:
+			if topic_passages.index(passage) <= new_index:
+				new_index -= 1
+			actions.append(ReorderPassageAction(_get_wrapper(passage), new_index))
+			new_index += 1
+		self._perform_action(CompositeAction(actions))
 		self._passage_list_manager.save()
 
 	# XXX: Deleting a topic doesn't remove its tags from the current window.
@@ -615,7 +625,7 @@ def _test():
 	Topic 'topic1': add passage observer called.
 	>>> topic1.passages
 	[PassageEntry('Genesis 3:5', ''), PassageEntry('Genesis 5:5', '')]
-	>>> _move_current_passage(passage2, 0)
+	>>> _move_current_passage([passage2], 0)
 	Topic 'topic1': remove passage observer called.
 	Topic 'topic1': add passage observer called.
 	>>> operations_manager.undo()
@@ -751,6 +761,13 @@ def _test():
 	Topic 'ZZZ2': remove passage observer called.
 	>>> topic_zzz.passages
 	[PassageEntry('Exodus 2:2', ''), PassageEntry('Exodus 2:3', ''), PassageEntry('Exodus 2:4', '')]
+	>>> _move_current_passage([topic_zzz.passages[1], topic_zzz.passages[2]], 0)
+	Topic 'ZZZ': remove passage observer called.
+	Topic 'ZZZ': add passage observer called.
+	Topic 'ZZZ': remove passage observer called.
+	Topic 'ZZZ': add passage observer called.
+	>>> topic_zzz.passages
+	[PassageEntry('Exodus 2:3', ''), PassageEntry('Exodus 2:4', ''), PassageEntry('Exodus 2:2', '')]
 
 	Check that they work over no passages too:
 	>>> _remove_passage([])
