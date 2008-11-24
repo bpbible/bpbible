@@ -581,6 +581,9 @@ class VerseList(list):
 		\s+					# some whitespace
 		(?P<verse>\d+)		# and more digits
 		""", "\g<word> \g<chapter>:\g<verse>"),
+		
+		# Matt 4: 6 -> Matt 4:6
+		(r":\s+", ":"),
 
 		# Hakim-Hakim 3:5-9 -> HakimHakim
 		(r"""
