@@ -35,6 +35,10 @@ class Upper(object):
 		return self.object[item].upper()
 	
 
+def is_date_conversion_supported():
+	# vietnamese under windows doesn't complete the loop
+	return wx.DateTime.Now().ParseFormat(wx.DateTime.Now().Format("%B %d"), "%B %d") != -1
+	
 class DictionaryList(VirtualListBox):
 	def __init__(self, parent, book):
 		super(DictionaryList, self).__init__(parent)
@@ -76,11 +80,22 @@ leap_year_default_date = wx.DateTime()
 leap_year_default_date.ParseDate("1 Jan 2008")
 
 def date_to_mmdd(date, return_formatted=True):
+	dt = wx.DateTime()
+	
+	if not return_formatted and not is_date_conversion_supported():
+		try:
+			month, day = map(int, date.split(".", 1))
+		except ValueError:
+			pass
+		else:
+			dt.Set(day, month-1, 2008)
+			return dt
+			
+
 	# tack the following bits on the end to see if they help give us dates
 	# the second is February -> February 1
 	# the third is 29 February -> 29 February 2008
 	additions = ["", " 1", " 2008"]
-	dt = wx.DateTime()
 
 	# turn off logging to avoid debug messages
 	ol = wx.Log.GetLogLevel()
@@ -101,6 +116,9 @@ def date_to_mmdd(date, return_formatted=True):
 
 	
 def mmdd_to_date(date):
+	if not is_date_conversion_supported():
+		return None
+
 	dt = wx.DateTime()
 	ansa = dt.ParseFormat(date, "%m.%d", leap_year_default_date)
 	if ansa == -1:
@@ -142,7 +160,10 @@ class TextEntry(wx.Panel):
 	def show_popup(self, event):
 		def on_cal_changed(event):
 			dt = event.GetDate()
-			self.Parent.choose_item(dt.Format("%B ") + str(dt.Day))
+			if is_date_conversion_supported():
+				self.Parent.choose_item(dt.Format("%B ") + str(dt.Day))
+			else:
+				self.Parent.choose_item(dt.Format("%m.%d"))
 
 		def on_cal(event):
 			win.Destroy()
@@ -288,7 +309,11 @@ class DictionarySelector(wx.Panel):
 		# set it to today
 		if book.has_feature("DailyDevotion") and not was_devotion:
 			dt = wx.DateTime.Today()
-			self.choose_item(dt.Format("%B ") + str(dt.Day))
+			if is_date_conversion_supported():
+				self.choose_item(dt.Format("%B ") + str(dt.Day))
+			else:
+				self.choose_item(dt.Format("%m.%d"))
+				
 		else:
 			self.choose_item(self.text_entry.text.Value)
 			
