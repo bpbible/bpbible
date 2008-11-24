@@ -1,0 +1,50 @@
+Poetic layout
+Put current verse number in green - so you can see it in red-letter text
+Verse numbers not underlined.
+
+Chapter introductions are now displayed if there
+DisplayLevel support in other books - display keys with parents if module
+supports it.
+Book chooser in caption
+Double click on caption to toggle pane maximization
+Ctrl-F10: maximize pane
+Ctrl-F5: restore pane
+Fix maximized bottom and top panes
+Guess the Verse
+
+Per-language and per-book font choice
+Change languages in UI
+Verse-per-line layout
+
+Search
+- commentaries, dictionaries, other books
+- strong's numbers, morphology, scripture references
+- within x entries/verses
+- Stemming
+- Removed 20000 hit limit
+- Added keypad
+- Zipped indexes
+- Search includes canonical headings (e.g. in Psalms)
+- Improved highlighting in languages with non-composed diacritics - like Hindi
+
+Harmony:
+- Don't reset harmony to top when changing between harmonies
+
+Escape hides tooltips
+Made tooltips jumpier - 0.2 seconds instead of 0.5
+
+Dialog to notfiy of errors occurring
+
+Made references of the form:
+Gen 5v2
+Gen 5 2
+Gen 5: 2
+work
+
+Changed abbreviation for Psalms from Pss to Psa.
+
+Scroll up and down when selecting and moving up or down
+
+Book manager:
+- unlock books
+- delete books
