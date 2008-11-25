@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2008-11-17 20:24+AUS Eastern Daylight Time\n"
-"PO-Revision-Date: 2008-11-17 13:19+0700\n"
+"POT-Creation-Date: 2008-11-25 13:30+SE Asia Standard Time\n"
+"PO-Revision-Date: 2008-11-25 13:35+0700\n"
 "Last-Translator: Daniel Owens <dh_owens@yahoo.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -13,11 +13,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: pygettext.py 1.5\n"
 
-#: auilayer.py:301
+#: auilayer.py:310
 msgid "Books"
 msgstr "Các Sách"
 
-#: auilayer.py:341
+#: auilayer.py:350
 msgid "History"
 msgstr "Lịch Sử"
 
@@ -65,24 +65,28 @@ msgstr "Số chương trong sách"
 msgid "The text of the heading"
 msgstr "Văn bản của tiêu đề"
 
-#: backend/book.py:507
-msgid ""
-"Couldn't save cipher key. You will have to set it again when you restart"
+#: backend/book.py:512
+msgid "Couldn't save cipher key. You will have to set it again when you restart"
 msgstr "Không lưu được mã số. Bạn phải thiết lập lại khi bạn lại khởi đầu"
 
-#: backend/book.py:531
+#: backend/book.py:536
 msgid "commentary"
 msgstr "Sách Giải Nghĩa"
 
-#: backend/book.py:538 bibleframe.py:35 xrc/auifrm_xrc.py:66
+#: backend/book.py:543
+#: bibleframe.py:35
+#: xrc/auifrm_xrc.py:66
 msgid "Bible"
 msgstr "Kinh Thánh"
 
-#: bibleframe.py:69 bookframe.py:171 search/searchpanel.py:152
+#: bibleframe.py:69
+#: bookframe.py:171
+#: search/searchpanel.py:152
 msgid "Search"
 msgstr "Tìm Kiếm"
 
-#: bibleframe.py:74 xrc/harmonyfrm_xrc.py:92
+#: bibleframe.py:74
+#: xrc/harmonyfrm_xrc.py:92
 msgid "Harmony"
 msgstr "Sách Hoà Hợp"
 
@@ -90,7 +94,8 @@ msgstr "Sách Hoà Hợp"
 msgid "Open the harmony"
 msgstr "Mở Sách Hoà Hợp"
 
-#: bibleframe.py:80 xrc/guess_verse_xrc.py:67
+#: bibleframe.py:80
+#: xrc/guess_verse_xrc.py:67
 msgid "Guess the Verse"
 msgstr "Đoán Câu Kinh Thánh"
 
@@ -114,7 +119,8 @@ msgstr "Chép các câu"
 msgid "Copy verses to other applications"
 msgstr "Chép các câu sang ứng dụng khác"
 
-#: bibleframe.py:103 bibleframe.py:152
+#: bibleframe.py:103
+#: bibleframe.py:152
 msgid "Open sticky tooltip"
 msgstr "Mở cửa cố định"
 
@@ -130,7 +136,9 @@ msgstr "So sánh các câu"
 msgid "Open the verse comparison pane to the selected verses"
 msgstr "Mở cửa so sánh câu tại câu lựa chọn"
 
-#: bibleframe.py:120 manage_topics_frame.py:149 xrc/manage_topics_xrc.py:132
+#: bibleframe.py:120
+#: manage_topics_frame.py:151
+#: xrc/manage_topics_xrc.py:132
 msgid "Manage Topics"
 msgstr "Quản lý Chủ đề"
 
@@ -150,7 +158,8 @@ msgstr "Đánh dấu câu hiện thời"
 msgid "Copying selected verses..."
 msgstr "Đang chép câu được chọn"
 
-#: bookframe.py:153 mainframe.py:787
+#: bookframe.py:153
+#: mainframe.py:785
 msgid "Show the %s pane"
 msgstr "Hiện cửa %s"
 
@@ -207,30 +216,24 @@ msgid ""
 "<b>This book is not set.</b><br>\n"
 "This may be because you do not have any of this type of book installed.\n"
 "<p> If you don't have any of this type of book, first download them from <a\n"
-"href=\"http://www.crosswire.org/sword/modules/index.jsp\">http://www."
-"crosswire.org/sword/modules/index.jsp</a>.<br>\n"
+"href=\"http://www.crosswire.org/sword/modules/index.jsp\">http://www.crosswire.org/sword/modules/index.jsp</a>.<br>\n"
 "Then to install them, either drag them onto BPBible, or go <code>File >\n"
 "Install Books...</code> and select the books.\n"
 "<p> If you have already have SWORD books installed, go to <code>File >\n"
-"Set SWORD Paths</code> and add the path where the books are installed to the "
-"book search paths.\n"
+"Set SWORD Paths</code> and add the path where the books are installed to the book search paths.\n"
 msgstr ""
 "<b>Chưa đọc sách này được.</b><br>\n"
 "Nguyên nhân có thể là vì bạn chưa cài sách của loại này.\n"
 "<p>Nếu chưa có sách của loại này, tải về nó từ <a\n"
-"href=\"http://www.crosswire.org/sword/modules/index.jsp\">http://www."
-"crosswire.org/sword/modules/index.jsp</a>.<br>\n"
-"Để cài đặt nó, hoặc là bấm kéo nó trên ứng dụng BPBible hoặc là bấm "
-"<code>Tập Tin >\n"
+"href=\"http://www.crosswire.org/sword/modules/index.jsp\">http://www.crosswire.org/sword/modules/index.jsp</a>.<br>\n"
+"Để cài đặt nó, hoặc là bấm kéo nó trên ứng dụng BPBible hoặc là bấm <code>Tập Tin >\n"
 "Cài sách...</code> và chọn sách mình tải về.\n"
 "<p> Nếu bạn có sách SWORD cài đặt rồi, bấm <code>Tập Tin >\n"
-"Xác định danh mục chứa sách Đự Án Gươm</code> và thêm đường dẫn đến sách "
-"được cài đặt.\n"
+"Xác định danh mục chứa sách Đự Án Gươm</code> và thêm đường dẫn đến sách được cài đặt.\n"
 
 #: config.py:115
 msgid ""
-"<p><b>[Reference clipped as the maximum verse limit (%d verses) has been "
-"exceeded.\n"
+"<p><b>[Reference clipped as the maximum verse limit (%d verses) has been exceeded.\n"
 "<br>This probably means the reference was invalid]</b>"
 msgstr ""
 "<p><b>[Địa chỉ được cắt ngắn vì tối đa số câu (%d câu) bị trội hơn.\n"
@@ -241,24 +244,16 @@ msgid "<custom: based on %s>"
 msgstr "<đặc biệt: dựa vào %s>"
 
 #: displayframe.py:199
-msgid ""
-"Module %s is not installed, so you cannot view details for this strong's "
-"number"
-msgstr ""
-"Môđun %s chưa được cài đặt cho nên bạn không thể xem chi tiết cho số Strong "
-"này"
+msgid "Module %s is not installed, so you cannot view details for this strong's number"
+msgstr "Môđun %s chưa được cài đặt cho nên bạn không thể xem chi tiết cho số Strong này"
 
 #: displayframe.py:209
 msgid "Don't know how to open this morphology type:"
 msgstr "Không biết cách thức mở loại hình thái học này:"
 
 #: displayframe.py:220
-msgid ""
-"Module %s is not installed, so you cannot view details for this "
-"morphological code"
-msgstr ""
-"Môđun %s chưa được cài đặt cho nên bạn không thể xem chi tiết cho mã hình "
-"thái học này"
+msgid "Module %s is not installed, so you cannot view details for this morphological code"
+msgstr "Môđun %s chưa được cài đặt cho nên bạn không thể xem chi tiết cho mã hình thái học này"
 
 #: displayframe.py:414
 msgid "Select all"
@@ -284,19 +279,19 @@ msgstr "Chép văn bản đã chọn (không có nối kết)"
 msgid "Copy the selected text, removing all links"
 msgstr "Chép văn bản đã chọn, xoá nối kết"
 
-#: displayframe.py:479
+#: displayframe.py:491
 msgid "the selected word"
 msgstr "từ được chọn"
 
-#: displayframe.py:485
+#: displayframe.py:497
 msgid "the selected phrase"
 msgstr "cụm từ được chọn"
 
-#: displayframe.py:499
+#: displayframe.py:511
 msgid "Look up %s in the dictionary"
 msgstr "Tra cứu %s trong từ điển"
 
-#: displayframe.py:519
+#: displayframe.py:531
 msgid "Search for %s in the Bible"
 msgstr "Tìm kiếm %s trong Kinh Thánh"
 
@@ -320,23 +315,24 @@ msgstr "Ngoại lệ ở trên bị ứng dụng bỏ qua"
 msgid "Other Books"
 msgstr "Sách Khác"
 
-#: guess_verse.py:30
-msgid "Yes, you are right. The verse was %s"
-msgstr ""
-
 #: guess_verse.py:32
+msgid "Yes, you are right. The verse was %s"
+msgstr "Đúng, bạn chọn đúng. Câu đúng là %s"
+
+#: guess_verse.py:34
 msgid "Correct"
-msgstr ""
+msgstr "Đúng"
 
-#: guess_verse.py:38
+#: guess_verse.py:41
 msgid "No, you are wrong. Try again."
-msgstr ""
+msgstr "Không, bạn không đúng. Hãy làm thử lại."
 
-#: guess_verse.py:39
+#: guess_verse.py:42
 msgid "Try again."
-msgstr ""
+msgstr "Làm thử lại."
 
-#: gui/movablelist.py:7 xrc/manage_topics_xrc.py:122
+#: gui/movablelist.py:7
+#: xrc/manage_topics_xrc.py:122
 #: xrc/manage_topics_xrc.py:123
 msgid "Copy"
 msgstr "Chép"
@@ -350,8 +346,11 @@ msgid "%s is not in this harmony"
 msgstr "Không có %s trong sách hoà hợp này"
 
 #: install_manager/install_drop_target.py:33
-#: install_manager/install_drop_target.py:56 module_manager.py:72
-#: module_manager.py:76 templatemanager.py:433 templatemanager.py:444
+#: install_manager/install_drop_target.py:56
+#: module_manager.py:72
+#: module_manager.py:76
+#: templatemanager.py:433
+#: templatemanager.py:444
 msgid "Error"
 msgstr "Lỗi Lầm"
 
@@ -384,20 +383,19 @@ msgstr "Tập tin này không được cài đặt:"
 #: install_manager/install_drop_target.py:68
 msgid ""
 "An error occurred while installing modules.\n"
-"Please make sure that the directory exists, and that you have permission to "
-"write to the directory.\n"
+"Please make sure that the directory exists, and that you have permission to write to the directory.\n"
 "The error given was:"
 msgstr ""
 "Lỗi lầm đã xảy ra khi cài đặt môđun.\n"
-"Làm ơn làm chắc chắn rằng có danh mục và bạn được phép viết trong danh mục "
-"đó.\n"
+"Làm ơn làm chắc chắn rằng có danh mục và bạn được phép viết trong danh mục đó.\n"
 "Lỗi lầm là:"
 
 #: install_manager/install_drop_target.py:81
 msgid "Extracting %s"
 msgstr "Đang rút ra %s"
 
-#: install_manager/install_drop_target.py:82 search/searchpanel.py:892
+#: install_manager/install_drop_target.py:82
+#: search/searchpanel.py:891
 msgid "Preparing"
 msgstr "Đang Chuẩn bị"
 
@@ -413,7 +411,8 @@ msgstr "Bạn chắc chắn muốn cài các sách này không?"
 msgid "Other..."
 msgstr "Khác..."
 
-#: install_manager/install_module.py:57 pathmanager.py:54
+#: install_manager/install_module.py:57
+#: pathmanager.py:54
 msgid "Choose a directory:"
 msgstr "Chọn danh mục:"
 
@@ -425,147 +424,154 @@ msgstr "Thông Tin"
 msgid "Cannot read book metadata in file %s"
 msgstr "Không đọc được siêu dự liệu trong tập tin %s"
 
-#: mainframe.py:247
+#: mainframe.py:245
 msgid "Go to verse"
 msgstr "Tới câu"
 
-#: mainframe.py:248
+#: mainframe.py:246
 msgid "Go to this verse"
 msgstr "Tới câu này"
 
-#: mainframe.py:251
+#: mainframe.py:249
 msgid "Bible Search"
 msgstr "Tìm Kiếm trong Kinh Thánh"
 
-#: mainframe.py:252
+#: mainframe.py:250
 msgid "Search in this Bible"
 msgstr "Tìm Kiếm trong cuốn Kinh Thánh này"
 
-#: mainframe.py:255 xrc/copyverses_xrc.py:80
+#: mainframe.py:253
+#: xrc/copyverses_xrc.py:80
 msgid "Copy Verses"
 msgstr "Chép Các Câu"
 
-#: mainframe.py:256
+#: mainframe.py:254
 msgid "Open the Copy Verses dialog"
 msgstr "Mở hộp thoại Chép Các Câu"
 
-#: mainframe.py:261
+#: mainframe.py:259
 msgid "Back"
 msgstr "Quay Lại"
 
-#: mainframe.py:262
+#: mainframe.py:260
 msgid "Go back a verse"
 msgstr "Quay lại một câu"
 
-#: mainframe.py:265
+#: mainframe.py:263
 msgid "Forward"
 msgstr "Đi Tới"
 
-#: mainframe.py:266
+#: mainframe.py:264
 msgid "Go forward a verse"
 msgstr "Đi tới một câu"
 
-#: mainframe.py:270
+#: mainframe.py:268
 msgid "Zoom In"
 msgstr "Thu Lớn"
 
-#: mainframe.py:271
+#: mainframe.py:269
 msgid "Make text bigger"
 msgstr "Làm văn bản lớn hơn"
 
-#: mainframe.py:274
+#: mainframe.py:272
 msgid "Default Zoom"
 msgstr "Thu Phóng Mặc Định"
 
-#: mainframe.py:275
+#: mainframe.py:273
 msgid "Return text to default size"
 msgstr "Làm cho văn bản có cỡ mặc định"
 
-#: mainframe.py:278
+#: mainframe.py:276
 msgid "Zoom Out"
 msgstr "Thu Nhỏ"
 
-#: mainframe.py:279
+#: mainframe.py:277
 msgid "Make text smaller"
 msgstr "Làm văn bản nhỏ hơn"
 
-#: mainframe.py:308
+#: mainframe.py:306
 msgid "Navigation"
 msgstr "Sự Đi Lại"
 
-#: mainframe.py:310
+#: mainframe.py:308
 msgid "Zoom"
 msgstr "Thu Phóng"
 
-#: mainframe.py:312
+#: mainframe.py:310
 msgid "History toolbar"
 msgstr "Thanh công cụ lịch sử"
 
-#: mainframe.py:720 xrc/auifrm_xrc.py:44
+#: mainframe.py:718
+#: xrc/auifrm_xrc.py:44
 msgid "&Language"
 msgstr "&Ngôn Ngữ"
 
-#: mainframe.py:745 xrc/auifrm_xrc.py:47
+#: mainframe.py:743
+#: xrc/auifrm_xrc.py:47
 msgid "&Display"
 msgstr "&Biểu Hiện"
 
-#: mainframe.py:750 xrc/auifrm_xrc.py:50
+#: mainframe.py:748
+#: xrc/auifrm_xrc.py:50
 msgid "&Windows"
 msgstr "&Các Cửa Sổ"
 
-#: mainframe.py:755 xrc/auifrm_xrc.py:49
+#: mainframe.py:753
+#: xrc/auifrm_xrc.py:49
 msgid "Toolbars"
 msgstr "Các Thanh Công Cụ"
 
-#: mainframe.py:783
+#: mainframe.py:781
 msgid "Show the %s toolbar"
 msgstr "Hiện thanh công cụ %s"
 
-#: mainframe.py:806 xrc/auifrm_xrc.py:51
+#: mainframe.py:804
+#: xrc/auifrm_xrc.py:51
 msgid "Debug"
 msgstr "Chỉnh Lỗi"
 
-#: mainframe.py:877
+#: mainframe.py:875
 msgid "Use Strong's headwords"
 msgstr "Dùng số Strong"
 
-#: mainframe.py:878
+#: mainframe.py:876
 msgid "Display Strong's numbers using the transliterated text"
 msgstr "Hiện số Strong sử dụng văn bản được chuyển chữ"
 
-#: mainframe.py:883
+#: mainframe.py:881
 msgid "Expand cross-references"
 msgstr "Mở rộng địa chỉ Kinh Thánh liên quan"
 
-#: mainframe.py:884
+#: mainframe.py:882
 msgid "Display cross references partially expanded"
 msgstr "Hiện một phần của địa chỉ Kinh Thánh liên quan"
 
-#: mainframe.py:889
+#: mainframe.py:887
 msgid "One line per verse"
 msgstr "Một câu một dòng"
 
-#: mainframe.py:890
+#: mainframe.py:888
 msgid "Display each verse on its own line."
 msgstr "Hiện từng câu trong dòng riêng"
 
-#: mainframe.py:895
+#: mainframe.py:893
 msgid "Topic Tags"
 msgstr "Thẻ Chủ Đề"
 
-#: mainframe.py:896
+#: mainframe.py:894
 msgid "Display the topics that each verse is tagged with."
 msgstr "Hiện chủ đề của từng câu"
 
-#: mainframe.py:1049
+#: mainframe.py:1047
 msgid "An error occurred on closing:"
 msgstr "Lỗi lầm đã xảy ra khi đóng:"
 
-#: mainframe.py:1061 mainframe.py:1062
+#: mainframe.py:1059
+#: mainframe.py:1060
 msgid "search "
 msgstr "tìm kiếm"
 
-#: mainframe.py:1085
+#: mainframe.py:1083
 msgid ""
 "Flexible Bible study software.\n"
 "\t\t\tBuilt Using the Sword Project from crosswire.org\n"
@@ -578,35 +584,35 @@ msgstr ""
 "\t\t\tPython Version: %(sysversion)s\n"
 "\t\t\twxPython Version: %(wxversion)s\t\t\tSWORD Version: %(swversion)s"
 
-#: mainframe.py:1096
+#: mainframe.py:1094
 msgid "BPBible website"
 msgstr "Trang Web BPBible"
 
-#: mainframe.py:1098
+#: mainframe.py:1096
 msgid "BPBible development team"
 msgstr "Nhóm phát triển BPBible"
 
-#: mainframe.py:1099
+#: mainframe.py:1097
 msgid "SWORD library developers"
 msgstr "Người khai triển ứng dụng của Thư Viện Gươm"
 
-#: mainframe.py:1103
+#: mainframe.py:1101
 msgid "Developers"
 msgstr "Các Người Khải Triển Ứng Dụng"
 
-#: mainframe.py:1104
+#: mainframe.py:1102
 msgid "Artists"
 msgstr "Các Nghệ Sĩ"
 
-#: mainframe.py:1105
+#: mainframe.py:1103
 msgid "Translators"
 msgstr "Các Người Biên Dịch"
 
-#: mainframe.py:1107
+#: mainframe.py:1105
 msgid "translator-credits"
 msgstr "công trạng về việc biên dịch"
 
-#: mainframe.py:1111
+#: mainframe.py:1109
 msgid ""
 "Icons used are from famfamfam\n"
 "http://www.famfamfam.com/lab/icons/silk\n"
@@ -618,77 +624,84 @@ msgstr ""
 "và Đự Án Mặt Bàn Tango\n"
 "http://tango.freedesktop.org/Tango_Desktop_Project"
 
-#: mainframe.py:1117
-msgid ""
-"BPBible is licensed under the GPL v2. For more details, refer to the LICENSE."
-"txt file in the application directory"
-msgstr ""
-"BPBible có giấy phép GPL v2. Để biết thêm chi tiết, xem tập tin LICENSE.txt "
-"trong danh mục application"
+#: mainframe.py:1115
+msgid "BPBible is licensed under the GPL v2. For more details, refer to the LICENSE.txt file in the application directory"
+msgstr "BPBible có giấy phép GPL v2. Để biết thêm chi tiết, xem tập tin LICENSE.txt trong danh mục application"
 
-#: manage_topics_frame.py:73
+#: manage_topics_frame.py:75
 msgid "Topics"
 msgstr "Các Chủ Đề"
 
-#: manage_topics_frame.py:265
+#: manage_topics_frame.py:271
 msgid "&New Topic"
 msgstr "Chủ đề &Mới"
 
-#: manage_topics_frame.py:270
+#: manage_topics_frame.py:276
 msgid "Add &Passage"
 msgstr "Thêm &Phân Đoạn"
 
-#: manage_topics_frame.py:277 manage_topics_frame.py:446
+#: manage_topics_frame.py:283
+#: manage_topics_frame.py:502
 msgid "Cu&t"
 msgstr "Cắ&t"
 
-#: manage_topics_frame.py:282 manage_topics_frame.py:451
+#: manage_topics_frame.py:288
+#: manage_topics_frame.py:507
 msgid "&Copy"
 msgstr "&Chép"
 
-#: manage_topics_frame.py:287 manage_topics_frame.py:456
+#: manage_topics_frame.py:293
+#: manage_topics_frame.py:512
 msgid "&Paste"
 msgstr "&Dán"
 
-#: manage_topics_frame.py:294
+#: manage_topics_frame.py:300
 msgid "Delete &Topic"
 msgstr "Xoá &Chủ Đề"
 
-#: manage_topics_frame.py:310
+#: manage_topics_frame.py:316
 msgid "Cannot copy the topic to one of its children."
 msgstr "Không thể chép chủ đề sang con của nó."
 
-#: manage_topics_frame.py:311
+#: manage_topics_frame.py:317
 msgid "Copy Topic"
 msgstr "Chép Chủ Đề"
 
-#: manage_topics_frame.py:348
+#: manage_topics_frame.py:334
+msgid "Search: %s"
+msgstr "Tìm Kiếm: %s"
+
+#: manage_topics_frame.py:335
+msgid "Results from the search `%s'."
+msgstr "Kết quả của việc tìm tiếm '%s'."
+
+#: manage_topics_frame.py:360
 msgid "Passage"
 msgstr "Phân Đoạn"
 
-#: manage_topics_frame.py:349
+#: manage_topics_frame.py:361
 msgid "Comment"
 msgstr "Lời Giải Nghĩa"
 
-#: manage_topics_frame.py:439
+#: manage_topics_frame.py:495
 msgid "&Open"
 msgstr "&Mở"
 
-#: manage_topics_frame.py:463
+#: manage_topics_frame.py:519
 msgid "&Delete"
 msgstr "&Xoá"
 
-#: manage_topics_frame.py:847
-msgid "Unrecognised passage `%s'."
-msgstr "Phân đoạn '%s' không được nhận biết."
-
-#: manage_topics_frame.py:850
+#: manage_topics_frame.py:995
 msgid ""
 "Passage `%s' contains multiple passages.\n"
 "Only one verse or verse range can be entered."
 msgstr ""
 "Phân đoạn `%s' chứa nhiều phân đoạn.\n"
 "Phải cho vào một câu hoặc một phạm vi câu thôi."
+
+#: manage_topics_frame.py:1000
+msgid "Unrecognised passage `%s'."
+msgstr "Phân đoạn '%s' không được nhận biết."
 
 #: module_manager.py:24
 msgid "Please select some books to delete"
@@ -701,10 +714,8 @@ msgstr "Chọn Sách"
 #: module_manager.py:28
 msgid ""
 "You are about to delete books.\n"
-"This will completely remove the books and free up the disk space that they "
-"used.\n"
-"You cannot undo this operation. Are you sure you want to delete these books?"
-"\"\n"
+"This will completely remove the books and free up the disk space that they used.\n"
+"You cannot undo this operation. Are you sure you want to delete these books?\"\n"
 "Books to be deleted:"
 msgstr ""
 "Bạn sắp xoá sách.\n"
@@ -804,27 +815,40 @@ msgstr "Đang đọc sách..."
 msgid "Path manager"
 msgstr "Quản lý đường dẫn"
 
-#: search/fields.py:38 search/fields.py:45
+#: search/fields.py:39
+#: search/fields.py:46
 msgid "Invalid strong's number %s."
 msgstr "Số Strong %s không có hiệu lực."
 
-#: search/fields.py:109
+#: search/fields.py:115
 msgid "In finding references, the reference must all be in one book"
 msgstr "Các địa chỉ mình tìm thấy phải ở trong cùng một quyển sách"
+
+#: search/indexed_text.py:102
+msgid "Invalid XML found: Searching on fields may not work or may not display all matches."
+msgstr ""
+
+#: search/indexed_text.py:130
+msgid "Invalid encoding: Searching may not work or may display the wrong results"
+msgstr ""
 
 #: search/query_parser.py:648
 msgid "Could not understand string"
 msgstr "Không hiểu được dòng"
 
-#: search/search.py:215 search/search.py:221
-msgid "Book '%s' not found!"
-msgstr "Sách '%s' không được tìm thấy!"
+#: search/search.py:97
+msgid "A problem was detected with this book while indexing it:"
+msgstr "Gặp nan đề trong việc tạo ra chỉ số:"
 
-#: search/search.py:232
-msgid "Only one dash allowed in '%s'"
-msgstr "Chỉ được phép cho vào một nét gạch trong '%s'"
+#: search/search.py:99
+msgid "Check whether there is a newer version of this book which might fix this problem."
+msgstr "Kiểm tra liệu có ấn bản mới của sách này mà có thể giải quyết vấn đề này."
 
-#: search/search.py:321
+#: search/search.py:279
+msgid "Couldn't understand book search range '%s'"
+msgstr "Không hiểu được phạm vi tìm kiếm '%s'"
+
+#: search/search.py:354
 msgid ""
 "There seems to be an error in your regular expression.\n"
 "The error message given was: %s"
@@ -832,22 +856,26 @@ msgstr ""
 "Hình như có lỗi lầm trong biểu thức chính quy của bạn.\n"
 "Lỗi lầm là: %s"
 
-#: search/search.py:336
+#: search/search.py:369
 msgid "You cannot search on the field %r"
 msgstr "Bạn không thể tìm thấy trong trường %r"
 
-#: search/search.py:351
+#: search/search.py:384
 msgid "Done"
 msgstr "Xong"
 
-#: search/searchpanel.py:255 search/searchpanel.py:536
-#: search/searchpanel.py:689 search/searchpanel.py:708
-#: search/searchpanel.py:779 search/searchpanel.py:795
-#: search/searchpanel.py:830
+#: search/searchpanel.py:255
+#: search/searchpanel.py:537
+#: search/searchpanel.py:690
+#: search/searchpanel.py:709
+#: search/searchpanel.py:780
+#: search/searchpanel.py:796
+#: search/searchpanel.py:831
 msgid "%d references found"
 msgstr "%d địa chỉ được tìm thấy"
 
-#: search/searchpanel.py:281 xrc/search_xrc.py:141
+#: search/searchpanel.py:281
+#: xrc/search_xrc.py:141
 msgid "&Index"
 msgstr "&Chỉ Số"
 
@@ -859,133 +887,149 @@ msgstr "Xoá Chỉ Số"
 msgid "You don't have a current %s, so you cannot search at the moment"
 msgstr "Bạn chưa có một %s hiện tại cho nên bạn không thể tìm kiếm"
 
-#: search/searchpanel.py:305 search/searchpanel.py:342
+#: search/searchpanel.py:306
+#: search/searchpanel.py:343
 msgid "No current version"
 msgstr "Không ấn bản hiện tại"
 
-#: search/searchpanel.py:316
+#: search/searchpanel.py:317
 msgid "Reading search index..."
 msgstr "Đọc chỉ số tìm kiếm..."
 
-#: search/searchpanel.py:348
-msgid ""
-"Search index does not exist for book %s. Indexing will make search much "
-"faster. Create Index?"
-msgstr ""
-"Chưa có chỉ số tìm kiếm cho sách %s. Tạo chỉ số sẽ khiến việc tìm kiếm nhanh "
-"hơn. Bạn muốn tạo chỉ số tìm kiếm không?"
+#: search/searchpanel.py:349
+msgid "Search index does not exist for book %s. Indexing will make search much faster. Create Index?"
+msgstr "Chưa có chỉ số tìm kiếm cho sách %s. Tạo chỉ số sẽ khiến việc tìm kiếm nhanh hơn. Bạn muốn tạo chỉ số tìm kiếm không?"
 
-#: search/searchpanel.py:351
+#: search/searchpanel.py:352
 msgid "Create Index?"
 msgstr "Tạo chỉ số không?"
 
-#: search/searchpanel.py:370 search/searchpanel.py:568
-#: search/searchpanel.py:809 search/searchpanel.py:840 xrc/search_xrc.py:139
+#: search/searchpanel.py:371
+#: search/searchpanel.py:569
+#: search/searchpanel.py:810
+#: search/searchpanel.py:841
+#: xrc/search_xrc.py:139
 msgid "&Search"
 msgstr "&Tìm Kiếm"
 
-#: search/searchpanel.py:396 xrc/search_xrc.py:142 xrc/search_xrc.py:156
+#: search/searchpanel.py:397
+#: xrc/search_xrc.py:142
+#: xrc/search_xrc.py:156
 msgid "Search Options"
 msgstr "Lựa Chọn Tìm Kiếm"
 
-#: search/searchpanel.py:532
+#: search/searchpanel.py:533
 msgid "&Stop"
 msgstr "&Ngừng"
 
-#: search/searchpanel.py:593 search/searchpanel.py:667
+#: search/searchpanel.py:594
+#: search/searchpanel.py:668
 msgid "Error in search"
 msgstr "Lỗi lầm trong việc tìm kiếm"
 
-#: search/searchpanel.py:598 search/searchpanel.py:672
+#: search/searchpanel.py:599
+#: search/searchpanel.py:673
 msgid "The following words were not found in this %s:"
 msgstr "Các từ này không được tìm thấy trong %s này:"
 
-#: search/searchpanel.py:601 search/searchpanel.py:675
+#: search/searchpanel.py:602
+#: search/searchpanel.py:676
 msgid "Unknown word"
 msgstr "Từ chưa được biết"
 
-#: search/searchpanel.py:691 search/searchpanel.py:711
-#: search/searchpanel.py:781 search/searchpanel.py:799
+#: search/searchpanel.py:692
+#: search/searchpanel.py:712
+#: search/searchpanel.py:782
+#: search/searchpanel.py:800
 msgid "1 word"
 msgstr "1 từ"
 
-#: search/searchpanel.py:692 search/searchpanel.py:712
-#: search/searchpanel.py:782 search/searchpanel.py:800
+#: search/searchpanel.py:693
+#: search/searchpanel.py:713
+#: search/searchpanel.py:783
+#: search/searchpanel.py:801
 msgid "%d words"
 msgstr "%d từ"
 
-#: search/searchpanel.py:695 search/searchpanel.py:717
+#: search/searchpanel.py:696
+#: search/searchpanel.py:718
 msgid "%d hits"
 msgstr "%d chỗ được tìm thấy"
 
-#: search/searchpanel.py:707 search/searchpanel.py:794
-#: search/searchpanel.py:829
+#: search/searchpanel.py:708
+#: search/searchpanel.py:795
+#: search/searchpanel.py:830
 msgid "1 reference found"
 msgstr "1 địa chỉ được tìm thấy"
 
-#: search/searchpanel.py:716
+#: search/searchpanel.py:717
 msgid "1 hit"
 msgstr "1 chỗ được tìm thấy"
 
-#: search/searchpanel.py:813 search/searchpanel.py:847
+#: search/searchpanel.py:814
+#: search/searchpanel.py:848
 msgid "Reference"
 msgstr "Địa Chỉ"
 
-#: search/searchpanel.py:813 search/searchpanel.py:847
-#: xrc/copyverses_xrc.py:78 xrc/templatemanager_xrc.py:97
+#: search/searchpanel.py:814
+#: search/searchpanel.py:848
+#: xrc/copyverses_xrc.py:78
+#: xrc/templatemanager_xrc.py:97
 msgid "Preview"
 msgstr "Xem Thử"
 
-#: search/searchpanel.py:826
+#: search/searchpanel.py:827
 msgid "%(version)s search - %(numresults)s"
 msgstr "%(version)s tìm kiếm - %(numresults)s"
 
-#: search/searchpanel.py:888
+#: search/searchpanel.py:887
 msgid "Processing %s"
 msgstr "Đang xử lý %s"
 
-#: search/searchpanel.py:892
+#: search/searchpanel.py:891
 msgid "Indexing %s"
 msgstr "Tạo chỉ số cho %s"
 
-#: search/searchpanel.py:920
+#: search/searchpanel.py:923
 msgid "Writing %s"
 msgstr "Đang viết %s"
 
-#: search/searchpanel.py:1053
+#: search/searchpanel.py:1061
 msgid "Other Book Search"
 msgstr "Tìm Kiếm trong Sách Khác"
 
-#: search/searchpanel.py:1098
+#: search/searchpanel.py:1106
 msgid "Entries"
 msgstr "Các giá trị tính"
 
-#: search/searchpanel.py:1105
+#: search/searchpanel.py:1113
 msgid "Dictionary Search"
 msgstr "Tìm Kiếm trong Từ Điển"
 
-#: search/searchpanel.py:1146
+#: search/searchpanel.py:1154
 msgid "Commentary Search"
 msgstr "Tìm Kiếm trong Sách Giải Nghĩa"
 
-#: swlib/pysw.py:114 swlib/pysw.py:532
+#: swlib/pysw.py:116
+#: swlib/pysw.py:534
 msgid "There are only %(chapters)d chapters in %(book)s (given %(given)d)"
 msgstr "Chỉ có %(chapters)d chương trong %(book)s (khi có %(given)d)"
 
-#: swlib/pysw.py:131 swlib/pysw.py:542
-msgid ""
-"There are only %(verses)d verses in %(book)s %(chapter)s (given %(given)d)"
+#: swlib/pysw.py:133
+#: swlib/pysw.py:544
+msgid "There are only %(verses)d verses in %(book)s %(chapter)s (given %(given)d)"
 msgstr "Chỉ có %(verses)d câu trong %(book)s %(chapter)s (khi có %(given)d)"
 
-#: swlib/pysw.py:700 swlib/pysw.py:1292
+#: swlib/pysw.py:707
+#: swlib/pysw.py:1341
 msgid "Invalid Reference: %s"
 msgstr "Địa chỉ không có hiệu lực: %s"
 
-#: swlib/pysw.py:1280
+#: swlib/pysw.py:1329
 msgid "Invalid empty reference"
 msgstr "Địa chỉ trống không có hiệu lực"
 
-#: tag_passage_dialog.py:21
+#: tag_passage_dialog.py:20
 msgid "Tag %s"
 msgstr "Đánh dấu %s"
 
@@ -1025,11 +1069,13 @@ msgstr "Chép Tất Cả"
 msgid "Copy tooltip text (with links)"
 msgstr "Chép văn bản trong cửa tạm thời (với nối kết)"
 
-#: tooltip.py:368 tooltip.py:493
+#: tooltip.py:368
+#: tooltip.py:493
 msgid "Sticky Tooltip"
 msgstr "Cửa Tạm Thời"
 
-#: tooltip.py:390 tooltip.py:392
+#: tooltip.py:390
+#: tooltip.py:392
 msgid "Stay on top"
 msgstr "Tiếp tục ở trên"
 
@@ -1177,7 +1223,8 @@ msgstr "&Mở Mẫu"
 msgid "Edit Template..."
 msgstr "Sửa Mẫu..."
 
-#: xrc/copyverses_xrc.py:79 xrc/templatemanager_xrc.py:99
+#: xrc/copyverses_xrc.py:79
+#: xrc/templatemanager_xrc.py:99
 msgid "&Cancel"
 msgstr "&Huỷ"
 
@@ -1201,7 +1248,8 @@ msgstr "Cỡ Phông Chữ"
 msgid "Preview:"
 msgstr "Xem thử"
 
-#: xrc/fontchoice_xrc.py:76 xrc/templatemanager_xrc.py:98
+#: xrc/fontchoice_xrc.py:76
+#: xrc/templatemanager_xrc.py:98
 msgid "&Ok"
 msgstr "&Ok"
 
@@ -1225,15 +1273,18 @@ msgstr "Cài tại:"
 msgid "Book Installation"
 msgstr "Cài Sách"
 
-#: xrc/manage_topics_xrc.py:120 xrc/manage_topics_xrc.py:121
+#: xrc/manage_topics_xrc.py:120
+#: xrc/manage_topics_xrc.py:121
 msgid "Cut"
 msgstr "Cắt"
 
-#: xrc/manage_topics_xrc.py:124 xrc/manage_topics_xrc.py:125
+#: xrc/manage_topics_xrc.py:124
+#: xrc/manage_topics_xrc.py:125
 msgid "Paste"
 msgstr "Dán"
 
-#: xrc/manage_topics_xrc.py:126 xrc/manage_topics_xrc.py:127
+#: xrc/manage_topics_xrc.py:126
+#: xrc/manage_topics_xrc.py:127
 #: xrc/module_manager_xrc.py:67
 msgid "Delete"
 msgstr "Xoá"
@@ -1394,23 +1445,15 @@ msgstr "&Phạm Vị Đặc Biệt"
 msgid "Search Range"
 msgstr "Phạm Vi Tìm Kiếm"
 
-#: xrc/tag_passage_dialog_xrc.py:67
+#: xrc/tag_passage_dialog_xrc.py:66
 msgid "&Tag: "
 msgstr "&Dấu:"
 
-#: xrc/tag_passage_dialog_xrc.py:68
-msgid "&New"
-msgstr "&Mới"
-
-#: xrc/tag_passage_dialog_xrc.py:69
-msgid "Creates a new topic."
-msgstr "Tạo ra chủ đề mới"
-
-#: xrc/tag_passage_dialog_xrc.py:70
+#: xrc/tag_passage_dialog_xrc.py:67
 msgid "&Comment:"
 msgstr "&Lời Giải Nghĩa:"
 
-#: xrc/tag_passage_dialog_xrc.py:71
+#: xrc/tag_passage_dialog_xrc.py:68
 msgid "Tag Passage"
 msgstr "Đánh dấu phân đoạn"
 
@@ -1442,39 +1485,34 @@ msgstr ""
 "Dùng $$text cho văn bản của câu, $$versenum cho\n"
 "số câu và $$reference cho địa chỉ"
 
-#: xrc/topic_creation_dialog_xrc.py:67
-msgid "&Parent:"
-msgstr "&Mẹ:"
-
-#: xrc/topic_creation_dialog_xrc.py:68
-msgid "&Name: "
-msgstr "&Tên:"
-
-#: xrc/topic_creation_dialog_xrc.py:69
-msgid "&Description:"
-msgstr "&Mô Tả:"
-
-#: xrc/topic_creation_dialog_xrc.py:70
-msgid "Create New Topic"
-msgstr "Tạo Ra Chủ Đề Mới"
-
+#~ msgid "Book '%s' not found!"
+#~ msgstr "Sách '%s' không được tìm thấy!"
+#~ msgid "Only one dash allowed in '%s'"
+#~ msgstr "Chỉ được phép cho vào một nét gạch trong '%s'"
+#~ msgid "&New"
+#~ msgstr "&Mới"
+#~ msgid "Creates a new topic."
+#~ msgstr "Tạo ra chủ đề mới"
+#~ msgid "&Parent:"
+#~ msgstr "&Mẹ:"
+#~ msgid "&Name: "
+#~ msgstr "&Tên:"
+#~ msgid "&Description:"
+#~ msgstr "&Mô Tả:"
+#~ msgid "Create New Topic"
+#~ msgstr "Tạo Ra Chủ Đề Mới"
 #~ msgid "&Passage: "
 #~ msgstr "&Phân Đoạn:"
-
 #~ msgid "Edit Passage"
 #~ msgstr "Sửa Phân Đoạn"
-
 #~ msgid "English"
 #~ msgstr "Tiếng Anh"
-
 #~ msgid "Spanish"
 #~ msgstr "Tiếng Tây Ban Nha"
-
 #~ msgid "BM test"
 #~ msgstr "Kiểm Tra BM"
-
 #~ msgid "Vietnamese"
 #~ msgstr "Tiếng Việt"
-
 #~ msgid "Ben Morgan"
 #~ msgstr "Ben Morgan"
+
