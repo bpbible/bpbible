@@ -17,6 +17,8 @@ class GuessVerseFrame(xrcGuessVerseFrame):
 		self.books.AppendItems([book.bookname for book in VK.books])
 		self.books.Selection = 0
 		self.new_guess()
+		self.Children[0].Fit()
+		self.Fit()
 	
 	def new_guess(self):
 		randomnum = random.randint(1, 31102)
@@ -29,14 +31,16 @@ class GuessVerseFrame(xrcGuessVerseFrame):
 			wx.MessageBox(
 				_("Yes, you are right. The verse was %s")
 					% UserVK(self.key).text,
-				_("Correct")
+				_("Correct"),
+				parent=self
 			)
 
 			self.new_guess()
 		else:
 			wx.MessageBox(
 				_("No, you are wrong. Try again."), 
-				_("Try again.")
+				_("Try again."),
+				parent=self
 			)
 
 if __name__ == '__main__':
