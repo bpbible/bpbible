@@ -525,7 +525,8 @@ class HtmlBase(wx.html.HtmlWindow):
 		wx.CallAfter(self.ScrollNow, -1, y / scrollstep, d)
 		
 	def ScrollNow(self, x, y, disabler=None):
-		self.Scroll(x, y)
+		if self:
+			self.Scroll(x, y)
 		
 	
 	def SetPage(self, *args, **kwargs):
