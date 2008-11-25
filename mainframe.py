@@ -163,7 +163,8 @@ class MainFrame(wx.Frame, AuiLayer):
 		dprint(MESSAGE, "Setting AUI up")
 		
 		self.create_aui_items()
-		
+		self.buffer = wx.TextCtrl(self)
+		self.buffer.Hide()
 		
 		super(MainFrame, self).setup()
 		self.set_aui_items_up()
@@ -174,9 +175,6 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.setup_frames()
 
 		self.bibleref.SetFocus()
-		self.buffer = wx.TextCtrl(self)
-		self.buffer.Hide()
-		
 		dprint(MESSAGE, "Setting menus up")
 		
 		self.set_menus_up()

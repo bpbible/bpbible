@@ -217,13 +217,22 @@ class DockArt(wx.aui.PyAuiDockArt):
 
 		# clipping doesn't seem to be done here. So draw all or nothing
 		if clipping_rect and clipping_rect.ContainsRect(drop_arrow_rect):
+			# bug under gtk:
+			# window content doesn't fill maximized window when resizing if we
+			# set the foreground colour for the mainframe. So change the
+			# colour of our hidden text buffer instead and use it			
+			if osutils.is_gtk():
+				window = guiconfig.mainfrm.buffer
+
 			fg_old = window.ForegroundColour
-			window.ForegroundColour = dc.GetTextForeground()
+
+			window.SetForegroundColour(dc.GetTextForeground())
 		
 			wx.RendererNative.Get().DrawDropArrow(
 				window, dc, drop_arrow_rect, 0
 			)
-			window.ForegroundColour = fg_old
+			
+			window.SetForegroundColour(fg_old)
 	
 
 mouse_over = {}
