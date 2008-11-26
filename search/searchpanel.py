@@ -584,7 +584,12 @@ class SearchPanel(xrcSearchPanel):
 		if self.indexed_search:
 			index_word_list = self.index.statistics["wordlist"]
 			stemming_data = self.index.statistics["stem_map"]
-			stemmer = get_stemmer(self.book.mod)
+
+			# don't stem on case sensitive as we cannot retain the case
+			if not case_sensitive:
+				stemmer = get_stemmer(self.book.mod)
+			else:
+				stemmer = None
 		else:
 			index_word_list = None
 			stemming_data = None

@@ -672,7 +672,6 @@ def print_regexes(string, verbose=False):
 
 def separate_words(string, wordlist=None, stemming_data=None, stemmer=None,
 		cross_verse_search=True):
-	#TODO: don't stem when case sensitive
 	global cross_verse
 	cross_verse = cross_verse_search
 
