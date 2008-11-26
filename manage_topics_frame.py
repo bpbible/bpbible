@@ -132,6 +132,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 
 	def set_selected_topic(self, new_topic):
 		self._selected_topic = new_topic
+		self.selected_passages = []
 		self._change_topic_details(new_topic)
 
 	selected_topic = property(get_selected_topic, set_selected_topic)
