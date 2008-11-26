@@ -547,9 +547,18 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 			)
 		self.passage_details_panel.Hide()
 		self.item_details_panel.Sizer.Add(self.passage_details_panel, 1, wx.GROW)
+		self.item_details_panel_text = wx.StaticText(self.item_details_panel)
+		self.item_details_panel.Sizer.Add(self.item_details_panel_text, 1, wx.ALIGN_CENTRE)
+		self.item_details_panel_text.Hide()
 
 	def _change_topic_details(self, new_topic):
 		if new_topic is None:
+			if self.topic_details_panel.IsShown():
+				self._display_no_items_selected()
+			return
+
+		if new_topic is self._manager:
+			self._display_text_in_panel(_("All topics."))
 			return
 
 		self.topic_details_panel.set_topic(new_topic)
@@ -557,12 +566,27 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 
 	def _change_passage_details(self, selected_passages):
 		if not selected_passages:
+			if self.passage_details_panel.IsShown():
+				self._display_no_items_selected()
 			return
 		elif len(selected_passages) == 1:
 			self.passage_details_panel.set_passage(selected_passages[0])
 			self._switch_item_details_current_panel(self.passage_details_panel)
 		else:
-			self.passage_details_panel.Hide()
+			self._display_text_in_panel(
+					_(u"%d passages selected.\n\nSelect a passage to view it.") % len(selected_passages)
+				)
+
+	def _display_no_items_selected(self):
+		"""When no items have been selected, display this to the user."""
+		self._display_text_in_panel(_("No items have been selected."))
+
+	def _display_text_in_panel(self, text):
+		"""Displays the given text in the panel instead of either the current
+		passage or the current topic.
+		"""
+		self.item_details_panel_text.Label = text
+		self._switch_item_details_current_panel(self.item_details_panel_text)
 
 	@guiutil.frozen
 	def _switch_item_details_current_panel(self, new_panel):
