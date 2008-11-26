@@ -226,6 +226,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 			wx.WXK_DELETE: self._delete,
 			(ord("Z"), wx.MOD_CMD): self._operations_manager.undo,
 			(ord("Y"), wx.MOD_CMD): self._operations_manager.redo,
+			(ord("A"), wx.MOD_CMD): self._select_all_passages,
 		}
 
 		if not self._operations_manager.can_undo:
@@ -495,6 +496,14 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		"""Selects the entry in the list control with the given index."""
 		state = wx.LIST_STATE_SELECTED | wx.LIST_STATE_FOCUSED
 		self.passage_list_ctrl.SetItemState(index, state, state)
+
+	@guiutil.frozen
+	def _select_all_passages(self):
+		if self._passage_list_topic is None:
+			return
+
+		for index in range(len(self._passage_list_topic.passages)):
+			self._select_list_entry_by_index(index)
 	
 	def _show_passage_context_menu(self, event):
 		"""Shows the context menu for a passage in the passage list."""
