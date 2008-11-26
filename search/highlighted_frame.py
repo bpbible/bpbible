@@ -11,7 +11,7 @@ from search import removeformatting
 
 from backend.bibleinterface import biblemgr
 from gui.reference_display_frame import ReferenceDisplayFrame
-from swlib.pysw import SW
+from swlib.pysw import SW, VerseList
 
 #TODO: highlight Aenon - AE joined up, that is - in KJV
 
@@ -331,6 +331,58 @@ def highlight(string1, string2, is_bible, regexes, fields=(),
 			if count == 0:
 				dprint(WARNING, "Didn't highlight morph - are they on?", value)
 
+		elif key == "ref":
+			if is_bible:
+				ref = re.compile(
+					r'^(<a href="bible:([^#]*)(#.*)?">)(.*?)(</a>)$'
+				)
+			else:
+				# if we aren't in the bible, the start and end will be in
+				# different tokens. So match start and then end
+				ref = re.compile(
+					r'^(<a href="bible:([^#]*)(#.*)?">)|(</a>)$'
+				)
+
+			v = VerseList(value, userInput=True)
+			in_ref = [False]
+			def subst(match):
+				if (is_bible or match.group(1)):
+					if match.group(2).startswith("%3F"):
+						url = SW.URL("bible:" +
+						SW.URL.decode(str(match.group(2))).c_str())
+						values = url.getParameterValue("values")
+						references = VerseList([
+							url.getParameterValue("val%s" % value)
+							for value in range(int(values))
+						])
+					else:
+						references = VerseList(match.group(2))
+				else:
+					# our closing </a>?
+					if not is_bible and in_ref[0] and match.group(4):
+						in_ref[0] = False
+						return "</font></b>%s" % match.group(4)
+
+					return match.group(0)
+
+				for item in v:
+					for i in item:
+						if references.VerseInRange(i):
+							if is_bible:
+								# wrap the contents of the <a> in formatting
+								return '%s<b><font color="#008800">%s</font></b>%s' % match.group(1, 4, 5)
+							else:
+								# start the formatting, to be completed with
+								# the </a> tag handling above
+								in_ref[0] = True
+								return '%s<b><font color="#008800">' % \
+									match.group(1)
+
+				return match.group(0)
+
+			for tokens in results:
+				for idx, token in enumerate(tokens):
+					tokens[idx] = ref.sub(subst, token)
 	
 	replacements = {
 		'<' : '&lt;',
