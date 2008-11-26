@@ -968,7 +968,7 @@ class PassageDetailsPanel(xrcPassageDetailsPanel):
 		self.passage_verse_key = new_passage.passage
 		self.passage_text.Value = passage_text
 		self.comment_text.Value = new_passage.comment
-		self.passage_preview.SetReference(str(new_passage))
+		self._preview_passage(str(new_passage))
 
 	def begin_create_passage(self, parent_topic, passage):
 		self._creating_passage = True
@@ -997,7 +997,12 @@ class PassageDetailsPanel(xrcPassageDetailsPanel):
 			return
 
 		if self._save_passage():
-			self.passage_preview.SetReference(str(self.passage))
+			self._preview_passage(str(self.passage))
+
+	def _preview_passage(self, reference):
+		self.passage_preview.SetReference(
+				reference, exclude_topic_tag=self.passage.parent
+			)
 
 	def _save_passage(self):
 		"""Saves the current passage.
