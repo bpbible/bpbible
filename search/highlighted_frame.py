@@ -7,7 +7,7 @@ from backend.book import Bible
 from util.string_util import KillTags, ReplaceUnicode, replace_amp, htmlify_unicode, remove_amps
 from util.debug import dprint, ERROR, WARNING
 
-from search import removeformatting
+from search.query_parser import removeformatting
 
 from backend.bibleinterface import biblemgr
 from gui.reference_display_frame import ReferenceDisplayFrame

@@ -16,11 +16,13 @@ import re
 import string
 import cPickle
 from util.debug import *
-from query_parser import removeformatting, separate_words
-from query_parser import SpellingException
-from indexed_text import IndexedText, VerseIndexedText, DictionaryIndexedText
-from stemming import get_stemmer
-from fields import all_fields
+from search.query_parser import removeformatting, separate_words
+from search.query_parser import SpellingException
+from search.indexed_text import (
+	IndexedText, VerseIndexedText, DictionaryIndexedText
+)
+from search.stemming import get_stemmer
+from search.fields import all_fields
 
 
 _number = 0

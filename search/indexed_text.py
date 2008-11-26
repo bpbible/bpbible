@@ -6,9 +6,9 @@ from util.debug import dprint, WARNING, ERROR, is_debugging
 from util.unicode import to_unicode, to_str
 
 
-from query_parser import removeformatting
-import process_text
-import fields
+from search.query_parser import removeformatting
+from search import process_text
+from search import fields
 
 class IndexedText(object):
 	"""A bit of text, one reference per line, with an index built against it"""
@@ -88,7 +88,8 @@ class IndexedText(object):
 			# fix its encoding if necessary
 			if ord(module.Encoding()) == SW.ENC_LATIN1:
 				xml_items = [
-					item.decode("cp1252").encode("utf8")
+					# ignore any errors
+					item.decode("cp1252", "ignore").encode("utf8", "ignore")
 					for item in xml_items
 				]
 

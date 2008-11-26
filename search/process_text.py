@@ -1,4 +1,3 @@
-import xml.dom.minidom as m
 import xml.etree.cElementTree as etree
 
 # cElementTree uses elementtree, but the import is in C code.
@@ -7,7 +6,7 @@ import xml.etree.ElementTree
 
 from cStringIO import StringIO
 import re
-import fields
+from search import fields
 from util.debug import dprint, WARNING
 import string
 from swlib.pysw import SW, TOP

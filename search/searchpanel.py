@@ -14,13 +14,13 @@ from xrc.search_xrc import *
 
 import config
 import guiconfig
-import search
-from search import COMBINED
-from search import SearchException, SpellingException, RemoveDuplicates
-from query_parser import separate_words
-from stemming import get_stemmer
+import index
+from index import COMBINED
+from index import SearchException, SpellingException, RemoveDuplicates
+from search.query_parser import separate_words
+from search.stemming import get_stemmer
 
-from highlighted_frame import HighlightedDisplayFrame
+from search.highlighted_frame import HighlightedDisplayFrame
 from swlib.pysw import TK, VK, UserVK, GetBestRange, Searcher, SWREGEX
 from gui import guiutil
 from util.debug import dprint, WARNING, is_debugging
@@ -307,7 +307,7 @@ class SearchPanel(xrcSearchPanel):
 				"so you cannot search at the moment") % self.book.noun
 		if not search_config["indexed_search"]:
 			self.search_button.Enable(self.book.version is not None)
-			self.set_index_available(search.IndexExists(self.version))
+			self.set_index_available(index.IndexExists(self.version))
 			if not self.book.version:
 				wx.MessageBox(NO_CURRENT_VERSION,
 				_("No current version"), parent=self)
@@ -320,14 +320,14 @@ class SearchPanel(xrcSearchPanel):
 			
 			return
 
-		if(self.version and search.IndexExists(self.version)):
+		if(self.version and index.IndexExists(self.version)):
 			busy_info = wx.BusyInfo(_("Reading search index..."))
 			try:
-				self.index = search.ReadIndex(self.version)
+				self.index = index.ReadIndex(self.version)
 			except Exception, e:
 				dprint(WARNING, "Error reading index. Deleting it...", e)
 				try:
-					search.DeleteIndex(self.version)
+					index.DeleteIndex(self.version)
 				except Exception, e2:
 					dprint(WARNING, "Couldn't delete it", e2)
 
@@ -662,7 +662,7 @@ class SearchPanel(xrcSearchPanel):
 		self.numwords = len(regexes)
 		succeeded = True
 		if case_sensitive:
-			search_type |= search.CASESENSITIVE
+			search_type |= index.CASESENSITIVE
 		
 		try:
 			self.search_results = self.index.Search(
@@ -708,7 +708,7 @@ class SearchPanel(xrcSearchPanel):
 			wx.CallAfter(self.clear_list)
 			return
 
-		self.search_results = search.RemoveDuplicates(self.search_results)
+		self.search_results = index.RemoveDuplicates(self.search_results)
 		
 		self.search_label.Label = (
 			"%s, %s, %s" % (
@@ -876,7 +876,7 @@ class SearchPanel(xrcSearchPanel):
 	def generate_index(self, event=None):
 		if(self.index):
 			self.index = None
-			error = search.DeleteIndex(self.version)
+			error = index.DeleteIndex(self.version)
 			if error:
 				wx.MessageBox(error, parent=self)
 			else:
@@ -908,11 +908,11 @@ class SearchPanel(xrcSearchPanel):
 			#create index
 			try:
 				self.index = self.index_type(version, callback)
-			except search.Cancelled:
+			except index.Cancelled:
 				self.show_keyboard_button(False)
 				return None
 
-			except search.BadBook, e:
+			except index.BadBook, e:
 				self.index = e.index
 				error = unicode(e)
 			
@@ -978,7 +978,7 @@ class SearchPanel(xrcSearchPanel):
 	
 	@property
 	def index_type(self):
-		return search.Index
+		return index.Index
 	
 	@property
 	def title(self):
@@ -1073,7 +1073,7 @@ class GenbookSearchPanel(SearchPanel):
 	
 	@property
 	def index_type(self):
-		return search.GenBookIndex
+		return index.GenBookIndex
 
 	@property
 	def template(self):
@@ -1125,7 +1125,7 @@ class DictionarySearchPanel(SearchPanel):
 	
 	@property
 	def index_type(self):
-		return search.DictionaryIndex
+		return index.DictionaryIndex
 
 	def search_list_format_text(self, text):
 		assert len(text.split(" - ")), "Can't have ranges in dictionary"
@@ -1166,7 +1166,7 @@ class CommentarySearchPanel(SearchPanel):
 
 	@property
 	def index_type(self):
-		return search.CommentaryIndex
+		return index.CommentaryIndex
 
 	def construct_option_panels(self, parent):
 		super(CommentarySearchPanel, self).construct_option_panels(parent)

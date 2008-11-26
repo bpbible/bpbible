@@ -1,5 +1,4 @@
-import process_text
-import query_parser
+from search import query_parser
 from swlib.pysw import SW, VerseList
 import re
 from util import classproperty
@@ -26,6 +25,11 @@ class BaseField(object):
 	@classproperty
 	def field_to_use(cls):
 		return cls.field_name
+	
+	def get_parser(self):
+		"""Convenience method to avoid circular import at top level"""
+		from search import process_text
+		return process_text.ParseBase
 
 class StrongsField(BaseField):
 	field_name = "strongs"
@@ -34,7 +38,7 @@ class StrongsField(BaseField):
 	def prepare(cls, input):
 		match = re.match("^([GH])(\d+)(\w*)$", input)
 		if not match:
-			from search import SearchException
+			from index import SearchException
 			raise SearchException(
 				_("Invalid strong's number %s.") % input
 			)
@@ -42,17 +46,17 @@ class StrongsField(BaseField):
 		prefix, number, extra = match.group(1, 2, 3)
 		number = int(number)
 		if number > 9999:
-			from search import SearchException
+			from index import SearchException
 			raise SearchException(_("Invalid strong's number %s.") % input)
 
 		return "%s%04d%s" % (prefix, int(number), extra)
 	
 	def finalize(self):
 		return super(StrongsField, self).finalize().replace(
-			process_text.ParseOSIS.FIELD_SEPARATOR.decode("utf-8"),
+			self.get_parser().FIELD_SEPARATOR.decode("utf-8"),
 			":"
 		).replace(
-			process_text.ParseOSIS.DASH.decode("utf-8"),
+			self.get_parser().DASH.decode("utf-8"),
 			"-"
 		)
 		
@@ -96,7 +100,7 @@ class RefField(BaseField):
 	
 	def finalize(self):
 		return '\n'.join(self.matches).replace(
-			process_text.ParseOSIS.FIELD_SEPARATOR.decode("utf-8"),
+			self.get_parser().FIELD_SEPARATOR.decode("utf-8"),
 			"."
 		)
 	
@@ -110,7 +114,7 @@ class RefField(BaseField):
 				vl
 			)
 		if vl[0][0].getBookName() != vl[0][-1].getBookName():
-			from search import SearchException		
+			from index import SearchException		
 			raise SearchException(
 				_("In finding references, the reference "
 					"must all be in one book")
