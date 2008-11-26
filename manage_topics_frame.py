@@ -304,6 +304,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		
 		self.topic_tree.PopupMenu(menu)
 
+	@guiutil.frozen
 	def _safe_paste(self, operation=None):
 		"""A wrapper around the operations manager paste operation that
 		catches the CircularDataException and displays an error message.
@@ -311,7 +312,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		if operation is None:
 			operation = self._operations_manager.paste
 		try:
-			guiutil.frozen(operation)()
+			operation()
 		except CircularDataException:
 			wx.MessageBox(_("Cannot copy the topic to one of its children."),
 					_("Copy Topic"), wx.OK | wx.ICON_ERROR, self)
