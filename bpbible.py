@@ -1,4 +1,19 @@
 #!/usr/bin/env python
+import os
+import sys
+
+if hasattr(sys, "frozen"):
+	# py2exe may get paths wrong
+	if os.path.dirname(sys.argv[0]):
+		os.chdir(os.path.dirname(sys.argv[0]))
+
+# allow user to drop customization scripts in custom
+# these will be auto-run
+# for example, for distributing small patches
+if os.path.isdir("custom"):
+	for file in os.listdir("custom"):
+		if os.path.isfile("custom/%s" % file) and file.endswith(".py"):
+			execfile("custom/%s" % file)
 
 from util.debug import dprint, MESSAGE, WARNING, is_debugging
 dprint(MESSAGE, "Importing wx")
