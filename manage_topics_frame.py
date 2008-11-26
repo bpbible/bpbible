@@ -902,12 +902,11 @@ class TopicDetailsPanel(xrcTopicDetailsPanel):
 		if new_topic is self.topic:
 			return
 
-		self.old_name = new_topic.name
-		self.old_description = new_topic.description
-
 		self._save_topic()
 		self.combine_action = False
 
+		self.old_name = new_topic.name
+		self.old_description = new_topic.description
 		self.topic = new_topic
 		self.name_text.Value = new_topic.name
 		self.display_tag_checkbox.Value = bool(new_topic.display_tag)
