@@ -752,8 +752,13 @@ class SearchPanel(xrcSearchPanel):
 		self.searcher = Searcher(self.book)
 		self.searcher.callback = callback
 
-		assert not fields and not excl_fields, \
-			"Strong's searches don't work here yet"
+		if fields or excl_fields:
+			wx.MessageBox(
+				_("You cannot search on fields in unindexed search"),
+				_("Error"),
+				parent=self
+			)
+			return
 		
 		self.numwords = len(regexes)
 		if not regexes:
