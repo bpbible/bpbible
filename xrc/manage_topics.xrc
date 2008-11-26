@@ -148,29 +148,33 @@
         <border>6</border>
       </object>
       <object class="sizeritem">
-        <object class="wxTextCtrl" name="comment_text">
-          <style>wxTE_MULTILINE</style>
+        <object class="wxBoxSizer">
+          <object class="sizeritem">
+            <object class="wxTextCtrl" name="comment_text">
+              <style>wxTE_MULTILINE</style>
+            </object>
+            <option>1</option>
+            <flag>wxGROW</flag>
+          </object>
+          <object class="spacer">
+            <size>6</size>
+          </object>
+          <object class="sizeritem">
+            <object class="wxHtmlWindow" name="passage_preview" subclass="gui.reference_display_frame.ReferenceDisplayFrame"/>
+            <option>1</option>
+            <flag>wxGROW</flag>
+          </object>
+          <orient>wxHORIZONTAL</orient>
         </object>
         <option>1</option>
         <flag>wxGROW</flag>
-        <border>6</border>
-        <minsize>200,75</minsize>
-      </object>
-      <object class="spacer">
-        <flag>wxGROW</flag>
-      </object>
-      <object class="sizeritem">
-        <object class="wxHtmlWindow" name="passage_preview" subclass="gui.reference_display_frame.ReferenceDisplayFrame"/>
-        <option>1</option>
-        <flag>wxGROW</flag>
-        <minsize>200,75</minsize>
       </object>
       <cols>2</cols>
-      <rows>3</rows>
+      <rows>2</rows>
       <vgap>6</vgap>
       <hgap>6</hgap>
       <growablecols>1</growablecols>
-      <growablerows>1,2</growablerows>
+      <growablerows>1</growablerows>
     </object>
   </object>
 </resource>
