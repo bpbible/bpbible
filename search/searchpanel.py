@@ -226,7 +226,7 @@ class SearchPanel(xrcSearchPanel):
 			tlw.Show()
 
 			self.searchkey.SetFocus()
-
+			
 			#tlw.Sizer.Layout()
 			#tlw.SetSize(panel.floating_size)		
 			
@@ -237,7 +237,7 @@ class SearchPanel(xrcSearchPanel):
 		
 		self.check_for_index()
 		self.set_title()
-
+		
 		if self.search_on_show:
 			self.search_on_show = False
 			wx.CallAfter(self.on_search)
@@ -272,7 +272,7 @@ class SearchPanel(xrcSearchPanel):
 
 		self.verselist.Font = font
 		self.searchkey.Font = font
-		self.panel_1.Layout()
+		self.layout_panel_1()
 		
 
 	
@@ -289,9 +289,16 @@ class SearchPanel(xrcSearchPanel):
 		if not is_debugging():
 			self.genindex.ContainingSizer.Show(self.genindex, not available)
 		
-			self.panel_1.Layout()
+			self.layout_panel_1()
 			
 
+	def layout_panel_1(self):
+		# If we have Jesus "lamb" in our search combo dropdown items, and do a
+		# layout when Jesus is type in, it changes to Jesus "lamb"
+		# so change it back
+		old_value = self.searchkey.Value
+		self.panel_1.Layout()
+		self.searchkey.Value = old_value
 		
 
 	def check_for_index(self):
@@ -310,7 +317,7 @@ class SearchPanel(xrcSearchPanel):
 
 		if self.index and self.index.version == self.version:
 			self.set_index_available(True)
-		
+			
 			return
 
 		if(self.version and search.IndexExists(self.version)):
@@ -442,8 +449,9 @@ class SearchPanel(xrcSearchPanel):
 		return self.range_panel.get_scope()
 
 	def on_collapse(self, event):
-		self.panel_1.Layout()
-	
+		self.layout_panel_1()
+		self.verselist.Refresh()
+
 	def on_searchkey_focus(self, event):
 		event.Skip()
 		
@@ -496,7 +504,7 @@ class SearchPanel(xrcSearchPanel):
 		
 	def show_keyboard_button(self, shown=True):
 		self.keyboard_button.ContainingSizer.Show(self.keyboard_button, shown)
-		self.panel_1.Layout()
+		self.layout_panel_1()
 	
 	def on_close(self, event=None):
 		guiconfig.mainfrm.show_panel(self.id, False)
