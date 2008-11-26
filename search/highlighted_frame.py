@@ -12,6 +12,7 @@ from search.query_parser import removeformatting
 from backend.bibleinterface import biblemgr
 from gui.reference_display_frame import ReferenceDisplayFrame
 from swlib.pysw import SW, VerseList
+import guiconfig
 
 #TODO: highlight Aenon - AE joined up, that is - in KJV
 
@@ -471,6 +472,13 @@ class HighlightedDisplayFrame(ReferenceDisplayFrame):
 		d = wx.LogNull()
 		self.ScrollToAnchor("highlight")
 		self.ScrollLines(-1)
+	
+	def get_frame_for_search(self):
+		for item in guiconfig.mainfrm.frames:
+			if item.book == self.book:
+				return item
+
+		assert False, "Search frame not found for %s" % self
 
 if __name__ == '__main__':
 	string1 = u"abcd TE ST\u03b6"

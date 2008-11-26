@@ -527,8 +527,13 @@ class DisplayFrame(HtmlSelectableWindow):
 
 
 	def make_search_text(self):
+		frame = self.get_frame_for_search()
+		if frame.book == biblemgr.bible:
+			search_text = _("Search for %s in the Bible")
+		else:
+			search_text = _("Search for %s in this book")
 		update_ui = self._get_text(
-			_("Search for %s in the Bible"),
+			search_text,
 			is_search=True)
 
 		def on_search_click():
@@ -593,7 +598,9 @@ class DisplayFrame(HtmlSelectableWindow):
 				if " " in text:
 					text = '"%s"' % text
 
-			guiconfig.mainfrm.search_panel.search_and_show(text)
+			search_panel = frame.get_search_panel_for_frame()
+			assert search_panel, "Search panel not found for %s" % self
+			search_panel.search_and_show(text)
 
 		assert hasattr(self, "mod"), self		
 		font = fonts.get_module_gui_font(self.mod, default_to_None=True)
@@ -638,8 +645,8 @@ class DisplayFrame(HtmlSelectableWindow):
 	#	import wx.lib.wxpTag
 	#	self.SetPage("3 <wxp class='CheckBox'><param label='2' /></wxp>4")
 
-
-
+	def get_frame_for_search(self):
+		return guiconfig.mainfrm.bibletext
 
 class DisplayFrameXRC(DisplayFrame):
 	def __init__(self):

@@ -238,6 +238,8 @@ class BookFrame(DisplayFrame):
 
 		return None		
 
+	def get_frame_for_search(self):
+		return self
 		
 
 	def go_quickly(self):
