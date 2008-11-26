@@ -748,7 +748,7 @@ class TopicTree(wx.TreeCtrl):
 			)
 		)
 
-	def on_drop_passage(self, x, y, drag_result):
+	def on_drop_passage(self, x, y, selected_passages, drag_result):
 		"""Drops the given passage onto the topic with the given x and y
 		coordinates in the tree.
 		The drag result specifies whether the passage should be copied or
@@ -768,7 +768,7 @@ class TopicTree(wx.TreeCtrl):
 		drop_topic = self.GetPyData(drop_target)
 		keep_original = (drag_result != wx.DragMove)
 		self._topic_frame._operations_manager.do_copy(
-				self._topic_frame.selected_passages, drop_topic, keep_original
+				selected_passages, drop_topic, keep_original
 			)
 
 	def _get_item_children(self, item=None, recursively=False):
@@ -807,12 +807,13 @@ class PassageListCtrl(wx.ListCtrl, ListCtrlAutoWidthMixin):
 	def _start_drag(self, event):
 		"""Starts the drag and registers a drop source for the passage."""
 		self._drag_index = event.GetIndex()
+		self.dragged_passages = self._topic_frame.selected_passages
 		passage_entry = self._topic_frame.selected_topic.passages[self._drag_index]
 		self.drag_passage_entry = passage_entry
 		id = passage_entry.get_id()
 
 		data = wx.CustomDataObject("PassageEntry")
-		data.SetData(str(id))
+		data.SetData(",".join(str(passage.get_id()) for passage in self.dragged_passages))
 		drop_source = wx.DropSource(self)
 		drop_source.SetData(data)
 		result = drop_source.DoDragDrop(wx.Drag_DefaultMove)
@@ -873,7 +874,10 @@ class TopicPassageDropTarget(wx.PyDropTarget):
 
 	def OnData(self, x, y, result):
 		if self.GetData():
-			self._topic_tree.on_drop_passage(x, y, result)
+			selected_passages = [lookup_passage_entry(int(id))
+					for id in self.data.GetData().split(",")
+				]
+			self._topic_tree.on_drop_passage(x, y, selected_passages, result)
 		return result
 
 class TopicDetailsPanel(xrcTopicDetailsPanel):

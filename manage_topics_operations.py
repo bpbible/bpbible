@@ -109,6 +109,9 @@ class ManageTopicsOperations(object):
 		If a topic is copied to one of its children, a CircularDataException
 		will be thrown.
 		"""
+		if not item:
+			return
+
 		item = self._context.get_wrapper(item)
 		try:
 			if item.is_child_topic(to_topic):
