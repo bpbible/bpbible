@@ -322,6 +322,11 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 	@guiutil.frozen
 	def _delete(self):
 		"""Deletes the currently selected item while keeping the GUI frozen."""
+		if not self.is_passage_selected and self.selected_topic is self._manager:
+			wx.MessageBox(_("Cannot delete the base topic."),
+					_("Delete Topic"), wx.OK | wx.ICON_ERROR, self)
+			return
+
 		self._operations_manager.delete()
 	
 	def _create_topic(self, topic, creation_function=None):
