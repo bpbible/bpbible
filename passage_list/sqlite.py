@@ -2,6 +2,8 @@ import sqlite3
 from swlib.pysw import VK
 sqlite3.register_adapter(VK, lambda vk: str(vk))
 
+# XXX: Include subtopic is actually meant to be display tag, but
+# I can't be bothered doing the schema migration so close to 0.4.
 schema = """\
 CREATE TABLE master_topic_record(
 schema_version varchar,

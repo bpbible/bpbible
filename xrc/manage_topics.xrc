@@ -80,9 +80,26 @@
         </object>
       </object>
       <object class="sizeritem">
-        <object class="wxTextCtrl" name="name_text"/>
+        <object class="wxBoxSizer">
+          <object class="sizeritem">
+            <object class="wxTextCtrl" name="name_text"/>
+            <option>1</option>
+            <flag>wxGROW</flag>
+          </object>
+          <object class="spacer">
+            <size>6</size>
+          </object>
+          <object class="sizeritem">
+            <object class="wxCheckBox" name="display_tag_checkbox">
+              <label>Show tags</label>
+            </object>
+            <flag>wxALIGN_CENTRE_VERTICAL|wxFIXED_MINSIZE</flag>
+            <border>6</border>
+          </object>
+          <orient>wxHORIZONTAL</orient>
+        </object>
+        <option>1</option>
         <flag>wxGROW</flag>
-        <border>6</border>
       </object>
       <object class="sizeritem">
         <object class="wxStaticText" name="description_label">

@@ -48,12 +48,20 @@ class ManageTopicsOperations(object):
 
 		self._perform_action(DeleteAction, action_item=item)
 
-	def set_topic_name(self, topic, name, combine_action=False):
-		self.set_topic_details(topic, name, topic.description)
+	def set_display_tag(self, topic, display_tag, combine_action=False):
+		self.set_topic_details(
+				topic, topic.name, topic.description,
+				display_tag, combine_action=combine_action
+			)
 
-	def set_topic_details(self, topic, name, description, combine_action=False):
+	def set_topic_name(self, topic, name, combine_action=False):
+		self.set_topic_details(topic, name, topic.description, combine_action=combine_action)
+
+	def set_topic_details(self, topic, name, description, display_tag=None, combine_action=False):
+		if display_tag is None:
+			display_tag = topic.display_tag
 		self._perform_action(SetTopicDetailsAction(
-				self._passage_list_manager, topic, name, description
+				self._passage_list_manager, topic, name, description, display_tag,
 			), combine_action=combine_action)
 
 	def set_passage_details(self, passage_entry, passage, comment, allow_undo=True, combine_action=False):
@@ -316,11 +324,12 @@ class SetPassageDetailsAction(Action):
 		return SetPassageDetailsAction(self.manager, self.passage_entry, self.old_passage, self.old_comment)
 
 class SetTopicDetailsAction(Action):
-	def __init__(self, manager, topic, name, description):
+	def __init__(self, manager, topic, name, description, display_tag):
 		super(SetTopicDetailsAction, self).__init__()
 		self.topic = topic
 		self.name = name
 		self.description = description
+		self.display_tag = display_tag
 		self.manager = manager
 
 	def combine_action(self, action):
@@ -332,13 +341,18 @@ class SetTopicDetailsAction(Action):
 
 	def _perform_action(self):
 		self.old_name = self.topic.name
-		self.old_description = self.topic.name
+		self.old_description = self.topic.description
+		self.old_display_tag = self.topic.display_tag
 		self.topic.name = self.name
 		self.topic.description = self.description
+		self.topic.display_tag = self.display_tag
 		self.manager.save_item(self.topic)
 
 	def _get_reverse_action(self):
-		return SetTopicDetailsAction(self.manager, self.topic, self.old_name, self.old_description)
+		return SetTopicDetailsAction(
+				self.manager, self.topic,
+				self.old_name, self.old_description, self.old_display_tag,
+			)
 
 class CopyAction(CompositeAction):
 	"""This action copies or moves a passage to a new topic."""
@@ -662,6 +676,14 @@ def _test():
 	'New description.'
 	>>> _set_topic_name(topic1, "topic1 (new name)")
 	Topic 'topic1 (new name)': name changed observer called.
+	>>> topic1.display_tag
+	True
+	>>> operations_manager.set_display_tag(topic1, False)
+	>>> topic1.display_tag
+	False
+	>>> operations_manager.undo()
+	>>> topic1.display_tag
+	True
 
 	>>> _set_passage_details(passage2, "Gen 5:5", "comment")
 	Passage 'Genesis 5:5': comment changed observer called.

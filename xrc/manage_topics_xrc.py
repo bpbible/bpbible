@@ -66,6 +66,7 @@ class xrcTopicDetailsPanel(wx.Panel):
         # Define variables for the controls, bind event handlers
         self.name_label = xrc.XRCCTRL(self, "name_label")
         self.name_text = xrc.XRCCTRL(self, "name_text")
+        self.display_tag_checkbox = xrc.XRCCTRL(self, "display_tag_checkbox")
         self.description_label = xrc.XRCCTRL(self, "description_label")
         self.description_text = xrc.XRCCTRL(self, "description_text")
 
@@ -132,6 +133,7 @@ def __gettext_strings():
     _("Redo")
     _("Manage Topics")
     _("Name:")
+    _("Show tags")
     _("Description:")
     _("Passage:")
     _("Comment:")

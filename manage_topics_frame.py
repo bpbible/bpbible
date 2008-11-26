@@ -841,6 +841,7 @@ class TopicDetailsPanel(xrcTopicDetailsPanel):
 		self.topic = None
 		self.name_text.Bind(wx.EVT_KILL_FOCUS, self._lost_focus)
 		self.description_text.Bind(wx.EVT_KILL_FOCUS, self._lost_focus)
+		self.display_tag_checkbox.Bind(wx.EVT_CHECKBOX, self._display_tag_changed)
 		self.old_name = u""
 		self.old_description = u""
 		self._operations_manager = operations_manager
@@ -864,6 +865,7 @@ class TopicDetailsPanel(xrcTopicDetailsPanel):
 
 		self.topic = new_topic
 		self.name_text.Value = new_topic.name
+		self.display_tag_checkbox.Value = bool(new_topic.display_tag)
 		self.description_text.Value = new_topic.description
 
 	def focus(self):
@@ -886,10 +888,21 @@ class TopicDetailsPanel(xrcTopicDetailsPanel):
 		name = self.name_text.Value
 		description = self.description_text.Value
 		if name != self.old_name or description != self.old_description:
-			self._operations_manager.set_topic_details(self.topic, name, description, self.combine_action)
+			self._operations_manager.set_topic_details(
+					self.topic, name, description,
+					combine_action=self.combine_action,
+				)
 			self.old_name = name
 			self.old_description = description
-			self._combine_action = True
+			self.combine_action = True
+
+	def _display_tag_changed(self, event):
+		display_tag = bool(self.display_tag_checkbox.IsChecked())
+		self._operations_manager.set_display_tag(
+				self.topic, display_tag,
+				combine_action=self.combine_action,
+			)
+		self.combine_action = True
 
 class PassageDetailsPanel(xrcPassageDetailsPanel):
 	def __init__(self, parent, operations_manager):

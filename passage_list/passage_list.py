@@ -14,7 +14,7 @@ class BasePassageList(object):
 	"""
 	contains_passages = True
 	__table__ = "topic"
-	__fields_to_store__ = ["name", "description", "order_number", "parent"]
+	__fields_to_store__ = ["name", "description", "include_subtopic", "order_number", "parent"]
 
 	def __init__(self, description=""):
 		self._description = description
@@ -181,6 +181,15 @@ class BasePassageList(object):
 		for passage in self.passages:
 			new_list.add_passage(passage.clone())
 		return new_list
+
+	# XXX: Wrapper to save schema migration, see sqlite.py.
+	def get_include_subtopic(self):
+		return self.display_tag
+
+	def set_include_subtopic(self, new_value):
+		self.display_tag = new_value
+
+	include_subtopic = property(get_include_subtopic, set_include_subtopic)
 	
 	def __eq__(self, other):
 		try:
@@ -198,9 +207,10 @@ class BasePassageList(object):
 class PassageList(BasePassageList):
 	contains_passages = True
 
-	def __init__(self, name, description=""):
+	def __init__(self, name, description="", display_tag=True):
 		super(PassageList, self).__init__(description)
 		self._name = name
+		self.display_tag = display_tag
 
 	def set_name(self, name):
 		if name != self._name:
@@ -303,6 +313,15 @@ class PassageListManager(BasePassageList):
 		#return _("Topics")
 
 	name = property(get_name, lambda self, new_name: None)
+
+	def display_tag(self):
+		"""Whether we should display tags for this topic and its subtopics.
+
+		Always True for the top-level manager.
+		"""
+		return True
+
+	display_tag = property(display_tag, lambda self, new: None)
 
 	def get_topic_trail(self):
 		return ()

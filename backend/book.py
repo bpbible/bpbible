@@ -299,6 +299,9 @@ class Book(object):
 			)
 
 	def _insert_tags_for_topic(self, verse_key, topic, exclude_topic_tag):
+		if not topic.display_tag:
+			return ""
+
 		if topic != exclude_topic_tag:
 			result = self._topic_tags(verse_key, topic)
 		else:
