@@ -48,22 +48,20 @@
             <object class="wxBoxSizer">
               <orient>wxVERTICAL</orient>
               <object class="sizeritem">
-                <object class="unknown" name="passage_list_ctrl"/>
-                <option>3</option>
-                <flag>wxGROW</flag>
-                <border>6</border>
-              </object>
-              <object class="sizeritem">
-                <object class="wxPanel" name="item_details_panel">
-                  <object class="wxBoxSizer">
-                    <orient>wxVERTICAL</orient>
+                <object class="wxSplitterWindow" name="passage_list_splitter">
+                  <object class="unknown" name="passage_list_ctrl"/>
+                  <object class="wxPanel" name="item_details_panel">
+                    <object class="wxBoxSizer">
+                      <orient>wxVERTICAL</orient>
+                    </object>
                   </object>
+                  <orientation>horizontal</orientation>
                 </object>
-                <option>0</option>
+                <option>1</option>
                 <flag>wxGROW</flag>
-                <border>6</border>
               </object>
             </object>
+            <style>wxNO_BORDER</style>
           </object>
         </object>
         <option>5</option>

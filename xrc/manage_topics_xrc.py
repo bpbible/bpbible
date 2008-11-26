@@ -39,6 +39,7 @@ class xrcManageTopicsFrame(wx.Frame):
         self.toolbar = xrc.XRCCTRL(self, "toolbar")
         self.splitter = xrc.XRCCTRL(self, "splitter")
         self.passage_list_pane = xrc.XRCCTRL(self, "passage_list_pane")
+        self.passage_list_splitter = xrc.XRCCTRL(self, "passage_list_splitter")
         self.item_details_panel = xrc.XRCCTRL(self, "item_details_panel")
 
 

@@ -561,6 +561,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		else:
 			self.passage_details_panel.Hide()
 
+	@guiutil.frozen
 	def _switch_item_details_current_panel(self, new_panel):
 		"""Makes the given panel the currently displayed item details panel."""
 		# Avoid dead object errors.
@@ -572,7 +573,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 			if window is not new_panel:
 				window.Hide()
 		new_panel.Show()
-		self.passage_list_pane.Sizer.Layout()
+		self.item_details_panel.Sizer.Layout()
 
 def _passage_str(passage_entry, short=False):
 	"""Gets a string for the given passage for user output.
