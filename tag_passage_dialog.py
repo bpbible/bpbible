@@ -18,6 +18,7 @@ class TagPassageDialog(xrcTagPassageDialog):
 		self.topic_selector.SetFocus()
 		self._bindEvents()
 		self.Title = _("Tag %s") % self._passage_entry
+		self.Size = (355, 282)
 
 	def _bindEvents(self):
 		self.Bind(wx.EVT_BUTTON, self._on_ok_button_clicked, self.wxID_OK)
