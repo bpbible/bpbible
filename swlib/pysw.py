@@ -1396,8 +1396,6 @@ class Searcher(SW.Searcher):
 		self.mod = book.mod
 		self.callback = None
 		self.userdata = userdata
-		self.vk = VK()
-		self.vk.thisown = False
 
 	def PercentFunction(self, number):
 		if(self.callback):
@@ -1405,6 +1403,25 @@ class Searcher(SW.Searcher):
 			if not continuing:
 				self.TerminateSearch()
 	
+	def Search(self, string, options=0, scopestr=None, case_sensitive=False):
+		scope = None
+		assert scopestr is None
+
+		list = self.doSearch(string, options, 
+			(not case_sensitive)*REG_ICASE, scope)
+
+		results = []
+		for item in range(list.Count()):
+			results.append(list.GetElement(item))
+		
+		return [x.getText() for x in results]
+	
+class VerseKeySearcher(Searcher):
+	def __init__(self, book, userdata = None):
+		super(VerseKeySearcher, self).__init__(book, userdata)
+		self.vk = VK()
+		self.vk.thisown = False
+
 	def Search(self, string, options=0, scopestr=None, case_sensitive=False):
 		self.mod.setKey(self.vk)
 

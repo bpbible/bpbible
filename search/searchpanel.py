@@ -21,7 +21,9 @@ from search.query_parser import separate_words
 from search.stemming import get_stemmer
 
 from search.highlighted_frame import HighlightedDisplayFrame
-from swlib.pysw import TK, VK, UserVK, GetBestRange, Searcher, SWREGEX
+from swlib.pysw import (
+	TK, VK, UserVK, GetBestRange, Searcher, VerseKeySearcher, SWREGEX
+)
 from gui import guiutil
 from util.debug import dprint, WARNING, is_debugging
 from gui import virtuallist
@@ -749,7 +751,7 @@ class SearchPanel(xrcSearchPanel):
 			return
 		
 		#Create searcher, and set percent callback to callback
-		self.searcher = Searcher(self.book)
+		self.searcher = self.get_sword_searcher()(self.book)
 		self.searcher.callback = callback
 
 		if fields or excl_fields:
@@ -1003,6 +1005,8 @@ class SearchPanel(xrcSearchPanel):
 		is_word_proximity = self.options_panel.proximity_type.Selection == 0
 		return proximity, is_word_proximity
 		
+	def get_sword_searcher(self):
+		return Searcher
 
 	def search_list_format_text(self, text):
 		return GetBestRange(text, abbrev=True, userInput=False, userOutput=True)
@@ -1073,7 +1077,9 @@ class BibleSearchPanel(SearchPanel):
 				self.searchkey.Value, self.search_results
 			)
 		manage_topics_frame.Show()
-			
+	
+	def get_sword_searcher(self):
+		return VerseKeySearcher
 
 class GenbookSearchPanel(SearchPanel):
 	id = N_("Other Book Search")
@@ -1168,7 +1174,7 @@ class DictionarySearchPanel(SearchPanel):
 		# we must be all in the same entry
 		return 1, False
 
-class CommentarySearchPanel(SearchPanel):
+class CommentarySearchPanel(BibleSearchPanel):
 	id = N_("Commentary Search")
 	@property
 	def book(self):
