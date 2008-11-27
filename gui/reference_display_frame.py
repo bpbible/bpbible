@@ -2,6 +2,7 @@ import wx
 from backend.bibleinterface import biblemgr
 from displayframe import DisplayFrameXRC
 from util import overridableproperty
+from backend.verse_template import VerseTemplate
 
 class ReferenceDisplayFrame(DisplayFrameXRC):
 	"""This class is a display frame which is able to show references.
@@ -43,7 +44,11 @@ class ReferenceDisplayFrame(DisplayFrameXRC):
 	
 	@overridableproperty
 	def template(self):
-		return None
+		return VerseTemplate(
+			u'<p><a href="bible:$internal_reference"><small><em>'
+			'$reference ($version)</em></small></a></p><br>$text',
+			headings=""
+		)
 	
 	@property
 	def book(self):
