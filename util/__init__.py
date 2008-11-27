@@ -3,6 +3,13 @@ import sys
 import time
 import cProfile
 
+if sys.platform == "win32":
+    # On Windows, the best timer is time.clock()
+    default_timer = time.clock
+else:
+    # On most other platforms the best timer is time.time()
+    default_timer = time.time
+
 def noop(*args, **kwargs):
 	"""Do nothing."""
 
@@ -10,7 +17,7 @@ def is_py2exe():
 	return hasattr(sys, "frozen")	
 	
 def timeit(f, *args, **kwargs):
-	t = time.time()
+	t = default_timer()
 	times = kwargs.pop("times", 1)
 	last_result = None
 	try:
@@ -20,7 +27,7 @@ def timeit(f, *args, **kwargs):
 		return last_result
 
 	finally:
-		print "%s took %f time" % (f.__name__, time.time() - t)
+		print "%s took %f time" % (f.__name__, default_timer() - t)
 
 def profile(callable, *args, **kwargs):
 	prof = cProfile.Profile()
