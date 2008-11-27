@@ -1,7 +1,8 @@
 BPBible
 
 BPBible is a flexible Bible Study tool made using the SWORD project, Python 
-and wxPython. This is the third release of the software, so there are probably a few problems still hanging around.
+and wxPython. This is the fourth release of the software, so there may be a 
+few problems still hanging around.
 
 Website: bpbible.com
 
@@ -30,18 +31,25 @@ Features
 
 Running binaries under Windows
 
-To run the binaries under Windows, download the BPBible unstaller (bpbible-x.x-setup.exe). For the installer, run it and follow the prompts. Now run bpbible.exe in the application directory, or use the Start Menu, Desktop and Quick Launch shortcuts, if you chose to create them.
+To run the binaries under Windows, download the BPBible installer (bpbible-x.x-setup.exe). For the installer, run it and follow the prompts. Now run bpbible.exe in the application directory, or use the Start Menu, Desktop and Quick Launch shortcuts, if you chose to create them.
 
 Running from source
 
 To build from source, you will need to have the following:
 
-1. wxPython 2.8 (preferably 2.8.7) 
+1. wxPython 2.8 (preferably at least 2.8.7) 
 2. Python 2.5 (though older versions may work)
 3. SWORD 1.5.11
 4. Windows, Linux or Mac
 
 BPBible works mostly under Mac. Certain features, like the quickselectors, do not appear correctly. Also, users must compile it themselves - there is no binary distribution yet.
+
+Using the binaries under Linux
+
+If you are running 32-bit Linux, you can download binaries for the SWORD
+python bindings from http://bpbible.googlecode.com. Extract them into your
+python site-packages directory. If you do this, you shouldn't need to do the
+next step below.
 
 Building the SWIG bindings
 
@@ -58,7 +66,19 @@ make python_make
 cd python
 python setup.py install
 
-To use BPBible optimally with Sword 1.5.11, download the bpbible-0.4-sword-1.5.11-patch.zip from the http://bpbible.googlecode.com and apply the fixes. This will increase the performance substantially with zipped modules, and fix problems with the divineName tag in non-english Bibles.
+If you try running BPBible and it gives errors about a missing symbol
+uncompress, you need to modify the setup.py. Replace the line 
+libraries=[('sword')],
+
+with 
+libraries=['sword', 'z', 'curl'],
+
+Then run "python setup.py install" again.
+
+To use BPBible optimally with Sword 1.5.11, download the 
+SWORD patches file from http://bpbible.googlecode.com and 
+apply the fixes. This will increase the performance substantially with zipped 
+modules, and fix problems with the divineName tag in non-english Bibles.
 
 Running BPBible
 
