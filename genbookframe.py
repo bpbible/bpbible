@@ -153,7 +153,7 @@ class GenBookFrame(BookFrame):
 				anchor = ""
 				bgcolor = ""
 				if key.equals(ref):
-					bgcolor = ' bgcolor="#9999ff"'
+					bgcolor = ' bgcolor="#ccccff"'
 					anchor = '<a name="current" href="#current">%s</a>' % key
 				else:
 					anchor = '<a href="genbook:%s">%s</a>' % (
