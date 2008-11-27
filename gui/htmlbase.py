@@ -364,7 +364,7 @@ def convert_lgs(text):
 
 	parts = []
 	for item in re.finditer(
-		r'<indent-block-(start|end) source="lg"( width="5")? />', text
+		r'<indent-block-(start|end) source="lg"( width="0")? />', text
 	):
 		parts.append((item.group(1), item.span()))
 
@@ -457,6 +457,7 @@ def convert_language(text, language_code):
 class HtmlBase(wx.html.HtmlWindow):
 	loading_a_page = False
 	override_loading_a_page = False
+	do_convert_lgs = False
 
 	def __init__(self, *args, **kwargs):
 		super(HtmlBase, self).__init__(*args, **kwargs)
@@ -565,7 +566,10 @@ class HtmlBase(wx.html.HtmlWindow):
 		if body_colour is None or text_colour is None:
 			body_colour, text_colour = guiconfig.get_window_colours()
 
-		text = convert_lgs(text)
+		# we only want properly indented lgs in the main bibleframe
+		if self.do_convert_lgs:
+			text = convert_lgs(text)
+
 		text = convert_language(text, self.language_code)
 
 		text = HTML_TEXT % (

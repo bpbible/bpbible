@@ -33,6 +33,7 @@ bible_settings.add_item("verse_per_line", False, item_type=bool)
 
 class BibleFrame(VerseKeyedFrame):
 	id = N_("Bible")
+	do_convert_lgs = True
 
 	def __init__(self, parent):
 		self.panel = wx.Panel(parent)

@@ -176,7 +176,7 @@ class OSISParser(filterutils.ParserBase):
 		if attributes.get("eID"):
 			return self.end_lg()
 
-		self.buf += '<indent-block-start source="lg" width="5" />'
+		self.buf += '<indent-block-start source="lg" width="0" />'
 	
 	def end_lg(self):
 		self.buf += '<indent-block-end source="lg" />'
