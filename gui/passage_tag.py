@@ -4,6 +4,7 @@ from protocols import protocol_handler
 from manage_topics_frame import ManageTopicsFrame
 from topic_selector import TopicSelector
 from passage_list import lookup_passage_list
+from swlib.pysw import VerseList
 from tooltip import TooltipConfig
 
 TAG_COLOUR = (255, 0, 0)
@@ -51,14 +52,14 @@ class TopicTooltipConfig(TooltipConfig):
 
 	def get_text(self):
 		html = ""
-		description = self.topic.description.replace("\n", "<br>")
+		description = self.topic.description.replace(u"\n", u"<br>")
 		if description:
-			html = "<p>%s</p>" % description
+			html = u"<p>%s</p>" % description
 
-		passage_html = "<br>".join(self._passage_entry_text(passage_entry)
+		passage_html = u"<br>".join(self._passage_entry_text(passage_entry)
 				for passage_entry in self.topic.passages)
 		if passage_html:
-			html += "<p>%s</p>" % passage_html
+			html += u"<p>%s</p>" % passage_html
 	
 		return html
 
@@ -66,8 +67,9 @@ class TopicTooltipConfig(TooltipConfig):
 		"""Gets the HTML for the given passage entry with its comment."""
 		comment = passage_entry.comment.replace("\n", "<br>")
 		reference = str(passage_entry)
-		return "<b><a href=\"bible:%(reference)s\">%(reference)s</a></b> " \
-			"%(comment)s" % locals()
+		localised_reference = VerseList([passage_entry.passage]).GetBestRange(userOutput=True)
+		return (u"<b><a href=\"bible:%(reference)s\">%(localised_reference)s</a></b> "
+			u"%(comment)s" % locals())
 
 protocol_handler.register_hover("passage_tag", on_passage_tag_hover)
 
