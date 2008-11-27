@@ -2,6 +2,7 @@ import wx
 from passage_list import get_primary_passage_list_manager, \
 		PassageEntry, PassageList
 import passage_list.settings
+from swlib.pysw import VerseList
 from xrc.tag_passage_dialog_xrc import xrcTagPassageDialog
 from xrc.xrc_util import attach_unknown_control
 from topic_selector import TopicSelector
@@ -17,7 +18,8 @@ class TagPassageDialog(xrcTagPassageDialog):
 		self.topic_selector.selected_topic = passage_list.settings.last_selected_topic
 		self.topic_selector.SetFocus()
 		self._bindEvents()
-		self.Title = _("Tag %s") % self._passage_entry
+		passage_str = VerseList([self._passage_entry.passage]).GetBestRange(userOutput=True)
+		self.Title = _("Tag %s") % passage_str
 		self.Size = (355, 282)
 
 	def _bindEvents(self):
