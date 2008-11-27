@@ -10,6 +10,7 @@ from util.observerlist import ObserverList
 from module_popup import ModulePopup
 from util.debug import dprint, WARNING
 from util import osutils
+import util.i18n
 
 # the following three functions borrowed from wxAUI in dockart.cpp
 
@@ -406,8 +407,8 @@ class AuiLayer(object):
 			self.pane_titles[_(item[1])] = item[1]
 		
 		
-		if config_manager["BPBible"]["layout"] is not None:
-			layout = config_manager["BPBible"]["layout"]
+		if util.i18n.langid in config_manager["BPBible"]["layout"]:
+			layout = config_manager["BPBible"]["layout"][util.i18n.langid]
 			self.create_items(self.get_aui_items(), use_startups=False)
 			if not guiconfig.use_one_toolbar:
 				self.create_toolbars(self.toolbars)
