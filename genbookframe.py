@@ -191,6 +191,15 @@ class GenBookFrame(BookFrame):
 		
 		self.update_title()
 		
+	def update_title(self, shown=None):
+		m = guiconfig.mainfrm
+		p = m.get_pane_for_frame(self)
+		version = self.book.version
+		ref = self.reference
+		
+		text = "%s - %s (%s)" % (self.title, ref, version)
+		m.set_pane_title(p.name, text)
+	
 
 	def chapter_move(self, amount):
 		mod = self.book.mod
