@@ -50,6 +50,6 @@ Book manager:
 - delete books
 
 Topic management and tagging
-- Tag current verses with a topic
-- Save search results in a topic
+- Tag selected verses or the current verse with a topic
+- Save search results as a new topic
 - Annotate passage with comments on them
