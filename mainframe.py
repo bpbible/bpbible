@@ -65,7 +65,7 @@ import util.i18n
 
 settings = config_manager.add_section("BPBible")
 
-settings.add_item("layout", None, item_type="pickle")
+settings.add_item("layout", {}, item_type="pickle")
 settings.add_item("bibleref", "Genesis 1:1")
 settings.add_item("bible", "ESV")
 settings.add_item("dictionary", "ISBE")
@@ -358,7 +358,7 @@ class MainFrame(wx.Frame, AuiLayer):
 		return w, size
 	
 	def save_data(self):
-		settings["layout"] = self.save_layout()
+		settings["layout"][util.i18n.langid] = self.save_layout()
 		settings["bibleref"] = self.currentverse
 		settings["bible"] = biblemgr.bible.version
 		settings["commentary"] = biblemgr.commentary.version

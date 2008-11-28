@@ -14,7 +14,7 @@ class GuessVerseFrame(xrcGuessVerseFrame):
 		)
 
 		self.guess_button.Bind(wx.EVT_BUTTON, self.on_guess)
-		self.books.AppendItems([book.bookname for book in VK.books])
+		self.books.AppendItems([unicode(book) for book in UserVK.books])
 		self.books.Selection = 0
 		self.new_guess()
 		self.Children[0].Fit()
@@ -23,10 +23,11 @@ class GuessVerseFrame(xrcGuessVerseFrame):
 	def new_guess(self):
 		randomnum = random.randint(1, 31102)
 		self.key = VK("Gen 1:%d" % randomnum)
+		self.user_key = UserVK(self.key)
 		self.reference_frame.SetReference(self.key.text)
 
 	def on_guess(self, event):
-		won = self.key.getBookName() == self.books.StringSelection
+		won = self.user_key.getBookName() == self.books.StringSelection
 		if won:
 			wx.MessageBox(
 				_("Yes, you are right. The verse was %s")

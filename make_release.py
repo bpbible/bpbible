@@ -30,12 +30,15 @@ def handle_args():
 		global show_splashscreen
 		show_splashscreen = False
 
-	if len(args) != 1:
-		sys.stderr.write("Usage: make_release.py [-r] <version number>")
-		sys.exit(1)
-
 	global new_version
-	new_version = args[0]
+	if len(args) != 1:
+		if make_release:
+			sys.stderr.write("Usage: make_release.py [-r] <version number>")
+			sys.exit(1)
+		else:
+			new_version = "0.0"
+	else:
+		new_version = args[0]
 
 handle_args()
 

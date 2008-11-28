@@ -128,39 +128,52 @@
     </object>
   </object>
   <object class="wxPanel" name="PassageDetailsPanel">
-    <object class="wxFlexGridSizer">
+    <object class="wxBoxSizer">
       <object class="sizeritem">
-        <object class="wxStaticText">
-          <label>Passage:</label>
-        </object>
-        <border>6</border>
-      </object>
-      <object class="sizeritem">
-        <object class="wxTextCtrl" name="passage_text"/>
-        <option>1</option>
-        <flag>wxGROW</flag>
-        <border>6</border>
-      </object>
-      <object class="sizeritem">
-        <object class="wxStaticText">
-          <label>Comment:</label>
-        </object>
-        <border>6</border>
-      </object>
-      <object class="sizeritem">
-        <object class="wxBoxSizer">
+        <object class="wxFlexGridSizer">
+          <object class="sizeritem">
+            <object class="wxStaticText">
+              <label>Passage:</label>
+            </object>
+            <border>6</border>
+          </object>
+          <object class="sizeritem">
+            <object class="wxTextCtrl" name="passage_text"/>
+            <option>1</option>
+            <flag>wxGROW</flag>
+            <border>6</border>
+          </object>
+          <object class="sizeritem">
+            <object class="wxStaticText">
+              <label>Comment:</label>
+            </object>
+            <border>6</border>
+          </object>
           <object class="sizeritem">
             <object class="wxTextCtrl" name="comment_text">
               <style>wxTE_MULTILINE</style>
             </object>
             <option>1</option>
             <flag>wxGROW</flag>
+            <border>6</border>
           </object>
-          <object class="spacer">
-            <size>6</size>
-          </object>
+          <cols>2</cols>
+          <rows>2</rows>
+          <vgap>6</vgap>
+          <hgap>6</hgap>
+          <growablecols>1</growablecols>
+          <growablerows>1</growablerows>
+        </object>
+        <option>1</option>
+        <flag>wxGROW|wxRIGHT</flag>
+        <border>6</border>
+      </object>
+      <object class="sizeritem">
+        <object class="wxBoxSizer">
           <object class="sizeritem">
-            <object class="wxHtmlWindow" name="passage_preview" subclass="gui.reference_display_frame.ReferenceDisplayFrame"/>
+            <object class="wxHtmlWindow" name="passage_preview" subclass="gui.reference_display_frame.ReferenceDisplayFrame">
+              <style>wxSUNKEN_BORDER</style>
+            </object>
             <option>1</option>
             <flag>wxGROW</flag>
           </object>
@@ -169,12 +182,7 @@
         <option>1</option>
         <flag>wxGROW</flag>
       </object>
-      <cols>2</cols>
-      <rows>2</rows>
-      <vgap>6</vgap>
-      <hgap>6</hgap>
-      <growablecols>1</growablecols>
-      <growablerows>1</growablerows>
+      <orient>wxHORIZONTAL</orient>
     </object>
   </object>
 </resource>

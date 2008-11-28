@@ -608,8 +608,9 @@ class VerseList(list):
 		locale_changed = False
 		if isinstance(args, basestring):
 			orig_args = args
-			for matcher, replacement in self.replacements:
-				args = matcher.sub(replacement, args)
+			if userInput:
+				for matcher, replacement in self.replacements:
+					args = matcher.sub(replacement, args)
 			
 			args = to_str(args)
 			context = to_str(context)

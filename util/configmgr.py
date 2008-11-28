@@ -165,8 +165,14 @@ class ConfigManager(object):
 					(font, int(size), False)
 				))
 
-		except (NoSectionError, NoOptionError):
-			pass
+			layout = config_parser.get("BPBible", "layout")
+			if layout is not None:
+				obj = pickle.loads(layout)
+				d = {"en": obj}
+				config_parser.set("BPBible", "layout", pickle.dumps(d))
+
+		except (NoSectionError, NoOptionError), e:
+			dprint(WARNING, "Error on upgrading", e)
 		
 def _test():
 	"""\

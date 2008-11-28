@@ -3,6 +3,7 @@ from backend.bibleinterface import biblemgr
 from displayframe import DisplayFrameXRC
 from util import overridableproperty
 from backend.verse_template import VerseTemplate
+import config
 
 class ReferenceDisplayFrame(DisplayFrameXRC):
 	"""This class is a display frame which is able to show references.
@@ -37,9 +38,14 @@ class ReferenceDisplayFrame(DisplayFrameXRC):
 			kwargs["template"] = template
 
 		data = biblemgr.bible.GetReference(self.reference, *args, **kwargs)
-		# XXX: This replace should be done for us by the backend Bible
-		# interface (or by Sword itself).
-		data = data.replace("<!P>","</p><p>")
+		if data is None:
+			data = config.MODULE_MISSING_STRING()
+
+		else:
+			# XXX: This replace should be done for us by the backend Bible
+			# interface (or by Sword itself).
+			data = data.replace("<!P>","</p><p>")
+
 		self.SetPage("%s" % data)
 	
 	@overridableproperty
