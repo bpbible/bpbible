@@ -48,3 +48,8 @@ Scroll up and down when selecting and moving up or down
 Book manager:
 - unlock books
 - delete books
+
+Topic management and tagging
+- Tag current verses with a topic
+- Save search results in a topic
+- Annotate passage with comments on them
