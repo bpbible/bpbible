@@ -286,24 +286,24 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		
 		item = menu.Append(wx.ID_ANY, _("Cu&t"))
 		self.Bind(wx.EVT_MENU,
-				lambda e: self._operations_manager.cut,
+				lambda e: self._operations_manager.cut(),
 				id=item.Id)
 
 		item = menu.Append(wx.ID_ANY, _("&Copy"))
 		self.Bind(wx.EVT_MENU,
-				lambda e: self._operations_manager.copy,
+				lambda e: self._operations_manager.copy(),
 				id=item.Id)
 
 		item = menu.Append(wx.ID_ANY, _("&Paste"))
 		self.Bind(wx.EVT_MENU,
-				lambda e: self._safe_paste,
+				lambda e: self._safe_paste(),
 				id=item.Id)
 
 		menu.AppendSeparator()
 		
 		item = menu.Append(wx.ID_ANY, _("Delete &Topic"))
 		self.Bind(wx.EVT_MENU,
-				lambda e: self._delete,
+				lambda e: self._delete(),
 				id=item.Id)
 		
 		self.topic_tree.PopupMenu(menu)
@@ -519,24 +519,24 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		
 		item = menu.Append(wx.ID_ANY, _("Cu&t"))
 		self.Bind(wx.EVT_MENU,
-				lambda e: self._operations_manager.cut,
+				lambda e: self._operations_manager.cut(),
 				id=item.Id)
 
 		item = menu.Append(wx.ID_ANY, _("&Copy"))
 		self.Bind(wx.EVT_MENU,
-				lambda e: self._operations_manager.copy,
+				lambda e: self._operations_manager.copy(),
 				id=item.Id)
 
 		item = menu.Append(wx.ID_ANY, _("&Paste"))
 		self.Bind(wx.EVT_MENU,
-				lambda e: self._safe_paste,
+				lambda e: self._safe_paste(),
 				id=item.Id)
 
 		menu.AppendSeparator()
 		
 		item = menu.Append(wx.ID_ANY, _("&Delete"))
 		self.Bind(wx.EVT_MENU,
-				lambda e: self._delete,
+				lambda e: self._delete(),
 				id=item.Id)
 		
 		self.passage_list_ctrl.PopupMenu(menu)
