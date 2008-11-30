@@ -269,7 +269,7 @@ class DisplayFrame(HtmlSelectableWindow):
 						verselist = bible.GetReferencesFromMod(module, reflist)
 						data += '<hr>'.join(
 							process_html_for_module(module, ref)
-							for ref in refs
+							for ref in verselist
 						)
 
 					SetText(data)
