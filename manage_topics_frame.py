@@ -183,6 +183,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 	def _remove_topic_node(self, parent_node, topic):
 		topic_node = self._find_topic(parent_node, topic)
 		self.topic_tree.Delete(topic_node)
+		self._remove_observers(topic)
 
 	def _rename_topic_node(self, parent_node, new_name):
 		self.topic_tree.SetItemText(parent_node, new_name)
