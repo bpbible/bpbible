@@ -37,6 +37,9 @@ def get_user_data_dir():
 	appname = "bpbible"
 	home_dir = os.path.expanduser('~')
 	if is_msw():
+		if "APPDATA" not in os.environ:
+			raise SystemExit("APPDATA is not set.\nENIVIRON=%s" % os.environ)
+
 		return os.path.join(os.environ["APPDATA"], appname)
 	elif is_mac():
 		return os.path.join(home_dir, "Library", "Application Support", appname)
