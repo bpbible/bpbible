@@ -10,6 +10,7 @@ from util.configmgr import config_manager
 from util.debug import dprint, ERROR, MESSAGE, WARNING
 from util import osutils
 from gui import fonts
+import sys
 
 
 html_settings = config_manager.add_section("Html")
@@ -45,7 +46,7 @@ class TagHandler(wx.html.HtmlWinTagHandler):
 			return self.HandleTag2(tag)
 		except Exception, e:
 			import traceback
-			traceback.print_exc()
+			traceback.print_exc(file=sys.stdout)
 			dprint(ERROR, "Error occurred in handling tag", e.args, e.message)
 
 	def HandleTag2(self, tag):

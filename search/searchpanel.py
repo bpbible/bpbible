@@ -339,31 +339,31 @@ class SearchPanel(xrcSearchPanel):
 			#	del busy_info
 
 				
-				return
-			self.set_index_available(True)
-			
-		else:
-			self.search_button.Enable(self.version is not None)
-			
-			self.index = None
-		
-			if not self.version:
-				wx.MessageBox(NO_CURRENT_VERSION,
-				_("No current version"), parent=self)
-				self.show_keyboard_button(shown=False)
-				
-				return
-			self.set_index_available(False)
-
-			msg = _("Search index does not exist for book %s. "
-				"Indexing will make search much faster. "
-				"Create Index?") % self.version 
-			create = wx.MessageBox(msg, _("Create Index?"), 
-				wx.YES_NO, parent=self)
-			if create == wx.YES:
-				self.build_index(self.version)
 			else:
-				self.set_gui_search_type(self.indexed_search)
+				self.set_index_available(True)
+				return
+			
+		self.search_button.Enable(self.version is not None)
+		
+		self.index = None
+		
+		if not self.version:
+			wx.MessageBox(NO_CURRENT_VERSION,
+			_("No current version"), parent=self)
+			self.show_keyboard_button(shown=False)
+			
+			return
+		self.set_index_available(False)
+
+		msg = _("Search index does not exist for book %s. "
+			"Indexing will make search much faster. "
+			"Create Index?") % self.version 
+		create = wx.MessageBox(msg, _("Create Index?"), 
+			wx.YES_NO, parent=self)
+		if create == wx.YES:
+			self.build_index(self.version)
+		else:
+			self.set_gui_search_type(self.indexed_search)
 
 	def on_select(self, event):
 		self.go_to_reference(event.m_itemIndex)
@@ -926,7 +926,7 @@ class SearchPanel(xrcSearchPanel):
 
 			except index.BadBook, e:
 				self.index = e.index
-				error = unicode(e)
+				error = e.message
 			
 			self.set_index_available(True)
 			self.show_keyboard_button()

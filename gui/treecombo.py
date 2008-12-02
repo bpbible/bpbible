@@ -3,12 +3,13 @@ import wx.combo
 from util import osutils
 from util.observerlist import ObserverList
 from util.debug import dprint, WARNING
+import sys
 
 def check_item(item):
 	if not item:
 		dprint(WARNING, "Called with invalid tree item")
 		import traceback
-		traceback.print_stack()
+		traceback.print_stack(file=sys.stdout)
 			
 	return bool(item)
 

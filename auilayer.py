@@ -675,7 +675,7 @@ class AuiLayer(object):
 
 				
 			
-		self.on_changed()
+		wx.CallAfter(self.on_changed)
 	
 	def on_changed(self):
 		for pane in self.aui_mgr.GetAllPanes():

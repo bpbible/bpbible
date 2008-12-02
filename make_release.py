@@ -110,7 +110,7 @@ def build_src_dist(zip_file):
 		os.system("svn export --force %s %s" % (svn_release_tag, src_dist.dir))
 	else:
 		os.system("svn export --force . %s" % src_dist.dir)
-	os.system("zip -r %s bpbible" % zip_file)
+	os.system("zip -r %s %s" % (zip_file, src_dist.dir))
 
 def build_installer():
 	print "Building the binary distribution."

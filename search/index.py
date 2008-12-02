@@ -165,8 +165,15 @@ class Index(object):
 				books += vk.bookCount(i)
 			for i in [1, 2]:
 				for j in range(1, vk.bookCount(i)+1):
-					bookname=vk.bookName(i,j)
-					continuing = progress((bookname, 
+					bookname = vk.bookName(i,j)
+					# two translates in case of dashes
+					bookname_ui = pysw.locale.translate(
+						pysw.locale.translate(
+							bookname
+						)
+					).decode(pysw.locale_encoding)
+
+					continuing = progress((bookname_ui, 
 									99*(j+offsets[i])/books))
 					if not continuing:
 						raise Cancelled

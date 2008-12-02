@@ -105,7 +105,7 @@ class IndexedText(object):
 					"may not display all matches.")
 				)
 				import traceback
-				traceback.print_exc()
+				traceback.print_exc(file=sys.stdout)
 				print self.get_key(module).getText()
 		
 		if content is None:

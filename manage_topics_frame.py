@@ -68,8 +68,8 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		self.passage_list_ctrl.Bind(wx.EVT_KEY_UP, self._on_char)
 		self.topic_tree.Bind(wx.EVT_KEY_UP, self._on_char)
 
-		for tool in ("cut_tool", "copy_tool", "paste_tool",
-				"delete_tool", "undo_tool", "redo_tool"):
+		for tool in ("add_topic_tool", "add_passage_tool", "cut_tool", 
+			"copy_tool", "paste_tool", "delete_tool", "undo_tool", "redo_tool"):
 			handler = lambda event, tool=tool: self._perform_toolbar_action(event, tool)
 			self.toolbar.Bind(wx.EVT_TOOL, handler, id=wx.xrc.XRCID(tool))
 
@@ -183,6 +183,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 	def _remove_topic_node(self, parent_node, topic):
 		topic_node = self._find_topic(parent_node, topic)
 		self.topic_tree.Delete(topic_node)
+		self._remove_observers(topic)
 
 	def _rename_topic_node(self, parent_node, new_name):
 		self.topic_tree.SetItemText(parent_node, new_name)
@@ -240,6 +241,9 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		"""Performs the action requested from the toolbar."""
 		event.Skip()
 		actions = {
+			"add_topic_tool": lambda: self._create_topic(self.selected_topic),
+			"add_passage_tool": 
+				lambda: self._create_passage(self.selected_topic),			
 			"copy_tool":	self._operations_manager.copy,
 			"cut_tool":		self._operations_manager.cut,
 			"paste_tool":	self._safe_paste,
@@ -286,24 +290,24 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		
 		item = menu.Append(wx.ID_ANY, _("Cu&t"))
 		self.Bind(wx.EVT_MENU,
-				lambda e: self._operations_manager.cut,
+				lambda e: self._operations_manager.cut(),
 				id=item.Id)
 
 		item = menu.Append(wx.ID_ANY, _("&Copy"))
 		self.Bind(wx.EVT_MENU,
-				lambda e: self._operations_manager.copy,
+				lambda e: self._operations_manager.copy(),
 				id=item.Id)
 
 		item = menu.Append(wx.ID_ANY, _("&Paste"))
 		self.Bind(wx.EVT_MENU,
-				lambda e: self._safe_paste,
+				lambda e: self._safe_paste(),
 				id=item.Id)
 
 		menu.AppendSeparator()
 		
 		item = menu.Append(wx.ID_ANY, _("Delete &Topic"))
 		self.Bind(wx.EVT_MENU,
-				lambda e: self._delete,
+				lambda e: self._delete(),
 				id=item.Id)
 		
 		self.topic_tree.PopupMenu(menu)
@@ -519,24 +523,24 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		
 		item = menu.Append(wx.ID_ANY, _("Cu&t"))
 		self.Bind(wx.EVT_MENU,
-				lambda e: self._operations_manager.cut,
+				lambda e: self._operations_manager.cut(),
 				id=item.Id)
 
 		item = menu.Append(wx.ID_ANY, _("&Copy"))
 		self.Bind(wx.EVT_MENU,
-				lambda e: self._operations_manager.copy,
+				lambda e: self._operations_manager.copy(),
 				id=item.Id)
 
 		item = menu.Append(wx.ID_ANY, _("&Paste"))
 		self.Bind(wx.EVT_MENU,
-				lambda e: self._safe_paste,
+				lambda e: self._safe_paste(),
 				id=item.Id)
 
 		menu.AppendSeparator()
 		
 		item = menu.Append(wx.ID_ANY, _("&Delete"))
 		self.Bind(wx.EVT_MENU,
-				lambda e: self._delete,
+				lambda e: self._delete(),
 				id=item.Id)
 		
 		self.passage_list_ctrl.PopupMenu(menu)
