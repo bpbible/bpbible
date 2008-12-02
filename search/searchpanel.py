@@ -926,7 +926,7 @@ class SearchPanel(xrcSearchPanel):
 
 			except index.BadBook, e:
 				self.index = e.index
-				error = unicode(e)
+				error = e.message
 			
 			self.set_index_available(True)
 			self.show_keyboard_button()
