@@ -38,7 +38,12 @@ def get_user_data_dir():
 	home_dir = os.path.expanduser('~')
 	if is_msw():
 		if "APPDATA" not in os.environ:
-			raise SystemExit("APPDATA is not set.\nENIVIRON=%s" % os.environ)
+			import wx
+			a = wx.App()
+			wx.MessageBox(
+				"APPDATA is not set. Quitting. \nENVIRON=%s" % os.environ,
+				"Fatal Error")
+			raise SystemExit("APPDATA is not set.\nENVIRON=%s" % os.environ)
 
 		return os.path.join(os.environ["APPDATA"], appname)
 	elif is_mac():
