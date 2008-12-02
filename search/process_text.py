@@ -92,7 +92,7 @@ class ParseThML(ParseBase):
 		self._parse(tree, si)
 		return si.getvalue()
 
-	def handle_note(self):
+	def handle_note(self, node, si):
 		return
 
 	def handle_br(self, node, si):
