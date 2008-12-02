@@ -10,6 +10,10 @@ Keyboard shortcuts can speed up your use of BPBible. The keyboard shortcuts are 
 || *Shortcut* || *Description*              ||
 || Ctrl-C     || Copy text with links       ||
 || Ctrl-H     || Open Harmony               ||
+|| Ctrl-F10   || Maximize Pane              ||
+|| Ctrl-F5    || Restore Pane               ||
+|| s          || Open a search quick selector; type into here to search the current book ||
+
 
 
 ----
@@ -26,7 +30,6 @@ Keyboard shortcuts can speed up your use of BPBible. The keyboard shortcuts are 
 || F9        || Go to the previous verse      ||
 || F12       || Go to the next verse          ||
 || g         || Open the verse quick selector ||
-|| s         || Open a search quick selector; type into here to search the Bible ||
 || Shift-t   || Open a tooltip quick selector; this will open a sticky tooltip at the given location ||
 
 

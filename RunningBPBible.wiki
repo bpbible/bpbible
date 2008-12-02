@@ -14,12 +14,19 @@ To run the binaries under Windows, download the BPBible installer (`bpbible-x.x-
 = Running from source =
 == Dependencies ==
 To build from source, you will need to have the following:
- # wxPython 2.8 (preferably 2.8.7) 
+ # wxPython 2.8 (preferably at least 2.8.7) 
  # Python 2.5 (though older versions may work)
  # SWORD 1.5.11
- # Windows or Linux
+ # Windows, Linux or Mac
 
-BPBible SVN has been tested somewhat under Mac, and it mostly works. Some things, such as verse tooltips, don't yet work though.  This support is likely to make its way into the next BPBible release.
+BPBible works mostly under Mac. Certain features, like the quickselectors, do not appear correctly. Also, users must compile it themselves - there is no binary distribution yet.
+
+== Using the binaries under Linux ==
+
+If you are running 32-bit Linux, you can download binaries for the SWORD
+python bindings from http://bpbible.googlecode.com. Extract them into your
+python site-packages directory. If you do this, you shouldn't need to do the
+next step below.
 
 == Building the SWIG bindings ==
 The SWIG bindings are located in the bindings/swig directory of the SWORD
@@ -28,6 +35,7 @@ that directory.
 
 If you want to install them under Linux, the procedure will probably be:
 {{{
+<change into the bindings/swig directory of the SWORD source code>
 cd package
 ./configure
 make pythonswig
@@ -35,5 +43,24 @@ make python_make
 cd python
 python setup.py install
 }}}
+
+If you try running BPBible and it gives errors about a missing symbol
+uncompress, you need to modify the setup.py. Replace the line 
+{{{
+libraries=[('sword')],
+}}}
+
+with 
+{{{
+libraries=['sword', 'z', 'curl'],
+}}}
+
+Then run `python setup.py install` again.
+
+To use BPBible optimally with Sword 1.5.11, download the 
+SWORD patches file from http://bpbible.googlecode.com and 
+apply the fixes. This will increase the performance substantially with zipped 
+modules, and fix problems with the divineName tag in non-english Bibles.
+
 == Running BPBible ==
 Once the SWIG bindings are installed, unzip the BPBible source. From there, run `python bpbible.py`. 
