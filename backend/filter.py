@@ -1,3 +1,4 @@
+import sys
 from swlib.pysw import SW
 from util.debug import dprint, ERROR
 
@@ -29,7 +30,7 @@ class MarkupInserter(SW.MarkupCallback):
 			import traceback
 			dprint(ERROR, "EXCEPTION: ", e)
 			try:
-				traceback.print_exc()
+				traceback.print_exc(file=sys.stdout)
 			except Exception, e2:
 				dprint(ERROR, "Couldn't print exception - exception raised", e2)
 	
