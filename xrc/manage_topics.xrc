@@ -2,6 +2,17 @@
 <resource>
   <object class="wxFrame" name="ManageTopicsFrame">
     <object class="wxToolBar" name="toolbar">
+      <object class="tool" name="add_topic_tool">
+        <bitmap>..\graphics\application_form_add.png</bitmap>
+        <tooltip>New topic</tooltip>
+        <label>New topic</label>
+      </object>
+      <object class="tool" name="add_passage_tool">
+        <bitmap>..\graphics\book_add.png</bitmap>
+        <tooltip>Add passage</tooltip>
+        <label>Add passage</label>
+      </object>
+      <object class="separator"/>
       <object class="tool" name="cut_tool">
         <bitmap>..\graphics\edit-cut.png</bitmap>
         <tooltip>Cut</tooltip>

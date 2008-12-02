@@ -68,8 +68,8 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		self.passage_list_ctrl.Bind(wx.EVT_KEY_UP, self._on_char)
 		self.topic_tree.Bind(wx.EVT_KEY_UP, self._on_char)
 
-		for tool in ("cut_tool", "copy_tool", "paste_tool",
-				"delete_tool", "undo_tool", "redo_tool"):
+		for tool in ("add_topic_tool", "add_passage_tool", "cut_tool", 
+			"copy_tool", "paste_tool", "delete_tool", "undo_tool", "redo_tool"):
 			handler = lambda event, tool=tool: self._perform_toolbar_action(event, tool)
 			self.toolbar.Bind(wx.EVT_TOOL, handler, id=wx.xrc.XRCID(tool))
 
@@ -241,6 +241,9 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		"""Performs the action requested from the toolbar."""
 		event.Skip()
 		actions = {
+			"add_topic_tool": lambda: self._create_topic(self.selected_topic),
+			"add_passage_tool": 
+				lambda: self._create_passage(self.selected_topic),			
 			"copy_tool":	self._operations_manager.copy,
 			"cut_tool":		self._operations_manager.cut,
 			"paste_tool":	self._safe_paste,
