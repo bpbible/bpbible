@@ -1,0 +1,66 @@
+#summary How to translate BPBible
+
+= Introduction =
+
+BPBible 0.4 adds the ability to translate the user interface. This page details how to do it.
+
+= Details =
+You need to find the abbreviation for your language. This is typically a two letter string (for example, vi for Vietnamese). This may have a country-specific postfix (for example, en_AU would be for Australian English). Note: your language must be supported by wxWidgets.
+
+To find the abbreviation for your language, find the line with your language in resources/iso-639-2.data. It should also have a two letter name (or if it doesn't, try using the three letter - but it may not work).
+
+There are three files you have to edit to translate the BPBible user interface. If you are having difficulty with it, the Vietnamese locale is a good example to copy.
+
+== Configuration file ==
+The locale configuration file is where the language is registered with BPBible. This will be put at locales/_language_abbrev_/locale.conf
+It can have three sections, as seen in this example (Vietnamese):
+{{{
+[Language]
+Description=Vietnamese
+
+[SWORD]
+locale=vi
+abbreviations=vi_abbrev
+
+[Text]
+English=Tiếng Anh
+BM test=Kiểm Tra BM
+Vietnamese=Tiếng Việt
+}}}
+
+The SWORD section can have two items, locale and abbreviations. These correspond to the Bible book names files, but without .conf on the end. abbreviations is optional; it defaults to the value of locale.
+
+The Text section is intended to have messages which apply to BPBible but don't have a more widespread application. At the moment, language names go in here.
+
+== Application messages ==
+The application messages makes up the bulk of the translation work. 
+To start, copy the messages.pot file in the locales directory and name it _language_abbreviation_.po.
+Then edit the file. [http://www.poedit.net/ Poedit] will do the editing for you; this should be very easy to use. Go Catalog > Settings to set up the language and name of the project.
+
+When you make changes, you should compile it to see the effects. Running bpbible with a -d flag from the command line (`bpbible.exe -d` if you are running the compiled executable; `python bpbible.py -d` otherwise) will give a debug menu. Going Debug > Locale > compile will compile the .po file; using Debug > Locale > restart will restart BPBible to work with the new locale changes.
+Note: if you do not have the configuration file mentioned above in place, the language will not show up in File > Languages, and it will not compile it. 
+
+== Bible Book names ==
+Lastly, there are the bible book names. You will need to produce a .conf file for the book names, and also for abbreviations if you want them. Before you make one, see if there are any [http://crosswire.org/svn/sword/tags/sword-1-5-11/locales.d/ here] for your language already. If there are any for your language, download them and use them.
+
+Follow the steps mentioned [http://crosswire.org/wiki/index.php/DevTools:SWORD here] to produce a file for use. 
+
+NOTE: BPBible allows dashes in booknames. After following the steps from the page above (that is, without dashes in the booknames), add extra entries of the form `BookName=Book-Name.`
+
+For example, the Vietnamese locale has `Mathiơ=Ma-thi-ơ`
+
+These files should go in the locales/locales.d folder
+
+== Directory Structure ==
+The final directory structure for your language files will look something like this (where language_abbrev is the abbreviation for your language).
+  * locales
+    * _language_abbrev_.po
+    * locales.d
+      * _language_abbrev__`_`_abbrev.conf
+      * _language_abbrev_.conf
+    * _language_abbrev_
+      * locale.conf
+      * LC_MESSAGES
+        * messages.mo
+
+If you create a zip file with these files in it, this can be extracted onto other installations to install the language.
