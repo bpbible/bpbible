@@ -9,6 +9,7 @@ class OSISParser(filterutils.ParserBase):
 		
 		self.strongs_bufs = []
 		self.morph_bufs = []
+		self.was_sword_ref = False
 		self.in_indent = False
 	
 	def start_reference(self, attributes):
@@ -24,14 +25,16 @@ class OSISParser(filterutils.ParserBase):
 		#TODO check for Bible:Gen.3.5
 		self.ref = attributes["osisRef"]
 		idx = self.ref.find(":")
+		self.was_sword_ref = False
+		
 		if idx != -1:
 			if not self.ref[:idx].startswith("Bible"):
-				self.ref = None
-				self.success = SW.INHERITED
-				dprint(WARNING, "Different protocol", attributes)			
-				return
-			
-			self.ref = self.ref[idx+1:]
+				self.ref = "sword://%s/%s" % (
+					self.ref[:idx], SW.URL.encode(self.ref[idx+1:]).c_str()
+				)
+				self.was_sword_ref = True
+			else:
+				self.ref = self.ref[idx+1:]
 
 		self.u.suspendLevel += 1
 		self.u.suspendTextPassThru = self.u.suspendLevel
@@ -44,12 +47,16 @@ class OSISParser(filterutils.ParserBase):
 		self.u.suspendLevel -= 1
 		self.u.suspendTextPassThru = self.u.suspendLevel
 
-		ref = GetBestRange(self.ref, context=self.u.key.getText(), abbrev=True)
-		
-		self.buf += '<a href="bible:%s">%s</a>' % (
-			ref, self.u.lastTextNode.c_str()
-		)
-	
+		if self.was_sword_ref:
+			self.buf += '<a href="%s">%s</a>' % (
+				self.ref, self.u.lastTextNode.c_str()
+			)
+		else:			
+			ref = GetBestRange(self.ref, context=self.u.key.getText(), abbrev=True)
+			self.buf += '<a href="bible:%s">%s</a>' % (
+				ref, self.u.lastTextNode.c_str()
+			)
+			
 	def start_w(self, attributes):
 		self.strongs_bufs = []
 		# w lemma="strong:H03050" wn="008"

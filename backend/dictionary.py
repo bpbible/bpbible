@@ -190,8 +190,8 @@ class Dictionary(Book):
 		topics_dict[name] = topics
 		return topics
 	
-	def snap_text(self, text):
-		mod = self.mod
+	def snap_text(self, text, module=None):
+		mod = module or self.mod
 		if mod is None:
 			return text
 		k = mod.getKey()

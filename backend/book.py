@@ -467,7 +467,15 @@ class Book(object):
 
 		return render_text
 	
-	def has_feature(self, feature):
+	def has_feature(self, feature, module=None):
+		if module is not None:
+			oldmod = self.mod			
+			try:
+				self.SetModule(module, notify=False)
+				return self.has_feature(feature)
+			finally:
+				self.SetModule(oldmod, notify=False)
+			
 		if not self.mod:
 			return False
 		

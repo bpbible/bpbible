@@ -182,10 +182,11 @@ class FontChoiceDialog(xrcFontChoiceDialog):
 					self.mod.setSkipConsecutiveLinks(old)
 
 				ref = self.mod.getKeyText()
-				if book in (biblemgr.bible, biblemgr.commentary):
-					ref = pysw.internal_to_user(ref)
-				else:
-					ref = to_unicode(ref, self.mod)
+				ref = frame.format_ref(self.mod, ref)
+				#if book in (biblemgr.bible, biblemgr.commentary):
+				#	ref = pysw.internal_to_user(ref)
+				#else:
+				#	ref = to_unicode(ref, self.mod)
 				self.preview.SetPage("%s (%s)<br>%s" % (
 					ref, self.mod.Name(), text
 				))

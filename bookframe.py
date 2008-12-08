@@ -79,6 +79,10 @@ class BookFrame(DisplayFrame):
 		self.SetPage(data, raw=raw)
 		self.update_title()
 		
+	@property
+	def SetReference_from_string(self):
+		# by default use SetReference
+		return self.SetReference
 
 	def setup(self):
 		self.book = None
@@ -272,6 +276,9 @@ class BookFrame(DisplayFrame):
 	def title(self):
 		return _(self.id)
 	
+	def format_ref(self, module, ref):
+		return ref
+	
 class VerseKeyedFrame(BookFrame):
 	def chapter_move(self, number):
 		vk = VK(self.reference)
@@ -312,6 +319,10 @@ class VerseKeyedFrame(BookFrame):
 		self.chapter_move(-1)
 	
 	get_verified = BookFrame.get_verified_one_verse
+	
+	def format_ref(self, module, ref):
+		return GetBestRange(ref, userOutput=True)
+
 
 class LinkedFrame(VerseKeyedFrame):
 	def __init__(self, parent):
@@ -483,15 +494,19 @@ class DictionaryFrame(BookFrame):
 		p = m.get_pane_for_frame(self)
 		version = self.book.version
 		ref = self.reference
-		
-		ref = self.book.snap_text(ref)
+		ref = self.format_ref(self.book.mod, ref)
 
-		if self.book.has_feature("DailyDevotion"):
-			ref = mmdd_to_date(ref) or ref
-		
 		text = u"%s - %s (%s)" % (self.title, ref, version)
 		m.set_pane_title(p.name, text)
 	
+	def format_ref(self, module, ref):
+		ref = self.book.snap_text(ref, module=module)
+
+		if self.book.has_feature("DailyDevotion", module=module):
+			ref = mmdd_to_date(ref) or ref
+
+		return ref
+		
 	def get_window(self):
 		return self.dict
 		
@@ -506,10 +521,7 @@ class DictionaryFrame(BookFrame):
 
 		self.reference = ref
 		
-		snapped_ref = self.book.snap_text(ref)
-
-		if self.book.has_feature("DailyDevotion"):
-			snapped_ref = mmdd_to_date(snapped_ref) or snapped_ref
+		snapped_ref = self.format_ref(self.book.mod, ref)
 		
 		ref_text = "<b>%s</b>" % snapped_ref
 
@@ -522,6 +534,9 @@ class DictionaryFrame(BookFrame):
 
 		self.SetPage(data, raw=raw)
 		self.update_title()
+
+	def SetReference_from_string(self, string):
+		wx.CallAfter(guiconfig.mainfrm.UpdateDictionaryUI, string)
 
 #xrc_classes = [DictionaryFrame, CommentaryFrame, BookFrame, BibleFrame]
 #

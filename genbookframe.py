@@ -190,7 +190,12 @@ class GenBookFrame(BookFrame):
 			self.scroll_to_current()
 		
 		self.update_title()
-		
+	
+	def SetReference_from_string(self, string):
+		key = TK(self.book.mod.getKey(), self.book.mod)
+		key.text = string
+		self.go_to_key(string)
+
 	def update_title(self, shown=None):
 		m = guiconfig.mainfrm
 		p = m.get_pane_for_frame(self)
@@ -233,3 +238,9 @@ class GenBookFrame(BookFrame):
 
 	def genbook_version_changed(self, newversion):
 		self.genbooktree.SetBook(biblemgr.genbook, self.reference_text)
+	
+	def format_ref(self, module, ref):
+		k = TK(module.getKey(), module)
+		k.text = ref		
+		return k.breadcrumb(delimiter=">")
+
