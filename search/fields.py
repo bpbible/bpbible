@@ -36,7 +36,7 @@ class StrongsField(BaseField):
 
 	@classmethod	
 	def prepare(cls, input):
-		match = re.match("^([GH])(\d+)(\w*)$", input)
+		match = re.match("^([GHgh])(\d+)(\w*)$", input)
 		if not match:
 			from index import SearchException
 			raise SearchException(
@@ -44,6 +44,7 @@ class StrongsField(BaseField):
 			)
 
 		prefix, number, extra = match.group(1, 2, 3)
+		prefix = prefix.upper()
 		number = int(number)
 		if number > 9999:
 			from index import SearchException
