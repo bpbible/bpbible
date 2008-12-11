@@ -1,6 +1,7 @@
 from backend import filterutils
 from swlib.pysw import SW, GetBestRange
 from util.debug import dprint, WARNING
+import os.path
 
 class OSISParser(filterutils.ParserBase):
 	def __init__(self, *args, **kwargs):
@@ -52,7 +53,7 @@ class OSISParser(filterutils.ParserBase):
 				self.ref, self.u.lastTextNode.c_str()
 			)
 		else:			
-			ref = GetBestRange(self.ref, context=self.u.key.getText(), abbrev=True)
+			ref = GetBestRange(self.ref, abbrev=True)
 			self.buf += '<a href="bible:%s">%s</a>' % (
 				ref, self.u.lastTextNode.c_str()
 			)
@@ -226,6 +227,16 @@ class OSISParser(filterutils.ParserBase):
 			
 		else:
 			self.success = SW.INHERITED
+	
+	def start_figure(self, attrib):
+		src = attrib.get("src")
+		if not src:
+			self.success = SW.FAILED
+			return
+
+		data_path = self.u.module.getConfigEntry("AbsoluteDataPath")
+		img_path = os.path.realpath("%s/%s" % (data_path, src))
+		self.buf += '<img border=0 src="%s" />' % img_path
 			
 
 class OSISRenderer(SW.RenderCallback):
