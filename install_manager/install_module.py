@@ -45,7 +45,7 @@ class ModuleInstallDialog(xrcModuleInstallDialog):
 		self.Size = 400, 300
 		self.dest_dir = ""
 		self.old_selection = 0
-		self.destination.Items = biblemgr.paths + [_("Other...")]
+		self.destination.Items = list(reversed(biblemgr.paths)) + [_("Other...")]
 		self.destination.Selection = 0
 		self.on_destination_choice(None)
 		self.destination.Bind(wx.EVT_CHOICE, self.on_destination_choice)
