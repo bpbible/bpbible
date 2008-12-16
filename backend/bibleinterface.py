@@ -5,6 +5,7 @@ Exposes an interface onto a manager for bibles, commentaries, dictionaries and
 generic books
 """
 from swlib.pysw import SW
+from swlib import pysw
 
 from backend.book import Bible, Commentary
 from backend.dictionary import Dictionary
@@ -48,7 +49,7 @@ class BibleInterface(object):
 	
 	def init_options(self):
 		for option, values in self.get_options():
-			for path, mgr in self.mgrs:
+			for path, mgr, modules in self.mgrs:
 				option_value = mgr.getGlobalOption(option)
 
 				# if NULL is ever a valid value for this, 
@@ -71,7 +72,7 @@ class BibleInterface(object):
 		if type(value) == bool:
 			processed_value = {True:"On", False:"Off"}[value]
 
-		for path, mgr in self.mgrs:
+		for path, mgr, modules in self.mgrs:
 			mgr.setGlobalOption(str(option), str(processed_value))
 
 		self.options[option] = processed_value
@@ -100,16 +101,15 @@ class BibleInterface(object):
 	
 	def _get_modules(self):
 		self.modules = {}
-		for path, mgr in self.mgrs:
-			self.modules.update((name.c_str(), mod) 
-				for name, mod in mgr.getModules().iteritems()
-			)
+		for path, mgr, modules in self.mgrs:
+			self.modules.update(modules)
+
 				
 	def get_options(self):
 		option_names = []
 		options = {}
 
-		for path, mgr in self.mgrs:
+		for path, mgr, modules in self.mgrs:
 			# I'm not sure if one SWMgr can include 3 options for a
 			# value, and another two. (for example)
 			# if so, we choose the last one
@@ -129,7 +129,7 @@ class BibleInterface(object):
 		return [(option, options[option]) for option in option_names]
 	
 	def get_tip(self, option):
-		for path, mgr in reversed(self.mgrs):
+		for path, mgr, modules in reversed(self.mgrs):
 			tip = mgr.getGlobalOptionTip(option)
 			if tip:
 				return tip
@@ -246,7 +246,10 @@ class BibleInterface(object):
 			if path_changed is None:
 				paths = self.load_paths()[::-1]
 				for item in paths:
-					self.mgrs.append([item, self.make_manager(item)])
+					mgr = self.make_manager(item)
+					modules = [(name.c_str(), mod) for name, mod 
+								in mgr.getModules().iteritems()]
+					self.mgrs.append([item, mgr, modules])
 			
 				self.paths = paths
 			else:
@@ -254,7 +257,9 @@ class BibleInterface(object):
 					if item[0] != path_changed:
 						continue
 
-					item[1] = self.make_manager(item[0])
+					item[1] = mgr = self.make_manager(item[0])
+					item[2] = [(name.c_str(), mod) for name, mod 
+								in mgr.getModules().iteritems()]
 
 			self._get_modules()
 

@@ -7,7 +7,6 @@ from gui.treecombo import LazyTreeCombo
 class GenBookTree(LazyTreeCombo):
 	def __init__(self, parent, book, frame):
 		super(GenBookTree, self).__init__(parent, style=wx.CB_READONLY)
-		self.root = self.tree.GetRootItem()
 		self.tree.Bind(wx.EVT_TREE_ITEM_EXPANDING, self.Expand)
 		#self.Bind(wx.EVT_COMBOBOX, self.OnChoice)
 		#self.Bind(wx.EVT_TEXT, self.OnChoice)
@@ -16,38 +15,54 @@ class GenBookTree(LazyTreeCombo):
 		wx.CallAfter(self.SetBook, book)
 
 	def SetBook(self, book, old=""):
-		self.root = self.tree.GetRootItem()
-		#if not self.root
+		### TODO: the following code triggers treekey detected mutating
+		### exceptions. Haven't found out why they are changing yet.
+		#for item in self.data_items:
+		#	item.check_changed()
+
+		#for item in self.data_items:
+		#	print `item.Persist()`, `item.getText()`
+		#	if not item.thisown:
+		#		print "*** WARNING: not thisown (%r)" % item
+		#	else:
+		#		item.thisown = False
+		#		item.__swig_destroy__(item)
+
+		self.tree.DeleteAllItems()#Children(self.tree.RootItem)
+		#import gc;gc.collect()
+		root = self.tree.AddRoot("<hidden root>")
 		
-		self.tree.DeleteChildren(self.tree.RootItem)
 		
 		self.book = book
 			
 
 		if book.mod:
-			self.tk = TK(book.mod.getKey(), book.mod)
-			self.tk.root()
-			self.tree.SetPyData(self.root, (ImmutableTK(self.tk), False))
-			self.AddItems(self.root)
+			tk = TK(book.mod.getKey(), book.mod)
+			tk.root()
+			itk = ImmutableTK(tk)
+			self.tree.SetPyData(root, (itk, False))
+			#self.data_items = [itk]
+
+			self.AddItems(root)
 			
 			# clear error
-			self.tk.Error()
+			tk.Error()
 
 
-			self.tk.text = old
-			first_child = self.tree.GetFirstChild(self.root)[0]
+			tk.text = old
+			first_child = self.tree.GetFirstChild(root)[0]
 			if first_child:
-				if not ord(self.tk.Error()) and self.tk.text:
-					self.go_to_key(self.tk)
+				if not ord(tk.Error()) and tk.text:
+					self.go_to_key(tk)
 			
 				else:
 					self.set_value(first_child)
 			
 				return
 		
-		self.tree.SetPyData(self.root, (["<empty>"], False))
-		self.AddItems(self.root)
-		self.set_value(self.tree.GetFirstChild(self.root)[0])
+		self.tree.SetPyData(root, (["<empty>"], False))
+		self.AddItems(root)
+		self.set_value(self.tree.GetFirstChild(root)[0])
 				
 			
 

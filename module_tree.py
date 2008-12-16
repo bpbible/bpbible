@@ -4,6 +4,7 @@ from swlib.pysw import SW
 from gui.filterable_tree import TreeItem, FilterableTree
 from util.observerlist import ObserverList
 from util.unicode import to_unicode
+from util.debug import dprint, ERROR
 
 from moduleinfo import ModuleInfo
 from util import languages
@@ -127,7 +128,7 @@ class ModuleTree(FilterableTree):
 		text = "%s - %s" % (
 			module.Name(), to_unicode(module.Description(), module))
 		
-		if biblemgr.modules[module.Name()].this != module.this:
+		if biblemgr.modules[module.Name()] != module:
 			text += inactive_description
 
 		tree_item.add_child(text, data=module)
@@ -146,14 +147,19 @@ class PathModuleTree(ModuleTree):
 		
 	
 	def add_first_level_groups(self):
-		for path, mgr in reversed(biblemgr.mgrs):
+		for path, mgr, modules in reversed(biblemgr.mgrs):
 			self.model.add_child(path, data=mgr)
 	
 	def add_children(self, tree_item):
-		for mod in sorted(tree_item.data.getModules().values(), 
-							key=lambda mod:mod.Name()):
-			self.add_module(tree_item, mod, "\nThis book is not active as it "
-			"is shadowed by a book in a different path")
+		for path, mgr, modules in reversed(biblemgr.mgrs):
+			if mgr == tree_item.data:
+				for modname, mod in sorted(modules, key=lambda x:x[0]):
+					self.add_module(tree_item, mod, 
+						"\nThis book is not active as it "
+						"is shadowed by a book in a different path")
+				break
+		else:
+			dprint(ERROR, "Did not find mgr in list", mgr)
 	
 class LanguageModuleTree(ModuleTree):
 	def add_first_level_groups(self):

@@ -1239,7 +1239,7 @@ class TK(SW.TreeKeyIdx):
 	def __iter__(self):
 		self.check_changed()
 		cls = type(self)
-		tk = cls(self.tk)
+		tk = TK(self.tk)
 		if(tk.firstChild()):
 			yield cls(tk)
 			while(tk.nextSibling()):
@@ -1309,12 +1309,31 @@ class ImmutableTK(TK):
 
 	def check_changed(self):
 		if self.immutable != self.getText():
-			raise TypeError, "Detected mutating ImmutableTK"
+			raise TypeError(
+				"Detected mutating ImmutableTK (from %r to %r)" %
+				(self.immutable, self.getText()))
 
 	def error(self, *args, **kwargs):
 		raise TypeError, "This is immutable"
 	
-	increment = setText = set_text = root = error
+	def Persist(self, value=None):
+		assert value is None, "Don't change this key's persist"
+		return super(ImmutableTK, self).Persist()
+	increment = setText = set_text = root = firstChild = error
+	nextSibling = previousSibling = parent = error
+	Index = error
+	__delattr__ = error
+	__iadd__ = error
+	__isub__ = error
+	append = error
+	appendChild = assureKeyPath = castTo = error
+	clearBound = copyFrom = create = decrement = error
+	firstChild = error
+	increment = insertBefore = error
+	nextSibling = parent = previousSibling = remove = root = save = error
+	setLocalName = setOffset = setPosition = setText = setUserData = error
+	set_text = error
+	
 
 # -- Utility functions
 def GetVerseStr(verse, context = "", raiseError=False, 

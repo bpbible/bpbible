@@ -21,6 +21,7 @@ class Book(object):
 		self.parent = parent
 		self.mod = None
 		self.observers = observerlist.ObserverList()
+		self.cleanup_module = observerlist.ObserverList()
 		self.template = VerseTemplate(body = "$text")
 		self.templatelist = [self.template]
 		self.vk = VK()
@@ -524,8 +525,8 @@ class Book(object):
 
 		
 	def get_mgr(self, mod):
-		for path, mgr in self.parent.mgrs:				
-			if mod.this in [m.this for m in mgr.getModules().values()]:
+		for path, mgr, modules in self.parent:
+			if mod in [m for name, m in modules]:
 				return mgr
 
 		return None

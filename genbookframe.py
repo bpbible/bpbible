@@ -70,14 +70,26 @@ class GenBookFrame(BookFrame):
 		self.genbookpanel.Fit()
 		self.genbooktree.Bind(wx.EVT_COMBOBOX, self.on_genbook_change)
 		biblemgr.genbook.observers += self.genbook_version_changed
+		biblemgr.genbook.cleanup_module += self.cleanup_module
 		guiconfig.mainfrm.on_close += lambda:biblemgr.genbook.observers.remove(
 			self.genbook_version_changed
 		)
 		self.reference_text = None
 		
 		
-	
+	def cleanup_module(self, module):
+		if self.book.mod == module:
+			print "CLEANING"
+			# clean up all our TK's
+			self.reference = "<empty>"
+			self.reference_text = "<empty>"
+
+			self.genbooktree.tree.DeleteChildren(self.genbooktree.tree.RootItem)
+			self.genbooktree.value = None
+
 	def SetReference(self, ref, context=None):
+		if isinstance(ref, TK):
+			ref = TK(ref)
 		self.reference = ref
 		
 		if isinstance(ref, basestring) and ref == "<empty>":
@@ -194,7 +206,7 @@ class GenBookFrame(BookFrame):
 	def SetReference_from_string(self, string):
 		key = TK(self.book.mod.getKey(), self.book.mod)
 		key.text = string
-		self.go_to_key(string)
+		self.go_to_key(key)
 
 	def update_title(self, shown=None):
 		m = guiconfig.mainfrm

@@ -30,7 +30,7 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
 								|wx.TR_SINGLE
 								|wx.TR_LINES_AT_ROOT
 								|wx.SIMPLE_BORDER)
-		root = self.tree.AddRoot("<hidden root>")
+		self.tree.AddRoot("<hidden root>")
 								
 		self.tree.Bind(wx.EVT_MOTION, self.OnMotion)
 		self.tree.Bind(wx.EVT_LEFT_DOWN, self.OnLeftDown)
@@ -318,15 +318,16 @@ class TreeCombo(wx.combo.ComboCtrl):
 class LazyTreeCombo(TreeCombo):
 	def __init__(self, parent, style):
 		super(LazyTreeCombo, self).__init__(parent, style=style)
-		self.root = self.tree.GetRootItem()
 		self.tree.Bind(wx.EVT_TREE_ITEM_EXPANDING, self.Expand)
 		self.Bind(wx.EVT_TEXT, self.OnChoice)
+		#self.data_items = []
 
 	def AddItems(self, item):
 		data, hasExpanded = self.tree.GetPyData(item)
 		if hasExpanded: return
 		self.tree.SetPyData(item, (data, True))
 		for child in data:
+			#self.data_items.append(child)
 			node = self.tree.AppendItem(item, unicode(child))
 			# set data to key, hasexpanded
 			self.tree.SetPyData(node, (child, False))

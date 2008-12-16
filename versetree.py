@@ -8,7 +8,6 @@ from gui.treecombo import LazyTreeCombo
 class VerseTree(LazyTreeCombo):
 	def __init__(self, parent, with_verses=False):
 		super(VerseTree, self).__init__(parent, style=wx.TE_PROCESS_ENTER)
-		self.root = self.tree.GetRootItem()
 		self.currentverse = None
 		self.with_verses = with_verses
 		
@@ -18,14 +17,13 @@ class VerseTree(LazyTreeCombo):
 		wx.CallAfter(self.setup)
 
 	def setup(self):
-		self.root = self.tree.GetRootItem()
-		#if not self.root
+		root = self.tree.GetRootItem()
 		
 		self.tree.DeleteChildren(self.tree.RootItem)
 		
-		self.tree.SetPyData(self.root, (UserVK.books, False))
-		self.AddItems(self.root)
-		#self.set_value(self.tree.GetFirstChild(self.root)[0])
+		self.tree.SetPyData(root, (UserVK.books, False))
+		self.AddItems(root)
+		#self.set_value(self.tree.GetFirstChild(root)[0])
 
 	def has_children(self, item):
 		data = self.get_data(item)
@@ -59,6 +57,8 @@ class VerseTree(LazyTreeCombo):
 		self.SetText(pysw.internal_to_user(event.ref))
 
 	def get_tree_item(self):
+		root = self.tree.GetRootItem()
+	
 		text = self.GetValue()
 		was_book = False
 		for book in UserVK.books:
@@ -75,7 +75,7 @@ class VerseTree(LazyTreeCombo):
 
 			except VerseParsingError:
 				if not self.currentverse:
-					return self.tree.GetFirstChild(self.root)[0]
+					return self.tree.GetFirstChild(root)[0]
 					
 
 		verse_key = UserVK(VK(self.currentverse))
@@ -83,7 +83,6 @@ class VerseTree(LazyTreeCombo):
 		book, chapter = verse_key.getBookName(), verse_key.Chapter()
 		verse = verse_key.Verse()
 
-		root = self.tree.GetRootItem()
 		item, cookie = self.tree.GetFirstChild(root)
 		while item:
 			if self.tree.GetItemText(item) == book:

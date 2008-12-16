@@ -16,7 +16,13 @@ class ModuleManagerDialog(xrcModuleManagerDialog):
 		self.filterable_tree_holder.Sizer.Add(self.tree, 1, wx.GROW)
 		self.filterable_tree_holder.Layout()
 		self.Size = 500, 400
+		self.Bind(wx.EVT_WINDOW_DESTROY, lambda evt:
+			(evt.Skip(), biblemgr.on_after_reload.remove(self.recreate)))
 		
+		biblemgr.on_after_reload += self.recreate
+	
+	def recreate(self, biblemgr):
+		self.tree.recreate()		
 	
 	def on_delete(self, event):
 		checked_modules = self.get_checked()
@@ -33,12 +39,54 @@ Books to be deleted:""") + '\n' +
 	', '.join([item.GetData().data.Name() for item in checked_modules]),
 		_("Confirm book deletion"),
 		wx.YES_NO, parent=self):
-			for item in checked_modules:
-				mgr = item.GetParent().GetData().data
-				InstallMgr.removeModule(mgr, item.GetData().data.Name())
-		
-			biblemgr.reload()
-			self.tree.recreate()
+			items = [
+				item.GetData().data.Name() for item in checked_modules
+			]
+			try:
+				for item in checked_modules:
+					module = item.GetData().data
+					mgr = item.GetParent().GetData().data
+					for book in (biblemgr.bible, biblemgr.commentary,
+								 biblemgr.genbook, biblemgr.dictionary):
+						#if str(module) == str(book.mod):
+						#	import code
+						#	code.InteractiveConsole(locals()).interact()
+						### TODO: work out who's still got TK's hanging around
+						if module in book.GetModules():
+							book.cleanup_module(module)
+							if book.mod == module:
+								good_books = [
+									x for x in book.GetModuleList() 
+									if x not in items
+								]
+								if good_books:
+									book_to_set = good_books[0]
+								else:
+									book_to_set = None
+
+								
+								## if we don't set a book here,
+								## genbooktree.getpreviousitem won't be called
+								## in SetReference, and data still hangs 
+								## around... So deleting the last book might
+								## not be possible at the moment
+								book.SetModule(
+									book_to_set,
+									#None,
+									#"Josephus", 
+								notify=True)
+#							wx.SafeYield()	
+
+							break
+					#else:
+					#	dprint(ERROR, 
+					#		"Couldn't clean up module as book not found for it", 
+					#		module.Name())
+
+					InstallMgr.removeModule(mgr, module.Name())
+			finally:
+				biblemgr.reload()
+				self.tree.recreate()
 	
 	def on_unlock(self, event):
 		selection = self.tree.tree.GetSelection()

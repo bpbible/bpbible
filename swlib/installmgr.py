@@ -7,7 +7,7 @@ import tarfile
 import Sword
 from pyftptransport import PyFTPTransport
 from swlib.installsource import InstallSource
-from util.debug import dprint, WARNING
+from util.debug import dprint, WARNING, MESSAGE
 
 try:
   WindowsError
@@ -110,10 +110,19 @@ class FileMgr(object):
 			return
 	
 		for item in os.listdir(dir):
-			print "removing", item
-			os.remove(dir + "/" + item)
+			dprint(MESSAGE, "Encountered", item)
+			path = dir + "/" + item
+			if os.path.isdir(path):
+				dprint(MESSAGE, "Removing directory")
+				FileMgr.removeDir(path)
+			else:
+				dprint(MESSAGE, "removing", path)
+				os.remove(path)
 
-		os.removedirs(dir)
+		# check whether this directory still exists, removedirs on its
+		# children may have deleted it already
+		if os.path.exists(dir):
+			os.removedirs(dir)
 
 	@staticmethod
 	def copyFile(file, dest):
