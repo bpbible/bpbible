@@ -40,6 +40,32 @@ Then edit the file. [http://www.poedit.net/ Poedit] will do the editing for you;
 When you make changes, you should compile it to see the effects. Running bpbible with a -d flag from the command line (`bpbible.exe -d` if you are running the compiled executable; `python bpbible.py -d` otherwise) will give a debug menu. Going Debug > Locale > compile will compile the .po file; using Debug > Locale > restart will restart BPBible to work with the new locale changes.
 Note: if you do not have the configuration file mentioned above in place, the language will not show up in File > Languages, and it will not compile it. 
 
+=== Special formatting ===
+Sometimes special formatting is used in messages; this needs to be understood to translate the message properly.
+
+`%s` is used for inserting a string into another one.
+So for an example,
+{{{
+msgid "Show the %s pane"
+}}}
+
+Here `%s` represents the name of the pane (which is defined elsewhere). When displayed to the user, this will be substituted in. `%d` is similar; it is used for integers.
+
+Another variation is `%(name)s`. This is used in strings which would need more than one `%s`, so that they can be reordered.
+
+So for example from the en_AU test locale:
+{{{
+#: swlib/pysw.py:109 swlib/pysw.py:412
+msgid "There are only %(chapters)d chapters in %(book)s (given %(given)d)"
+msgstr ""
+"You seem to think %(book)s has %(given)d chapters, but %(book)s really has %"
+"(chapters)d chapters"
+}}}
+
+This allows rearranging of the order of the inserted strings. You don't need to translate what is inside the brackets (and shouldn't - it will break it), as these are just the identifiers for the string.
+
+`&` is used for the accelerator in menus and for controls. So `&Language` would make L the accelerator for Language - it would generally put an underline under the L, and pressing L would go to that item in the menu.
+
 == Bible Book names ==
 Lastly, there are the bible book names. You will need to produce a .conf file for the book names, and also for abbreviations if you want them. Before you make one, see if there are any [http://crosswire.org/svn/sword/tags/sword-1-5-11/locales.d/ here] for your language already. If there are any for your language, download them and use them.
 
