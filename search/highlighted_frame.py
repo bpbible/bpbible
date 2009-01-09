@@ -276,7 +276,9 @@ def highlight(string1, string2, is_bible, regexes, fields=(),
 	
 	for key, value in fields:
 		if key == "strongs":
-			match = re.match("([GH])(\d+)(\w?)", value)
+			match = re.match("([GH])(\d+)(\w?)", value.upper())
+			if not match:
+				continue
 			prefix, number, extra = match.group(1, 2, 3)
 			lang = ["Hebrew", "Greek"][prefix=="G"]
 			number = str(int(number))
