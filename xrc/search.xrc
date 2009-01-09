@@ -127,6 +127,19 @@
                       <flag>wxGROW</flag>
                       <border>6</border>
                     </object>
+                    <object class="sizeritem">
+                      <object class="wxBoxSizer">
+                        <object class="sizeritem">
+                          <object class="wxStaticText" name="maybe_incorrect_results_label">
+                            <label>Warning: Searching on fields may not work or may not display all matches.</label>
+                          </object>
+                        </object>
+                        <orient>wxHORIZONTAL</orient>
+                      </object>
+                      <flag>wxGROW</flag>
+                      <border>6</border>
+                      <minsize>15</minsize>
+                    </object>
                   </object>
                 </object>
               </object>

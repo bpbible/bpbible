@@ -22,6 +22,7 @@ class IndexedText(object):
 		self.version = version
 		module = self.load_module(version)
 		self.errors_on_collection = []
+		self._has_xml_errors = False
 		if create_index:
 			self.collect_text(module)
 	
@@ -99,11 +100,7 @@ class IndexedText(object):
 				)
 
 			except Exception, e:
-				self.errors_on_collection.append(
-					_(
-					"Invalid XML found: Searching on fields may not work or "
-					"may not display all matches.")
-				)
+				self._has_xml_errors = True
 				import traceback
 				traceback.print_exc(file=sys.stdout)
 				print self.get_key(module).getText()
@@ -606,6 +603,18 @@ class IndexedText(object):
 			mylist.append((a.start(), a.end()-a.start()))
 
 		return mylist
+
+	@property
+	def has_xml_errors(self):
+		# XXX: Indexes created by BPBible 0.4 and below do not have this
+		# field, and so it is assumed that they don't have XML errors.
+		# This is fine, because the error will instead appear in their list
+		# of error messages, meaning that they will be recorded as having an
+		# error anyway.
+		try:
+			return self._has_xml_errors
+		except AttributeError:
+			return False
 	
 	def get_entries(self):
 		return None	

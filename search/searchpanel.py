@@ -161,6 +161,7 @@ class SearchPanel(xrcSearchPanel):
 		wx.CallAfter(self.on_create)
 
 		self.search_results = []
+		self.maybe_incorrect_results = False
 		self.save_results_button.Hide()
 
 		self.searching = False
@@ -672,7 +673,7 @@ class SearchPanel(xrcSearchPanel):
 			search_type |= index.CASESENSITIVE
 		
 		try:
-			self.search_results = self.index.Search(
+			self.search_results, self.maybe_incorrect_results = self.index.Search(
 				regexes, excl_regexes, fields, excl_fields, 
 				search_type, searchrange=scope,
 				progress=index_callback,
@@ -698,6 +699,8 @@ class SearchPanel(xrcSearchPanel):
 			self.hits = len(self.search_results)
 			if self.hits == 0:
 				succeeded = False
+
+		self.maybe_incorrect_results_label.Show(self.maybe_incorrect_results)
 
 		if not succeeded:
 			self.search_label.Label = (
@@ -768,8 +771,10 @@ class SearchPanel(xrcSearchPanel):
 		
 
 		# set the previous results to the scope, so that we only search in it
+		self.maybe_incorrect_results = False
 		search_scope = scope
 		for item in regexes:
+
 			self.search_results = self.searcher.Search(
 				to_str(item, self.book.mod),
 				SWREGEX, search_scope, case_sensitive
@@ -829,6 +834,7 @@ class SearchPanel(xrcSearchPanel):
 	def clear_list(self):
 		self.search_button.SetLabel(_("&Search"))
 		self.show_progress_bar(False)
+		self.maybe_incorrect_results_label.Hide()
 
 		#Clear list
 		self.verselist.set_data([_("Reference"), _("Preview")], length=0)

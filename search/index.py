@@ -125,15 +125,28 @@ class Index(object):
 		self.GenerateIndex(self.version, progress)
 		self.check_for_errors()
 
-	def check_for_errors(self):
+	def check_for_errors(self, raise_exception=True):
 		errors = []
+		has_xml_errors = False
 		for item in self.books:
+			if item.has_xml_errors:
+				has_xml_errors = True
+
 			for i in item.errors_on_collection:
 				if i not in errors:
 					errors.append(i)
 			
 		if errors:
-			raise BadBook(self, errors)
+			if raise_exception:
+				raise BadBook(self, errors)
+			else:
+				return True
+
+		elif has_xml_errors:
+			dprint(WARNING, "Invalid XML found")
+			return True
+
+		return False
 	
 	def GenerateIndex(self, mod, progress = lambda x:x):
 		"""Index.GenerateIndex - Collates book indexes"""
@@ -391,7 +404,12 @@ class Index(object):
 			results += book.find_index(matches)
 		
 		progress((_("Done"), 100))
-		return results
+
+		if not fields:
+			maybe_incorrect_results = False
+		else:
+			maybe_incorrect_results = self.check_for_errors(raise_exception=False)
+		return results, maybe_incorrect_results
 	
 	
 	def WriteIndex(self, progress=util.noop):
