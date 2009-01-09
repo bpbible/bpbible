@@ -82,7 +82,7 @@ class ChapterItem(wx.Panel):
 		self.Bind(wx.EVT_ENTER_WINDOW, 
 			lambda evt:wx.CallAfter(self.on_enter, evt.X, evt.Y))
 		self.Bind(wx.EVT_LEAVE_WINDOW, self.on_leave)
-		self.Bind(wx.EVT_LEFT_UP, lambda evt: 
+		self.Bind(wx.EVT_LEFT_DOWN, lambda evt: 
 			self.Parent.on_click(self.internal_text)
 		)
 		
