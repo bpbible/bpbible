@@ -408,7 +408,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 			index = self._passage_list_topic.passages.index(passage_entry)
 		self._add_passage_list_passage_observers(passage_entry)
 		self.passage_list_ctrl.InsertStringItem(index, _passage_str(passage_entry, short=True))
-		self.passage_list_ctrl.SetStringItem(index, 1, passage_entry.comment)
+		self.passage_list_ctrl.SetStringItem(index, 1, passage_entry.comment[:300].replace("\n", " "))
 
 	def _remove_topic_passage(self, passage_entry, index):
 		self.passage_list_ctrl.DeleteItem(index)
