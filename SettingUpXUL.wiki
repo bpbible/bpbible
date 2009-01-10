@@ -1,0 +1,12 @@
+#summary Setting up BPBible with XUL.
+#labels Development
+
+= Introduction =
+
+How to set up a XUL and PyXPCOM instance to use with BPBible.
+
+= Source =
+The source is currently in SVN in branches/xul.
+
+= Setup =
+Start off looking at [http://pyxpcomext.mozdev.org/no_wrap/tutorials/pyxulrunner/python_xulrunner_about.html].
