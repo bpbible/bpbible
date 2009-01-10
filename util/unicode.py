@@ -50,4 +50,4 @@ def to_unicode_2(text, module):
 	if not text:
 		return
 		
-	return text.decode(get_module_encoding(module))
+	return text.decode(get_module_encoding(module), "replace")
