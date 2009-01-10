@@ -34,7 +34,7 @@ class ModuleManagerDialog(xrcModuleManagerDialog):
 		if wx.YES == wx.MessageBox(_(
 """You are about to delete books.
 This will completely remove the books and free up the disk space that they used.
-You cannot undo this operation. Are you sure you want to delete these books?"
+You cannot undo this operation. Are you sure you want to delete these books?
 Books to be deleted:""") + '\n' + 
 	', '.join([item.GetData().data.Name() for item in checked_modules]),
 		_("Confirm book deletion"),
