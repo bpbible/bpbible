@@ -10,3 +10,8 @@ The source is currently in SVN in branches/xul.
 
 = Setup =
 Start off looking at [http://pyxpcomext.mozdev.org/no_wrap/tutorials/pyxulrunner/python_xulrunner_about.html].
+
+= Possibly useful tools and Firefox extensions =
+* PyShell (http://pyxpcomext.mozdev.org/samples.html)
+* XPCOMViewer (https://addons.mozilla.org/en-US/firefox/addon/7979)
+* Venkman (Javascript debugger, contains some of the layout we might want) (http://www.mozilla.org/projects/venkman/).
