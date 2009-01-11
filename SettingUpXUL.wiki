@@ -12,6 +12,11 @@ The source is currently in SVN in branches/xul.
 Start off looking at [http://pyxpcomext.mozdev.org/no_wrap/tutorials/pyxulrunner/python_xulrunner_about.html].
 
 = Possibly useful tools and Firefox extensions =
-* PyShell (http://pyxpcomext.mozdev.org/samples.html)
-* XPCOMViewer (https://addons.mozilla.org/en-US/firefox/addon/7979)
-* Venkman (Javascript debugger, contains some of the layout we might want) (http://www.mozilla.org/projects/venkman/).
+PyShell (http://pyxpcomext.mozdev.org/samples.html)
+
+XPCOMViewer (https://addons.mozilla.org/en-US/firefox/addon/7979)
+
+Venkman (Javascript debugger, contains some of the layout we might want) (http://www.mozilla.org/projects/venkman/).
+
+= Notes =
+XULRunner has this annoying habit of letting a XULRunner instance hang around, and using that instance in future.  This causes problems if components are added and not registered on startup because a new instance is not being created.  Periodically run through in Task Manager and kill everything with your XULRunner stub name to make sure.
