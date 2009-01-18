@@ -955,6 +955,7 @@ class TopicDetailsPanel(xrcTopicDetailsPanel):
 class PassageDetailsPanel(xrcPassageDetailsPanel):
 	def __init__(self, parent, operations_manager):
 		super(PassageDetailsPanel, self).__init__(parent)
+		self.passage_preview.show_reference_string = True
 		self.passage = None
 		self.last_passage_text = u""
 		self.passage_verse_key = None

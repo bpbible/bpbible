@@ -3,6 +3,7 @@ from backend.bibleinterface import biblemgr
 from displayframe import DisplayFrameXRC
 from util import overridableproperty
 from backend.verse_template import VerseTemplate
+from swlib.pysw import GetBestRange
 import config
 
 class ReferenceDisplayFrame(DisplayFrameXRC):
@@ -13,6 +14,7 @@ class ReferenceDisplayFrame(DisplayFrameXRC):
 	"""
 	def __init__(self):
 		self.reference = None
+		self.show_reference_string = False
 		super(ReferenceDisplayFrame, self).__init__()
 
 	def SetReference(self, reference, *args, **kwargs):
@@ -38,6 +40,13 @@ class ReferenceDisplayFrame(DisplayFrameXRC):
 			kwargs["template"] = template
 
 		data = biblemgr.bible.GetReference(self.reference, *args, **kwargs)
+		if self.show_reference_string:
+			reference_text = GetBestRange(self.reference, userOutput=True)
+			reference_string = (u'<p><a href="bible:%s"><small><em>'
+					'%s (%s)</em></small></a></p><br>' %
+					(self.reference, reference_text, self.book.version))
+		else:
+			reference_string = ""
 		if data is None:
 			data = config.MODULE_MISSING_STRING()
 
@@ -46,15 +55,19 @@ class ReferenceDisplayFrame(DisplayFrameXRC):
 			# interface (or by Sword itself).
 			data = data.replace("<!P>","</p><p>")
 
-		self.SetPage("%s" % data)
+		self.SetPage("%s%s" % (reference_string, data))
 	
 	@overridableproperty
 	def template(self):
-		return VerseTemplate(
-			u'<p><a href="bible:$internal_reference"><small><em>'
-			'$reference ($version)</em></small></a></p><br>$text',
-			headings=""
-		)
+		return None
+
+		# XXX: This doesn't work for some reason, since it doesn't give us
+		# any verse number.
+		template = VerseTemplate(headings="")
+		template.body = self.book.template.body
+		template.header = self.book.template.header
+		template.footer = self.book.template.footer
+		return template
 	
 	@property
 	def book(self):
