@@ -63,7 +63,7 @@ msgstr ""
 "(chapters)d chapters"
 }}}
 
-This allows rearranging of the order of the inserted strings. You don't need to translate what is inside the brackets (and shouldn't - it will break it), as these are just the identifiers for the string.
+This allows rearranging of the order of the inserted strings. You don't need to translate what is inside the brackets (and shouldn't - it will break it), as these are just the identifiers for the string. Also, make sure the letter after the bracket (s or d) is still there - it won't work without this.
 
 `&` is used for the accelerator in menus and for controls. So `&Language` would make L the accelerator for Language - it would generally put an underline under the L, and pressing L would go to that item in the menu.
 
@@ -91,3 +91,6 @@ The final directory structure for your language files will look something like t
         * messages.mo
 
 If you create a zip file with these files in it, this can be extracted onto other installations to install the language.
+
+= History and History Toolbar =
+"History" and "History Toolbar" should not be translated the same. Due to technical restrictions, translating them to the same word(s) will stop the history panel being usable.
