@@ -367,6 +367,8 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 	def _remove_observers(self, parent_topic):
 		parent_topic.add_subtopic_observers.remove(self._add_new_topic_node)
 		parent_topic.remove_subtopic_observers.remove(self._remove_topic_node)
+		parent_topic.name_changed_observers.remove(self._rename_topic_node)
+
 		for subtopic in parent_topic.subtopics:
 			self._remove_observers(subtopic)
 	
