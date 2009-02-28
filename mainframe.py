@@ -20,6 +20,7 @@ from backend import filterutils
 
 dprint(MESSAGE, "Importing frames")
 from bibleframe import BibleFrame, bible_settings
+from bookframe import BookFrame
 from bookframe import CommentaryFrame
 from bookframe import DictionaryFrame
 from displayframe import IN_MENU
@@ -246,8 +247,8 @@ class MainFrame(wx.Frame, AuiLayer):
 			shortHelp=_("Go to this verse"))
 			
 		self.tool_search = self.main_toolbar.AddLabelTool(wx.ID_ANY,  
-			_("Bible Search"), bmp("find.png"),
-			shortHelp=_("Search in this Bible"))
+			_("Search"), bmp("find.png"),
+			shortHelp=_("Search in the current book"))
 			
 		self.tool_copy_verses = self.main_toolbar.AddLabelTool(wx.ID_ANY,  
 			_("Copy Verses"), bmp("page_copy.png"),
@@ -583,8 +584,7 @@ class MainFrame(wx.Frame, AuiLayer):
 		
 		self.Bind(wx.EVT_TOOL, self.BibleRefEnter, self.tool_go)
 		
-		self.Bind(wx.EVT_TOOL, lambda x: self.search_panel.show(), 
-			self.tool_search)
+		self.Bind(wx.EVT_TOOL, self.do_search, self.tool_search)
 		
 		self.Bind(wx.EVT_TOOL, lambda x:self.zoom(1),
 			self.tool_zoom_in)
@@ -925,6 +925,15 @@ class MainFrame(wx.Frame, AuiLayer):
 	def toggle_display_tags(self, event):
 		passage_list.settings.display_tags = event.IsChecked()
 		self.UpdateBibleUI(settings_changed=True, source=SETTINGS_CHANGED)
+
+	def do_search(self, event):
+		"""Search in the currently selected book, defaulting to the Bible if
+		no book window is selected.
+		"""
+		selected_frame = self.get_selected_frame()
+		if selected_frame is None or not isinstance(selected_frame, BookFrame):
+			selected_frame = self.bibletext
+		selected_frame.search()
 		
 	def set_verse_per_line(self, to):
 		bible_settings["verse_per_line"] = to

@@ -444,6 +444,14 @@ class AuiLayer(object):
 			if pane.name == pane_name:
 				return f
 
+	def get_selected_frame(self):
+		for f, pane_name in self.panes:
+			pane = self.aui_mgr.GetPane(pane_name)
+			assert pane.IsOk(), pane_name
+			active = bool(pane.state & pane.optionActive)
+			if active:
+				return f
+
 	def create_items(self, items, use_startups=True):
 		for frame, title, name, always_items, startup_items in items:
 			defaults = "CaptionVisible MaximizeButton Movable Floatable " \
