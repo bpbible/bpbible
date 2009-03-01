@@ -31,3 +31,5 @@ ChromeBug: Nice extension, but still in alpha and haven't yet found a XULRunner 
 XULRunner has this annoying habit of letting a XULRunner instance hang around, and using that instance in future.  This causes problems if components are added and not registered on startup because a new instance is not being created.  Periodically run through in Task Manager and kill everything with your XULRunner stub name to make sure.
 
 To show the Error Console, run with bpbible -jsconsole.  utils.debug.dprint() and utils.debug.dump() will write debugging printouts and status messages to the Error Console.
+
+If you ever want to change the components in the components directory, they will not be re-registered.  The easiest way to force them to re-register is to change the build ID in the application.ini file, then run bpbible (then please change it back so we don't have spurious changes to it in SVN).
