@@ -136,7 +136,7 @@ def diff():
 	for item in languages:
 		if os.path.exists("locales/%s.po.new" % item):
 			print "Language:", item
-			err = system("python %s/Scripts/diff.py -u locales/%s.po locales/%s.po.new" % (tools_path, item, item))
+			err = system("python %s/scripts/diff.py -u locales/%s.po locales/%s.po.new" % (tools_path, item, item))
 
 import util.i18n
 languages = [language for language in util.i18n.languages]
