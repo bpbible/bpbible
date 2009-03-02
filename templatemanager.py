@@ -326,6 +326,9 @@ class TemplatePanel(xrcTemplatePanel):
 
 		self.fields = []
 
+		# hmm, the instructions don't get automatically done...
+		self.instructions.Label = _(self.instructions.Label)
+
 		template_options = biblemgr.bible.get_template_options()
 
 		for field in fields.split():
