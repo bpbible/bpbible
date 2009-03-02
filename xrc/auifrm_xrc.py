@@ -63,5 +63,6 @@ def __gettext_strings():
     _("Report a problem...")
     _("Download books...")
     _("&About...")
+    _("Show about dialog")
     _("Bible")
 

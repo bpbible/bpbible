@@ -1,6 +1,8 @@
 #TODO: on move remove popup
 #TODO: \n on copy
 #TODO: ($text)$text
+
+#TODO: why don't trailing spaces get preserved between restarts?!?
 import wx
 import re
 
@@ -77,6 +79,7 @@ class CopyVerseDialog(xrcCopyVerseDialog):
 		self.tp_holder.Sizer.Add(self.template_panel, 1, wx.GROW|wx.ALL,
 			border=6)
 		self.tp_holder.Fit()
+		self.tp_holder.Parent.Parent.Label = _("Edit Template...")
 		self.Fit()
 		self.SetMinSize(self.Size)
 

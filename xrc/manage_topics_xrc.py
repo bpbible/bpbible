@@ -119,6 +119,10 @@ def __gettext_strings():
     
     def _(str): pass
     
+    _("New topic")
+    _("New topic")
+    _("Add passage")
+    _("Add passage")
     _("Cut")
     _("Cut")
     _("Copy")

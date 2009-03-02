@@ -84,6 +84,7 @@
         <object class="separator"/>
         <object class="wxMenuItem" name="wxID_ABOUT">
           <label>_About...</label>
+          <help>Show about dialog</help>
         </object>
       </object>
     </object>
