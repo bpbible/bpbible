@@ -415,7 +415,7 @@ class LinkedFrame(VerseKeyedFrame):
 				self.notify(event.ref)
 
 		elif event.settings_changed:
- 			if self.aui_pane.IsShown():
+			if self.aui_pane.IsShown():
 				self.refresh()
 			else:
 				self.settings_changed = True
