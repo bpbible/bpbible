@@ -173,6 +173,7 @@ class MainFrame(wx.Frame, AuiLayer):
 		dprint(MESSAGE, "Binding events")
 		
 		self.bind_events()
+		dprint(MESSAGE, "Setting up frames")
 		self.setup_frames()
 
 		self.bibleref.SetFocus()
@@ -668,9 +669,10 @@ class MainFrame(wx.Frame, AuiLayer):
 
 	def on_install_module(self, event):
 		fd = wx.FileDialog(self, 
-			wildcard="Installable books (*.zip)|*.zip",
+			wildcard=_("Installable books") +  " (*.zip)|*.zip",
 			style=wx.FD_DEFAULT_STYLE|wx.FD_MULTIPLE|wx.FD_MULTIPLE|wx.FD_OPEN,
-			defaultDir=settings["last_book_directory"], message="Choose books"
+			defaultDir=settings["last_book_directory"], 
+			message=_("Choose books")
 		)
 
 		if fd.ShowModal() == wx.ID_OK:
@@ -1029,8 +1031,10 @@ class MainFrame(wx.Frame, AuiLayer):
 			name = self.get_pane_for_frame(frame).name 
 			self.aui_callbacks[name] = frame.on_shown
 
-		self.set_bible_ref(settings["bibleref"], LOADING_SETTINGS,
-				userInput=False)
+		dprint(MESSAGE, "Setting initial bibleref")
+		
+		self.set_bible_ref(settings["bibleref"] or "Genesis 1:1", 
+			LOADING_SETTINGS, userInput=False)
 		self.DictionaryListSelected()
 		self.version_tree.recreate()
 
