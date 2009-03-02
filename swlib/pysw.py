@@ -44,6 +44,8 @@ for a in dir(SW):
 	if(a[:2]=="SW"):
 		setattr(SW, a[2:], getattr(SW, a))
 
+LIB_1512_COMPAT = SW.Version().currentVersion > SW.Version("1.5.11")
+print "SVN; SWORD 1.5.12 compatible" if LIB_1512_COMPAT else "1.5.11 compatible"
 
 if hasattr(sys, "SW_dont_do_stringmgr"):
 	dprint(WARNING, "Skipping StringMgr initialization")
@@ -84,7 +86,8 @@ else:
 # *only* after we've set the system string mgr can we set the system 
 # locale mgr...
 locale_mgr = SW.LocaleMgr.getSystemLocaleMgr()
-locale_mgr.loadConfigDir("locales/locales.d")
+locale_mgr.loadConfigDir("locales/locales.d" + 
+	("/SWORD_1512" if LIB_1512_COMPAT else ""))
 
 #if locale_mgr.getLocale("bpbible"):
 #	locale_mgr.setDefaultLocaleName("bpbible")
@@ -360,6 +363,22 @@ class VK(SW.VerseKey):#, object):
 		vk.this = item.this
 		return vk
 
+	def UpperBound_1512(self, to=None):
+		if to is None:
+			return super(VK, self).UpperBound()
+		
+		super(VK, self).UpperBound(SW.VerseKey(to))
+		
+	def LowerBound_1512(self, to=None):
+		if to is None:
+			return super(VK, self).LowerBound()
+		
+		super(VK, self).LowerBound(SW.VerseKey(to))
+	
+	if LIB_1512_COMPAT:
+		LowerBound = LowerBound_1512
+		UpperBound = UpperBound_1512
+		
 	#def UpperBound(self, to=None):
 	#	if to is not None:
 	#		return self._get(self.UpperBound(to))
@@ -424,7 +443,7 @@ class EncodedVK(VK):
 		if text is None:
 			return super(EncodedVK, self).UpperBound()
 
-		super(EncodedVK, self).UpperBound(text.encode(self.encoding))	
+		super(EncodedVK, self).UpperBound(text.encode(self.encoding))
 	
 	def getText(self):
 		return super(EncodedVK, self).getText().decode(self.encoding)
@@ -696,6 +715,9 @@ class VerseList(list):
 		# wrong osisrefs: x
 		# <reference osisRef="Gen.3.5-Rev.22.21">gen 3:5 -</reference> foobar'
 		my_re = r'\s*(<reference osisRef=[^>]*>[^>]*</reference>((;|,)?\s*))+$'
+		if LIB_1512_COMPAT:
+			return
+
 		osis_ref = VK.convertToOSIS(args, SW.Key(context))
 		match = re.match(my_re, osis_ref)
 
@@ -1104,7 +1126,7 @@ i_vk.Book(1)
 while not i_vk.Error():
 	t = ord(i_vk.Testament())
 	b = ord(i_vk.Book())
-	n = i_vk.bookName(t, b)
+	n = i_vk.getBookName()
 	books.append(BookData(n, t, b))
 	localized_books.append(LocalizedBookData(n, t, b))
 	
@@ -1144,12 +1166,12 @@ locale_changed = ObserverList()
 
 def get_dash_hack(locale):
 	lookup = {}
-	for testament in range(locale.getNumBookGroupings()):
-		for book in range(locale.getNumBooks(testament)):
-			b = locale.getBook(testament, book)
-			with_dash = locale.translate(b.name).decode(locale_encoding)
-			if with_dash != b.name.decode(locale_encoding):
-				lookup[b.name.decode(locale_encoding)] = with_dash
+	for testament in range(2):#locale.getNumBookGroupings()):
+		for book in range(i_vk.bookCount(testament)):
+			book_name = locale.translate(i_vk.bookName(testament, book))
+			with_dash = locale.translate(book_name).decode(locale_encoding)
+			if with_dash != book_name.decode(locale_encoding):
+				lookup[book_name.decode(locale_encoding)] = with_dash
 	
 	return lookup
 		
