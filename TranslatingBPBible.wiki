@@ -78,6 +78,52 @@ For example, the Vietnamese locale has `Mathiơ=Ma-thi-ơ`
 
 These files should go in the locales/locales.d folder
 
+=== Display Menu ===
+There are items in the display menu such as Footnotes, Cross-references, etc. These are translated using the bible book name .conf file above. Under the bible booknames in the [Text] section, you will need to add strings of the form `Footnotes=Notes of foot`
+
+So at the end of the list of booknames you may have:
+{{{
+...
+Revelation of John=The Apocalypse
+
+Footnotes=Notes of foot
+...
+}}}
+
+The strings you may need to translate are list below.
+The more common ones are:
+{{{
+Headings
+Toggles Headings On and Off if they exist
+Cross-references
+Toggles Scripture Cross-references On and Off if they exist
+Footnotes
+Toggles Footnotes On and Off if they exist
+Words of Christ in Red
+Toggles Red Coloring for Words of Christ On and Off if they are marked
+Strong's Numbers
+Toggles Strong's Numbers On and Off if they exist
+Morphological Tags
+Toggles Morphological Tags On and Off if they exist
+}}}
+
+And less commonly (i.e. with Hebrew and Greek texts).
+{{{
+Hebrew Cantillation
+Toggles Hebrew Cantillation Marks
+Morpheme Segmentation
+Toggles Morpheme Segmentation On and Off, when present
+Greek Accents
+Toggles Greek Accents
+Hebrew Vowel Points
+Toggles Hebrew Vowel Points
+Textual Variants
+Switch between Textual Variants modes
+Primary Reading
+Secondary Reading
+All Readings
+}}}
+
 == Directory Structure ==
 The final directory structure for your language files will look something like this (where language_abbrev is the abbreviation for your language).
   * locales
