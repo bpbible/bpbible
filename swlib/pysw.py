@@ -760,15 +760,22 @@ class VerseList(list):
 					check_vk_bounds(v)
 
 				if userInput:
+					v.setLocale("en_US")
+					low = v.LowerBound()
+					
+					# bug in SWORD svn, call above for v should have set this
+					low.setLocale("en_US")
+					low_text = low.getText()
+
+					up = v.UpperBound()
+					up_text = up.getText()
+					
 					# we need to do this carefully
 					# if we just copy across the bounds get mussed when they
 					# have dashes. We don't want this happening, so set the
 					# bounds separately.
 					# Use VerseKey's getText so we don't worry about unicode
-					v = VK((
-						SW.VerseKey.getText(VK(v.LowerBound())),
-						SW.VerseKey.getText(VK(v.UpperBound())),
-					), raiseError=False)
+					v = VK((low_text, up_text), raiseError=False)
 				
 				else:
 					# if we stay inside, just use a straight copy
