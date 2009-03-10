@@ -632,7 +632,7 @@ def _passage_str(passage_entry, short=False):
 	if not passage_entry.passage:
 		return u""
 
-	return VerseList([passage_entry.passage]).GetBestRange(userOutput=True, short=short)
+	return passage_entry.passage.GetBestRange(userOutput=True, short=short)
 
 # Specifies what type of dragging is currently happening with the topic tree.
 # This is needed since it has to select and unselect topics when dragging and
@@ -1059,14 +1059,9 @@ class PassageDetailsPanel(xrcPassageDetailsPanel):
 		self.last_passage_text = passage_text
 
 		passages = VerseList(passage_text, userInput=True)
-		if len(passages) == 1:
-			self.passage_verse_key = passages[0]
+		if len(passages) >= 1:
+			self.passage_verse_key = passages
 			return True
-		elif len(passages) > 1:
-			wx.MessageBox(_(u"Passage `%s' contains multiple passages.\n"
-					"Only one verse or verse range can be entered.") % passage_text,
-					"", wx.OK | wx.ICON_INFORMATION, self)
-			return False
 		else:
 			wx.MessageBox(_(u"Unrecognised passage `%s'.") % passage_text,
 					"", wx.OK | wx.ICON_INFORMATION, self)

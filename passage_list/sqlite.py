@@ -1,6 +1,7 @@
 import sqlite3
-from swlib.pysw import VK
+from swlib.pysw import VK, VerseList
 sqlite3.register_adapter(VK, lambda vk: str(vk))
+sqlite3.register_adapter(VerseList, lambda verse_list: str(verse_list))
 
 # XXX: Include subtopic is actually meant to be display tag, but
 # I can't be bothered doing the schema migration so close to 0.4.

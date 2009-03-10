@@ -67,7 +67,7 @@ class TopicTooltipConfig(TooltipConfig):
 		"""Gets the HTML for the given passage entry with its comment."""
 		comment = passage_entry.comment.replace("\n", "<br>")
 		reference = str(passage_entry)
-		localised_reference = VerseList([passage_entry.passage]).GetBestRange(userOutput=True)
+		localised_reference = passage_entry.passage.GetBestRange(userOutput=True)
 		return (u"<b><a href=\"bible:%(reference)s\">%(localised_reference)s</a></b> "
 			u"%(comment)s" % locals())
 

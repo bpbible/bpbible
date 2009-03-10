@@ -31,14 +31,16 @@ class PassageEntry(object):
 		if not self.passage:
 			return False
 
-		if self.passage.isBoundSet():
-			lower_bound = self.passage.LowerBound()
-			upper_bound = self.passage.UpperBound()
-		else:
-			lower_bound = self.passage
-			upper_bound = self.passage
-		return lower_bound.compare(verse) <= 0 \
-				and upper_bound.compare(verse) >= 0
+		for verse_key in self.passage:
+			if verse_key.isBoundSet():
+				lower_bound = verse_key.LowerBound()
+				upper_bound = verse_key.UpperBound()
+			else:
+				lower_bound = verse_key
+				upper_bound = verse_key
+			if (lower_bound.compare(verse) <= 0
+					and upper_bound.compare(verse) >= 0):
+				return True
 	
 	def get_passage(self):
 		return self._passage
@@ -47,9 +49,8 @@ class PassageEntry(object):
 		"""Sets the passage for this passage entry.
 
 		If the passage is a string, then it will be converted to a passage if
-		possible.  If the string contains multiple passages, then a
-		MultiplePassagesError will be raised.  If the string does not
-		represent a valid passage, then an InvalidPassageError will be raised.
+		possible.  If the string does not represent a valid passage,
+		then an InvalidPassageError will be raised.
 		"""
 		old_passage = self._passage
 		self._set_passage(passage)
@@ -63,7 +64,7 @@ class PassageEntry(object):
 		self._passage = passage
 	
 	passage = property(get_passage, set_passage,
-			doc="The passage (as a VK).")
+			doc="The passage (as a VerseList).")
 	
 	def get_comment(self):
 		return self._comment
@@ -81,10 +82,8 @@ class PassageEntry(object):
 			return None
 
 		passages = VerseList(passage)
-		if len(passages) == 1:
-			return passages[0]
-		elif len(passages) > 1:
-			raise MultiplePassagesError
+		if len(passages) >= 1:
+			return passages
 		else:
 			raise InvalidPassageError
 
@@ -100,27 +99,10 @@ class PassageEntry(object):
 	def __str__(self):
 		if self.passage is None:
 			return ""
-		elif self.passage.isBoundSet():
-			return self._get_range_text()
-		else:
-			return self.passage.getText()
+		return str(self.passage)
 
 	def __repr__(self):
 		return "PassageEntry(%s, %s)" % (repr(str(self)), repr(self.comment))
-	
-	def _get_range_text(self):
-		lower_bound = self.passage.LowerBound()
-		upper_bound = self.passage.UpperBound()
-		begin_str = self.passage.LowerBound().getText()
-
-		if lower_bound.Book() != upper_bound.Book():
-			end_str = "%s %d:%d" % (upper_bound.getBookName(),
-				upper_bound.Chapter(), upper_bound.Verse())
-		elif lower_bound.Chapter() != upper_bound.Chapter():
-			end_str = "%d:%d" % (upper_bound.Chapter(), upper_bound.Verse())
-		else:
-			end_str = str(upper_bound.Verse())
-		return "%s - %s" % (begin_str, end_str)
 
 	def clone(self):
 		"""Makes a clean copy of this passage entry and returns it."""
@@ -136,17 +118,11 @@ class PassageEntry(object):
 		except:
 			return False
 
-	def __reduce__(self):
-		return PassageEntry, (self.passage, self.comment)
-
 class PassageError(Exception):
 	pass
 
 class InvalidPassageError(PassageError):
 	"""This error is raised if an invalid passage string is given."""
-
-class MultiplePassagesError(PassageError):
-	"""This error is raised if the passage string contains multiple passages."""
 
 def lookup_passage_entry(id):
 	"""Looks up the passage entry with the given ID.

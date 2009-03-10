@@ -1,6 +1,6 @@
 from util.observerlist import ObserverList
 from passage_list import (BasePassageList, PassageList, PassageEntry,
-		InvalidPassageError, MultiplePassagesError)
+		InvalidPassageError)
 
 class ManageTopicsOperations(object):
 	def __init__(self, passage_list_manager, context):
@@ -316,7 +316,7 @@ class SetPassageDetailsAction(Action):
 		exception = None
 		try:
 			self.passage_entry.passage = self.passage
-		except (InvalidPassageError, MultiplePassagesError), e:
+		except InvalidPassageError, e:
 			exception = e
 		self.passage_entry.comment = self.comment
 		self.manager.save_item(self.passage_entry)
@@ -883,6 +883,7 @@ def _test():
 	>>> _remove_passage(passage1)
 	>>> _set_topic_details(topic1, "New Topic Name", "description")
 	>>> _set_passage_details(passage1, "Genesis 3:3", "description")
+	>>> _set_passage_details(passage1, "Genesis 3:4 - 5, 7, 9", "description")
 	
 	>>> _copy_topic(topic2, manager)
 	>>> _remove_subtopic(topic2)
