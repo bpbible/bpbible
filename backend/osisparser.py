@@ -209,8 +209,14 @@ class OSISParser(filterutils.ParserBase):
 			# usual poetry indent in WEB
 			"x-secondary": 2,
 		}
-			
-		indent = mapping.get(attributes.get("type"), 0)
+
+		level = attributes.get("level")
+		if level:
+			# the level defaults to 1 - i.e. no indent
+			indent = 2 * (int(level) - 1)
+		else:
+			indent = mapping.get(attributes.get("type"), 0)
+
 		if indent:
 			if self.in_indent:
 				dprint(WARNING, "Nested indented l's", self.u.key.getText())
