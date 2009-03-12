@@ -444,8 +444,12 @@ class Book(object):
 		if match:
 			book, chapter, verse = match.group(1, 2, 3)
 
-			# include the introduction
-			text = "%s %s:0-%s %s" % (book, chapter, book, chapter)
+			# include introductions - book introduction if necessary
+			if chapter == "1":
+				text = "%s 0:0-%s %s" % (book, book, chapter)
+
+			else:
+				text = "%s %s:0-%s %s" % (book, chapter, book, chapter)
 
 		else:
 			dprint(ERROR, "Couldn't parse verse text", text)
