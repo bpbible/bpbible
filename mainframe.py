@@ -148,6 +148,8 @@ class MainFrame(wx.Frame, AuiLayer):
 			biblemgr.on_after_reload.remove(self.on_modules_reloaded)
 		
 		fonts.fonts_changed += self.refresh_all_pages
+		self.on_close += lambda: \
+			fonts.fonts_changed.remove(self.refresh_all_pages)
 
 		
 		
@@ -1040,6 +1042,10 @@ class MainFrame(wx.Frame, AuiLayer):
 
 	def restart(self, event=None):
 		guiconfig.app.restarting = True
+		wx.MessageBox(
+			_("BPBible will now quickly restart to change your language."), 
+			_("Restarting")
+		)
 		self.MainFrameClose(None)
 	
 	def MainFrameClose(self, event=None):

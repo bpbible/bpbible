@@ -182,6 +182,9 @@ class SearchPanel(xrcSearchPanel):
 		self.versepreview.parent = self
 
 		fonts.fonts_changed += self.set_font
+		guiconfig.mainfrm.on_close += lambda:\
+			fonts.fonts_changed.remove(self.set_font)
+		
 	
 	def on_create(self, event=None):
 		self.Unbind(wx.EVT_WINDOW_CREATE)

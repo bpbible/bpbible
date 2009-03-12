@@ -11,6 +11,7 @@ from gui.guiutil import bmp
 from util import osutils
 
 from gui import fonts
+import guiconfig
 
 _disabled = False#True
 
@@ -256,6 +257,8 @@ class DictionarySelector(wx.Panel):
 		self.SetSizerAndFit(sizer)
 		self.item_changed = ObserverList()
 		fonts.fonts_changed += self.set_font
+		guiconfig.mainfrm.on_close += lambda:\
+			fonts.fonts_changed.remove(self.set_font)
 	
 	def set_font(self):
 		if self.list.book.mod is None:
