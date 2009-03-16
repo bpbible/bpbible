@@ -1,5 +1,6 @@
 from string import Template as str_template
 import re
+from swlib.pysw import process_digits
 
 class VerseTemplate(object):
 	"""VerseTemplate is a class which defines templates for Bible Text""" 
@@ -71,10 +72,11 @@ class SmartBody(object):
 	
 	def safe_substitute(self, dict):
 		text = dict.pop("text")
-		if dict["versenumber"] == 0 and not text or text == "<br />":
+		verse_0 = dict["versenumber"] == process_digits("0", userOutput=True)
+		if verse_0 and not text or text == "<br />":
 			return ""
 		
-		if dict["versenumber"] == 0:
+		if verse_0:
 			dict["versenumber"] = ""
 			
 		

@@ -118,7 +118,7 @@ class VerseCompareFrame(LinkedFrame):
 					t += biblemgr.bible.templatelist[-1].\
 						headings.safe_substitute(heading_dict)
 				
-				t += "<sup>%(versenumber)d</sup> %(text)s" % body_dict
+				t += "<sup>%(versenumber)s</sup> %(text)s" % body_dict
 				t = process_html_for_module(module, t)
 
 				text.append(t)

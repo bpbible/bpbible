@@ -2,6 +2,7 @@ import Sword as SW
 import os
 import re
 import sys
+import string
 from util.debug import *
 from util.unicode import to_str, to_unicode
 from util import is_py2exe
@@ -45,6 +46,7 @@ for a in dir(SW):
 		setattr(SW, a[2:], getattr(SW, a))
 
 LIB_1512_COMPAT = SW.Version().currentVersion > SW.Version("1.5.11")
+SW_HAS_MDB = hasattr(SW.Mgr, "loadMDBDir")
 print "SVN; SWORD 1.5.12 compatible" if LIB_1512_COMPAT else "1.5.11 compatible"
 
 if hasattr(sys, "SW_dont_do_stringmgr"):
@@ -404,9 +406,12 @@ class VK(SW.VerseKey):#, object):
 	
 	set_chapter_checked = set_vk_chapter_checked
 	set_verse_checked = set_vk_verse_checked
+	
+	def chapter_str(self):
+		return str(self.Chapter())
 
 	def get_book_chapter(self):
-		return u"%s %d" % (self.getBookName(), self.Chapter())
+		return u"%s %s" % (self.getBookName(), self.chapter_str())
 
 		
 
@@ -452,8 +457,12 @@ class EncodedVK(VK):
 		return super(EncodedVK, self).getRangeText().decode(self.encoding)
 		
 		
+class LocalizedVK(EncodedVK):
+	def chapter_str(self):
+		return process_digits(str(self.Chapter()), userOutput=True)
 
-class UserVK(EncodedVK):
+
+class UserVK(LocalizedVK):
 	def __init__(self, arg=None):
 		if isinstance(arg, SW.Key):
 			super(UserVK, self).__init__(arg)
@@ -500,7 +509,7 @@ class UserVK(EncodedVK):
 		return localized_books
 		
 
-class AbbrevVK(EncodedVK):
+class AbbrevVK(LocalizedVK):
 	def __init__(self, arg=None):
 		if isinstance(arg, SW.Key):
 			super(AbbrevVK, self).__init__(arg)
@@ -630,6 +639,8 @@ class VerseList(list):
 			if userInput:
 				for matcher, replacement in self.replacements:
 					args = matcher.sub(replacement, args)
+
+				args = process_digits(args, userInput=True)
 			
 			args = to_str(args)
 			context = to_str(context)
@@ -715,8 +726,6 @@ class VerseList(list):
 		# wrong osisrefs: x
 		# <reference osisRef="Gen.3.5-Rev.22.21">gen 3:5 -</reference> foobar'
 		my_re = r'\s*(<reference osisRef=[^>]*>[^>]*</reference>((;|,)?\s*))+$'
-		if LIB_1512_COMPAT:
-			return
 
 		osis_ref = VK.convertToOSIS(args, SW.Key(context))
 		match = re.match(my_re, osis_ref)
@@ -931,6 +940,12 @@ class VerseList(list):
 
 			chapter = versekey.Chapter()
 			verse = versekey.Verse()
+			userChapter, userVerse = str(chapter), str(verse)
+
+			if userOutput:
+				userChapter = process_digits(userChapter, userOutput=True)
+				userVerse = process_digits(userVerse, userOutput=True)
+			
 
 			chapter_verses = versekey.verseCount(
 				ord(versekey.Testament()), 
@@ -938,7 +953,7 @@ class VerseList(list):
 				chapter
 			)
 
-			return book, chapter, verse, chapter_verses
+			return book, chapter, verse, chapter_verses, userChapter, userVerse
 
 		def get_bounds_details(vk):
 			if vk.isBoundSet():
@@ -954,8 +969,8 @@ class VerseList(list):
 		for vk in self:
 			item = get_bounds_details(vk)
 			# take details of first and last for each VK
-			((book1, chapter1, verse1, verse_count1), 
-			 (book2, chapter2, verse2, verse_count2)) = item
+			((book1, chapter1, verse1, verse_count1, uc1, uv1), 
+			 (book2, chapter2, verse2, verse_count2, uc2, uv2)) = item
 
 			# check whether we have a chapter range
 			# this means that the first verse is verse 1 and the second one is
@@ -970,21 +985,21 @@ class VerseList(list):
 				range += separator
 
 				if (book1, chapter1) != (book2, chapter2):
-					range += "%s %d-" % (book1, chapter1)
+					range += "%s %s-" % (book1, uc1)
 				
 					if book1 != book2:
-						range += "%s %d" % (book2, chapter2)
+						range += "%s %s" % (book2, uc2)
 					else:
-						range += "%d" % (chapter2)
+						range += "%s" % (uc2)
 					
 				else:
-					range += "%s %d" % (book2, chapter2)
+					range += "%s %s" % (book2, uc2)
 				
 				lastbook, lastchapter, lastverse = book2, chapter2, verse2
 				continue
 				
 					
-			for idx, (book, chapter, verse, _) in enumerate(item):
+			for idx, (book, chapter, verse, _, uc, uv) in enumerate(item):
 				if (book, chapter, verse) == (lastbook, lastchapter, lastverse):
 					break
 
@@ -1006,13 +1021,13 @@ class VerseList(list):
 				range += separator
 
 				if book != lastbook:
-					range += "%s %d:%d" % (book, chapter, verse)
+					range += "%s %s:%s" % (book, uc, uv)
 
 				elif chapter != lastchapter:
-					range += "%d:%d" % (chapter, verse)
+					range += "%s:%s" % (uc, uv)
 
 				elif verse != lastverse:
-					range += "%d" % (verse)
+					range += "%s" % (uv)
 
 				lastbook, lastchapter, lastverse = book, chapter, verse
 			
@@ -1186,7 +1201,9 @@ def change_locale(lang, abbrev_lang, additional=None):
 	global locale, locale_lang, locale_encoding, locale_dash_hack
 	global abbrev_locale, abbrev_locale_lang, abbrev_locale_encoding
 	global abbrev_locale_dash_hack
+	global locale_digits
 	locale = locale_mgr.getLocale(lang)
+	locale_digits = None
 	if not locale:
 		dprint(WARNING, "Couldn't find locale %r" % lang,
 		[x.c_str() for x in locale_mgr.getAvailableLocales()])
@@ -1200,7 +1217,26 @@ def change_locale(lang, abbrev_lang, additional=None):
 		locale_lang = lang
 		locale_encoding = locale.getEncoding()
 		locale_dash_hack = get_dash_hack(locale)
+		digits = locale.translate(string.digits).decode(locale_encoding)
+		if digits != string.digits:
+			print "Found digits!!!!!!!!!!!!!!"
+			assert len(digits) == 10, "digits string wasn't 10 digits long"
+			internal_to_external = dict(zip(string.digits, digits))
+			external_to_internal = dict(zip(digits, string.digits))
+			def make_replacer(mapping):
+				matcher = re.compile("[%s]" % ''.join(mapping.keys()))
+				def replace_digit(match):
+					return mapping[match.group(0)]
 
+				def replace(s):
+					return matcher.sub(replace_digit, s)
+
+				return replace
+
+			locale_digits = dict(
+				internal_to_external=make_replacer(internal_to_external),
+				external_to_internal=make_replacer(external_to_internal),
+			)
 	
 	if additional:
 		locale.augment(additional)
@@ -1395,7 +1431,19 @@ def GetVerseStr(verse, context = "", raiseError=False,
 		
 	return vk[0].text
 
+def process_digits(text, userInput=False, userOutput=False):
+	assert userInput ^ userOutput, "Specify one of userInput and userOutput"
+	if not locale_digits:
+		return text
+
+	if userInput:
+		return locale_digits["external_to_internal"](text)
+	else:		
+		return locale_digits["internal_to_external"](text)
+
+		
 def process_dash_hack(text, lookup):
+	text = process_digits(text, userOutput=True)
 	for item, value in lookup.items():
 		text = text.replace(item, value)
 	

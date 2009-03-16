@@ -1,6 +1,6 @@
 import re
 import passage_list
-from swlib.pysw import VK, SW, GetBestRange, GetVerseStr, TOP
+from swlib.pysw import VK, SW, GetBestRange, GetVerseStr, TOP, process_digits
 from swlib import pysw
 from backend.verse_template import VerseTemplate
 from util import observerlist
@@ -113,7 +113,8 @@ class Book(object):
 	def GetReference(self, ref, specialref="",
 			specialtemplate=None, context="", max_verses=177, raw=False,
 			stripped=False, template=None, display_tags=None,
-			exclude_topic_tag=None, end_ref=None, headings=False):
+			exclude_topic_tag=None, end_ref=None, headings=False,
+			verselist=None):
 		"""GetReference gets a reference from a Book.
 		
 		specialref is a ref (string) which will be specially formatted 
@@ -142,15 +143,23 @@ class Book(object):
 			else:
 				display_tags = passage_list.settings.display_tags
 	
+		assert not (verselist and end_ref), \
+			"No end ref with a listkey!!!"
+
 		if end_ref:
 			ref += " - " + end_ref
 
 		old_headings = self.vk.Headings(headings)
 
-		verselist = self.vk.ParseVerseList(to_str(ref), to_str(lastverse), True)
-		rangetext = GetBestRange(verselist.getRangeText(), 
+		if not verselist:
+			verselist = self.vk.ParseVerseList(to_str(ref), to_str(lastverse), True)
+
+		# if they pass in a verselist, they can also pass in the ref they
+		# would like to go along with it. This can be useful if it also
+		# includes headings that shouldn't be seen
+		rangetext = GetBestRange(ref, 
 			userInput=False, userOutput=True)
-		internal_rangetext = GetBestRange(verselist.getRangeText())
+		internal_rangetext = GetBestRange(ref)
 			
 		if rangetext == "":
 			self.vk.Headings(old_headings)
@@ -215,80 +224,135 @@ class Book(object):
 			verselist is valid"""
 		#only for bible keyed books
 		verselist.setPosition(TOP)
-		#verselist.Persist()
+		verselist.Persist(1)
+		versekey = SW.VerseKey()
+		versekey.Headings(1)
 		mod = module or self.mod
+		old_mod_skiplinks = mod.getSkipConsecutiveLinks()
+		mod.setSkipConsecutiveLinks(True)
 		mod.SetKey(verselist)
 		verses_left = max_verses
 
 		ERR_OK = chr(0)
 		render_text = self.get_rendertext(mod)
 
-		while verselist.Error() == ERR_OK:
-			if verses_left == 0:
-				yield None, None
-				return
-
-			
-			mod.SetKey(verselist)
-			key = mod.getKey()
-			versekey = VK.castTo(key)
-			#if(self.headings):
-			#	versekey.Headings(1)
-			internal_reference = versekey.getText()
-			reference = pysw.internal_to_user(internal_reference)
-
-
-
-			if raw:
-				text = mod.getRawEntry().decode("utf-8", "replace")
-			
-			elif stripped:
-				text = mod.StripText().decode("utf-8", "replace")
+		try:
+			while mod.Error() == ERR_OK:
+				if verses_left == 0:
+					yield None, None
+					break
 				
+				#mod.SetKey(verselist)
+				key = mod.getKey()
+				#versekey = VK.castTo(key)
+				versekey.setText(key.getText())
+				#if(self.headings):
+				#	versekey.Headings(1)
+				internal_reference = versekey.getText()
+				if internal_reference.endswith(":0"):
+					reference = ""
+				else:
+					reference = pysw.internal_to_user(internal_reference)
+
+
+
+				if raw:
+					text = mod.getRawEntry().decode("utf-8", "replace")
 				
-			else:
-				text = render_text()
-			
-			# XXX: This needs to be done better than this.  Move into
-			# subclass somehow.
-			if isinstance(self, Bible) and display_tags:
-				tags = self.insert_tags(versekey, exclude_topic_tag)
-			else:
-				tags = ""
- 
-			body_dict = dict(text=text,
-						  versenumber = versekey.Verse(), 
-						  chapternumber = versekey.Chapter(), 
-						  booknumber = ord(versekey.Book()),
-						  bookabbrev = versekey.getBookAbbrev(),
-						  bookname = versekey.getBookName(),
-						  reference = reference,
-						  internal_reference = internal_reference,
-						  tags = tags,
-			)	
-
-					  
-			headings = self.get_headings(internal_reference, mod)
-			versekey = VK.castTo(key)
-			heading_dicts = []
-			for heading, canonical in headings:
-				if not raw:
-					if stripped:
-						heading = mod.StripText(heading).decode(
-							"utf8",
-							"replace"
-						)
-					else:
-						heading = render_text(heading)
-
-				heading_dict = dict(heading=heading, canonical=canonical)
-				heading_dict.update(body_dict)
-				heading_dicts.append(heading_dict)
+				elif stripped:
+					text = mod.StripText().decode("utf-8", "replace")
+					
+					
+				else:
+					text = render_text()
 				
-			yield body_dict, heading_dicts	
+				# XXX: This needs to be done better than this.  Move into
+				# subclass somehow.
+				if isinstance(self, Bible) and display_tags:
+					tags = self.insert_tags(versekey, exclude_topic_tag)
+				else:
+					tags = ""
 
-			verselist.increment(1)
-			verses_left -= 1
+				mod.getKey()
+				
+				start_verse = end_verse = versekey.Verse()
+				
+				# a patch adds isLinked, not in SWORD trunk yet
+				# if not there, we will only see the first number
+				if hasattr(mod, "isLinked"):
+					# look forwards and backwards to see what the linked verse
+					# number is (e.g. 3-5). Note: currently this won't cross
+					# chapter boundaries
+					vk = versekey.clone()
+					vk = versekey.castTo(vk)
+					vk.thisown=True
+					vk.Headings(0)
+					while(vk.Error() == '\x00' 
+						and vk.Chapter() == versekey.Chapter() 
+						and mod.isLinked(vk, versekey)):
+						end_verse = vk.Verse()
+						vk.increment(1)
+				
+					vk = versekey.clone()
+					vk = versekey.castTo(vk)
+					vk.thisown=True
+					
+					vk.Headings(0)
+					# hopefully we won't see anything backwards, but it is
+					# possible (i.e. if we start in the middle of a linked
+					# verse
+					while(vk.Error() == '\x00'
+						and vk.Chapter() == versekey.Chapter() 
+						and mod.isLinked(vk, versekey)):				
+						start_verse = vk.Verse()
+
+						vk.decrement(1)
+				
+				if start_verse == end_verse:
+					verse = "%d" % start_verse
+				else:
+					verse = "%d-%d" % (start_verse, end_verse)
+
+				body_dict = dict(text=text,
+							versenumber = process_digits(verse,
+								userOutput=True), 
+							chapternumber = process_digits(
+								str(versekey.Chapter()),
+								userOutput=True),
+							booknumber = ord(versekey.Book()),
+							bookabbrev = versekey.getBookAbbrev(),
+							bookname = versekey.getBookName(),
+							reference = reference,
+							internal_reference = internal_reference,
+							tags = tags,
+				)	
+						  
+				headings = self.get_headings(internal_reference, mod)
+				#versekey = VK.castTo(key)
+				heading_dicts = []
+				for heading, canonical in headings:
+					if not raw:
+						if stripped:
+							heading = mod.StripText(heading).decode(
+								"utf8",
+								"replace"
+							)
+						else:
+							heading = render_text(heading)
+
+					heading_dict = dict(heading=heading, canonical=canonical)
+					heading_dict.update(body_dict)
+					heading_dicts.append(heading_dict)
+					
+				yield body_dict, heading_dicts	
+
+				mod.increment(1)
+				verses_left -= 1
+
+		finally:
+			mod.setKey(SW.Key())
+			mod.setSkipConsecutiveLinks(old_mod_skiplinks)
+
 
 	
 	def insert_tags(self, verse_key, exclude_topic_tag):
@@ -445,17 +509,37 @@ class Book(object):
 			book, chapter, verse = match.group(1, 2, 3)
 
 			# include introductions - book introduction if necessary
+			ref = "%s %s" % (book, chapter)
+			text = "%s %s:0-%s %s" % (book, chapter, book, chapter)
+			vk = SW.VerseKey()
+			vk.Headings(1)
+			list = vk.ParseVerseList(text, "", True)
 			if chapter == "1":
-				text = "%s 0:0-%s %s" % (book, book, chapter)
+				vk.setText("%s 0:0" % book)
+				list.add(vk)
+				#text = "%s 0:0-%s %s" % (book, book, chapter)
+			
+				if book == "Genesis":
+					vk.Testament(0)
+					list.add(vk)
+					vk.Testament(1)
+					list.add(vk)
 
-			else:
-				text = "%s %s:0-%s %s" % (book, chapter, book, chapter)
+				elif book == "Matthew":
+					# set it to 0 first so that we come back to the testament
+					# heading
+					vk.Testament(0)
+					vk.Testament(2)
+					list.add(vk)
+
+				list.sort()
 
 		else:
 			dprint(ERROR, "Couldn't parse verse text", text)
+			return ""
 
-		return self.GetReference(text, specialref, specialtemplate, context,
-				raw=raw, headings=True)
+		return self.GetReference(ref, specialref, specialtemplate, context,
+				raw=raw, headings=True, verselist=list)
 
 	def get_rendertext(self, mod=None):
 		"""Return the text render function.

@@ -1,6 +1,6 @@
 import wx
 from swlib import pysw
-from swlib.pysw import SW
+from swlib.pysw import SW, process_digits
 from backend import chapter_headings
 from protocols import protocol_handler
 from displayframe import DisplayFrame
@@ -32,7 +32,8 @@ class ChapterHeadingsTooltipConfig(TooltipConfig):
 			self.ref, vk.get_book_chapter()
 		)
 	
-		html += ": %d verses<br>" % len(vk)
+		html += ": %s<br>" % (_("%s verses") % 
+			process_digits(str(len(vk)), userOutput=True))
 	
 		html += "<ul>"
 		for vk, text in chapter_headings.get_chapter_headings(self.ref):

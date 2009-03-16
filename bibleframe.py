@@ -255,9 +255,12 @@ class BibleFrame(VerseKeyedFrame):
 		if chapter is None:
 			data = config.MODULE_MISSING_STRING()
 			self.SetPage(data, raw=raw)
-			
-			
 
+		elif chapter == '':
+			data = '<font color="#888888"><i>%s</i></font>' % _(
+				"This chapter is empty.")
+			self.SetPage(data, raw=raw)
+			
 		else:
 			data += chapter
 
