@@ -1219,7 +1219,6 @@ def change_locale(lang, abbrev_lang, additional=None):
 		locale_dash_hack = get_dash_hack(locale)
 		digits = locale.translate(string.digits).decode(locale_encoding)
 		if digits != string.digits:
-			print "Found digits!!!!!!!!!!!!!!"
 			assert len(digits) == 10, "digits string wasn't 10 digits long"
 			internal_to_external = dict(zip(string.digits, digits))
 			external_to_internal = dict(zip(digits, string.digits))
