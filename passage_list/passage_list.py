@@ -1,5 +1,6 @@
 from passage_entry import PassageEntry
 from util.observerlist import ObserverList
+from swlib.pysw import VerseList
 import sqlite
 
 _passage_list_id_dict = {}
@@ -270,7 +271,7 @@ class PassageList(BasePassageList):
 		"""
 		passage_list = PassageList(name, description)
 		for verse in verse_list:
-			passage_list.add_passage(PassageEntry(verse, comment))
+			passage_list.add_passage(PassageEntry(VerseList([verse]), comment))
 		return passage_list
 
 def _create_passage_list(name, description, passages, subtopics):
