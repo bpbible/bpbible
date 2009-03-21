@@ -245,11 +245,11 @@ class VK(SW.VerseKey):#, object):
 	def get_text(self):
 		return self.__str__()
 	
-	def set_text(self, value):
+	def set_text(self, value, raiseError=True):
 		if(isinstance(value, basestring)):
 			self.ClearBounds()
 
-			if not KeyExists(value, self):
+			if raiseError and not KeyExists(value, self):
 				raise VerseParsingError, value
 				
 			self.setText(value.encode(self.encoding))
@@ -257,11 +257,12 @@ class VK(SW.VerseKey):#, object):
 			self.ClearBounds()
 			
 			top, bottom = value
-			if not KeyExists(top, self):
-				raise VerseParsingError, top
+			if raiseError:
+				if not KeyExists(top, self):
+					raise VerseParsingError, top
 		
-			if not KeyExists(bottom, self):
-				raise VerseParsingError, bottom
+				if not KeyExists(bottom, self):
+					raise VerseParsingError, bottom
 
 			self.UpperBound(bottom)
 			self.LowerBound(top)
@@ -755,7 +756,7 @@ class VerseList(list):
 					t = t.replace("-", "")
 
 				if not raiseError:
-					key.text = t.decode(key.encoding)
+					key.set_text(t.decode(key.encoding), raiseError=False)
 				else:
 					key.AutoNormalize(False)
 					key.set_text_checked(t)
