@@ -29,6 +29,7 @@ class LazyTopicList(object):
 
 		self.cardinality = 0
 		self.entry_size = 0
+		self.has_new_methods = False
 
 		success = False
 		try:
@@ -65,12 +66,20 @@ class LazyTopicList(object):
 			mod = ld_class.castTo(swld)
 			if not mod:
 				continue
+
+			self.entry_size = value
+			
+			if mod and hasattr(mod, "getEntryCount"):
+				self.has_new_methods = True
+				self.mod = mod
+				self.cardinality = mod.getEntryCount()
+				return True
+				
 		
 			p = "%s%s.idx" % (
 				mod.getConfigEntry("PrefixPath"),
 				mod.getConfigEntry("DataPath"))
 
-			self.entry_size = value
 			f = open(p)
 			
 			# goto end of file
@@ -91,6 +100,9 @@ class LazyTopicList(object):
 			return self.cardinality
 	
 	def __getitem__(self, item):
+		if self.has_new_methods:
+			return to_unicode(self.mod.getKeyForEntry(item), self.mod)
+
 		if self.entry_size and self.topics[item] is None:
 			myrange = [x for x in 
 				xrange(item - self.GRAB_AROUND, item + self.GRAB_AROUND + 1)

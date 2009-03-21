@@ -9,6 +9,7 @@ from util.observerlist import ObserverList
 from gui.virtuallist import VirtualListBox
 from gui.guiutil import bmp
 from util import osutils
+from util.unicode import to_str
 
 from gui import fonts
 import guiconfig
@@ -24,6 +25,14 @@ class DateConverter(object):
 	
 	def __getitem__(self, item):
 		return mmdd_to_date(self.object[item]) or self.object[item]
+	
+	@property
+	def has_new_methods(self):
+		return self.object.has_new_methods
+	
+	@property
+	def mod(self):
+		return self.object.mod
 
 class Upper(object):
 	def __init__(self, object):
@@ -64,11 +73,16 @@ class DictionaryList(VirtualListBox):
 		self.set_data(self.topics)
 
 	def choose_item(self, text):
-		# get what sword thinks the key should be
-		text = self.book.snap_text(text)
+		if self.topics.has_new_methods:
+			idx = self.topics.mod.getEntryForKey(
+				to_str(text, self.topics.mod)
+			)
+		else:
+			# get what sword thinks the key should be
+			text = self.book.snap_text(text)
 
-		# then look it up in the list
-		idx = bisect.bisect_left(self._upper_topics, unicode(text))
+			# then look it up in the list
+			idx = bisect.bisect_left(self._upper_topics, unicode(text))
 
 		idx = min(len(self.topics)-1, idx)
 		if idx >= 0:
