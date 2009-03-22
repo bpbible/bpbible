@@ -98,7 +98,10 @@ sword_paths_file += "sword.conf"
 raw = False
 
 def name():
-	return _("BPBible")
+	# Note that the string BPBible is *not* translated, since it is the
+	# application trade name and must be preserved in all languages in any
+	# place it occurs (including this one).
+	return "BPBible"
 
 def MODULE_MISSING_STRING():
 	return _("""<b>This book is not set.</b><br>
