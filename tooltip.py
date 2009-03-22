@@ -79,7 +79,11 @@ class TooltipBaseMixin(object):
 		I've tried to get it as simple as I can."""
 
 		# set our target to what we were over at the time
-		self.target = self.new_target
+		assert bool(position) ^ bool(self.new_target), "Target is None?!?"
+		if self.new_target:
+			self.target, target_rect, factor = self.new_target
+		else:
+			factor = 0
 
 		# set the size
 		self.html.SetSize((400, 50))
@@ -102,21 +106,28 @@ class TooltipBaseMixin(object):
 
 		width, height = self.GetSize()
 
-		# pop it up at mouse point
-		x, y = position or self.get_popup_position()
+		if position:
+			x, y = position
+		else:			
+			x, y = target_rect.BottomLeft
+			
+
+		y += factor
 		
 		# find screen size and position
 		screen_rect = guiutil.get_screen_rect((x, y))
+		#TODO: rows of refs
 		
 		if x + width > screen_rect.Right:
-			x = max(screen_rect.Right - width - 2, screen_rect.Left)
+			x = max(screen_rect.Right - width - factor, screen_rect.Left)
 
 		if y + height > screen_rect.Bottom:
+			y = target_rect.Top - factor - height
 			# if we moved the x along, try to move the y so it is above
-			if x == screen_rect.Right - width - 2:
-				y = y - height - 2
-			else:
-				y = screen_rect.Bottom - height - 2
+			#if x == screen_rect.Right - width - 2:
+			#	y = target_rect.TopRighty - height - target_rect.Height - 10
+			#else:
+			#	y = screen_rect.Bottom - height - target_rect.Height
 
 			y = max(y, screen_rect.Top)
 
@@ -298,8 +309,9 @@ class Tooltip(TooltipBaseMixin, tooltip_parent):
 			if not self:
 				return
 
-			if self.wants_to_go_away and \
-				self.logical_parent.current_target != self.target:
+			if self.wants_to_go_away and (
+				not self.logical_parent.current_target
+				or self.logical_parent.current_target[0] != self.target):
 				dprint(TOOLTIP, 
 					"Going away as mouse off and not vetoed by mousein")
 				#self.parent.lastcell = ""

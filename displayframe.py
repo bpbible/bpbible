@@ -104,10 +104,11 @@ class DisplayFrame(HtmlSelectableWindow):
 	def MouseOut(self, event = None):
 		if event: event.Skip()
 
-		if(self._tooltip is not None and self.tooltip.timer is not None and 
-			self.tooltip.timer.IsRunning()):
+		#if(self._tooltip is not None and self.tooltip.timer is not None and 
+		#	self.tooltip.timer.IsRunning()):
 		
-			self.tooltip.Stop()
+		#	dprint(TOOLTIP, "Stopping on displayframe mouseout")
+		#	self.tooltip.Stop()
 
 		#self.current_target = None
 		self.mouseout = True
@@ -160,9 +161,70 @@ class DisplayFrame(HtmlSelectableWindow):
 
 		link = cell.GetLink()
 		href = link.GetHref()
-		self.current_target = href
+		parent = cell.Parent
+		assert parent
 
-		if self.tooltip.target == self.current_target:
+		first = None
+		last = None
+		last_iterated = None
+		in_block = False
+		cell_found = False
+		y_level = cell.GetPosY()
+
+		child = parent.FirstChild
+		while child:
+			# skip over non-terminals, these will include font tags and colour
+			# tags
+			if child.IsTerminalCell():
+				# check we are at the right link and y level
+				#TODO: will all of a link be at the same level if sup or
+				# <font> in link? Anyway, I'm assuming it is...
+				if child.GetLink() and child.GetLink().GetHref() == href \
+					and y_level == child.GetPosY(): 
+					if not in_block:
+						first = child
+				
+					in_block = True
+
+					if cell.this == child.this:
+						cell_found = True
+
+				else:
+					if cell_found:
+						last = last_iterated
+						break
+					
+					in_block = False
+
+			last_iterated = child
+			child = child.Next
+		else:
+			assert False, "Didn't find cell!?!"
+		
+		rect = wx.Rect(first.GetPosX(), first.GetPosY(), 
+			last.GetPosX() - first.GetPosX() + last.GetWidth(),
+			last.GetPosY() - first.GetPosY() + last.GetHeight()
+		)
+
+		xx, yy = 0, 0
+		while parent:
+			rect.Offset((
+				parent.GetPosX(),
+				parent.GetPosY()
+			))
+			parent = parent.Parent
+
+		# now this value refers to somewhere on the scrolled page.
+		# so we need to find the value on the client, then turn it to a screen
+		# value...
+		xx, yy = rect.TopLeft
+		xx, yy = self.ClientToScreen(self.CalcScrolledPosition(xx, yy))
+		self.current_target = href, wx.Rect(
+			xx, yy, rect.GetWidth(), rect.GetHeight()
+		), 5
+
+		if self.current_target and self.tooltip.target and \
+				self.tooltip.target[0] == self.current_target[0]:
 			return 
 
 		
