@@ -327,6 +327,8 @@ class MainFrame(wx.Frame, AuiLayer):
 		if settings["maximized"]:
 			self.Maximize(True)
 				
+		filterutils.set_headwords_module_from_conf(biblemgr)
+
 		def set_mod(book, mod_name):
 			if book.ModuleExists(mod_name):
 				book.SetModule(mod_name, notify=False)
@@ -679,7 +681,7 @@ class MainFrame(wx.Frame, AuiLayer):
 
 		if fd.ShowModal() == wx.ID_OK:
 			self.drop_target.handle_dropped_files(fd.Paths)
-			settings["last_book_directory"]	= fd.GetDirectory()
+			settings["last_book_directory"] = fd.GetDirectory()
 
 		fd.Destroy()
 			
@@ -822,6 +824,42 @@ class MainFrame(wx.Frame, AuiLayer):
 			item.create_item(self, menu, is_popup=is_popup)
 		return menu
 	
+	
+	def fill_headwords_menu(self):
+		self.headwords_map = {}
+		sub_menu = wx.Menu("")
+		known_headwords_modules = [
+			_("Pronunciation"),
+			_("Original Language"),
+			_("Transliterated"),
+		]
+	
+		for mod_name, module in biblemgr.headwords_modules.items() + [("", None)]:
+			if not mod_name:
+				#sub_menu.AppendSeparator()
+				headwords_desc = _("Strong's Numbers")
+			else:
+				headwords_desc = module.getConfigEntry("HeadwordsDesc")
+			
+			item = sub_menu.AppendRadioItem(wx.ID_ANY, 
+				_(headwords_desc)
+			)
+			
+			if filterutils.filter_settings["headwords_module"] == mod_name:
+				item.Check()
+			
+			self.headwords_map[item.Id] = mod_name, module
+				
+			self.Bind(wx.EVT_MENU, self.on_headwords, item)
+		
+		strongs_headwords = self.options_menu.AppendSubMenu(
+			sub_menu,
+			_("Strong's headwords"),
+#			_("Display Strong's numbers using headwords")
+		)
+	
+		
+	
 	def fill_options_menu(self):
 		while self.options_menu.MenuItems:
 			self.options_menu.DestroyItem(
@@ -874,12 +912,9 @@ class MainFrame(wx.Frame, AuiLayer):
 		if options:
 			self.options_menu.AppendSeparator()
 
-		strongs_headwords = self.options_menu.AppendCheckItem(
-			wx.ID_ANY,
-			_("Use Strong's headwords"),
-			_("Display Strong's numbers using the transliterated text")
-		)
+		self.fill_headwords_menu()
 
+	
 		cross_references = self.options_menu.AppendCheckItem(
 			wx.ID_ANY,
 			_("Expand cross-references"),
@@ -899,7 +934,6 @@ class MainFrame(wx.Frame, AuiLayer):
 		)
 		
 
-		self.Bind(wx.EVT_MENU, self.toggle_headwords, strongs_headwords)
 		self.Bind(wx.EVT_MENU, self.toggle_expand_cross_references, 
 			cross_references)
 		self.Bind(wx.EVT_MENU, self.toggle_display_tags, display_tags)
@@ -908,21 +942,23 @@ class MainFrame(wx.Frame, AuiLayer):
 			verse_per_line)
 		
 		filter_settings = config_manager["Filter"]
-		strongs_headwords.Check(filter_settings["strongs_headwords"])
 		cross_references.Check(filter_settings["footnote_ellipsis_level"])
 		display_tags.Check(passage_list.settings.display_tags)
 		verse_per_line.Check(bible_settings["verse_per_line"])
 
 	
-	def toggle_headwords(self, event):
-		config_manager["Filter"]["strongs_headwords"] = event.IsChecked()
+	def on_headwords(self, event):
+		obj = event.GetEventObject()
+		menuitem = obj.MenuBar.FindItemById(event.Id)
+		filterutils.set_headwords_module(self.headwords_map[menuitem.Id])
+
 		self.UpdateBibleUI(settings_changed=True, source=SETTINGS_CHANGED)
-		
+
 	def toggle_expand_cross_references(self, event):
 		filter_settings = config_manager["Filter"]
 	
 		filter_settings["footnote_ellipsis_level"] = \
-			event.IsChecked() *	filterutils.default_ellipsis_level
+			event.IsChecked() * filterutils.default_ellipsis_level
 
 		self.UpdateBibleUI(settings_changed=True, source=SETTINGS_CHANGED)
 

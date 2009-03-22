@@ -101,9 +101,22 @@ class BibleInterface(object):
 	
 	def _get_modules(self):
 		self.modules = {}
+		self.headwords_modules = {}
 		for path, mgr, modules in self.mgrs:
-			self.modules.update(modules)
+			headwords_modules = [(name, module) for name, module in modules if
+				module.getConfigEntry("HeadwordsDesc") is not None]
+			
+			modules = [(name, module) for name, module in modules if
+				module.getConfigEntry("HeadwordsDesc") is None]				
 
+			self.modules.update(modules)
+			self.headwords_modules.update(headwords_modules)
+
+	@property
+	def all_modules(self):
+		mods = self.modules.copy()
+		mods.update(self.headwords_modules)
+		return mods
 				
 	def get_options(self):
 		option_names = []

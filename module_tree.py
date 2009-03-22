@@ -128,7 +128,7 @@ class ModuleTree(FilterableTree):
 		text = "%s - %s" % (
 			module.Name(), to_unicode(module.Description(), module))
 		
-		if biblemgr.modules[module.Name()] != module:
+		if biblemgr.all_modules[module.Name()] != module:
 			text += inactive_description
 
 		tree_item.add_child(text, data=module)

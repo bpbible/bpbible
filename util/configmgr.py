@@ -9,7 +9,7 @@ from swlib.pysw import SW
 # This is the version of the configuration file, and should be updated
 # whenever there is a need to because the configuration changed (though it
 # might as well be kept roughly in sync with version numbers).
-CONFIG_VERSION = "0.4"
+CONFIG_VERSION = "0.4.1"
 	
 class ConfigSection(object):
 	def __init__(self, section):
@@ -149,7 +149,24 @@ class ConfigManager(object):
 		dprint(MESSAGE, "Upgrading from", version_from.getText())
 		if version_from <= SW.Version("0.3"):
 			self._upgrade_03_to_04(config_parser)
+		if version_from <= SW.Version("0.4.1"):
+			self._upgrade_04_to_041(config_parser)
+			
 
+	def _upgrade_04_to_041(self, config_parser):
+		try:
+			# upgrade font
+			headwords = config_parser.getboolean("Filter", "strongs_headwords")
+
+			mod = "HeadwordsTransliterated"
+			if not headwords:
+				mod = ""
+
+			config_parser.set("Filter", "headwords_module", mod)
+		except (NoSectionError, NoOptionError), e:
+			dprint(WARNING, "Error on upgrading", e)
+			
+	
 	def _upgrade_03_to_04(self, config_parser):
 		try:
 			# upgrade font

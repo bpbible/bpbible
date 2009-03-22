@@ -12,7 +12,7 @@ filter_settings.add_item("use_thml_parser", True, item_type=bool)
 filter_settings.add_item("expand_thml_refs", True, item_type=bool)
 filter_settings.add_item("footnote_ellipsis_level", default_ellipsis_level, 
 	item_type=int)
-filter_settings.add_item("strongs_headwords", True, item_type=bool)
+filter_settings.add_item("headwords_module", "HeadwordsTransliterated", item_type=str)
 filter_settings.add_item("strongs_colour", "#0000ff")
 
 
@@ -61,8 +61,10 @@ strongs_re = re.compile(r"([HG])(\d+)(!\w)?")
 word_re = re.compile(r" \d+ +([^ ]+)")
 
 
+headwords_module = None
 strongsgreek = strongshebrew = None
 strongs_cache = {}
+strongs_cacher = None
 registered = False
 
 class ParserBase(object):
@@ -98,10 +100,25 @@ class ParserBase(object):
 
 				return method(attributes)
 				
-	def get_strongs_headword(self, value):
+	def get_strongs_headword_from_headword_module(self, value):
+		global strongs_cacher
+		
+		new_strongs_cacher = headwords_module
+		
+		if strongs_cacher != new_strongs_cacher:
+			strongs_cache.clear()
+		
+		strongs_cacher = new_strongs_cacher
+
+		
 		if value in strongs_cache:
 			return strongs_cache[value]
-	
+		
+		#if not headwords_module:
+		#	dprint(WARNING, "Mod is None")
+		#	#self.success = SW.INHERITED
+		#	#return
+		
 		match = strongs_re.match(value)
 		if not match:
 			dprint(WARNING, "Could not match lemma", value)
@@ -111,61 +128,71 @@ class ParserBase(object):
 		if type not in "HG":
 			dprint(WARNING, "Unknown lemma", value)
 			return
+
+		orig_value = value
+		
+		num = int(number)
+		# normalize
+		value = "%s%04d" % (type, int(number))
+		display_number = "%s%d" % (type, int(number))
+		
 		
 		mod, modlang, last_item = dict(
 			H=(strongshebrew, "Hebrew", last_hebrew),
 			G=(strongsgreek, "Greek", last_greek)
 		)[type]
-
-		if not mod:
-			dprint(WARNING, "Mod is None for type ", type)
-			self.success = SW.INHERITED
-			return
-
-		k = mod.getKey()
-		k.setText(number)
-		mod.setKey(k)
-		entry = mod.getRawEntry()
-		text = mod.getKeyText()
-
-		match = word_re.match(entry)
-		if not match:
-			# don't report hebrew 00, as this is used throughout the KJV OT
-			if not (number == '00' and modlang == "Hebrew"):
-				dprint(WARNING, "Could not find strong's headword", 
-					"mod:", modlang, "number:", number, "Entry:", entry)
-
-		if text == last_item or not match:
-			# TR has strong's numbers past the last one (I think for
-			# morphlogy. If we hit the last one, do a quick check to see
-			# whether it is likely to be past the end. If so, just give the
-			# number.
-			if last_item.strip("GH0") not in number or not match:
-				item = '<small><em>&lt;<a href="passagestudy.jsp?action=showStrongs&type=%s&value=%s">%s</a>&gt;</em></small>' % (modlang, number, number)
-				strongs_cache[value] = item
-				return item
-				
-				
 		
-		word = match.groups()[0]
 		if extra:
 			number += extra
-		#self.buf += "&lt;%s&gt;" % word
+			display_number += extra
+			value_with_extra = value + extra
+		
+		else:
+			value_with_extra = value
+		
+		if headwords_module:
+			headwords_module.setKey(SW.Key(value_with_extra))
+
+			# this MUST be in html/thml...
+			word = headwords_module.getRawEntry()
+		
+			if headwords_module.getKeyText() not in (
+				# if we can't find the value with the extra bit, ignore this
+				value, value_with_extra
+			):
+				# don't report hebrew 00, as this is used throughout the KJV OT		
+				if value != 'H0000':
+					dprint(WARNING, "Could not find strong's headword", value)
+
+				word = display_number
+
+				#self.success = SW.INHERITED
+				#return
+		else:
+			word = display_number
+
+		#TODO handle extra...
 		item = '<font size="-1"><glink href="passagestudy.jsp?action=showStrongs&type=%s&value=%s">&lt;%s&gt;</glink></font>' % (modlang, number, word)
 		strongs_cache[value] = item
-
-		return item
 		
+		
+		return item
+	
+	get_strongs_headword = get_strongs_headword_from_headword_module
+
 	def set_biblemgr(self, biblemgr):
 		self.biblemgr = biblemgr
 
 def clear_cache(biblemgr=None):
 	global strongsgreek, strongshebrew, strongs_cache, last_greek, last_hebrew
+	global strongs_cacher, headwords_module
 	strongsgreek = None
 	strongshebrew = None
 	last_greek = None
 	last_hebrew = None
 	strongs_cache = {}
+	strongs_cacher = None
+	headwords_module = None
 	
 def setup(biblemgr):
 	global strongsgreek, strongshebrew, last_greek, last_hebrew
@@ -178,6 +205,37 @@ def setup(biblemgr):
 	if strongshebrew:
 		strongshebrew.setPosition(BOTTOM)
 		last_hebrew = strongshebrew.getKeyText()
+	
+	# if this is our first try, we won't have loaded the config file
+	# but we do this again later
+	# if we are refreshing biblemgr, then we should load from config
+	set_headwords_module_from_conf(biblemgr)
+
+
+def set_headwords_module_from_conf(biblemgr):
+	preferred = filter_settings["headwords_module"]
+	
+	if biblemgr.headwords_modules:
+		modules = [(name, mod) for name, mod 
+			in biblemgr.headwords_modules.items()
+			if preferred == name]
+
+		if modules:
+			set_headwords_module(modules[0])
+			return
+		
+	if biblemgr.headwords_modules and preferred:
+		set_headwords_module(biblemgr.headwords_modules.items()[0])
+	else:
+		print "Setting to None"
+		set_headwords_module(("", None))
+
+
+def set_headwords_module(name_mod):
+	global headwords_module
+	name, mod = name_mod
+	headwords_module = mod
+	filter_settings["headwords_module"] = name 
 		
 
 def register_biblemgr(biblemgr):

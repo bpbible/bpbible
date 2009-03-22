@@ -60,13 +60,15 @@ class OSISParser(filterutils.ParserBase):
 			
 	def start_w(self, attributes):
 		self.strongs_bufs = []
+		self.was_G3588 = None
 		# w lemma="strong:H03050" wn="008"
 	
-		if ("lemma" not in attributes or self.u.suspendTextPassThru or 
-			not	filterutils.filter_settings["strongs_headwords"]):
+		if ("lemma" not in attributes or self.u.suspendTextPassThru):
+			#not	filterutils.filter_settings["strongs_headwords"]):
 			self.success = SW.INHERITED		
 			return
 
+		# TODO: gloss, xlit?, POS?
 		lemmas = attributes["lemma"]
 		for lemma in lemmas.split(" "):
 		
@@ -78,7 +80,13 @@ class OSISParser(filterutils.ParserBase):
 				
 				return
 			
-			headword = self.get_strongs_headword(lemma[lemma.index(":")+1:])
+			strongs = lemma[lemma.index(":")+1:]
+			if self.was_G3588 is None and strongs == "G3588":
+				self.was_G3588 = True
+			else:
+				self.was_G3588 = False
+		
+			headword = self.get_strongs_headword(strongs)
 			if not headword:
 				self.success = SW.INHERITED
 				return
@@ -105,8 +113,13 @@ class OSISParser(filterutils.ParserBase):
 			
 	
 	def end_w(self):
+		if self.was_G3588 and not self.u.lastTextNode.size():
+			# and not self.morph_bufs:
+			# don't show empty 3588 tags
+			return
+			
 		if self.strongs_bufs:
-			self.buf += " ".join(self.strongs_bufs + self.morph_bufs)
+			self.buf += "".join(self.strongs_bufs + self.morph_bufs)
 			return
 
 		self.success = SW.INHERITED
