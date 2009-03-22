@@ -8,6 +8,7 @@ from gui import guiutil
 from tooltip import Tooltip, TooltipConfig
 import guiconfig
 from util.observerlist import ObserverList
+from util import osutils
 
 
 def on_headings_hover(frame, href, url, x, y):
@@ -114,7 +115,15 @@ class ChapterItem(wx.Panel):
 		protocol_handler.on_hover(self.Parent, 
 			"headings:%s" % self.internal_text, x, y)
 
-	def on_leave(self, event):
+	def on_leave(self, event=None):
+		if event: event.Skip()
+		if event and osutils.is_gtk():
+			# Under GTK, we can get the notification of leave before the
+			# enter! This used to cause really annoying header bar tooltips 
+			# to pop up after moving diagonally across it quickly.
+			wx.CallAfter(self.on_leave)
+			return
+	
 		self.Parent.current_target = None
 	
 		self.Parent.tooltip.MouseOut(None)
