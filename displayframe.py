@@ -224,7 +224,7 @@ class DisplayFrame(HtmlSelectableWindow):
 		), 5
 
 		if self.current_target and self.tooltip.target and \
-				self.tooltip.target[0] == self.current_target[0]:
+				self.tooltip.target == self.current_target[0]:
 			return 
 
 		
@@ -250,19 +250,8 @@ class DisplayFrame(HtmlSelectableWindow):
 		frame.tooltip.html.reference = frame.reference
 
 		if action == "showStrongs":
-			type = url.getParameterValue("type") #Hebrew or greek
-			value = url.getParameterValue("value") #strongs number
-			if not type or not value: 
-				return
-			#do lookup
-			type = "Strongs"+type #as module is StrongsHebrew
-			tooltipdata = dictionary.GetReferenceFromMod(type, value)
-			if tooltipdata is None:
-				tooltipdata = _("Module %s is not installed, "
-				"so you cannot view "
-				"details for this strong's number") %type
-
-			SetText(tooltipdata)
+			frame.tooltip.show_strongs_ref(href, url, x, y)
+			return
 
 		elif action=="showMorph":
 			type = url.getParameterValue("type") #Hebrew or greek
@@ -716,3 +705,51 @@ class DisplayFrameXRC(DisplayFrame):
 		self.PostCreate(pre)
 		self.setup()
 
+
+class AUIDisplayFrame(DisplayFrame):
+	def restore_pane(self):
+		self.maximize_pane(False)
+	
+	def maximize_pane(self, to=True):
+		main = guiconfig.mainfrm
+		pane = self.aui_pane
+		maximized_pane = main.get_maximized_pane()
+		if to:
+			if not maximized_pane:
+				main.maximize_pane(pane)
+				
+		else:
+			if maximized_pane:
+				main.restore_maximized_pane(pane)
+		main.aui_mgr.Update()
+		wx.CallAfter(main.update_all_aui_menu_items)
+
+	def get_actions(self):
+		actions = super(AUIDisplayFrame, self).get_actions()
+		actions.update({
+			(wx.WXK_F5, wx.MOD_CMD): self.restore_pane,
+			(wx.WXK_F10, wx.MOD_CMD): self.maximize_pane,
+		})		
+		
+		return actions
+
+	def toggle_frame(self):
+		pane = guiconfig.mainfrm.get_pane_for_frame(self)
+		guiconfig.mainfrm.show_panel(pane.name, not pane.IsShown())
+	
+	def is_hidable(self):
+		return self.aui_pane.HasCloseButton()
+
+	@property
+	def aui_pane(self):
+		"""Gets the AUI pane for this frame."""
+		return guiconfig.mainfrm.get_pane_for_frame(self)
+
+	@property
+	def title(self):
+		return _(self.id)
+	
+	def get_window(self):
+		return self
+	
+		
