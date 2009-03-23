@@ -205,7 +205,7 @@ class PassageTag(wx.PyWindow):
 		event.Skip()
 
 	def on_enter(self, x, y):
-		self.Parent.current_target = self
+		self.Parent.current_target = self, self.ScreenRect, 5
 		if self.Parent.tooltip.target == self:
 			return
 
