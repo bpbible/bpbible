@@ -1,6 +1,6 @@
 import wx
 from wx import html
-from displayframe import DisplayFrame
+from displayframe import AUIDisplayFrame
 from displayframe import IN_BOTH, IN_MENU
 from tooltip import BiblicalPermanentTooltip
 import versetree
@@ -8,6 +8,7 @@ import versetree
 
 from swlib.pysw import VK, VerseParsingError
 from swlib.pysw import GetVerseStr, GetBestRange
+
 from swlib import pysw
 from util.unicode import to_str, to_unicode
 from gui import guiutil
@@ -22,7 +23,7 @@ from events import SETTINGS_CHANGED, CHAPTER_MOVE, VERSE_MOVE, QUICK_SELECTOR
 from util.i18n import N_
 
 
-class BookFrame(DisplayFrame):
+class BookFrame(AUIDisplayFrame):
 	has_menu = True
 	shows_info = True
 	use_quickselector = True
@@ -94,8 +95,6 @@ class BookFrame(DisplayFrame):
 		actions.update({
 			wx.WXK_F8: self.chapter_forward,
 			wx.WXK_F5: self.chapter_back,
-			(wx.WXK_F5, wx.MOD_CMD): self.restore_pane,
-			(wx.WXK_F10, wx.MOD_CMD): self.maximize_pane,
 			ord("S"): self.search_quickly,
 		})
 
@@ -104,22 +103,6 @@ class BookFrame(DisplayFrame):
 		
 		return actions
 
-	def restore_pane(self):
-		self.maximize_pane(False)
-	
-	def maximize_pane(self, to=True):
-		main = guiconfig.mainfrm
-		pane = self.aui_pane
-		maximized_pane = main.get_maximized_pane()
-		if to:
-			if not maximized_pane:
-				main.maximize_pane(pane)
-				
-		else:
-			if maximized_pane:
-				main.restore_maximized_pane(pane)
-		main.aui_mgr.Update()
-		wx.CallAfter(main.update_all_aui_menu_items)
 			
 			
 	def chapter_move(self, amount): pass
@@ -138,17 +121,6 @@ class BookFrame(DisplayFrame):
 
 		self.SetReference(self.reference)
 
-	def toggle_frame(self):
-		pane = guiconfig.mainfrm.get_pane_for_frame(self)
-		guiconfig.mainfrm.show_panel(pane.name, not pane.IsShown())
-	
-	def is_hidable(self):
-		return self.aui_pane.HasCloseButton()
-
-	@property
-	def aui_pane(self):
-		"""Gets the AUI pane for this frame."""
-		return guiconfig.mainfrm.get_pane_for_frame(self)
 
 	def get_menu_items(self):
 		def set_text():
@@ -232,9 +204,6 @@ class BookFrame(DisplayFrame):
 		text = "%s - %s (%s)" % (self.title, ref, version)
 		m.set_pane_title(p.name, text)
 	
-	def get_window(self):
-		return self
-	
 	def get_search_panel_for_frame(self):
 		for item in guiconfig.mainfrm.searchers:
 			if self.book == item.book:
@@ -271,10 +240,6 @@ class BookFrame(DisplayFrame):
 	
 	def get_verified(self, ref):
 		return ref
-	
-	@property
-	def title(self):
-		return _(self.id)
 	
 	def format_ref(self, module, ref):
 		return ref
