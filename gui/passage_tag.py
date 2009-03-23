@@ -40,7 +40,7 @@ class TopicTooltipConfig(TooltipConfig):
 	def get_title(self):
 		return self.topic.full_name
 
-	def add_to_toolbar(self, toolbar):
+	def add_to_permanent_toolbar(self, toolbar):
 		self.topic_selector = TopicSelector(toolbar)
 		toolbar.AddControl(self.topic_selector)
 		self.topic_selector.selected_topic = self.topic
