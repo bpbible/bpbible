@@ -1,7 +1,7 @@
 import wx.combo
 import wx
 from swlib.pysw import GetVerseStr, BookData, ChapterData
-from swlib.pysw import VK, UserVK, VerseParsingError
+from swlib.pysw import VK, UserVK, VerseParsingError, process_digits
 from swlib import pysw
 from gui.treecombo import LazyTreeCombo
 		
@@ -33,7 +33,6 @@ class VerseTree(LazyTreeCombo):
 		return isinstance(data, (BookData, ChapterData))
 
 	def format_tree(self, item):
-		print `self.get_data(item)`
 		return "%s" % self.get_data(item)
 	
 	def format_combo(self, item):
@@ -43,14 +42,18 @@ class VerseTree(LazyTreeCombo):
 
 		elif isinstance(data, ChapterData):
 			parent_data = self.get_data(self.tree.GetItemParent(item))
-			return "%s %s" % (parent_data, data)
+			return pysw.process_digits("%s %s" % (parent_data, data),
+				userOutput=True)
 
 		parent = self.tree.GetItemParent(item)
 		parent_data = self.get_data(parent)
 		grandparent_data = self.get_data(self.tree.GetItemParent(parent))
 		print `grandparent_data`
 
-		return "%s %s:%s " % (grandparent_data, parent_data, data)
+		return pysw.process_digits(
+			"%s %s:%s " % (grandparent_data, parent_data, data),
+			userOutput=True)
+
 	
 	def set_current_verse(self, event):
 		self.currentverse = event.ref
@@ -82,6 +85,9 @@ class VerseTree(LazyTreeCombo):
 
 		book, chapter = verse_key.getBookName(), verse_key.Chapter()
 		verse = verse_key.Verse()
+		chapter = process_digits(str(chapter), userOutput=True)
+		verse = process_digits(str(verse), userOutput=True)
+		
 
 		item, cookie = self.tree.GetFirstChild(root)
 		while item:
@@ -100,8 +106,8 @@ class VerseTree(LazyTreeCombo):
 		item2, cookie = self.tree.GetFirstChild(item)
 
 		while item2:
-			data = self.get_data(item2)
-			if data.chapter_number == chapter:
+			data = unicode(self.get_data(item2))
+			if data == chapter:
 				# if : isn't in there, we take it as a chapter reference
 				if not self.with_verses or ":" not in text:
 					return item2
@@ -110,14 +116,14 @@ class VerseTree(LazyTreeCombo):
 
 			item2, cookie = self.tree.GetNextChild(item, cookie)
 		
-		assert item2, "Chapter '%d' not found in %s" % (chapter, book)
+		assert item2, "Chapter '%s' not found in %s" % (chapter, book)
 
 		self.tree.Expand(item2)
 		
 		item3, cookie = self.tree.GetFirstChild(item2)
 
 		while item3:
-			data = self.get_data(item3)
+			data = unicode(self.get_data(item3))
 			if data == verse:
 				return item3
 

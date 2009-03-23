@@ -113,11 +113,12 @@ def set_vk_chapter_checked(self, chapter):
 	if 0 < chapter <= chapters:
 		self.Chapter(chapter)
 	else:
-		raise VerseParsingError(_("There are only %(chapters)d chapters "
+		raise VerseParsingError(process_digits(
+			_("There are only %(chapters)d chapters "
 			"in %(book)s (given %(given)d)") % dict(
 				chapters=chapters, book=self.getBookName(), 
 				given=chapter
-			)
+			), userOutput=True)
 		)
 	
 def set_vk_verse_checked(self, verse):
@@ -130,11 +131,12 @@ def set_vk_verse_checked(self, verse):
 	if 0 < verse <= verses:
 		self.Verse(verse)
 	else:
-		raise VerseParsingError(_("There are only %(verses)d verses in "
+		raise VerseParsingError(process_digits(
+			_("There are only %(verses)d verses in "
 			"%(book)s %(chapter)s (given %(given)d)") % dict(
 				verses=verses, book=self.getBookName(),
 				chapter=chapter, given=verse
-			)
+			), userOutput=True)
 		)
 
 class VK(SW.VerseKey):#, object):
@@ -555,21 +557,23 @@ def check_vk_bounds(vk):
 	chapter = vk.Chapter()
 
 	if chapter > chapters:
-		raise VerseParsingError(_("There are only %(chapters)d chapters "
+		raise VerseParsingError(process_digits(
+			_("There are only %(chapters)d chapters "
 			"in %(book)s (given %(given)d)") % dict(
 				chapters=chapters, book=vk.getBookName(), given=chapter
-			)
+			), userOutput=True)
 		)
 
 	verse = vk.Verse()
 	verses = vk.verseCount(testament, book, chapter)
 	
 	if verse > verses:
-		raise VerseParsingError(_("There are only %(verses)d verses in "
+		raise VerseParsingError(process_digits(
+			_("There are only %(verses)d verses in "
 			"%(book)s %(chapter)s (given %(given)d)") % dict(
 				verses=verses, book=vk.getBookName(), 
 				chapter=chapter, given=verse
-			)
+			), userOutput=True)
 		)
 	
 
@@ -1125,6 +1129,14 @@ class LocalizedBookData(BookData):
 			locale.translate(self.bookname).decode(locale_encoding), 
 			locale_dash_hack
 		)
+	
+	def __iter__(self):
+		for item in range(len(self.chapters)):
+			yield LocalizedChapterData(
+				item+1, 
+				i_vk.verseCount(self.testament, self.booknumber, item + 1),
+			)
+		
 		
 class ChapterData(object):
 	"""A class so that we can tell it is chapter data"""
@@ -1140,6 +1152,15 @@ class ChapterData(object):
 	
 	def __str__(self):
 		return "%s" % self.chapter_number
+
+class LocalizedChapterData(ChapterData):
+	def __str__(self):
+		return process_digits(str(self.chapter_number), userOutput=True)
+
+	def __iter__(self):
+		for a in xrange(1, self.chapter_length+1):
+			yield process_digits(str(a), userOutput=True)
+
 
 books = []
 localized_books = []
