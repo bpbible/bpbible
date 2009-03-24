@@ -15,20 +15,28 @@ make_release = False
 new_version = None
 py2exe_opts = ""
 show_splashscreen = True
+portable_build = False
 
 def handle_args():
-	opts, args = getopt.getopt(sys.argv[1:], "r", ["make-release", "compress", "no-splashscreen"])
-	if ('-r', '') in opts or ('--make-release', '') in opts:
-		global make_release
-		make_release = True
-
-	if ('--compress', '') in opts:
-		global py2exe_opts
+	opts, args = getopt.getopt(sys.argv[1:], "r", ["make-release", "compress", "no-splashscreen", "portable"])
+	global py2exe_opts
+	global show_splashscreen
+	if ('--portable', '') in opts:
+		global portable_build
+		portable_build = True
 		py2exe_opts += " compressed "
-
-	if ('--no-splashscreen', '') in opts:
-		global show_splashscreen
 		show_splashscreen = False
+
+	else:
+		if ('-r', '') in opts or ('--make-release', '') in opts:
+			global make_release
+			make_release = True
+
+		if ('--compress', '') in opts:
+			py2exe_opts += " compressed "
+
+		if ('--no-splashscreen', '') in opts:
+			show_splashscreen = False
 
 	global new_version
 	if len(args) != 1:
@@ -70,13 +78,14 @@ def maybe_make_dir(dir):
 maybe_make_dir("dist")
 maybe_make_dir("%s" % src_dist.dir)
 
-paths_conf = """\
-[BPBiblePaths]
-DataPath = $DATADIR
-IndexPath = $DATADIR/indexes
-"""
-open("%s/paths.ini" % src_dist.dir, "w").write(paths_conf)
-open("dist/paths.ini", "w").write(paths_conf)
+if not portable_build:
+	paths_conf = """\
+	[BPBiblePaths]
+	DataPath = $DATADIR
+	IndexPath = $DATADIR/indexes
+	"""
+	open("%s/paths.ini" % src_dist.dir, "w").write(paths_conf)
+	open("dist/paths.ini", "w").write(paths_conf)
 
 from config import bpbible_configuration, release_settings, splashscreen_settings
 release_settings["version"] = new_version
@@ -118,14 +127,43 @@ def build_installer():
 
 	import wx
 	wx_dir = os.path.dirname(wx.__file__)
-	os.system("copy %s installer" % os.path.join(wx_dir, "gdiplus.dll"))
-	os.system("copy %s installer" % os.path.join(wx_dir, "msvcp71.dll"))
+	global portable_build
+	if portable_build:
+		os.system("copy %s dist" % os.path.join(wx_dir, "gdiplus.dll"))
+		os.system("copy %s dist" % os.path.join(wx_dir, "msvcp71.dll"))
+		if os.path.exists("\\PortableApps\\AppCompactor\\App\\bin\\upx.exe"):
+			upx_path = "\\PortableApps\\AppCompactor\\App\\bin\\upx.exe"
+		else:
+			for path in os.environ["PATH"].split(os.pathsep):
+				tmppath = os.path.join(path, "upx.exe")
+				if os.path.exists(tmppath) and os.access(tmppath, os.X_OK):
+					upx_path = tmppath
+					break
 
-	print "Creating the installer."
-	iss_file = os.path.join("installer", "bpbible.iss")
-	iss_contents = open("%s.template" % iss_file, "r").read().replace("$APP_VERSION", new_version)
-	open(iss_file, "w").write(iss_contents)
-	os.system("iscc %s" % iss_file)
+		if os.path.exists(upx_path):
+			print "Compressing further with UPX..."
+			os.chdir("dist")
+			import glob
+			for file in glob.glob("*.exe")+glob.glob("*.dll"):
+				os.system(upx_path + " --best --compress-icons=0 --nrv2e --crp-ms=999999 -k \"%s\"" % file)
+				if os.system(upx_path + " -t \"%s\"" % file):
+					# Broken/didn't work: rename backup to original filename
+					os.rename(file[:-1]+"~", file)
+				else:
+					# Worked: remove backup
+					os.remove(file[:-1]+"~")
+		else:
+			print "** Please compress this further with the PortableApps.com AppCompactor"
+			print "(http://PortableApps.com/AppCompactor) before uploading it **"
+	else:
+		os.system("copy %s installer" % os.path.join(wx_dir, "gdiplus.dll"))
+		os.system("copy %s installer" % os.path.join(wx_dir, "msvcp71.dll"))
+
+		print "Creating the installer."
+		iss_file = os.path.join("installer", "bpbible.iss")
+		iss_contents = open("%s.template" % iss_file, "r").read().replace("$APP_VERSION", new_version)
+		open(iss_file, "w").write(iss_contents)
+		os.system("iscc %s" % iss_file)
 
 def upload_release():
 	if not make_release:
