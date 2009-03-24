@@ -172,6 +172,8 @@ u'<small><sup>$versenumber</sup></small></glink> $text $tags')
 
 bible_template = SmartVerseTemplate(body=body)
 
+bible_template_without_headings = SmartVerseTemplate(body=body, headings=u'')
+
 #, footer="<br>$range ($version)")
 
 

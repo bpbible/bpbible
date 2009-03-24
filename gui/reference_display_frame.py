@@ -59,15 +59,7 @@ class ReferenceDisplayFrame(DisplayFrameXRC):
 	
 	@overridableproperty
 	def template(self):
-		return None
-
-		# XXX: This doesn't work for some reason, since it doesn't give us
-		# any verse number.
-		template = VerseTemplate(headings="")
-		template.body = self.book.template.body
-		template.header = self.book.template.header
-		template.footer = self.book.template.footer
-		return template
+		return config.bible_template_without_headings
 	
 	@property
 	def book(self):
