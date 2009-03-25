@@ -340,6 +340,14 @@ class AuiLayer(object):
 				["Hide"]]
 			],
 			
+			[self.preview_window.get_window(),
+				self.preview_window.title,
+				self.preview_window.id,
+				[],
+				[["Right"],
+				["Layer",2],
+				["Hide"]]],
+			
 			[self.verse_compare.get_window(), 
 				self.verse_compare.title, 
 				self.verse_compare.id, 
@@ -385,13 +393,16 @@ class AuiLayer(object):
 			[self.verse_compare.get_window(), "Version Comparison"],			
 			
 			[self.history_pane, "History"],
+			[self.preview_window, "Preview",],
+			
 		]
 		items.extend([item, item.title] for item in self.searchers)
 
 
 		panes = (
 			self.bibletext, self.commentarytext, 
-			self.dictionarytext, self.genbooktext, self.verse_compare
+			self.dictionarytext, self.genbooktext, self.verse_compare,
+			self.preview_window
 		)
 
 		self.panes = [(frame, frame.id) for frame in panes]
@@ -704,12 +715,18 @@ class AuiLayer(object):
 		#if not toggle and pane.IsMaximized():
 		#	# restore the pane first
 		#	self.aui_mgr.RestorePane(pane)
-		pane.Show(toggle)
-		self.aui_mgr.Update()
+		changed = not (toggle and not maximized and pane.IsShown())
+		if changed:
+			pane.Show(toggle)
+
+			self.aui_mgr.Update()
+			
+
 		if panel in self.aui_callbacks:
 			self.aui_callbacks[panel](toggle)
 
-		self.on_pane_changed(panel, toggle)
+		if changed:
+			self.on_pane_changed(panel, toggle)
 
 	def restore_maximized_pane(self, pane):
 		self.restore_pane_direction(pane)

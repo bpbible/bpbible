@@ -21,8 +21,7 @@ _rgbNoFocusInner = wx.Colour(245, 245, 245)
 def on_passage_tag_hover(frame, href, url, x, y):
 	passage_list = _get_passage_list_from_href(href)
 
-	frame.tooltip.tooltip_config = TopicTooltipConfig(passage_list)
-	frame.tooltip.Start()
+	frame.show_tooltip(TopicTooltipConfig(passage_list))
 
 def _get_passage_list_from_href(href):
 	"""Gets the passage list corresponding to the given passage tag HREF."""
@@ -40,7 +39,8 @@ class TopicTooltipConfig(TooltipConfig):
 	def get_title(self):
 		return self.topic.full_name
 
-	def add_to_permanent_toolbar(self, toolbar):
+	def add_to_toolbar(self, toolbar, permanent):
+		if not permanent: return
 		self.topic_selector = TopicSelector(toolbar)
 		toolbar.AddControl(self.topic_selector)
 		self.topic_selector.selected_topic = self.topic

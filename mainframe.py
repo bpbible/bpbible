@@ -63,6 +63,8 @@ import passage_list
 from error_handling import ErrorDialog
 from util.i18n import N_
 import util.i18n
+from preview_window import PreviewWindow
+
 
 settings = config_manager.add_section("BPBible")
 
@@ -460,6 +462,9 @@ class MainFrame(wx.Frame, AuiLayer):
 	def create_aui_items(self):
 		self.version_tree = ModuleTree(self)
 		self.version_tree.on_module_choice += self.set_module
+		
+		self.preview_window = PreviewWindow(self)
+		
 
 		self.genbooktext = GenBookFrame(self, biblemgr.genbook)
 		self.bible_observers += self.genbooktext.reload

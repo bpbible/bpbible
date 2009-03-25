@@ -5,7 +5,7 @@ from backend import chapter_headings
 from protocols import protocol_handler
 from displayframe import DisplayFrame
 from gui import guiutil
-from tooltip import Tooltip, TooltipConfig
+from tooltip import Tooltip, TooltipConfig, TooltipDisplayer
 import guiconfig
 from util.observerlist import ObserverList
 from util import osutils
@@ -18,9 +18,7 @@ def on_headings_hover(frame, href, url, x, y):
 	ref = url.getHostName()
 	# print ref
 
-	frame.tooltip.tooltip_config = ChapterHeadingsTooltipConfig(ref)
-
-	frame.tooltip.Start()
+	frame.show_tooltip(ChapterHeadingsTooltipConfig(ref))
 
 class ChapterHeadingsTooltipConfig(TooltipConfig):
 	"""The tooltip configuration for the headings in a chapter."""
@@ -217,8 +215,10 @@ class Line(wx.Window):
 		dc.Background = wx.Brush(get_line_colour())
 		dc.Clear()
 	
-class HeaderBar(wx.Panel):
+class HeaderBar(TooltipDisplayer, wx.Panel):
 	def __init__(self, parent, i_current_chapter, style=wx.NO_BORDER):
+		self.html_type = DisplayFrame
+		
 		super(HeaderBar, self).__init__(parent, style=style)
 		
 		self.i_current_chapter = i_current_chapter
@@ -232,18 +232,7 @@ class HeaderBar(wx.Panel):
 		self.create_item()
 		
 		self.MinSize = -1, self.item.Size[1] + 1
-
 		
-		self.tooltip = Tooltip(guiutil.toplevel_parent(self), 
-				style=wx.NO_BORDER,
-				html_type=DisplayFrame, logical_parent=self)
-		
-		# For compatibility with display frame:
-		# code in displayframe wants it to have an _tooltip member (MouseIn)
-		self._tooltip = self.tooltip
-		# and a logical_parent
-		self.logical_parent = None
-
 		if guiconfig.mainfrm:
 			guiconfig.mainfrm.add_toplevel(self.tooltip)
 

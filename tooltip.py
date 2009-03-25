@@ -26,14 +26,47 @@ class TooltipBaseMixin(object):
 		self.new_target = None
 		self._tooltip_config = None
 		self.toolbar_creator = None
-		
+		self.toolbar = None
+
 		tooltip_config = kwargs.pop("tooltip_config", TooltipConfig())
 		
 		super(TooltipBaseMixin, self).__init__(*args, **kwargs)
 
 		self.set_tooltip_config(tooltip_config, update=False)
 	
-	def show_strongs_ref(self, href, url, x, y):
+	def recreate_toolbar(self):
+		if self.toolbar: 
+			self.toolbar.Destroy()
+
+		self.create_toolbar()
+		self.toolbarpanel.Sizer.Add(self.toolbar, 1, wx.GROW)
+		self.toolbarpanel.Layout()
+		self.toolbar_creator = type(self.tooltip_config)
+
+	def stay_on_top(self, evt):
+		new = PermanentTooltip(guiconfig.mainfrm, self.html_type,
+			tooltip_config=self.tooltip_config.another(),)
+
+		if not hasattr(self.html, "reference"):
+			dprint(WARNING, "Tooltip html didn't have reference", self.html)
+			self.html.reference = ""
+		
+		# the context of the note
+		new.html.reference = self.html.reference
+
+		new.ShowTooltip(self.get_permanent_tooltip_position())
+		
+		dprint(TOOLTIP, "Stop on permanent popup")
+		self.Stop()
+		
+	def get_permanent_tooltip_position(self):
+		return self.Position
+
+	def Stop(self):
+		pass
+
+	
+	def show_strongs_ref(self, frame, href, url, x, y):
 		dictionary = biblemgr.dictionary		
 		type = url.getParameterValue("type") #Hebrew or greek
 		value = url.getParameterValue("value") #strongs number
@@ -41,18 +74,11 @@ class TooltipBaseMixin(object):
 			print "Not type or value", href
 			return
 
-		if not isinstance(self.tooltip_config, StrongsTooltipConfig):
-			self.tooltip_config = StrongsTooltipConfig()
-
-		self.tooltip_config.set_type_value(type, value)
+		tooltip_config = StrongsTooltipConfig(type, value)
+		frame.show_tooltip(tooltip_config)
 		
-		self.update_text(False)
-		
-		
-		self.Start()
 	
-	
-	def show_bible_refs(self, href, url, x, y):
+	def show_bible_refs(self, frame, href, url, x, y):
 		# don't show a tooltip if there is no bible
 		if biblemgr.bible.mod is None:
 			return
@@ -70,9 +96,7 @@ class TooltipBaseMixin(object):
 				for value in range(int(values))
 			]
 
-		self.tooltip_config = BibleTooltipConfig(references)
-
-		self.Start()
+		frame.show_tooltip(BibleTooltipConfig(references))
 
 	def update_text(self, force=True):
 		self._SetText(self.tooltip_config.get_text())
@@ -80,10 +104,6 @@ class TooltipBaseMixin(object):
 		if force:
 			self.html.SetPage(self.text, body_colour=self.colour,
 				text_colour=self.text_colour)
-
-	def SetText(self, text):
-		self.tooltip_config = TextTooltipConfig(text)
-		self.update_text(False)
 
 	def _SetText(self, text):
 		# remove trailing new lines
@@ -142,7 +162,10 @@ class TooltipBaseMixin(object):
 			x = max(screen_rect.Right - width - factor, screen_rect.Left)
 
 		if y + height > screen_rect.Bottom:
-			y = target_rect.Top - factor - height
+			if position:
+				y -= height
+			else:
+				y = target_rect.Top - factor - height
 			# if we moved the x along, try to move the y so it is above
 			#if x == screen_rect.Right - width - 2:
 			#	y = target_rect.TopRighty - height - target_rect.Height - 10
@@ -161,15 +184,56 @@ class TooltipBaseMixin(object):
 		# Add one so that it's not right under the cursor
 		return x + 1, y + 1	
 
+	def create_toolbar(self):
+		# create the toolbar
+		self.toolbar = wx.ToolBar(self.toolbarpanel,
+			style=wx.TB_FLAT|wx.TB_NODIVIDER|wx.TB_HORZ_TEXT)
+
+		self.toolbar.SetToolBitmapSize((16, 16))
+
+		force_mask = False
+		
+		if osutils.is_msw() and not osutils.is_win2000():
+			force_mask = not guiutil.is_xp_styled()
+
+		self.tooltip_config.add_to_toolbar(self.toolbar, permanent=False)
+		self.tooltip_config.bind_to_toolbar(self.toolbar)
+
+		#	self.toolbar.AddSeparator()
+		
+		self.gui_anchor = self.toolbar.AddLabelTool(wx.ID_ANY,  
+			_("Anchor"), bmp("anchor.png", force_mask=force_mask),
+			shortHelp=_("Don't hide this tooltip"))
+		
+		self.gui_copy = self.toolbar.AddLabelTool(wx.ID_ANY,  
+			_("Copy All"), bmp("page_copy.png", force_mask=force_mask),
+			shortHelp=_("Copy tooltip text (with links)"))
+			
+
+		self.toolbar.Bind(wx.EVT_TOOL, self.stay_on_top, id=self.gui_anchor.Id)
+		self.toolbar.Bind(wx.EVT_TOOL, self.copy_all, id=self.gui_copy.Id)
+		
+		self.toolbar.Realize()
+	
 	def get_tooltip_config(self):
 		return self._tooltip_config
 
 	def set_tooltip_config(self, tooltip_config, update=False):
+		old_config = self._tooltip_config
+		if old_config:
+			old_config.unbind_from_toolbar(self.toolbar)
+
 		self._tooltip_config = tooltip_config
 		self._tooltip_config.tooltip = self
-		if self.toolbar_creator is not None \
-			and type(self.tooltip_config) != self.toolbar_creator:
-			self.recreate_toolbar()
+		if self.toolbar_creator is not None:
+			if type(self.tooltip_config) != self.toolbar_creator:
+				self.recreate_toolbar()
+				self.toolbar.SetBackgroundColour(self.colour)
+				self.toolbarpanel.SetBackgroundColour(self.colour)
+			else:
+				self.tooltip_config.bind_to_toolbar(self.toolbar)
+			
+
 
 		
 		self.update_text(force=update)
@@ -210,7 +274,8 @@ class Tooltip(TooltipBaseMixin, tooltip_parent):
 			super(Tooltip, self).__init__(parent, style)
 			
 		
-		self.interval = 200
+		self.interval = 400
+		self.out_interval = 400
 		self.timer = None
 		self.out_timer = None
 		self.mouse_is_over = True
@@ -238,7 +303,6 @@ class Tooltip(TooltipBaseMixin, tooltip_parent):
 		# put it on its panel
 		panel_sizer = wx.BoxSizer(wx.HORIZONTAL)
 		self.toolbarpanel.SetSizer(panel_sizer)
-		self.toolbar = None
 		self.recreate_toolbar()
 
 		# and set up the rest of the panels
@@ -261,54 +325,24 @@ class Tooltip(TooltipBaseMixin, tooltip_parent):
 			item.SetBackgroundColour(self.colour)
 
 		# and bind mouse enter and leave events to all children
-		def bind_mouse_events(item):
-			# callafter as under MSW, enter seems to come before leave in
-			# places
-			item.Bind(wx.EVT_ENTER_WINDOW, 
-				lambda evt: wx.CallAfter(self.MouseIn))
-			item.Bind(wx.EVT_LEAVE_WINDOW, self.MouseOut)
-			
-			for child in item.Children:
-				bind_mouse_events(child)
-
-		bind_mouse_events(self)
-
+		self.bind_mouse_events(self)
+	
 	def recreate_toolbar(self):
-		if self.toolbar: 
-			print "Destroying and recreating it"
-			self.toolbar.Destroy()
-		self.create_toolbar()
-		self.toolbarpanel.Sizer.Add(self.toolbar, 1, wx.GROW)
-		self.toolbar_creator = type(self.tooltip_config)
+		super(Tooltip, self).recreate_toolbar()
+		self.bind_mouse_events(self.toolbar)
 
-	def create_toolbar(self):
-		# create the toolbar
-		self.toolbar = wx.ToolBar(self.toolbarpanel,
-			style=wx.TB_FLAT|wx.TB_NODIVIDER|wx.TB_HORZ_TEXT)
-
-		self.toolbar.SetToolBitmapSize((16, 16))
-
-		force_mask = False
+	def bind_mouse_events(self, item):
+		# callafter as under MSW, enter seems to come before leave in
+		# places
+		item.Bind(wx.EVT_ENTER_WINDOW, 
+			lambda evt: wx.CallAfter(self.MouseIn))
+		item.Bind(wx.EVT_LEAVE_WINDOW, self.MouseOut)
 		
-		if osutils.is_msw() and not osutils.is_win2000():
-			force_mask = not guiutil.is_xp_styled()
+		for child in item.Children:
+			self.bind_mouse_events(child)
 
-		self.tooltip_config.add_to_toolbar(self.toolbar)#:
-		#	self.toolbar.AddSeparator()
-		
-		self.gui_anchor = self.toolbar.AddLabelTool(wx.ID_ANY,  
-			_("Anchor"), bmp("anchor.png", force_mask=force_mask),
-			shortHelp=_("Don't hide this tooltip"))
-		
-		self.gui_copy = self.toolbar.AddLabelTool(wx.ID_ANY,  
-			_("Copy All"), bmp("page_copy.png", force_mask=force_mask),
-			shortHelp=_("Copy tooltip text (with links)"))
-			
+	
 
-		self.toolbar.Bind(wx.EVT_TOOL, self.stay_on_top, id=self.gui_anchor.Id)
-		self.toolbar.Bind(wx.EVT_TOOL, self.copy_all, id=self.gui_copy.Id)
-		
-		self.toolbar.Realize()
 
 		
 
@@ -316,28 +350,16 @@ class Tooltip(TooltipBaseMixin, tooltip_parent):
 		text = self.html.ToText()
 		guiutil.copy(text)
 
-	def stay_on_top(self, evt):
-		new = PermanentTooltip(guiconfig.mainfrm, self.html_type,
-			tooltip_config=self.tooltip_config.another(),)
-
-		if not hasattr(self.html, "reference"):
-			dprint(WARNING, "Tooltip html didn't have reference", self.html)
-			self.html.reference = ""
-		
-		# the context of the note
-		new.html.reference = self.html.reference
-
-		new.ShowTooltip(self.Position)
-		
-		dprint(TOOLTIP, "Stop on permanent popup")
-		self.Stop()
-		
 	def MouseIn(self, event=None):
 		#TODO: make frame and this be able to veto tooltip goaway
 		self.mouse_is_over = True
 
 		# stop tooltip going away if there was just a mouseout
 		self.wants_to_go_away = False
+		
+		# if we are about to pop up a new one, don't
+		if self.timer:
+			self.timer.Stop()
 
 	def MouseOut(self, event):
 		# unless we get unset before the next event loop, disappear next event
@@ -368,7 +390,7 @@ class Tooltip(TooltipBaseMixin, tooltip_parent):
 		if self.out_timer:
 			self.out_timer.Stop()
 
-		self.out_timer = wx.CallLater(self.interval, disappear)
+		self.out_timer = wx.CallLater(self.out_interval, disappear)
 
 	def Start(self):
 		# if we have an out timer, stop it
@@ -431,15 +453,51 @@ class PermanentTooltip(TooltipBaseMixin, pclass):
 		self.container_panel = wx.Panel(self)
 
 		# create button panel
-		self.buttonpanel = wx.Panel(self.container_panel, -1)		
+		self.toolbarpanel = wx.Panel(self.container_panel, -1)		
+		self.buttonsizer = wx.BoxSizer(wx.HORIZONTAL)		
+		self.toolbarpanel.SetSizer(self.buttonsizer)		
+		self.recreate_toolbar()
+
+
+		# make buttonsizer
+
+		# make html
+		self.html = html_type(self.container_panel, 
+			style=html.HW_SCROLLBAR_AUTO)
+
+		self.html.book = biblemgr.bible
 		
-		self.toolbar = wx.ToolBar(self.buttonpanel,
-			style=wx.TB_FLAT|wx.TB_NODIVIDER|wx.TB_HORZ_TEXT)
+		# make sizer for panel
+		self.global_sizer = wx.BoxSizer(wx.VERTICAL)		
+		self.global_sizer.Add(self.toolbarpanel, flag=wx.GROW)
+		self.global_sizer.Add(self.html, flag=wx.GROW, proportion=3)
+		self.container_panel.SetSizer(self.global_sizer)
+		
+		# set colour
+		self.colour, self.text_colour = guiconfig.get_tooltip_colours()
+		self.container_panel.SetBackgroundColour(self.colour)
+		self.toolbarpanel.SetBackgroundColour(self.colour)
+				
+		# set icon
+		self.SetIcons(guiconfig.icons)
+
+		# Set the text
+		self.update_text()
 		
 		self.Bind(wx.EVT_CLOSE, self.on_close)
 
-		if self.tooltip_config.add_to_permanent_toolbar(self.toolbar):
+		# non gui stuff
+		self.parent = parent
+		self.stayontop = True
+	
+	def create_toolbar(self):
+		self.toolbar = wx.ToolBar(self.toolbarpanel,
+			style=wx.TB_FLAT|wx.TB_NODIVIDER|wx.TB_HORZ_TEXT)
+		
+		if self.tooltip_config.add_to_toolbar(self.toolbar, permanent=True):
 			self.toolbar.AddSeparator()
+		
+		self.tooltip_config.bind_to_toolbar(self.toolbar)			
 
 		self.gui_anchor = self.toolbar.AddLabelTool(wx.ID_ANY,  
 			_("Stay on top"),
@@ -454,44 +512,12 @@ class PermanentTooltip(TooltipBaseMixin, pclass):
 			
 		self.toolbar.Realize()
 
-		# make buttonsizer
-		self.buttonsizer = wx.BoxSizer(wx.HORIZONTAL)		
-		self.buttonsizer.Add(self.toolbar, 1, wx.GROW)
-		self.buttonpanel.SetSizerAndFit(self.buttonsizer)
-
-		# make html
-		self.html = html_type(self.container_panel, 
-			style=html.HW_SCROLLBAR_AUTO)
-
-		self.html.book = biblemgr.bible
-		
-		# make sizer for panel
-		self.global_sizer = wx.BoxSizer(wx.VERTICAL)		
-		self.global_sizer.Add(self.buttonpanel, flag=wx.GROW)
-		self.global_sizer.Add(self.html, flag=wx.GROW, proportion=3)
-		self.container_panel.SetSizer(self.global_sizer)
-		
-		# set colour
-		self.colour, self.text_colour = guiconfig.get_tooltip_colours()
-		self.container_panel.SetBackgroundColour(self.colour)
-		self.buttonpanel.SetBackgroundColour(self.colour)
-				
-		# set icon
-		self.SetIcons(guiconfig.icons)
-
-		# Set the text
-		self.update_text()
-		
-		# non gui stuff
-		self.parent = parent
-		self.stayontop = True
-
 	def update_text(self, force=True):
 		super(PermanentTooltip, self).update_text(force=force)
 		self.Title = self.tooltip_config.get_title()
 
 	def on_close(self, event):
-		self.tooltip_config.on_close()
+		self.tooltip_config.unbind_from_toolbar(self.toolbar)
 		self.Destroy()
 
 	def toggle_topness(self, evt):
@@ -537,26 +563,22 @@ class TooltipConfig(object):
 		if self.tooltip:
 			self.tooltip.update_text()
 
-	def add_to_toolbar(self, toolbar):
-		"""Called to add things to the non-permanent tooltip's toolbar 
+	def bind_to_toolbar(self, toolbar):
+		"""Rebind toolbar events for this new config"""
+		pass
+	
+	def unbind_from_toolbar(self, toolbar):
+		"""Unbind events, etc. from the toolbar. Called when the current
+		config is removed."""
+	
+	def add_to_toolbar(self, toolbar, permanent):
+		"""Called to add things to the tooltip's toolbar 
 		(if anything needs to be added).
 		
 		This should return True if any items were added to the toolbar.
 		"""
 		return False
 	
-
-	def add_to_permanent_toolbar(self, toolbar):
-		"""Called to add things to the permanent tooltip's toolbar 
-		(if anything needs to be added).
-		
-		This should return True if any items were added to the toolbar.
-		"""
-		return False
-
-	def on_close(self):
-		"""Called when the tooltip is closed."""
-
 	def get_title(self):
 		"""Gets the title to be used on a sticky tooltip."""
 		return _("Sticky Tooltip")
@@ -575,35 +597,38 @@ class TextTooltipConfig(TooltipConfig):
 		return self.text
 
 class StrongsTooltipConfig(TooltipConfig):
-	def another(self):
-		s = StrongsTooltipConfig()
-		s.set_type_value(self.type, self.value)
-		return s
-
-	def set_type_value(self, type, value):
+	def __init__(self, type, value):
+		super(StrongsTooltipConfig, self).__init__()
 		self.type = type
 		self.value = value
 		prefix = dict(Hebrew="H", Greek="G").get(type)
 		if prefix is not None:
 			self.shortened = "%s%s" % (prefix, self.value)
 		else:
-			self.shortened = None
+			self.shortened = None	
 	
-	def add_to_toolbar(self, toolbar):
+	def another(self):
+		return StrongsTooltipConfig(self.type, self.value)
+
+	def bind_to_toolbar(self, toolbar):
+		toolbar.Bind(wx.EVT_TOOL,
+			self.search,
+			id=toolbar.gui_find.Id
+		)
+
+	def unbind_from_toolbar(self, toolbar):
+		toolbar.Unbind(wx.EVT_TOOL)
+		
+	def add_to_toolbar(self, toolbar, permanent):
 		#if not self.shortened: return False
-		self.gui_find = toolbar.AddLabelTool(wx.ID_ANY, 
+		toolbar.gui_find = toolbar.AddLabelTool(wx.ID_ANY, 
 			_("Find"),
 			guiutil.bmp("find.png"),
 			shortHelp=_("Search for this strong's number in the Bible"))
 
-		toolbar.Bind(wx.EVT_TOOL, 
-			self.search,
-			id=self.gui_find.Id
-		)
+		self.bind_to_toolbar(toolbar)
 		
 		return True
-	
-	add_to_permanent_toolbar = add_to_toolbar
 	
 	def search(self, event):
 		if not self.shortened: return
@@ -631,35 +656,57 @@ class BibleTooltipConfig(TooltipConfig):
 	def __init__(self, references=None):
 		super(BibleTooltipConfig, self).__init__()
 		self.references = references
-		self.gui_reference = None
+		self.toolbar = None
+		self.is_bound = False
+	
+	def another(self):
+		return BibleTooltipConfig(self.references)
 
-	def add_to_permanent_toolbar(self, toolbar):
-		self.gui_reference = wx.TextCtrl(toolbar,
+	def bind_to_toolbar(self, toolbar):
+		if not toolbar.permanent: return
+		self.toolbar = toolbar
+		import traceback
+		assert not self.is_bound, self.is_bound
+		self.set_refs(self.references, update=False)
+		guiconfig.mainfrm.bible_observers += self.bible_ref_changed
+		self.is_bound = ''.join(traceback.format_stack())
+		
+		toolbar.Bind(wx.EVT_TOOL, 
+			lambda x:self.set_ref(toolbar.gui_reference.Value), 
+			id=toolbar.gui_go.Id
+		)
+		
+		toolbar.gui_reference.Bind(wx.EVT_TEXT_ENTER, 
+			lambda x:self.set_ref(toolbar.gui_reference.Value))
+
+
+		
+		
+	def unbind_from_toolbar(self, toolbar):
+		if not toolbar.permanent: return
+
+		assert self.is_bound
+		guiconfig.mainfrm.bible_observers -= self.bible_ref_changed
+		self.is_bound = False
+
+		toolbar.Unbind(wx.EVT_TOOL, id=toolbar.gui_go.Id)
+		toolbar.gui_reference.Unbind(wx.EVT_TEXT_ENTER)
+		
+	def add_to_toolbar(self, toolbar, permanent):
+		toolbar.permanent = permanent
+		if not permanent: return
+		toolbar.gui_reference = wx.TextCtrl(toolbar,
 				style=wx.TE_PROCESS_ENTER, size=(140, -1))
 
-		self.set_refs(self.references, update=False)
-
-		toolbar.AddControl(self.gui_reference)
+		toolbar.AddControl(toolbar.gui_reference)
 		
-		self.gui_reference.Bind(wx.EVT_TEXT_ENTER, 
-			lambda x:self.set_ref(self.gui_reference.Value))
-
-		guiconfig.mainfrm.bible_observers += self.bible_ref_changed
-		self.gui_go = toolbar.AddLabelTool(wx.ID_ANY,  
+		toolbar.gui_go = toolbar.AddLabelTool(wx.ID_ANY,  
 			_("Go to verses"),
 			guiutil.bmp("accept.png"),
 			shortHelp=_("Open this reference")
 		)
 
-		toolbar.Bind(wx.EVT_TOOL, 
-			lambda x:self.set_ref(self.gui_reference.Value), 
-			id=self.gui_go.Id
-		)
-
 		return True
-
-	def on_close(self):
-		guiconfig.mainfrm.bible_observers -= self.bible_ref_changed
 
 	def get_title(self):
 		return "; ".join(GetBestRange(ref, userOutput=True) 
@@ -715,8 +762,8 @@ class BibleTooltipConfig(TooltipConfig):
 		reference_strings = '|'.join(
 			GetBestRange(ref, userOutput=True) for ref in self.references
 		)
-		if self.gui_reference:
-			self.gui_reference.ChangeValue(reference_strings)
+		if self.toolbar.gui_reference:
+			self.toolbar.gui_reference.ChangeValue(reference_strings)
 		
 		if update:
 			self.tooltip_changed()
@@ -733,3 +780,41 @@ class BibleTooltipConfig(TooltipConfig):
 	def bible_ref_changed(self, event):
 		if event.settings_changed:
 			self.tooltip_changed()
+
+class TooltipDisplayer(object):
+	def __init__(self, *args, **kwargs):
+		super(TooltipDisplayer, self).__init__(*args, **kwargs)
+		self.setup()
+	
+	def setup(self):
+		self._tooltip = None	
+		if not hasattr(self, "logical_parent"):
+			self.logical_parent = None
+
+		s = super(TooltipDisplayer, self)
+		if hasattr(s, "setup"):
+			s.setup()
+	
+	def show_tooltip(self, tooltip_config):
+		if guiconfig.mainfrm.preview_window.show_preview(self, tooltip_config):
+			return
+
+		self.tooltip.tooltip_config = tooltip_config
+		self.tooltip.Start()
+
+	@property
+	def tooltip(self):
+		if not self._tooltip:
+			self._tooltip = Tooltip(guiutil.toplevel_parent(self), 
+				style=wx.NO_BORDER,
+				html_type=self.html_type, logical_parent=self)
+			#self.Bind(wx.EVT_KILL_FOCUS, self.KillFocus)
+			
+			guiconfig.mainfrm.add_toplevel(self._tooltip)
+
+		return self._tooltip
+		
+		
+
+
+

@@ -1,5 +1,6 @@
 from swlib.pysw import SW
 from backend.bibleinterface import biblemgr
+from tooltip import TextTooltipConfig
 
 from util.debug import *
 from util import noop
@@ -75,6 +76,8 @@ def on_sword_opened(frame, href, url):
 	
 
 def on_sword_hover(frame, href, url, x, y):
+	tooltip_config = TextTooltipConfig("")
+
 	module = url.getHostName()
 	key = SW.URL.decode(url.getPath()).c_str()
 	
@@ -86,16 +89,16 @@ def on_sword_hover(frame, href, url, x, y):
 		ref = f.format_ref(f.mod, ref)
 		text = f.mod.RenderText()
 
-		frame.tooltip.SetText("%s (%s)<br>%s" % (
+		tooltip_config.text = ("%s (%s)<br>%s" % (
 			ref, f.mod.Name(), text
 		))
 	else:
-		frame.tooltip.SetText(
+		tooltip_config.text = (
 			_("The book '%s' is not installed, "
 				"so you cannot view "
 				"details for this entry (%s)") % (module, key))
-		
-	frame.show_tooltip(x, y)
+
+	frame.show_tooltip(tooltip_config)
 
 protocol_handler.register_handler("sword", on_sword_opened)
 protocol_handler.register_hover("sword", on_sword_hover)

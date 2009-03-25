@@ -14,7 +14,7 @@ from swlib.pysw import GetBestRange, SW, VerseList
 from backend.bibleinterface import biblemgr
 from backend.verse_template import VerseTemplate
 from util import osutils
-from tooltip import Tooltip, tooltip_settings
+from tooltip import Tooltip, tooltip_settings, TextTooltipConfig, TooltipDisplayer
 from gui import htmlbase
 from gui.menu import MenuItem, Separator
 from gui.htmlbase import HtmlSelectableWindow, convert_language, convert_lgs
@@ -47,7 +47,7 @@ def process_html_for_module(module, text):
 				
 
 
-class DisplayFrame(HtmlSelectableWindow):
+class DisplayFrame(TooltipDisplayer, HtmlSelectableWindow):
 	def __init__(self, parent, style=html.HW_DEFAULT_STYLE,
 			logical_parent=None):
 		super(DisplayFrame, self).__init__(parent, style=style)
@@ -56,11 +56,9 @@ class DisplayFrame(HtmlSelectableWindow):
 		
 
 	def setup(self):
-		if not hasattr(self, "logical_parent"):
-			self.logical_parent = None
-			self.handle_links = True
-			
-		self._tooltip = None
+		self.handle_links = True
+		self.html_type = DisplayFrame
+
 		self.current_target = None
 		self.mouseout = False
 		
@@ -85,18 +83,6 @@ class DisplayFrame(HtmlSelectableWindow):
 
 		super(DisplayFrame, self).setup()
 	
-	@property
-	def tooltip(self):
-		if not self._tooltip:
-			self._tooltip = Tooltip(guiutil.toplevel_parent(self), 
-				style=wx.NO_BORDER,
-				html_type=DisplayFrame, logical_parent=self)
-			#self.Bind(wx.EVT_KILL_FOCUS, self.KillFocus)
-			
-			guiconfig.mainfrm.add_toplevel(self._tooltip)
-
-		return self._tooltip
-		
 	#def KillFocus(self, event):
 	#	self.tooltip.Stop()
 	#	event.Skip()
@@ -221,7 +207,7 @@ class DisplayFrame(HtmlSelectableWindow):
 		xx, yy = self.ClientToScreen(self.CalcScrolledPosition(xx, yy))
 		self.current_target = href, wx.Rect(
 			xx, yy, rect.GetWidth(), rect.GetHeight()
-		), 5
+		), 4
 
 		if self.current_target and self.tooltip.target and \
 				self.tooltip.target == self.current_target[0]:
@@ -232,7 +218,9 @@ class DisplayFrame(HtmlSelectableWindow):
 
 	@staticmethod
 	def on_hover(frame, href, url, x, y):
-		SetText = frame.tooltip.SetText
+		tooltip_config = TextTooltipConfig("")
+		def SetText(text):
+			tooltip_config.text = text
 
 		if url.getHostName() != "passagestudy.jsp":
 			return
@@ -250,7 +238,7 @@ class DisplayFrame(HtmlSelectableWindow):
 		frame.tooltip.html.reference = frame.reference
 
 		if action == "showStrongs":
-			frame.tooltip.show_strongs_ref(href, url, x, y)
+			frame.tooltip.show_strongs_ref(frame, href, url, x, y)
 			return
 
 		elif action=="showMorph":
@@ -389,18 +377,14 @@ class DisplayFrame(HtmlSelectableWindow):
 			dprint(WARNING, "Unknown action", action, href)
 			return
 
-
-		frame.show_tooltip(x, y)
+		frame.show_tooltip(tooltip_config)
 	
 	@staticmethod
 	def on_hover_bible(frame, href, url, x, y):
 		scrolled_values = frame.CalcScrolledPosition(x, y) 
 		screen_x, screen_y = frame.ClientToScreen(scrolled_values)
 	
-		frame.tooltip.show_bible_refs(href, url, screen_x, screen_y)
-
-	def show_tooltip(self, x, y):
-		self.tooltip.Start()
+		frame.tooltip.show_bible_refs(frame, href, url, screen_x, screen_y)
 
 	def OnCellMouseLeave(self, cell, x, y):
 		if self._tooltip is not None:
