@@ -73,7 +73,7 @@ class DictionaryList(VirtualListBox):
 		self.set_data(self.topics)
 
 	def choose_item(self, text):
-		if self.topics.has_new_methods:
+		if self.topics and self.topics.has_new_methods:
 			idx = self.topics.mod.getEntryForKey(
 				to_str(text, self.topics.mod)
 			)
