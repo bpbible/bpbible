@@ -154,12 +154,16 @@ class Book(object):
 		if not verselist:
 			verselist = self.vk.ParseVerseList(to_str(ref), to_str(lastverse), True)
 
+		print verselist.getRangeText()
+
 		# if they pass in a verselist, they can also pass in the ref they
 		# would like to go along with it. This can be useful if it also
 		# includes headings that shouldn't be seen
 		rangetext = GetBestRange(ref, 
-			userInput=False, userOutput=True)
-		internal_rangetext = GetBestRange(ref)
+			userInput=False, userOutput=True, headings=headings)
+
+		print rangetext
+		internal_rangetext = GetBestRange(ref, headings=headings)
 			
 		if rangetext == "":
 			self.vk.Headings(old_headings)
@@ -293,11 +297,9 @@ class Book(object):
 						end_verse = vk.Verse()
 						vk.increment(1)
 				
-					vk = versekey.clone()
-					vk = versekey.castTo(vk)
-					vk.thisown=True
-					
+					vk.copyFrom(versekey)
 					vk.Headings(0)
+
 					# hopefully we won't see anything backwards, but it is
 					# possible (i.e. if we start in the middle of a linked
 					# verse
@@ -454,9 +456,10 @@ class Book(object):
 
 	def GetFootnoteData(self, mod, passage, number, field):
 		if mod != self.mod:
-			mod = self.parent.get_module(mod)
-			if mod is None:
-				return None
+			if not isinstance(mod, SW.Module):
+				mod = self.parent.get_module(mod)
+				if mod is None:
+					return None
 
 		else:
 			mod = self.mod
@@ -471,13 +474,10 @@ class Book(object):
 		return mod.RenderText(data)
 
 
-	def GetReferenceFromMod(self, modname, ref, max_verses = -1):
-		if not self.ModuleExists(modname):
-			return None
-		
-		oldmod = self.version
+	def GetReferenceFromMod(self, mod, ref, max_verses = -1):
+		oldmod = self.mod
+		if not self.SetModule(mod, notify=False): return None
 		try:
-			self.SetModule(modname, notify=False)
 			verses = self.GetReference(ref, max_verses=max_verses)
 		finally:
 			self.SetModule(oldmod, notify=False)
@@ -485,12 +485,12 @@ class Book(object):
 		return verses
 
 
-	def GetReferencesFromMod(self, modname, ref, context="", max_verses=-1):
-		oldmod = self.version
+	def GetReferencesFromMod(self, mod, ref, context="", max_verses=-1):
+		oldmod = self.mod
+		if not self.SetModule(mod, notify=False): return None
+		
 		try:
-			self.SetModule(modname, notify=False)
 			verses = self.GetReferences(ref, context, max_verses = max_verses)
-			
 		finally:
 			self.SetModule(oldmod, notify=False)
 		

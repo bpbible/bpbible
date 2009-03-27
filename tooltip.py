@@ -27,6 +27,7 @@ class TooltipBaseMixin(object):
 		self._tooltip_config = None
 		self.toolbar_creator = None
 		self.toolbar = None
+		self.html = None
 
 		tooltip_config = kwargs.pop("tooltip_config", TooltipConfig())
 		
@@ -234,8 +235,8 @@ class TooltipBaseMixin(object):
 				self.tooltip_config.bind_to_toolbar(self.toolbar)
 			
 
-
-		
+		# set for fonts
+		if self.html: self.html.mod = tooltip_config.get_module()
 		self.update_text(force=update)
 
 	tooltip_config = property(get_tooltip_config, set_tooltip_config)
@@ -443,8 +444,7 @@ class PermanentTooltip(TooltipBaseMixin, pclass):
 		super(PermanentTooltip, self).__init__(
 			parent, 
 			title=_("Sticky Tooltip"), 
-			style=style|wx.STAY_ON_TOP|wx.MINIMIZE_BOX , 
-			tooltip_config=tooltip_config
+			style=style|wx.STAY_ON_TOP|wx.MINIMIZE_BOX,
 		) 
 
 		self.style = style
@@ -458,15 +458,10 @@ class PermanentTooltip(TooltipBaseMixin, pclass):
 		self.toolbarpanel.SetSizer(self.buttonsizer)		
 		self.recreate_toolbar()
 
-
-		# make buttonsizer
-
 		# make html
 		self.html = html_type(self.container_panel, 
 			style=html.HW_SCROLLBAR_AUTO)
 
-		self.html.book = biblemgr.bible
-		
 		# make sizer for panel
 		self.global_sizer = wx.BoxSizer(wx.VERTICAL)		
 		self.global_sizer.Add(self.toolbarpanel, flag=wx.GROW)
@@ -482,7 +477,8 @@ class PermanentTooltip(TooltipBaseMixin, pclass):
 		self.SetIcons(guiconfig.icons)
 
 		# Set the text
-		self.update_text()
+		self.tooltip_config = tooltip_config
+		#self.update_text()
 		
 		self.Bind(wx.EVT_CLOSE, self.on_close)
 
@@ -551,9 +547,17 @@ def BiblicalPermanentTooltip(parent, ref):
 			tooltip_config=tooltip_config)
 
 class TooltipConfig(object):
-	def __init__(self):
+	def __init__(self, mod=None, book=None):
 		self.tooltip = None
-	
+		self.mod = mod
+		self.book = book
+
+	def get_module(self):
+		if self.book:
+			return self.book.mod
+
+		return self.mod
+
 	def another(self):
 		"""Possibly duplicate this config if it stores any state, otherwise
 		just return it as is"""
@@ -588,8 +592,8 @@ class TooltipConfig(object):
 		return ""
 
 class TextTooltipConfig(TooltipConfig):
-	def __init__(self, text):
-		super(TextTooltipConfig, self).__init__()
+	def __init__(self, text, mod):
+		super(TextTooltipConfig, self).__init__(mod)
 		self.text = text
 
 	def get_text(self):
@@ -598,14 +602,19 @@ class TextTooltipConfig(TooltipConfig):
 
 class StrongsTooltipConfig(TooltipConfig):
 	def __init__(self, type, value):
-		super(StrongsTooltipConfig, self).__init__()
 		self.type = type
 		self.value = value
 		prefix = dict(Hebrew="H", Greek="G").get(type)
+		
+		module = "Strongs"+self.type #as module is StrongsHebrew
+		mod = biblemgr.get_module(module)
+		
 		if prefix is not None:
 			self.shortened = "%s%s" % (prefix, self.value)
 		else:
 			self.shortened = None	
+	
+		super(StrongsTooltipConfig, self).__init__(mod)
 	
 	def another(self):
 		return StrongsTooltipConfig(self.type, self.value)
@@ -637,16 +646,15 @@ class StrongsTooltipConfig(TooltipConfig):
 		search_panel.search_and_show("strongs:%s" % self.shortened)
 	
 	def get_text(self):
-		# before we've been properly fed which value to look at, don't do
-		# anything
-		if not hasattr(self, "type"): return ""
-		#do lookup
-		type = "Strongs"+self.type #as module is StrongsHebrew
-		tooltipdata = biblemgr.dictionary.GetReferenceFromMod(type, self.value)
-		if tooltipdata is None:
+		if self.mod is None:
 			tooltipdata = _("Module %s is not installed, "
 			"so you cannot view "
 			"details for this strong's number") %type
+		
+		else:
+			#do lookup
+			tooltipdata = biblemgr.dictionary.GetReferenceFromMod(
+				self.mod, self.value)
 
 		return tooltipdata
 
@@ -654,7 +662,7 @@ class StrongsTooltipConfig(TooltipConfig):
 	
 class BibleTooltipConfig(TooltipConfig):
 	def __init__(self, references=None):
-		super(BibleTooltipConfig, self).__init__()
+		super(BibleTooltipConfig, self).__init__(mod=None, book=biblemgr.bible)
 		self.references = references
 		self.toolbar = None
 		self.is_bound = False
@@ -795,8 +803,10 @@ class TooltipDisplayer(object):
 		if hasattr(s, "setup"):
 			s.setup()
 	
-	def show_tooltip(self, tooltip_config):
-		if guiconfig.mainfrm.preview_window.show_preview(self, tooltip_config):
+	def show_tooltip(self, tooltip_config, mod=None):
+		if guiconfig.mainfrm.preview_window.show_preview(
+			self, tooltip_config
+		):
 			return
 
 		self.tooltip.tooltip_config = tooltip_config

@@ -218,7 +218,7 @@ class DisplayFrame(TooltipDisplayer, HtmlSelectableWindow):
 
 	@staticmethod
 	def on_hover(frame, href, url, x, y):
-		tooltip_config = TextTooltipConfig("")
+		tooltip_config = TextTooltipConfig("", mod=frame.mod)
 		def SetText(text):
 			tooltip_config.text = text
 
@@ -249,15 +249,16 @@ class DisplayFrame(TooltipDisplayer, HtmlSelectableWindow):
 				tooltipdata += "<br>%s" % type
 			else:
 				value = url.getParameterValue("value") #strongs number
-				if not type or not value: 
+				module = biblemgr.get_module("Robinson")
+				if not value:
 					return
-
-				#do lookup
-				type = "Robinson" 
-				tooltipdata = dictionary.GetReferenceFromMod(type, value)
-				if tooltipdata is None:
+				
+				tooltip_config.module = module
+				if not module:
 					tooltipdata = _("Module %s is not installed, so you "
 					"cannot view details for this morphological code") % type
+				else:
+					tooltipdata = dictionary.GetReferenceFromMod(module, value)
 
 			SetText(tooltipdata)
 
@@ -268,10 +269,12 @@ class DisplayFrame(TooltipDisplayer, HtmlSelectableWindow):
 			if((not type) or (not value)): 
 				dprint(WARNING, "Not type or value in showNote", href)
 				return
-			module = url.getParameterValue("module")
+			module = biblemgr.get_module(url.getParameterValue("module"))
 			passage = url.getParameterValue("passage")
-			if not passage: 
+			if not passage or not module:
 				return
+
+			tooltip_config.mod = module
 
 			if type == "n":
 				data = bible.GetFootnoteData(module, passage, value, "body")
@@ -326,10 +329,12 @@ class DisplayFrame(TooltipDisplayer, HtmlSelectableWindow):
 				dprint(WARNING, "unknown type for showRef", type, href)
 				return
 			value = url.getParameterValue("value") #passage
-			if not value: 
+			module = biblemgr.get_module(url.getParameterValue("module"))			
+			if not value or not module:
 				return
 
-			module = url.getParameterValue("module")
+			tooltip_config.mod = module
+			
 			#make this plain
 			#template = VerseTemplate(header = "$range<br>", 
 			#body = '<font color = "blue"><small><sup>$versenumber</sup></small></font> $text')
@@ -554,7 +559,7 @@ class DisplayFrame(TooltipDisplayer, HtmlSelectableWindow):
 			text = self.strip_text(text)
 			guiconfig.mainfrm.UpdateDictionaryUI(text)
 
-		assert hasattr(self, "mod"), self		
+		assert hasattr(self, "mod"), self
 		font = fonts.get_module_gui_font(self.mod, default_to_None=True)
 		
 		return MenuItem("Dictionary lookup", on_lookup_click, 

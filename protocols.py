@@ -76,21 +76,23 @@ def on_sword_opened(frame, href, url):
 	
 
 def on_sword_hover(frame, href, url, x, y):
-	tooltip_config = TextTooltipConfig("")
+	tooltip_config = TextTooltipConfig("", mod=None)
 
 	module = url.getHostName()
 	key = SW.URL.decode(url.getPath()).c_str()
 	
 	f = find_frame(module)
 	if f:
-		f.mod.KeyText(key)
+		mod = biblemgr.get_module(module)
+		mod.KeyText(key)
 		
-		ref = to_unicode(f.mod.getKeyText(), f.mod)
-		ref = f.format_ref(f.mod, ref)
-		text = f.mod.RenderText()
+		ref = to_unicode(mod.getKeyText(), mod)
+		ref = f.format_ref(mod, ref)
+		text = mod.RenderText()
 
+		tooltip_config.module = mod
 		tooltip_config.text = ("%s (%s)<br>%s" % (
-			ref, f.mod.Name(), text
+			ref, mod.Name(), text
 		))
 	else:
 		tooltip_config.text = (

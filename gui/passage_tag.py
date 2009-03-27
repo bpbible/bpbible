@@ -33,7 +33,7 @@ def _get_passage_list_from_href(href):
 
 class TopicTooltipConfig(TooltipConfig):
 	def __init__(self, topic):
-		super(TopicTooltipConfig, self).__init__()
+		super(TopicTooltipConfig, self).__init__(book=biblemgr.bible)
 		self.topic = topic
 
 	def get_title(self):

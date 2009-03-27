@@ -2,6 +2,7 @@ import wx
 from swlib import pysw
 from swlib.pysw import SW, process_digits
 from backend import chapter_headings
+from backend.bibleinterface import biblemgr
 from protocols import protocol_handler
 from displayframe import DisplayFrame
 from gui import guiutil
@@ -24,6 +25,9 @@ class ChapterHeadingsTooltipConfig(TooltipConfig):
 	"""The tooltip configuration for the headings in a chapter."""
 	def __init__(self, ref):
 		self.ref = ref
+		super(ChapterHeadingsTooltipConfig, self).__init__(
+			book=biblemgr.bible
+		)
 
 	def get_text(self):
 		vk = pysw.UserVK(self.ref)
