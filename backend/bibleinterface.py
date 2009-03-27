@@ -167,6 +167,9 @@ class BibleInterface(object):
 		else:
 			paths = [data_path]
 
+		if "resources" not in paths:
+			paths.append("resources")
+
 		return paths
 	
 	def write_paths(self, paths, filename=config.sword_paths_file):
