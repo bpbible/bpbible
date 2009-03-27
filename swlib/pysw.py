@@ -413,7 +413,13 @@ class VK(SW.VerseKey):#, object):
 			return
 
 		b = ord(self.Book())-1
+		t = ord(self.Testament())
+		if b == 0 and t >= 1:
+			self.Testament(t-1)
+			b = self.bookCount(t-1)
+
 		self.Book(b)
+
 		err = self.Error()
 		if err: 
 			# do it again to set the error
