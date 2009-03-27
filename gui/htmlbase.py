@@ -356,7 +356,7 @@ def zoom(direction):
 	
 
 
-def convert_lgs(text):
+def convert_lgs(text, width=60):
 	blocks = []
 	#def extractor(text):
 	#	t = '<block id="%d">' % len(blocks)
@@ -420,10 +420,11 @@ def convert_lgs(text):
 		if not block[0]:
 			continue
 
-		block[1] = """<indent-area-start /><table cellspacing=0 cellpadding=0 width=100%%><tr><td width=60px></td><td>%s</td></tr></table><indent-area-end />""" % (
+		block[1] = """<indent-area-start /><table cellspacing=0 cellpadding=0 width=100%%><tr><td width=%dpx></td><td>%s</td></tr></table><indent-area-end />""" % (
+		width,
 		re.sub(
 			r'(^|<(indent-block-end|/h6|br|/p)((>)|(/>)|( [^>]*>)))\s*((<indent-block-start source="l"[^>]+>)?\s*)(<glink href="nbible:[^"]*"[^>]*><small><sup>\d*</sup></small></glink>)',
-	r"\1</td></tr><tr><td valign=top align=center width=60px>\9</td><td>\7",
+	r"\1</td></tr><tr><td valign=top align=center width=%dpx>\9</td><td>\7" % width,
 	block[1]
 		)
 		)
@@ -458,7 +459,8 @@ def convert_language(text, language_code):
 class HtmlBase(wx.html.HtmlWindow):
 	loading_a_page = False
 	override_loading_a_page = False
-	do_convert_lgs = False
+	do_convert_lgs = True
+	lg_width = 20
 
 	def __init__(self, *args, **kwargs):
 		super(HtmlBase, self).__init__(*args, **kwargs)
@@ -569,7 +571,7 @@ class HtmlBase(wx.html.HtmlWindow):
 
 		# we only want properly indented lgs in the main bibleframe
 		if self.do_convert_lgs:
-			text = convert_lgs(text)
+			text = convert_lgs(text, self.lg_width)
 
 		text = convert_language(text, self.language_code)
 
