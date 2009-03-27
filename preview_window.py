@@ -30,6 +30,10 @@ class PreviewWindow(AUIDisplayFrame, TooltipBaseMixin):
 		
 		
 		self.html = self
+		self.mod = None
+		self.html.SetPage('<font color="#888888"><i>%s</i></font>' % _(
+				"Move over a link to see a preview for it"))
+		
 		self.html_type=DisplayFrame
 
 		# required to get fonts working
