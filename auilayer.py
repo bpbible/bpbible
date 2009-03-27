@@ -442,6 +442,8 @@ class AuiLayer(object):
 	def maximize_pane(self, pane):
 		self.fix_pane_direction(pane)
 		self.aui_mgr.MaximizePane(pane)
+		self.on_changed()
+		
 	
 	def get_pane_for_frame(self, frame):
 		for f, pane_name in self.panes:
@@ -731,7 +733,7 @@ class AuiLayer(object):
 	def restore_maximized_pane(self, pane):
 		self.restore_pane_direction(pane)
 		self.aui_mgr.RestoreMaximizedPane()
-		
+		self.on_changed()
 
 	def on_pane_changed(self, pane_name, toggle):
 		wx.CallAfter(self.update_all_aui_menu_items)
