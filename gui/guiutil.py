@@ -148,7 +148,7 @@ def handle(signal, sender, command, source, more, **kwargs):
 	import util.i18n
 	
 	# if the _ isn't correct, move builtin _ into the local _ 
-	if not isinstance(_, MethodType) or _.im_self != util.i18n.mytranslation:
+	if not isinstance(_, MethodType) or _.im_self is not util.i18n.mytranslation:
 		sender.locals['_'] = __builtin__._
 	
 		# now trample over the last-result _ with the i18n _
