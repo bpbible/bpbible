@@ -6,6 +6,7 @@ from topic_selector import TopicSelector
 from passage_list import lookup_passage_list
 from swlib.pysw import VerseList
 from tooltip import TooltipConfig
+from backend.bibleinterface import biblemgr
 
 TAG_COLOUR = (255, 0, 0)
 _rgbSelectOuter = wx.Colour(170, 200, 245)

@@ -253,7 +253,7 @@ class DisplayFrame(TooltipDisplayer, HtmlSelectableWindow):
 				if not value:
 					return
 				
-				tooltip_config.module = module
+				tooltip_config.mod = module
 				if not module:
 					tooltipdata = _("Module %s is not installed, so you "
 					"cannot view details for this morphological code") % type
