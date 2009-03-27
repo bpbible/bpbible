@@ -181,7 +181,15 @@ class VK(SW.VerseKey):#, object):
 	"""
 
 	encoding = "ascii"
-	def __init__(self, key=(), raiseError=True):
+	def __init__(self, key=(), raiseError=True, headings=False):
+		assert isinstance(raiseError, bool), "raiseError wasn't bool"
+		if headings:
+			assert isinstance(key, SW.VerseKey)
+			SW.VerseKey.__init__(self)
+			self.Headings(1)
+			self.copyFrom(key)
+			return
+
 		if isinstance(key, basestring):
 			#if not KeyExists(key):
 			#	raise VerseParsingError, key
@@ -308,8 +316,8 @@ class VK(SW.VerseKey):#, object):
 				return num
 			if(upper.Testament()==lower.Testament()):
 				num-=lower.Book()-upper.Book()
-				uc=upper.getChapterCount(upper.Testament(), upper.Book())
-				lc=upper.getChapterCount(lower.Testament(), lower.Book())
+				uc=upper.chapterCount(upper.Testament(), upper.Book())
+				lc=upper.chapterCount(lower.Testament(), lower.Book())
 		return 1
 
 	def __iter__(self):
@@ -400,7 +408,19 @@ class VK(SW.VerseKey):#, object):
 		return ord(SW.VerseKey.Error(self))
 	
 	def set_chapter(self, value):
-		self.Chapter(value)
+		if value != 0 or self.Headings() == '\x01':
+			self.Chapter(value)
+			return
+
+		b = ord(self.Book())-1
+		self.Book(b)
+		err = self.Error()
+		if err: 
+			# do it again to set the error
+			self.Book(b)
+			return
+
+		self.Chapter(self.chapterCount(ord(self.Testament()), b))
 	
 	def get_chapter(self):
 		return self.Chapter()
@@ -624,7 +644,7 @@ class VerseList(list):
 	
 
 	def __init__(self, args=None, context="", expand=True, raiseError=False,
-				userInput=False):
+				userInput=False, headings=False):
 		converted = False
 
 		if(isinstance(args, (list, tuple))):
@@ -659,6 +679,8 @@ class VerseList(list):
 				vk = i_vk
 				locale = locale_mgr.getDefaultLocaleName()
 
+			old_headings = vk.Headings(headings)
+
 			try:
 	
 				# make sure we have this set correctly
@@ -681,13 +703,16 @@ class VerseList(list):
 						vk.AutoNormalize(an)
 
 			finally:
+				vk.Headings(old_headings)
+
 				if locale_changed:
 					if old != locale:
 						locale_mgr.setDefaultLocaleName(old)
 						
 
 		if(isinstance(args, SW.ListKey)):
-			self.RefreshVKs(args, raiseError=raiseError, userInput=userInput)
+			self.RefreshVKs(args, raiseError=raiseError, userInput=userInput,
+				headings=headings)
 
 		else:
 			raise TypeError, `args`
@@ -738,7 +763,7 @@ class VerseList(list):
 		if not match:
 			raise VerseParsingError(_(u"Invalid Reference: %s") % orig_args)
 
-	def RefreshVKs(self, lk, raiseError=False,userInput=False):
+	def RefreshVKs(self, lk, raiseError=False,userInput=False, headings=True):
 		"""Turns a listkey into a VerseList"""
 		#TODO: error
 		l=[]
@@ -751,11 +776,16 @@ class VerseList(list):
 			if(not a):
 				continue
 			v=SW.VerseKey.castTo(a)
-			if not v:
+			if not v or not v.isBoundSet():
+				#print "HERE"
 				#1 verse only
 				key = get_a_key(userInput)
+				
+				if headings:
+					old = key.Headings(1)
 
 				t = a.getText()
+				#print t, `key.Headings()`
 				if "-" in t:
 					t = t.replace("-", "")
 
@@ -766,7 +796,9 @@ class VerseList(list):
 					key.set_text_checked(t)
 					key.AutoNormalize(True)
 
-				v = VK(key, raiseError=False)
+				v = VK(key, raiseError=False, headings=headings)
+				if headings:
+					key.Headings(old)
 					
 
 			else:
@@ -1503,9 +1535,9 @@ def BookName(text):
 	return u_vk.getBookName()
 
 def GetBestRange(text, context="", abbrev=False, raiseError=False,
-		userInput=False, userOutput=False):
+		userInput=False, userOutput=False, headings=False):
 	vl = VerseList(text, context=context, raiseError=raiseError,
-		userInput=userInput)
+		userInput=userInput, headings=headings)
 	return vl.GetBestRange(abbrev, userOutput=userOutput)
 
 class Searcher(SW.Searcher):
