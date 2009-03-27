@@ -1264,7 +1264,7 @@ def change_locale(lang, abbrev_lang, additional=None):
 	global locale_digits
 	locale = locale_mgr.getLocale(lang)
 	locale_digits = None
-	if not locale:
+	if not locale or locale.getName() == "en_US":
 		dprint(WARNING, "Couldn't find locale %r" % lang,
 		[x.c_str() for x in locale_mgr.getAvailableLocales()])
 		locale_lang = lang
@@ -1276,6 +1276,7 @@ def change_locale(lang, abbrev_lang, additional=None):
 	else:
 		locale_lang = lang
 		locale_encoding = locale.getEncoding()
+		assert locale_encoding, dir(locale)
 		locale_dash_hack = get_dash_hack(locale)
 		digits = locale.translate(string.digits).decode(locale_encoding)
 		if digits != string.digits:
@@ -1301,7 +1302,7 @@ def change_locale(lang, abbrev_lang, additional=None):
 		locale.augment(additional)
 
 	abbrev_locale = locale_mgr.getLocale(abbrev_lang)
-	if abbrev_locale:
+	if abbrev_locale and abbrev_locale.getName() != "en_US":
 		abbrev_locale_lang = abbrev_lang
 		abbrev_locale_encoding = abbrev_locale.getEncoding()
 		abbrev_locale_dash_hack = get_dash_hack(abbrev_locale)
