@@ -32,7 +32,7 @@ IN_BOTH = IN_POPUP | IN_MENU
 def process_html_for_module(module, text):
 	# process lgs individually for each block.
 	# this stops lgs flowing on to the next block
-	text = convert_lgs(text)
+	text = convert_lgs(text, width=20)
 
 	language_code, (font, size, gui) = \
 		fonts.get_font_params(module)
