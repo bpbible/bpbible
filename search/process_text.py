@@ -166,7 +166,7 @@ class ParseThML(ParseBase):
 		for item in range(list.Count()):
 			i = list.GetElement(item)
 			k = SW.VerseKey_castTo(i)
-			if k:
+			if k and k.isBoundSet():
 				lb = k.LowerBound()
 				ub = k.UpperBound()
 				refs.append("%s-%s" % (lb.getOSISRef(), ub.getOSISRef()))
