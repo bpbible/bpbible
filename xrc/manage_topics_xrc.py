@@ -129,6 +129,8 @@ def __gettext_strings():
     _("Copy")
     _("Paste")
     _("Paste")
+    _("Copy the topic as text to the clipboard for use in other applications.")
+    _("Export")
     _("Delete")
     _("Delete")
     _("Undo previous action")

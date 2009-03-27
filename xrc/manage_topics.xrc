@@ -28,6 +28,15 @@
         <tooltip>Paste</tooltip>
         <label>Paste</label>
       </object>
+      
+      
+      
+      
+      <object class="tool" name="copy_text_tool">
+        <bitmap>..\graphics\edit-copy.png</bitmap>
+        <tooltip>Copy the topic as text to the clipboard for use in other applications.</tooltip>
+        <label>Export</label>
+      </object>
       <object class="tool" name="delete_tool">
         <bitmap>..\graphics\delete.png</bitmap>
         <tooltip>Delete</tooltip>

@@ -69,7 +69,8 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		self.topic_tree.Bind(wx.EVT_KEY_UP, self._on_char)
 
 		for tool in ("add_topic_tool", "add_passage_tool", "cut_tool", 
-			"copy_tool", "paste_tool", "delete_tool", "undo_tool", "redo_tool"):
+			"copy_tool", "copy_text_tool", "paste_tool", "delete_tool",
+			"undo_tool", "redo_tool"):
 			handler = lambda event, tool=tool: self._perform_toolbar_action(event, tool)
 			self.toolbar.Bind(wx.EVT_TOOL, handler, id=wx.xrc.XRCID(tool))
 
@@ -245,6 +246,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 			"add_passage_tool": 
 				lambda: self._create_passage(self.selected_topic),			
 			"copy_tool":	self._operations_manager.copy,
+			"copy_text_tool":	self._copy_as_text,
 			"cut_tool":		self._operations_manager.cut,
 			"paste_tool":	self._safe_paste,
 			"delete_tool":	self._delete,
@@ -311,6 +313,28 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 				id=item.Id)
 		
 		self.topic_tree.PopupMenu(menu)
+
+	def _copy_as_text(self):
+		guiconfig.mainfrm.copy(self._get_current_topic_text())
+
+	def _get_current_topic_text(self):
+		if self.selected_topic is None:
+			return u""
+		text = self.selected_topic.full_name + u"\n" + self.selected_topic.description.strip()
+
+		passage_text = u"\n".join(self._passage_entry_text(passage_entry)
+				for passage_entry in self.selected_topic.passages)
+		if passage_text:
+			text += u"\n\n" + passage_text
+	
+		return text.strip()
+
+	def _passage_entry_text(self, passage_entry):
+		"""Gets the text for the given passage entry with its comment."""
+		text = passage_entry.passage.GetBestRange(userOutput=True)
+		if passage_entry.comment:
+			text = u"%s: %s" % (text, passage_entry.comment.strip())
+		return text
 
 	@guiutil.frozen
 	def _safe_paste(self, operation=None):
