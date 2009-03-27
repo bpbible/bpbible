@@ -4,6 +4,7 @@ from gui.guiutil import FreezeUI
 from events import HISTORY
 import guiconfig
 from swlib import pysw
+from util import osutils
 
 use_history_as_tree = False
 
@@ -196,7 +197,10 @@ class HistoryTree(wx.TreeCtrl):
 	def rebuild_tree(self, item=None):
 		self.Unbind(wx.EVT_TREE_SEL_CHANGED)
 	
-		freeze = FreezeUI(self)
+		if osutils.is_gtk():
+			freeze = None
+		else:
+			freeze = FreezeUI(self)
 		self.DeleteAllItems()
 		self.build_tree()
 		root = self.GetRootItem()
