@@ -143,7 +143,7 @@ def __gettext_strings():
     _("Search Options")
     _("0 references found")
     _("Save Results")
-    _("Warning: Searching on fields may not work or may not display all matches.")
+    _("Warning: This book contains invalid XML, so searching on fields may not work or may not display all matches in this book.")
     _("&Close")
     _("Search &Type:")
     _("Indexed")

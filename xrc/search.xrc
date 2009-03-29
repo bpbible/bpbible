@@ -131,7 +131,7 @@
                       <object class="wxBoxSizer">
                         <object class="sizeritem">
                           <object class="wxStaticText" name="maybe_incorrect_results_label">
-                            <label>Warning: Searching on fields may not work or may not display all matches.</label>
+                            <label>Warning: This book contains invalid XML, so searching on fields may not work or may not display all matches in this book.</label>
                           </object>
                         </object>
                         <orient>wxHORIZONTAL</orient>

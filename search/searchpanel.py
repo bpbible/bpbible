@@ -672,6 +672,7 @@ class SearchPanel(xrcSearchPanel):
 		search_type = COMBINED
 		self.numwords = len(regexes)
 		succeeded = True
+		maybe_show = False
 		if case_sensitive:
 			search_type |= index.CASESENSITIVE
 		
@@ -702,8 +703,18 @@ class SearchPanel(xrcSearchPanel):
 			self.hits = len(self.search_results)
 			if self.hits == 0:
 				succeeded = False
+				maybe_show = True
 
-		self.maybe_incorrect_results_label.Show(self.maybe_incorrect_results)
+		print self.maybe_incorrect_results
+		relayout = self.maybe_incorrect_results_label.IsShown() != self.maybe_incorrect_results
+		if relayout:
+			self.maybe_incorrect_results_label.Show(
+				self.maybe_incorrect_results
+			)
+		
+			self.layout_panel_1()
+		
+		maybe_show = maybe_show and self.maybe_incorrect_results
 
 		if not succeeded:
 			self.search_label.Label = (
@@ -718,7 +729,7 @@ class SearchPanel(xrcSearchPanel):
 				)
 			)
 				
-			wx.CallAfter(self.clear_list)
+			wx.CallAfter(self.clear_list, maybe_show)
 			return
 
 		self.search_results = index.RemoveDuplicates(self.search_results)
@@ -834,10 +845,12 @@ class SearchPanel(xrcSearchPanel):
 		# Update UI
 		self.insert_results()
 
-	def clear_list(self):
+	def clear_list(self, maybe_show=False):
 		self.search_button.SetLabel(_("&Search"))
 		self.show_progress_bar(False)
-		self.maybe_incorrect_results_label.Hide()
+		if not maybe_show and self.maybe_incorrect_results_label.IsShown():
+			self.maybe_incorrect_results_label.Hide()
+			self.layout_panel_1()
 
 		#Clear list
 		self.verselist.set_data([_("Reference"), _("Preview")], length=0)
