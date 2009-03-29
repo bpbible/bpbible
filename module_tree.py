@@ -160,18 +160,26 @@ class PathModuleTree(ModuleTree):
 				break
 		else:
 			dprint(ERROR, "Did not find mgr in list", mgr)
-	
+
 class LanguageModuleTree(ModuleTree):
 	def add_first_level_groups(self):
+		def module_lang(x):
+			if x == "Greek":
+				return "grc"
+			if x == "Hebrew":
+				return "he"
+			return module.Lang()
 		language_mappings = {}
 		self.data = {}
-		for module in biblemgr.modules.values():
-			lang = module.Lang()
+		for module in biblemgr.modules.values() + ["Greek", "Hebrew"]:
+			lang = module_lang(module)
 			if lang not in language_mappings:
 				language_mappings[lang] = \
 					languages.get_language_description(lang)
 
-			self.data.setdefault(lang, []).append(module)
+			d=self.data.setdefault(lang, [])
+			if isinstance(module, SW.Module):
+				d.append(module)
 		
 		for lang, mapping in sorted(language_mappings.items(), 
 			key=lambda (lang, mapping): mapping):

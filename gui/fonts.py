@@ -61,7 +61,7 @@ def get_default_font(module_or_language):
 def get_module_gui_font(module, default_to_None=False):
 	default, (face, size, use_in_gui) = get_module_font_params(module)
 	if use_in_gui:
-		font  = wx.FFont(size, wx.FONTFAMILY_ROMAN, face=face)
+		font = wx.FFont(size, wx.FONTFAMILY_ROMAN, face=face)
 	else:
 		if default_to_None:
 			font = None

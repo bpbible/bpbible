@@ -114,13 +114,17 @@ class FontChoiceDialog(xrcFontChoiceDialog):
 		# if there is a book which uses this language open, 
 		# use this for the preview
 		for book in books:
-			if book.mod.Lang() == data:
+			if book.mod and book.mod.Lang() == data:
 				self.mod = book.mod
 				break
 		
 		# otherwise just take the first one of the language		
 		else:
-			self.mod = self.tree.data[data][0]
+			# greek and hebrew are always there, so they can be empty
+			if self.tree.data[data]:
+				self.mod = self.tree.data[data][0]
+			else:
+				self.mod = None
 		
 		self.item_section = font_settings["language_fonts"]
 		self.item_to_set = data
