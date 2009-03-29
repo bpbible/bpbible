@@ -154,15 +154,12 @@ class Book(object):
 		if not verselist:
 			verselist = self.vk.ParseVerseList(to_str(ref), to_str(lastverse), True)
 
-		print verselist.getRangeText()
-
 		# if they pass in a verselist, they can also pass in the ref they
 		# would like to go along with it. This can be useful if it also
 		# includes headings that shouldn't be seen
 		rangetext = GetBestRange(ref, 
 			userInput=False, userOutput=True, headings=headings)
 
-		print rangetext
 		internal_rangetext = GetBestRange(ref, headings=headings)
 			
 		if rangetext == "":
@@ -211,7 +208,7 @@ class Book(object):
 		
 		self.vk.Headings(old_headings)
 
-		text += template.finalize(''.join(verses))
+		text += template.finalize(u''.join(verses))
 		text += template.footer.safe_substitute(d)
 		return text
 		
