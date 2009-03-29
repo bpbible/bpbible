@@ -142,6 +142,11 @@ class IndexedText(object):
 		self.create_index_against_text(module, key)
 
 		module.setKey(old_key)
+		
+		# IMPORTANT: clear the error indicator
+		# otherwise the highlighted search frame may end up blank the first
+		# time the user uses it!
+		module.Error()
 
 	def extract_strongs(self, text):
 		# put offset in an array, so that we can write to it in the callback
