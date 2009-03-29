@@ -329,8 +329,11 @@ class DisplayFrame(TooltipDisplayer, HtmlSelectableWindow):
 				dprint(WARNING, "unknown type for showRef", type, href)
 				return
 			value = url.getParameterValue("value") #passage
-			module = biblemgr.get_module(url.getParameterValue("module"))			
-			if not value or not module:
+			module = biblemgr.get_module(url.getParameterValue("module"))
+			if not module:
+				module = biblemgr.bible.mod
+
+			if not value:
 				return
 
 			tooltip_config.mod = module
