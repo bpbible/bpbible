@@ -20,6 +20,8 @@ tooltip_settings.add_item("plain_xrefs", False, item_type=bool)
 tooltip_settings.add_item("border", 6, item_type=int)
 
 class TooltipBaseMixin(object):
+	set_toolbar_background = False
+	
 	def __init__(self, *args, **kwargs):
 		self.text = None
 		self.target = None
@@ -229,8 +231,9 @@ class TooltipBaseMixin(object):
 		if self.toolbar_creator is not None:
 			if type(self.tooltip_config) != self.toolbar_creator:
 				self.recreate_toolbar()
-				self.toolbar.SetBackgroundColour(self.colour)
-				self.toolbarpanel.SetBackgroundColour(self.colour)
+				if self.set_toolbar_background:
+					self.toolbar.SetBackgroundColour(self.colour)
+					self.toolbarpanel.SetBackgroundColour(self.colour)
 			else:
 				self.tooltip_config.bind_to_toolbar(self.toolbar)
 			
@@ -260,6 +263,8 @@ class Tooltip(TooltipBaseMixin, tooltip_parent):
 	a) It is converted into a permanent tooltip
 	b) A link on it is opened
 	c) All tooltips are hidden (e.g. moving over a different window)"""
+
+	set_toolbar_background = True
 
 	def __init__(self, parent, style, logical_parent, html_type):
 		self.style = style
@@ -540,8 +545,7 @@ class PermanentTooltip(TooltipBaseMixin, pclass):
 
 def BiblicalPermanentTooltip(parent, ref):
 	"""Creates a Biblical permanent tooltip, open to the given ref."""
-	tooltip_config = BibleTooltipConfig()
-	tooltip_config.set_ref(ref)
+	tooltip_config = BibleTooltipConfig(ref.split("|"))
 	from displayframe import DisplayFrame
 	return PermanentTooltip(parent, html_type=DisplayFrame,
 			tooltip_config=tooltip_config)
