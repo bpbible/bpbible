@@ -68,7 +68,7 @@ class BookFrame(AUIDisplayFrame):
 		if raw is None:
 			raw = config.raw
 		self.reference = ref
-		text = self.book.GetReference(ref, context=context, raw=raw)#bible text
+		text = self.book.GetReference(ref, context=context, raw=raw)
 		if text is None:
 			data = config.MODULE_MISSING_STRING()
 		else:
@@ -225,7 +225,7 @@ class BookFrame(AUIDisplayFrame):
 		tooltip = BiblicalPermanentTooltip(guiconfig.mainfrm,
 			ref=pysw.internal_to_user(ref))
 
-		tooltip.ShowTooltip()
+		tooltip.ShowTooltip(wx.GetMousePosition())
 	
 	def go_quickly_finished(self, qs, ansa):
 		if ansa == wx.OK:
@@ -400,7 +400,7 @@ class CommentaryFrame(LinkedFrame):
 
 	def SetReference(self, ref, context = None):
 		super(CommentaryFrame, self).SetReference(ref)
-		
+
 		self.gui_reference.SetValue(pysw.internal_to_user(ref))
 		self.gui_reference.currentverse = ref
 		
