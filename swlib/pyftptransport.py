@@ -15,6 +15,11 @@ class StatusReporter(object):
 	def statusUpdate(self, dtTotal, dlNow):
 		pass
 
+if not hasattr(Sword, "FTPTransport"):
+	# we may not have built this with FTP support,
+	# as this just takes up space at the moment.
+	Sword.FTPTransport = object
+
 class PyFTPTransport(Sword.FTPTransport):
 	def __init__(self, host, statusReporter=None):
 		super(PyFTPTransport, self).__init__(host, statusReporter)
