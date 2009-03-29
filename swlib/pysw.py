@@ -49,6 +49,7 @@ LIB_1512_COMPAT = SW.Version().currentVersion > SW.Version("1.5.11")
 SW_HAS_MDB = hasattr(SW.Mgr, "loadMDBDir")
 print "SVN; SWORD 1.5.12 compatible" if LIB_1512_COMPAT else "1.5.11 compatible"
 
+locale_dir = "locales/locales.d" + ("/SWORD_1512" if LIB_1512_COMPAT else "")
 if hasattr(sys, "SW_dont_do_stringmgr"):
 	dprint(WARNING, "Skipping StringMgr initialization")
 else:
@@ -83,13 +84,19 @@ else:
 	
 	# we don't own this, the system string mgr holder does
 	m.thisown = False
-	SW.StringMgr.setSystemStringMgr(m)
+	try:
+		SW.StringMgr.setSystemStringMgr(m, locale_dir)
+	except TypeError, e:
+		if LIB_1512_COMPAT:
+			print "Don't we have those patches???", e
+
+		SW.StringMgr.setSystemStringMgr(m)
 	
 # *only* after we've set the system string mgr can we set the system 
 # locale mgr...
 locale_mgr = SW.LocaleMgr.getSystemLocaleMgr()
-locale_mgr.loadConfigDir("locales/locales.d" + 
-	("/SWORD_1512" if LIB_1512_COMPAT else ""))
+if not hasattr(sys, "SW_dont_do_stringmgr"):
+	locale_mgr.loadConfigDir(locale_dir)
 
 #if locale_mgr.getLocale("bpbible"):
 #	locale_mgr.setDefaultLocaleName("bpbible")
@@ -193,8 +200,11 @@ class VK(SW.VerseKey):#, object):
 		if isinstance(key, basestring):
 			#if not KeyExists(key):
 			#	raise VerseParsingError, key
+			#print key
 			SW.VerseKey.__init__(self, key.encode(self.encoding))
+			#print "TESTING", key
 			if raiseError and self.Error():
+				#print "RAISING ERROR"
 				raise VerseParsingError, key
 			return
 			
@@ -608,6 +618,7 @@ def check_vk_bounds(vk):
 #		result=SW.VerseKey.ParseVerseList(self, range, context, expand)
 #		return VerseList(result)
 
+rev_22_21 = VK("rev 22:21")
 class VerseList(list): 
 	"""A list of VK's
 
@@ -723,12 +734,8 @@ class VerseList(list):
 		else:
 			raise TypeError, `args`
 
-			
-				
-			
-
 		for a in self:
-			if a[-1]==VK("rev 22:21"):
+			if a[-1]== rev_22_21:
 				dprint(WARNING, "Possibly incorrect string. Result is", self)
 
 
@@ -790,6 +797,7 @@ class VerseList(list):
 				if headings:
 					old = key.Headings(1)
 
+
 				t = a.getText()
 				#print t, `key.Headings()`
 				if "-" in t:
@@ -803,6 +811,8 @@ class VerseList(list):
 					key.AutoNormalize(True)
 
 				v = VK(key, raiseError=False, headings=headings)
+				v.setLocale("en_US")
+				
 				if headings:
 					key.Headings(old)
 					
@@ -1296,6 +1306,7 @@ def change_locale(lang, abbrev_lang, additional=None):
 			locale_digits = dict(
 				internal_to_external=make_replacer(internal_to_external),
 				external_to_internal=make_replacer(external_to_internal),
+				digits=digits,
 			)
 	
 	if additional:
