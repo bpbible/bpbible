@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-03-02 13:39+EST\n"
+"POT-Creation-Date: 2009-03-30 13:17+EST\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 msgid "Books"
 msgstr "The books tab"
 
-#: auilayer.py:351
+#: auilayer.py:359
 msgid "History"
 msgstr "The history tab"
 
@@ -66,145 +66,146 @@ msgstr ""
 msgid "The text of the heading"
 msgstr ""
 
-#: backend/book.py:524
+#: backend/book.py:609
 msgid ""
 "Couldn't save cipher key. You will have to set it again when you restart"
 msgstr "Arg. The cipher key not be savable. On restarting your key be lost"
 
-#: backend/book.py:548
+#: backend/book.py:633
 msgid "commentary"
 msgstr "Other man's words"
 
-#: backend/book.py:555 bibleframe.py:35 xrc/auifrm_xrc.py:67
+#: backend/book.py:640 bibleframe.py:35 xrc/auifrm_xrc.py:68
 msgid "Bible"
 msgstr "God's word"
 
-#: bibleframe.py:70 bookframe.py:175 mainframe.py:251
+#: bibleframe.py:71 bookframe.py:147 mainframe.py:255
 #: search/searchpanel.py:154
 msgid "Search"
 msgstr "Hunt around inside this book"
 
-#: bibleframe.py:75 xrc/harmonyfrm_xrc.py:92
+#: bibleframe.py:76 xrc/harmonyfrm_xrc.py:92
 msgid "Harmony"
 msgstr "Parallel passage viewer"
 
-#: bibleframe.py:78
+#: bibleframe.py:79
 msgid "Open the harmony"
 msgstr "Open the parallel passage viewer"
 
-#: bibleframe.py:81 xrc/guess_verse_xrc.py:67
+#: bibleframe.py:82 xrc/guess_verse_xrc.py:67
 msgid "Guess the Verse"
 msgstr "Guess where a reference be"
 
-#: bibleframe.py:84
+#: bibleframe.py:85
 msgid "Play Guess the Verse"
 msgstr "Guess where a reference be"
 
-#: bibleframe.py:90
+#: bibleframe.py:91
 msgid "Random verse"
 msgstr "Go somewhere new"
 
-#: bibleframe.py:93
+#: bibleframe.py:94
 msgid "Go to a random verse"
 msgstr "Go somewhere new"
 
-#: bibleframe.py:96
+#: bibleframe.py:97
 msgid "Copy verses"
 msgstr "Transport the verses into the clipboard"
 
-#: bibleframe.py:100
+#: bibleframe.py:101
 msgid "Copy verses to other applications"
 msgstr "Zap verses into a different program"
 
-#: bibleframe.py:104 bibleframe.py:153
+#: bibleframe.py:105 bibleframe.py:154
 msgid "Open sticky tooltip"
 msgstr "Open a tooltip of stickyness"
 
-#: bibleframe.py:107
+#: bibleframe.py:108
 msgid "Open a sticky tooltip with the selected verses"
 msgstr "Open a tooltip of stickyness with the verses selected"
 
-#: bibleframe.py:111
+#: bibleframe.py:112
 msgid "Compare verses"
 msgstr "See the differences between them texts"
 
-#: bibleframe.py:114
+#: bibleframe.py:115
 msgid "Open the verse comparison pane to the selected verses"
 msgstr "Zap to the text differentiator with these verses"
 
-#: bibleframe.py:121 manage_topics_frame.py:154 xrc/manage_topics_xrc.py:138
+#: bibleframe.py:122 manage_topics_frame.py:154 xrc/manage_topics_xrc.py:138
 msgid "Manage Topics"
 msgstr "Twiddle the topics"
 
-#: bibleframe.py:124
+#: bibleframe.py:125
 msgid "Manages all of the topics and the passages in them."
 msgstr "Does topic and passage twiddling"
 
-#: bibleframe.py:127
+#: bibleframe.py:128
 msgid "Tag verses"
 msgstr "Tag them verses"
 
-#: bibleframe.py:130
+#: bibleframe.py:131
 msgid "Tags the currently selected verses."
 msgstr "Tag these verses"
 
-#: bibleframe.py:188
+#: bibleframe.py:189
 msgid "Copying selected verses..."
 msgstr "Zapping 'em into the clipboard"
 
-#: bookframe.py:157 mainframe.py:787
+#: bibleframe.py:261
+msgid "This chapter is empty."
+msgstr ""
+
+#: bookframe.py:129 mainframe.py:796
 msgid "Show the %s pane"
 msgstr "%s pane: show"
 
-#: bookframe.py:159
+#: bookframe.py:131
 msgid "Hide the %s pane"
 msgstr "%s pane: hide"
 
-#: bookframe.py:168
+#: bookframe.py:140
 msgid "Shows or hides the pane"
 msgstr "pane: toggle"
 
-#: bookframe.py:177
+#: bookframe.py:149
 msgid "Search in this book"
 msgstr "Run your eyes over the book for this word"
 
-#: bookframe.py:188
+#: bookframe.py:160
 msgid "Information..."
 msgstr "Open the metadata..."
 
-#: bookframe.py:191
+#: bookframe.py:163
 msgid "Show information on the current book"
 msgstr "Display the guff about this book"
 
-#: bookframe.py:205
+#: bookframe.py:177
 msgid "Search for:"
 msgstr "Run your eyes over the page for:"
 
-#: bookframe.py:251
+#: bookframe.py:220
 msgid "Go to reference"
 msgstr "Zip to this reference"
 
-#: bookframe.py:366
+#: bookframe.py:331
 msgid "Go to this reference"
 msgstr "Zip to this reference"
 
-#: bookframe.py:373
+#: bookframe.py:338
 msgid "Link the %s to the Bible"
 msgstr "Hook up the %s to the centre pane"
 
-#: bookframe.py:430
+#: bookframe.py:395
 msgid "Commentary"
 msgstr "Other man's words"
 
-#: bookframe.py:443
+#: bookframe.py:408
 msgid "Dictionary"
 msgstr "Define a word"
 
-#: config.py:101
-msgid "BPBible"
-msgstr "BP - God's word"
-
-#: config.py:104
+#: config.py:107
+#, fuzzy
 msgid ""
 "<b>This book is not set.</b><br>\n"
 "This may be because you do not have any of this type of book installed.\n"
@@ -220,7 +221,8 @@ msgstr ""
 "<h1>No books here!!!</h1>\n"
 "Read the manual to find out how to put books in here"
 
-#: config.py:115
+#: config.py:118
+#, fuzzy
 msgid ""
 "<p><b>[Reference clipped as the maximum verse limit (%d verses) has been "
 "exceeded.\n"
@@ -235,64 +237,58 @@ msgstr "Change the way this be working..."
 msgid "<custom: based on %s>"
 msgstr "!!!CUSTOM!!! - from %s"
 
-#: displayframe.py:263
-msgid ""
-"Module %s is not installed, so you cannot view details for this strong's "
-"number"
-msgstr "You ain't get the book %s, so you can't see this strong's number info"
-
-#: displayframe.py:273
+#: displayframe.py:248
 msgid "Don't know how to open this morphology type:"
 msgstr "Don't have a clue how to open this morphology type:"
 
-#: displayframe.py:284
+#: displayframe.py:258
 msgid ""
 "Module %s is not installed, so you cannot view details for this "
 "morphological code"
 msgstr ""
 "You ain't get the book %s, so you can't see this morphological code info"
 
-#: displayframe.py:478
+#: displayframe.py:457
 msgid "Select all"
 msgstr "Mark all text as selected"
 
-#: displayframe.py:480
+#: displayframe.py:459
 msgid "Select all the text in the frame"
 msgstr "Mark all the text in the frame as being selected"
 
-#: displayframe.py:483
+#: displayframe.py:462
 msgid "Copy selection (with links)"
 msgstr "Zap marked text, links and all, into clipboard"
 
-#: displayframe.py:486
+#: displayframe.py:465
 msgid "Copy the selected text with links"
 msgstr "Zap marked text, links and all, into clipboard"
 
-#: displayframe.py:490
+#: displayframe.py:469
 msgid "Copy selection (without links)"
 msgstr "Zap marked text, eliminating links, into clipboard"
 
-#: displayframe.py:493
+#: displayframe.py:472
 msgid "Copy the selected text, removing all links"
 msgstr "Zap marked text, eliminating links, into clipboard"
 
-#: displayframe.py:555
+#: displayframe.py:534
 msgid "the selected word"
 msgstr "the word you have selected"
 
-#: displayframe.py:561
+#: displayframe.py:540
 msgid "the selected phrase"
 msgstr "The phrase you've chose"
 
-#: displayframe.py:575
+#: displayframe.py:554
 msgid "Look up %s in the dictionary"
 msgstr "Examine the dictionary for %s"
 
-#: displayframe.py:596
+#: displayframe.py:575
 msgid "Search for %s in the Bible"
 msgstr "Run your eyes over God's word for %s"
 
-#: displayframe.py:598
+#: displayframe.py:577
 #, fuzzy
 msgid "Search for %s in this book"
 msgstr "Run your eyes over the book for this word"
@@ -346,9 +342,14 @@ msgstr "Reading in the gospel comparator"
 msgid "%s is not in this harmony"
 msgstr "Arg. %s be not in here"
 
+#: header_bar.py:38
+#, fuzzy
+msgid "%s verses"
+msgstr "Tag them verses"
+
 #: install_manager/install_drop_target.py:33
 #: install_manager/install_drop_target.py:56 module_manager.py:120
-#: module_manager.py:124 search/searchpanel.py:763 templatemanager.py:436
+#: module_manager.py:124 search/searchpanel.py:777 templatemanager.py:436
 #: templatemanager.py:447
 msgid "Error"
 msgstr "ERROR"
@@ -395,7 +396,7 @@ msgstr ""
 msgid "Extracting %s"
 msgstr "Pulling %s out"
 
-#: install_manager/install_drop_target.py:82 search/searchpanel.py:917
+#: install_manager/install_drop_target.py:82 search/searchpanel.py:933
 msgid "Preparing"
 msgstr "Starting..."
 
@@ -423,153 +424,179 @@ msgstr "Open the metadata..."
 msgid "Cannot read book metadata in file %s"
 msgstr "Arg. The book metadata be broken in file %s"
 
-#: mainframe.py:247
+#: mainframe.py:251
 msgid "Go to verse"
 msgstr "Zip to this reference"
 
-#: mainframe.py:248
+#: mainframe.py:252
 msgid "Go to this verse"
 msgstr "Zip to this reference"
 
-#: mainframe.py:252
+#: mainframe.py:256
 #, fuzzy
 msgid "Search in the current book"
 msgstr "Run your eyes over the book for this word"
 
-#: mainframe.py:255 xrc/copyverses_xrc.py:80
+#: mainframe.py:259 xrc/copyverses_xrc.py:80
 msgid "Copy Verses"
 msgstr "Transport the verses into the clipboard"
 
-#: mainframe.py:256
+#: mainframe.py:260
 msgid "Open the Copy Verses dialog"
 msgstr "Transport the verses into the clipboard"
 
-#: mainframe.py:261
+#: mainframe.py:265
 msgid "Back"
 msgstr "Return to the previous verse"
 
-#: mainframe.py:262
+#: mainframe.py:266
 msgid "Go back a verse"
 msgstr "Return to the previous verse"
 
-#: mainframe.py:265
+#: mainframe.py:269
 msgid "Forward"
 msgstr "Return to the next verse"
 
-#: mainframe.py:266
+#: mainframe.py:270
 msgid "Go forward a verse"
 msgstr "Return to the next verse"
 
-#: mainframe.py:270
+#: mainframe.py:274
 msgid "Zoom In"
 msgstr "Grow"
 
-#: mainframe.py:271
+#: mainframe.py:275
 msgid "Make text bigger"
 msgstr "Enlarge the text"
 
-#: mainframe.py:274
+#: mainframe.py:278
 msgid "Default Zoom"
 msgstr "Back to normal size"
 
-#: mainframe.py:275
+#: mainframe.py:279
 msgid "Return text to default size"
 msgstr "Put text back the way it were"
 
-#: mainframe.py:278
+#: mainframe.py:282
 msgid "Zoom Out"
 msgstr "Shrink"
 
-#: mainframe.py:279
+#: mainframe.py:283
 msgid "Make text smaller"
 msgstr "Shrink text"
 
-#: mainframe.py:308
+#: mainframe.py:312
 msgid "Navigation"
 msgstr "A toolbar to move around"
 
-#: mainframe.py:310
+#: mainframe.py:314
 msgid "Zoom"
 msgstr "A toolbar to Zoom"
 
-#: mainframe.py:312
+#: mainframe.py:316
 msgid "History toolbar"
 msgstr "A toolbar with history"
 
-#: mainframe.py:672
+#: mainframe.py:681
 #, fuzzy
 msgid "Installable books"
 msgstr "Put some more books in my library..."
 
-#: mainframe.py:675 versecompare.py:188
+#: mainframe.py:684 versecompare.py:188
 msgid "Choose books"
 msgstr "Select the texts"
 
-#: mainframe.py:720 xrc/auifrm_xrc.py:44
+#: mainframe.py:729 xrc/auifrm_xrc.py:44
 msgid "&Language"
 msgstr "&Lingo"
 
-#: mainframe.py:745 xrc/auifrm_xrc.py:47
+#: mainframe.py:754 xrc/auifrm_xrc.py:48
 msgid "&Display"
 msgstr "Toggle them options"
 
-#: mainframe.py:750 xrc/auifrm_xrc.py:50
+#: mainframe.py:759 xrc/auifrm_xrc.py:51
 msgid "&Windows"
 msgstr "This be a list of windows"
 
-#: mainframe.py:755 xrc/auifrm_xrc.py:49
+#: mainframe.py:764 xrc/auifrm_xrc.py:50
 msgid "Toolbars"
 msgstr "These be the floating strips"
 
-#: mainframe.py:783
+#: mainframe.py:792
 msgid "Show the %s toolbar"
 msgstr "%s toolbar: show"
 
-#: mainframe.py:806 xrc/auifrm_xrc.py:51
+#: mainframe.py:815 xrc/auifrm_xrc.py:52
 msgid "Debug"
 msgstr "For the experts"
 
-#: mainframe.py:877
-msgid "Use Strong's headwords"
+#: mainframe.py:837
+msgid "Pronunciation"
+msgstr ""
+
+#: mainframe.py:838
+#, fuzzy
+msgid "Original Language"
+msgstr "Lingo"
+
+#: mainframe.py:839
+#, fuzzy
+msgid "Transliterated"
+msgstr "Translingofiers"
+
+#: mainframe.py:845
+#, fuzzy
+msgid "Strong's Numbers"
+msgstr "Bad strong's %s."
+
+#: mainframe.py:862
+#, fuzzy
+msgid "Strong's headwords"
 msgstr "Show a word, not a number"
 
-#: mainframe.py:878
-msgid "Display Strong's numbers using the transliterated text"
-msgstr "Show a word for the strong's text, not the number"
-
-#: mainframe.py:883
+#: mainframe.py:925
 msgid "Expand cross-references"
 msgstr "Grow cross-references"
 
-#: mainframe.py:884
+#: mainframe.py:926
 msgid "Display cross references partially expanded"
 msgstr "Show cross-references expanded to the 2nd level"
 
-#: mainframe.py:889
+#: mainframe.py:931
 msgid "One line per verse"
 msgstr "Each verse by itself"
 
-#: mainframe.py:890
+#: mainframe.py:932
 msgid "Display each verse on its own line."
 msgstr "Put each verse on its own lonesome line"
 
-#: mainframe.py:895
+#: mainframe.py:937
 msgid "Topic Tags"
 msgstr "Tags of topic"
 
-#: mainframe.py:896
+#: mainframe.py:938
 msgid "Display the topics that each verse is tagged with."
 msgstr "Show what the verses their be"
 
-#: mainframe.py:1060
+#: mainframe.py:1087
+msgid "BPBible will now quickly restart to change your language."
+msgstr ""
+
+#: mainframe.py:1088
+#, fuzzy
+msgid "Restarting"
+msgstr "Restart the application"
+
+#: mainframe.py:1107
 msgid "An error occurred on closing:"
 msgstr "This problem be occuring on conclusion:"
 
-#: mainframe.py:1072 mainframe.py:1073
+#: mainframe.py:1119 mainframe.py:1120
 msgid "search "
 msgstr ""
 
-#: mainframe.py:1096
+#: mainframe.py:1143
+#, fuzzy
 msgid ""
 "Flexible Bible study software.\n"
 "\t\t\tBuilt Using the Sword Project from crosswire.org\n"
@@ -583,35 +610,35 @@ msgstr ""
 "\t\t\twxPython Version be %(wxversion)s\n"
 "\t\t\tSWORD Version: %(swversion)s"
 
-#: mainframe.py:1107
+#: mainframe.py:1154
 msgid "BPBible website"
 msgstr "Vist the website for this application"
 
-#: mainframe.py:1109
+#: mainframe.py:1156
 msgid "BPBible development team"
 msgstr "The BPBible coders"
 
-#: mainframe.py:1110
+#: mainframe.py:1157
 msgid "SWORD library developers"
 msgstr "SWORD devels"
 
-#: mainframe.py:1114
+#: mainframe.py:1161
 msgid "Developers"
 msgstr "Coders"
 
-#: mainframe.py:1115
+#: mainframe.py:1162
 msgid "Artists"
 msgstr "Picture makers"
 
-#: mainframe.py:1116
+#: mainframe.py:1163
 msgid "Translators"
 msgstr "Translingofiers"
 
-#: mainframe.py:1118
+#: mainframe.py:1165
 msgid "translator-credits"
 msgstr "Translated dutifully by BM"
 
-#: mainframe.py:1122
+#: mainframe.py:1169
 msgid ""
 "Icons used are from famfamfam\n"
 "http://www.famfamfam.com/lab/icons/silk\n"
@@ -623,7 +650,7 @@ msgstr ""
 "and the Tango Desktop Project\n"
 "http://tango.freedesktop.org/Tango_Desktop_Project for the use of their icons"
 
-#: mainframe.py:1128
+#: mainframe.py:1175
 msgid ""
 "BPBible is licensed under the GPL v2. For more details, refer to the LICENSE."
 "txt file in the application directory"
@@ -716,14 +743,6 @@ msgid "No items have been selected."
 msgstr ""
 
 #: manage_topics_frame.py:1066
-msgid ""
-"Passage `%s' contains multiple passages.\n"
-"Only one verse or verse range can be entered."
-msgstr ""
-"Passage `%s' isn't simple enough\n"
-"Try putting in only one verse or verse range"
-
-#: manage_topics_frame.py:1071
 msgid "Unrecognised passage `%s'."
 msgstr "Don't know this passage `%s'"
 
@@ -843,7 +862,26 @@ msgstr "Slurping up the books"
 msgid "Path manager"
 msgstr "Manage dem paths"
 
-#: protocols.py:94
+#: preview_window.py:10 search/searchpanel.py:856 search/searchpanel.py:890
+#: xrc/copyverses_xrc.py:78 xrc/templatemanager_xrc.py:97
+msgid "Preview"
+msgstr "Scan your eyes over them changes"
+
+#: preview_window.py:34
+msgid "Move over a link to see a preview for it"
+msgstr ""
+
+#: preview_window.py:57
+#, fuzzy
+msgid "Show in tooltip"
+msgstr "A tooltip of stickyness"
+
+#: preview_window.py:58
+#, fuzzy
+msgid "Show this in a tooltip"
+msgstr "%s toolbar: show"
+
+#: protocols.py:99
 #, fuzzy
 msgid ""
 "The book '%s' is not installed, so you cannot view details for this entry (%"
@@ -898,34 +936,34 @@ msgstr ""
 msgid "Could not understand string"
 msgstr "What string be this?"
 
-#: search/searchpanel.py:258 search/searchpanel.py:548
-#: search/searchpanel.py:708 search/searchpanel.py:727
-#: search/searchpanel.py:805 search/searchpanel.py:821
-#: search/searchpanel.py:857
+#: search/searchpanel.py:261 search/searchpanel.py:551
+#: search/searchpanel.py:722 search/searchpanel.py:741
+#: search/searchpanel.py:819 search/searchpanel.py:835
+#: search/searchpanel.py:873
 msgid "%d references found"
 msgstr "Found %d passages"
 
-#: search/searchpanel.py:284 xrc/search_xrc.py:142
+#: search/searchpanel.py:287 xrc/search_xrc.py:142
 msgid "&Index"
 msgstr "Build the index"
 
-#: search/searchpanel.py:287
+#: search/searchpanel.py:290
 msgid "Unindex"
 msgstr "Zap the index"
 
-#: search/searchpanel.py:309
+#: search/searchpanel.py:312
 msgid "You don't have a current %s, so you cannot search at the moment"
 msgstr "There be no %s, so no hunting for you now"
 
-#: search/searchpanel.py:316 search/searchpanel.py:353
+#: search/searchpanel.py:319 search/searchpanel.py:356
 msgid "No current version"
 msgstr "The version be missing"
 
-#: search/searchpanel.py:327
+#: search/searchpanel.py:330
 msgid "Reading search index..."
 msgstr "Slurping up the index"
 
-#: search/searchpanel.py:359
+#: search/searchpanel.py:362
 msgid ""
 "Search index does not exist for book %s. Indexing will make search much "
 "faster. Create Index?"
@@ -933,120 +971,115 @@ msgstr ""
 "Missing search index for %s. Indexing will make hunting zippier.\n"
 "Index: build?"
 
-#: search/searchpanel.py:362
+#: search/searchpanel.py:365
 msgid "Create Index?"
 msgstr "Index: build?"
 
-#: search/searchpanel.py:381 search/searchpanel.py:580
-#: search/searchpanel.py:835 search/searchpanel.py:867 xrc/search_xrc.py:140
+#: search/searchpanel.py:384 search/searchpanel.py:583
+#: search/searchpanel.py:849 search/searchpanel.py:883 xrc/search_xrc.py:140
 msgid "&Search"
 msgstr "Hunt &around"
 
-#: search/searchpanel.py:407 xrc/search_xrc.py:143 xrc/search_xrc.py:158
+#: search/searchpanel.py:410 xrc/search_xrc.py:143 xrc/search_xrc.py:158
 msgid "Search Options"
 msgstr "Configure that search"
 
-#: search/searchpanel.py:544
+#: search/searchpanel.py:547
 msgid "&Stop"
 msgstr "&Halt"
 
-#: search/searchpanel.py:610 search/searchpanel.py:684
+#: search/searchpanel.py:613 search/searchpanel.py:688
 msgid "Error in search"
 msgstr "Broken hunt parameters"
 
-#: search/searchpanel.py:615 search/searchpanel.py:689
+#: search/searchpanel.py:618 search/searchpanel.py:693
 msgid "The following words were not found in this %s:"
 msgstr "In this %s, these words be missing:"
 
-#: search/searchpanel.py:618 search/searchpanel.py:692
+#: search/searchpanel.py:621 search/searchpanel.py:696
 msgid "Unknown word"
 msgstr "What word be this?"
 
-#: search/searchpanel.py:710 search/searchpanel.py:730
-#: search/searchpanel.py:807 search/searchpanel.py:825
+#: search/searchpanel.py:724 search/searchpanel.py:744
+#: search/searchpanel.py:821 search/searchpanel.py:839
 msgid "1 word"
 msgstr "1 ngram"
 
-#: search/searchpanel.py:711 search/searchpanel.py:731
-#: search/searchpanel.py:808 search/searchpanel.py:826
+#: search/searchpanel.py:725 search/searchpanel.py:745
+#: search/searchpanel.py:822 search/searchpanel.py:840
 msgid "%d words"
 msgstr "%d ngrams"
 
-#: search/searchpanel.py:714 search/searchpanel.py:736
+#: search/searchpanel.py:728 search/searchpanel.py:750
 msgid "%d hits"
 msgstr "%d results"
 
-#: search/searchpanel.py:726 search/searchpanel.py:820
-#: search/searchpanel.py:856
+#: search/searchpanel.py:740 search/searchpanel.py:834
+#: search/searchpanel.py:872
 msgid "1 reference found"
 msgstr "1 passage found"
 
-#: search/searchpanel.py:735
+#: search/searchpanel.py:749
 msgid "1 hit"
 msgstr "1 result"
 
-#: search/searchpanel.py:762
+#: search/searchpanel.py:776
 #, fuzzy
 msgid "You cannot search on fields in unindexed search"
 msgstr "Whaddaya mean be searching for a %r?"
 
-#: search/searchpanel.py:840 search/searchpanel.py:874
+#: search/searchpanel.py:856 search/searchpanel.py:890
 msgid "Reference"
 msgstr "Entry"
 
-#: search/searchpanel.py:840 search/searchpanel.py:874
-#: xrc/copyverses_xrc.py:78 xrc/templatemanager_xrc.py:97
-msgid "Preview"
-msgstr "Scan your eyes over them changes"
-
-#: search/searchpanel.py:853
+#: search/searchpanel.py:869
 msgid "%(version)s search - %(numresults)s"
 msgstr "For hunting in %(version)s - %(numresults)s"
 
-#: search/searchpanel.py:913
+#: search/searchpanel.py:929
 msgid "Processing %s"
 msgstr "Chewing over %s"
 
-#: search/searchpanel.py:917
+#: search/searchpanel.py:933
 msgid "Indexing %s"
 msgstr "%s: Indexing"
 
-#: search/searchpanel.py:949
+#: search/searchpanel.py:965
 msgid "Writing %s"
 msgstr "Dumping %s"
 
-#: search/searchpanel.py:1091
+#: search/searchpanel.py:1107
 msgid "Other Book Search"
 msgstr "Search different books"
 
-#: search/searchpanel.py:1136
+#: search/searchpanel.py:1152
 msgid "Entries"
 msgstr "Badgers"
 
-#: search/searchpanel.py:1143
+#: search/searchpanel.py:1159
 msgid "Dictionary Search"
 msgstr "Search them definitions"
 
-#: search/searchpanel.py:1184
+#: search/searchpanel.py:1200
 msgid "Commentary Search"
 msgstr "Search Other man's words"
 
-#: swlib/pysw.py:114 swlib/pysw.py:548
+#: swlib/pysw.py:124 swlib/pysw.py:597
 msgid "There are only %(chapters)d chapters in %(book)s (given %(given)d)"
 msgstr ""
 "You seem to think %(book)s has %(given)d chapters, but %(book)s really has %"
 "(chapters)d chapters"
 
-#: swlib/pysw.py:131 swlib/pysw.py:558
+#: swlib/pysw.py:142 swlib/pysw.py:608
 msgid ""
 "There are only %(verses)d verses in %(book)s %(chapter)s (given %(given)d)"
 msgstr "%(book)s %(chapter)s has only %(verses)d verses, not %(given)d"
 
-#: swlib/pysw.py:725 swlib/pysw.py:1378
+#: swlib/pysw.py:777 swlib/pysw.py:1492
 msgid "Invalid Reference: %s"
 msgstr "WRONG: %s"
 
-#: swlib/pysw.py:1366
+#: swlib/pysw.py:1480
 msgid "Invalid empty reference"
 msgstr "Fatal Error 1302: reference was empty or not supplied"
 
@@ -1070,39 +1103,55 @@ msgstr "Trample?"
 msgid "Template name is already in use. Try a different name."
 msgstr "This template name is already there. Try a different name."
 
-#: tooltip.py:179
-msgid "Tooltip"
-msgstr "TipTool"
-
-#: tooltip.py:218
+#: tooltip.py:208
 msgid "Anchor"
 msgstr "Glue tight"
 
-#: tooltip.py:219
+#: tooltip.py:209
 msgid "Don't hide this tooltip"
 msgstr "Don't let this run away"
 
-#: tooltip.py:222
+#: tooltip.py:212
 msgid "Copy All"
 msgstr "Zip all off"
 
-#: tooltip.py:223
+#: tooltip.py:213
 msgid "Copy tooltip text (with links)"
 msgstr "Zap tooltip text, links and all, into clipboard"
 
-#: tooltip.py:378 tooltip.py:503
+#: tooltip.py:278
+msgid "Tooltip"
+msgstr "TipTool"
+
+#: tooltip.py:451 tooltip.py:592
 msgid "Sticky Tooltip"
 msgstr "A tooltip of stickyness"
 
-#: tooltip.py:400 tooltip.py:402
+#: tooltip.py:504 tooltip.py:506
 msgid "Stay on top"
 msgstr "Anchor on surface of screen"
 
-#: tooltip.py:537
+#: tooltip.py:638
+#, fuzzy
+msgid "Find"
+msgstr "&Hunt for:"
+
+#: tooltip.py:640
+#, fuzzy
+msgid "Search for this strong's number in the Bible"
+msgstr "Run your eyes over God's word for %s"
+
+#: tooltip.py:654
+msgid ""
+"Module %s is not installed, so you cannot view details for this strong's "
+"number"
+msgstr "You ain't get the book %s, so you can't see this strong's number info"
+
+#: tooltip.py:716
 msgid "Go to verses"
 msgstr "Zip to these references"
 
-#: tooltip.py:539
+#: tooltip.py:718
 msgid "Open this reference"
 msgstr "Zip to this reference"
 
@@ -1155,70 +1204,74 @@ msgid "&Exit"
 msgstr "&Kill the application off"
 
 #: xrc/auifrm_xrc.py:46
+msgid "Quit this program"
+msgstr ""
+
+#: xrc/auifrm_xrc.py:47
 msgid "&File"
 msgstr "&Configure this program"
 
-#: xrc/auifrm_xrc.py:48
+#: xrc/auifrm_xrc.py:49
 msgid "Default Layout"
 msgstr "Change it back the way it were"
 
-#: xrc/auifrm_xrc.py:52
+#: xrc/auifrm_xrc.py:53
 msgid "Html Ide"
 msgstr "This be the HTML IDE"
 
-#: xrc/auifrm_xrc.py:53
+#: xrc/auifrm_xrc.py:54
 msgid "WI"
 msgstr "Show me the widget inspector"
 
-#: xrc/auifrm_xrc.py:54
+#: xrc/auifrm_xrc.py:55
 msgid "gather"
 msgstr "Gather the text that be here"
 
-#: xrc/auifrm_xrc.py:55
+#: xrc/auifrm_xrc.py:56
 msgid "diff"
 msgstr "Diff with the text that was there"
 
-#: xrc/auifrm_xrc.py:56
+#: xrc/auifrm_xrc.py:57
 msgid "confirm"
 msgstr "Overwrite with the new text"
 
-#: xrc/auifrm_xrc.py:57
+#: xrc/auifrm_xrc.py:58
 msgid "compile"
 msgstr "Crunch it into the correct form"
 
-#: xrc/auifrm_xrc.py:58
+#: xrc/auifrm_xrc.py:59
 msgid "Restart"
 msgstr "Restart the application"
 
-#: xrc/auifrm_xrc.py:59
+#: xrc/auifrm_xrc.py:60
 msgid "Locale"
 msgstr "Fiddle with languages"
 
-#: xrc/auifrm_xrc.py:60
+#: xrc/auifrm_xrc.py:61
 msgid "&Help"
 msgstr "&Arrghh"
 
-#: xrc/auifrm_xrc.py:61
+#: xrc/auifrm_xrc.py:62
 msgid "BPBible Website"
 msgstr "Vist the website for this application"
 
-#: xrc/auifrm_xrc.py:62
+#: xrc/auifrm_xrc.py:63
 msgid "Documentation..."
 msgstr "How things work..."
 
-#: xrc/auifrm_xrc.py:63
+#: xrc/auifrm_xrc.py:64
 msgid "Report a problem..."
 msgstr "Say what be wrong in here..."
 
-#: xrc/auifrm_xrc.py:64
+#: xrc/auifrm_xrc.py:65
 msgid "Download books..."
 msgstr "Get more reading material"
 
-#: xrc/auifrm_xrc.py:65
+#: xrc/auifrm_xrc.py:66
 msgid "&About..."
 msgstr "&Read all about these there scurvy knaves"
 
-#: xrc/auifrm_xrc.py:66
+#: xrc/auifrm_xrc.py:67
 msgid "Show about dialog"
 msgstr ""
 
@@ -1407,7 +1460,8 @@ msgstr "&Store this search"
 
 #: xrc/search_xrc.py:146
 msgid ""
-"Warning: Searching on fields may not work or may not display all matches."
+"Warning: This book contains invalid XML, so searching on fields may not work "
+"or may not display all matches in this book."
 msgstr ""
 
 #: xrc/search_xrc.py:147
@@ -1514,6 +1568,19 @@ msgstr ""
 "You can use $$text to bring up the verse text\n"
 "$$versenum to bring up the verse number\n"
 "and $$reference for the reference"
+
+#~ msgid "BPBible"
+#~ msgstr "BP - God's word"
+
+#~ msgid "Display Strong's numbers using the transliterated text"
+#~ msgstr "Show a word for the strong's text, not the number"
+
+#~ msgid ""
+#~ "Passage `%s' contains multiple passages.\n"
+#~ "Only one verse or verse range can be entered."
+#~ msgstr ""
+#~ "Passage `%s' isn't simple enough\n"
+#~ "Try putting in only one verse or verse range"
 
 #~ msgid "Bible Search"
 #~ msgstr "Search the good book"
