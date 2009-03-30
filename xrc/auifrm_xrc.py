@@ -43,6 +43,7 @@ def __gettext_strings():
     _("Set fonts...")
     _("&Language")
     _("&Exit")
+    _("Quit this program")
     _("&File")
     _("&Display")
     _("Default Layout")

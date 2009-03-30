@@ -22,6 +22,7 @@
         <object class="separator"/>
         <object class="wxMenuItem" name="wxID_EXIT">
           <label>_Exit</label>
+          <help>Quit this program</help>
         </object>
         <label>_File</label>
       </object>
