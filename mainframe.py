@@ -738,6 +738,8 @@ class MainFrame(wx.Frame, AuiLayer):
 			trans = pysw.locale.translate(key)
 			if key == trans:
 				trans = display_name
+			else:
+				trans += "\t(%s)" % display_name
 
 			menu_item = language_menu.AppendRadioItem(
 				wx.ID_ANY,  
