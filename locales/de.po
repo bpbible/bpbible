@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: German BPBible 1.0\n"
-"POT-Creation-Date: 2009-03-30 13:17+EST\n"
+"POT-Creation-Date: 2009-03-30 16:23+AUS Eastern Daylight Time\n"
 "PO-Revision-Date: 2009-03-09 17:48+0100\n"
 "Last-Translator: markusch <xx>\n"
 "Language-Team: Markusch <markuschmichael@gmx.de>\n"
@@ -136,7 +136,7 @@ msgstr "Vergleiche Verse"
 msgid "Open the verse comparison pane to the selected verses"
 msgstr "Öffne das Vergleichsfenster zu ausgewählten Versen"
 
-#: bibleframe.py:122 manage_topics_frame.py:154 xrc/manage_topics_xrc.py:138
+#: bibleframe.py:122 manage_topics_frame.py:155 xrc/manage_topics_xrc.py:140
 msgid "Manage Topics"
 msgstr "Themen verwalten"
 
@@ -160,7 +160,7 @@ msgstr "Kopiere ausgewählte Verse..."
 msgid "This chapter is empty."
 msgstr ""
 
-#: bookframe.py:129 mainframe.py:796
+#: bookframe.py:129 mainframe.py:798
 msgid "Show the %s pane"
 msgstr "Zeige %s"
 
@@ -526,92 +526,92 @@ msgstr "Bücher auswählen"
 msgid "&Language"
 msgstr "&Sprache"
 
-#: mainframe.py:754 xrc/auifrm_xrc.py:48
+#: mainframe.py:756 xrc/auifrm_xrc.py:48
 msgid "&Display"
 msgstr "&Anzeige"
 
-#: mainframe.py:759 xrc/auifrm_xrc.py:51
+#: mainframe.py:761 xrc/auifrm_xrc.py:51
 msgid "&Windows"
 msgstr "&Fenster"
 
-#: mainframe.py:764 xrc/auifrm_xrc.py:50
+#: mainframe.py:766 xrc/auifrm_xrc.py:50
 msgid "Toolbars"
 msgstr "Werkzeugkasten"
 
-#: mainframe.py:792
+#: mainframe.py:794
 msgid "Show the %s toolbar"
 msgstr "Werkzeugkasten %s anzeigen"
 
-#: mainframe.py:815 xrc/auifrm_xrc.py:52
+#: mainframe.py:817 xrc/auifrm_xrc.py:52
 msgid "Debug"
 msgstr "Debug"
 
-#: mainframe.py:837
+#: mainframe.py:839
 msgid "Pronunciation"
 msgstr ""
 
-#: mainframe.py:838
+#: mainframe.py:840
 #, fuzzy
 msgid "Original Language"
 msgstr "Sprache"
 
-#: mainframe.py:839
+#: mainframe.py:841
 #, fuzzy
 msgid "Transliterated"
 msgstr "Übersetzer"
 
-#: mainframe.py:845
+#: mainframe.py:847
 #, fuzzy
 msgid "Strong's Numbers"
 msgstr "Ungültiger Sprachschlüssel %s."
 
-#: mainframe.py:862
+#: mainframe.py:864
 #, fuzzy
 msgid "Strong's headwords"
 msgstr "Übersetzung als Stichwort"
 
-#: mainframe.py:925
+#: mainframe.py:927
 msgid "Expand cross-references"
 msgstr "Parallelstellen expandieren"
 
-#: mainframe.py:926
+#: mainframe.py:928
 msgid "Display cross references partially expanded"
 msgstr "Zeigt Parallelstellen teilweise expandiert"
 
-#: mainframe.py:931
+#: mainframe.py:933
 msgid "One line per verse"
 msgstr "Eine Zeile pro Vers"
 
-#: mainframe.py:932
+#: mainframe.py:934
 msgid "Display each verse on its own line."
 msgstr "Zeigt jeden Vers in einer Zeile."
 
-#: mainframe.py:937
+#: mainframe.py:939
 msgid "Topic Tags"
 msgstr "Themen markieren"
 
-#: mainframe.py:938
+#: mainframe.py:940
 msgid "Display the topics that each verse is tagged with."
 msgstr "Zeigt die Themen jedes Verses an."
 
-#: mainframe.py:1087
+#: mainframe.py:1089
 msgid "BPBible will now quickly restart to change your language."
 msgstr ""
 
-#: mainframe.py:1088
+#: mainframe.py:1090
 #, fuzzy
 msgid "Restarting"
 msgstr "Neustart"
 
-#: mainframe.py:1107
+#: mainframe.py:1109
 msgid "An error occurred on closing:"
 msgstr "Beim Schließen ist ein Fehler aufgetreten:"
 
-#: mainframe.py:1119 mainframe.py:1120
+#: mainframe.py:1121 mainframe.py:1122
 msgid "search "
 msgstr "Suche "
 
-#: mainframe.py:1143
+#: mainframe.py:1145
 #, fuzzy
 msgid ""
 "Flexible Bible study software.\n"
@@ -626,35 +626,35 @@ msgstr ""
 "\t\t\twxPython Version: %(wxversion)s\n"
 "\t\t\tSWORD Version: %(swversion)s"
 
-#: mainframe.py:1154
+#: mainframe.py:1156
 msgid "BPBible website"
 msgstr "BPBible website"
 
-#: mainframe.py:1156
+#: mainframe.py:1158
 msgid "BPBible development team"
 msgstr "BPBible Entwicklungsteam"
 
-#: mainframe.py:1157
+#: mainframe.py:1159
 msgid "SWORD library developers"
 msgstr "SWORD Entwicklerbibliothek"
 
-#: mainframe.py:1161
+#: mainframe.py:1163
 msgid "Developers"
 msgstr "Entwickler"
 
-#: mainframe.py:1162
+#: mainframe.py:1164
 msgid "Artists"
 msgstr "Künstler"
 
-#: mainframe.py:1163
+#: mainframe.py:1165
 msgid "Translators"
 msgstr "Übersetzer"
 
-#: mainframe.py:1165
+#: mainframe.py:1167
 msgid "translator-credits"
 msgstr "translator-credits"
 
-#: mainframe.py:1169
+#: mainframe.py:1171
 msgid ""
 "Icons used are from famfamfam\n"
 "http://www.famfamfam.com/lab/icons/silk\n"
@@ -666,7 +666,7 @@ msgstr ""
 "und Tango Desktop Project\n"
 "http://tango.freedesktop.org/Tango_Desktop_Project verwendet."
 
-#: mainframe.py:1175
+#: mainframe.py:1177
 msgid ""
 "BPBible is licensed under the GPL v2. For more details, refer to the LICENSE."
 "txt file in the application directory"
@@ -674,79 +674,79 @@ msgstr ""
 "BPBible ist lizenziert unter GPL v2. Für weitere Informationen wird auf die "
 "Datei LICENSE.txt im Programmverzeichnis verwiesen."
 
-#: manage_topics_frame.py:77
+#: manage_topics_frame.py:78
 msgid "Topics"
 msgstr "Themen"
 
-#: manage_topics_frame.py:279
+#: manage_topics_frame.py:281
 msgid "&New Topic"
 msgstr "&Neues Thema"
 
-#: manage_topics_frame.py:284
+#: manage_topics_frame.py:286
 msgid "Add &Passage"
 msgstr "&Passage hinzufügen"
 
-#: manage_topics_frame.py:291 manage_topics_frame.py:526
+#: manage_topics_frame.py:293 manage_topics_frame.py:550
 msgid "Cu&t"
 msgstr "&Ausschneiden"
 
-#: manage_topics_frame.py:296 manage_topics_frame.py:531
+#: manage_topics_frame.py:298 manage_topics_frame.py:555
 msgid "&Copy"
 msgstr "&Kopieren"
 
-#: manage_topics_frame.py:301 manage_topics_frame.py:536
+#: manage_topics_frame.py:303 manage_topics_frame.py:560
 msgid "&Paste"
 msgstr "&Einfügen"
 
-#: manage_topics_frame.py:308
+#: manage_topics_frame.py:310
 msgid "Delete &Topic"
 msgstr "Lösche &Thema"
 
-#: manage_topics_frame.py:325
+#: manage_topics_frame.py:349
 msgid "Cannot copy the topic to one of its children."
 msgstr "Dieses Thema kann nicht auf ein untergeordnetes Thema kopiert werden."
 
-#: manage_topics_frame.py:326
+#: manage_topics_frame.py:350
 msgid "Copy Topic"
 msgstr "Kopiere Thema"
 
-#: manage_topics_frame.py:332
+#: manage_topics_frame.py:356
 msgid "Cannot delete the base topic."
 msgstr "Das Hauptthema kann nicht gelöscht werden."
 
-#: manage_topics_frame.py:333
+#: manage_topics_frame.py:357
 msgid "Delete Topic"
 msgstr "Lösche Thema"
 
-#: manage_topics_frame.py:348
+#: manage_topics_frame.py:372
 msgid "Search: %s"
 msgstr "Suche: %s"
 
-#: manage_topics_frame.py:349
+#: manage_topics_frame.py:373
 msgid "Results from the search `%s'."
 msgstr "Ergebnisse von der Suche `%s'."
 
-#: manage_topics_frame.py:376
+#: manage_topics_frame.py:400
 msgid "Passage"
 msgstr "Passage"
 
-#: manage_topics_frame.py:377
+#: manage_topics_frame.py:401
 msgid "Comment"
 msgstr "Kommentar"
 
-#: manage_topics_frame.py:519
+#: manage_topics_frame.py:543
 msgid "&Open"
 msgstr "&öffnen"
 
-#: manage_topics_frame.py:543
+#: manage_topics_frame.py:567
 msgid "&Delete"
 msgstr "&Löschen"
 
-#: manage_topics_frame.py:582
+#: manage_topics_frame.py:606
 msgid "All topics."
 msgstr "Alle Themen."
 
-#: manage_topics_frame.py:598
+#: manage_topics_frame.py:622
 msgid ""
 "%d passages selected.\n"
 "\n"
@@ -756,11 +756,11 @@ msgstr ""
 "\n"
 "Wählen Sie eine Passage zum Betrachten."
 
-#: manage_topics_frame.py:603
+#: manage_topics_frame.py:627
 msgid "No items have been selected."
 msgstr "Keine Einträge wurden ausgewählt."
 
-#: manage_topics_frame.py:1066
+#: manage_topics_frame.py:1090
 msgid "Unrecognised passage `%s'."
 msgstr "Unbekannte Passage `%s'."
 
@@ -1381,44 +1381,52 @@ msgstr "Ausschneiden"
 msgid "Paste"
 msgstr "Einfügen"
 
-#: xrc/manage_topics_xrc.py:132 xrc/manage_topics_xrc.py:133
+#: xrc/manage_topics_xrc.py:132
+msgid "Copy the topic as text to the clipboard for use in other applications."
+msgstr ""
+
+#: xrc/manage_topics_xrc.py:133
+msgid "Export"
+msgstr ""
+
+#: xrc/manage_topics_xrc.py:134 xrc/manage_topics_xrc.py:135
 #: xrc/module_manager_xrc.py:67
 msgid "Delete"
 msgstr "Löschen"
 
-#: xrc/manage_topics_xrc.py:134
+#: xrc/manage_topics_xrc.py:136
 msgid "Undo previous action"
 msgstr "Letzte Aktion rückgängig machen"
 
-#: xrc/manage_topics_xrc.py:135
+#: xrc/manage_topics_xrc.py:137
 msgid "Undo"
 msgstr "Rückgängig"
 
-#: xrc/manage_topics_xrc.py:136
+#: xrc/manage_topics_xrc.py:138
 msgid "Redoes the last undone action"
 msgstr "Letzte Aktion wiederholen"
 
-#: xrc/manage_topics_xrc.py:137
+#: xrc/manage_topics_xrc.py:139
 msgid "Redo"
 msgstr "Wiederholen"
 
-#: xrc/manage_topics_xrc.py:139
+#: xrc/manage_topics_xrc.py:141
 msgid "Name:"
 msgstr "Name:"
 
-#: xrc/manage_topics_xrc.py:140
+#: xrc/manage_topics_xrc.py:142
 msgid "Show tags"
 msgstr "Zeige Markierungen"
 
-#: xrc/manage_topics_xrc.py:141
+#: xrc/manage_topics_xrc.py:143
 msgid "Description:"
 msgstr "Beschreibung:"
 
-#: xrc/manage_topics_xrc.py:142
+#: xrc/manage_topics_xrc.py:144
 msgid "Passage:"
 msgstr "Passage:"
 
-#: xrc/manage_topics_xrc.py:143
+#: xrc/manage_topics_xrc.py:145
 msgid "Comment:"
 msgstr "Kommentar:"
 
