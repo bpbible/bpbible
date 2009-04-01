@@ -28,6 +28,13 @@
         </object>
         <object class="sizeritem">
           <object class="wxBoxSizer">
+            <object class="sizeritem">
+              <object class="wxButton" name="show_answer_button">
+                <label>&amp;Show answer</label>
+              </object>
+              <flag>wxBOTTOM|wxLEFT</flag>
+              <border>6</border>
+            </object>
             <object class="spacer">
               <option>1</option>
               <flag>wxGROW</flag>
@@ -40,7 +47,7 @@
               <flag>wxBOTTOM|wxRIGHT|wxALIGN_RIGHT</flag>
               <border>6</border>
             </object>
-            <orient>wxVERTICAL</orient>
+            <orient>wxHORIZONTAL</orient>
           </object>
           <flag>wxGROW</flag>
         </object>

@@ -38,6 +38,7 @@ class xrcGuessVerseFrame(wx.Frame):
         # Define variables for the controls, bind event handlers
         self.reference_frame = xrc.XRCCTRL(self, "reference_frame")
         self.books = xrc.XRCCTRL(self, "books")
+        self.show_answer_button = xrc.XRCCTRL(self, "show_answer_button")
         self.guess_button = xrc.XRCCTRL(self, "guess_button")
 
 
@@ -63,6 +64,7 @@ def __gettext_strings():
     
     def _(str): pass
     
+    _("&Show answer")
     _("&Guess")
     _("Guess the Verse")
 
