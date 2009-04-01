@@ -30,10 +30,7 @@ def get_chapter_headings(chapter):
 	# and turn on headings
 	biblemgr.set_option("Headings", True)
 
-	vk = EncodedVK()
-	vk.Headings(1)
-	vk.LowerBound("%s:0" % chapter)
-	vk.UpperBound(chapter)
+	vk = EncodedVK(("%s:0" % chapter, chapter), headings=True)
 
 	mod = biblemgr.bible.mod
 	headings = []

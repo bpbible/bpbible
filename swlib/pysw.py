@@ -191,10 +191,40 @@ class VK(SW.VerseKey):#, object):
 	def __init__(self, key=(), raiseError=True, headings=False):
 		assert isinstance(raiseError, bool), "raiseError wasn't bool"
 		if headings:
-			assert isinstance(key, SW.VerseKey)
 			SW.VerseKey.__init__(self)
 			self.Headings(1)
-			self.copyFrom(key)
+			
+			if isinstance(key, tuple):
+				min, max = key
+				tmp_lk = self.ParseVerseList(min)
+				if tmp_lk.Count():
+					k = tmp_lk.GetElement(0)
+					vk = SW.VerseKey.castTo(k)
+					if not vk:
+						print "WARNING: not vk"
+						self.LowerBound(k.getText())
+					else:
+						self.LowerBound_VK(vk)
+
+				tmp_lk = self.ParseVerseList(max, min, True)
+				if tmp_lk.Count():
+					k = tmp_lk.GetElement(0)					
+					vk = SW.VerseKey.castTo(k)
+					if not vk:
+						print "WARNING: not vk"
+						self.UpperBound(k.getText())
+						
+					else:
+						if vk.isBoundSet():
+							self.UpperBound_VK(vk.UpperBound())
+						else:
+							self.UpperBound_VK(vk)
+
+				self.setPosition(TOP)
+				
+			else:
+				assert isinstance(key, SW.VerseKey)
+				self.copyFrom(key)
 			return
 
 		if isinstance(key, basestring):
@@ -386,10 +416,20 @@ class VK(SW.VerseKey):#, object):
 		vk.this = item.this
 		return vk
 
+	UpperBound_VK = SW.VerseKey.UpperBound
+	LowerBound_VK = SW.VerseKey.LowerBound
+
+	def LowerBound_VK_1511(self, key):
+		SW.VerseKey.LowerBound(self, key.getText())
+
+	def UpperBound_VK_1511(self, key):
+		SW.VerseKey.UpperBound(self, key.getText())
+
 	def UpperBound_1512(self, to=None):
 		if to is None:
 			return super(VK, self).UpperBound()
 		
+		vk.setBounds
 		super(VK, self).UpperBound(SW.VerseKey(to))
 		
 	def LowerBound_1512(self, to=None):
@@ -401,6 +441,10 @@ class VK(SW.VerseKey):#, object):
 	if LIB_1512_COMPAT:
 		LowerBound = LowerBound_1512
 		UpperBound = UpperBound_1512
+	else:
+		LowerBound_VK = LowerBound_VK_1511
+		UpperBound_VK = UpperBound_VK_1511
+		
 		
 	#def UpperBound(self, to=None):
 	#	if to is not None:
@@ -1267,25 +1311,33 @@ def get_dash_hack(locale):
 	
 	return lookup
 		
+def get_locale(lang, additional=None):
+	locale = locale_mgr.getLocale(lang)
+	if not locale:
+		locale = SW.Locale("")
+	
+	if additional:
+		locale.augment(additional)
+
+	if not locale.getName() or locale.getName() == "en_US":
+		return False, SW.Locale(""), "ascii"
+	
+	return True, locale, locale.getEncoding()
+
 def change_locale(lang, abbrev_lang, additional=None):
 	global locale, locale_lang, locale_encoding, locale_dash_hack
 	global abbrev_locale, abbrev_locale_lang, abbrev_locale_encoding
 	global abbrev_locale_dash_hack
 	global locale_digits
-	locale = locale_mgr.getLocale(lang)
+	locale_lang = lang	
+	worked, locale, locale_encoding = get_locale(lang, additional=additional)
 	locale_digits = None
-	if not locale or locale.getName() == "en_US":
+	if not worked:
 		dprint(WARNING, "Couldn't find locale %r" % lang,
 		[x.c_str() for x in locale_mgr.getAvailableLocales()])
-		locale_lang = lang
-		locale_encoding = "ascii"
-		locale = SW.Locale("")		
 		locale_dash_hack = {}
-		
 	
 	else:
-		locale_lang = lang
-		locale_encoding = locale.getEncoding()
 		assert locale_encoding, dir(locale)
 		locale_dash_hack = get_dash_hack(locale)
 		digits = locale.translate(string.digits).decode(locale_encoding)
@@ -1309,24 +1361,18 @@ def change_locale(lang, abbrev_lang, additional=None):
 				digits=digits,
 			)
 	
-	if additional:
-		locale.augment(additional)
-
-	abbrev_locale = locale_mgr.getLocale(abbrev_lang)
-	if abbrev_locale and abbrev_locale.getName() != "en_US":
+	w, abbrev_locale, abbrev_locale_encoding = get_locale(abbrev_lang)
+	if w:
 		abbrev_locale_lang = abbrev_lang
-		abbrev_locale_encoding = abbrev_locale.getEncoding()
 		abbrev_locale_dash_hack = get_dash_hack(abbrev_locale)
-	
 	
 	else:
 		dprint(WARNING, "Couldn't find locale %r" % abbrev_lang,
 		[x.c_str() for x in locale_mgr.getAvailableLocales()])
 		abbrev_locale_lang = locale_lang
-		abbrev_locale_encoding = locale_encoding
 		abbrev_locale_dash_hack = {}
 		abbrev_locale = locale
-	
+		abbrev_locale_encoding = locale_encoding
 		
 	locale_changed(locale, lang, abbrev_locale, abbrev_lang)
 
