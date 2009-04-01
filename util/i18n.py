@@ -12,6 +12,7 @@ import gettext
 from util.debug import dprint, WARNING
 from util.configmgr import config_manager
 from swlib.pysw import SW, change_locale
+from swlib import pysw
 import os
 locale_settings = config_manager.add_section("Locale")
 locale_settings.add_item("language", "en", item_type=str)
@@ -37,9 +38,14 @@ def initialize():
 	ngettext = mytranslation.ngettext
 
 	if langid in languages:
-		desc, locale, abbrev = languages[langid]
-		l = SW.Locale("locales/%s/locale.conf" % langid)
-		change_locale(locale, abbrev, additional=l)
+		desc, locale, abbrev, conf = languages[langid]
+		print desc, locale, abbrev
+		change_locale(locale, abbrev, additional=conf)
+
+def get_locale(langid):
+	if langid in languages:
+		desc, locale, abbrev, conf = languages[langid]
+		return pysw.get_locale(locale, additional=conf)
 
 def N_(text):
 	"""Mark text as i18n'able, but don't translate it yet"""
@@ -65,8 +71,10 @@ def find_languages(is_release=False):
 			language = conf.get("Language", "Description") or item
 			locale = conf.get("SWORD", "locale") or "bpbible"
 			abbrev_locale = conf.get("SWORD", "abbreviations") or locale
+			locale_conf = SW.Locale("locales/%s/locale.conf" % item)
 			
-			languages[item] = language, locale, abbrev_locale
+			
+			languages[item] = language, locale, abbrev_locale, locale_conf
 	
 	return languages
 

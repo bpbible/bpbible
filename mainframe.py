@@ -733,18 +733,22 @@ class MainFrame(wx.Frame, AuiLayer):
 			assert False, "Language menu could not be found"
 		
 		self.language_mapping = {}
-		for text, (display_name, locale, abbrev) in util.i18n.languages.items():
+		for text, (display_name, locale, abbrev, conf) \
+			in util.i18n.languages.items():
+			
+			worked, own_locale, own_encoding = util.i18n.get_locale(text)
+			own_key = display_name.encode(own_encoding)
+			own_trans = own_locale.translate(own_key)
+			own_trans = own_trans.decode(own_encoding)
+
 			key = display_name.encode(pysw.locale_encoding)
 			trans = pysw.locale.translate(key)
-			if key == trans:
-				trans = display_name
-			else:
-				trans += "\t(%s)" % display_name
+			trans = trans.decode(pysw.locale_encoding)
 
-			menu_item = language_menu.AppendRadioItem(
-				wx.ID_ANY,  
-				trans.decode(pysw.locale_encoding),
-			)
+			if trans != own_trans:
+				trans += " - %s" % own_trans
+
+			menu_item = language_menu.AppendRadioItem(wx.ID_ANY, trans)
 			menu_item.Check(text == util.i18n.locale_settings["language"])
 
 			self.language_mapping[menu_item.Id] = text
