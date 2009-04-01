@@ -11,6 +11,7 @@ import zipfile
 import gzip
 from configmgr import config_manager
 import util
+from swlib import pysw
 
 
 search_config = config_manager.add_section("Search")
@@ -22,7 +23,14 @@ def WriteIndex(index, path = config.index_path, progress=util.noop):
 
 	length = float(len(index.books) + 2)
 	for idx, item in enumerate(index.books):
-		continuing = progress((item.bookname, 100*idx/length))
+		# two translates in case of dashes
+		bookname_ui = pysw.locale.translate(
+			pysw.locale.translate(
+				item.bookname
+			)
+		).decode(pysw.locale_encoding)
+		
+		continuing = progress((bookname_ui, 100*idx/length))
 		if not continuing: return
 		
 		z.writestr("books/" + item.bookname.encode("utf8"),
