@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2009-03-30 16:23+AUS Eastern Daylight Time\n"
-"PO-Revision-Date: 2009-03-30 21:04+0800\n"
+"PO-Revision-Date: 2009-03-31 20:23+0800\n"
 "Last-Translator: Paulos <paulos@yahoo.cn>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -284,7 +284,7 @@ msgstr "复制选中文本,删除所有链接"
 
 #: displayframe.py:534
 msgid "the selected word"
-msgstr "选中的字"
+msgstr "选中的词"
 
 #: displayframe.py:540
 msgid "the selected phrase"
@@ -353,9 +353,8 @@ msgid "%s is not in this harmony"
 msgstr "%s 不在四福音合参中"
 
 #: header_bar.py:38
-#, fuzzy
 msgid "%s verses"
-msgstr "添加标签"
+msgstr "%s 经节"
 
 #: install_manager/install_drop_target.py:33
 #: install_manager/install_drop_target.py:56
@@ -553,24 +552,20 @@ msgid "Pronunciation"
 msgstr "发音"
 
 #: mainframe.py:840
-#, fuzzy
 msgid "Original Language"
-msgstr "语言"
+msgstr "原文"
 
 #: mainframe.py:841
-#, fuzzy
 msgid "Transliterated"
-msgstr "翻译"
+msgstr "音译"
 
 #: mainframe.py:847
-#, fuzzy
 msgid "Strong's Numbers"
-msgstr "%s无效的strong's number."
+msgstr "strong's 编号"
 
 #: mainframe.py:864
-#, fuzzy
 msgid "Strong's headwords"
-msgstr "打开Strong's标题"
+msgstr "Strong's中心词"
 
 #: mainframe.py:927
 msgid "Expand cross-references"
@@ -601,9 +596,8 @@ msgid "BPBible will now quickly restart to change your language."
 msgstr "BPBible将快速的切换到您设置的语言"
 
 #: mainframe.py:1090
-#, fuzzy
 msgid "Restarting"
-msgstr "重起"
+msgstr "重起中"
 
 #: mainframe.py:1109
 msgid "An error occurred on closing:"
@@ -883,21 +877,19 @@ msgstr "路径管理"
 #: xrc/copyverses_xrc.py:78
 #: xrc/templatemanager_xrc.py:97
 msgid "Preview"
-msgstr "内容"
+msgstr "预览"
 
 #: preview_window.py:34
 msgid "Move over a link to see a preview for it"
 msgstr "移到链接上以查看预览"
 
 #: preview_window.py:57
-#, fuzzy
 msgid "Show in tooltip"
-msgstr "Sticky Tooltip"
+msgstr "在提示工具中显示"
 
 #: preview_window.py:58
-#, fuzzy
 msgid "Show this in a tooltip"
-msgstr "显示%s工具栏"
+msgstr "在提示工具中显示"
 
 #: protocols.py:99
 msgid "The book '%s' is not installed, so you cannot view details for this entry (%s)"
@@ -1009,7 +1001,7 @@ msgstr "&停止"
 #: search/searchpanel.py:613
 #: search/searchpanel.py:688
 msgid "Error in search"
-msgstr "搜索发生错误"
+msgstr "搜索时发生错误"
 
 #: search/searchpanel.py:618
 #: search/searchpanel.py:693
@@ -1019,26 +1011,26 @@ msgstr "在%s中找不到您要找的:"
 #: search/searchpanel.py:621
 #: search/searchpanel.py:696
 msgid "Unknown word"
-msgstr "未知的字"
+msgstr "未知的词"
 
 #: search/searchpanel.py:724
 #: search/searchpanel.py:744
 #: search/searchpanel.py:821
 #: search/searchpanel.py:839
 msgid "1 word"
-msgstr "1 个字"
+msgstr "1 个词"
 
 #: search/searchpanel.py:725
 #: search/searchpanel.py:745
 #: search/searchpanel.py:822
 #: search/searchpanel.py:840
 msgid "%d words"
-msgstr "%d 个字"
+msgstr "%d 个词"
 
 #: search/searchpanel.py:728
 #: search/searchpanel.py:750
 msgid "%d hits"
-msgstr "%d 匹配"
+msgstr "%d 个匹配"
 
 #: search/searchpanel.py:740
 #: search/searchpanel.py:834
@@ -1136,7 +1128,7 @@ msgstr "Anchor"
 
 #: tooltip.py:209
 msgid "Don't hide this tooltip"
-msgstr "打开工具提示"
+msgstr "打开提示工具"
 
 #: tooltip.py:212
 msgid "Copy All"
@@ -1144,11 +1136,11 @@ msgstr "复制所有"
 
 #: tooltip.py:213
 msgid "Copy tooltip text (with links)"
-msgstr "复制工具提示(和链接)"
+msgstr "复制提示工具内容(和链接)"
 
 #: tooltip.py:278
 msgid "Tooltip"
-msgstr "工具提示"
+msgstr "提示工具"
 
 #: tooltip.py:451
 #: tooltip.py:592
@@ -1161,14 +1153,12 @@ msgid "Stay on top"
 msgstr "总在最上"
 
 #: tooltip.py:638
-#, fuzzy
 msgid "Find"
-msgstr "&搜索内容："
+msgstr "查找："
 
 #: tooltip.py:640
-#, fuzzy
 msgid "Search for this strong's number in the Bible"
-msgstr "在圣经中查找%s"
+msgstr "在圣经中查找这个strong's number"
 
 #: tooltip.py:654
 msgid "Module %s is not installed, so you cannot view details for this strong's number"
@@ -1341,7 +1331,7 @@ msgstr "字体大小："
 
 #: xrc/fontchoice_xrc.py:75
 msgid "Preview:"
-msgstr "内容："
+msgstr "预览："
 
 #: xrc/fontchoice_xrc.py:76
 #: xrc/templatemanager_xrc.py:98
@@ -1480,7 +1470,7 @@ msgstr "&搜索内容："
 
 #: xrc/search_xrc.py:138
 msgid "Words to search for"
-msgstr "要搜索的字"
+msgstr "要搜索的词"
 
 #: xrc/search_xrc.py:139
 msgid "Open the Virtual Keyboard"
@@ -1532,7 +1522,7 @@ msgstr "搜索内容之间得隔多少"
 
 #: xrc/search_xrc.py:154
 msgid "Words"
-msgstr "字"
+msgstr "词"
 
 #: xrc/search_xrc.py:155
 msgid "Verses"
