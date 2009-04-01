@@ -32,7 +32,7 @@ IN_BOTH = IN_POPUP | IN_MENU
 def process_html_for_module(module, text):
 	# process lgs individually for each block.
 	# this stops lgs flowing on to the next block
-	text = convert_lgs(text, width=20)
+	text = convert_lgs(text, width=30)
 
 	language_code, (font, size, gui) = \
 		fonts.get_font_params(module)
@@ -286,8 +286,8 @@ class DisplayFrame(TooltipDisplayer, HtmlSelectableWindow):
 				#make this plain
 				template = VerseTemplate(
 				header="<a href='nbible:$internal_range'><b>$range</b></a><br>",
-				body = "<font color = 'blue'><sup><small>$versenumber"
-				"</small></sup></font> $text")
+				body=u'<glink href="nbible:$internal_reference">'
+					u'<small><sup>$versenumber</sup></small></glink> $text ')
 				try:
 					#no footnotes
 					if tooltip_settings["plain_xrefs"]:
@@ -343,9 +343,8 @@ class DisplayFrame(TooltipDisplayer, HtmlSelectableWindow):
 			#body = '<font color = "blue"><small><sup>$versenumber</sup></small></font> $text')
 			template = VerseTemplate(
 				header="<a href='bible:$internal_range'><b>$range</b></a><br>", 
-				body = "<font color = 'blue'><sup><small>$versenumber"
-				"</small></sup></font> $text", 
-			)
+				body=u'<glink href="nbible:$internal_reference">'
+					u'<small><sup>$versenumber</sup></small></glink> $text ')
 
 			try:
 				if tooltip_settings["plain_xrefs"]: 

@@ -728,8 +728,9 @@ class BibleTooltipConfig(TooltipConfig):
 		try:
 			template = VerseTemplate(
 				header="<a href='nbible:$internal_range'><b>$range</b></a><br>",
-				body="<font color='blue'><sup><small>$versenumber"
-				"</small></sup></font> $text ")
+				body=u'<glink href="nbible:$internal_reference">'
+					u'<small><sup>$versenumber</sup></small></glink> $text ')
+
 			#no footnotes
 			if tooltip_settings["plain_xrefs"]:
 				biblemgr.temporary_state(biblemgr.plainstate)
