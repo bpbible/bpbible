@@ -1190,8 +1190,7 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.UpdateBibleUI(settings_changed=True, source=SETTINGS_CHANGED)
 	
 	def commentary_version_changed(self, newversion):
-		#TODO get rid of this?
-		self.UpdateBibleUI(settings_changed=True, source=SETTINGS_CHANGED)
+		self.commentarytext.refresh()
 	
 	def dictionary_version_changed(self, newversion):
 		freeze_ui = guiutil.FreezeUI(self.dictionary_list)
