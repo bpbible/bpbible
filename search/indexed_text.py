@@ -155,18 +155,18 @@ class IndexedText(object):
 		
 		# TODO use \1
 		expr = re.compile(
-			u"([%s])([^%s]*)[%s]([^%s]*)[%s]" % (
+			u"([%s])([^%s]*)[%s]\s*([^%s]*?)\s*[%s]" % (
 				(process_text.special_chars,) * 5),
 			re.UNICODE
 		)
 		def replace(match):
 			o = offset[0]
-			type, number, text = match.group(1, 2, 3)
+			all, type, number, text = match.group(0, 1, 2, 3)
 
 			#text = expr.sub(replace, text)
 			
-			new_offset = (o + len(number) + 3)
-			start = match.start() - o
+			new_offset = (o + len(all) - len(text))
+			#start = match.start() - o
 			collectors[type].collect(number, text, 
 				match.start() - o, match.end() - new_offset)
 			offset[0] = new_offset
