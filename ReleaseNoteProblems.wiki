@@ -1,0 +1,9 @@
+#summary List of problems to check for in release notes.
+#labels Development
+
+= Problems =
+
+ # Not having screenshots for major new or changed functionality.
+ # Using the word "module" rather than "book" (or other equivalent in the user's domain language).
+ # Incorrect spelling or grammar (note: we use en-AU spelling, not en-US).
+ # _Add more problems here..._
