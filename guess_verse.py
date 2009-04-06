@@ -25,11 +25,11 @@ class GuessVerseFrame(xrcGuessVerseFrame):
 		randomnum = random.randint(1, 31102)
 		self.key = VK("Gen 1:%d" % randomnum)
 		self.user_key = UserVK(self.key)
-		self.reference_frame.SetReference(self.key.text)
+		self.reference_frame.SetReference(self.key.getText())
 
 	def on_show_answer(self, event):
 		wx.MessageBox(
-			_("The verse was %s") % UserVK(self.key).text,
+			_("The verse was %s") % UserVK(self.key).getText(),
 			parent=self
 		)
 
@@ -40,7 +40,7 @@ class GuessVerseFrame(xrcGuessVerseFrame):
 		if won:
 			wx.MessageBox(
 				_("Yes, you are right. The verse was %s")
-					% UserVK(self.key).text,
+					% UserVK(self.key).getText(),
 				_("Correct"),
 				parent=self
 			)

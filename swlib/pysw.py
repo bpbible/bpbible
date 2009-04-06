@@ -84,8 +84,10 @@ else:
 	
 	# we don't own this, the system string mgr holder does
 	m.thisown = False
+	have_set_locale_dir = False
 	try:
 		SW.StringMgr.setSystemStringMgr(m, locale_dir)
+		have_set_locale_dir = True
 	except TypeError, e:
 		if LIB_1512_COMPAT:
 			print "Don't we have those patches???", e
@@ -95,13 +97,25 @@ else:
 # *only* after we've set the system string mgr can we set the system 
 # locale mgr...
 locale_mgr = SW.LocaleMgr.getSystemLocaleMgr()
-if not hasattr(sys, "SW_dont_do_stringmgr"):
+if not have_set_locale_dir:
 	locale_mgr.loadConfigDir(locale_dir)
+	have_set_locale_dir = True
 
 #if locale_mgr.getLocale("bpbible"):
 #	locale_mgr.setDefaultLocaleName("bpbible")
 #else:
 #	dprint(WARNING, "bpbible locale not found")
+try:
+	vk = SW.VerseKey()
+	vk.ParseVerseList("", "", False, False)
+	LIB_SUPPORTS_SINGLE_CHAPTER_BOOKS = True
+	
+except (TypeError, NotImplementedError), e:
+	if LIB_1512_COMPAT:
+		print "Extended ParseVerseList not supported???", e
+	LIB_SUPPORTS_SINGLE_CHAPTER_BOOKS = False
+		
+del vk
 
 
 class VerseParsingError(Exception): 
@@ -292,6 +306,11 @@ class VK(SW.VerseKey):#, object):
 		self.decrement(amount)
 		return self
 	
+	if not LIB_SUPPORTS_SINGLE_CHAPTER_BOOKS:
+		def ParseVerseList(self, a, b="", c=False, d=False):
+			return SW.VerseKey.ParseVerseList(self, a, b, c)
+				
+
 	def get_text(self):
 		return self.__str__()
 	
@@ -496,11 +515,6 @@ class VK(SW.VerseKey):#, object):
 	def get_book_chapter(self):
 		return u"%s %s" % (self.getBookName(), self.chapter_str())
 
-		
-
-			
-	
-
 	# horrible swig magic...
 	__swig_setmethods__	 = {"text":set_text, "chapter":set_chapter}
 	__swig_getmethods__	 = {"text":get_text, "chapter":get_chapter}
@@ -509,7 +523,7 @@ class VK(SW.VerseKey):#, object):
 	__swig_getmethods__ = {}
 	for _s in [SW.VerseKey]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
 	__getattr__ = lambda self, name: SW._swig_getattr(self, VK, name)
-	
+
 class EncodedVK(VK):
 
 	def getInternalVK(self):
@@ -543,8 +557,31 @@ class EncodedVK(VK):
 class LocalizedVK(EncodedVK):
 	def chapter_str(self):
 		return process_digits(str(self.Chapter()), userOutput=True)
+	
+	def get_book_chapter(self):
+		if LIB_SUPPORTS_SINGLE_CHAPTER_BOOKS:
+			if self.getChapterMax() == 1:
+				return u"%s" % (self.getBookName())
 
+		return super(LocalizedVK, self).get_book_chapter()
 
+	def getText(self):
+		if LIB_SUPPORTS_SINGLE_CHAPTER_BOOKS:
+			if self.getChapterMax() == 1:
+				return u"%s %d" % (self.getBookName(), 
+					process_digits(
+						self.Verse(),
+						userOutput=True
+					))
+
+		return process_digits(
+			u"%s %d:%d" % (self.getBookName(), 
+				self.Chapter(),
+				self.Verse(),
+			),
+				userOutput=True
+			)
+		
 class UserVK(LocalizedVK):
 	def __init__(self, arg=None):
 		if isinstance(arg, SW.Key):
@@ -568,12 +605,9 @@ class UserVK(LocalizedVK):
 			super(UserVK, self).getBookName(), locale_dash_hack
 		)
 		
-	def getText(self):
-		return process_dash_hack(
-			super(UserVK, self).getText(), locale_dash_hack
-		)
 		
 	def getRangeText(self):
+		print "Warning - don't use getRangeText here"
 		return process_dash_hack(
 			super(UserVK, self).getRangeText(), locale_dash_hack
 		)
@@ -610,11 +644,6 @@ class AbbrevVK(LocalizedVK):
 	def getBookName(self):
 		return process_dash_hack(
 			super(AbbrevVK, self).getBookName(), abbrev_locale_dash_hack
-		)
-	
-	def getText(self):
-		return process_dash_hack(
-			super(AbbrevVK, self).getText(), abbrev_locale_dash_hack
 		)
 	
 	def getRangeText(self):
@@ -753,12 +782,12 @@ class VerseList(list):
 					locale_changed = True
 				
 				if not raiseError:
-					args = vk.ParseVerseList(args, context, expand)
+					args = vk.ParseVerseList(args, context, expand, userInput)
 
 				else:
 					an = vk.AutoNormalize(0)
 					try:
-						args = vk.ParseVerseList(args, context, expand)
+						args = vk.ParseVerseList(args, context, expand, userInput)
 						self.TestForError(s, context, orig_args)
 					finally:
 						vk.AutoNormalize(an)
@@ -985,6 +1014,8 @@ class VerseList(list):
 		'Mark 15:23'
 		>>> GetBestRange("Jude 1:5")
 		'Jude 1:5'
+		>>> GetBestRange("Jude 5")
+		'Jude 1:5'
 		>>> GetBestRange("Gen 3:23,24")
 		'Genesis 3:23,24'
 		>>> GetBestRange("Gen 3:23,24;1,5")
@@ -1049,8 +1080,13 @@ class VerseList(list):
 				ord(versekey.Book()), 
 				chapter
 			)
+			
+			book_chapters = versekey.chapterCount(
+				ord(versekey.Testament()), 
+				ord(versekey.Book()), 
+			)
 
-			return book, chapter, verse, chapter_verses, userChapter, userVerse
+			return book, chapter, verse, chapter_verses, book_chapters, userChapter, userVerse
 
 		def get_bounds_details(vk):
 			if vk.isBoundSet():
@@ -1066,8 +1102,8 @@ class VerseList(list):
 		for vk in self:
 			item = get_bounds_details(vk)
 			# take details of first and last for each VK
-			((book1, chapter1, verse1, verse_count1, uc1, uv1), 
-			 (book2, chapter2, verse2, verse_count2, uc2, uv2)) = item
+			((book1, chapter1, verse1, verse_count1, chapter_count1, uc1, uv1), 
+			 (book2, chapter2, verse2, verse_count2, chapter_count2, uc2, uv2)) = item
 
 			# check whether we have a chapter range
 			# this means that the first verse is verse 1 and the second one is
@@ -1082,10 +1118,16 @@ class VerseList(list):
 				range += separator
 
 				if (book1, chapter1) != (book2, chapter2):
-					range += "%s %s-" % (book1, uc1)
+					if LIB_SUPPORTS_SINGLE_CHAPTER_BOOKS and userOutput and chapter_count1 == 1:
+						range += "%s" % book1
+					else:
+						range += "%s %s-" % (book1, uc1)
 				
 					if book1 != book2:
-						range += "%s %s" % (book2, uc2)
+						if LIB_SUPPORTS_SINGLE_CHAPTER_BOOKS and userOutput and chapter_count2 == 1:
+							range += "%s" % book2
+						else:
+							range += "%s %s" % (book2, uc2)
 					else:
 						range += "%s" % (uc2)
 					
@@ -1096,7 +1138,7 @@ class VerseList(list):
 				continue
 				
 					
-			for idx, (book, chapter, verse, _, uc, uv) in enumerate(item):
+			for idx, (book, chapter, verse, _, chapters, uc, uv) in enumerate(item):
 				if (book, chapter, verse) == (lastbook, lastchapter, lastverse):
 					break
 
@@ -1108,7 +1150,7 @@ class VerseList(list):
 				elif idx:
 					separator = "-"
 
-				# use comma to separate when in the same chapter				
+				# use comma to separate when in the same chapter
 				elif (book, chapter) == (lastbook, lastchapter):
 					separator = ","
 				
@@ -1117,13 +1159,29 @@ class VerseList(list):
 				
 				range += separator
 
-				if book != lastbook:
+				done = False
+				if LIB_SUPPORTS_SINGLE_CHAPTER_BOOKS and userOutput:
+					if chapters == 1:
+						if book != lastbook:
+							range += "%s %s" % (book, uv)
+							done = True
+
+						print chapter, lastchapter
+						assert chapter == 1 and (done or lastchapter in (1, None)), \
+							"Changed chapter but not book when only one chapter?!?"
+
+						if not done:
+							range += "%s" % uv
+							done = True
+
+				if done: pass
+				elif book != lastbook:
 					range += "%s %s:%s" % (book, uc, uv)
 
 				elif chapter != lastchapter:
 					range += "%s:%s" % (uc, uv)
 
-				elif verse != lastverse:
+				else: # verse != lastverse:
 					range += "%s" % (uv)
 
 				lastbook, lastchapter, lastverse = book, chapter, verse
@@ -1223,6 +1281,18 @@ class LocalizedBookData(BookData):
 		)
 	
 	def __iter__(self):
+		if LIB_SUPPORTS_SINGLE_CHAPTER_BOOKS and len(self.chapters) == 1:
+			l = LocalizedChapterData(
+				1, 
+				i_vk.verseCount(self.testament, self.booknumber, 1),
+			)
+
+			for a in l:
+				yield a
+			
+			return
+		
+			
 		for item in range(len(self.chapters)):
 			yield LocalizedChapterData(
 				item+1, 
@@ -1570,11 +1640,8 @@ def abbrev_to_user(key):
 	return VK(key).text
 
 def internal_to_user(key):
-	return UserVK(VK(key)).text
+	return UserVK(VK(key)).getText()
 	
-def user_to_internal(key):
-	return VK(UserVK(key)).text
-
 def get_a_key(userInput):
 	if userInput:
 		return u_vk
