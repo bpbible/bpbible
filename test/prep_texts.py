@@ -42,6 +42,11 @@ I'n the beginning God cree-ated the heavens and the 1,2345 earth."""),
 	("Genesis 5:3",
 	"""Et Dieu vit la lumi\xe8re, qu'elle \xe9tait bonne; et Dieu s\xe9para la
 lumi\xe8re d'avec les t\xe9n\xe8bres."""),
+	("Genesis 5:2", u'<w lemma="x-Strongs:H07225">\u8d77 \u521d </w> <w lemma="x-Strongs:H0430">\uff0c \u3000 \u795e </w> <w morph="x-StrongsMorph:H8804" lemma="x-Strongs:H01254">\u521b \u9020 </w> <w lemma="x-Strongs:H08064">\u5929 </w> <w lemma="x-Strongs:H0776">\u5730 </w> \u3002'),
+	("Genesis 5:1", u'<w lemma="strong:H07225">\u8d77 \u521d </w> <w lemma="strong:H0430">\uff0c \u3000 \u795e </w> <w morph="strongMorph:H8804" lemma="strong:H01254">\u521b \u9020 </w> <w lemma="strong:H08064">\u5929 </w> <w lemma="strong:H0776">\u5730 </w> \u3002'),
+	
+
+
 ]
 
 items = dict(
@@ -101,7 +106,10 @@ ModDrv=RawLD
 [%(modulename)s]
 DataPath=./modules/%(modulename)s
 Description=A test of %(modulename)s - lumi\xe8re
-SourceType=Plaintext
+SourceType=OSIS
+GlobalOptionFilter=OSISStrongs
+GlobalOptionFilter=OSISMorph
+Feature=StrongsNumbers
 Encoding=%(sword_encoding)s
 ModDrv=RawText
 """, 
@@ -183,7 +191,14 @@ for item, (mod_dir, mod_extra, driver, key_type, conf, entries) in items.items()
 		assert module.isWritable(), "MODULE MUST BE WRITABLE"
 
 		for key, value in entries:
-			value = value.decode("cp1252").encode(encoding)
+			if isinstance(value, unicode):
+				if encoding == "cp1252":
+					print "Skipping cp1252 as Unicode value for ", key
+					continue
+				value = value.encode(encoding)
+			else:
+				value = value.decode("cp1252").encode(encoding)
+
 			key = key.decode("cp1252").encode(encoding)
 
 			#print "KEY", key
