@@ -357,6 +357,7 @@ class LinkedFrame(VerseKeyedFrame):
 		ref = self.get_verified(ref)
 		if not ref: return
 		self.SetReference(ref)
+		self.latest_reference = ref
 	
 	def on_link(self, event=None):
 		self.linked = not self.linked
