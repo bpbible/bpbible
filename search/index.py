@@ -355,7 +355,7 @@ class Index(object):
 		if not regexes and not fields:
 			# we can't search for just a negative at the moment
 			# so -/a/ isn't a valid search
-			return []
+			return [], False
 
 		return self.multi_search(
 			regexes, excl_regexes, fields, excl_fields, books, proximity, 
