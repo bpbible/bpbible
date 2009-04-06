@@ -734,7 +734,8 @@ class MainFrame(wx.Frame, AuiLayer):
 		
 		self.language_mapping = {}
 		for text, (display_name, locale, abbrev, conf) \
-			in util.i18n.languages.items():
+			in sorted(util.i18n.languages.items(), 
+				key=lambda (text, (display_name, x, y, z)): display_name):
 			
 			worked, own_locale, own_encoding = util.i18n.get_locale(text)
 			own_key = display_name.encode(own_encoding)
