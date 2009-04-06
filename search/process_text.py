@@ -66,10 +66,12 @@ class ParseBase(object):
 				assert item.count("-") == 1, item
 				start, end = item.split("-")
 
-				# NASTY HACK: VerseKey max argument can't handle anything
-				# other than : for the chapter verse separator. It can handle
-				# book:chapter:verse, though. So quickly change all . -> :
-				end = end.replace(".", ":")
+				if not pysw.LIB_1512_COMPAT:
+					# NASTY HACK: VerseKey max argument can't handle anything
+					# other than : for the chapter verse separator. It can handle
+					# book:chapter:verse, though. So quickly change all . -> :
+					end = end.replace(".", ":")
+
 				vk = SW.VerseKey(start, end)
 				while vk.Error() == '\x00':
 					items.append(vk.getOSISRef())
@@ -159,7 +161,6 @@ class ParseThML(ParseBase):
 	def handle_scripRef(self, node, si):
 		ref = node.attrib.get("passage")
 		if not ref:
-			ref = node
 			si2 = StringIO()
 			self._parse_children(node, si2)
 			ref = si2.getvalue()
@@ -278,6 +279,8 @@ class ParseOSIS(ParseBase):
 		"x-Robinsons": "robinson",
 		"x-Robison": "robinson",
 		"strongMorph": "strongMorph",
+		"x-StrongsMorph": "strongMorph",
+		
 	}
 	
 
