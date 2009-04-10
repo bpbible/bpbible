@@ -215,7 +215,7 @@ class Book(object):
 			
 	def GetReference_yield(self, verselist, max_verses=177, 
 			raw=False, stripped=False, module=None, exclude_topic_tag=None,
-			display_tags=True):
+			display_tags=True, skip_linked_verses=True):
 		"""GetReference_yield: 
 			yield the body dictionary and headings dictinoary
 			for each reference.
@@ -238,12 +238,14 @@ class Book(object):
 		render_text = self.get_rendertext(mod)
 
 		try:
-			while mod.Error() == ERR_OK:
+			incrementer = mod if skip_linked_verses else verselist
+			while incrementer.Error() == ERR_OK:
 				if verses_left == 0:
 					yield None, None
 					break
 				
-				#mod.SetKey(verselist)
+				if not skip_linked_verses:
+					mod.SetKey(verselist)
 				key = mod.getKey()
 				#versekey = VK.castTo(key)
 				versekey.setText(key.getText())
@@ -345,7 +347,7 @@ class Book(object):
 					
 				yield body_dict, heading_dicts	
 
-				mod.increment(1)
+				incrementer.increment(1)
 				verses_left -= 1
 
 		finally:

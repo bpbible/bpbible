@@ -79,7 +79,7 @@ class VerseCompareFrame(LinkedFrame):
 				items.append((
 					item, 
 					list(self.book.GetReference_yield(
-						verselist, module=item, max_verses=176
+						verselist, module=item, max_verses=176, skip_linked_verses=False
 					))
 				))
 				
