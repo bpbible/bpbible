@@ -52,3 +52,19 @@ The Mozilla bookmarks window and Places API has many similarities to BPBible's t
 This should probably not be reused, as some of our future plans for user editable content (e.g. mapping to a user editable module) are unlikely to be compatible.  However, some of the UI / backend logic may be able to be reused.
 
 Mozilla Places homepage at https://developer.mozilla.org/en/Places.
+
+==Protocol handling==
+We can use a protocol handler to encapsulate access to any module content, using module specific URLs (like the sword:// URL, though we would be much better to use bpbible:// to ensure no conflicts breaking our application).
+
+This is actually present in basic form in SVN, but could get very tricky very quickly if we are trying to encapsulate too much of the state of the Window (think about the URL for having the ESV, the KJV and the AB in parallel for Genesis 3: 2 - 7, with the KJV displaying WoC and Strong's Numbers and the others having all display settings turned off).
+
+==Utility classes and methods==
+Mozilla provides many things that are part of the standard library in Python (and probably are necessary to make Javascript able to implement real applications).  However, if we are able to get them from Python, we will probably get a better and more "Pythonic" interface, and be better able to use existing Python code.  Networking and file access are prime examples.  However, some classes provided by Mozilla may still be more useful than the Python equivalent and should be considered.
+
+===Threading===
+While Python does provide threading support, mixing it with the Mozilla threading support could be quite dangerous and have unexpected side-effects.  I think it's probably worth considering using the Mozilla implementation just to ensure that we avoid nasty (and possibly OS or environment specific) interactions.
+
+Possibly relevant articles:
+  * https://developer.mozilla.org/En/The_Thread_Manager
+  * https://developer.mozilla.org/En/NSPR_API_Reference/Threads
+  * https://developer.mozilla.org/En/Code_snippets/Threads
