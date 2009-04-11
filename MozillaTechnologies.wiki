@@ -1,0 +1,19 @@
+#summary Discusses available Mozilla technologies that might help us and whether we should use them or not.
+#labels Phase-Design,Development
+
+= Introduction =
+
+The Mozilla Platform has a lot of available functionality.  Much of this functionality is either:
+  * Provided by Python in some form;
+  * Provided by BPBible current in some form;
+  * Able to be done better our way than the Mozilla way.
+
+Some of the technology is very good, so we really need to evaluate it and to decide what is useful and what isn't, and more importantly _why_ we make the decisions that we do.
+
+
+= Technologies =
+
+==Bookmarks / Places==
+==XBL==
+==RDF==
+==Extensions==
