@@ -188,10 +188,7 @@ def build_installer():
 			appinfo_display_version = new_version
 
 		# Make an X.X.X.X-format version number out of the version number
-		new_version_four_part = new_version.split(".")
-		while len(new_version_four_part) < 4:
-			new_version_four_part.append("0")
-		new_version_four_part = ".".join(new_version_four_part)
+		new_version_four_part = ".".join((new_version.split(".") + ["0", "0", "0"])[:4])
 
 		appinfo_contents = appinfo_contents.replace("$APPVERSION", new_version_four_part)
 		appinfo_contents = appinfo_contents.replace("$APPDISPLAYVERSION", appinfo_display_version)
