@@ -1,0 +1,24 @@
+[Format]
+Type=PortableApps.comFormat
+Version=0.9.8
+
+[Details]
+Name=BPBible Portable
+Publisher=PortableApps.com & Contributors
+Homepage=PortableApps.com/BPBiblePortable
+Category=Education
+Description=BPBible Portable is the flexible BPBible Bible study tool packaged with a PortableApps.com launcher as a portable app, so you can study the Bible on the go.
+
+[License]
+Shareable=true
+OpenSource=true
+Freeware=true
+CommercialUse=true
+
+[Version]
+PackageVersion=$APPVERSION
+DisplayVersion=$APPDISPLAYVERSION
+
+[Control]
+Icons=1
+Start=BPBiblePortable.exe
