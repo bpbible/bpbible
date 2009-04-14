@@ -193,7 +193,9 @@ current_verse_template = SmartVerseTemplate(body)
 
 # TODO: do we want this to have tags? I'd guess not
 verse_compare_template = VerseTemplate(
-	u"<sup>$versenumber</sup> $text ",
+	u'<glink href="nbible:$internal_reference">'
+	u'<small><sup>$versenumber</sup></small></glink> $text ',
+	
 	header=u"<p><b>(<a href='%s:$version'>$version</a>)"
 	u"</b> " % BIBLE_VERSION_PROTOCOL
 )
