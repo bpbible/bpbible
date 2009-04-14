@@ -114,6 +114,12 @@ class config(object):
 		while True:
 			was_continuation = is_continuation
 			line = fp.readline()
+
+			# if we are at the first line, strip it of the BOM if it has it
+			# TODO: test this!!!
+			if lineno == 0 and line.startswith('\xef\xbb\xbf'):
+				line = line[3:]
+
 			if not line:
 				break
 			lineno = lineno + 1
