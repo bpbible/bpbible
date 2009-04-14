@@ -18,12 +18,13 @@ if not hasattr(Sword, "FTPTransport"):
 	# we may not have built this with FTP support,
 	# as this just takes up space at the moment.
 	Sword.FTPTransport = object
-else:
-	assert False, "We need to import ftplib"
+#else:
+#	assert False, "We need to import ftplib"
 
 class PyFTPTransport(Sword.FTPTransport):
 	def __init__(self, host, statusReporter=None):
-		assert Sword.FTPTransport != object, "Built without FTP support"
+		assert False and Sword.FTPTransport != object, \
+			"Built without FTP support"
 		super(PyFTPTransport, self).__init__(host, statusReporter)
 		self.host = host
 		print "HOST", self.host
