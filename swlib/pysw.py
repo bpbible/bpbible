@@ -1042,6 +1042,8 @@ class VerseList(list):
 		>>> GetBestRange("Gen.4.5")
 		'Genesis 4:5'
 		"""
+
+		single_chapter_books = LIB_SUPPORTS_SINGLE_CHAPTER_BOOKS and userOutput
 		
 		def getdetails(versekey):
 			if userOutput:
@@ -1118,13 +1120,13 @@ class VerseList(list):
 				range += separator
 
 				if (book1, chapter1) != (book2, chapter2):
-					if LIB_SUPPORTS_SINGLE_CHAPTER_BOOKS and userOutput and chapter_count1 == 1:
-						range += "%s" % book1
+					if single_chapter_books and chapter_count1 == 1:
+						range += "%s-" % book1
 					else:
 						range += "%s %s-" % (book1, uc1)
 				
 					if book1 != book2:
-						if LIB_SUPPORTS_SINGLE_CHAPTER_BOOKS and userOutput and chapter_count2 == 1:
+						if single_chapter_books and chapter_count2 == 1:
 							range += "%s" % book2
 						else:
 							range += "%s %s" % (book2, uc2)
@@ -1132,7 +1134,10 @@ class VerseList(list):
 						range += "%s" % (uc2)
 					
 				else:
-					range += "%s %s" % (book2, uc2)
+					if single_chapter_books and chapter_count2 == 1:
+						range += "%s" % book2
+					else:
+						range += "%s %s" % (book2, uc2)
 				
 				lastbook, lastchapter, lastverse = book2, chapter2, verse2
 				continue
@@ -1160,21 +1165,18 @@ class VerseList(list):
 				range += separator
 
 				done = False
-				if LIB_SUPPORTS_SINGLE_CHAPTER_BOOKS and userOutput:
-					if chapters == 1:
-						if book != lastbook:
-							range += "%s %s" % (book, uv)
-							done = True
+				if single_chapter_books and chapters == 1:
+					if book != lastbook:
+						range += "%s %s" % (book, uv)
+						done = True
 
-						print chapter, lastchapter
-						assert chapter == 1 and (done or lastchapter in (1, None)), \
-							"Changed chapter but not book when only one chapter?!?"
+					assert chapter == 1 and (done or lastchapter in (1, None)), \
+						"Changed chapter but not book when only one chapter?!?"
 
-						if not done:
-							range += "%s" % uv
-							done = True
+					if not done:
+						range += "%s" % uv
+						done = True
 
-				if done: pass
 				elif book != lastbook:
 					range += "%s %s:%s" % (book, uc, uv)
 
