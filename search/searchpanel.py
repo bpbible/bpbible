@@ -37,6 +37,9 @@ from keypad import KeyPad
 from util.i18n import N_
 from util import i18n
 
+# in these languages, we don't want to use word boundaries
+# this is chinese, japanese and korean
+CJK_LANGUAGES = ("zh", "ja", "ko")
 
 
 #TODO: better status bar: text overlay
@@ -601,12 +604,19 @@ class SearchPanel(xrcSearchPanel):
 			stemming_data = None
 			stemmer = None
 
+		lang = self.book.mod.Lang()
+		if "_" in lang:
+			lang = lang[:lang.index("_")]
+		
+		cjk = lang in CJK_LANGUAGES
 		
 		succeeded = True
 		try:
+			#### TODO: pull this out of the UI.
 			(regexes, excl_regexes), (fields, excl_fields) = separate_words(
 				key, index_word_list, stemming_data, stemmer,
-				cross_verse_search=is_word_proximity or proximity > 1
+				cross_verse_search=is_word_proximity or proximity > 1,
+				cjk_search=cjk
 			)
 
 		except SearchException, myexcept:
@@ -705,7 +715,6 @@ class SearchPanel(xrcSearchPanel):
 				succeeded = False
 				maybe_show = True
 
-		print self.maybe_incorrect_results
 		relayout = self.maybe_incorrect_results_label.IsShown() != self.maybe_incorrect_results
 		if relayout:
 			self.maybe_incorrect_results_label.Show(

@@ -299,6 +299,7 @@ class Inclusion(GroupOfObjects): pass
 		
 
 cross_verse = True
+cjk = False
 
 class WordsWithDashWords(GroupOfObjects): 
 	def to_regex(self):
@@ -313,6 +314,11 @@ class Words(GroupOfObjects):
 		# across a verse - so use a space.
 		if not cross_verse:
 			delimiter = " "
+		
+		# hmm, we don't have delimiters for CJK
+		# TODO: this throws cross-verse search out the window for CJK
+		if cjk:
+			delimiter = "\s?"
 
 		return delimiter.join(self.item_to_regex(item) for item in self.items)
 
@@ -327,6 +333,9 @@ class Regex(GroupOfObjects): pass
 class Phrase(GroupOfObjects): 
 	def to_regex(self, ):
 		assert len(self.items) == 1
+		if cjk:
+			return self.item_to_regex(self.items[0])
+
 		return r"\b%s\b" % self.item_to_regex(self.items[0])
 
 class SingleWord(Phrase): pass
@@ -671,9 +680,11 @@ def print_regexes(string, verbose=False):
 			print item.to_regex()
 
 def separate_words(string, wordlist=None, stemming_data=None, stemmer=None,
-		cross_verse_search=True):
+		cross_verse_search=True, cjk_search=False):
 	global cross_verse
+	global cjk
 	cross_verse = cross_verse_search
+	cjk = cjk_search
 
 	result = parse(string)
 	if not result: 
@@ -708,7 +719,7 @@ def separate_words(string, wordlist=None, stemming_data=None, stemmer=None,
 				yield word
 
 	badwords = list(check_proper_word(result))
-	if badwords:
+	if badwords and not cjk:
 		raise SpellingException(badwords)	
 	
 	regexes = [], []
@@ -723,9 +734,11 @@ def separate_words(string, wordlist=None, stemming_data=None, stemmer=None,
 			if word is None or item.is_excluded() or stemmer is None:
 				regexes[item.is_excluded()].append(item.to_regex())
 			else:
-				regexes[item.is_excluded()].append(r"\b%s\b" %
-					stemmer.compose_regex(stemming_data, word)
-				)
+				r = stemmer.compose_regex(stemming_data, word)
+				if not cjk:
+					r = r"\b%s\b" % r
+
+				regexes[item.is_excluded()].append(r)
 
 	return regexes, fields
 		
