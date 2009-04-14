@@ -119,7 +119,13 @@ class DisplayFrame(TooltipDisplayer, HtmlSelectableWindow):
 		guiconfig.mainfrm.hide_tooltips(exceptions=exceptions)
 
 	def strip_text(self, word):
-		return word.strip(string.whitespace + string.punctuation)
+		return word.strip(string.whitespace + string.punctuation +
+			u'\N{RIGHT DOUBLE QUOTATION MARK}' 
+			u'\N{LEFT DOUBLE QUOTATION MARK}'
+			u'\N{EM DASH}'
+			u'\N{RIGHT SINGLE QUOTATION MARK}'
+			u'\N{LEFT SINGLE QUOTATION MARK}'
+		)
 
 	def CellClicked(self, cell, x, y, event):
 		if(self.select or event.Dragging()): 

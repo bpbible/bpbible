@@ -1204,7 +1204,7 @@ class MainFrame(wx.Frame, AuiLayer):
 		if not ref:
 			ref = self.dictionary_list.GetValue().upper()
 		else:
-			self.dictionary_list.SetValue(ref)
+			self.dictionary_list.choose_item(ref)
 
 		self.dictionarytext.SetReference(ref)
 
