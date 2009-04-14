@@ -1,4 +1,4 @@
-from search import query_parser
+#from search import query_parser
 from swlib.pysw import SW, VerseList
 import re
 from util import classproperty
