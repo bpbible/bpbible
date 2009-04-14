@@ -28,12 +28,9 @@ class PopupList(virtuallist.VirtualListBox):
 		module = self.modules[item]
 		key = to_str(self.key, module)
 		k = SW.Key(key)
-		if hasattr(module, "hasKey"):
-			has_key = module.hasKey(k)
-			
-			# -1 means not implemented
-			if has_key != -1:
-				return bool(has_key)
+		if hasattr(module, "hasEntry"):
+			has_key = module.hasEntry(k)
+			return has_key
 
 		print "No hasKey :(", module.Name()
 		
