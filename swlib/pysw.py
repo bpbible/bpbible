@@ -446,14 +446,13 @@ class VK(SW.VerseKey):#, object):
 
 	def UpperBound_1512(self, to=None):
 		if to is None:
-			return super(VK, self).UpperBound()
+			return VK(super(VK, self).UpperBound())
 		
-		vk.setBounds
 		super(VK, self).UpperBound(SW.VerseKey(to))
 		
 	def LowerBound_1512(self, to=None):
 		if to is None:
-			return super(VK, self).LowerBound()
+			return VK(super(VK, self).LowerBound())
 		
 		super(VK, self).LowerBound(SW.VerseKey(to))
 	
