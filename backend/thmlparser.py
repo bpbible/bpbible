@@ -54,7 +54,7 @@ class ThMLParser(filterutils.ParserBase):
 			last = GetVerseStr(self.u.key.getText())
 			for item in refList.split(";"):
 				vref = item
-				vref = GetBestRange(vref, context=last)
+				vref = GetBestRange(vref, context=last, use_bpbible_locale=True)
 				items.append('<a href="bible:%s">%s</a>' %(vref, item))
 				last = vref
 			self.buf += "; ".join(items)

@@ -53,7 +53,7 @@ class OSISParser(filterutils.ParserBase):
 				self.ref, self.u.lastTextNode.c_str()
 			)
 		else:			
-			ref = GetBestRange(self.ref, abbrev=True)
+			ref = GetBestRange(self.ref, abbrev=True, use_bpbible_locale=True)
 			self.buf += '<a href="bible:%s">%s</a>' % (
 				ref, self.u.lastTextNode.c_str()
 			)

@@ -582,7 +582,7 @@ class LocalizedVK(EncodedVK):
 			)
 		
 class UserVK(LocalizedVK):
-	def __init__(self, arg=None):
+	def __init__(self, arg=None, locale=None):
 		if isinstance(arg, SW.Key):
 			super(UserVK, self).__init__(arg)
 			arg = None
@@ -590,7 +590,9 @@ class UserVK(LocalizedVK):
 		else:
 			super(UserVK, self).__init__()
 
-		self.setLocale(locale_lang)
+		if locale is None:
+			locale = locale_lang
+		self.setLocale(locale)
 		self.encoding = locale_encoding
 		
 		if arg is not None:
@@ -623,7 +625,10 @@ class UserVK(LocalizedVK):
 	@classproperty
 	def books(cls): 
 		return localized_books
-		
+
+class BPBibleLocaleVK(UserVK):
+	def __init__(self, arg=None):
+		super(BPBibleLocaleVK, self).__init__(arg, locale="bpbible")
 
 class AbbrevVK(LocalizedVK):
 	def __init__(self, arg=None):
@@ -733,7 +738,7 @@ class VerseList(list):
 	
 
 	def __init__(self, args=None, context="", expand=True, raiseError=False,
-				userInput=False, headings=False):
+				userInput=False, headings=False, use_bpbible_locale=False):
 		converted = False
 
 		if(isinstance(args, (list, tuple))):
@@ -760,7 +765,11 @@ class VerseList(list):
 			context = to_str(context)
 			s = args
 
-			if userInput:
+			if use_bpbible_locale:
+				vk = b_vk
+				locale = "bpbible"
+
+			elif userInput:
 				vk = u_vk
 				locale = locale_lang
 				
@@ -1450,6 +1459,7 @@ def change_locale(lang, abbrev_lang, additional=None):
 change_locale("bpbible", "abbr")
 
 u_vk = UserVK()
+b_vk = BPBibleLocaleVK()
 a_vk = AbbrevVK()
 
 
@@ -1667,9 +1677,11 @@ def BookName(text):
 	return u_vk.getBookName()
 
 def GetBestRange(text, context="", abbrev=False, raiseError=False,
-		userInput=False, userOutput=False, headings=False):
+		userInput=False, userOutput=False, headings=False,
+		use_bpbible_locale=False):
 	vl = VerseList(text, context=context, raiseError=raiseError,
-		userInput=userInput, headings=headings)
+		userInput=userInput, headings=headings,
+		use_bpbible_locale=use_bpbible_locale)
 	return vl.GetBestRange(abbrev, userOutput=userOutput)
 
 class Searcher(SW.Searcher):
