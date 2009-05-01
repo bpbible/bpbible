@@ -5,7 +5,6 @@ import sys
 import string
 from util.debug import *
 from util.unicode import to_str, to_unicode
-from util import is_py2exe
 from util import classproperty
 from util.observerlist import ObserverList
 
@@ -270,6 +269,14 @@ class VK(SW.VerseKey):#, object):
 
 	@classproperty
 	def books(cls): return books
+
+	@property
+	def v_books(self):
+		if LIB_1512_COMPAT:
+			v11n = self.getVersificationSystem()
+			return get_books(v11n)[0]
+
+		return localized_books	
 
 	def __cmp___(self, other): return self.compare(other)
 	def __lt__( self, other): return self.compare(other)<0
@@ -626,6 +633,14 @@ class UserVK(LocalizedVK):
 	def books(cls): 
 		return localized_books
 
+	@property
+	def v_books(self):
+		if LIB_1512_COMPAT:
+			v11n = self.getVersificationSystem()
+			return get_books(v11n)[1]
+
+		return localized_books
+
 class BPBibleLocaleVK(UserVK):
 	def __init__(self, arg=None):
 		super(BPBibleLocaleVK, self).__init__(arg, locale="bpbible")
@@ -817,7 +832,8 @@ class VerseList(list):
 
 		for a in self:
 			if a[-1]== rev_22_21:
-				dprint(WARNING, "Possibly incorrect string. Result is", self)
+				#dprint(WARNING, "Possibly incorrect string. Result is", self)
+				pass
 
 
 	def TestForError(self, args, context, orig_args):
@@ -1334,33 +1350,43 @@ class LocalizedChapterData(ChapterData):
 			yield process_digits(str(a), userOutput=True)
 
 
-books = []
-localized_books = []
-i_vk = VK()
-i_vk.Book(1)
+def get_books(v11n):
+	if v11n in v11n_books:
+		return v11n_books[v11n]
 
-while not i_vk.Error():
-	t = ord(i_vk.Testament())
-	b = ord(i_vk.Book())
-	n = i_vk.getBookName()
-	books.append(BookData(n, t, b))
-	localized_books.append(LocalizedBookData(n, t, b))
+	books = []
+	localized_books = []
+
+	vk = VK()
+	if LIB_1512_COMPAT:
+		vk.setVersificationSystem(v11n)
+
+	vk.Book(1)
+
+	while not vk.Error():
+		t = ord(vk.Testament())
+		b = ord(vk.Book())
+		n = vk.getBookName()
+		books.append(BookData(n, t, b))
+		localized_books.append(LocalizedBookData(n, t, b))
+		
+		vk.Book(ord(vk.Book()) + 1)
 	
-	i_vk.Book(ord(i_vk.Book()) + 1)
+	for book, localized_book in zip(books, localized_books):
+		for chapter in range(vk.chapterCount(book.testament, book.booknumber)):
+			c = ChapterData(chapter+1, 
+					vk.verseCount(book.testament, book.booknumber, chapter+1)
+			)
+	
+			book.chapters.append(c)
+			localized_book.chapters.append(c)
+	
+	v11n_books[v11n] = books, localized_books
+	return v11n_books[v11n]
 
-for book, localized_book in zip(books, localized_books):
-	for chapter in range(i_vk.chapterCount(book.testament, book.booknumber)):
-		c = ChapterData(chapter+1, 
-				i_vk.verseCount(book.testament, book.booknumber, chapter+1)
-		)
-
-		book.chapters.append(c)
-		localized_book.chapters.append(c)
-		
-		
-del book
-del localized_book
-del chapter
+i_vk = VK()
+v11n_books = {}
+books, localized_books = get_books("KJV")
 
 SW.abbrev.__len__ = SW.abbrev.getAbbrevCount
 SW.abbrev.__getitem__ = SW.abbrev.getAbbrevData
@@ -1372,8 +1398,17 @@ def find_bookidx(name):
 	name = name.replace("-", "").upper().strip().encode(locale_encoding)
 	abbrevs = locale.getBookAbbrevs()
 	d = bisect.bisect_left(abbrevs, name)
-	if abbrevs[d].ab.startswith(name):
-		return abbrevs[d].book - 1
+	while d < len(abbrevs) and abbrevs[d].ab.startswith(name):
+		if LIB_1512_COMPAT:
+			# if the locale has additional versification translations, move
+			# along until we find a good one
+			e = i_vk.getBookNumberByOSISName(abbrevs[d].osis)
+			if e != -1:
+				return e - 1
+			
+			d += 1
+		else:
+			return abbrevs[d].book - 1
 	
 	return None
 	
