@@ -181,6 +181,12 @@ class BibleInterface(object):
 		
 		config_parser.set("Install", "DataPath", paths[0])
 		config_parser.set("Install", "AugmentPath", [])
+
+		# 1.5.12+ will listen to localepath and only look there, so set it to
+		# a dummy location... (we would like to set it to 
+		# locales/locales.d/SWORD_1512, but it needs it to end in locales.d :(
+		config_parser.set("Install", "LocalePath", "locales\\dummy")
+		
 		augment_paths = config_parser.get("Install", "AugmentPath")
 		del augment_paths[0]
 		augment_paths.extend(paths[1:])
@@ -268,6 +274,7 @@ class BibleInterface(object):
 					self.mgrs.append([item, mgr, modules])
 			
 				self.paths = paths
+				
 			else:
 				for item in self.mgrs:
 					if item[0] != path_changed:

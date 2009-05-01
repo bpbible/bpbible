@@ -1,4 +1,5 @@
 from ConfigParser import RawConfigParser, NoOptionError, NoSectionError
+from util import confparser
 from observerlist import ObserverList
 from debug import dprint, WARNING, MESSAGE
 import os
@@ -9,7 +10,7 @@ from swlib.pysw import SW
 # This is the version of the configuration file, and should be updated
 # whenever there is a need to because the configuration changed (though it
 # might as well be kept roughly in sync with version numbers).
-CONFIG_VERSION = "0.4.1"
+CONFIG_VERSION = "0.4.2"
 	
 class ConfigSection(object):
 	def __init__(self, section):
@@ -151,8 +152,24 @@ class ConfigManager(object):
 			self._upgrade_03_to_04(config_parser)
 		if version_from <= SW.Version("0.4.1"):
 			self._upgrade_04_to_041(config_parser)
+		if version_from <= SW.Version("0.4.2"):
+			self._upgrade_041_to_042(config_parser)
 			
 
+	def _upgrade_041_to_042(self, config_parser):
+		import config
+		try:
+			config_parser = confparser.config()
+			config_parser.read(config.sword_paths_file)
+			if not config_parser.has_section("Install"):
+				config_parser.add_section("Install")
+			
+			config_parser.set("Install", "LocalePath", "locales\\dummy")
+			config_parser.write(open(config.sword_paths_file, "w"))
+			
+		except EnvironmentError, e:
+			dprint(WARNING, "Error on upgrading - is sword.conf writable?", e)
+	
 	def _upgrade_04_to_041(self, config_parser):
 		try:
 			# upgrade font
