@@ -55,10 +55,10 @@ class TopicTooltipConfig(TooltipConfig):
 		self.tooltip_changed()
 
 	def get_text(self):
-		html = ""
+		html = u"<p><b>%s</b></p>" % self.topic.full_name
 		description = self.topic.description.replace(u"\n", u"<br>")
 		if description:
-			html = u"<p>%s</p>" % description
+			html += u"<p>%s</p>" % description
 
 		passage_html = u"<br>".join(self._passage_entry_text(passage_entry)
 				for passage_entry in self.topic.passages)
