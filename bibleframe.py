@@ -116,17 +116,17 @@ class BibleFrame(VerseKeyedFrame):
 			), IN_POPUP),
 					
 			
-			(Separator, IN_BOTH),
-			# Pick suitably arbitrary accelerators.
+			(Separator, IN_MENU),
 			(MenuItem(
 				_("Manage Topics"), 
 				self.manage_topics,
 				accelerator="Ctrl+Shift+T",
 				doc=_("Manages all of the topics and the passages in them.")	
-			), IN_BOTH),
+			), IN_MENU),
 			(MenuItem(
 				_("Tag verses"), 
 				self.tag_verses,
+				accelerator="Ctrl+T",
 				enabled=self.has_module,
 				doc=_("Tags the currently selected verses.")
 
