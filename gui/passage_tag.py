@@ -3,7 +3,7 @@ import guiconfig
 from protocols import protocol_handler
 from manage_topics_frame import ManageTopicsFrame
 from topic_selector import TopicSelector
-from passage_list import lookup_passage_list
+from passage_list import lookup_passage_list, lookup_passage_entry
 from swlib.pysw import VerseList
 from tooltip import TooltipConfig
 from backend.bibleinterface import biblemgr
@@ -20,22 +20,25 @@ _rgbNoFocusInner = wx.Colour(245, 245, 245)
 
 
 def on_passage_tag_hover(frame, href, url, x, y):
-	passage_list = _get_passage_list_from_href(href)
+	passage_list, passage_entry = _get_passage_list_and_entry_from_href(href)
 
-	frame.show_tooltip(TopicTooltipConfig(passage_list))
+	frame.show_tooltip(TopicTooltipConfig(passage_list, passage_entry))
 
-def _get_passage_list_from_href(href):
+def _get_passage_list_and_entry_from_href(href):
 	"""Gets the passage list corresponding to the given passage tag HREF."""
 	href_parts = href.split(":")
-	assert len(href_parts) == 2
+	assert len(href_parts) == 3
 	assert href_parts[0] == "passage_tag"
 	passage_list_id = int(href_parts[1])
-	return lookup_passage_list(passage_list_id)
+	passage_entry_id = int(href_parts[2])
+	return (lookup_passage_list(passage_list_id),
+			lookup_passage_entry(passage_entry_id))
 
 class TopicTooltipConfig(TooltipConfig):
-	def __init__(self, topic):
+	def __init__(self, topic, selected_passage_entry):
 		super(TopicTooltipConfig, self).__init__(book=biblemgr.bible)
 		self.topic = topic
+		self.selected_passage_entry = selected_passage_entry
 
 	def get_title(self):
 		return self.topic.full_name
@@ -66,7 +69,9 @@ class TopicTooltipConfig(TooltipConfig):
 
 	def _passage_entry_text(self, passage_entry):
 		"""Gets the HTML for the given passage entry with its comment."""
-		comment = passage_entry.comment.replace("\n", "<br>")
+		comment = passage_entry.comment.replace(u"\n", u"<br>")
+		if passage_entry is self.selected_passage_entry:
+			comment = u'<highlight-start colour="#008000">%s<highlight-end />' % comment
 		reference = str(passage_entry)
 		localised_reference = passage_entry.passage.GetBestRange(userOutput=True)
 		return (u"<b><a href=\"bible:%(reference)s\">%(localised_reference)s</a></b> "
@@ -210,8 +215,8 @@ class PassageTag(wx.PyWindow):
 		if self.Parent.tooltip.target == self:
 			return
 
-		protocol_handler.on_hover(self.Parent, 
-			"passage_tag:%d" % self._passage_list.get_id(), x, y)
+		href = "passage_tag:%d:%d" % (self._passage_list.get_id(), self._passage_entry.get_id())
+		protocol_handler.on_hover(self.Parent, href, x, y)
 
 	def on_leave(self, event):
 		self.Parent.current_target = None
