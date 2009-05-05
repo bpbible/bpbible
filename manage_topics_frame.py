@@ -320,7 +320,9 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 	def _get_current_topic_text(self):
 		if self.selected_topic is None:
 			return u""
-		text = self.selected_topic.full_name + u"\n" + self.selected_topic.description.strip()
+		text = self.selected_topic.full_name
+		if self.selected_topic.description:
+			text += u"\n" + self.selected_topic.description.strip()
 
 		passage_text = u"\n".join(self._passage_entry_text(passage_entry)
 				for passage_entry in self.selected_topic.passages)
