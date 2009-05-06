@@ -612,7 +612,7 @@ class Book(object):
 
 		
 	def get_mgr(self, mod):
-		for path, mgr, modules in self.parent:
+		for path, mgr, modules in self.parent.mgrs:
 			if mod in [m for name, m in modules]:
 				return mgr
 
