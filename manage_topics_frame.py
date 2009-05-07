@@ -468,7 +468,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 
 	def _change_passage_comment(self, passage_entry, new_comment):
 		index = self.selected_topic.passages.index(passage_entry)
-		self.passage_list_ctrl.SetStringItem(index, 1, new_comment)
+		self.passage_list_ctrl.SetStringItem(index, 1, passage_entry.comment[:300].replace("\n", " "))
 
 	def _passage_selection_changed(self, event):
 		self._change_selected_passages()
