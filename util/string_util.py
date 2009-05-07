@@ -69,6 +69,9 @@ def replace_amp(groups):
 
 	if ent[0] == "#":
 		try:
+			if ent[1] == "x":
+				return unichr(int(ent[1:], 16))
+
 			return unichr(int(ent[1:]))
 		except ValueError:
 			from debug import dprint, WARNING
