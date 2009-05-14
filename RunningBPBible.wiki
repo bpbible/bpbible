@@ -1,5 +1,5 @@
 #summary How to run BPBible
-#labels Featured,Phase-Deploy
+#labels Featured,Phase-Deploy,User-Documentation
 
 = Introduction =
 There are two ways to run BPBible:
