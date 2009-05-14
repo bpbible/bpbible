@@ -1,4 +1,4 @@
-#summary How to install modules for BPBible
+#summary How to install books for BPBible
 #labels User-Documentation,Featured,Phase-Deploy
 
 = Introduction =
@@ -14,7 +14,7 @@ Now do one of the following:
  # In the file menu, select Install Books..., and locate the zip file.
 
 You can now select the installation directory to install it to somewhere
-different, or view the information associated with the module before
+different, or view the information associated with the book before
 installing it. Now press OK to install the book. The book should show up in
 the list of available books.
 
