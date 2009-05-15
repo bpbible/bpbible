@@ -233,11 +233,10 @@ class InstallMgr(object):
 
 		Returns True if module couldn't be found, False otherwise"""
 		mod_name = Sword.SWBuf(moduleName)
-		module = manager.config.getSections().find(mod_name)
-
-		if (module != manager.config.getSections().end()):
-			# to be sure all files are closed
-			# this does not remove the .conf information from SWMgr
+		s = manager.config.getSections()
+		module = s.find(mod_name)
+		# we use to have != s.end, but that crashes...
+		if mod_name in s:
 			manager.deleteModule(moduleName)
 				
 			file_buf = Sword.SWBuf("File")
@@ -279,8 +278,7 @@ class InstallMgr(object):
 						modFile = baseModFile + "/"
 						modFile += item
 						config = Sword.SWConfig(modFile)
-						if config.getSections().find(mod_name) != \
-							config.getSections().end():
+						if mod_name in config.getSections():
 							del config
 							FileMgr.removeFile(modFile)
 

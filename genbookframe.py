@@ -74,6 +74,10 @@ class GenBookFrame(BookFrame):
 		guiconfig.mainfrm.on_close += lambda:biblemgr.genbook.observers.remove(
 			self.genbook_version_changed
 		)
+		guiconfig.mainfrm.on_close += lambda:biblemgr.genbook.cleanup_module.remove(
+			self.cleanup_module
+		)
+		
 		self.reference_text = None
 		
 		
