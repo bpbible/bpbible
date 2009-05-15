@@ -150,9 +150,9 @@ class ConfigManager(object):
 		dprint(MESSAGE, "Upgrading from", version_from.getText())
 		if version_from <= SW.Version("0.3"):
 			self._upgrade_03_to_04(config_parser)
-		if version_from <= SW.Version("0.4.1"):
+		if version_from < SW.Version("0.4.1"):
 			self._upgrade_04_to_041(config_parser)
-		if version_from <= SW.Version("0.4.2"):
+		if version_from < SW.Version("0.4.2"):
 			self._upgrade_041_to_042(config_parser)
 			
 
