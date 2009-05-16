@@ -29,7 +29,7 @@ from guess_verse import GuessVerseFrame
 
 bible_settings = config_manager.add_section("Bible")
 bible_settings.add_item("verse_per_line", False, item_type=bool)
-
+bible_settings.add_item("select_verse_on_click", False, item_type=bool)
 
 class BibleFrame(VerseKeyedFrame):
 	id = N_("Bible")
@@ -337,7 +337,6 @@ class BibleFrame(VerseKeyedFrame):
 		text = first + " - " + last
 		print text
 		return GetBestRange(text)
-
 	
 	#def CellClicked(self, cell, x, y, event):
 	#	#if(self.select): return
@@ -346,5 +345,17 @@ class BibleFrame(VerseKeyedFrame):
 
 	#	return super(BibleFrame, self).CellClicked(cell, x, y, event)
 
-	
+	def CellMouseUp(self, cell, x, y, event):
+		if not self.m_tmpHadSelection and not self.m_selection and not event.Dragging():
+			self.maybe_select_clicked_verse(cell)
 
+	def maybe_select_clicked_verse(self, cell):
+		if not bible_settings["select_verse_on_click"]:
+			return
+
+		start_cell = self.GetInternalRepresentation().FirstTerminal
+		reference = self.FindVerse(cell, start_cell=start_cell)
+		if reference:
+			wx.CallAfter(self.suppress_scrolling,
+				lambda: self.notify(reference)
+			)

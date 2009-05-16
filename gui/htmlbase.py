@@ -764,6 +764,7 @@ class HtmlSelectableWindow(HtmlBase):
 		#self.buffer = wx.TextCtrl(self)
 		#self.buffer.Hide()
 		self.m_selection = None
+		self.m_tmpHadSelection = False
 		self.setup()
 
 	def setup(self):
@@ -944,6 +945,7 @@ class HtmlSelectableWindow(HtmlBase):
 		xx, yy = self.CalcUnscrolledPosition(x, y) 
 
 
+		self.m_tmpHadSelection = (self.m_selection is not None)
 		self.m_tmpSelFromPos = self.CalcUnscrolledPosition(event.GetPosition());
 		self.m_tmpSelFromCell = None;
 		self.m_selection = None
@@ -970,6 +972,16 @@ class HtmlSelectableWindow(HtmlBase):
 
 		self.select = False
 		self.mousedown = False
+
+		x, y = self.mousecoords
+		cellover = self.FindCell(x,y)
+		xx, yy = self.CalcUnscrolledPosition(x, y) 
+
+		if(cellover):
+			self.CellMouseUp(cellover, xx, yy, event) 
+
+	def CellMouseUp(self, cell, x, y, event):
+		pass
 
 	def PutMeIn(self):
 		#taken straight from the original source code :)
