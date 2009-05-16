@@ -26,7 +26,7 @@
 ;cleanup when the optional features are not selected is needed, it can be included in the
 ;PortableApps.comInstallerCustom.nsi which is detailed within that file.
 
-;LAST UPDATED FOR INSTALLER VERSION: 0.12.x
+;LAST UPDATED FOR INSTALLER VERSION: 0.13.x
 
 ;== Basic Information.  Basic information about the portable app
 !define NAME "BPBible Portable"
@@ -39,6 +39,7 @@
 !define INSTALLERCOMMENTS "For additional details, visit PortableApps.com"
 !define INSTALLERADDITIONALTRADEMARKS "" ;end this entry with a period and a space if used
 !define INSTALLERMULTILINGUAL "true" ;uncomment this entry for multilingual installers
+;!define INCLUDEINSTALLERSOURCE "true" ;uncoment this entry to include the PortableApps.com Installer source code
 
 !ifndef INSTALLERMULTILINGUAL
 	;== Single language installer

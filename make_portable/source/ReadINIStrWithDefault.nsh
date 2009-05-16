@@ -1,9 +1,13 @@
-; ReadINIStrWithDefault
+; ReadINIStrWithDefault 1.1 (2009-05-12)
+;
 ; Substitutes a default value if the INI is undefined
-; Copyright 2008 John T. Haller of PortableApps.com
+; Copyright 2008-2009 John T. Haller of PortableApps.com
 ; Released under the BSD
 ;
 ; Usage: ${ReadINIStrWithDefault} OUTPUT_VALUE INI_FILENAME SECTION_NAME ENTRY_NAME DEFAULT_VALUE
+;
+; History:
+; 1.1 (2009-05-12): Fixed error with $0 and $2 being swapped
 
 Function ReadINIStrWithDefault
 	;Start with a clean slate
@@ -31,6 +35,7 @@ Function ReadINIStrWithDefault
 	;Clear the stack
 	Pop $4
 	Pop $3
+	Exch 2
 	Pop $2
 	Pop $1
 	
