@@ -13,6 +13,7 @@ class HistoryItem(object):
 		self.parent = parent
 		self.children = []
 		self.ref = ref
+		self.y_pos = None
 	
 	def trim(self, child):
 		assert child in self.children, "Can't trim item when not in children"
@@ -91,10 +92,11 @@ class History(object):
 	def can_forward(self):
 		return bool(self.current_item.children)
 
-	def new_location(self, new_location):
+	def new_location(self, new_location, current_ypos=None):
 		if new_location == self.current_item.ref:
 			return
 
+		self.current_item.y_pos = current_ypos
 		history_item = HistoryItem(self.current_item, new_location)
 		self.current_item.children.append(history_item)
 		self.current_item = history_item
@@ -104,7 +106,10 @@ class History(object):
 		self.history = HistoryItem(None, None)
 		self.current_item = self.history
 		
-	def go(self, direction):
+	def go(self, direction, current_ypos=None):
+		if current_ypos is not None:
+			self.current_item.y_pos = current_ypos
+
 		if direction < 0:
 			return self.back()
 		if direction > 0:
@@ -141,6 +146,8 @@ class HistoryTree(wx.TreeCtrl):
 		item = event.GetItem()
 		history_item = self.GetPyData(item)
 		parent = self.history.current_item
+
+		self.history.current_item.y_pos = guiconfig.mainfrm.bibletext.GetViewStart()[1]
 		# if it is in our back list, go back to it
 		while parent:
 			if history_item == parent:
@@ -159,7 +166,9 @@ class HistoryTree(wx.TreeCtrl):
 			else:
 				self.history.new_location(history_item.ref)
 
-		guiconfig.mainfrm.set_bible_ref(history_item.ref, source=HISTORY)
+		guiconfig.mainfrm.set_bible_ref(history_item.ref, source=HISTORY,
+				y_pos=history_item.y_pos
+			)
 		wx.CallAfter(self.rebuild_tree)
 
 	def create_item(self, parent, item):

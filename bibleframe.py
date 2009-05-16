@@ -236,7 +236,7 @@ class BibleFrame(VerseKeyedFrame):
 		tag_passage(self, self.get_quick_selected())
 	
 	@guiutil.frozen
-	def SetReference(self, ref, context=None, raw=None):
+	def SetReference(self, ref, context=None, raw=None, y_pos=None):
 		"""Sets reference. This is set up to be an observer of the main frame,
 		so don't call internally. To set verse reference, use notify"""
 		if raw is None:
@@ -272,7 +272,10 @@ class BibleFrame(VerseKeyedFrame):
 			self.SetPage(data, raw=raw)
 
 			#set to current verse
-			self.scroll_to_current()
+			if y_pos is not None:
+				self.Scroll(-1, y_pos)
+			else:
+				self.scroll_to_current()
 
 		#file = open("a.html","w")
 		#file.writelines(data)
