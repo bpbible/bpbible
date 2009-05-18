@@ -81,7 +81,7 @@ if(setup(
 		os.system(r"if not exist dist\%s mkdir dist\%s" % (subdir, subdir))
 
 	os.system("copy xrc\\*.xrc dist\\xrc\\")
-	for item in "png xpm svg gif".split():
+	for item in "png gif".split():
 		os.system("copy graphics\\*.%s dist\\graphics\\" % item)
 	
 	os.system("copy harmony\\robertson.harm dist\\harmony")
