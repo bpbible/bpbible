@@ -23,7 +23,7 @@
 !define PORTABLEAPPNAME "BPBible Portable"
 !define APPNAME "BPBible"
 !define NAME "BPBiblePortable"
-!define VER "1.6.1.0"
+!define VER "1.6.5.0"
 !define WEBSITE "PortableApps.com/BPBiblePortable"
 !define DEFAULTEXE "bpbible.exe"
 !define DEFAULTAPPDIR "bpbible"
@@ -66,6 +66,7 @@ SetDatablockOptimize On
 !insertmacro GetParameters
 !insertmacro GetParent
 !insertmacro GetRoot
+!include LogicLib.nsh
 
 ;(NSIS Plugins)
 !include TextReplace.nsh
@@ -82,199 +83,98 @@ LoadLanguageFile "${NSISDIR}\Contrib\Language files\${LAUNCHERLANGUAGE}.nlf"
 !include PortableApps.comLauncherLANG_${LAUNCHERLANGUAGE}.nsh
 
 ;=== Variables
-!define PROGRAMDIRECTORY "$EXEDIR\App\${DEFAULTAPPDIR}"
-!define SETTINGSDIRECTORY "$EXEDIR\Data\settings"
-!define RESOURCESDIRECTORY "$EXEDIR\Data\resources"
-Var SPPRESOURCESDIRECTORY ; SWORD Project Portable Resources Directory
-Var SBPRESOURCESDIRECTORY ; SwordBible Portable Resources Directory
-Var USELOCALSPRESOURCES ; Do we use the local SWORD Project Resources if they exist?
-Var LOCALSPRESOURCESDIRECTORY ; Local SWORD Project Resources Directory
-Var ADDITIONALPARAMETERS
 Var EXECSTRING
-Var DISABLESPLASHSCREEN
-Var LASTRESOURCESDIRECTORY
-Var LASTSPPRESOURCESDIRECTORY
-Var LASTSBPRESOURCESDIRECTORY
-Var LASTLOCALSPRESOURCESDIRECTORY
 Var MISSINGFILEORPATH
 Var BPBIBLELANGUAGE
-Var LASTBPBIBLELANGUAGE
-Var LASTDRIVE
-Var CURRENTDRIVE
 
 Section "Main"
-	;=== Set up the path variables
-	${GetParent} $EXEDIR $0
-	StrCpy $SPPRESOURCESDIRECTORY "$0\SWORDProjectPortable\Data\settings"
-	StrCpy $SBPRESOURCESDIRECTORY "$0\SwordBiblePortable\Data"
+	${IfNot} ${FileExists} "$EXEDIR\App\${DEFAULTAPPDIR}\${DEFAULTEXE}"
+		;=== Program executable not where expected
+		StrCpy $MISSINGFILEORPATH ${DEFAULTEXE}
+		MessageBox MB_OK|MB_ICONEXCLAMATION `$(LauncherFileNotFound)`
+		Abort
+	${EndIf}
 
-	IfFileExists "${PROGRAMDIRECTORY}\${DEFAULTEXE}" CheckINI
+	;=== Read the parameters from the INI file
+	${ReadINIStrWithDefault} $0 "$EXEDIR\${NAME}.ini" "${NAME}" "DisableSplashScreen" "false"
 
-	;=== Program executable not where expected
-	StrCpy $MISSINGFILEORPATH ${DEFAULTEXE}
-	MessageBox MB_OK|MB_ICONEXCLAMATION `$(LauncherFileNotFound)`
-	Abort
+	${If} $0 != "true"
+		;=== Show the splash screen while processing data
+		InitPluginsDir
+		File /oname=$PLUGINSDIR\splash.jpg "${NAME}.jpg"
+		newadvsplash::show /NOUNLOAD 2000 0 0 -1 /L $PLUGINSDIR\splash.jpg
+	${EndIf}
 
-	CheckINI:
-		;=== Find the INI file, if there is one
-		IfFileExists "$EXEDIR\${NAME}.ini" "" NoINI
+	;=== Get any passed parameters
+	StrCpy $EXECSTRING `"$EXEDIR\App\${DEFAULTAPPDIR}\${DEFAULTEXE}" --data-path="$EXEDIR\Data\settings" --index-path="$EXEDIR\Data\resources" --sword-path="$EXEDIR\Data\settings"`
 
-		;=== Read the parameters from the INI file
-		${ReadINIStrWithDefault} $ADDITIONALPARAMETERS "$EXEDIR\${NAME}.ini" "${NAME}" "AdditionalParameters" ""
-		${ReadINIStrWithDefault} $DISABLESPLASHSCREEN "$EXEDIR\${NAME}.ini" "${NAME}" "DisableSplashScreen" "false"
-		${ReadINIStrWithDefault} $USELOCALSPRESOURCES "$EXEDIR\${NAME}.ini" "${NAME}" "UseLocalResources" "false"
-		Goto DisplaySplash
+	${GetParameters} $0
+	${IfThen} $0 != "" ${|} StrCpy $EXECSTRING "$EXECSTRING $0" ${|}
 
-	NoINI:
-		;=== No INI file, so we'll use the defaults
-		StrCpy $ADDITIONALPARAMETERS ""
-		StrCpy $DISABLESPLASHSCREEN "false"
-		StrCpy $USELOCALSPRESOURCES "false"
+	${ReadINIStrWithDefault} $0 "$EXEDIR\${NAME}.ini" "${NAME}" "AdditionalParameters" ""
+	${IfThen} $0 != "" ${|} StrCpy $EXECSTRING "$EXECSTRING $0" ${|}
 
-	DisplaySplash:
-		StrCmp $DISABLESPLASHSCREEN "true" GetPassedParameters
-			;=== Show the splash screen while processing data
-			InitPluginsDir
-			File /oname=$PLUGINSDIR\splash.jpg "${NAME}.jpg"
-			newadvsplash::show /NOUNLOAD 2000 0 0 -1 /L $PLUGINSDIR\splash.jpg
-
-	GetPassedParameters:
-		;=== Get any passed parameters
-		${GetParameters} $0
-		StrCmp "'$0'" "''" "" LaunchProgramParameters
-
-		;=== No parameters
-		StrCpy $EXECSTRING `"${PROGRAMDIRECTORY}\${DEFAULTEXE}" --data-path="${SETTINGSDIRECTORY}" --index-path="${RESOURCESDIRECTORY}" --sword-path="${SETTINGSDIRECTORY}"`
-		Goto AdditionalParameters
-
-	LaunchProgramParameters:
-		StrCpy $EXECSTRING `"${PROGRAMDIRECTORY}\${DEFAULTEXE}" --data-path="${SETTINGSDIRECTORY}" --index-path="${RESOURCESDIRECTORY}" --sword-path="${SETTINGSDIRECTORY}" $0`
-
-	AdditionalParameters:
-		StrCmp $ADDITIONALPARAMETERS "" BPBibleLanguageGLIBC
-
-		;=== Additional Parameters
-		StrCpy $EXECSTRING `$EXECSTRING $ADDITIONALPARAMETERS`
-
-	BPBibleLanguageGLIBC:
-		; e.g. en_US, hu
+	;=== Set the language
+		; GLIBC: e.g. en_US, hu
 		ReadEnvStr $BPBIBLELANGUAGE "PortableApps.comLocaleglibc"
-		StrCmp $BPBIBLELANGUAGE "" BPBibleLanguageCode2
-		IfFileExists "${PROGRAMDIRECTORY}\locales\$BPBIBLELANGUAGE\*.*" SetBPBibleLanguage
+		${If} $BPBIBLELANGUAGE == ""
+		${OrIfNot} ${FileExists} "$EXEDIR\App\${DEFAULTAPPDIR}\locales\$BPBIBLELANGUAGE\*.*"
+			; Code 2: e.g. en, hu
+			ReadEnvStr $BPBIBLELANGUAGE "PortableApps.comLocaleCode2"
+			${If} $BPBIBLELANGUAGE != "en"
+				${If} $BPBIBLELANGUAGE == ""
+				${OrIfNot} ${FileExists} "$EXEDIR\App\${DEFAULTAPPDIR}\locales\$BPBIBLELANGUAGE\*.*"
+					ReadINIStr $BPBIBLELANGUAGE "$EXEDIR\Data\settings\${NAME}Settings.ini" "Language" "LANG"
+					${IfThen} $BPBIBLELANGUAGE == "en_US" ${|} StrCpy $BPBIBLELANGUAGE "en" ${|}
+					${IfNotThen} ${FileExists} "$EXEDIR\App\${DEFAULTAPPDIR}\locales\$BPBIBLELANGUAGE\*.*" ${|} StrCpy $BPBIBLELANGUAGE "en" ${|}
+				${EndIf}
+			${EndIf}
+		${EndIf}
 
-	BPBibleLanguageCode2:
-		; e.g. en, hu
-		ReadEnvStr $BPBIBLELANGUAGE "PortableApps.comLocaleCode2"
-		StrCmp $BPBIBLELANGUAGE "" BPBibleLanguageSettingsFile
-		StrCmp $BPBIBLELANGUAGE "en" SetBPBibleLanguage
-		IfFileExists "${PROGRAMDIRECTORY}\locales\$BPBIBLELANGUAGE\*.*" SetBPBibleLanguage
+		${ReadINIStrWithDefault} $0 "$EXEDIR\Data\settings\${NAME}Settings.ini" "Language" "LastLanguage" "NONE"
+		${If} $BPBIBLELANGUAGE != ""
+		${AndIf} $0 != $BPBIBLELANGUAGE
+			; If it's the same as before, don't change it.  This could be useful if the user
+			; manually changes the language to something the PortableApps.com Platform doesn't
+			; support, such as Vietnamese at the moment.
+			WriteINIStr "$EXEDIR\Data\settings\data.conf" "Locale" "language" $BPBIBLELANGUAGE
+			WriteINIStr "$EXEDIR\Data\settings\${NAME}Settings.ini" "Language" "LastLanguage" $BPBIBLELANGUAGE
+		${EndIf}
 
-	BPBibleLanguageSettingsFile:
-		ReadINIStr $BPBIBLELANGUAGE "${SETTINGSDIRECTORY}\${NAME}Settings.ini" "Language" "LANG"
-		StrCmp $BPBIBLELANGUAGE "" SettingsWork
-		StrCmp $BPBIBLELANGUAGE "en_US" SetBPBibleLanguage
-		IfFileExists "${PROGRAMDIRECTORY}\locales\$BPBIBLELANGUAGE\*.*" SetBPBibleLanguage SettingsWork
-
-	SetBPBibleLanguage:
-		; If it's the same as before, don't change it.  This could be useful if the user
-		; manually changes the language to something the PortableApps.com Platform doesn't
-		; support, such as Vietnamese at the moment.
-		${ReadINIStrWithDefault} $LASTBPBIBLELANGUAGE "${SETTINGSDIRECTORY}\${NAME}Settings.ini" "Language" "LastLanguage" "NONE"
-		StrCmp $LASTBPBIBLELANGUAGE $BPBIBLELANGUAGE SettingsWork
-		WriteINIStr "${SETTINGSDIRECTORY}\data.conf" "Locale" "language" $BPBIBLELANGUAGE
-		WriteINIStr "${SETTINGSDIRECTORY}\${NAME}Settings.ini" "Language" "LastLanguage" "$BPBIBLELANGUAGE"
-
-	SettingsWork:
+	;=== Work with the settings
 		;=== Create data directories if non-existent
 		CreateDirectory "$EXEDIR\Data"
-		CreateDirectory "${SETTINGSDIRECTORY}"
-		CreateDirectory "${RESOURCESDIRECTORY}"
+		CreateDirectory "$EXEDIR\Data\settings"
+		CreateDirectory "$EXEDIR\Data\resources"
+		CopyFiles /SILENT "$EXEDIR\App\DefaultData\settings\*.*" "$EXEDIR\Data\settings"
 
-		; Find The SWORD Project for Windows
-		ReadRegStr $LOCALSPRESOURCESDIRECTORY HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\sword.exe" "Path"
-		ClearErrors
-		StrCmp $LOCALSPRESOURCESDIRECTORY "" "" SkipSetLocalSPResourcesDefault
-			StrCpy $LOCALSPRESOURCESDIRECTORY "C:\Program Files\CrossWire\The SWORD Project"
-
-	SkipSetLocalSPResourcesDefault:
-		${ReadINIStrWithDefault} $LASTDRIVE "${SETTINGSDIRECTORY}\${NAME}Settings.ini" "${NAME}Settings" "LastDrive" "NONE"
-		${ReadINIStrWithDefault} $LASTRESOURCESDIRECTORY "${SETTINGSDIRECTORY}\${NAME}Settings.ini" "${NAME}Settings" "LastResourcesDirectory" "NONE"
-		${ReadINIStrWithDefault} $LASTSPPRESOURCESDIRECTORY "${SETTINGSDIRECTORY}\${NAME}Settings.ini" "${NAME}Settings" "LastSWORDProjectPortableResourcesDirectory" "NONE"
-		${ReadINIStrWithDefault} $LASTSBPRESOURCESDIRECTORY "${SETTINGSDIRECTORY}\${NAME}Settings.ini" "${NAME}Settings" "LastSwordBiblePortableResourcesDirectory" "NONE"
-		${ReadINIStrWithDefault} $LASTLOCALSPRESOURCESDIRECTORY "${SETTINGSDIRECTORY}\${NAME}Settings.ini" "${NAME}Settings" "LastLocalSWORDProjectResourcesDirectory" "NONE"
-		StrCmp "${SETTINGSDIRECTORY}" $LASTDRIVE "" FixPaths
-		StrCmp "${RESOURCESDIRECTORY}" $LASTRESOURCESDIRECTORY "" FixPaths
-		StrCmp $SPPRESOURCESDIRECTORY $LASTSPPRESOURCESDIRECTORY "" FixPaths
-		StrCmp $SBPRESOURCESDIRECTORY $LASTSBPRESOURCESDIRECTORY "" FixPaths
-		StrCmp $LOCALSPRESOURCESDIRECTORY $LASTLOCALSPRESOURCESDIRECTORY "" FixPaths
-		Goto RunProgram ; All paths identical.  Skip path correction.
-
-	FixPaths:
-		${GetRoot} $EXEDIR $CURRENTDRIVE
-		WriteINIStr "${SETTINGSDIRECTORY}\${NAME}Settings.ini" "${NAME}Settings" "LastDrive" $CURRENTDRIVE
-		WriteINIStr "${SETTINGSDIRECTORY}\${NAME}Settings.ini" "${NAME}Settings" "LastResourcesDirectory" ${RESOURCESDIRECTORY}
-		WriteINIStr "${SETTINGSDIRECTORY}\${NAME}Settings.ini" "${NAME}Settings" "LastSWORDProjectPortableResourcesDirectory" $SPPRESOURCESDIRECTORY
-		WriteINIStr "${SETTINGSDIRECTORY}\${NAME}Settings.ini" "${NAME}Settings" "LastSwordBiblePortableResourcesDirectory" $SBPRESOURCESDIRECTORY
-		WriteINIStr "${SETTINGSDIRECTORY}\${NAME}Settings.ini" "${NAME}Settings" "LastLocalSWORDProjectResourcesDirectory" $LOCALSPRESOURCESDIRECTORY
-		FlushINI "${SETTINGSDIRECTORY}\${NAME}Settings.ini"
-		IfFileExists "${SETTINGSDIRECTORY}\data.conf" "" CreateSwordConf
-		WriteINIStr "${SETTINGSDIRECTORY}\data.conf" "Internal" "path" "${SETTINGSDIRECTORY}\data.conf"
-		FlushINI "${SETTINGSDIRECTORY}\data.conf"
-
-	CreateSwordConf:
-		IfFileExists "${SETTINGSDIRECTORY}\sword.conf" FixSwordPaths
-			FileOpen $R0 "${SETTINGSDIRECTORY}\sword.conf" w
-			FileClose $R0
-
-	FixSwordPaths:
-		; Turn DataPaths into AugmentPaths - we need to use an exclusive DataPath for WriteINIStr
-		${ReplaceInFile} "${SETTINGSDIRECTORY}\sword.conf" "DataPath=" "AugmentPath="
-		; Remove "comment" notation (if the directory doesn't exist, it gets "commented" so that it doesn't appear in the list.)
-		${ReplaceInFile} "${SETTINGSDIRECTORY}\sword.conf" "DisabledPath=" "AugmentPath="
-
-		;FixSwordPathsSPPResources:
-			; Fix SWORD Project Portable paths
-			${ReplaceInFile} "${SETTINGSDIRECTORY}\sword.conf" "AugmentPath=$LASTSPPRESOURCESDIRECTORY" "DataPath=$LASTSPPRESOURCESDIRECTORY"
-			WriteINIStr "${SETTINGSDIRECTORY}\sword.conf" "Install" "DataPath" "$SPPRESOURCESDIRECTORY"
-			FlushINI "${SETTINGSDIRECTORY}\sword.conf"
-
-		;FixSwordPathsSBPResources:
-			${ReplaceInFile} "${SETTINGSDIRECTORY}\sword.conf" "DataPath=" "AugmentPath="
-			; Fix SwordBible Portable paths
-			${ReplaceInFile} "${SETTINGSDIRECTORY}\sword.conf" "AugmentPath=$LASTSBPRESOURCESDIRECTORY" "DataPath=$LASTSBPRESOURCESDIRECTORY"
-			WriteINIStr "${SETTINGSDIRECTORY}\sword.conf" "Install" "DataPath" "$SBPRESOURCESDIRECTORY"
-			FlushINI "${SETTINGSDIRECTORY}\sword.conf"
-
-		;FixSwordPathsLocalSPResources:
-			; Remove DataPaths - we need to use that for the WriteINIStr stuff
-			${ReplaceInFile} "${SETTINGSDIRECTORY}\sword.conf" "DataPath=" "AugmentPath="
-			; Fix SWORD Project Portable paths
-			${ReplaceInFile} "${SETTINGSDIRECTORY}\sword.conf" "AugmentPath=$LASTLOCALSPRESOURCESDIRECTORY" "DataPath=$LASTLOCALSPRESOURCESDIRECTORY"
-			WriteINIStr "${SETTINGSDIRECTORY}\sword.conf" "Install" "DataPath" "$LOCALSPRESOURCESDIRECTORY"
-			FlushINI "${SETTINGSDIRECTORY}\sword.conf"
-
-			StrCmp $USELOCALSPRESOURCES "true" FixSwordPathsBPBibleResources
-			; We're not going to use the local SWORD installation resources, so disable it
-			${ReplaceInFile} "${SETTINGSDIRECTORY}\sword.conf" "DataPath=$LOCALSPRESOURCESDIRECTORY" "DisabledPath=$LOCALSPRESOURCESDIRECTORY"
-
-		FixSwordPathsBPBibleResources:
-			${ReplaceInFile} "${SETTINGSDIRECTORY}\sword.conf" "DataPath=" "AugmentPath="
+		;=== Update drive letters:
+		${ReadINIStrWithDefault} $0 "$EXEDIR\Data\settings\${NAME}Settings.ini" "${NAME}Settings" "LastResourcesDirectory" "NONE"
+		${If} $0 == "$EXEDIR\Data\resources"
+			${ReplaceInFile} "$EXEDIR\Data\settings\sword.conf" "DataPath=" "AugmentPath="
 			; Make it find BPBible Portable's resources path first
-			${ReplaceInFile} "${SETTINGSDIRECTORY}\sword.conf" "AugmentPath=$LASTRESOURCESDIRECTORY" "DataPath=$LASTRESOURCESDIRECTORY"
-			WriteINIStr "${SETTINGSDIRECTORY}\sword.conf" "Install" "DataPath" "${RESOURCESDIRECTORY}"
-			FlushINI "${SETTINGSDIRECTORY}\sword.conf"
+			${ReplaceInFile} "$EXEDIR\Data\settings\sword.conf" "AugmentPath=$0" "DataPath=$0"
+			WriteINIStr "$EXEDIR\Data\settings\sword.conf" "Install" "DataPath" "$EXEDIR\Data\resources"
+			FlushINI "$EXEDIR\Data\settings\sword.conf"
+		${EndIf}
 
-		;UpdateDriveLetters:
-			StrCmp $LASTDRIVE "NONE" RemoveSwordRIFBackup
-			StrCmp $LASTDRIVE $CURRENTDRIVE RemoveSwordRIFBackup
+		; $0 = last, $1 = current
+		${ReadINIStrWithDefault} $0 "$EXEDIR\Data\settings\${NAME}Settings.ini" "${NAME}Settings" "LastDrive" "NONE"
+		${GetRoot} $EXEDIR $1
+		${If} $0 != $1
+			WriteINIStr "$EXEDIR\Data\settings\${NAME}Settings.ini" "${NAME}Settings" "LastDrive" $1
+			WriteINIStr "$EXEDIR\Data\settings\${NAME}Settings.ini" "${NAME}Settings" "LastResourcesDirectory" "$EXEDIR\Data\resources"
+			${If} ${FileExists} "$EXEDIR\Data\settings\data.conf"
+				WriteINIStr "$EXEDIR\Data\settings\data.conf" "Internal" "path" "$EXEDIR\Data\settings\data.conf"
+				FlushINI "$EXEDIR\Data\settings\data.conf"
+			${EndIf}
 
 			;=== Replace drive letter entries elsewhere
-			${ReplaceInFile} "${SETTINGSDIRECTORY}\sword.conf" $2 $3
+			${ReplaceInFile} "$EXEDIR\Data\settings\sword.conf" $0 $1
+			Delete "$EXEDIR\Data\settings\sword.conf.oldReplaceInFile"
+		${EndIf}
 
-	RemoveSwordRIFBackup:
-		Delete "${SETTINGSDIRECTORY}\sword.conf.old" ; clean up the thing from ReplaceInFile calls
-
-	RunProgram:
+	;=== run the program:
 		Exec $EXECSTRING
 		newadvsplash::stop /WAIT
 SectionEnd

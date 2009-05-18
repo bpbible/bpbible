@@ -1,13 +1,15 @@
 [Format]
 Type=PortableApps.comFormat
-Version=0.9.8
+Version=0.90
 
 [Details]
 Name=BPBible Portable
-Publisher=PortableApps.com & Contributors
+AppID=BPBiblePortable
+Publisher=BPBible team & PortableApps.com
 Homepage=PortableApps.com/BPBiblePortable
 Category=Education
-Description=BPBible Portable is the flexible BPBible Bible study tool packaged with a PortableApps.com launcher as a portable app, so you can study the Bible on the go.
+Description=BPBible is a flexible Bible study program.
+Language=Multilingual
 
 [License]
 Shareable=true
@@ -18,6 +20,9 @@ CommercialUse=true
 [Version]
 PackageVersion=$APPVERSION
 DisplayVersion=$APPDISPLAYVERSION
+
+[SpecialPaths]
+Plugins=App\BPBible\resources
 
 [Control]
 Icons=1

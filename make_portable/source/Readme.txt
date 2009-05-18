@@ -1,7 +1,7 @@
 BPBIBLE PORTABLE
 ================
 Copyright (C) 2004-2008 John T. Haller of PortableApps.com
-Copyright (C) 2008 Chris Morgan of PortableApps.com
+Copyright (C) 2008-2009 Chris Morgan of PortableApps.com
 
 Website: http://PortableApps.com/BPBiblePortable
 
@@ -39,7 +39,7 @@ By default, the program expects this directory structure:
 
 -\ <--- Directory with BPBiblePortable.exe
   +\App\
-    +\bpbible\
+    +\BPBible\
   +\Data\
     +\settings\
     +\resources\
@@ -69,10 +69,7 @@ The BPBible Portable Launcher will look for an ini file called BPBiblePortable.i
 [BPBiblePortable]
 AdditionalParameters=
 DisableSplashScreen=false
-UseLocalResources=false
 
 The AdditionalParameters entry allows you to pass additional commandline parameter entries to bpbible.exe.  Whatever you enter here will be appended to the call to bpbible.exe.
 
 The DisableSplashScreen entry allows you to run the BPBible Portable Launcher without the splash screen showing up.  The default is false.
-
-The UseLocalResources entry allows you to tell BPBible Portable to automatically detect whether you have a locally installed copy of The SWORD Project for Windows (aka BibleCS), and if it finds it, include the resources from it, so that BPBible will use them also.
