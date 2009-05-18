@@ -93,9 +93,14 @@ class BookFrame(AUIDisplayFrame):
 	def get_actions(self):
 		actions = super(BookFrame, self).get_actions()
 		actions.update({
-			wx.WXK_F8: self.chapter_forward,
 			wx.WXK_F5: self.chapter_back,
+			wx.WXK_F8: self.chapter_forward,
+			(wx.WXK_LEFT, wx.MOD_CMD): self.chapter_back,
+			(wx.WXK_RIGHT, wx.MOD_CMD): self.chapter_forward,
 			ord("S"): self.search_quickly,
+			# Emulation of vi, Gmail, Google Reader, etc.
+			ord("K"): self.chapter_back,
+			ord("J"): self.chapter_forward,
 		})
 
 		if self.use_quickselector:
@@ -257,12 +262,20 @@ class VerseKeyedFrame(BookFrame):
 		self.notify(vk.text, source=VERSE_MOVE)
 	
 	def get_actions(self):
-		d = super(VerseKeyedFrame, self).get_actions()
-		d.update({wx.WXK_F9 : self.verse_back,
-				  wx.WXK_F12: self.verse_forward,
+		actions = super(VerseKeyedFrame, self).get_actions()
+		actions.update({
+			wx.WXK_F9 : self.verse_back,
+		  	wx.WXK_F12: self.verse_forward,
+			(wx.WXK_UP, wx.MOD_CMD): self.verse_back,
+			(wx.WXK_DOWN, wx.MOD_CMD): self.verse_forward,
+			# Emulation of vi, Gmail, Google Reader, etc.
+			# Note that this overrides the next and previous chapter shortcut
+			# from the book frame.
+			ord("K"): self.verse_back,
+			ord("J"): self.verse_forward,
 		})
 
-		return d
+		return actions
 	
 		
 
