@@ -657,12 +657,12 @@ class MainFrame(wx.Frame, AuiLayer):
 	#	self.set_bible_ref(history_item.ref, source=HISTORY)
 	def add_history_item(self, event):
 		if event.source != HISTORY:
-			self.history.new_location(event.ref, event.current_ypos)
+			self.history.new_location(event.ref)
 
 	def move_history(self, direction):
-		current_ypos = self.bibletext.GetViewStart()[1]
-		history_item = self.history.go(direction, current_ypos)
-		self.set_bible_ref(history_item.ref, y_pos=history_item.y_pos, source=HISTORY)
+		history_item = self.history.go(direction)
+		y_pos = history_item.y_pos if not history_item.have_settings_changed() else None
+		self.set_bible_ref(history_item.ref, y_pos=y_pos, source=HISTORY)
 	
 	def on_html_ide(self, event):
 		ide = HtmlIde(self)
@@ -1226,13 +1226,13 @@ class MainFrame(wx.Frame, AuiLayer):
 
 	def UpdateBibleUI(self, source, settings_changed=False, y_pos=None):
 		current_ypos = self.bibletext.GetViewStart()[1]
+		self.history.before_navigate()
 		self.bible_observers(
 			BibleEvent(
 				ref=self.currentverse,
 				settings_changed=settings_changed,
 				source=source,
 				y_pos=y_pos,
-				current_ypos=current_ypos,
 			)
 		)
 	

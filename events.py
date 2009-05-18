@@ -21,10 +21,8 @@ sources = (
 ) = range(17)
 
 class BibleEvent(object):
-	def __init__(self, ref, settings_changed=False, source=None,
-			y_pos=None, current_ypos=None):
+	def __init__(self, ref, settings_changed=False, source=None, y_pos=None):
 		self.ref = ref
 		self.settings_changed = settings_changed
 		self.source = source
 		self.y_pos = y_pos
-		self.current_ypos = current_ypos
