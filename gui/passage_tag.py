@@ -41,7 +41,11 @@ class TopicTooltipConfig(TooltipConfig):
 		self.selected_passage_entry = selected_passage_entry
 
 	def get_title(self):
-		return self.topic.full_name
+		try:
+			return self.topic.full_name
+		except AttributeError:
+			# The topic has been deleted.
+			return u""
 
 	def add_to_toolbar(self, toolbar, permanent):
 		if not permanent: return
@@ -55,7 +59,11 @@ class TopicTooltipConfig(TooltipConfig):
 		self.tooltip_changed()
 
 	def get_text(self):
-		html = u"<p><b>%s</b></p>" % self.topic.full_name
+		try:
+			html = u"<p><b>%s</b></p>" % self.topic.full_name
+		except AttributeError:
+			# The topic has been deleted.
+			return u""
 		description = self.topic.description.replace(u"\n", u"<br>")
 		if description:
 			html += u"<p>%s</p>" % description

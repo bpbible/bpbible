@@ -93,7 +93,8 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		topic.
 		"""
 		self._set_selected_topic(topic)
-		assert passage_entry in topic.passages
+		if passage_entry not in topic.passages:
+			return
 		index = topic.passages.index(passage_entry)
 		self._select_list_entry_by_index(index)
 		self.passage_list_ctrl.SetFocus()
@@ -106,7 +107,8 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 	
 	def _set_selected_topic(self, topic):
 		tree_item = self._find_topic(self.topic_tree.GetRootItem(), topic)
-		assert tree_item is not None
+		if tree_item is None:
+			tree_item = self.topic_tree.GetRootItem()
 		self.topic_tree.SelectItem(tree_item)
 		self.topic_tree.EnsureVisible(tree_item)
 		return tree_item
