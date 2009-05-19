@@ -459,6 +459,8 @@ class SearchPanel(xrcSearchPanel):
 		#self.verselist.InsertColumn(1, "Preview")
 		self.set_gui_search_type(search_config["indexed_search"])
 
+		guiutil.add_close_window_esc_accelerator(self, self.on_close)
+
 	def construct_option_panels(self, parent):
 		self.range_panel = RangePanel(parent)
 		self.options_panel = xrcOptionsPanel(parent)

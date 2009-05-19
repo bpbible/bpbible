@@ -48,6 +48,8 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 
 	def _bind_events(self):
 		self.Bind(wx.EVT_CLOSE, self._on_close)
+		guiutil.add_close_window_esc_accelerator(self, self.Close)
+
 		self.topic_tree.Bind(wx.EVT_TREE_SEL_CHANGED, self._selected_topic_changed)
 		self.topic_tree.Bind(wx.EVT_TREE_ITEM_GETTOOLTIP, self._get_topic_tool_tip)
 		self.topic_tree.Bind(wx.EVT_TREE_END_LABEL_EDIT, self._end_topic_label_edit)

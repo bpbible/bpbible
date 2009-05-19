@@ -301,3 +301,22 @@ if osutils.is_mac():
 	hasNativePopupWindows = False
 else:
 	hasNativePopupWindows = True
+
+def add_close_window_esc_accelerator(frame, handler):
+
+	def escape_handler(event):
+		if event.KeyCode == wx.WXK_ESCAPE and not event.GetModifiers():
+			event.Skip()
+			handler()
+	
+	bind_event_to_all_children(frame, wx.EVT_KEY_UP, escape_handler,
+			lambda child: child is not wx.Choice)
+	
+def bind_event_to_all_children(parent, event, handler,
+		child_filter=(lambda child: True)):
+	if not child_filter(parent):
+		return
+
+	parent.Bind(event, handler)
+	for child in parent.Children:
+		bind_event_to_all_children(child, event, handler, child_filter)
