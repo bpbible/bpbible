@@ -39,6 +39,7 @@ class TopicTooltipConfig(TooltipConfig):
 		super(TopicTooltipConfig, self).__init__(book=biblemgr.bible)
 		self.topic = topic
 		self.selected_passage_entry = selected_passage_entry
+		self.scroll_to_current = True
 
 	def get_title(self):
 		try:
@@ -78,11 +79,13 @@ class TopicTooltipConfig(TooltipConfig):
 	def _passage_entry_text(self, passage_entry):
 		"""Gets the HTML for the given passage entry with its comment."""
 		comment = passage_entry.comment.replace(u"\n", u"<br>")
+		current_anchor = u""
 		if passage_entry is self.selected_passage_entry:
 			comment = u'<highlight-start colour="#008000">%s<highlight-end />' % comment
+			current_anchor = "#current"
 		reference = str(passage_entry)
 		localised_reference = passage_entry.passage.GetBestRange(userOutput=True)
-		return (u"<b><a href=\"bible:%(reference)s\">%(localised_reference)s</a></b> "
+		return (u"<b><a href=\"bible:%(reference)s%(current_anchor)s\">%(localised_reference)s</a></b> "
 			u"%(comment)s" % locals())
 
 protocol_handler.register_hover("passage_tag", on_passage_tag_hover)

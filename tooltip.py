@@ -107,6 +107,7 @@ class TooltipBaseMixin(object):
 		if force:
 			self.html.SetPage(self.text, body_colour=self.colour,
 				text_colour=self.text_colour)
+			self.maybe_scroll_to_current()
 
 	def _SetText(self, text):
 		# remove trailing new lines
@@ -187,6 +188,12 @@ class TooltipBaseMixin(object):
 		self.MoveXY(x, y)
 
 		self.Show()
+
+		wx.CallAfter(self.maybe_scroll_to_current)
+
+	def maybe_scroll_to_current(self):
+		if self.tooltip_config.scroll_to_current:
+			self.html.scroll_to_current()
 	
 	def get_popup_position(self):
 		x, y = wx.GetMousePosition()
@@ -562,6 +569,7 @@ class TooltipConfig(object):
 		self.tooltip = None
 		self.mod = mod
 		self.book = book
+		self.scroll_to_current = False
 
 	def get_module(self):
 		if self.book:
