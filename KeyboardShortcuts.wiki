@@ -13,6 +13,9 @@ Keyboard shortcuts can speed up your use of BPBible. The keyboard shortcuts are 
 || Ctrl-F10   || Maximize Pane              ||
 || Ctrl-F5    || Restore Pane               ||
 || s          || Open a search quick selector; type into here to search the current book ||
+|| p / Shift-n  || Go to the previous search result ||
+|| n          || Go to the next search result ||
+
 
 
 
@@ -25,10 +28,10 @@ Keyboard shortcuts can speed up your use of BPBible. The keyboard shortcuts are 
 || Ctrl-F     || Open the search panel      ||
 || Ctrl-R     || Open the Bible at a random verse ||
 || Ctrl-Shift-C|| Copy the selected verses with the formatting last used for copying verses. ||
-|| F5        || Go to the previous chapter    ||
-|| F8        || Go to the next chapter        ||
-|| F9        || Go to the previous verse      ||
-|| F12       || Go to the next verse          ||
+|| F5 / Ctrl-Left|| Go to the previous chapter    ||
+|| F8 / Ctrl-Right|| Go to the next chapter        ||
+|| F9 / Ctrl-Up / k   || Go to the previous verse      ||
+|| F12 / Ctrl-Down / j|| Go to the next verse          ||
 || g         || Open the verse quick selector ||
 || Shift-t   || Open a tooltip quick selector; this will open a sticky tooltip at the given location ||
 || t         || Tag the selected verses with a topic. ||
@@ -39,10 +42,10 @@ Keyboard shortcuts can speed up your use of BPBible. The keyboard shortcuts are 
 
 = Commentary/Version comparison =
 || *Shortcut* || *Description*               ||
-|| F5       || Go to the previous chapter    ||
-|| F8       || Go to the next chapter        ||
-|| F9       || Go to the previous verse      ||
-|| F12      || Go to the next verse          ||
+|| F5 / Ctrl-Left|| Go to the previous chapter    ||
+|| F8 / Ctrl-Right|| Go to the next chapter        ||
+|| F9 / Ctrl-Up / k|| Go to the previous verse      ||
+|| F12 / Ctrl-Down / j|| Go to the next verse          ||
 || g        || Open the verse quick selector ||
 
 
@@ -51,6 +54,6 @@ Keyboard shortcuts can speed up your use of BPBible. The keyboard shortcuts are 
 
 = Dictionaries / Other books =
 || *Shortcut* || *Description*                     ||
-|| F5         || Go to the previous topic          ||
-|| F8         || Go to the next topic              ||
+|| F5 / Ctrl-Left / k|| Go to the previous topic          ||
+|| F8 / Ctrl-Right / j|| Go to the next topic              ||
 || g          || Open the reference quick selector ||
