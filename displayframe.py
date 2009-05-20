@@ -104,18 +104,12 @@ class DisplayFrame(TooltipDisplayer, HtmlSelectableWindow):
 		if event: event.Skip()
 	
 		self.mouseout = False
-		if self.has_tooltip:
-			exceptions = [self.tooltip]
-		else:
-			exceptions = []
-			
-		item = self
-		while item.logical_parent:
-			item = item.logical_parent
-			if item.has_tooltip:
-				exceptions.append(item.tooltip)
 
-			
+		### children includes our own tooltip...
+		exceptions = [item for item in self.tooltip.tooltip_children()]
+		exceptions += [item for item in self.tooltip.tooltip_parents()]
+		exceptions = [t for t in exceptions if t.IsShown()]
+
 		guiconfig.mainfrm.hide_tooltips(exceptions=exceptions)
 
 	def strip_text(self, word):
