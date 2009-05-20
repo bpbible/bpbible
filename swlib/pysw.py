@@ -85,19 +85,21 @@ else:
 	m.thisown = False
 	have_set_locale_dir = False
 	try:
+		### TODO: remove this pre-1.6.0 hack sometime
 		SW.StringMgr.setSystemStringMgr(m, locale_dir)
 		have_set_locale_dir = True
 	except TypeError, e:
-		if LIB_1512_COMPAT:
-			print "Don't we have those patches???", e
+		#if LIB_1512_COMPAT:
+		#	print "Don't we have those patches???", e
 
 		SW.StringMgr.setSystemStringMgr(m)
 	
 # *only* after we've set the system string mgr can we set the system 
 # locale mgr...
-locale_mgr = SW.LocaleMgr.getSystemLocaleMgr()
 if not have_set_locale_dir:
-	locale_mgr.loadConfigDir(locale_dir)
+	locale_mgr = SW.LocaleMgr(locale_dir)
+	locale_mgr.thisown = False
+	SW.LocaleMgr.setSystemLocaleMgr(locale_mgr)
 	have_set_locale_dir = True
 
 #if locale_mgr.getLocale("bpbible"):
