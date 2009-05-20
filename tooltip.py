@@ -844,6 +844,9 @@ class TooltipDisplayer(object):
 
 		return self._tooltip
 		
+	@property
+	def has_tooltip(self):
+		return self._tooltip is not None
 		
 
 

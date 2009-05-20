@@ -104,16 +104,16 @@ class DisplayFrame(TooltipDisplayer, HtmlSelectableWindow):
 		if event: event.Skip()
 	
 		self.mouseout = False
-		if self._tooltip:
-			exceptions = [self._tooltip]
+		if self.has_tooltip:
+			exceptions = [self.tooltip]
 		else:
 			exceptions = []
 			
 		item = self
 		while item.logical_parent:
 			item = item.logical_parent
-			if item._tooltip:
-				exceptions.append(item._tooltip)
+			if item.has_tooltip:
+				exceptions.append(item.tooltip)
 
 			
 		guiconfig.mainfrm.hide_tooltips(exceptions=exceptions)
@@ -400,7 +400,7 @@ class DisplayFrame(TooltipDisplayer, HtmlSelectableWindow):
 		frame.tooltip.show_bible_refs(frame, href, url, screen_x, screen_y)
 
 	def OnCellMouseLeave(self, cell, x, y):
-		if self._tooltip is not None:
+		if self.has_tooltip:
 			self.tooltip.MouseOut(None)
 
 		self.current_target = None
