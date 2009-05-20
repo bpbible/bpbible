@@ -306,8 +306,10 @@ def add_close_window_esc_accelerator(frame, handler):
 
 	def escape_handler(event):
 		if event.KeyCode == wx.WXK_ESCAPE and not event.GetModifiers():
-			event.Skip()
 			handler()
+		else:
+			event.Skip()
+			
 	
 	bind_event_to_all_children(frame, wx.EVT_KEY_UP, escape_handler,
 			lambda child: child is not wx.Choice)
