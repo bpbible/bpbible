@@ -181,6 +181,8 @@ class TooltipBaseMixin(object):
 		mouse_x, mouse_y = wx.GetMousePosition()
 		if (x <= mouse_x <= x + width) and (y <= mouse_y <= y + height):
 			x = mouse_x + 5
+			if x + width > screen_rect.Right:
+				x = max(mouse_x - width - factor, screen_rect.Left)
 
 		if x + width > screen_rect.Right:
 			x = max(screen_rect.Right - width - factor, screen_rect.Left)
