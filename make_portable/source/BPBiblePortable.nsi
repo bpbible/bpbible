@@ -72,7 +72,6 @@ SetDatablockOptimize On
 !include TextReplace.nsh
 
 ;(Custom)
-!include ReadINIStrWithDefault.nsh
 !include ReplaceInFileWithTextReplace.nsh
 
 ;=== Program Icon
@@ -96,7 +95,7 @@ Section "Main"
 	${EndIf}
 
 	;=== Read the parameters from the INI file
-	${ReadINIStrWithDefault} $0 "$EXEDIR\${NAME}.ini" "${NAME}" "DisableSplashScreen" "false"
+	ReadINIStr $0 "$EXEDIR\${NAME}.ini" "${NAME}" "DisableSplashScreen"
 
 	${If} $0 != "true"
 		;=== Show the splash screen while processing data
@@ -111,7 +110,7 @@ Section "Main"
 	${GetParameters} $0
 	${IfThen} $0 != "" ${|} StrCpy $EXECSTRING "$EXECSTRING $0" ${|}
 
-	${ReadINIStrWithDefault} $0 "$EXEDIR\${NAME}.ini" "${NAME}" "AdditionalParameters" ""
+	ReadINIStr $0 "$EXEDIR\${NAME}.ini" "${NAME}" "AdditionalParameters"
 	${IfThen} $0 != "" ${|} StrCpy $EXECSTRING "$EXECSTRING $0" ${|}
 
 	;=== Set the language
@@ -131,7 +130,7 @@ Section "Main"
 			${EndIf}
 		${EndIf}
 
-		${ReadINIStrWithDefault} $0 "$EXEDIR\Data\settings\${NAME}Settings.ini" "Language" "LastLanguage" "NONE"
+		ReadINIStr $0 "$EXEDIR\Data\settings\${NAME}Settings.ini" "Language" "LastLanguage"
 		${If} $BPBIBLELANGUAGE != ""
 		${AndIf} $0 != $BPBIBLELANGUAGE
 			; If it's the same as before, don't change it.  This could be useful if the user
@@ -149,8 +148,8 @@ Section "Main"
 		CopyFiles /SILENT "$EXEDIR\App\DefaultData\settings\*.*" "$EXEDIR\Data\settings"
 
 		;=== Update drive letters:
-		${ReadINIStrWithDefault} $0 "$EXEDIR\Data\settings\${NAME}Settings.ini" "${NAME}Settings" "LastResourcesDirectory" "NONE"
-		${If} $0 == "$EXEDIR\Data\resources"
+		ReadINIStr $0 "$EXEDIR\Data\settings\${NAME}Settings.ini" "${NAME}Settings" "LastResourcesDirectory"
+		${If} $0 != "$EXEDIR\Data\resources"
 			${ReplaceInFile} "$EXEDIR\Data\settings\sword.conf" "DataPath=" "AugmentPath="
 			; Make it find BPBible Portable's resources path first
 			${ReplaceInFile} "$EXEDIR\Data\settings\sword.conf" "AugmentPath=$0" "DataPath=$0"
@@ -159,7 +158,7 @@ Section "Main"
 		${EndIf}
 
 		; $0 = last, $1 = current
-		${ReadINIStrWithDefault} $0 "$EXEDIR\Data\settings\${NAME}Settings.ini" "${NAME}Settings" "LastDrive" "NONE"
+		ReadINIStr $0 "$EXEDIR\Data\settings\${NAME}Settings.ini" "${NAME}Settings" "LastDrive"
 		${GetRoot} $EXEDIR $1
 		${If} $0 != $1
 			WriteINIStr "$EXEDIR\Data\settings\${NAME}Settings.ini" "${NAME}Settings" "LastDrive" $1
