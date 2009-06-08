@@ -360,31 +360,12 @@ class Book(object):
 		"""Generates and returns all the passage tags for the given verse."""
 		manager = passage_list.get_primary_passage_list_manager()
 		return "".join(
-				self._insert_tags_for_topic(verse_key, topic, exclude_topic_tag)
-				for topic in manager.subtopics
-			)
-
-	def _insert_tags_for_topic(self, verse_key, topic, exclude_topic_tag):
-		if not topic.display_tag:
-			return ""
-
-		if topic != exclude_topic_tag:
-			result = self._topic_tags(verse_key, topic)
-		else:
-			result = ""
-
-		for subtopic in topic.subtopics:
-			result += self._insert_tags_for_topic(verse_key, subtopic, exclude_topic_tag)
-
-		return result
-	
-	def _topic_tags(self, verse_key, topic):
-		result = ""
-		for passage in topic.passages:
-			if passage.contains_verse(verse_key):
-				result += "<passage_tag topic_id=%d passage_entry_id=%d> &nbsp;" \
-					% (topic.get_id(), passage.get_id())
-		return result
+			"<passage_tag topic_id=%d passage_entry_id=%d> &nbsp;" % (passage.parent.get_id(), passage.get_id())
+			for passage in manager.get_all_passage_entries_for_verse(verse_key)
+			if (passage.parent is not exclude_topic_tag
+				and passage.parent.can_display_tag
+				and passage.parent is not manager)
+		)
 	
 	def get_headings(self, ref, mod=None):
 		"""Gets an array of the headings for the current verse. Must have just

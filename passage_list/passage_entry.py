@@ -1,5 +1,6 @@
 from swlib.pysw import VerseList
 from util.observerlist import ObserverList
+from verse_to_passage_entry_map import singleton_verse_to_passage_entry_map
 
 _passage_entry_id_dict = {}
 
@@ -56,6 +57,7 @@ class PassageEntry(object):
 		self._set_passage(passage)
 		if self._passage != old_passage:
 			self.passage_changed_observers(self._passage)
+			singleton_verse_to_passage_entry_map.update_passage_entry(self, old_passage)
 	
 	def _set_passage(self, passage):
 		"""Sets the passage without notifying that the passage has changed."""

@@ -1,4 +1,5 @@
 from passage_entry import PassageEntry
+from verse_to_passage_entry_map import singleton_verse_to_passage_entry_map
 from util.observerlist import ObserverList
 from swlib.pysw import VerseList
 import sqlite
@@ -62,6 +63,7 @@ class BasePassageList(object):
 		sqlite.store_topic(subtopic)
 		#print self.subtopics, index, subtopic.id
 		self.add_subtopic_observers(subtopic)
+		subtopic.apply_to_all_child_passages(singleton_verse_to_passage_entry_map.add_passage_entry)
 	
 	def add_empty_subtopic(self, name, description=""):
 		"""Adds an empty passage list with the given name and description.
@@ -84,6 +86,7 @@ class BasePassageList(object):
 			del self.subtopics[index]
 			sqlite.remove_item(topic)
 			self.remove_subtopic_observers(topic)
+			topic.apply_to_all_child_passages(singleton_verse_to_passage_entry_map.remove_passage_entry)
 		except ValueError:
 			raise MissingTopicError(topic)
 	
@@ -110,6 +113,7 @@ class BasePassageList(object):
 		self.passages.insert(index, passage)
 		passage.parent = self
 		sqlite.save_or_update_item(passage)
+		singleton_verse_to_passage_entry_map.add_passage_entry(passage)
 		self.add_passage_observers(passage)
 
 	def remove_passage(self, passage):
@@ -123,6 +127,7 @@ class BasePassageList(object):
 			index = self.passages.index(passage)
 			del self.passages[index]
 			sqlite.remove_item(passage)
+			singleton_verse_to_passage_entry_map.remove_passage_entry(passage)
 			self.remove_passage_observers(passage, index)
 		except ValueError:
 			raise MissingPassageError(passage)
@@ -140,6 +145,13 @@ class BasePassageList(object):
 				if topic.contains_verse(verse_key, recursive=True):
 					return True
 		return False
+
+	def apply_to_all_child_passages(self, callable, recursive=True):
+		for passage in self.passages:
+			callable(passage)
+		if recursive:
+			for topic in self.subtopics:
+				topic.apply_to_all_child_passages(callable, recursive=True)
 
 	def get_id(self):
 		"""Gets a unique identifier for this list.
@@ -250,6 +262,12 @@ class PassageList(BasePassageList):
 		return " > ".join(self.get_topic_trail())
 	
 	full_name = property(get_full_name)
+
+	@property
+	def can_display_tag(self):
+		if not self.display_tag:
+			return False
+		return self.parent.can_display_tag
 	
 	def __eq__(self, other):
 		try:
@@ -323,6 +341,13 @@ class PassageListManager(BasePassageList):
 		return True
 
 	display_tag = property(display_tag, lambda self, new: None)
+
+	@property
+	def can_display_tag(self):
+		return True
+
+	def get_all_passage_entries_for_verse(self, verse_key):
+		return singleton_verse_to_passage_entry_map.get_passage_entries_for_verse_key(verse_key)
 
 	def get_topic_trail(self):
 		return ()
