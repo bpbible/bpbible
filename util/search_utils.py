@@ -26,7 +26,7 @@ def WriteIndex(index, path = config.index_path, progress=util.noop):
 		# two translates in case of dashes
 		bookname_ui = pysw.locale.translate(
 			pysw.locale.translate(
-				item.bookname
+				item.bookname.encode("utf8")
 			)
 		).decode(pysw.locale_encoding)
 		
