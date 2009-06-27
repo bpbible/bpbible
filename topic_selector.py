@@ -66,8 +66,11 @@ class TopicSelector(wx.TextCtrl):
 	def _setup_dropdown_data(self):
 		filter = self.GetValue()
 		if filter:
-			filtered_words = [word.strip() for word in filter.lower().split()
-					if (word and word != ">")]
+			if ">" in filter:
+				filtered_words = [filter.lower()]
+			else:
+				filtered_words = [word.strip() for word in filter.lower().split()
+						if (word and word != ">")]
 			filtered_topics = [(name, index) for index, (name, _) in enumerate(self._topics)
 					if all(filtered_word in name.lower() for filtered_word in filtered_words)]
 		else:
