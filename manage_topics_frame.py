@@ -97,6 +97,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 			return
 		index = topic.passages.index(passage_entry)
 		self._select_list_entry_by_index(index)
+		self.passage_list_ctrl.EnsureVisible(index)
 		self.passage_list_ctrl.SetFocus()
 
 	def _get_tree_selected_topic(self):
