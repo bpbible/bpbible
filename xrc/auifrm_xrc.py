@@ -42,6 +42,7 @@ def __gettext_strings():
     _("Manage books...")
     _("Set fonts...")
     _("&Language")
+    _("&Bible book names")
     _("&Exit")
     _("Quit this program")
     _("&File")

@@ -1437,8 +1437,9 @@ def get_locale(lang, additional=None):
 		locale.augment(additional)
 
 	if not locale.getName() or locale.getName() == "en_US":
-		return False, SW.Locale(""), "ascii"
+		return False, SW.Locale(""), "UTF-8"
 	
+	assert locale.getEncoding() == "UTF-8", "Only UTF-8 locales supported"
 	return True, locale, locale.getEncoding()
 
 def change_locale(lang, abbrev_lang, additional=None):
@@ -1484,7 +1485,7 @@ def change_locale(lang, abbrev_lang, additional=None):
 		abbrev_locale_dash_hack = get_dash_hack(abbrev_locale)
 	
 	else:
-		dprint(WARNING, "Couldn't find locale %r" % abbrev_lang,
+		dprint(WARNING, "Couldn't find abbreviation locale %r" % abbrev_lang,
 		[x.c_str() for x in locale_mgr.getAvailableLocales()])
 		abbrev_locale_lang = locale_lang
 		abbrev_locale_dash_hack = {}
