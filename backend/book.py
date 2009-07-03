@@ -362,7 +362,10 @@ class Book(object):
 		return "".join(
 			"<passage_tag topic_id=%d passage_entry_id=%d> &nbsp;" % (passage.parent.get_id(), passage.get_id())
 			for passage in manager.get_all_passage_entries_for_verse(verse_key)
-			if (passage.parent is not exclude_topic_tag
+			# XXX: I had a problem with passages that had empty parents that
+			# I can't reproduce, so I just ignore these topics.
+			if (passage.parent is not None
+				and passage.parent is not exclude_topic_tag
 				and passage.parent.can_display_tag
 				and passage.parent is not manager)
 		)
