@@ -16,6 +16,7 @@ from swlib import pysw
 import os
 locale_settings = config_manager.add_section("Locale")
 locale_settings.add_item("language", "en", item_type=str)
+locale_settings.add_item("language_book_names", {}, item_type="pickle")
 
 localedir = "locales"
 domain = "messages"             # the translation file is messages.mo
@@ -39,13 +40,56 @@ def initialize():
 
 	if langid in languages:
 		desc, locale, abbrev, conf = languages[langid]
-		print desc, locale, abbrev
-		change_locale(locale, abbrev, additional=conf)
+		b = locale_settings["language_book_names"].get(langid)
+		bookname_languages = dict(get_bookname_languages())
+		if b not in bookname_languages:
+			if b: print "Language not found", b
+			lang = langid
+			#b = langid
+		else:
+			desc, locale, abbrev = bookname_languages[b]
+			lang = b
+
+		change_locale(lang, abbrev, additional=conf)
 
 def get_locale(langid):
 	if langid in languages:
 		desc, locale, abbrev, conf = languages[langid]
 		return pysw.get_locale(locale, additional=conf)
+
+def get_bookname_languages():
+	langs = [x.c_str() for x in pysw.locale_mgr.getAvailableLocalesVector()]
+	for item in langs:
+		if item.endswith("abbrev"): continue
+		if item in ("en_US", "abbr"): continue
+		if "en_au" in item.lower() and config.is_release():
+			continue
+		
+		i2 = item
+		if item == "bpbible":
+			i2 = "en"
+
+		if i2 in languages:
+			desc, locale, abbrev, conf = languages[i2]
+			worked, locale, locale_encoding = pysw.get_locale(locale, additional=conf)
+		else:
+			abbrev = None
+			for i in langs:
+				if i == item + "-abbrev" or i == item + "_abbrev":
+					abbrev = i
+					break
+			else:
+				abbrev = item
+
+			worked, locale, locale_encoding = pysw.get_locale(item)
+			desc = locale.getDescription().decode(locale_encoding)
+			if desc.endswith(" (Unicode)"): desc = desc[:-10]
+
+		#if abbrev: 
+		#	worked, abbrev_locale, abbrev_locale_encoding = pysw.get_locale(abbrev)
+		#else: abbrev_locale = None
+
+		yield (item, (desc, locale, abbrev))
 
 def N_(text):
 	"""Mark text as i18n'able, but don't translate it yet"""
