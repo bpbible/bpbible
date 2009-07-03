@@ -13,7 +13,7 @@ Start off looking at [http://pyxpcomext.mozdev.org/no_wrap/tutorials/pyxulrunner
 
 Take your BPBible configuration files and BPBible binary libraries from an existing BPBible installation.
 
-Copy xulrunner/xulrunner-stub to bpbible, and use it (see the tutorial above for more detailed explanations of setting up XULRunner).
+Copy xulrunner/xulrunner-stub to bpbible, and use it (see the tutorial above for more detailed explanations of setting up XULRunner). You should probably have set PYTHONPATH=.
 
 = Possibly useful tools and Firefox extensions =
 PyShell (http://pyxpcomext.mozdev.org/samples.html).  Already present in SVN.
