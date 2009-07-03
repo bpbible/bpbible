@@ -8,6 +8,13 @@ class VerseToPassageEntryMap(object):
 		self.add_passage_entry(passage_entry)
 
 	def add_passage_entry(self, passage_entry):
+		# If the passage is not connected to a topic or its parent topic has
+		# not yet been connected to a topic then it should not be added.
+		# This prevents duplicate entries when a list of passages is created
+		# and then added to the main passage manager (like in saved search results).
+		if passage_entry.parent is None or passage_entry.parent.parent is None:
+			return
+
 		for verse_key in passage_entry.passage:
 			for verse in verse_key:
 				verse_key_text = self._verse_key_text(verse)
