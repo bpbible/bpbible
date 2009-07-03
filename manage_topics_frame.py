@@ -379,8 +379,11 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		name = _(u"Search: %s") % search_string
 		description = _(u"Results from the search `%s'.") % search_string
 
+		# Tags are not displayed by default for saved search results because
+		# they are not really user created and it looks dubious having tags
+		# "Search: My search" littering the screen.
 		self._create_topic(self._manager,
-				lambda: PassageList.create_from_verse_list(name, search_results, description)
+				lambda: PassageList.create_from_verse_list(name, search_results, description, display_tag=False)
 			)
 	
 	def _create_passage(self, topic):

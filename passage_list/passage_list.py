@@ -280,14 +280,15 @@ class PassageList(BasePassageList):
 		return '<PassageList %s>' % repr(self.name)
 	
 	@staticmethod
-	def create_from_verse_list(name, verse_list, description="", comment=""):
+	def create_from_verse_list(name, verse_list, description="", comment="", display_tag=True):
 		"""Creates a passage list with the given name.
 
 		verse_list: The list of verses to create the passage list from.
 		description: The description for the passage list.
 		comment: The comment to attach to every passage entry.
+		display_tag: Should the tag be displayed for this topic.
 		"""
-		passage_list = PassageList(name, description)
+		passage_list = PassageList(name, description, display_tag=display_tag)
 		for verse in verse_list:
 			passage_list.add_passage(PassageEntry(VerseList([verse]), comment))
 		return passage_list
