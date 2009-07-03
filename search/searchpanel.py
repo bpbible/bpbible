@@ -390,6 +390,7 @@ class SearchPanel(xrcSearchPanel):
 			index = 0
 
 		self.verselist.SetSelection(index)
+		self.verselist.EnsureVisible(index)
 		self.go_to_reference(index)
 
 	def go_to_reference(self, idx):
