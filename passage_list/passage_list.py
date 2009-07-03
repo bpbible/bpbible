@@ -428,6 +428,7 @@ def get_primary_passage_list_manager(filename=DEFAULT_FILENAME):
 	"""Gets the primary passage list manager for the application."""
 	global _global_passage_list_manager
 	if _global_passage_list_manager is None:
+		singleton_verse_to_passage_entry_map.clear()
 		_global_passage_list_manager = sqlite.load_manager(filename)
 		import guiconfig
 		guiconfig.mainfrm.on_close += _global_passage_list_manager.close
