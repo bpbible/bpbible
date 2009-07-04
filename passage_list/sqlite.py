@@ -91,6 +91,7 @@ def _load_topic_children(topic):
 	passages = []
 	for row in connection.execute(child_query % (fields, "passage"), (topic.id,)):
 		passage = PassageEntry(None)
+		passage.parent = topic
 		_load_record(passage, row)
 		passage.parent = topic
 		passages.append(passage)
