@@ -7,12 +7,23 @@
         <object class="wxFlexGridSizer">
           <object class="sizeritem">
             <object class="wxStaticText">
+              <label>&amp;Passage:</label>
+            </object>
+            <flag>wxALIGN_CENTRE_VERTICAL</flag>
+            <border>6</border>
+          </object>
+          <object class="sizeritem">
+            <object class="wxTextCtrl" name="passage_text"/>
+            <option>1</option>
+            <flag>wxGROW</flag>
+          </object>
+          <object class="sizeritem">
+            <object class="wxStaticText">
               <label>&amp;Tag: </label>
             </object>
             <flag>wxALIGN_CENTRE_VERTICAL</flag>
             <border>6</border>
           </object>
-          <cols>2</cols>
           <object class="sizeritem">
             <object class="unknown" name="topic_selector">
               <focused>1</focused>
@@ -34,11 +45,12 @@
             <option>1</option>
             <flag>wxGROW</flag>
           </object>
-          <rows>2</rows>
+          <cols>2</cols>
+          <rows>3</rows>
           <vgap>6</vgap>
           <hgap>6</hgap>
           <growablecols>1</growablecols>
-          <growablerows>1</growablerows>
+          <growablerows>2</growablerows>
         </object>
         <option>1</option>
         <flag>wxALL|wxGROW</flag>

@@ -36,6 +36,7 @@ class xrcTagPassageDialog(wx.Dialog):
         self.PostCreate(pre)
 
         # Define variables for the controls, bind event handlers
+        self.passage_text = xrc.XRCCTRL(self, "passage_text")
         self.comment_text = xrc.XRCCTRL(self, "comment_text")
         self.wxID_OK = xrc.XRCCTRL(self, "wxID_OK")
         self.wxID_CANCEL = xrc.XRCCTRL(self, "wxID_CANCEL")
@@ -63,6 +64,7 @@ def __gettext_strings():
     
     def _(str): pass
     
+    _("&Passage:")
     _("&Tag: ")
     _("&Comment:")
     _("Tag Passage")

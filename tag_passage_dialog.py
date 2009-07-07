@@ -18,7 +18,9 @@ class TagPassageDialog(xrcTagPassageDialog):
 		self.topic_selector.selected_topic = passage_list.settings.last_selected_topic
 		self.topic_selector.SetFocus()
 		self._bindEvents()
-		passage_str = VerseList([self._passage_entry.passage]).GetBestRange(userOutput=True)
+		self.passage_verse_key = VerseList([self._passage_entry.passage])
+		passage_str = self.passage_verse_key.GetBestRange(userOutput=True)
+		self.passage_text.Value = passage_str
 		self.Title = _("Tag %s") % passage_str
 		self.Size = (355, 282)
 
@@ -27,11 +29,22 @@ class TagPassageDialog(xrcTagPassageDialog):
 		self.topic_selector.return_pressed_observers += self.comment_text.SetFocus
 	
 	def _on_ok_button_clicked(self, event):
-		if self._topic_is_selected():
+		if self._topic_is_selected() and self._is_valid_passage():
 			event.Skip()
 
 	def _topic_is_selected(self):
 		return self.topic_selector.selected_topic is not None
+
+	def _is_valid_passage(self):
+		passage_text = self.passage_text.Value
+		passages = VerseList(passage_text, userInput=True)
+		if len(passages) >= 1:
+			self._passage_entry.passage = passages
+			return True
+		else:
+			wx.MessageBox(_(u"Unrecognised passage `%s'.") % passage_text,
+					"", wx.OK | wx.ICON_INFORMATION, self)
+			return False
 
 def tag_passage(parent, passage):
 	"""Allows the user to tag the given passage.
