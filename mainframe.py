@@ -558,9 +558,9 @@ class MainFrame(wx.Frame, AuiLayer):
 		
 		web_links = dict(
 			gui_website="http://bpbible.com",
-			gui_documentation="http://code.google.com/p/bpbible/w/list",
+			gui_documentation="http://code.google.com/p/bpbible/w/list?q=label:user-documentation&sort=pagename",
 			gui_issues="http://code.google.com/p/bpbible/issues/list",
-			gui_books="http://www.crosswire.org/sword/modules/index.jsp"
+			gui_books="http://code.google.com/p/bpbible/wiki/InstallingBooks",
 		)
 		
 		def weblink_handler(weblink):

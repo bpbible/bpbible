@@ -79,6 +79,7 @@
         </object>
         <object class="wxMenuItem" name="gui_documentation">
           <label>Documentation...</label>
+          <accel>F1</accel>
         </object>
         <object class="wxMenuItem" name="gui_issues">
           <label>Report a problem...</label>
