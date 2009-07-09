@@ -10,18 +10,29 @@ import guiconfig
 import events
 
 class TagPassageDialog(xrcTagPassageDialog):
-	def __init__(self, parent, passage_entry):
+	def __init__(self, parent, passage_entry, show_topic, title):
 		super(TagPassageDialog, self).__init__(parent)
+		self._show_topic = show_topic
+		attach_unknown_control("topic_selector", TopicSelector, self)
+		if show_topic:
+			self.topic_selector.selected_topic = passage_list.settings.last_selected_topic
+			self.topic_selector.SetFocus()
+		else:
+			flex_sizer = self.Sizer.Children[0].Sizer
+			flex_sizer.Show(2, False)
+			flex_sizer.Show(3, False)
+			flex_sizer.Layout()
+			self.comment_text.SetFocus()
 		self._passage_entry = passage_entry
 		self._manager = get_primary_passage_list_manager()
-		attach_unknown_control("topic_selector", TopicSelector, self)
-		self.topic_selector.selected_topic = passage_list.settings.last_selected_topic
-		self.topic_selector.SetFocus()
 		self._bindEvents()
 		self.passage_verse_key = VerseList([self._passage_entry.passage])
 		passage_str = self.passage_verse_key.GetBestRange(userOutput=True)
 		self.passage_text.Value = passage_str
-		self.Title = _("Tag %s") % passage_str
+		self.comment_text.Value = self._passage_entry.comment
+		if title is None:
+			title = _("Tag %s")
+		self.Title = title % passage_str
 		self.Size = (355, 282)
 
 	def _bindEvents(self):
@@ -33,7 +44,7 @@ class TagPassageDialog(xrcTagPassageDialog):
 			event.Skip()
 
 	def _topic_is_selected(self):
-		return self.topic_selector.selected_topic is not None
+		return (not self._show_topic or self.topic_selector.selected_topic is not None)
 
 	def _is_valid_passage(self):
 		passage_text = self.passage_text.Value
@@ -46,7 +57,7 @@ class TagPassageDialog(xrcTagPassageDialog):
 					"", wx.OK | wx.ICON_INFORMATION, self)
 			return False
 
-def tag_passage(parent, passage):
+def tag_passage(parent, passage, topic_to_apply=None, title=None):
 	"""Allows the user to tag the given passage.
 
 	This shows the passage tagging dialog (modally), and allows the user to
@@ -55,15 +66,49 @@ def tag_passage(parent, passage):
 	If the topic that the user enters does not exist, then a new topic will
 	be created.
 	"""
-	passage_entry = PassageEntry(passage)
-	dialog = TagPassageDialog(parent, passage_entry)
+	editing_comment = isinstance(passage, PassageEntry)
+	if editing_comment:
+		passage_entry = passage
+	else:
+		passage_entry = PassageEntry(passage)
+	dialog = TagPassageDialog(
+		parent,
+		passage_entry,
+		show_topic=(topic_to_apply is None),
+		title=title
+	)
 	if dialog.ShowModal() == wx.ID_OK:
 		passage_entry.comment = dialog.comment_text.GetValue()
-		dialog.topic_selector.maybe_create_topic_from_text()
-		topic = dialog.topic_selector.selected_topic
-		topic.add_passage(passage_entry)
-		passage_list.settings.last_selected_topic = topic
+		if topic_to_apply is None:
+			dialog.topic_selector.maybe_create_topic_from_text()
+			topic = dialog.topic_selector.selected_topic
+			passage_list.settings.last_selected_topic = topic
+		else:
+			topic = topic_to_apply
+
+		if not editing_comment:
+			topic.add_passage(passage_entry)
+
 		get_primary_passage_list_manager().save()
-		guiconfig.mainfrm.UpdateBibleUIWithoutScrolling(
-				source=events.PASSAGE_TAGGED)
+
+		if not editing_comment:
+			guiconfig.mainfrm.UpdateBibleUIWithoutScrolling(
+					source=events.PASSAGE_TAGGED)
 	dialog.Destroy()
+
+
+def comment_on_passage(parent, passage):
+	tag_passage(
+		parent,
+		passage,
+		get_primary_passage_list_manager().comments_special_topic,
+		title=_("Comment on %s"),
+	)
+
+def edit_comment(parent, passage_entry):
+	tag_passage(
+		parent,
+		passage_entry,
+		get_primary_passage_list_manager().comments_special_topic,
+		title=_("Comment on %s"),
+	)

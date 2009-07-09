@@ -179,6 +179,9 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 			self._add_topic_node(subtopic, parent_node)
 	
 	def _add_topic_node(self, passage_list, parent_node):
+		if passage_list.is_special_topic:
+			return
+
 		node = self.topic_tree.AppendItem(parent_node, passage_list.name)
 		self.topic_tree.SetPyData(node, passage_list)
 		self._add_sub_topics(passage_list, node)
@@ -399,6 +402,9 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		event.Skip()
 	
 	def _remove_observers(self, parent_topic):
+		if parent_topic.is_special_topic:
+			return
+
 		parent_topic.add_subtopic_observers.remove(self._add_new_topic_node)
 		parent_topic.remove_subtopic_observers.remove(self._remove_topic_node)
 		parent_topic.name_changed_observers.remove(self._rename_topic_node)

@@ -25,6 +25,7 @@ import re
 from util.i18n import N_
 
 from guess_verse import GuessVerseFrame
+import user_comments
 
 
 bible_settings = config_manager.add_section("Bible")
@@ -131,6 +132,12 @@ class BibleFrame(VerseKeyedFrame):
 				doc=_("Tags the currently selected verses.")
 
 			), IN_BOTH),
+			(MenuItem(
+				_("Add comment to verses"), 
+				self.comment_on_verses,
+				enabled=self.has_module,
+				doc=_("Makes a comment on the currently selected verses."),
+			), IN_BOTH),
 
 			(Separator, IN_BOTH),
 				 
@@ -145,6 +152,7 @@ class BibleFrame(VerseKeyedFrame):
 			(ord("C"), wx.MOD_CMD|wx.MOD_SHIFT): self.copy_quickly,
 			(ord("T"), wx.MOD_SHIFT): self.tooltip_quickly,
 			ord("T"): self.tag_verses,
+			ord("C"): self.comment_on_verses,
 			
 		})
 		return actions
@@ -234,6 +242,10 @@ class BibleFrame(VerseKeyedFrame):
 	def tag_verses(self):
 		from tag_passage_dialog import tag_passage
 		tag_passage(self, self.get_quick_selected())
+
+	def comment_on_verses(self):
+		from tag_passage_dialog import comment_on_passage
+		comment_on_passage(self, self.get_quick_selected())
 	
 	@guiutil.frozen
 	def SetReference(self, ref, context=None, raw=None, y_pos=None):

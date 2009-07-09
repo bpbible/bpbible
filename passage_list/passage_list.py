@@ -4,6 +4,8 @@ from util.observerlist import ObserverList
 from swlib.pysw import VerseList
 import sqlite
 
+SPECIAL_TOPIC_PREFIX = "BPBIBLE_SPECIAL_TOPIC_"
+
 _passage_list_id_dict = {}
 
 class BasePassageList(object):
@@ -203,6 +205,10 @@ class BasePassageList(object):
 		self.display_tag = new_value
 
 	include_subtopic = property(get_include_subtopic, set_include_subtopic)
+
+	@property
+	def is_special_topic(self):
+		return self.name.startswith(SPECIAL_TOPIC_PREFIX)
 	
 	def __eq__(self, other):
 		try:
@@ -265,7 +271,7 @@ class PassageList(BasePassageList):
 
 	@property
 	def can_display_tag(self):
-		if not self.display_tag:
+		if not self.display_tag or self.is_special_topic:
 			return False
 		return self.parent.can_display_tag
 	
@@ -408,6 +414,10 @@ class PassageListManager(BasePassageList):
 		"""
 		topics = [topic_name.strip() for topic_name in name.split(">")]
 		return self._find_or_create_topics(topics)
+
+	@property
+	def comments_special_topic(self):
+		return self.find_or_create_topic(SPECIAL_TOPIC_PREFIX + "comments")
 
 def _create_manager(lists, passages):
 	manager = PassageListManager()

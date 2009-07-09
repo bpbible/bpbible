@@ -17,8 +17,9 @@ sources = (
 	TOPIC_LIST,
 	LOADING_SETTINGS,
 	PASSAGE_TAGGED,
-	HEADER_BAR
-) = range(17)
+	HEADER_BAR,
+	COMMENT_DELETED,
+) = range(18)
 
 class BibleEvent(object):
 	def __init__(self, ref, settings_changed=False, source=None, y_pos=None):

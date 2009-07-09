@@ -109,6 +109,9 @@ class TopicSelector(wx.TextCtrl):
 		self._get_topics(self._manager)
 
 	def _get_topics(self, topic):
+		if topic.is_special_topic:
+			return
+
 		self._topics.append((topic.full_name, topic))
 		for subtopic in topic.subtopics:
 			self._get_topics(subtopic)
