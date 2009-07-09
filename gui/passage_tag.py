@@ -7,6 +7,7 @@ from passage_list import lookup_passage_list, lookup_passage_entry
 from swlib.pysw import VerseList
 from tooltip import TooltipConfig
 from backend.bibleinterface import biblemgr
+from util.string_util import text2html
 
 TAG_COLOUR = (255, 0, 0)
 _rgbSelectOuter = wx.Colour(170, 200, 245)
@@ -61,11 +62,11 @@ class TopicTooltipConfig(TooltipConfig):
 
 	def get_text(self):
 		try:
-			html = u"<p><b>%s</b></p>" % self.topic.full_name
+			html = u"<p><b>%s</b></p>" % text2html(self.topic.full_name)
 		except AttributeError:
 			# The topic has been deleted.
 			return u""
-		description = self.topic.description.replace(u"\n", u"<br>")
+		description = text2html(self.topic.description)
 		if description:
 			html += u"<p>%s</p>" % description
 
@@ -78,13 +79,13 @@ class TopicTooltipConfig(TooltipConfig):
 
 	def _passage_entry_text(self, passage_entry):
 		"""Gets the HTML for the given passage entry with its comment."""
-		comment = passage_entry.comment.replace(u"\n", u"<br>")
+		comment = text2html(passage_entry.comment)
 		current_anchor = u""
 		if passage_entry is self.selected_passage_entry:
 			comment = u'<highlight-start colour="#008000">%s<highlight-end />' % comment
 			current_anchor = "#current"
 		reference = str(passage_entry)
-		localised_reference = passage_entry.passage.GetBestRange(userOutput=True)
+		localised_reference = text2html(passage_entry.passage.GetBestRange(userOutput=True))
 		return (u"<b><a href=\"bible:%(reference)s%(current_anchor)s\">%(localised_reference)s</a></b> "
 			u"%(comment)s" % locals())
 

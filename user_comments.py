@@ -7,6 +7,7 @@ import guiconfig
 from gui import guiutil
 from passage_list import lookup_passage_entry, get_primary_passage_list_manager
 from backend.bibleinterface import biblemgr
+from util.string_util import text2html
 
 def on_usercomment_opened(frame, href, url):
 	passage_entry = find_passage_entry(url)
@@ -58,8 +59,8 @@ class UserCommentTooltipConfig(TooltipConfig):
 
 	def get_text(self):
 		reference = (u'<b><a href="bible:%s">%s</a></b>'
-				% (str(self.passage_entry), self.localised_reference))
-		comment = self.passage_entry.comment.replace(u"\n", u"<br>")
+				% (str(self.passage_entry), text2html(self.localised_reference)))
+		comment = text2html(self.passage_entry.comment)
 		return u'<p>%(reference)s</p><p>%(comment)s</p>' % locals()
 
 	@property

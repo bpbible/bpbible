@@ -1,6 +1,7 @@
 import re
 import traceback
 import htmlentitydefs
+import cgi
 
 greek = u'\u0370-\u03e1\u03f0-\u03ff\u1f00-\u1fff'
 hebrew = u'\u0590-\u05ff\ufb1d-\ufb4f'
@@ -97,6 +98,9 @@ def nl2br(data):
 
 def br2nl(data):
 	return re.sub("<br[^>]*>", "\n", data)
+
+def text2html(text):
+	return nl2br(cgi.escape(text))
 	
 def interact(interaction_locals):
 	import code
