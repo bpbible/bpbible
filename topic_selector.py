@@ -48,7 +48,7 @@ class TopicSelector(wx.TextCtrl):
 			return
 
 		self._selected_topic = topic
-		self._update_topic_text()
+		wx.CallAfter(self._update_topic_text)
 		self.topic_changed_observers(topic)
 
 	selected_topic = property(get_selected_topic, set_selected_topic,
@@ -124,6 +124,7 @@ class TopicSelector(wx.TextCtrl):
 			self.ChangeValue(_("None"))
 		else:
 			self.ChangeValue(self._selected_topic.full_name)
+		self.SetInsertionPoint(0)
 
 	def _on_text_changed(self, event):
 		self._show_dropdown()
