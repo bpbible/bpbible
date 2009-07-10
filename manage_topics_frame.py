@@ -520,7 +520,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 	def _passage_activated(self, event):
 		passage_entry = self.selected_topic.passages[event.GetIndex()]
 		guiconfig.mainfrm.set_bible_ref(str(passage_entry), source=TOPIC_LIST)
-		self.Iconize(True)
+		guiconfig.mainfrm.Raise()
 
 	def select_passages(self, passages, focused_passage):
 		"""Selects the given passages in the passage list control.
