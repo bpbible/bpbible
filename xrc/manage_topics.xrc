@@ -28,10 +28,6 @@
         <tooltip>Paste</tooltip>
         <label>Paste</label>
       </object>
-      
-      
-      
-      
       <object class="tool" name="copy_text_tool">
         <bitmap>..\graphics\edit-copy.png</bitmap>
         <tooltip>Copy the topic as text to the clipboard for use in other applications.</tooltip>
@@ -59,11 +55,23 @@
     <object class="wxBoxSizer">
       <object class="sizeritem">
         <object class="wxSplitterWindow" name="splitter">
-          <object class="unknown" name="topic_tree">
-          </object>
           <orientation>vertical</orientation>
           <sashpos>180</sashpos>
           <style>wxSP_NOBORDER</style>
+          <object class="wxPanel">
+            <object class="wxBoxSizer">
+              <orient>wxVERTICAL</orient>
+              <object class="sizeritem">
+                <object class="unknown" name="topic_selector"/>
+                <flag>wxGROW</flag>
+              </object>
+              <object class="sizeritem">
+                <object class="unknown" name="topic_tree"/>
+                <option>1</option>
+                <flag>wxGROW</flag>
+              </object>
+            </object>
+          </object>
           <object class="wxPanel" name="passage_list_pane">
             <object class="wxBoxSizer">
               <orient>wxVERTICAL</orient>

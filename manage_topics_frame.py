@@ -10,6 +10,7 @@ from xrc.xrc_util import attach_unknown_control
 from gui import guiutil
 from manage_topics_operations import (ManageTopicsOperations,
 		CircularDataException, BaseOperationsContext)
+from topic_selector import TopicSelector
 
 from swlib.pysw import VerseList
 
@@ -17,6 +18,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 	def __init__(self, parent):
 		super(ManageTopicsFrame, self).__init__(parent)
 		attach_unknown_control("topic_tree", lambda parent: TopicTree(self, parent), self)
+		attach_unknown_control("topic_selector", TopicSelector, self)
 		attach_unknown_control("passage_list_ctrl", lambda parent: PassageListCtrl(self, parent), self)
 		self.SetIcons(guiconfig.icons)
 		self._manager = get_primary_passage_list_manager()
@@ -37,6 +39,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		self._passage_list_topic = None
 		self.is_passage_selected = False
 		self.selected_passages = []
+		self.topic_selector.topic_changed_observers.add_observer(self._set_selected_topic)
 		self._setup_item_details_panel()
 		self._init_passage_list_ctrl_headers()
 		self._setup_passage_list_ctrl()
@@ -107,6 +110,9 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		return self.topic_tree.GetPyData(selection)
 	
 	def _set_selected_topic(self, topic):
+		if topic is self.selected_topic:
+			return
+
 		tree_item = self._find_topic(self.topic_tree.GetRootItem(), topic)
 		if tree_item is None:
 			tree_item = self.topic_tree.GetRootItem()
@@ -140,6 +146,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		self._selected_topic = new_topic
 		self.selected_passages = []
 		self._change_topic_details(new_topic)
+		self.topic_selector.selected_topic = new_topic
 
 	selected_topic = property(get_selected_topic, set_selected_topic)
 

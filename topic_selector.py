@@ -44,6 +44,9 @@ class TopicSelector(wx.TextCtrl):
 		return self._selected_topic
 
 	def set_selected_topic(self, topic):
+		if topic is self._selected_topic:
+			return
+
 		self._selected_topic = topic
 		self._update_topic_text()
 		self.topic_changed_observers(topic)
