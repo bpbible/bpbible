@@ -168,9 +168,8 @@ class TopicSelector(wx.TextCtrl):
 	def _select_currently_selected(self):
 		selection = self._topic_list.GetFirstSelected()
 		if selection == -1:
-			if self._topic_list.GetItemCount() == 1:
-				selection = 0
-			else:
+			selection = 0
+			if self._topic_list.GetItemCount() == 0:
 				return
 
 		topic_index = self._topic_list.GetItemData(selection)
