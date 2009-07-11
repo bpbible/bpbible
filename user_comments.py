@@ -34,7 +34,7 @@ class UserCommentTooltipConfig(TooltipConfig):
 		toolbar.gui_edit = toolbar.AddLabelTool(
 			wx.ID_ANY, 
 			_("Edit"),
-			guiutil.bmp("book.png"),
+			guiutil.bmp("page_edit.png"),
 			shortHelp=_("Edit this comment"))
 
 		toolbar.Bind(
