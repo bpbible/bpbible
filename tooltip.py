@@ -477,6 +477,9 @@ class Tooltip(TooltipBaseMixin, tooltip_parent):
 		#self.Show()
 		self.Hide()
 		#self.Thaw()
+
+	def HideTooltip(self):
+		self.Stop()
 	
 	def resize_tooltip(self):
 		w, h = self.container_panel.Size
@@ -582,6 +585,9 @@ class PermanentTooltip(TooltipBaseMixin, pclass):
 	def Start(self):
 		self.ShowTooltip() 
 
+	def HideTooltip(self):
+		self.Close()
+
 	#def SetTransparent(*args):pass
 	def resize_tooltip(self):
 		# set the container panel to fit
@@ -622,6 +628,10 @@ class TooltipConfig(object):
 	def tooltip_changed(self):
 		if self.tooltip:
 			self.tooltip.update_text()
+
+	def hide_tooltip(self):
+		if self.tooltip:
+			self.tooltip.HideTooltip()
 
 	def bind_to_toolbar(self, toolbar):
 		"""Rebind toolbar events for this new config"""
@@ -699,6 +709,7 @@ class StrongsTooltipConfig(TooltipConfig):
 		if not self.shortened: return
 		search_panel = guiconfig.mainfrm.bibletext.get_search_panel_for_frame()
 		assert search_panel, "Search panel not found for %s" % guiconfig.mainfrm.bibletext
+		self.hide_tooltip()
 		search_panel.search_and_show("strongs:%s" % self.shortened)
 	
 	def get_text(self):

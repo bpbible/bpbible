@@ -68,6 +68,7 @@ class UserCommentTooltipConfig(TooltipConfig):
 		return self.passage_entry.passage.GetBestRange(userOutput=True)
 
 	def do_edit_comment(self, event):
+		self.hide_tooltip()
 		edit_comment(guiconfig.mainfrm, self.passage_entry)
 
 	def do_delete_comment(self, event):
@@ -78,6 +79,7 @@ class UserCommentTooltipConfig(TooltipConfig):
 			parent=None)
 
 		if delete_comment == wx.YES:
+			self.hide_tooltip()
 			self.passage_entry.parent.remove_passage(self.passage_entry)
 			get_primary_passage_list_manager().save()
 			guiconfig.mainfrm.UpdateBibleUIWithoutScrolling(
