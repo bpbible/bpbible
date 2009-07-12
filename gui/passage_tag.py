@@ -1,15 +1,16 @@
 import wx
 import guiconfig
+import guiutil
 from protocols import protocol_handler
 from manage_topics_frame import ManageTopicsFrame
 from topic_selector import TopicSelector
+import passage_list
 from passage_list import lookup_passage_list, lookup_passage_entry
 from swlib.pysw import VerseList
 from tooltip import TooltipConfig
 from backend.bibleinterface import biblemgr
 from util.string_util import text2html
 
-TAG_COLOUR = (255, 0, 0)
 _rgbSelectOuter = wx.Colour(170, 200, 245)
 _rgbSelectInner = wx.Colour(230, 250, 250)
 _rgbSelectTop = wx.Colour(210, 240, 250)
@@ -41,6 +42,9 @@ class TopicTooltipConfig(TooltipConfig):
 		self.topic = topic
 		self.selected_passage_entry = selected_passage_entry
 		self.scroll_to_current = True
+		self.expand_passages = passage_list.settings.expand_topic_passages
+		self.text_needs_reloading = True
+		self.text = u""
 
 	def get_title(self):
 		try:
@@ -56,11 +60,28 @@ class TopicTooltipConfig(TooltipConfig):
 		self.topic_selector.selected_topic = self.topic
 		self.topic_selector.topic_changed_observers += self._change_selected_topic
 
+		self.gui_expand_passages = toolbar.AddLabelTool(wx.ID_ANY,  
+			_("Expand"),
+			guiutil.bmp("book_open.png"),
+			shortHelp=_("Expand all of the passages in this topic"), kind=wx.ITEM_CHECK)
+		toolbar.ToggleTool(self.gui_expand_passages.Id, self.expand_passages)
+
+		toolbar.Bind(wx.EVT_TOOL, self.toggle_expand_passages,
+			id=self.gui_expand_passages.Id)
+
 	def _change_selected_topic(self, new_topic):
 		self.topic = new_topic
 		self.tooltip_changed()
 
+	def toggle_expand_passages(self, event):
+		self.expand_passages = not self.expand_passages
+		self.text_needs_reloading = True
+		self.tooltip_changed()
+
 	def get_text(self):
+		if not self.text_needs_reloading:
+			return self.text
+
 		try:
 			html = u"<p><b>%s</b></p>" % text2html(self.topic.full_name)
 		except AttributeError:
@@ -75,19 +96,30 @@ class TopicTooltipConfig(TooltipConfig):
 		if passage_html:
 			html += u"<p>%s</p>" % passage_html
 	
+		self.text = html
+		self.text_needs_reloading = False
+
 		return html
 
 	def _passage_entry_text(self, passage_entry):
 		"""Gets the HTML for the given passage entry with its comment."""
 		comment = text2html(passage_entry.comment)
+		reference = str(passage_entry)
+		localised_reference = text2html(passage_entry.passage.GetBestRange(userOutput=True))
+		if self.expand_passages:
+			passage_text = u"<br>" + biblemgr.bible.GetReference(
+				reference, exclude_topic_tag=self.topic)
+			comment = u"<br>%s<br>" % comment
+		else:
+			passage_text = ""
+
 		current_anchor = u""
 		if passage_entry is self.selected_passage_entry:
 			comment = u'<highlight-start colour="#008000">%s<highlight-end />' % comment
+			passage_text = u'<highlight-start colour="#008000">%s<highlight-end />' % passage_text
 			current_anchor = "#current"
-		reference = str(passage_entry)
-		localised_reference = text2html(passage_entry.passage.GetBestRange(userOutput=True))
 		return (u"<b><a href=\"bible:%(reference)s%(current_anchor)s\">%(localised_reference)s</a></b> "
-			u"%(comment)s" % locals())
+			u"%(passage_text)s%(comment)s" % locals())
 
 protocol_handler.register_hover("passage_tag", on_passage_tag_hover)
 

@@ -977,11 +977,18 @@ class MainFrame(wx.Frame, AuiLayer):
 			_("Topic Tags"),
 			_("Display the topics that each verse is tagged with.")
 		)
+
+		expand_topic_passages = self.options_menu.AppendCheckItem(
+			wx.ID_ANY,
+			_("Expand Topic Passages"),
+			_("Display the complete passage text for passages in the topic tooltip")
+		)
 		
 
 		self.Bind(wx.EVT_MENU, self.toggle_expand_cross_references, 
 			cross_references)
 		self.Bind(wx.EVT_MENU, self.toggle_display_tags, display_tags)
+		self.Bind(wx.EVT_MENU, self.toggle_expand_topic_passages, expand_topic_passages)
 		self.Bind(wx.EVT_MENU, 
 			lambda evt:self.set_verse_per_line(evt.IsChecked()), 
 			verse_per_line)
@@ -989,6 +996,7 @@ class MainFrame(wx.Frame, AuiLayer):
 		filter_settings = config_manager["Filter"]
 		cross_references.Check(filter_settings["footnote_ellipsis_level"])
 		display_tags.Check(passage_list.settings.display_tags)
+		expand_topic_passages.Check(passage_list.settings.expand_topic_passages)
 		verse_per_line.Check(bible_settings["verse_per_line"])
 
 	
@@ -1010,6 +1018,9 @@ class MainFrame(wx.Frame, AuiLayer):
 	def toggle_display_tags(self, event):
 		passage_list.settings.display_tags = event.IsChecked()
 		self.UpdateBibleUI(settings_changed=True, source=SETTINGS_CHANGED)
+
+	def toggle_expand_topic_passages(self, event):
+		passage_list.settings.expand_topic_passages = event.IsChecked()
 
 	def do_search(self, event):
 		"""Search in the currently selected book, defaulting to the Bible if
