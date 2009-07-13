@@ -48,7 +48,7 @@ class TopicSelector(wx.TextCtrl):
 			return
 
 		self._selected_topic = topic
-		wx.CallAfter(self._update_topic_text)
+		self._update_topic_text()
 		self.topic_changed_observers(topic)
 
 	selected_topic = property(get_selected_topic, set_selected_topic,
@@ -180,6 +180,7 @@ class TopicSelector(wx.TextCtrl):
 		self.selected_topic = self._topics[topic_index][1]
 
 	def _on_focus_got(self, event):
+		self.SetInsertionPoint(0)
 		self.SetSelection(-1, -1)
 
 	def _on_focus_lost(self, event):
