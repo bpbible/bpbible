@@ -16,7 +16,7 @@ class TagPassageDialog(xrcTagPassageDialog):
 		attach_unknown_control("topic_selector", TopicSelector, self)
 		if show_topic:
 			self.topic_selector.selected_topic = passage_list.settings.last_selected_topic
-			self.topic_selector.SetFocus()
+			wx.CallAfter(self.topic_selector.SetFocus)
 		else:
 			flex_sizer = self.Sizer.Children[0].Sizer
 			flex_sizer.Show(2, False)
