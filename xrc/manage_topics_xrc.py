@@ -69,6 +69,7 @@ class xrcTopicDetailsPanel(wx.Panel):
         self.display_tag_checkbox = xrc.XRCCTRL(self, "display_tag_checkbox")
         self.description_label = xrc.XRCCTRL(self, "description_label")
         self.description_text = xrc.XRCCTRL(self, "description_text")
+        self.order_passages_choice = xrc.XRCCTRL(self, "order_passages_choice")
 
 
 

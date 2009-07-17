@@ -17,6 +17,7 @@ name varchar,
 description varchar,
 include_subtopic boolean,
 parent integer,
+order_passages_by varchar,
 order_number integer
 );
 
@@ -29,7 +30,9 @@ order_number integer
 );
 """
 
-_CURRENT_VERSION = "0.4"
+"ALTER topic ADD order_passages_by varchar;"
+
+_CURRENT_VERSION = "0.4.5"
 
 connection = None
 previous_filename = None
@@ -59,7 +62,9 @@ def load_manager(filename=None):
 def _maybe_setup_database(manager):
 	num_tables = connection.execute("select count(*) from sqlite_master").fetchone()[0]
 	if num_tables > 0:
-		manager.id = connection.execute("select base_topic_id from master_topic_record").fetchone()[0]
+		master_record = connection.execute("select base_topic_id, schema_version from master_topic_record").fetchone()
+		manager.id = master_record[0]
+		_maybe_upgrade_database(master_record[1])
 		return
 
 	connection.executescript(schema)
@@ -70,6 +75,15 @@ def _maybe_setup_database(manager):
 		])
 	connection.execute(query, values)
 	connection.commit()
+
+def _maybe_upgrade_database(version):
+	# Quick schema migration.  More to do later.
+	if version == "0.4":
+		connection.executescript(
+			"""
+			ALTER TABLE topic ADD COLUMN order_passages_by varchar;
+			UPDATE master_topic_record SET schema_version = '%s';
+			""" % _CURRENT_VERSION)
 
 def _load_topic_children(topic):
 	from passage_list import PassageList

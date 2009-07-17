@@ -120,6 +120,11 @@ class PassageEntry(object):
 		except:
 			return False
 
+	def __cmp__(self, other):
+		if self.passage is None or other.passage is None:
+			return -1
+		return cmp(self.passage[0], other.passage[0])
+
 class PassageError(Exception):
 	pass
 

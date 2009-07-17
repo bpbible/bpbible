@@ -11,8 +11,8 @@ from gui import guiutil
 from manage_topics_operations import (ManageTopicsOperations,
 		CircularDataException, BaseOperationsContext)
 from topic_selector import TopicSelector
-
 from swlib.pysw import VerseList
+from util.i18n import N_
 
 class ManageTopicsFrame(xrcManageTopicsFrame):
 	def __init__(self, parent):
@@ -442,6 +442,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 	def _add_passage_list_observers(self):
 		self._passage_list_topic.add_passage_observers += self._insert_topic_passage
 		self._passage_list_topic.remove_passage_observers += self._remove_topic_passage
+		self._passage_list_topic.passage_order_changed_observers += self._passage_order_changed
 
 	def _remove_passage_list_observers(self):
 		if self._passage_list_topic is None:
@@ -449,6 +450,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 
 		self._passage_list_topic.add_passage_observers -= self._insert_topic_passage
 		self._passage_list_topic.remove_passage_observers -= self._remove_topic_passage
+		self._passage_list_topic.passage_order_changed_observers -= self._passage_order_changed
 		for passage in self._passage_list_topic.passages:
 			self._remove_passage_list_passage_observers(passage)
 
@@ -473,6 +475,11 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 				if len(self._passage_list_topic.passages) == index:
 					index -= 1
 				self._select_list_entry_by_index(index)
+
+	def _passage_order_changed(self, order_passages_by):
+		self._setup_passage_list_ctrl()
+		# Preserve the selection.
+		pass
 
 	def _add_passage_list_passage_observers(self, passage_entry):
 		passage_entry.passage_changed_observers.add_observer(self._change_passage_passage, (passage_entry,))
@@ -875,6 +882,11 @@ class PassageListCtrl(wx.ListCtrl, ListCtrlAutoWidthMixin):
 	@guiutil.frozen
 	def _handle_drop(self, x, y, drag_result):
 		"""Handles moving the passage to the new location."""
+		# It doesn't make any sense reordering passages if it is not in
+		# natural order.
+		if self._topic_frame.selected_topic.order_passages_by != "NATURAL_ORDER":
+			return
+
 		index, flags = self.HitTest(wx.Point(x, y))
 		if index == wx.NOT_FOUND or index == self._drag_index:
 			return
@@ -934,17 +946,31 @@ class TopicPassageDropTarget(wx.PyDropTarget):
 			self._topic_tree.on_drop_passage(x, y, selected_passages, result)
 		return result
 
+TOPIC_ORDER_OPTIONS = [
+	N_("Unordered"),
+	N_("Order by Passage"),
+]
+
+TOPIC_ORDER_BACKEND_OPTIONS = [
+	"NATURAL_ORDER",
+	"PASSAGE_ORDER",
+]
+
 class TopicDetailsPanel(xrcTopicDetailsPanel):
 	def __init__(self, parent, operations_manager):
 		super(TopicDetailsPanel, self).__init__(parent)
 		self.topic = None
 		self.name_text.Bind(wx.EVT_KILL_FOCUS, self._lost_focus)
 		self.description_text.Bind(wx.EVT_KILL_FOCUS, self._lost_focus)
+		self.order_passages_choice.Bind(wx.EVT_CHOICE, self._order_passages_choice_item_selected)
 		self.display_tag_checkbox.Bind(wx.EVT_CHECKBOX, self._display_tag_changed)
 		self.old_name = u""
 		self.old_description = u""
+		self.old_order_passages_by = u""
 		self._operations_manager = operations_manager
 		self.combine_action = False
+		for option in TOPIC_ORDER_OPTIONS:
+			self.order_passages_choice.Append(_(option))
 
 	def Show(self, show=True):
 		super(TopicDetailsPanel, self).Show(show)
@@ -961,10 +987,12 @@ class TopicDetailsPanel(xrcTopicDetailsPanel):
 
 		self.old_name = new_topic.name
 		self.old_description = new_topic.description
+		self.old_order_passages_by = new_topic.order_passages_by
 		self.topic = new_topic
 		self.name_text.Value = new_topic.name
 		self.display_tag_checkbox.Value = bool(new_topic.display_tag)
 		self.description_text.Value = new_topic.description
+		self.order_passages_choice.SetSelection(TOPIC_ORDER_BACKEND_OPTIONS.index(new_topic.order_passages_by))
 
 	def focus(self):
 		"""Sets the focus on this panel for editing."""
@@ -985,19 +1013,31 @@ class TopicDetailsPanel(xrcTopicDetailsPanel):
 
 		name = self.name_text.Value
 		description = self.description_text.Value
-		if name != self.old_name or description != self.old_description:
+		order_passages_by = TOPIC_ORDER_BACKEND_OPTIONS[self.order_passages_choice.GetSelection()]
+		if (name != self.old_name or
+				description != self.old_description or
+				order_passages_by != self.old_order_passages_by):
 			self._operations_manager.set_topic_details(
-					self.topic, name, description,
+					self.topic, name, description, order_passages_by,
 					combine_action=self.combine_action,
 				)
 			self.old_name = name
 			self.old_description = description
+			self.old_order_passages_by = order_passages_by
 			self.combine_action = True
 
 	def _display_tag_changed(self, event):
 		display_tag = bool(self.display_tag_checkbox.IsChecked())
 		self._operations_manager.set_display_tag(
 				self.topic, display_tag,
+				combine_action=self.combine_action,
+			)
+		self.combine_action = True
+
+	def _order_passages_choice_item_selected(self, event):
+		order_passages_by = TOPIC_ORDER_BACKEND_OPTIONS[self.order_passages_choice.GetSelection()]
+		self._operations_manager.set_order_passages_by(
+				self.topic, order_passages_by,
 				combine_action=self.combine_action,
 			)
 		self.combine_action = True

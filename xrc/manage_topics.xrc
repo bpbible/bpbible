@@ -126,6 +126,14 @@
             <border>6</border>
           </object>
           <orient>wxHORIZONTAL</orient>
+          <object class="spacer">
+            <size>6</size>
+          </object>
+          <object class="sizeritem">
+            <object class="wxChoice" name="order_passages_choice"/>
+            <flag>wxFIXED_MINSIZE</flag>
+            <border>6</border>
+          </object>
         </object>
         <option>1</option>
         <flag>wxGROW</flag>

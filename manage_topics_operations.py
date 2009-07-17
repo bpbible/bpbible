@@ -51,18 +51,24 @@ class ManageTopicsOperations(object):
 
 	def set_display_tag(self, topic, display_tag, combine_action=False):
 		self.set_topic_details(
-				topic, topic.name, topic.description,
+				topic, topic.name, topic.description, topic.order_passages_by,
 				display_tag, combine_action=combine_action
+			)
+
+	def set_order_passages_by(self, topic, order_passages_by, combine_action=False):
+		self.set_topic_details(
+				topic, topic.name, topic.description, order_passages_by,
+				topic.display_tag, combine_action=combine_action
 			)
 
 	def set_topic_name(self, topic, name, combine_action=False):
 		self.set_topic_details(topic, name, topic.description, combine_action=combine_action)
 
-	def set_topic_details(self, topic, name, description, display_tag=None, combine_action=False):
+	def set_topic_details(self, topic, name, description, order_passages_by=None, display_tag=None, combine_action=False):
 		if display_tag is None:
 			display_tag = topic.display_tag
 		self._perform_action(SetTopicDetailsAction(
-				self._passage_list_manager, topic, name, description, display_tag,
+				self._passage_list_manager, topic, name, description, order_passages_by, display_tag,
 			), combine_action=combine_action)
 
 	def set_passage_details(self, passage_entry, passage, comment, allow_undo=True, combine_action=False):
@@ -334,11 +340,12 @@ class SetPassageDetailsAction(Action):
 		return SetPassageDetailsAction(self.manager, self.passage_entry, self.old_passage, self.old_comment)
 
 class SetTopicDetailsAction(Action):
-	def __init__(self, manager, topic, name, description, display_tag):
+	def __init__(self, manager, topic, name, description, order_passages_by, display_tag):
 		super(SetTopicDetailsAction, self).__init__()
 		self.topic = topic
 		self.name = name
 		self.description = description
+		self.order_passages_by = order_passages_by
 		self.display_tag = display_tag
 		self.manager = manager
 
@@ -353,15 +360,17 @@ class SetTopicDetailsAction(Action):
 		self.old_name = self.topic.name
 		self.old_description = self.topic.description
 		self.old_display_tag = self.topic.display_tag
+		self.old_order_passages_by = self.topic.order_passages_by
 		self.topic.name = self.name
 		self.topic.description = self.description
+		self.topic.order_passages_by = self.order_passages_by
 		self.topic.display_tag = self.display_tag
 		self.manager.save_item(self.topic)
 
 	def _get_reverse_action(self):
 		return SetTopicDetailsAction(
 				self.manager, self.topic,
-				self.old_name, self.old_description, self.old_display_tag,
+				self.old_name, self.old_description, self.old_order_passages_by, self.old_display_tag,
 			)
 
 class CopyAction(CompositeAction):
@@ -967,7 +976,7 @@ class PassageWrapper(object):
 		return False
 
 	def find_index(self):
-		return self._passage.parent.passages.index(self._passage)
+		return self._passage.parent._natural_order_passages.index(self._passage)
 
 	def remove_from_parent(self):
 		self._passage.parent.remove_passage(self._passage)
