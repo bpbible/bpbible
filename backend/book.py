@@ -362,7 +362,7 @@ class Book(object):
 		manager = passage_list.get_primary_passage_list_manager()
 
 		return u"".join(
-			'<a href="usercomment://%d"><small><sup>&dagger;</sup></small></a>' % passage_entry.get_id()
+			'<glink href="usercomment://%d"><small><sup>&dagger;</sup></small></glink>' % passage_entry.get_id()
 			for passage_entry in manager.get_all_passage_entries_for_verse(verse_key)
 			if (passage_entry.parent is not None and
 				passage_entry.parent is manager.comments_special_topic)
