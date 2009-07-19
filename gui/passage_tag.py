@@ -110,7 +110,7 @@ class TopicTooltipConfig(TooltipConfig):
 		localised_reference = text2html(passage_entry.passage.GetBestRange(userOutput=True))
 		if self.expand_passages:
 			passage_text = u"<br>" + biblemgr.bible.GetReference(
-				reference, exclude_topic_tag=self.topic)
+				reference, exclude_topic_tag=self.topic, remove_extra_whitespace=True)
 			if comment:
 				comment = u"<p>%s<p>" % comment
 		else:

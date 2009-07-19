@@ -2,7 +2,7 @@ import re
 import passage_list
 from swlib.pysw import VK, SW, GetBestRange, GetVerseStr, TOP, process_digits
 from swlib import pysw
-from backend.verse_template import VerseTemplate
+from backend.verse_template import VerseTemplate, SmartBody
 from util import observerlist
 from util import classproperty
 from util.debug import dprint, WARNING, ERROR
@@ -114,7 +114,7 @@ class Book(object):
 			specialtemplate=None, context="", max_verses=177, raw=False,
 			stripped=False, template=None, display_tags=None,
 			exclude_topic_tag=None, end_ref=None, headings=False,
-			verselist=None):
+			verselist=None, remove_extra_whitespace=False):
 		"""GetReference gets a reference from a Book.
 		
 		specialref is a ref (string) which will be specially formatted 
@@ -210,6 +210,8 @@ class Book(object):
 
 		text += template.finalize(u''.join(verses))
 		text += template.footer.safe_substitute(d)
+		if remove_extra_whitespace:
+			text = SmartBody.incl_whitespace_end.sub(u'', text)
 		return text
 		
 			
