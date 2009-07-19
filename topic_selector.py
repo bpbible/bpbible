@@ -44,12 +44,12 @@ class TopicSelector(wx.TextCtrl):
 		return self._selected_topic
 
 	def set_selected_topic(self, topic):
-		if topic is self._selected_topic:
-			return
-
+		selected_topic_changed = (topic is not self._selected_topic)
 		self._selected_topic = topic
 		self._update_topic_text()
-		self.topic_changed_observers(topic)
+
+		if selected_topic_changed:
+			self.topic_changed_observers(topic)
 
 	selected_topic = property(get_selected_topic, set_selected_topic,
 			doc="The currently selected topic for the control.")
