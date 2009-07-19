@@ -104,12 +104,15 @@ class TopicTooltipConfig(TooltipConfig):
 	def _passage_entry_text(self, passage_entry):
 		"""Gets the HTML for the given passage entry with its comment."""
 		comment = text2html(passage_entry.comment)
+		if self.expand_passages:
+			comment = u"<i>%s</i>" % comment
 		reference = str(passage_entry)
 		localised_reference = text2html(passage_entry.passage.GetBestRange(userOutput=True))
 		if self.expand_passages:
 			passage_text = u"<br>" + biblemgr.bible.GetReference(
 				reference, exclude_topic_tag=self.topic)
-			comment = u"<br>%s<br>" % comment
+			if comment:
+				comment = u"<p>%s<p>" % comment
 		else:
 			passage_text = ""
 
