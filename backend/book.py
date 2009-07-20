@@ -269,7 +269,9 @@ class Book(object):
 					
 					
 				else:
-					text = render_text() + self.get_user_comments(versekey)
+					text = render_text()
+
+				user_comments = self.get_user_comments(versekey)
 
 				# XXX: This needs to be done better than this.  Move into
 				# subclass somehow.
@@ -328,6 +330,7 @@ class Book(object):
 							reference = reference,
 							internal_reference = internal_reference,
 							tags = tags,
+							usercomments = user_comments,
 				)	
 						  
 				headings = self.get_headings(internal_reference, mod)
