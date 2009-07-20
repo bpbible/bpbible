@@ -10,9 +10,10 @@ import guiconfig
 import events
 
 class TagPassageDialog(xrcTagPassageDialog):
-	def __init__(self, parent, passage_entry, show_topic, title):
+	def __init__(self, parent, passage_entry, show_topic, title, is_new_passage):
 		super(TagPassageDialog, self).__init__(parent)
 		self._show_topic = show_topic
+		self.is_new_passage = is_new_passage
 		attach_unknown_control("topic_selector", TopicSelector, self)
 		if show_topic:
 			self.topic_selector.selected_topic = passage_list.settings.last_selected_topic
@@ -50,7 +51,8 @@ class TagPassageDialog(xrcTagPassageDialog):
 		passage_text = self.passage_text.Value
 		passages = VerseList(passage_text, userInput=True)
 		if len(passages) >= 1:
-			self._passage_entry.passage = passages
+			self._passage_entry.set_passage(passages,
+			new_passage=self.is_new_passage)
 			return True
 		else:
 			wx.MessageBox(_(u"Unrecognised passage `%s'.") % passage_text,
@@ -75,7 +77,8 @@ def tag_passage(parent, passage, topic_to_apply=None, title=None):
 		parent,
 		passage_entry,
 		show_topic=(topic_to_apply is None),
-		title=title
+		title=title,
+		is_new_passage=not editing_comment,
 	)
 	if dialog.ShowModal() == wx.ID_OK:
 		passage_entry.comment = dialog.comment_text.GetValue()

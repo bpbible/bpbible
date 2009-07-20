@@ -46,7 +46,7 @@ class PassageEntry(object):
 	def get_passage(self):
 		return self._passage
 	
-	def set_passage(self, passage):
+	def set_passage(self, passage, new_passage=False):
 		"""Sets the passage for this passage entry.
 
 		If the passage is a string, then it will be converted to a passage if
@@ -55,7 +55,7 @@ class PassageEntry(object):
 		"""
 		old_passage = self._passage
 		self._set_passage(passage)
-		if self._passage != old_passage:
+		if self._passage != old_passage and not new_passage:
 			self.passage_changed_observers(self._passage)
 			singleton_verse_to_passage_entry_map.update_passage_entry(self, old_passage)
 	
