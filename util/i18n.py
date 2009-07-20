@@ -16,7 +16,7 @@ from swlib import pysw
 import os
 locale_settings = config_manager.add_section("Locale")
 locale_settings.add_item("language", "en", item_type=str)
-locale_settings.add_item("language_book_names", {}, item_type="pickle")
+locale_settings.add_item("language_book_names", {"en": "bpbible"}, item_type="pickle")
 
 localedir = "locales"
 domain = "messages"             # the translation file is messages.mo
