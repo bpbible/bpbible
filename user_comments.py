@@ -11,7 +11,13 @@ from util.string_util import text2html
 
 def on_usercomment_opened(frame, href, url):
 	passage_entry = find_passage_entry(url)
-	edit_comment(frame, passage_entry)
+
+	# hide all tooltips - particularly the user comments one
+	guiconfig.mainfrm.hide_tooltips()
+
+	# now we do a calllater rather than callafter - launching modal dialogs
+	# from here needs a bit of care, otherwise we can end up in a nasty state
+	wx.CallLater(150, edit_comment, frame, passage_entry)
 
 def on_usercomment_hover(frame, href, url, x, y):
 	passage_entry = find_passage_entry(url)
