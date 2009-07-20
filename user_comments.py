@@ -43,22 +43,24 @@ class UserCommentTooltipConfig(TooltipConfig):
 			guiutil.bmp("page_edit.png"),
 			shortHelp=_("Edit this comment"))
 
+		toolbar.gui_delete = toolbar.AddLabelTool(wx.ID_ANY, 
+			_("Delete"),
+			guiutil.bmp("delete.png"),
+			shortHelp=_("Delete this comment"))
+
+	def bind_to_toolbar(self, toolbar):
+		toolbar.Bind(
+			wx.EVT_TOOL,
+			self.do_delete_comment,
+			id=toolbar.gui_delete.Id
+		)
+
 		toolbar.Bind(
 			wx.EVT_TOOL,
 			self.do_edit_comment,
 			id=toolbar.gui_edit.Id
 		)
 
-		toolbar.gui_delete = toolbar.AddLabelTool(wx.ID_ANY, 
-			_("Delete"),
-			guiutil.bmp("delete.png"),
-			shortHelp=_("Delete this comment"))
-
-		toolbar.Bind(
-			wx.EVT_TOOL,
-			self.do_delete_comment,
-			id=toolbar.gui_delete.Id
-		)
 
 	def get_title(self):
 		return _(u'Comment on %s') % self.localised_reference
