@@ -34,6 +34,7 @@ Keyboard shortcuts can speed up your use of BPBible. The keyboard shortcuts are 
 || F12 / Ctrl-Down / j|| Go to the next verse          ||
 || g         || Open the verse quick selector ||
 || Shift-t   || Open a tooltip quick selector; this will open a sticky tooltip at the given location ||
+|| c         || Make a comment on the selected verses. ||
 || t         || Tag the selected verses with a topic. ||
 || Ctrl-Shift-T|| Organise and comment on topics and on the passages for each topic. ||
 
