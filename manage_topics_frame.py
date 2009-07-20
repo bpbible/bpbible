@@ -13,6 +13,7 @@ from manage_topics_operations import (ManageTopicsOperations,
 from topic_selector import TopicSelector
 from swlib.pysw import VerseList
 from util.i18n import N_
+from util import osutils
 
 class ManageTopicsFrame(xrcManageTopicsFrame):
 	def __init__(self, parent):
@@ -879,7 +880,6 @@ class PassageListCtrl(wx.ListCtrl, ListCtrlAutoWidthMixin):
 		drop_source.SetData(data)
 		result = drop_source.DoDragDrop(wx.Drag_DefaultMove)
 
-	@guiutil.frozen
 	def _handle_drop(self, x, y, drag_result):
 		"""Handles moving the passage to the new location."""
 		# It doesn't make any sense reordering passages if it is not in
@@ -895,6 +895,10 @@ class PassageListCtrl(wx.ListCtrl, ListCtrlAutoWidthMixin):
 		# XXX: This does not handle copying the passage.
 		self._topic_frame._operations_manager.move_current_passage(new_index=index)
 		self._topic_frame.select_passages(selected_passages, self.drag_passage_entry)
+	
+	# list goes blank under wxGTK when dragging and dropping if this is frozen
+	if not osutils.is_gtk():
+		_handle_drop = guiutil.frozen(_handle_drop)
 
 class PassageListDropTarget(wx.PyDropTarget):
 	"""Allows passages to be reordered in the current topic.
