@@ -252,6 +252,7 @@ class PassageTag(wx.PyWindow):
 		wx.BufferedPaintDC(self, self.bmp)
 
 	def on_left_button_up(self, event):
+		guiconfig.mainfrm.hide_tooltips()
 		frame = ManageTopicsFrame(guiconfig.mainfrm)
 		frame.select_topic_and_passage(self._passage_list, self._passage_entry)
 		frame.Show()

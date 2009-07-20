@@ -48,7 +48,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		self._bind_events()
 		self.Size = (725, 590)
 		self.passage_list_splitter.SashGravity = 1.0
-		self.passage_list_splitter.SashPosition = 340
+		wx.CallAfter(self.passage_list_splitter.SetSashPosition, 340)
 
 	def _bind_events(self):
 		self.Bind(wx.EVT_CLOSE, self._on_close)
