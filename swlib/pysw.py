@@ -280,7 +280,7 @@ class VK(SW.VerseKey):#, object):
 
 		return localized_books	
 
-	def __cmp___(self, other): return self.compare(other)
+	def __cmp__(self, other): return self.compare(other)
 	def __lt__( self, other): return self.compare(other)<0
 	def __le__( self, other): return self.compare(other)<1
 	def __gt__( self, other): return self.compare(other)>0
