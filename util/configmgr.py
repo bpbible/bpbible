@@ -6,6 +6,7 @@ import os
 import cPickle as pickle
 import config
 from swlib.pysw import SW
+import re
 
 # This is the version of the configuration file, and should be updated
 # whenever there is a need to because the configuration changed (though it
@@ -55,6 +56,22 @@ class ConfigSection(object):
 	def watch(self, item, func):
 		self.watches[item] += func
 
+# RawConfigParser eats up trailing whitespace; replace each space with
+# \u0020, which the pickler can still read, but won't be eaten.
+space_replacer = re.compile("^(V.*)( +)$", re.M)
+
+def replace_spaces(match):
+	return match.group(1) + match.group(2).replace(" ", "\\u0020")
+
+def do_pickling(o):
+	d = pickle.dumps(o)
+
+	d = space_replacer.sub(replace_spaces, d)
+	assert not re.search("\s+\n", d), \
+		"Trailing whitespace detected - this will be eaten up..."
+
+	return d
+
 class ConfigManager(object):
 	def __init__(self, write_path=None):
 		self.sections = {}
@@ -87,7 +104,7 @@ class ConfigManager(object):
 					bool: str,
 					int: str,
 					float: str,
-					"pickle": pickle.dumps
+					"pickle": do_pickling
 				}[section.item_types[item]]
 				
 				# look it up now. If this is a lazily evaluated item, find its
