@@ -77,11 +77,9 @@ class ManageTopicsOperations(object):
 			), allow_undo=allow_undo, combine_action=combine_action)
 
 	def cut(self):
-		sys.stderr.write("CUT\n")
 		self._setup_clipboard(keep_original=False)
 
 	def copy(self):
-		sys.stderr.write("COPY\n")
 		self._setup_clipboard(keep_original=True)
 
 	def _setup_clipboard(self, keep_original):
@@ -94,7 +92,6 @@ class ManageTopicsOperations(object):
 		self.paste_available_changed_observers()
 
 	def paste(self):
-		sys.stderr.write("PASTE\n")
 		if not self._clipboard_data:
 			return
 
@@ -145,7 +142,6 @@ class ManageTopicsOperations(object):
 
 	def undo(self):
 		"""Undoes the most recently performed action."""
-		sys.stderr.write("UNDO\n")
 		if not self.can_undo:
 			raise OperationNotAvailableError()
 		recent_action = self._actions.pop()
@@ -156,7 +152,6 @@ class ManageTopicsOperations(object):
 
 	def redo(self):
 		"""Redoes the most recently undone action."""
-		sys.stderr.write("REDO\n")
 		if not self.can_redo:
 			raise OperationNotAvailableError()
 		undone_action = self._undone_actions.pop()
@@ -182,7 +177,6 @@ class ManageTopicsOperations(object):
 		This is useful for building up a list of items in actual_item and
 		creating a composite action.
 		"""
-		sys.stderr.write("PERFORM " + str(action) + "\n")
 		if callable(action):
 			if isinstance(action_item, list):
 				action = CompositeAction([action(item) for item in action_item])
