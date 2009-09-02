@@ -137,5 +137,4 @@ def lookup_passage_entry(id):
 	This is used by the passage tag to easily identify a given passage entry
 	(since tags can only receive string parameters).
 	"""
-	global _passage_entry_id_dict
 	return _passage_entry_id_dict[id]
