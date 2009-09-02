@@ -1,10 +1,10 @@
 # Copyright (C) 2009 BPBible
 # Jose Humberto Araque Meza <jharaquem@gmail.com>, 2009.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: BPBible Spanish 1.0\n"
-"POT-Creation-Date: 2009-05-20 17:03+EST\n"
+"POT-Creation-Date: 2009-09-02 13:21+EST\n"
 "PO-Revision-Date: 2009-04-26 19:45-0500\n"
 "Last-Translator: Jose Humberto Araque Meza <jharaquem@gmail.com>\n"
 "Language-Team: Jose Humberto Araque Meza <jharaquem@gmail.com>\n"
@@ -67,100 +67,111 @@ msgstr "El número del capítulo en el libro"
 msgid "The text of the heading"
 msgstr "El texto del encabezado"
 
-#: backend/book.py:611
+#: backend/book.py:612
 msgid ""
 "Couldn't save cipher key. You will have to set it again when you restart"
 msgstr ""
 "No es posible guardar clave de cifrado. Tendrá que configurarla de nuevo "
 "cuando reinicie"
 
-#: backend/book.py:635
+#: backend/book.py:636
 msgid "commentary"
 msgstr "comentario"
 
-#: backend/book.py:642 bibleframe.py:35 xrc/auifrm_xrc.py:68
+#: backend/book.py:643 bibleframe.py:36 xrc/auifrm_xrc.py:69
 msgid "Bible"
 msgstr "&Biblia"
 
-#: bibleframe.py:71 bookframe.py:163 mainframe.py:255
+#: bibleframe.py:72 bookframe.py:163 mainframe.py:255
 #: search/searchpanel.py:157
 msgid "Search"
 msgstr "Buscar..."
 
-#: bibleframe.py:76 xrc/harmonyfrm_xrc.py:92
+#: bibleframe.py:77 xrc/harmonyfrm_xrc.py:92
 msgid "Harmony"
 msgstr ""
 
-#: bibleframe.py:79
+#: bibleframe.py:80
 msgid "Open the harmony"
 msgstr ""
 
-#: bibleframe.py:82 xrc/guess_verse_xrc.py:69
+#: bibleframe.py:83 xrc/guess_verse_xrc.py:69
 msgid "Guess the Verse"
 msgstr "Adivina el versículo"
 
-#: bibleframe.py:85
+#: bibleframe.py:86
 msgid "Play Guess the Verse"
 msgstr "Jugar Adivina el Versículo"
 
-#: bibleframe.py:91
+#: bibleframe.py:92
 msgid "Random verse"
 msgstr "Versículo aleatorio"
 
-#: bibleframe.py:94
+#: bibleframe.py:95
 msgid "Go to a random verse"
 msgstr "Ir a un versículo aleatorio"
 
-#: bibleframe.py:97
+#: bibleframe.py:98
 msgid "Copy verses"
 msgstr "Copiar versículo"
 
-#: bibleframe.py:101
+#: bibleframe.py:102
 msgid "Copy verses to other applications"
 msgstr "Copiar versículos a otras aplicaciones"
 
-#: bibleframe.py:105 bibleframe.py:154
+#: bibleframe.py:106 bibleframe.py:162
 msgid "Open sticky tooltip"
 msgstr "Abrir nota adhesiva"
 
-#: bibleframe.py:108
+#: bibleframe.py:109
 msgid "Open a sticky tooltip with the selected verses"
 msgstr "Abrir nota adhesiva con el versículo seleccionado"
 
-#: bibleframe.py:112
+#: bibleframe.py:113
 msgid "Compare verses"
 msgstr "Comparar versículos"
 
-#: bibleframe.py:115
+#: bibleframe.py:116
 msgid "Open the verse comparison pane to the selected verses"
 msgstr ""
-"Abrir el panel de comparación de versículos para los versículos seleccionados"
+"Abrir el panel de comparación de versículos para los versículos "
+"seleccionados"
 
-#: bibleframe.py:121 manage_topics_frame.py:159 xrc/manage_topics_xrc.py:140
+#: bibleframe.py:122 manage_topics_frame.py:168 xrc/manage_topics_xrc.py:141
 msgid "Manage Topics"
 msgstr "Administrar Temas"
 
-#: bibleframe.py:124
+#: bibleframe.py:125
 msgid "Manages all of the topics and the passages in them."
 msgstr "Administrar todos los temas y los pasajes en los mismos."
 
-#: bibleframe.py:127
+#: bibleframe.py:128
 msgid "Tag verses"
 msgstr "Etiquetar versículos"
 
-#: bibleframe.py:131
+#: bibleframe.py:132
 msgid "Tags the currently selected verses."
 msgstr "Etiquetar los versículos actualmente seleccionados."
 
-#: bibleframe.py:189
+#: bibleframe.py:136
+#, fuzzy
+msgid "Add comment to verses"
+msgstr "Ir al versículo"
+
+#: bibleframe.py:139
+#, fuzzy
+msgid "Makes a comment on the currently selected verses."
+msgstr "Etiquetar los versículos actualmente seleccionados."
+
+#: bibleframe.py:197
 msgid "Copying selected verses..."
 msgstr "Copiando los versículos seleccionados..."
 
-#: bibleframe.py:261
+#: bibleframe.py:273
 msgid "This chapter is empty."
 msgstr "Este capítulo está vacío."
 
-#: bookframe.py:145 mainframe.py:804
+#: bookframe.py:145 mainframe.py:836
 msgid "Show the %s pane"
 msgstr "&Mostrar panel %s"
 
@@ -238,8 +249,8 @@ msgid ""
 "exceeded.\n"
 "<br>This probably means the reference was invalid]</b>"
 msgstr ""
-"<p><b>[La referencia recortada como el límite máximo de versículo (%d "
-"versículos) ha sido excedida.\n"
+"<p><b>[La referencia recortada como el límite máximo de versículo (%d versí"
+"culos) ha sido excedida.\n"
 "<br>Esto significa que probablemente la referencia no era válida]</b>"
 
 #: copyverses.py:82 xrc/copyverses_xrc.py:77
@@ -259,8 +270,8 @@ msgid ""
 "Module %s is not installed, so you cannot view details for this "
 "morphological code"
 msgstr ""
-"El módulo %s no está instalado, por lo que no puede ver los detalles de este "
-"código morfológico"
+"El módulo %s no está instalado, por lo que no puede ver los detalles de "
+"este código morfológico"
 
 #: displayframe.py:456
 msgid "Select all"
@@ -347,10 +358,19 @@ msgstr "No, está equivocado. Intente de nuevo."
 msgid "Try again."
 msgstr "Intente de nuevo."
 
-#: gui/movablelist.py:7 xrc/manage_topics_xrc.py:128
-#: xrc/manage_topics_xrc.py:129
+#: gui/movablelist.py:7 xrc/manage_topics_xrc.py:129
+#: xrc/manage_topics_xrc.py:130
 msgid "Copy"
 msgstr "Copiar"
+
+#: gui/passage_tag.py:64
+msgid "Expand"
+msgstr ""
+
+#: gui/passage_tag.py:66
+#, fuzzy
+msgid "Expand all of the passages in this topic"
+msgstr "Administrar todos los temas y los pasajes en los mismos."
 
 #: harmony/harmonyframe.py:213
 msgid "Loading harmony"
@@ -366,7 +386,7 @@ msgstr "%s versículos"
 
 #: install_manager/install_drop_target.py:33
 #: install_manager/install_drop_target.py:56 module_manager.py:120
-#: module_manager.py:124 search/searchpanel.py:802 templatemanager.py:436
+#: module_manager.py:124 search/searchpanel.py:803 templatemanager.py:436
 #: templatemanager.py:447
 msgid "Error"
 msgstr "Error"
@@ -415,7 +435,7 @@ msgstr ""
 msgid "Extracting %s"
 msgstr "Extrayendo %s"
 
-#: install_manager/install_drop_target.py:82 search/searchpanel.py:958
+#: install_manager/install_drop_target.py:82 search/searchpanel.py:959
 msgid "Preparing"
 msgstr "Preparando"
 
@@ -523,91 +543,95 @@ msgstr "Libros instalables"
 msgid "Choose books"
 msgstr "Escoger libros"
 
-#: mainframe.py:730 xrc/auifrm_xrc.py:44
+#: mainframe.py:760 xrc/auifrm_xrc.py:44
 msgid "&Language"
 msgstr "&Idioma"
 
-#: mainframe.py:762 xrc/auifrm_xrc.py:48
+#: mainframe.py:763 xrc/auifrm_xrc.py:45
+msgid "&Bible book names"
+msgstr ""
+
+#: mainframe.py:794 xrc/auifrm_xrc.py:49
 msgid "&Display"
 msgstr "&Ver"
 
-#: mainframe.py:767 xrc/auifrm_xrc.py:51
+#: mainframe.py:799 xrc/auifrm_xrc.py:52
 msgid "&Windows"
 msgstr "&Ventana"
 
-#: mainframe.py:772 xrc/auifrm_xrc.py:50
+#: mainframe.py:804 xrc/auifrm_xrc.py:51
 msgid "Toolbars"
 msgstr "Barras de herramientas"
 
-#: mainframe.py:800
+#: mainframe.py:832
 msgid "Show the %s toolbar"
 msgstr "Mostrar barra de herramientas %s"
 
-#: mainframe.py:823 xrc/auifrm_xrc.py:52
+#: mainframe.py:855 xrc/auifrm_xrc.py:53
 msgid "Debug"
 msgstr "Depurar"
 
-#: mainframe.py:845
+#: mainframe.py:877
 msgid "Pronunciation"
 msgstr "Pronunciación"
 
-#: mainframe.py:846
+#: mainframe.py:878
 msgid "Original Language"
 msgstr "Idioma Original"
 
-#: mainframe.py:847
+#: mainframe.py:879
 msgid "Transliterated"
 msgstr "Transcrito"
 
-#: mainframe.py:853
+#: mainframe.py:885
 msgid "Strong's Numbers"
 msgstr ""
 
-#: mainframe.py:870
+#: mainframe.py:902
 msgid "Strong's headwords"
 msgstr ""
 
-#: mainframe.py:933
+#: mainframe.py:965
 msgid "Expand cross-references"
 msgstr "Expandir referencia cruzada"
 
-#: mainframe.py:934
+#: mainframe.py:966
 msgid "Display cross references partially expanded"
 msgstr "Mostrar las referencias cruzadas parcialmente expandidas"
 
-#: mainframe.py:939
+#: mainframe.py:971
 msgid "One line per verse"
 msgstr "Un versículo por línea"
 
-#: mainframe.py:940
+#: mainframe.py:972
 msgid "Display each verse on its own line."
 msgstr "Mostrar cada versículo en una línea"
 
-#: mainframe.py:945
+#: mainframe.py:977
 msgid "Topic Tags"
 msgstr "Etiquetas de Temas"
 
-#: mainframe.py:946
+#: mainframe.py:978
 msgid "Display the topics that each verse is tagged with."
 msgstr "Mostrar los temas que tiene cada versículo con la etiqueta."
 
-#: mainframe.py:1095
+#: mainframe.py:1142
 msgid "BPBible will now quickly restart to change your language."
 msgstr "BPBible reiniciará rápidamente ahora para cambiar a su idioma."
 
-#: mainframe.py:1096
+#: mainframe.py:1143
 msgid "Restarting"
 msgstr "Reiniciando"
 
-#: mainframe.py:1115
+#: mainframe.py:1162
 msgid "An error occurred on closing:"
 msgstr "Se ha producido un error al cerrar:"
 
-#: mainframe.py:1127 mainframe.py:1128
+#: mainframe.py:1174 mainframe.py:1175
 msgid "search "
 msgstr "buscar"
 
-#: mainframe.py:1151
+#: mainframe.py:1198
 msgid ""
 "Flexible Bible study software.\n"
 "\t\t\tBuilt Using the Sword Project from crosswire.org\n"
@@ -621,36 +645,36 @@ msgstr ""
 "\t\t\twxPython Version: %(wxversion)s\n"
 "\t\t\tSWORD Version: %(swversion)s"
 
-#: mainframe.py:1162
+#: mainframe.py:1209
 msgid "BPBible website"
 msgstr "Sitio &Web de BPBible"
 
-#: mainframe.py:1164
+#: mainframe.py:1211
 msgid "BPBible development team"
 msgstr "Equipo de desarrollo de BPBible"
 
-#: mainframe.py:1165
+#: mainframe.py:1212
 msgid "SWORD library developers"
 msgstr "Biblioteca desarrolladores SWORD"
 
-#: mainframe.py:1169
+#: mainframe.py:1216
 msgid "Developers"
 msgstr "Desarrolladores"
 
-#: mainframe.py:1170
+#: mainframe.py:1217
 msgid "Artists"
 msgstr "Autores"
 
-#: mainframe.py:1171
+#: mainframe.py:1218
 msgid "Translators"
 msgstr "Traducciones"
 
-#: mainframe.py:1173
+#: mainframe.py:1220
 #, fuzzy
 msgid "translator-credits"
 msgstr "traductor-créditos"
 
-#: mainframe.py:1177
+#: mainframe.py:1224
 msgid ""
 "Icons used are from famfamfam\n"
 "http://www.famfamfam.com/lab/icons/silk\n"
@@ -662,7 +686,7 @@ msgstr ""
 "y de Tango Desktop Project\n"
 "http://tango.freedesktop.org/Tango_Desktop_Project"
 
-#: mainframe.py:1183
+#: mainframe.py:1230
 msgid ""
 "BPBible is licensed under the GPL v2. For more details, refer to the LICENSE."
 "txt file in the application directory"
@@ -670,79 +694,79 @@ msgstr ""
 "BPBible está licenciado bajo la GPL v2. Para más detalles, refiérase al "
 "archivo LICENSE.txt en la carpeta de la aplicación."
 
-#: manage_topics_frame.py:80
+#: manage_topics_frame.py:84
 msgid "Topics"
 msgstr "Temas"
 
-#: manage_topics_frame.py:285
+#: manage_topics_frame.py:297
 msgid "&New Topic"
 msgstr "Nuevo Tema"
 
-#: manage_topics_frame.py:290
+#: manage_topics_frame.py:302
 msgid "Add &Passage"
 msgstr "Agregar Pasaje"
 
-#: manage_topics_frame.py:297 manage_topics_frame.py:556
+#: manage_topics_frame.py:309 manage_topics_frame.py:582
 msgid "Cu&t"
 msgstr "Cortar"
 
-#: manage_topics_frame.py:302 manage_topics_frame.py:561
+#: manage_topics_frame.py:314 manage_topics_frame.py:587
 msgid "&Copy"
 msgstr "Copiar"
 
-#: manage_topics_frame.py:307 manage_topics_frame.py:566
+#: manage_topics_frame.py:319 manage_topics_frame.py:592
 msgid "&Paste"
 msgstr "Pegar"
 
-#: manage_topics_frame.py:314
+#: manage_topics_frame.py:326
 msgid "Delete &Topic"
 msgstr "Eliminar Tema"
 
-#: manage_topics_frame.py:355
+#: manage_topics_frame.py:367
 msgid "Cannot copy the topic to one of its children."
 msgstr "No puede copiar el tema a uno de sus hijos."
 
-#: manage_topics_frame.py:356
+#: manage_topics_frame.py:368
 msgid "Copy Topic"
 msgstr "Copiar Tema"
 
-#: manage_topics_frame.py:362
+#: manage_topics_frame.py:374
 msgid "Cannot delete the base topic."
 msgstr "No se puede eliminar el tema base"
 
-#: manage_topics_frame.py:363
+#: manage_topics_frame.py:375
 msgid "Delete Topic"
 msgstr "Eliminar Tema"
 
-#: manage_topics_frame.py:378
+#: manage_topics_frame.py:390
 msgid "Search: %s"
 msgstr "Buscar: %s"
 
-#: manage_topics_frame.py:379
+#: manage_topics_frame.py:391
 msgid "Results from the search `%s'."
 msgstr "Resultados de la búsqueda de `%s'."
 
-#: manage_topics_frame.py:406
+#: manage_topics_frame.py:424
 msgid "Passage"
 msgstr "Pasaje"
 
-#: manage_topics_frame.py:407
+#: manage_topics_frame.py:425
 msgid "Comment"
 msgstr "Comentar"
 
-#: manage_topics_frame.py:549
+#: manage_topics_frame.py:575
 msgid "&Open"
 msgstr "&Abrir"
 
-#: manage_topics_frame.py:573
+#: manage_topics_frame.py:599
 msgid "&Delete"
 msgstr "Borrar"
 
-#: manage_topics_frame.py:612
+#: manage_topics_frame.py:638
 msgid "All topics."
 msgstr "Todos los temas."
 
-#: manage_topics_frame.py:628
+#: manage_topics_frame.py:654
 msgid ""
 "%d passages selected.\n"
 "\n"
@@ -752,11 +776,21 @@ msgstr ""
 "\n"
 "Seleccione un pasaje para verlo."
 
-#: manage_topics_frame.py:633
+#: manage_topics_frame.py:659
 msgid "No items have been selected."
 msgstr "No han sido seleccionados temas"
 
-#: manage_topics_frame.py:1096
+#: manage_topics_frame.py:954
+#, fuzzy
+msgid "Unordered"
+msgstr "Desindexado"
+
+#: manage_topics_frame.py:955
+#, fuzzy
+msgid "Order by Passage"
+msgstr "Agregar Pasaje"
+
+#: manage_topics_frame.py:1158 tag_passage_dialog.py:58
 msgid "Unrecognised passage `%s'."
 msgstr "Pasaje `%s' no reconocido."
 
@@ -876,7 +910,7 @@ msgstr "Leyendo libros..."
 msgid "Path manager"
 msgstr "Administrador de rutas"
 
-#: preview_window.py:10 search/searchpanel.py:881 search/searchpanel.py:915
+#: preview_window.py:10 search/searchpanel.py:882 search/searchpanel.py:916
 #: xrc/copyverses_xrc.py:78 xrc/templatemanager_xrc.py:97
 msgid "Preview"
 msgstr "Vista previa"
@@ -952,10 +986,10 @@ msgstr ""
 msgid "Could not understand string"
 msgstr "No se puede entender la cadena"
 
-#: search/searchpanel.py:264 search/searchpanel.py:570
-#: search/searchpanel.py:747 search/searchpanel.py:766
-#: search/searchpanel.py:844 search/searchpanel.py:860
-#: search/searchpanel.py:898
+#: search/searchpanel.py:264 search/searchpanel.py:571
+#: search/searchpanel.py:748 search/searchpanel.py:767
+#: search/searchpanel.py:845 search/searchpanel.py:861
+#: search/searchpanel.py:899
 msgid "%d references found"
 msgstr "%d referencias encontradas"
 
@@ -991,93 +1025,93 @@ msgstr ""
 msgid "Create Index?"
 msgstr "Crear Indice?"
 
-#: search/searchpanel.py:401 search/searchpanel.py:602
-#: search/searchpanel.py:874 search/searchpanel.py:908 xrc/search_xrc.py:140
+#: search/searchpanel.py:402 search/searchpanel.py:603
+#: search/searchpanel.py:875 search/searchpanel.py:909 xrc/search_xrc.py:140
 msgid "&Search"
 msgstr "&Buscar"
 
-#: search/searchpanel.py:427 xrc/search_xrc.py:143 xrc/search_xrc.py:158
+#: search/searchpanel.py:428 xrc/search_xrc.py:143 xrc/search_xrc.py:158
 msgid "Search Options"
 msgstr "Opciones de Búsqueda"
 
-#: search/searchpanel.py:566
+#: search/searchpanel.py:567
 msgid "&Stop"
 msgstr "Detener"
 
-#: search/searchpanel.py:639 search/searchpanel.py:714
+#: search/searchpanel.py:640 search/searchpanel.py:715
 msgid "Error in search"
 msgstr "Error en la búsqueda"
 
-#: search/searchpanel.py:644 search/searchpanel.py:719
+#: search/searchpanel.py:645 search/searchpanel.py:720
 msgid "The following words were not found in this %s:"
 msgstr "Las siguientes palabras no se han encontrado en este %s:"
 
-#: search/searchpanel.py:647 search/searchpanel.py:722
+#: search/searchpanel.py:648 search/searchpanel.py:723
 msgid "Unknown word"
 msgstr "Palabra desconocida"
 
-#: search/searchpanel.py:749 search/searchpanel.py:769
-#: search/searchpanel.py:846 search/searchpanel.py:864
+#: search/searchpanel.py:750 search/searchpanel.py:770
+#: search/searchpanel.py:847 search/searchpanel.py:865
 msgid "1 word"
 msgstr "1 palabra"
 
-#: search/searchpanel.py:750 search/searchpanel.py:770
-#: search/searchpanel.py:847 search/searchpanel.py:865
+#: search/searchpanel.py:751 search/searchpanel.py:771
+#: search/searchpanel.py:848 search/searchpanel.py:866
 msgid "%d words"
 msgstr "%d palabras"
 
-#: search/searchpanel.py:753 search/searchpanel.py:775
+#: search/searchpanel.py:754 search/searchpanel.py:776
 #, fuzzy
 msgid "%d hits"
 msgstr "%d hits"
 
-#: search/searchpanel.py:765 search/searchpanel.py:859
-#: search/searchpanel.py:897
+#: search/searchpanel.py:766 search/searchpanel.py:860
+#: search/searchpanel.py:898
 msgid "1 reference found"
 msgstr "1 referencia encontrada"
 
-#: search/searchpanel.py:774
+#: search/searchpanel.py:775
 #, fuzzy
 msgid "1 hit"
 msgstr "1 hit"
 
-#: search/searchpanel.py:801
+#: search/searchpanel.py:802
 msgid "You cannot search on fields in unindexed search"
 msgstr "No se puede buscar en los campos sin índice de búsqueda"
 
-#: search/searchpanel.py:881 search/searchpanel.py:915
+#: search/searchpanel.py:882 search/searchpanel.py:916
 msgid "Reference"
 msgstr "Referencia"
 
-#: search/searchpanel.py:894
+#: search/searchpanel.py:895
 msgid "%(version)s search - %(numresults)s"
 msgstr "%(version)s búsqueda - %(numresults)s"
 
-#: search/searchpanel.py:954
+#: search/searchpanel.py:955
 msgid "Processing %s"
 msgstr "Procesando %s"
 
-#: search/searchpanel.py:958
+#: search/searchpanel.py:959
 msgid "Indexing %s"
 msgstr "Indexando %s"
 
-#: search/searchpanel.py:990
+#: search/searchpanel.py:991
 msgid "Writing %s"
 msgstr "Escribiendo %s"
 
-#: search/searchpanel.py:1147
+#: search/searchpanel.py:1148
 msgid "Other Book Search"
 msgstr "Buscar otro libro"
 
-#: search/searchpanel.py:1192
+#: search/searchpanel.py:1193
 msgid "Entries"
 msgstr "Entradas"
 
-#: search/searchpanel.py:1199
+#: search/searchpanel.py:1200
 msgid "Dictionary Search"
 msgstr "Buscar Diccionario"
 
-#: search/searchpanel.py:1240
+#: search/searchpanel.py:1241
 msgid "Commentary Search"
 msgstr "Buscar Comentario"
 
@@ -1091,17 +1125,22 @@ msgid ""
 msgstr ""
 "Solo hay %(verses)d versículos en %(book)s %(chapter)s (dado %(given)d)"
 
-#: swlib/pysw.py:876 swlib/pysw.py:1656
+#: swlib/pysw.py:876 swlib/pysw.py:1657
 msgid "Invalid Reference: %s"
 msgstr "Referencia Inválida: %s"
 
-#: swlib/pysw.py:1644
+#: swlib/pysw.py:1645
 msgid "Invalid empty reference"
 msgstr "Referencia vacía no válida"
 
-#: tag_passage_dialog.py:22
+#: tag_passage_dialog.py:35
 msgid "Tag %s"
 msgstr "Etiqueta %s"
+
+#: tag_passage_dialog.py:108 tag_passage_dialog.py:116 user_comments.py:66
+#, fuzzy
+msgid "Comment on %s"
+msgstr "Comentar"
 
 #: templatemanager.py:435
 msgid "Template '%s' is read only. Try a different name."
@@ -1120,61 +1159,90 @@ msgid "Template name is already in use. Try a different name."
 msgstr ""
 "El nombre de la plantilla ya está en uso. Intente con un nombre diferente."
 
-#: tooltip.py:222
+#: tooltip.py:224
 msgid "Anchor"
 msgstr "Ancla"
 
-#: tooltip.py:223
+#: tooltip.py:225
 msgid "Don't hide this tooltip"
 msgstr "No ocultar esta nota"
 
-#: tooltip.py:226
+#: tooltip.py:228
 msgid "Copy All"
 msgstr "Copiar Todo"
 
-#: tooltip.py:227
+#: tooltip.py:229
 msgid "Copy tooltip text (with links)"
 msgstr "Copiar texto de la nota (con enlaces)"
 
-#: tooltip.py:292
+#: tooltip.py:294
 msgid "Tooltip"
 msgstr "Nota"
 
-#: tooltip.py:500 tooltip.py:642
+#: tooltip.py:505 tooltip.py:654
 msgid "Sticky Tooltip"
 msgstr "Nota adhesiva"
 
-#: tooltip.py:553 tooltip.py:555
+#: tooltip.py:558 tooltip.py:560
 msgid "Stay on top"
 msgstr "Siempre visible"
 
-#: tooltip.py:688
+#: tooltip.py:700
 msgid "Find"
 msgstr "Encontrar"
 
-#: tooltip.py:690
+#: tooltip.py:702
 msgid "Search for this strong's number in the Bible"
 msgstr ""
 
-#: tooltip.py:704
+#: tooltip.py:717
 msgid ""
 "Module %s is not installed, so you cannot view details for this strong's "
 "number"
 msgstr ""
-"El módulo %s no está instalado, por lo que no puede ver los detalles de esta "
-"strong's number"
+"El módulo %s no está instalado, por lo que no puede ver los detalles de "
+"esta strong's number"
 
-#: tooltip.py:766
+#: tooltip.py:779
 msgid "Go to verses"
 msgstr "Ir al versículo"
 
-#: tooltip.py:768
+#: tooltip.py:781
 msgid "Open this reference"
 msgstr "Abrir esta referencia"
 
-#: topic_selector.py:113
+#: topic_selector.py:124
 msgid "None"
 msgstr "Ninguno"
+
+#: user_comments.py:42
+#, fuzzy
+msgid "Edit"
+msgstr "&Salir"
+
+#: user_comments.py:44
+#, fuzzy
+msgid "Edit this comment"
+msgstr "Editar"
+
+#: user_comments.py:47 xrc/manage_topics_xrc.py:135
+#: xrc/manage_topics_xrc.py:136 xrc/module_manager_xrc.py:67
+msgid "Delete"
+msgstr "Borrar"
+
+#: user_comments.py:49
+msgid "Delete this comment"
+msgstr ""
+
+#: user_comments.py:84
+#, fuzzy
+msgid "Are you sure you want to delete this comment?"
+msgstr "Está seguro que desea instalar este libro?"
+
+#: user_comments.py:85
+#, fuzzy
+msgid "Delete Comment"
+msgstr "Comentar"
 
 #: versecompare.py:45
 msgid "Version Comparison"
@@ -1217,81 +1285,81 @@ msgstr "&Administrar libros..."
 msgid "Set fonts..."
 msgstr "Seleccionar &Fuentes..."
 
-#: xrc/auifrm_xrc.py:45
+#: xrc/auifrm_xrc.py:46
 msgid "&Exit"
 msgstr "&Salir"
 
-#: xrc/auifrm_xrc.py:46
+#: xrc/auifrm_xrc.py:47
 msgid "Quit this program"
 msgstr "Salir del programa"
 
-#: xrc/auifrm_xrc.py:47
+#: xrc/auifrm_xrc.py:48
 msgid "&File"
 msgstr "&Archivo"
 
-#: xrc/auifrm_xrc.py:49
+#: xrc/auifrm_xrc.py:50
 msgid "Default Layout"
 msgstr "Diseño Predeterminado"
 
-#: xrc/auifrm_xrc.py:53
+#: xrc/auifrm_xrc.py:54
 #, fuzzy
 msgid "Html Ide"
 msgstr "Html Ide"
 
-#: xrc/auifrm_xrc.py:54
+#: xrc/auifrm_xrc.py:55
 #, fuzzy
 msgid "WI"
 msgstr "WI"
 
-#: xrc/auifrm_xrc.py:55
+#: xrc/auifrm_xrc.py:56
 msgid "gather"
 msgstr "reunir"
 
-#: xrc/auifrm_xrc.py:56
+#: xrc/auifrm_xrc.py:57
 msgid "diff"
 msgstr "diferencia"
 
-#: xrc/auifrm_xrc.py:57
+#: xrc/auifrm_xrc.py:58
 msgid "confirm"
 msgstr "Confirmar"
 
-#: xrc/auifrm_xrc.py:58
+#: xrc/auifrm_xrc.py:59
 msgid "compile"
 msgstr "compilar"
 
-#: xrc/auifrm_xrc.py:59
+#: xrc/auifrm_xrc.py:60
 msgid "Restart"
 msgstr "Reiniciar"
 
-#: xrc/auifrm_xrc.py:60
+#: xrc/auifrm_xrc.py:61
 msgid "Locale"
 msgstr "Localización"
 
-#: xrc/auifrm_xrc.py:61
+#: xrc/auifrm_xrc.py:62
 msgid "&Help"
 msgstr "A&yuda"
 
-#: xrc/auifrm_xrc.py:62
+#: xrc/auifrm_xrc.py:63
 msgid "BPBible Website"
 msgstr "Sitio Web de BPBible"
 
-#: xrc/auifrm_xrc.py:63
+#: xrc/auifrm_xrc.py:64
 msgid "Documentation..."
 msgstr "Documentación..."
 
-#: xrc/auifrm_xrc.py:64
+#: xrc/auifrm_xrc.py:65
 msgid "Report a problem..."
 msgstr "Reportar un problema"
 
-#: xrc/auifrm_xrc.py:65
+#: xrc/auifrm_xrc.py:66
 msgid "Download books..."
 msgstr "Descargar libros..."
 
-#: xrc/auifrm_xrc.py:66
+#: xrc/auifrm_xrc.py:67
 msgid "&About..."
 msgstr "Acerca de..."
 
-#: xrc/auifrm_xrc.py:67
+#: xrc/auifrm_xrc.py:68
 msgid "Show about dialog"
 msgstr "Mostrar el diálogo acerca de"
 
@@ -1363,70 +1431,65 @@ msgstr "Instalar en:"
 msgid "Book Installation"
 msgstr "Instalación de Libro"
 
-#: xrc/manage_topics_xrc.py:122 xrc/manage_topics_xrc.py:123
+#: xrc/manage_topics_xrc.py:123 xrc/manage_topics_xrc.py:124
 msgid "New topic"
 msgstr "Nuevo tema"
 
-#: xrc/manage_topics_xrc.py:124 xrc/manage_topics_xrc.py:125
+#: xrc/manage_topics_xrc.py:125 xrc/manage_topics_xrc.py:126
 msgid "Add passage"
 msgstr "Agregar pasaje"
 
-#: xrc/manage_topics_xrc.py:126 xrc/manage_topics_xrc.py:127
+#: xrc/manage_topics_xrc.py:127 xrc/manage_topics_xrc.py:128
 msgid "Cut"
 msgstr "Cortar"
 
-#: xrc/manage_topics_xrc.py:130 xrc/manage_topics_xrc.py:131
+#: xrc/manage_topics_xrc.py:131 xrc/manage_topics_xrc.py:132
 msgid "Paste"
 msgstr "Pegar"
 
-#: xrc/manage_topics_xrc.py:132
+#: xrc/manage_topics_xrc.py:133
 msgid "Copy the topic as text to the clipboard for use in other applications."
 msgstr ""
 "Copiar el tema como texto en el portapapeles para usarlo en otras "
 "aplicaciones."
 
-#: xrc/manage_topics_xrc.py:133
+#: xrc/manage_topics_xrc.py:134
 msgid "Export"
 msgstr "Exportar"
 
-#: xrc/manage_topics_xrc.py:134 xrc/manage_topics_xrc.py:135
-#: xrc/module_manager_xrc.py:67
-msgid "Delete"
-msgstr "Borrar"
-
-#: xrc/manage_topics_xrc.py:136
+#: xrc/manage_topics_xrc.py:137
 msgid "Undo previous action"
 msgstr "Deshacer acción previa"
 
-#: xrc/manage_topics_xrc.py:137
+#: xrc/manage_topics_xrc.py:138
 msgid "Undo"
 msgstr "Deshacer"
 
-#: xrc/manage_topics_xrc.py:138
+#: xrc/manage_topics_xrc.py:139
 msgid "Redoes the last undone action"
 msgstr "Rehacer la última acción deshecha"
 
-#: xrc/manage_topics_xrc.py:139
+#: xrc/manage_topics_xrc.py:140
 msgid "Redo"
 msgstr "Rehacer"
 
-#: xrc/manage_topics_xrc.py:141
+#: xrc/manage_topics_xrc.py:142
 msgid "Name:"
 msgstr "Nombre:"
 
-#: xrc/manage_topics_xrc.py:142
+#: xrc/manage_topics_xrc.py:143
 msgid "Show tags"
 msgstr "Mostrar etiquetas"
 
-#: xrc/manage_topics_xrc.py:143
+#: xrc/manage_topics_xrc.py:144
 msgid "Description:"
 msgstr "Descripción:"
 
-#: xrc/manage_topics_xrc.py:144
+#: xrc/manage_topics_xrc.py:145
 msgid "Passage:"
 msgstr "Pasaje:"
 
-#: xrc/manage_topics_xrc.py:145
+#: xrc/manage_topics_xrc.py:146
 msgid "Comment:"
 msgstr "Comentario:"
 
@@ -1563,15 +1626,20 @@ msgstr "Personalizar Rango"
 msgid "Search Range"
 msgstr "Rango de Búsqueda"
 
-#: xrc/tag_passage_dialog_xrc.py:66
+#: xrc/tag_passage_dialog_xrc.py:67
+#, fuzzy
+msgid "&Passage:"
+msgstr "Pasaje:"
+
+#: xrc/tag_passage_dialog_xrc.py:68
 msgid "&Tag: "
 msgstr "Etiqueta:"
 
-#: xrc/tag_passage_dialog_xrc.py:67
+#: xrc/tag_passage_dialog_xrc.py:69
 msgid "&Comment:"
 msgstr "&Comentario:"
 
-#: xrc/tag_passage_dialog_xrc.py:68
+#: xrc/tag_passage_dialog_xrc.py:70
 msgid "Tag Passage"
 msgstr "Etiqueta de pasaje"
 
