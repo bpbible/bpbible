@@ -234,6 +234,7 @@ class SearchPanel(xrcSearchPanel):
 			tlw.DefaultItem = self.search_button
 			tlw.Show()
 
+			tlw.Raise()
 			self.searchkey.SetFocus()
 			
 			#tlw.Sizer.Layout()
