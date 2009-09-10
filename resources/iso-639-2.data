@@ -139,8 +139,8 @@ fin	fi	Finnish	suomi; suomen kieli
 fiu	 	Finno-Ugrian (Other)
 fon	 	Fon	F?ngbe
 fra	fr	French	français; langue française
-frm	 	French, Middle (ca. 1400—1600)
-fro	 	French, Old (842—ca. 1400)
+frm	 	French, Middle (ca. 1400-1600)
+fro	 	French, Old (842-ca. 1400)
 frs	 	Frisian, Eastern	Seeltersk Fräisk; Seeltersk; Fräisk
 frr	 	Frisian, Northern
 fry	fy	Frisian, Western	frysk
@@ -259,7 +259,7 @@ jbo	 	Lojban	lojban
 loz	 	Lozi	siLozi
 lub	lu	Luba-Katanga
 lua	 	Luba-Lulua	lwaà:
-lui	 	Luiseño
+lui	 	Luiseno
 smj	 	Lule Sami	sámegiella
 lun	 	Lunda	chiLunda
 luo	 	Luo (Kenya and Tanzania)	Dholuo
@@ -318,14 +318,14 @@ non	 	Norse, Old	norskr
 nai	 	North American Indian (Other)
 sme	se	Northern Sami	sámi; sámegiella
 nor	no	Norwegian	Norsk
-nob	nb	Norwegian Bokmål	Norsk bokmål
+nob	nb	Norwegian Bokmal	Norsk bokmal
 nno	nn	Norwegian Nynorsk	Norsk nynorsk
 nub	 	Nubian languages
 nym	 	Nyamwezi	Kinyamwezi
 nyn	 	Nyankole
 nyo	 	Nyoro	Runyoro
 nzi	 	Nzima
-oci	oc	Occitan (post 1500); Provençal	Occitan
+oci	oc	Occitan (post 1500); Provencal	Occitan
 oji	oj	Ojibwa, Anishinaabe languages	???????? (Anishinaabemowin)
 ori	or	Oriya	?????
 orm	om	Oromo	Afaan Oromoo
@@ -347,7 +347,7 @@ pon	 	Pohnpeian
 pol	pl	Polish	polski
 por	pt	Portuguese	português
 pra	 	Prakrit languages
-pro	 	Provençal, Old (to 1500)
+pro	 	Provencal, Old (to 1500)
 pan	pa	Punjabi; Panjabi	??????; ??????
 pus	ps	Pushto; Pashto	????
 qaa-qtz	 	Reserved for local use
@@ -458,7 +458,7 @@ uzb	uz	Uzbek	O'zbek; ?????; ??????
 vai	 	Vai
 ven	ve	Venda	Tshiven?a
 vie	vi	Vietnamese	Ti?ng Vi?t
-vol	vo	Volapük	Volapük
+vol	vo	Volapuk	Volapuk
 vot	 	Votic	vadda tšeeli
 wak	 	Wakashan languages
 wal	 	Walamo
