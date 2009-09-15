@@ -197,14 +197,17 @@ class HistoryTree(wx.TreeCtrl):
 			)
 		wx.CallAfter(self.rebuild_tree)
 
-	def create_item(self, parent, item):
+	def create_item(self, parent, item, build_recursively=True):
 		new_tree_item = self.AppendItem(parent, text=item.user_ref)
 		if item == self.history.current_item:
 			self.SetItemBold(new_tree_item)
 			self.current_tree_item = new_tree_item
 
 		self.SetPyData(new_tree_item, item)
-		self.build_tree(item, new_tree_item)
+		if build_recursively:
+			self.build_tree(item, new_tree_item)
+
+		return new_tree_item
 	
 	def build_tree(self, history_item=None, tree_item=None):
 		if tree_item is None:
@@ -214,20 +217,21 @@ class HistoryTree(wx.TreeCtrl):
 		if history_item is None:
 			history_item = self.history.history
 
-		# don't display extra ones for now...
-		if use_history_as_tree:
-			for item in history_item.children[:-1]:
-				self.create_item(tree_item, item)
+		while history_item.children:
+			# don't display extra ones for now...
+			if use_history_as_tree:
+				for item in history_item.children[:-1]:
+					self.create_item(tree_item, item)
 
-		# Put the last item as a sibling, not a child.
-		# this is good way to do it
-		if history_item.children[-1:]:
-			item = history_item.children[-1]
+			# Put the last item as a sibling, not a child.
+			# this is good way to do it
+			history_item = history_item.children[-1]
 
 			# if no parent, it is a root, so just do as sibling
 			p = self.GetItemParent(tree_item) or tree_item
 
-			self.create_item(p, item)
+			tree_item = self.create_item(p, history_item,
+				build_recursively=False)
 		
 	def rebuild_tree(self, item=None):
 		self.Unbind(wx.EVT_TREE_SEL_CHANGED)
