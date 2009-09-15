@@ -337,6 +337,15 @@ class Book(object):
 				#versekey = VK.castTo(key)
 				heading_dicts = []
 				for heading, canonical in headings:
+					# the new-style pre-verse content lives wrapped up in
+					# <div>'s - it will contain the <title>, but the div will
+					# be stripped out.
+					# the old-style pre-verse content lives in <title>'s,
+					# which will also be stripped out. Unfortunately, it isn't
+					# that easy to tell whether it did have a title, so we
+					# employ a heuristic - if it starts with an <, it is a new
+					# one...
+					nh = heading.startswith("<")
 					if not raw:
 						if stripped:
 							heading = mod.StripText(heading).decode(
@@ -345,6 +354,9 @@ class Book(object):
 							)
 						else:
 							heading = render_text(heading)
+
+					if not nh:
+						heading = '<h6 class="heading" canonical="%s">%s</h6>\n' % (canonical, heading)
 
 					heading_dict = dict(heading=heading, canonical=canonical)
 					heading_dict.update(body_dict)
