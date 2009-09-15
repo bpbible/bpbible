@@ -1,6 +1,6 @@
 Alpha-3	Alpha-2	Language name	Native name
 abk	ab	Abkhazian	?????
-ace	 	Acehnese, Achinese	Basa AcËh
+ace	 	Acehnese, Achinese	Basa Ac√®h
 ach	 	Acoli
 ada	 	Adangme	adangb?
 ady	 	Adyghe; Adygei	????????; ????????
@@ -10,7 +10,7 @@ afr	af	Afrikaans	Afrikaans
 afa	 	Afro-Asiatic (Other)
 ain	 	Ainu	??? ???(????) or ainu itak
 aka	ak	Akan
-akk	 	Akkadian	akkad˚; liöanum akkaditum
+akk	 	Akkadian	akkad√ª; li≈°anum akkaditum
 sqi	sq	Albanian	Shqip
 ale	 	Aleut
 alg	 	Algonquian languages
@@ -19,16 +19,16 @@ amh	am	Amharic	????
 anp	 	Angika
 apa	 	Apache languages
 ara	ar	Arabic	???????
-arg	an	Aragonese	AragonÈs
+arg	an	Aragonese	Aragon√©s
 arc	 	Aramaic	?????
-arp	 	Arapaho	HinÛno'eitÌÌt
+arp	 	Arapaho	Hin√≥no'eit√≠√≠t
 arn	 	Araucanian; Mapudungun; Mapuche	mapudungun; mapuchedungun
 arw	 	Arawak
 hye	hy	Armenian	??????? ?????
-rup	 	Aromanian; Arumanian; Macedo-Romanian	Arm„neashce; Arm„neashti; Limba arm„neasc„
+rup	 	Aromanian; Arumanian; Macedo-Romanian	Arm√£neashce; Arm√£neashti; Limba arm√£neasc√£
 art	 	Artificial (Other)
 asm	as	Assamese	???????
-ast	 	Asturian; Bable; Leonese; Asturleonese	asturianu; Bable, LlionÈs; AsturllionÈs
+ast	 	Asturian; Bable; Leonese; Asturleonese	asturianu; Bable, Llion√©s; Asturllion√©s
 ath	 	Athapascan languages
 aus	 	Australian languages
 map	 	Austronesian (Other)
@@ -44,7 +44,7 @@ bam	bm	Bambara	bamanankan
 bai	 	Bamileke languages
 bad	 	Banda languages
 bnt	 	Bantu (Other)
-bas	 	Basa	?asa·
+bas	 	Basa	?asa√°
 bak	ba	Bashkir	??????? ????
 eus	eu	Basque	euskara
 btk	 	Batak
@@ -66,9 +66,9 @@ bug	 	Buginese	?? ????
 bul	bg	Bulgarian	????????? ????
 bua	 	Buriat	?????? ?????
 mya	my	Burmese	????????
-cad	 	Caddo	HasÌ:nay
+cad	 	Caddo	Has√≠:nay
 car	 	Carib
-cat	ca	Catalan; Valencian	catal‡
+cat	ca	Catalan; Valencian	catal√†
 cau	 	Caucasian (Other)
 ceb	 	Cebuano	Sinugboanon
 cel	 	Celtic (Other)
@@ -78,7 +78,7 @@ cmc	 	Chamic languages
 cha	ch	Chamorro	Chamoru
 che	ce	Chechen	??????? ????
 chr	 	Cherokee	???
-chy	 	Cheyenne	TsÍhÈst
+chy	 	Cheyenne	Ts√™h√©st
 chb	 	Chibcha
 nya	ny	Chichewa; Chewa; Nyanja	chiChewa; chinyanja
 zho	zh	Chinese	??
@@ -101,14 +101,14 @@ cpp	 	Creoles and Pidgins, Portuguese-based (Other)
 crh	 	Crimean Tatar; Crimean Turkish	qirimtatar tili, ??????????? ????
 hrv	hr	Croatian	hrvatski jezik
 cus	 	Cushitic (Other)
-ces	cs	Czech	ceötina (substantive); cesky (adverb)
+ces	cs	Czech	ce≈°tina (substantive); cesky (adverb)
 dak	 	Dakota	Lakhota
 dan	da	Danish	dansk
 dar	 	Dargwa	?????? ???
 day	 	Dayak
-del	 	Delaware	LÎnape
-chp	 	Dene Suline	DÎne SulinÈ; ??????
-din	 	Dinka	Thu??j‰?
+del	 	Delaware	L√´nape
+chp	 	Dene Suline	D√´ne Sulin√©; ??????
+din	 	Dinka	Thu??j√§?
 div	dv	Divehi; Dhivehi; Maldivian	?????????
 doi	 	Dogri	?????
 dgr	 	Dogrib	Tlicho
@@ -132,21 +132,21 @@ ewe	ee	Ewe	???gb?
 ewo	 	Ewondo
 fan	 	Fang
 fat	 	Fanti
-fao	fo	Faroese	f¯royskt
+fao	fo	Faroese	f√∏royskt
 fij	fj	Fijian	vosa Vakaviti
 fil	 	Filipino
 fin	fi	Finnish	suomi; suomen kieli
 fiu	 	Finno-Ugrian (Other)
 fon	 	Fon	F?ngbe
-fra	fr	French	franÁais; langue franÁaise
-frm	 	French, Middle (ca. 1400-1600)
-fro	 	French, Old (842-ca. 1400)
-frs	 	Frisian, Eastern	Seeltersk Fr‰isk; Seeltersk; Fr‰isk
+fra	fr	French	fran√ßais; langue fran√ßaise
+frm	 	French, Middle (ca. 1400‚Äî1600)
+fro	 	French, Old (842‚Äîca. 1400)
+frs	 	Frisian, Eastern	Seeltersk Fr√§isk; Seeltersk; Fr√§isk
 frr	 	Frisian, Northern
 fry	fy	Frisian, Western	frysk
 fur	 	Friulian	furlan
 ful	ff	Fulah	Fulfulde, Pulaar, Pular
-gaa	 	Ga	G„
+gaa	 	Ga	G√£
 glg	gl	Galician	Galego
 lug	lg	Ganda	Luganda
 gay	 	Gayo
@@ -154,8 +154,8 @@ gba	 	Gbaya
 gez	 	Ge'ez	???
 kat	ka	Georgian	??????? ??? (kartuli ena)
 deu	de	German	Deutsch
-gsw	 	Swiss German, Alemannic	Schwyzerd¸tsch, Alemannisch
-nds	 	German, Low; Low German; Saxon, Low; Low Saxon	Nederd¸¸tsch, Plattd¸¸tsch
+gsw	 	Swiss German, Alemannic	Schwyzerd√ºtsch, Alemannisch
+nds	 	German, Low; Low German; Saxon, Low; Low Saxon	Nederd√º√ºtsch, Plattd√º√ºtsch
 gmh	 	German, Middle High (ca. 1050-1500)	diutisk
 goh	 	German, Old High (ca. 750-1050)	diutisc
 gem	 	Germanic (Other)
@@ -167,13 +167,13 @@ grb	 	Grebo
 grc	 	Greek, Ancient (to 1453)	????????
 ell	el	Greek, Modern (1453-)	????????
 kal	kl	Greenlandic; Kalaallisut	kalaallisut; kalaallit oqaasii
-grn	gn	Guarani	AvaÒe'?
+grn	gn	Guarani	Ava√±e'?
 guj	gu	Gujarati	???????
 gwi	 	Gwich'in
-hai	 	Haida	X_aat KÌl
-hat	ht	Haitian Creole; Haitian	KreyÚl ayisyen
+hai	 	Haida	X_aat K√≠l
+hat	ht	Haitian Creole; Haitian	Krey√≤l ayisyen
 hau	ha	Hausa	Hausanci; ??????
-haw	 	Hawaiian	ëOlelo Hawaiëi
+haw	 	Hawaiian	‚ÄòOlelo Hawai‚Äòi
 heb	he	Hebrew	????????; ?????
 her	hz	Herero	Otjiherero
 hil	 	Hiligaynon	Ilonggo
@@ -185,12 +185,12 @@ hmn	 	Hmong	Hmoob
 hun	hu	Hungarian	magyar
 hup	 	Hupa	Na:tinixwe Mixine:whe
 iba	 	Iban
-isl	is	Icelandic	Ìslenska
+isl	is	Icelandic	√≠slenska
 ido	io	Ido	Ido
 ibo	ig	Igbo	Igbo
 ijo	 	Ijo languages
 ilo	 	Iloko
-smn	 	Inari Sami	s‰‰megiella
+smn	 	Inari Sami	s√§√§megiella
 inc	 	Indic (Other)
 ine	 	Indo-European (Other)
 ind	id	Indonesian	Bahasa Indonesia
@@ -198,11 +198,11 @@ inh	 	Ingush	???????? ????
 ina	ia	Interlingua (International Auxiliary Language Association)	interlingua
 ile	ie	Interlingue; Occidental	Interlingue
 iku	iu	Inuktitut	??????
-ipk	ik	Inupiaq	IÒupiaq; IÒupiatun
+ipk	ik	Inupiaq	I√±upiaq; I√±upiatun
 ira	 	Iranian (Other)
 gle	ga	Irish	Gaeilge
 mga	 	Irish, Middle (900-1200)	Gaoidhealg
-sga	 	Irish, Old (to 900)	GoÌdelc
+sga	 	Irish, Old (to 900)	Go√≠delc
 iro	 	Iroquoian languages
 ita	it	Italian	italiano
 jpn	ja	Japanese	??? (????)
@@ -221,7 +221,7 @@ kaa	 	Kara-Kalpak	?????????? ????
 krl	 	Karelian	karjalan kieli
 kar	 	Karen languages
 kas	ks	Kashmiri	?????; ?????
-csb	 	Kashubian	kaszÎbsczi j„zÎk
+csb	 	Kashubian	kasz√´bsczi j√£z√´k
 kaw	 	Kawi	Bha?a Kawi
 kaz	kk	Kazakh	????? ????
 kha	 	Khasi	Khasi
@@ -242,7 +242,7 @@ kpe	 	Kpelle	kpele
 kro	 	Kru languages
 kua	kj	Kuanyama; Kwanyama
 kum	 	Kumyk	?????
-kur	ku	Kurdish	KurdÓ
+kur	ku	Kurdish	Kurd√Æ
 kru	 	Kurukh
 kut	 	Kutenai	Ktunaxa
 lad	 	Ladino	?'?????-??????????
@@ -250,7 +250,7 @@ lah	 	Lahnda	??????
 lam	 	Lamba
 lao	lo	Lao	???????
 lat	la	Latin	latine; lingua latina
-lav	lv	Latvian	latvieöu valoda
+lav	lv	Latvian	latvie≈°u valoda
 lez	 	Lezghian	????? ????
 lim	li	Limburgish; Limburger; Limburgan	Limburgs
 lin	ln	Lingala	lingala
@@ -258,13 +258,13 @@ lit	lt	Lithuanian	lietuviu kalba
 jbo	 	Lojban	lojban
 loz	 	Lozi	siLozi
 lub	lu	Luba-Katanga
-lua	 	Luba-Lulua	lwa‡:
-lui	 	Luiseno
-smj	 	Lule Sami	s·megiella
+lua	 	Luba-Lulua	lwa√†:
+lui	 	Luise√±o
+smj	 	Lule Sami	s√°megiella
 lun	 	Lunda	chiLunda
 luo	 	Luo (Kenya and Tanzania)	Dholuo
 lus	 	Lushai
-ltz	lb	Luxembourgish; Letzeburgesch	LÎtzebuergesch
+ltz	lb	Luxembourgish; Letzeburgesch	L√´tzebuergesch
 mkd	mk	Macedonian	?????????? ?????
 mad	 	Madurese
 mag	 	Magahi
@@ -283,25 +283,25 @@ glv	gv	Manx	Gaelg; Manninagh
 mri	mi	Maori	te reo Maori
 mar	mr	Marathi	?????
 chm	 	Mari	????? ?????
-mah	mh	Marshallese	Kajin M∏ajel
+mah	mh	Marshallese	Kajin M¬∏ajel
 mwr	 	Marwari	????????
 mas	 	Masai	?l Maa
 myn	 	Mayan languages
 men	 	Mende	M?nde
-mic	 	Mi'kmaq; Micmac	MÌkmaq, Mi'gmaq
+mic	 	Mi'kmaq; Micmac	M√≠kmaq, Mi'gmaq
 min	 	Minangkabau	Baso Minangkabau
-mwl	 	Mirandese	LhÈngua Mirandesa
-moh	 	Mohawk	Kanieníkeha
+mwl	 	Mirandese	Lh√©ngua Mirandesa
+moh	 	Mohawk	Kanien‚Äôkeha
 mdf	 	Moksha	??????? ????
 mol	mo	Moldavian; Moldovan	????? ????????????
 mkh	 	Mon-Khmer (Other)
 lol	 	Mongo
 mon	mn	Mongolian	?????? ???
-mos	 	Mossi	MÚorÈ
+mos	 	Mossi	M√≤or√©
 mun	 	Munda languages
 nah	 	Nahuatl languages	nahuatl; nawatlahtolli
 nau	na	Nauruan	Ekakairu Naoero
-nav	nv	Navajo; Navaho	DinÈ bizaad; DinÈk'ehjÌ
+nav	nv	Navajo; Navaho	Din√© bizaad; Din√©k'ehj√≠
 nde	nd	Ndebele, North	isiNdebele
 nbl	nr	Ndebele, South	isiNdebele
 ndo	ng	Ndonga	Owambo
@@ -316,16 +316,16 @@ nqo	 	N'Ko
 nog	 	Nogai	????? ????
 non	 	Norse, Old	norskr
 nai	 	North American Indian (Other)
-sme	se	Northern Sami	s·mi; s·megiella
+sme	se	Northern Sami	s√°mi; s√°megiella
 nor	no	Norwegian	Norsk
-nob	nb	Norwegian Bokmal	Norsk bokmal
+nob	nb	Norwegian Bokm√•l	Norsk bokm√•l
 nno	nn	Norwegian Nynorsk	Norsk nynorsk
 nub	 	Nubian languages
 nym	 	Nyamwezi	Kinyamwezi
 nyn	 	Nyankole
 nyo	 	Nyoro	Runyoro
 nzi	 	Nzima
-oci	oc	Occitan (post 1500); Provencal	Occitan
+oci	oc	Occitan (post 1500); Proven√ßal	Occitan
 oji	oj	Ojibwa, Anishinaabe languages	???????? (Anishinaabemowin)
 ori	or	Oriya	?????
 orm	om	Oromo	Afaan Oromoo
@@ -345,9 +345,9 @@ phi	 	Philippine (Other)
 phn	 	Phoenician
 pon	 	Pohnpeian
 pol	pl	Polish	polski
-por	pt	Portuguese	portuguÍs
+por	pt	Portuguese	portugu√™s
 pra	 	Prakrit languages
-pro	 	Provencal, Old (to 1500)
+pro	 	Proven√ßal, Old (to 1500)
 pan	pa	Punjabi; Panjabi	??????; ??????
 pus	ps	Pushto; Pashto	????
 qaa-qtz	 	Reserved for local use
@@ -357,8 +357,8 @@ raj	 	Rajasthani	?????????
 rap	 	Rapanui	rapanui; pepito ote henua
 rar	 	Rarotongan; Cook Islands Maori
 roa	 	Romance (Other)
-ron	ro	Romanian	rom‚na
-rom	 	Romany	rromani chib; Romani öib; RomanÛ
+ron	ro	Romanian	rom√¢na
+rom	 	Romany	rromani chib; Romani ≈°ib; Roman√≥
 run	rn	Rundi	kiRundi
 rus	ru	Russian	??????? ????
 sal	 	Salishan languages
@@ -366,13 +366,13 @@ sam	 	Samaritan Aramaic	?????, ?????
 smi	 	Sami languages (Other)
 smo	sm	Samoan	gagana fa'a Samoa
 sad	 	Sandawe
-sag	sg	Sango	y‚ng‚ tÓ s‰ngˆ
+sag	sg	Sango	y√¢ng√¢ t√Æ s√§ng√∂
 san	sa	Sanskrit	?????????
 sat	 	Santali	??????
 srd	sc	Sardinian	sardu
 sas	 	Sasak
 sco	 	Scots	Scots leid; Lallans
-gla	gd	Scottish Gaelic; Gaelic	G‡idhlig
+gla	gd	Scottish Gaelic; Gaelic	G√†idhlig
 sel	 	Selkup	????????? ???
 sem	 	Semitic (Other)
 srp	sr	Serbian	?????? ?????
@@ -382,18 +382,18 @@ shn	 	Shan
 sna	sn	Shona	chiShona
 iii	ii	Sichuan Yi; Nuosu	??
 scn	 	Sicilian	Sicilianu
-sid	 	Sidamo	Sid·mo 'AfÛ
+sid	 	Sidamo	Sid√°mo 'Af√≥
 sgn	 	Sign languages
-bla	 	Siksika	siksik·;  ????
+bla	 	Siksika	siksik√°;  ????
 snd	sd	Sindhi	????? ?????, ??????
 sin	si	Sinhalese; Sinhala	?????
 sit	 	Sino-Tibetan (Other)
 sio	 	Siouan languages
-sms	 	Skolt Sami	s‰‰'mkiıll
+sms	 	Skolt Sami	s√§√§'mki√µll
 den	 	Slave (Athapascan)
 sla	 	Slavic (Other)
 svk	sk	Slovak	slovencina
-slv	sl	Slovenian	slovenöcina
+slv	sl	Slovenian	sloven≈°cina
 sog	 	Sogdian
 som	so	Somali	Soomaaliga; af Soomaali
 son	 	Songhai languages
@@ -406,7 +406,7 @@ sot	st	Sotho, Southern	Sesotho
 sai	 	South American Indian (Other)
 alt	 	Southern Altai	????? ????
 sma	 	Southern Sami	saemien giele
-spa	es	Spanish; Castilian	espaÒol, castellano
+spa	es	Spanish; Castilian	espa√±ol, castellano
 srn	 	Sranan Tongo
 suk	 	Sukuma
 sux	 	Sumerian	eme-gir
@@ -420,19 +420,19 @@ tgl	tl	Tagalog	Tagalog
 tah	ty	Tahitian	te reo Tahiti; te reo Ma'ohi
 tai	 	Tai (Other)
 tgk	tg	Tajik	??????; ??????
-tmh	 	Tamashek	Tamajeq, ?[?Ö
+tmh	 	Tamashek	Tamajeq, ?[?‚Ä¶
 tam	ta	Tamil	?????
-tat	tt	Tatar	???????; tatarÁa; ???????
+tat	tt	Tatar	???????; tatar√ßa; ???????
 tel	te	Telugu	??????
 ter	 	Tereno
 tet	 	Tetum, Lia-Tetun	Tetun
 tha	th	Thai	???????
 bod	bo	Tibetan	???????
-tig	 	Tigre	TigrÈ; Khasa
+tig	 	Tigre	Tigr√©; Khasa
 tir	ti	Tigrinya	????
 tem	 	Timne
 tiv	 	Tiv
-tli	 	Tlingit	LingÌt
+tli	 	Tlingit	Ling√≠t
 tpi	 	Tok Pisin	Tok Pisin
 tkl	 	Tokelau	Tokelau
 tog	 	Tonga (Nyasa)	chiTonga
@@ -442,7 +442,7 @@ tso	ts	Tsonga	Xitsonga
 tsn	tn	Tswana	Setswana
 tum	 	Tumbuka	chiTumbuka
 tup	 	Tupi languages	Nheengatu
-tur	tr	Turkish	T¸rkÁe
+tur	tr	Turkish	T√ºrk√ße
 ota	 	Turkish, Ottoman (1500-1928)
 tuk	tk	Turkmen	???????
 tvl	 	Tuvalu	'gana Tuvalu
@@ -450,16 +450,16 @@ tyv	 	Tuvinian	???? ???
 twi	tw	Twi
 udm	 	Udmurt	?????? ???
 uga	 	Ugaritic
-uig	ug	Uighur; Uyghur	Uy?urq?; UygurÁe; ???????
+uig	ug	Uighur; Uyghur	Uy?urq?; Uygur√ße; ???????
 ukr	uk	Ukrainian	?????????? ????
-umb	 	Umbundu	˙mb˙nd˙
+umb	 	Umbundu	√∫mb√∫nd√∫
 urd	ur	Urdu	????
 uzb	uz	Uzbek	O'zbek; ?????; ??????
 vai	 	Vai
 ven	ve	Venda	Tshiven?a
 vie	vi	Vietnamese	Ti?ng Vi?t
-vol	vo	Volapuk	Volapuk
-vot	 	Votic	vadda töeeli
+vol	vo	Volap√ºk	Volap√ºk
+vot	 	Votic	vadda t≈°eeli
 wak	 	Wakashan languages
 wal	 	Walamo
 wln	wa	Walloon	walon
@@ -472,7 +472,7 @@ sah	 	Yakut	???? ????
 yao	 	Yao	Chiyao
 yap	 	Yapese
 yid	yi	Yiddish	??????
-yor	yo	Yoruba	Yor˘b·
+yor	yo	Yoruba	Yor√πb√°
 ypk	 	Yupik languages
 znd	 	Zande languages	Pazande
 zap	 	Zapotec
