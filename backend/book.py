@@ -74,12 +74,13 @@ class Book(object):
 
 	def GetModuleList(self):
 		return sorted([name for name, mod in self.parent.modules.iteritems()
-				if mod.Type() == self.type or self.type is None])
+				if mod.Type() == self.type or self.type is None], 
+				key=lambda name:name.lower())
 	
 	def GetModules(self):
 		return sorted([mod for name, mod in self.parent.modules.iteritems()
 				if mod.Type() == self.type or self.type == None], 
-				key = lambda mod: mod.Name())
+				key = lambda mod: mod.Name().lower())
 	
 	@staticmethod
 	def get_template_options():

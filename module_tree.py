@@ -153,7 +153,7 @@ class PathModuleTree(ModuleTree):
 	def add_children(self, tree_item):
 		for path, mgr, modules in reversed(biblemgr.mgrs):
 			if mgr == tree_item.data:
-				for modname, mod in sorted(modules, key=lambda x:x[0]):
+				for modname, mod in sorted(modules, key=lambda x:x[0].lower()):
 					self.add_module(tree_item, mod, 
 						"\nThis book is not active as it "
 						"is shadowed by a book in a different path")
@@ -187,7 +187,7 @@ class LanguageModuleTree(ModuleTree):
 	
 	def add_children(self, tree_item):
 		for mod in sorted(self.data[tree_item.data], 
-							key=lambda mod:mod.Name()):
+							key=lambda mod:mod.Name.lower()):
 			self.add_module(tree_item, mod)
 	
 if __name__ == '__main__':
