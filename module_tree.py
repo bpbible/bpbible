@@ -187,7 +187,7 @@ class LanguageModuleTree(ModuleTree):
 	
 	def add_children(self, tree_item):
 		for mod in sorted(self.data[tree_item.data], 
-							key=lambda mod:mod.Name.lower()):
+							key=lambda mod:mod.Name().lower()):
 			self.add_module(tree_item, mod)
 	
 if __name__ == '__main__':
