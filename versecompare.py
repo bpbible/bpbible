@@ -12,7 +12,7 @@ from protocols import protocol_handler
 from util import noop
 from util.configmgr import config_manager
 from displayframe import IN_POPUP, process_html_for_module
-from swlib.pysw import GetBestRange, SW, VK
+from swlib.pysw import GetBestRange, SW, VK, VerseList
 from swlib import pysw
 from util.unicode import to_str
 
@@ -32,7 +32,11 @@ verse_comparison_settings.add_item(
 	item_type=bool
 )
 
-
+verse_comparison_settings.add_item(
+	"reference",
+	"",
+	item_type=str
+)
 
 def on_bible_version(frame, href, url):
 	biblemgr.bible.SetModule(url.getHostName())
@@ -51,9 +55,16 @@ class VerseCompareFrame(LinkedFrame):
 		self.SetBook(book)
 		#verse_comparison_settings["comparison_modules"] = book.GetModuleList()
 	
-	def SetReference(self, ref, context=""):
+	def SetReference(self, ref, context="", reload=False):
+		last_reference = verse_comparison_settings["reference"]
+		if VerseList(last_reference).VerseInRange(ref):
+			ref = last_reference
+
+		if ref == self.reference and not reload: return
 		text = "<h3>%s</h3>" % ref
 		self.reference = ref
+		verse_comparison_settings["reference"] = ref
+
 		text_func = [
 			self.get_compare_text,
 			self.get_parallel_text
@@ -233,3 +244,6 @@ class VerseCompareFrame(LinkedFrame):
 		verse_comparison_settings["parallel"] = event.Checked()
 		self.reload()
 		
+	
+	def reload(self):
+		self.SetReference(self.reference, reload=True)
