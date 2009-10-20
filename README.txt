@@ -39,17 +39,14 @@ To build from source, you will need to have the following:
 
 1. wxPython 2.8 (preferably at least 2.8.7) 
 2. Python 2.5 (though older versions may work)
-3. SWORD 1.5.11
+3. SWORD 1.6
 4. Windows, Linux or Mac
 
 BPBible works mostly under Mac. Certain features, like the quickselectors, do not appear correctly. Also, users must compile it themselves - there is no binary distribution yet.
 
 Using the binaries under Linux
 
-If you are running 32-bit Linux, you can download binaries for the SWORD
-python bindings from http://bpbible.googlecode.com. Extract them into your
-python site-packages directory. If you do this, you shouldn't need to do the
-next step below.
+There are at present no binaries available for Linux.
 
 Building the SWIG bindings
 
@@ -74,11 +71,6 @@ with
 libraries=['sword', 'z', 'curl'],
 
 Then run "python setup.py install" again.
-
-To use BPBible optimally with Sword 1.5.11, download the 
-SWORD patches file from http://bpbible.googlecode.com and 
-apply the fixes. This will increase the performance substantially with zipped 
-modules, and fix problems with the divineName tag in non-english Bibles.
 
 Running BPBible
 
