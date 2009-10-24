@@ -17,6 +17,7 @@ To build from source, you will need to have the following:
  # wxPython 2.8 (preferably at least 2.8.7) 
  # Python 2.5 (though older versions may work)
  # SWORD 1.6.0
+ # PyStemmer (BPBible will work without this, but stemming will not be supported when searching).
  # Windows, Linux or Mac
 
 BPBible works mostly under Mac. Certain features, like the quickselectors, do not appear correctly. Also, users must compile it themselves - there is no binary distribution yet.
@@ -60,4 +61,4 @@ libraries=['sword', 'z', 'curl'],
 Then run `python setup.py install` again.
 
 == Running BPBible ==
-Once the SWIG bindings are installed, unzip the BPBible source. From there, run `python bpbible.py`. 
+Once the SWIG bindings are installed, unzip the BPBible source. From there, run `python bpbible.py`.
