@@ -33,6 +33,12 @@
         <tooltip>Copy the topic as text to the clipboard for use in other applications.</tooltip>
         <label>Export</label>
       </object>
+      <object class="tool" name="sort_order_toggle_tool">
+        <bitmap>..\graphics\sc_sortup.png</bitmap>
+        <toggle>1</toggle>
+        <tooltip>Sorts the topic in passage order</tooltip>
+        <label>Sort</label>
+      </object>
       <object class="tool" name="delete_tool">
         <bitmap>..\graphics\delete.png</bitmap>
         <tooltip>Delete</tooltip>

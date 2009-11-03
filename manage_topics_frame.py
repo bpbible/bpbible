@@ -76,7 +76,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 
 		for tool in ("add_topic_tool", "add_passage_tool", "cut_tool", 
 			"copy_tool", "copy_text_tool", "paste_tool", "delete_tool",
-			"undo_tool", "redo_tool"):
+			"undo_tool", "redo_tool", "sort_order_toggle_tool"):
 			handler = lambda event, tool=tool: self._perform_toolbar_action(event, tool)
 			self.toolbar.Bind(wx.EVT_TOOL, handler, id=wx.xrc.XRCID(tool))
 
@@ -136,6 +136,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 
 		self.selected_topic = selected_topic
 		self._setup_passage_list_ctrl()
+		self._setup_order_passages_by()
 
 		self.Title = self._get_title()
 		event.Skip()
@@ -144,6 +145,10 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		return self._selected_topic
 
 	def set_selected_topic(self, new_topic):
+		if new_topic is not None:
+			new_topic.order_passages_by_observers += self._setup_order_passages_by
+		if self._selected_topic is not None:
+			self._selected_topic.order_passages_by_observers -= self._setup_order_passages_by
 		self._selected_topic = new_topic
 		self.selected_passages = []
 		self._change_topic_details(new_topic)
@@ -169,6 +174,12 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		if topic is not self._manager:
 			title = "%s - %s" % (topic.full_name, title)
 		return title
+
+	def _setup_order_passages_by(self): 
+		self.toolbar.ToggleTool(
+			wx.xrc.XRCID("sort_order_toggle_tool"),
+			bool(TOPIC_ORDER_BACKEND_OPTIONS.index(self.selected_topic.order_passages_by))
+		)
 
 	def _add_sub_topics(self, parent_list, parent_node):
 		parent_list.add_subtopic_observers.add_observer(
@@ -257,6 +268,9 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 	def _perform_toolbar_action(self, event, tool_id):
 		"""Performs the action requested from the toolbar."""
 		event.Skip()
+		if self.selected_topic is None:
+			return
+
 		actions = {
 			"add_topic_tool": lambda: self._create_topic(self.selected_topic),
 			"add_passage_tool": 
@@ -268,6 +282,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 			"delete_tool":	self._delete,
 			"undo_tool":	self._operations_manager.undo,
 			"redo_tool":	self._operations_manager.redo,
+			"sort_order_toggle_tool":	self._sort_order_toggled,
 		}
 		actions[tool_id]()
 
@@ -376,6 +391,15 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 			return
 
 		self._operations_manager.delete()
+	
+	@guiutil.frozen
+	def _sort_order_toggled(self):
+		is_ordered = self.toolbar.GetToolState(wx.xrc.XRCID("sort_order_toggle_tool"))
+		order_passages_by = TOPIC_ORDER_BACKEND_OPTIONS[int(is_ordered)]
+		self._operations_manager.set_order_passages_by(
+				self.selected_topic,
+				order_passages_by
+			)
 	
 	def _create_topic(self, topic, creation_function=None):
 		new_topic = self._operations_manager.add_new_topic(creation_function)
@@ -989,6 +1013,10 @@ class TopicDetailsPanel(xrcTopicDetailsPanel):
 		self._save_topic()
 		self.combine_action = False
 
+		if self.topic is not None:
+			self.topic.order_passages_by_observers -= self._order_passages_changed
+		new_topic.order_passages_by_observers += self._order_passages_changed
+
 		self.old_name = new_topic.name
 		self.old_description = new_topic.description
 		self.old_order_passages_by = new_topic.order_passages_by
@@ -1045,6 +1073,9 @@ class TopicDetailsPanel(xrcTopicDetailsPanel):
 				combine_action=self.combine_action,
 			)
 		self.combine_action = True
+
+	def _order_passages_changed(self):
+		self.order_passages_choice.SetSelection(TOPIC_ORDER_BACKEND_OPTIONS.index(self.topic.order_passages_by))
 
 class PassageDetailsPanel(xrcPassageDetailsPanel):
 	def __init__(self, parent, operations_manager):

@@ -138,6 +138,8 @@ def __gettext_strings():
     _("Undo")
     _("Redoes the last undone action")
     _("Redo")
+    _("Sorts the topic in passage order")
+    _("Sort")
     _("Manage Topics")
     _("Name:")
     _("Show tags")

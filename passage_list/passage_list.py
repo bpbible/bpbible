@@ -26,6 +26,7 @@ class BasePassageList(object):
 		self.parent = None
 		self.name_changed_observers = ObserverList()
 		self.description_changed_observers = ObserverList()
+		self.order_passages_by_observers = ObserverList()
 		self.subtopics = []
 		self._name = ""
 		self.add_subtopic_observers = ObserverList()
@@ -230,6 +231,7 @@ class BasePassageList(object):
 			order_passages_by = "NATURAL_ORDER"
 
 		self._order_passages_by = order_passages_by
+		self.order_passages_by_observers()
 
 		if order_passages_by == "NATURAL_ORDER":
 			self._passage_order_passages = None

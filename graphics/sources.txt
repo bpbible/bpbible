@@ -7,3 +7,4 @@ bullet_arrow_*.png, calendar_view_day.png, delete.png, find.png, link.png,
 magnifier*.png, page_copy.png, page_edit.png, text-columns.png - From silk icons
 go-next.png,  go-previous.png, go-up.png, edit-*.png - Tango icons
 bible-*.png, bible.svg, bpbible.ico - modified from open clipart
+sc_sortup.png - OpenOffice, classic scheme.
