@@ -1,5 +1,5 @@
 import sqlite3
-from swlib.pysw import VK, VerseList
+from swlib.pysw import VK, VerseList, SW
 sqlite3.register_adapter(VK, lambda vk: str(vk))
 sqlite3.register_adapter(VerseList, lambda verse_list: str(verse_list))
 
@@ -18,7 +18,8 @@ description varchar,
 include_subtopic boolean,
 parent integer,
 order_passages_by varchar,
-order_number integer
+order_number integer,
+tag_look integer
 );
 
 CREATE TABLE passage(
@@ -32,7 +33,7 @@ order_number integer
 
 "ALTER topic ADD order_passages_by varchar;"
 
-_CURRENT_VERSION = "0.4.5"
+_CURRENT_VERSION = "0.4.6"
 
 connection = None
 previous_filename = None
@@ -78,12 +79,23 @@ def _maybe_setup_database(manager):
 
 def _maybe_upgrade_database(version):
 	# Quick schema migration.  More to do later.
-	if version == "0.4":
+	version = SW.Version(str(version))
+	if version <= SW.Version("0.4"):
 		connection.executescript(
 			"""
 			ALTER TABLE topic ADD COLUMN order_passages_by varchar;
 			UPDATE master_topic_record SET schema_version = '%s';
 			""" % _CURRENT_VERSION)
+	
+	elif version < SW.Version("0.4.6"):
+		print "Upgrading to include look"
+		connection.executescript(
+			"""
+			ALTER TABLE topic ADD COLUMN tag_look integer;
+			UPDATE topic SET tag_look = 0;
+			UPDATE master_topic_record SET schema_version = '%s';
+			""" % _CURRENT_VERSION)
+
 
 def _load_topic_children(topic):
 	from passage_list import PassageList

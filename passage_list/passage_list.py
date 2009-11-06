@@ -19,7 +19,7 @@ class BasePassageList(object):
 	"""
 	contains_passages = True
 	__table__ = "topic"
-	__fields_to_store__ = ["name", "description", "include_subtopic", "order_passages_by", "order_number", "parent"]
+	__fields_to_store__ = ["name", "description", "include_subtopic", "order_passages_by", "order_number", "parent", "tag_look"]
 
 	def __init__(self, description=""):
 		self._description = description
@@ -276,10 +276,11 @@ class BasePassageList(object):
 class PassageList(BasePassageList):
 	contains_passages = True
 
-	def __init__(self, name, description="", display_tag=True):
+	def __init__(self, name, description="", display_tag=True, tag_look=0):
 		super(PassageList, self).__init__(description)
 		self._name = name
 		self.display_tag = display_tag
+		self.tag_look = tag_look
 
 	def set_name(self, name):
 		if name != self._name:

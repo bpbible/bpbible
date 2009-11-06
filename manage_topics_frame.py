@@ -986,7 +986,10 @@ TOPIC_ORDER_BACKEND_OPTIONS = [
 
 class TopicDetailsPanel(xrcTopicDetailsPanel):
 	def __init__(self, parent, operations_manager):
+		from gui.passage_tag import PassageTagLook
 		super(TopicDetailsPanel, self).__init__(parent)
+		attach_unknown_control("tag_look", lambda parent: PassageTagLook(parent, tag_text=""), self)
+		self.tag_look.Bind(wx.EVT_LEFT_UP, self.show_tag_looks)
 		self.topic = None
 		self.name_text.Bind(wx.EVT_KILL_FOCUS, self._lost_focus)
 		self.description_text.Bind(wx.EVT_KILL_FOCUS, self._lost_focus)
@@ -999,6 +1002,29 @@ class TopicDetailsPanel(xrcTopicDetailsPanel):
 		self.combine_action = False
 		for option in TOPIC_ORDER_OPTIONS:
 			self.order_passages_choice.Append(_(option))
+
+	def show_tag_looks(self, event):
+		from gui.passage_tag import LookPicker
+		btn = event.GetEventObject()
+		pos = btn.ClientToScreen((btn.Size[0], 0))
+		position = pos, (-btn.Size[0], btn.Size[1])
+		l = LookPicker(btn, self.topic.name, position)
+		l.Popup()
+		l.look_updated += self.update_tag_look
+	
+	def update_tag_look(self, look=None):
+		if look:
+			assert look is not None
+			self._operations_manager.set_tag_look(
+					self.topic, look,
+					combine_action=self.combine_action,
+				)
+			self.combine_action = True
+	
+		self.tag_look.tag_text = self.topic.name
+		self.tag_look.set_scheme(self.topic.tag_look)
+		self.tag_look.Parent.MinSize = self.tag_look.MinSize
+		self.tag_look.Parent.Parent.Sizer.Layout()
 
 	def Show(self, show=True):
 		super(TopicDetailsPanel, self).Show(show)
@@ -1025,6 +1051,7 @@ class TopicDetailsPanel(xrcTopicDetailsPanel):
 		self.display_tag_checkbox.Value = bool(new_topic.display_tag)
 		self.description_text.Value = new_topic.description
 		self.order_passages_choice.SetSelection(TOPIC_ORDER_BACKEND_OPTIONS.index(new_topic.order_passages_by))
+		self.update_tag_look()
 
 	def focus(self):
 		"""Sets the focus on this panel for editing."""
@@ -1044,19 +1071,24 @@ class TopicDetailsPanel(xrcTopicDetailsPanel):
 			return
 
 		name = self.name_text.Value
+		name_changed = name != self.old_name
+
 		description = self.description_text.Value
 		order_passages_by = TOPIC_ORDER_BACKEND_OPTIONS[self.order_passages_choice.GetSelection()]
 		if (name != self.old_name or
 				description != self.old_description or
 				order_passages_by != self.old_order_passages_by):
 			self._operations_manager.set_topic_details(
-					self.topic, name, description, order_passages_by,
+					self.topic, name, description, order_passages_by, self.topic.tag_look,
 					combine_action=self.combine_action,
 				)
 			self.old_name = name
 			self.old_description = description
 			self.old_order_passages_by = order_passages_by
 			self.combine_action = True
+
+		if name_changed:
+			self.update_tag_look()
 
 	def _display_tag_changed(self, event):
 		display_tag = bool(self.display_tag_checkbox.IsChecked())

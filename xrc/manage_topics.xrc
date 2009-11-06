@@ -113,6 +113,7 @@
         <object class="wxStaticText" name="name_label">
           <label>Name:</label>
         </object>
+        <flag>wxALIGN_CENTRE_VERTICAL</flag>
       </object>
       <object class="sizeritem">
         <object class="wxBoxSizer">
@@ -145,6 +146,14 @@
         <flag>wxGROW</flag>
       </object>
       <object class="sizeritem">
+        <object class="wxStaticText">
+          <label>Appearance:</label>
+        </object>
+      </object>
+      <object class="sizeritem">
+        <object class="unknown" name="tag_look"/>
+      </object>
+      <object class="sizeritem">
         <object class="wxStaticText" name="description_label">
           <label>Description:</label>
         </object>
@@ -166,7 +175,7 @@
       <vgap>6</vgap>
       <hgap>6</hgap>
       <growablecols>1</growablecols>
-      <growablerows>1</growablerows>
+      <growablerows>2</growablerows>
     </object>
   </object>
   <object class="wxPanel" name="PassageDetailsPanel">
