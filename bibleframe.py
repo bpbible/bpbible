@@ -153,7 +153,6 @@ class BibleFrame(VerseKeyedFrame):
 			(ord("T"), wx.MOD_SHIFT): self.tooltip_quickly,
 			ord("T"): self.tag_verses,
 			ord("C"): self.comment_on_verses,
-			
 		})
 		return actions
 	
@@ -235,17 +234,36 @@ class BibleFrame(VerseKeyedFrame):
 		self.observers(reference, source)
  
 	def manage_topics(self):
+		if not self.check_if_topic_management_is_available():
+			return
+
 		from manage_topics_frame import ManageTopicsFrame
 		frame = ManageTopicsFrame(guiconfig.mainfrm)
 		frame.Show()
 
 	def tag_verses(self):
+		if not self.check_if_topic_management_is_available():
+			return
+
 		from tag_passage_dialog import tag_passage
 		tag_passage(self, self.get_quick_selected())
 
 	def comment_on_verses(self):
+		if not self.check_if_topic_management_is_available():
+			return
+
 		from tag_passage_dialog import comment_on_passage
 		comment_on_passage(self, self.get_quick_selected())
+
+	def check_if_topic_management_is_available(self):
+		from passage_list import get_primary_passage_list_manager
+		is_available = not get_primary_passage_list_manager().has_error_on_loading
+
+		if not is_available:
+			wx.MessageBox(_(u"Topic management is currently not available due to an error."),
+				_(u"Error in Topic Management"), wx.OK | wx.ICON_ERROR, self)
+
+		return is_available
 	
 	@guiutil.frozen
 	def SetReference(self, ref, context=None, raw=None, y_pos=None):

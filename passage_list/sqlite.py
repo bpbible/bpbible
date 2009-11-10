@@ -52,12 +52,16 @@ def load_manager(filename=None):
 		filename = ":memory:"
 	assert connection is None or previous_filename == filename
 	previous_filename = filename
-	if connection is None:
-		connection = sqlite3.connect(filename)
 	manager = PassageListManager()
-	_maybe_setup_database(manager)
-	_load_topic_children(manager)
-	manager.parent = None
+	try:
+		if connection is None:
+			connection = sqlite3.connect(filename)
+		_maybe_setup_database(manager)
+		_load_topic_children(manager)
+		manager.parent = None
+	except sqlite3.Error, e:
+		import os
+		manager.has_error_on_loading = True
 	return manager
 
 def _maybe_setup_database(manager):
@@ -87,7 +91,7 @@ def _maybe_upgrade_database(version):
 			UPDATE master_topic_record SET schema_version = '%s';
 			""" % _CURRENT_VERSION)
 	
-	elif version < SW.Version("0.4.6"):
+	if version < SW.Version("0.4.6"):
 		print "Upgrading to include look"
 		connection.executescript(
 			"""

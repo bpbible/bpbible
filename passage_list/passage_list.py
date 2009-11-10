@@ -355,6 +355,7 @@ class PassageListManager(BasePassageList):
 	def __init__(self):
 		super(PassageListManager, self).__init__()
 		self.description = ""
+		self.has_error_on_loading = False
 
 	def save(self):
 		"""Saves this passage list manager to its file."""
@@ -389,6 +390,12 @@ class PassageListManager(BasePassageList):
 		return True
 
 	display_tag = property(display_tag, lambda self, new: None)
+
+	def tag_look(self):
+		"""Always 0 for the top-level manager."""
+		return 0
+
+	tag_look = property(tag_look, lambda self, new: None)
 
 	@property
 	def can_display_tag(self):
@@ -471,9 +478,11 @@ def get_primary_passage_list_manager(filename=DEFAULT_FILENAME):
 	global _global_passage_list_manager
 	if _global_passage_list_manager is None:
 		singleton_verse_to_passage_entry_map.clear()
+		print "Loading manager with filename",filename
 		_global_passage_list_manager = sqlite.load_manager(filename)
-		import guiconfig
-		guiconfig.mainfrm.on_close += _global_passage_list_manager.close
+		if not _global_passage_list_manager.has_error_on_loading:
+			import guiconfig
+			guiconfig.mainfrm.on_close += _global_passage_list_manager.close
 	return _global_passage_list_manager
 
 class MissingTopicError(Exception):

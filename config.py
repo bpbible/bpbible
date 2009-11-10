@@ -35,18 +35,25 @@ user_data_dir = osutils.get_user_data_dir()
 def get_path_if_exists(path, alternate_path):
 	"""Expands the given path and checks if it exists.
 
-	If it does, then it is returned.
-	Otherwise, alternate_path is returned.
+	If it is an empty path, then alternate_path will be returned.
+	If the path does not exist, then it will be created if possible.
 	"""
 	if "$DATADIR" in path:
 		path = path.replace("$DATADIR", user_data_dir)
-		if not os.path.exists(path):
-			os.makedirs(path)
 
-	if os.path.isdir(path):
-		return path
-	else:
-		return alternate_path
+	if not path:
+		path = alternate_path
+
+	return path
+
+def create_path_if_not_exists(path):
+	if os.path.exists(path):
+		return
+
+	try:
+		os.makedirs(path)
+	except OSError, e:
+		sys.stderr.write(e)
 
 if os.path.isfile(paths_file):
 	try:
@@ -94,6 +101,10 @@ if sword_paths_file[-1] not in "\\/" and sword_paths_file[-1] not in "\\/":
 	sword_paths_file += "/"
 
 sword_paths_file += "sword.conf"
+
+create_path_if_not_exists(data_path)
+create_path_if_not_exists(index_path)
+
 
 raw = False
 
