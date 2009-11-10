@@ -478,7 +478,7 @@ def get_primary_passage_list_manager(filename=DEFAULT_FILENAME):
 	global _global_passage_list_manager
 	if _global_passage_list_manager is None:
 		singleton_verse_to_passage_entry_map.clear()
-		print "Loading manager with filename",filename
+		#print "Loading manager with filename",filename
 		_global_passage_list_manager = sqlite.load_manager(filename)
 		if not _global_passage_list_manager.has_error_on_loading:
 			import guiconfig
