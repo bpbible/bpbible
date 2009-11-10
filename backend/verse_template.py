@@ -49,12 +49,18 @@ class Template(VerseTemplate):
 		return item in self.keys()
 
 class SmartBody(object):
-	whitespace = "<(?:(?:INDENT-BLOCK-(?:START|END)[^>]*>)|(?:br( [^>]*)?>)|(?:p( [^>]*)?>)|(?:!P>))"
-	included_whitespace = "(?:%s)(?:%s|\s)*" % (whitespace, whitespace)
+	indent_block = "(?:INDENT-BLOCK-(?:START|END)[^>]*>)|"
+	whitespace_template = "<(?:%s(?:br( [^>]*)?>)|(?:p( [^>]*)?>)|(?:!P>))"
+	whitespace = whitespace_template % indent_block
+	whitespace_without_indent = whitespace_template % ''
+	included_whitespace_template = "(?:%s)(?:%s|\s)*"
+	included_whitespace = included_whitespace_template % (whitespace, whitespace)
+	included_whitespace_without_indent = included_whitespace_template % (whitespace_without_indent, whitespace_without_indent)
 	vpl_text = '<br class="verse_per_line">'
 	
 	incl_whitespace_start = re.compile("^" + included_whitespace, re.IGNORECASE)
 	incl_whitespace_end = re.compile(included_whitespace + "$", re.IGNORECASE)
+	strip_whitespace_end = re.compile(included_whitespace_without_indent + "$", re.IGNORECASE)
 	incl_whitespace_br_start = re.compile(
 		u"(?P<ws>%s)%s" % (included_whitespace, vpl_text),
 		re.IGNORECASE

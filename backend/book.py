@@ -212,7 +212,7 @@ class Book(object):
 		text += template.finalize(u''.join(verses))
 		text += template.footer.safe_substitute(d)
 		if remove_extra_whitespace:
-			text = SmartBody.incl_whitespace_end.sub(u'', text)
+			text = SmartBody.strip_whitespace_end.sub(u'', text)
 		return text
 		
 			
