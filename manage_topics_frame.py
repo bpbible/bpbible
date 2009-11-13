@@ -594,12 +594,14 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 	def _show_passage_context_menu(self, event):
 		"""Shows the context menu for a passage in the passage list."""
 		self._change_selected_passages()
+		sel = event.GetIndex() != -1
 		menu = wx.Menu()
 		
 		item = menu.Append(wx.ID_ANY, _("&Open"))
 		self.Bind(wx.EVT_MENU,
 				lambda e: self._passage_activated(event),
 				id=item.Id)
+		item.Enable(sel)
 		
 		menu.AppendSeparator()
 		
@@ -607,11 +609,13 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		self.Bind(wx.EVT_MENU,
 				lambda e: self._operations_manager.cut(),
 				id=item.Id)
+		item.Enable(sel)
 
 		item = menu.Append(wx.ID_ANY, _("&Copy"))
 		self.Bind(wx.EVT_MENU,
 				lambda e: self._operations_manager.copy(),
 				id=item.Id)
+		item.Enable(sel)
 
 		item = menu.Append(wx.ID_ANY, _("&Paste"))
 		self.Bind(wx.EVT_MENU,
@@ -624,6 +628,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		self.Bind(wx.EVT_MENU,
 				lambda e: self._delete(),
 				id=item.Id)
+		item.Enable(sel)
 		
 		self.passage_list_ctrl.PopupMenu(menu)
 
@@ -892,6 +897,7 @@ class PassageListCtrl(wx.ListCtrl, ListCtrlAutoWidthMixin):
 
 	def _start_drag(self, event):
 		"""Starts the drag and registers a drop source for the passage."""
+		if event.GetIndex() == -1: return
 		self._drag_index = event.GetIndex()
 		self.dragged_passages = self._topic_frame.selected_passages
 		passage_entry = self._topic_frame.selected_topic.passages[self._drag_index]
@@ -1008,22 +1014,27 @@ class TopicDetailsPanel(xrcTopicDetailsPanel):
 		btn = event.GetEventObject()
 		pos = btn.ClientToScreen((btn.Size[0], 0))
 		position = pos, (-btn.Size[0], btn.Size[1])
-		l = LookPicker(btn, self.topic.name, position)
+		l = LookPicker(btn, self.topic.full_name, position,
+			# put in our parent defaults
+			*(self.topic.resolve_tag_look()+self.topic.parent.resolve_tag_look() + (self.topic.tag_look is None,)))
 		l.Popup()
 		l.look_updated += self.update_tag_look
 	
-	def update_tag_look(self, look=None):
-		if look:
-			assert look is not None
+	def update_tag_look(self, look=None, colour=None, is_parent=False):
+		if look is not None or is_parent:
 			self._operations_manager.set_tag_look(
-					self.topic, look,
+					self.topic, look, colour,
 					combine_action=self.combine_action,
 				)
 			self.combine_action = True
 	
-		self.tag_look.tag_text = self.topic.name
-		self.tag_look.set_scheme(self.topic.tag_look)
-		self.tag_look.Parent.MinSize = self.tag_look.MinSize
+		self.tag_look.tag_text = self.topic.full_name
+		self.tag_look.set_scheme(*self.topic.resolve_tag_look())
+		
+		# add in this offset so it as if we always have a border of 4 - no
+		# nasty resizes
+		offset = 4 - self.tag_look.border
+		self.tag_look.Parent.MinSize = self.tag_look.MinSize + (0, offset * 2)
 		self.tag_look.Parent.Parent.Sizer.Layout()
 
 	def Show(self, show=True):

@@ -19,7 +19,7 @@ class BasePassageList(object):
 	"""
 	contains_passages = True
 	__table__ = "topic"
-	__fields_to_store__ = ["name", "description", "include_subtopic", "order_passages_by", "order_number", "parent", "tag_look"]
+	__fields_to_store__ = ["name", "description", "include_subtopic", "order_passages_by", "order_number", "parent", "tag_look", "tag_colour"]
 
 	def __init__(self, description=""):
 		self._description = description
@@ -44,6 +44,12 @@ class BasePassageList(object):
 		self.order_number = 0
 		self._order_passages_by = "NATURAL_ORDER"
 	
+	def resolve_tag_look(self):
+		while self.tag_look is None:
+			self = self.parent
+
+		return self.tag_look, self.tag_colour
+
 	def add_subtopic(self, subtopic):
 		"""Adds the given sub-topic to the end of the list of sub-topics."""
 		self.insert_subtopic(subtopic, index=None)
@@ -276,11 +282,13 @@ class BasePassageList(object):
 class PassageList(BasePassageList):
 	contains_passages = True
 
-	def __init__(self, name, description="", display_tag=True, tag_look=0):
+	def __init__(self, name, description="", display_tag=True, tag_look=None,
+			tag_colour=0):
 		super(PassageList, self).__init__(description)
 		self._name = name
 		self.display_tag = display_tag
 		self.tag_look = tag_look
+		self.tag_colour = tag_colour
 
 	def set_name(self, name):
 		if name != self._name:
@@ -396,6 +404,12 @@ class PassageListManager(BasePassageList):
 		return 0
 
 	tag_look = property(tag_look, lambda self, new: None)
+
+	def tag_colour(self):
+		"""Always 0 for the top-level manager."""
+		return 0
+
+	tag_colour = property(tag_colour, lambda self, new: None)
 
 	@property
 	def can_display_tag(self):

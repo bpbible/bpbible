@@ -49,36 +49,38 @@ class ManageTopicsOperations(object):
 
 		self._perform_action(DeleteAction, action_item=item)
 
-	def set_tag_look(self, topic, tag_look, combine_action=False):
+	def set_tag_look(self, topic, tag_look, tag_colour, combine_action=False):
 		self.set_topic_details(
 				topic, topic.name, topic.description, topic.order_passages_by,
-				topic.display_tag, tag_look, combine_action=combine_action
+				topic.display_tag, tag_look, tag_colour, combine_action=combine_action
 			)
 
 	def set_display_tag(self, topic, display_tag, combine_action=False):
 		self.set_topic_details(
 				topic, topic.name, topic.description, topic.order_passages_by,
-				display_tag, topic.tag_look, combine_action=combine_action
+				display_tag, topic.tag_look, topic.tag_colour, combine_action=combine_action
 			)
 
 	def set_order_passages_by(self, topic, order_passages_by, combine_action=False):
 		self.set_topic_details(
 				topic, topic.name, topic.description, order_passages_by,
-				topic.display_tag, topic.tag_look, combine_action=combine_action
+				topic.display_tag, topic.tag_look, topic.tag_colour, combine_action=combine_action
 			)
 
 	def set_topic_name(self, topic, name, combine_action=False):
 		self.set_topic_details(topic, name, topic.description, combine_action=combine_action)
 
-	def set_topic_details(self, topic, name, description, order_passages_by=None, display_tag=None, tag_look=None, combine_action=False):
+	def set_topic_details(self, topic, name, description, order_passages_by=None, display_tag=None, tag_look="", tag_colour="", combine_action=False):
 		if display_tag is None:
 			display_tag = topic.display_tag
 		if order_passages_by is None:
 			order_passages_by = topic.order_passages_by
-		if tag_look is None:
+		if tag_look == "":
+			# we compare with a default of "" not None, as None is a valid value
 			tag_look = topic.tag_look
+			tag_colour = topic.tag_colour
 		self._perform_action(SetTopicDetailsAction(
-				self._passage_list_manager, topic, name, description, order_passages_by, display_tag, tag_look
+				self._passage_list_manager, topic, name, description, order_passages_by, display_tag, tag_look, tag_colour
 			), combine_action=combine_action)
 
 	def set_passage_details(self, passage_entry, passage, comment, allow_undo=True, combine_action=False):
@@ -344,7 +346,7 @@ class SetPassageDetailsAction(Action):
 		return SetPassageDetailsAction(self.manager, self.passage_entry, self.old_passage, self.old_comment)
 
 class SetTopicDetailsAction(Action):
-	def __init__(self, manager, topic, name, description, order_passages_by, display_tag, tag_look):
+	def __init__(self, manager, topic, name, description, order_passages_by, display_tag, tag_look, tag_colour):
 		super(SetTopicDetailsAction, self).__init__()
 		self.topic = topic
 		self.name = name
@@ -352,6 +354,7 @@ class SetTopicDetailsAction(Action):
 		self.order_passages_by = order_passages_by
 		self.display_tag = display_tag
 		self.tag_look = tag_look
+		self.tag_colour = tag_colour
 		self.manager = manager
 
 	def combine_action(self, action):
@@ -366,19 +369,21 @@ class SetTopicDetailsAction(Action):
 		self.old_description = self.topic.description
 		self.old_display_tag = self.topic.display_tag
 		self.old_tag_look = self.topic.tag_look
+		self.old_tag_colour = self.topic.tag_colour
 		self.old_order_passages_by = self.topic.order_passages_by
 		self.topic.name = self.name
 		self.topic.description = self.description
 		self.topic.order_passages_by = self.order_passages_by
 		self.topic.display_tag = self.display_tag
 		self.topic.tag_look = self.tag_look
+		self.topic.tag_colour = self.tag_colour
 		self.manager.save_item(self.topic)
 
 	def _get_reverse_action(self):
 		return SetTopicDetailsAction(
 				self.manager, self.topic,
 				self.old_name, self.old_description, self.old_order_passages_by, self.old_display_tag,
-				self.old_tag_look
+				self.old_tag_look, self.old_tag_colour
 			)
 
 class CopyAction(CompositeAction):

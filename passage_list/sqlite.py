@@ -19,7 +19,8 @@ include_subtopic boolean,
 parent integer,
 order_passages_by varchar,
 order_number integer,
-tag_look integer
+tag_look integer,
+tag_colour integer
 );
 
 CREATE TABLE passage(
@@ -33,7 +34,7 @@ order_number integer
 
 "ALTER topic ADD order_passages_by varchar;"
 
-_CURRENT_VERSION = "0.4.6"
+_CURRENT_VERSION = "0.4.6.1"
 
 connection = None
 previous_filename = None
@@ -62,6 +63,9 @@ def load_manager(filename=None):
 	except sqlite3.Error, e:
 		import os
 		manager.has_error_on_loading = True
+		print "SQLITE loading error"
+		import traceback
+		traceback.print_exc()
 	return manager
 
 def _maybe_setup_database(manager):
@@ -95,8 +99,23 @@ def _maybe_upgrade_database(version):
 		print "Upgrading to include look"
 		connection.executescript(
 			"""
+			ALTER TABLE topic ADD COLUMN tag_colour integer;
 			ALTER TABLE topic ADD COLUMN tag_look integer;
-			UPDATE topic SET tag_look = 0;
+			UPDATE topic SET tag_colour = 0;
+			UPDATE topic SET tag_look = NULL;
+
+			UPDATE master_topic_record SET schema_version = '%s';
+			""" % _CURRENT_VERSION)
+
+	elif version < SW.Version("0.4.6.1"):
+		# temporary upgrade bit, remove later
+		print "Upgrading to include look"
+		connection.executescript(
+			"""
+			ALTER TABLE topic ADD COLUMN tag_colour integer;
+			UPDATE topic SET tag_colour = 0;
+			UPDATE topic SET tag_look = NULL;
+
 			UPDATE master_topic_record SET schema_version = '%s';
 			""" % _CURRENT_VERSION)
 
