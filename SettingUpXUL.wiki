@@ -36,3 +36,10 @@ To show the Error Console, run with bpbible -jsconsole.  utils.debug.dprint() an
 If you ever want to change the components in the components directory, they will not be re-registered.  The easiest way to force them to re-register is to change the build ID in the application.ini file, then run bpbible (then please change it back so we don't have spurious changes to it in SVN).
 
 If you are wishing to install an extension in the extensions directory, make sure that it goes in a directory marked by its ID (typically a GUID, find it in install.rdf).  Also change the overlay (in the extension's chrome.manifest) to overlay onto chrome://bpbible/content/bpbible.xul rather than chrome://browser/content/browser.xul (which will work if it is just adding items to the Tools menu), and if it has an update URL that is http:// then remove it or comment it out (again in install.rdf).
+
+= Using BPBible under Mac =
+First download and install xulrunner. Then download the pythonext extension xpi into ~/Downloads. Checkout branches/xul into a directory bpbible-xul. Now run `bpbible-xul/installer/mk_bpbibleapp.sh`. This will create BPBible.app, which should have everything needed into it except the SWORD bindings, which you will need to build for Python 2.6 (32 bit). Once you have built this, copy `Sword.py` and `_Sword.so` into BPBible.app/Content/Resources/pylib. 
+
+You can run it either by calling `open -a BPBible`, double clicking BPBible in the Finder or running BPBible.app/Content/MacOS/xulrunner (if you want a console).
+
+The files checked out from SVN are accessible in BPBible.app/Content/Resources and can be edited as desired.
