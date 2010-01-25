@@ -24,7 +24,7 @@ BPBible works mostly under Mac. Certain features, like the quickselectors, do no
 
 == Using the binaries under Linux ==
 
-You can try downloading the bindings at http://sites.google.com/site/jmmorganswordmodules/Home/sword-1.6-bindings.tar.bz2 (for Python 2.6).  Extract the bindings into your Python site dir.
+You can try downloading the bindings at http://sites.google.com/site/jmmorganswordmodules/Home/sword-1.6-bindings.tar.bz2 (for Python 2.6, 32-bit).  Extract the bindings into your Python site dir.
 
 == Building the SWIG bindings ==
 The SWIG bindings are located in the bindings/swig directory of the SWORD
