@@ -53,6 +53,9 @@ class ModuleTree(FilterableTree):
 		self.tree.Unbind(wx.EVT_TREE_DELETE_ITEM)
 		
 	def on_version_tree(self, item):
+		if not item:
+			return
+
 		item_data = self.tree.GetPyData(item).data
 
 		parent = self.tree.GetItemParent(item)
