@@ -848,7 +848,7 @@ class MainFrame(wx.Frame, AuiLayer):
 			
 			menu = self.make_menu(items)
 
-			self.MenuBar.Insert(2+idx, menu, frame.title)
+			self.MenuBar.Insert(2+idx, menu, "&" + frame.title)
 
 		if not is_debugging():
 			for idx, (menu, menu_name) in enumerate(self.MenuBar.Menus):
