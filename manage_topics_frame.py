@@ -49,6 +49,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		self.Size = (725, 590)
 		self.passage_list_splitter.SashGravity = 1.0
 		wx.CallAfter(self.passage_list_splitter.SetSashPosition, 340)
+		self._set_selected_topic(self._manager)
 
 	def _bind_events(self):
 		self.Bind(wx.EVT_CLOSE, self._on_close)
@@ -409,7 +410,6 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 
 	def save_search_results(self, search_string, search_results):
 		assert search_string
-		self._set_selected_topic(self._manager)
 		self.topic_tree.SetFocus()
 		name = _(u"Search: %s") % search_string
 		description = _(u"Results from the search `%s'.") % search_string
