@@ -307,10 +307,12 @@ class DisplayFrame(TooltipDisplayer, HtmlSelectableWindow):
 						data = bible.GetFootnoteData(module, passage, value, "body")
 					else:
 						reflist = reflist.split("; ")
-						#get refs
-						verselist = bible.GetReferencesFromMod(module, reflist)
+						# get refs - not from module as module is the module
+						# the cross-reference is in - may be a
+						# commentary, for example - use our primary bible
+						verselist = bible.GetReferences(reflist)
 						data += '<hr>'.join(
-							process_html_for_module(module, ref)
+							process_html_for_module(bible.mod, ref)
 							for ref in verselist
 						)
 
