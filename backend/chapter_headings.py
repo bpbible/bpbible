@@ -56,7 +56,7 @@ def get_chapter_headings(chapter):
 
 		headings += ((item, text) for heading, text in re.findall(
 			'(<h6 class="heading" canonical="[^"]*">(.*?)</h6>)', 
-			content, re.U))
+			content, re.U) if text)
 	
 	biblemgr.restore_state()
 	version_headings[chapter] = headings
