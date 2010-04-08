@@ -14,6 +14,7 @@ from topic_selector import TopicSelector
 from swlib.pysw import VerseList
 from util.i18n import N_
 from util import osutils
+from util.observerlist import ObserverList
 
 class ManageTopicsFrame(xrcManageTopicsFrame):
 	def __init__(self, parent):
@@ -55,7 +56,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		self.Bind(wx.EVT_CLOSE, self._on_close)
 		guiutil.add_close_window_esc_accelerator(self, self.Close)
 
-		self.topic_tree.Bind(wx.EVT_TREE_SEL_CHANGED, self._selected_topic_changed)
+		self.topic_tree.on_selection_changed += self._selected_topic_changed
 		self.topic_tree.Bind(wx.EVT_TREE_ITEM_GETTOOLTIP, self._get_topic_tool_tip)
 		self.topic_tree.Bind(wx.EVT_TREE_END_LABEL_EDIT, self._end_topic_label_edit)
 		self.topic_tree.Bind(wx.EVT_TREE_BEGIN_LABEL_EDIT, self._begin_topic_label_edit)
@@ -122,17 +123,15 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		self.topic_tree.EnsureVisible(tree_item)
 		return tree_item
 
-	def _selected_topic_changed(self, event):
+	def _selected_topic_changed(self, item):
 		# Topic nodes are selected as they are dragged past, but we shouldn't
 		# change the selected topic and passage list until the dragging has
 		# been finished.
 		if self.topic_tree._dragging:
-			event.Skip()
 			return
 
 		selected_topic = self._get_tree_selected_topic()
 		if selected_topic is None:
-			event.Skip()
 			return
 
 		self.selected_topic = selected_topic
@@ -140,7 +139,6 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		self._setup_order_passages_by()
 
 		self.Title = self._get_title()
-		event.Skip()
 
 	def get_selected_topic(self):
 		return self._selected_topic
@@ -741,6 +739,13 @@ class TopicTree(wx.TreeCtrl):
 		self._topic_frame = topic_frame
 		super(TopicTree, self).__init__(*args, **kwargs)
 		self.Bind(wx.EVT_TREE_BEGIN_DRAG, self.on_begin_drag)
+
+		# bind to the tree selection changing, and then punt off from there
+		# we do this because non-msw platforms don't fire events for
+		# programmatic tree selection changed, and we want this uniformly to
+		# do it
+		self.Bind(wx.EVT_TREE_SEL_CHANGED, self._selection_changed)
+		self.on_selection_changed = ObserverList()
 		self._drag_item = None
 		self._dragging = DRAGGING_NONE
 		self.SetDropTarget(TopicPassageDropTarget(self))
@@ -876,6 +881,20 @@ class TopicTree(wx.TreeCtrl):
 				children.extend(self._get_item_children(child, True))
 			child, cookie = self.GetNextChild(item, cookie)
 		return children
+	
+	def SelectItem(self, item):
+		# we do this because non-msw platforms don't fire events for
+		# programmatic tree selection changed, and we want this uniformly to
+		# do it
+		res = super(TopicTree, self).SelectItem(item)
+		if not osutils.is_msw():
+			self.on_selection_changed(item)
+
+		return res
+	
+	def _selection_changed(self, event):
+		event.Skip()
+		self.on_selection_changed(event.Item)
 
 class PassageListCtrl(wx.ListCtrl, ListCtrlAutoWidthMixin):
 	"""A list control for the passage list in the topic manager.
