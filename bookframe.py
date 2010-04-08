@@ -64,7 +64,7 @@ class BookFrame(AUIDisplayFrame):
 
 
 	@guiutil.frozen
-	def SetReference(self, ref, context=None, raw=None):
+	def SetReference(self, ref, context="", raw=None):
 		if raw is None:
 			raw = config.raw
 		self.reference = ref
@@ -505,7 +505,7 @@ class DictionaryFrame(BookFrame):
 		guiconfig.mainfrm.UpdateDictionaryUI(ref)
 
 	@guiutil.frozen
-	def SetReference(self, ref, context=None, raw=None):
+	def SetReference(self, ref, context="", raw=None):
 		if raw is None:
 			raw = config.raw
 

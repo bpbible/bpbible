@@ -91,7 +91,7 @@ class GenBookFrame(BookFrame):
 			self.genbooktree.tree.DeleteChildren(self.genbooktree.tree.RootItem)
 			self.genbooktree.value = None
 
-	def SetReference(self, ref, context=None):
+	def SetReference(self, ref, context=""):
 		if isinstance(ref, TK):
 			ref = TK(ref)
 		self.reference = ref

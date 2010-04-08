@@ -266,7 +266,7 @@ class BibleFrame(VerseKeyedFrame):
 		return is_available
 	
 	@guiutil.frozen
-	def SetReference(self, ref, context=None, raw=None, y_pos=None):
+	def SetReference(self, ref, context="", raw=None, y_pos=None):
 		"""Sets reference. This is set up to be an observer of the main frame,
 		so don't call internally. To set verse reference, use notify"""
 		if raw is None:

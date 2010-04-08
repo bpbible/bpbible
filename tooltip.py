@@ -88,7 +88,9 @@ class TooltipBaseMixin(object):
 
 		ref = url.getHostName()
 		if ref:
-			references = [ref]
+			# split up the references in case one OSIS reference encodes
+			# multiple ones - issue 141
+			references = re.split("[;,]", ref)
 		else:
 			values = url.getParameterValue("values")
 			if not values:
