@@ -1,6 +1,6 @@
 import wx
 import sys
-from util.debug import dprint, WARNING
+from util.debug import dprint, WARNING, ERROR
 from util import i18n
 
 mylocale = None
