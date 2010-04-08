@@ -42,7 +42,8 @@ def initialize():
 		language_workaround_upto += 1
 		wx.Locale.AddLanguage(lang_info)
 		mylocale = wx.Locale(lang_info.Language)
-		assert mylocale.IsOk()
+		if not mylocale.IsOk():
+			dprint(ERROR, "Couldn't set locale or even english!!!! Bad things may happen!!!")
 		
 
 	mylocale.AddCatalogLookupPathPrefix(i18n.localedir)
