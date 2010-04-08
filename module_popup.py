@@ -12,7 +12,7 @@ class PopupList(virtuallist.VirtualListBox):
 		super(PopupList, self).__init__(parent)
 		self.book = book
 		self.modules = book.GetModules()
-		self.set_data(list(x.Name() for x in self.modules))
+		self.set_data(list("%s - %s" % (x.Name(), x.Description()) for x in self.modules))
 		for idx, item in enumerate(self.modules):
 			if item == book.mod:
 				self.EnsureVisible(idx)
@@ -68,7 +68,14 @@ class ModulePopup(wx.PopupTransientWindow):
 		
 
 
-		self.box.Size = self.box.GetBestSize() + (50, 200)
+		s = self.box.GetBestSize() + (50, 200)
+
+		# don't display empty whitespace at the end of the list unless needed
+		bottom = self.box.GetItemRect(self.box.ItemCount - 1).Bottom + 1
+		if bottom < s[1]:
+			s[1] = bottom
+
+		self.box.Size = s
 
 		panel.ClientSize = self.box.Size
 		size_combo = 0
