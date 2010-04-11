@@ -20,6 +20,7 @@ class DummyStemmer(object):
 
 			if words_to_search_for is None:
 				dprint(WARNING, "Stemmed word not found", word, word.lower())
+				words_to_search_for = [word]
 		else:
 			# don't try using the stemming data, as it might lead to
 			# inconsistencies
