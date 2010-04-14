@@ -145,11 +145,6 @@ def is_release():
 	return release_settings["is_released"]
 
 def show_splashscreen():
-	# the splashscreen isn't working under GTK (inhibits application
-	# startup)
-	if osutils.is_gtk():
-		return False
-
 	if ("--no-splashscreen", "") in opts:
 		return False
 
