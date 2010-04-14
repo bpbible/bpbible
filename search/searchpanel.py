@@ -16,8 +16,8 @@ import config
 import guiconfig
 import index
 from index import COMBINED
-from index import SearchException, SpellingException, RemoveDuplicates
-from search.query_parser import separate_words
+from index import SearchException, RemoveDuplicates
+from search.query_parser import separate_words, SpellingException
 from search.stemming import get_stemmer
 
 from search.highlighted_frame import HighlightedDisplayFrame
