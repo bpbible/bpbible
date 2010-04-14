@@ -292,10 +292,10 @@ class Tooltip(TooltipBaseMixin, tooltip_parent):
 				wx.FRAME_NO_TASKBAR   | 
 				wx.FRAME_FLOAT_ON_PARENT
 			)
-			super(Tooltip, self).__init__(parent, style=style,
+			super(Tooltip, self).__init__(parent, style=self.style,
 									title=_("Tooltip"))
 		else:
-			super(Tooltip, self).__init__(parent, style)
+			super(Tooltip, self).__init__(parent, self.style)
 			
 		
 		self.interval = 400
