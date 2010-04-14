@@ -16,8 +16,6 @@ import re
 import string
 import cPickle
 from util.debug import *
-from search.query_parser import removeformatting, separate_words
-from search.query_parser import SpellingException
 from search.indexed_text import (
 	IndexedText, VerseIndexedText, DictionaryIndexedText
 )
@@ -238,8 +236,8 @@ class Index(object):
 		stemmer = get_stemmer(self.book.mod)
 		stem_map = {}
 		for word, stemmed in zip(wordlist, stemmer.stemWords(wordlist)):
-			if word in stem_map and stemmed not in stem_map:
-				print word
+			#if word in stem_map and stemmed not in stem_map:
+			#	print word
 			if stemmed in stem_map:
 				stem_map[stemmed].append(word)
 
