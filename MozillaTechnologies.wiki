@@ -42,6 +42,8 @@ RDF is used in Mozilla as a persistent storage mechanism for configuration files
 
 It is also used in data sources, where it can be used to create a UI with RDF templates.  Things like the Places API and History are also available as RDF data sources, and this allows any UI using the data source to be automatically updated when the data source is updated.  Some of our things might be worth exposing as data sources.
 
+However, RDF can not (it appears) be used in an editable way with editable trees.  This rules out its use in places like Topic Management.
+
 Mozilla RDF homepage at https://developer.mozilla.org/en/RDF.
 
 ==Internationalisation==
@@ -70,3 +72,5 @@ Possibly relevant articles:
   * https://developer.mozilla.org/En/The_Thread_Manager
   * https://developer.mozilla.org/En/NSPR_API_Reference/Threads
   * https://developer.mozilla.org/En/Code_snippets/Threads
+
+Nowadays, Mozilla seems to prefer recommending web workers rather than using threads raw.
