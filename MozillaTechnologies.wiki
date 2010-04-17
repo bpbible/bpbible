@@ -12,6 +12,8 @@ Some of the technology is very good, so we really need to evaluate it and to dec
 
 Note: This is particularly talking about _Mozilla-specific_ functionality.  I am assuming that it is not necessary to discuss using standard web technologies such as HTML and CSS and Javascript (generally including Mozilla specific extensions to these), nor is it necessary to discuss core Mozilla technologies such as XUL which we will not have a Mozilla application without.
 
+We should also use the technologies well if we use them.  For example, check performance best practices (https://wiki.mozilla.org/Performance/Addons/BestPractices).
+
 = Technologies =
 
 ==Extensions/Overlays==
