@@ -108,6 +108,7 @@ class BookFrame(AUIDisplayFrame):
 			ord("N"): (lambda: self.search_results_move(1)),
 			# More Vi emulation.  Shift-N = previous search result.
 			(ord("N"), wx.MOD_SHIFT): (lambda: self.search_results_move(-1)),
+			(ord("G"), wx.MOD_CMD): self.focus_reference_textbox,
 		})
 
 		if self.use_quickselector:
@@ -229,8 +230,19 @@ class BookFrame(AUIDisplayFrame):
 
 	def get_frame_for_search(self):
 		return self
-		
 
+	def focus_reference_textbox(self):
+		textbox = self.get_reference_textbox()
+		if textbox is None:
+			return
+
+		textbox.SetFocus()
+		if hasattr(textbox, "SetSelection"):
+			textbox.SetSelection(-1, -1)
+
+	def get_reference_textbox(self):
+		return None
+		
 	def go_quickly(self):
 		qs = QuickSelector(self.get_window(), 
 			title=_("Go to reference"))
@@ -428,6 +440,9 @@ class CommentaryFrame(LinkedFrame):
 
 		self.gui_reference.SetValue(pysw.internal_to_user(ref))
 		self.gui_reference.currentverse = ref
+
+	def get_reference_textbox(self):
+		return self.gui_reference
 		
 class DictionaryFrame(BookFrame):
 	id = N_("Dictionary")
@@ -527,6 +542,9 @@ class DictionaryFrame(BookFrame):
 
 	def SetReference_from_string(self, string):
 		wx.CallAfter(guiconfig.mainfrm.UpdateDictionaryUI, string)
+
+	def get_reference_textbox(self):
+		return self.dictionary_list.text_entry
 
 #xrc_classes = [DictionaryFrame, CommentaryFrame, BookFrame, BibleFrame]
 #

@@ -260,3 +260,5 @@ class GenBookFrame(BookFrame):
 		k.text = ref		
 		return k.breadcrumb(delimiter=">")
 
+	def get_reference_textbox(self):
+		return self.genbooktree

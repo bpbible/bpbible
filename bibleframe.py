@@ -74,6 +74,12 @@ class BibleFrame(VerseKeyedFrame):
 
 		items = (
 			(MenuItem(
+				_("Go to Reference"), 
+				self.focus_reference_textbox, 
+				accelerator="Ctrl-L",
+				doc=_("Go to a reference"),
+			), IN_MENU),
+			(MenuItem(
 				_("Harmony"), 
 				self.show_harmony, 
 				accelerator="Ctrl-H",
@@ -155,6 +161,9 @@ class BibleFrame(VerseKeyedFrame):
 			ord("C"): self.comment_on_verses,
 		})
 		return actions
+
+	def get_reference_textbox(self):
+		return guiconfig.mainfrm.bibleref
 	
 	def tooltip_quickly(self):
 		qs = QuickSelector(self.get_window(), 
