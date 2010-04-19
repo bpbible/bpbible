@@ -159,6 +159,8 @@ class BibleFrame(VerseKeyedFrame):
 			(ord("T"), wx.MOD_SHIFT): self.tooltip_quickly,
 			ord("T"): self.tag_verses,
 			ord("C"): self.comment_on_verses,
+			(wx.WXK_LEFT, wx.MOD_ALT): self.history_go_back,
+			(wx.WXK_RIGHT, wx.MOD_ALT): self.history_go_forward,
 		})
 		return actions
 
@@ -237,6 +239,14 @@ class BibleFrame(VerseKeyedFrame):
 		randomnum = random.randint(1, 31102)
 		ref = VK("Gen 1:%d" % randomnum).text
 		self.notify(ref, source=RANDOM_VERSE)
+
+	def history_go_back(self):
+		if guiconfig.mainfrm.history.can_back():
+			guiconfig.mainfrm.move_history(-1)
+
+	def history_go_forward(self):
+		if guiconfig.mainfrm.history.can_forward():
+			guiconfig.mainfrm.move_history(1)
 	
 	def notify(self, reference, source=BIBLEFRAME):
 		#event = BibleEvent(ref=reference, source=source)
