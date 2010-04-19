@@ -253,6 +253,7 @@ class AuiLayer(object):
 		self.aui_uses_provider = False
 		self.maximized_pane_direction = None
 		
+		self.needs_showing_event = {}
 		self.on_render = ObserverList()
 		
 		try:
@@ -702,7 +703,11 @@ class AuiLayer(object):
 		for pane in self.aui_mgr.GetAllPanes():
 			if pane.IsShown():
 				if pane.name in self.aui_callbacks:
-					self.aui_callbacks[pane.name](True)
+					# only give an event if we need to - if we were already
+					# showing, this will have been set to false in
+					# update_all_aui_menu_items
+					if self.needs_showing_event.get(pane.name, True):
+						self.aui_callbacks[pane.name](True)
 		wx.CallAfter(self.update_all_aui_menu_items)
 	
 
@@ -711,7 +716,7 @@ class AuiLayer(object):
 		
 		maximized = self.get_maximized_pane()
 		
-		if maximized and not pane.IsToolbar(): 
+		if maximized and not pane.IsToolbar() and not pane.IsFloating(): 
 			self.restore_maximized_pane(maximized)
 		assert pane.IsOk(), panel
 		#if not toggle and pane.IsMaximized():
@@ -732,6 +737,7 @@ class AuiLayer(object):
 
 	def restore_maximized_pane(self, pane):
 		self.restore_pane_direction(pane)
+		self.pane_restore_hack()
 		self.aui_mgr.RestoreMaximizedPane()
 		self.on_changed()
 
@@ -741,7 +747,7 @@ class AuiLayer(object):
 		for item in self.windows_menu.MenuItems:
 			if item.Label == pane_name:
 				item.Check(toggle)
-	
+		
 	def update_all_aui_menu_items(self):
 
 		menus = self.windows_menu, self.toolbar_menu
@@ -753,8 +759,24 @@ class AuiLayer(object):
 				pane = self.aui_mgr.GetPane(self.pane_titles[item.Label])
 				assert pane.IsOk(), item.Label
 				item.Check(pane.IsShown())
+				self.needs_showing_event[pane.name] = not pane.IsShown()
 	
+	def pane_restore_hack(self):
+		for item in reversed(self.windows_menu.MenuItems):
+			if item.IsSeparator():
+				break
+	
+			pane = self.aui_mgr.GetPane(self.pane_titles[item.Label])
+			assert pane.IsOk(), item.Label
+
+			### HACK around http://trac.wxwidgets.org/ticket/11385
+			# set the saved hidden state to whether it was shown,
+			# otherwise it will show them regardless
+			if pane.IsFloating():
+				pane.SetFlag(pane.savedHiddenState, not pane.IsShown())
+
 	def on_pane_restore(self, event):
+		self.pane_restore_hack()
 		pane = event.GetPane()
 		self.restore_pane_direction(pane)
 		wx.CallAfter(self.update_all_aui_menu_items)
