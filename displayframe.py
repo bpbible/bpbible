@@ -19,7 +19,7 @@ from gui import htmlbase
 from gui.menu import MenuItem, Separator
 from gui.htmlbase import HtmlSelectableWindow, convert_language, convert_lgs
 from gui import guiutil
-from util.debug import dprint, WARNING, TOOLTIP
+from util.debug import dprint, WARNING, TOOLTIP, MESSAGE
 from protocols import protocol_handler
 from events import LINK_CLICKED
 
@@ -382,6 +382,8 @@ class DisplayFrame(TooltipDisplayer, HtmlSelectableWindow):
 					biblemgr.restore_state()
 				biblemgr.bible.templatelist.pop()
 
+		elif action == "showImage":
+			return
 		else:
 			dprint(WARNING, "Unknown action", action, href)
 			return
@@ -437,6 +439,18 @@ class DisplayFrame(TooltipDisplayer, HtmlSelectableWindow):
 			if biblemgr.dictionary.ModuleExists(type):
 				guiconfig.mainfrm.set_module(type, biblemgr.dictionary)
 				wx.CallAfter(guiconfig.mainfrm.UpdateDictionaryUI, value)
+
+
+		if action=="showImage":
+			value = url.getParameterValue("value") # path to image
+			if not value:
+				dprint(WARNING, "No URL value?", href)
+				return
+			else:
+				assert value.startswith("file:")
+				filepath = value[5:]
+				dprint(MESSAGE, "Opening image", filepath)
+				osutils.system_open_file(filepath)
 
 	@staticmethod
 	def on_link_clicked_bible(frame, href, url):

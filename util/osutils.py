@@ -27,6 +27,18 @@ def is_win2000():
 	
 	return False
 
+def system_open_file(filepath):
+	if is_mac():
+		o = "open"
+	elif is_gtk():
+		o = "xdg-open"
+	else:
+		# the first argument if in quotes becomes the title of the
+		# command prompt it will then launch - ugh
+		# so put something in quotes at the start to pacify it
+		o = 'start "title"'
+	os.system('%s "%s"' % (o, filepath))
+
 def get_user_data_dir():
 	"""Gets the user data directory for BPBible for the current platform.
 
