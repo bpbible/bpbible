@@ -61,17 +61,18 @@ def get_colours(b, scheme=original):
 	# original, b=0.5
 	return convert(scheme(b))
 
+# (Colour transform, use white text, default look to use with this colour)
 colours = [
-	(0.5, 0),
-	(0.6, 1),
-	(0.7, 1),
-	(0.8, 1),
-	(0.9, 1),
-	(0.0, 1),
-	(0.1, 0),
-	(0.2, 0),
-	(0.3, 0),
-	(0.4, 0),
+	(0.5, 0, 0),
+	(0.6, 1, 1),
+	(0.7, 1, 1),
+	(0.8, 1, 0),
+	(0.9, 1, 0),
+	(0.0, 1, 1),
+	(0.1, 0, 1),
+	(0.2, 0, 1),
+	(0.3, 0, 1),
+	(0.4, 0, 1),
 ]
 
 # our list of looks
@@ -220,14 +221,11 @@ class PassageTagLook(wx.PyWindow):
 		self.set_scheme(look, colour)
 		self.Bind(wx.EVT_PAINT, self.on_paint)
 		self.SetCursor(wx.StockCursor(wx.CURSOR_HAND))
-		f = self.Font
-		#f.SetWeight(wx.FONTWEIGHT_BOLD)
-		self.Font = f#wx.FFont(9, wx.FONTFAMILY_ROMAN, wx.FONTFLAG_BOLD)
 
 	def set_scheme(self, look, colour):
 		self.look, self.colour = look, colour
 		self.look_scheme, self.white_text, self.border = looks[look]
-		self.colour_id, white_text = colours[colour]
+		self.colour_id, white_text, default_look = colours[colour]
 		self.white_text = self.white_text and white_text
 		use_colours(self.colour_id, self.look_scheme)
 		self._create_bitmap()
@@ -375,20 +373,23 @@ class PassageTag(PassageTagLook):
 		self.Parent.tooltip.MouseOut(None)
 
 class Border(wx.Panel):
-	border_width = 5
-	def __init__(self, parent):
+	DEFAULT_BORDER_WIDTH = 5
+	def __init__(self, parent, border_width=DEFAULT_BORDER_WIDTH, rounded_rectangle_radius=5):
 		super(Border, self).__init__(parent)
 		self.Bind(wx.EVT_PAINT, self.on_paint)
 		self.Sizer = wx.BoxSizer(wx.HORIZONTAL)
 		self.border = False
+		self.border_width = border_width
+		self.rounded_rectangle_radius = rounded_rectangle_radius
 
 	def on_paint(self, event):
 		dc = wx.PaintDC(self)
 		if self.border:
 			dc.Pen = wx.Pen(wx.SystemSettings_GetColour(wx.SYS_COLOUR_GRAYTEXT))
-			t = 2 - self.w
-			dc.DrawRoundedRectangle(t, t, 
-				self.Size[0] - 2 * t, self.Size[1] - 2 * t, 5)
+			top = left = self.border_width - self.w - 3
+			width = self.Size[0] - 2 * left
+			height = self.Size[1] - 2 * top
+			dc.DrawRoundedRectangle(top, left, width, height, self.rounded_rectangle_radius)
 	
 	def set_child(self, child):
 		self.Sizer.Add(child, 0, wx.ALL)
@@ -397,6 +398,17 @@ class Border(wx.Panel):
 	def update_width(self, w):
 		self.w = w - 2
 		self.Sizer.Children[0].Border = self.border_width - self.w
+
+class ColourRect(wx.PyWindow):
+	def __init__(self, parent, colour=0, *args, **kwargs):
+		super(ColourRect, self).__init__(parent, *args, **kwargs)
+		self.SetCursor(wx.StockCursor(wx.CURSOR_HAND))
+		self.look = looks[3]
+		self.border = self.look[1]
+		self.colour = colour
+		_rgbSelectOuter, _rgbSelectInner, _rgbSelectTop, _rgbSelectBottom = get_colours(colours[self.colour][0], self.look[0])
+		self.BackgroundColour = _rgbSelectInner
+		self.Size = (12, 12)
 
 class LookPicker(wx.PopupTransientWindow):
 	COLUMNS = 5
@@ -410,52 +422,64 @@ class LookPicker(wx.PopupTransientWindow):
 		self.using_parent_look = using_parent
 
 		panel = wx.Panel(self, style=wx.RAISED_BORDER)
-		s1 = wx.FlexGridSizer(3, 2, 3, 6)
-		t = wx.StaticText(panel, label=_("Use Parent Look:"))
-		t1 = wx.StaticText(panel, label=_("Appearance:"))
-		t2 = wx.StaticText(panel, label=_("Colour:"))
-		f = t.Font
-		f.SetWeight(wx.FONTWEIGHT_BOLD)
-		t2.Font = t1.Font = t.Font = f
+		main_sizer = wx.FlexGridSizer(6, 1, 3, 6)
+		use_parent_look_label = wx.StaticText(panel, label=_("Use Parent Look:"))
+		colour_label = wx.StaticText(panel, label=_("Colour:"))
+		look_label = wx.StaticText(panel, label=_("Appearance:"))
+		label_font = use_parent_look_label.Font
+		label_font.Weight = wx.FONTWEIGHT_BOLD
+		colour_label.Font = look_label.Font = use_parent_look_label.Font = label_font
 		
-		pp = Border(panel)
-		p = PassageTagLook(pp, text, 
+		# Use parent look.
+		use_parent_look_tag_border = Border(panel)
+		use_parent_look_tag = PassageTagLook(use_parent_look_tag_border, text, 
 			look=self.parent_look, colour=self.parent_colour)
-		pp.set_child(p)
-		self.parent = p
-		s1.Add(t, 0, wx.CENTRE)
-		s1.Add(pp)
+		use_parent_look_tag_border.set_child(use_parent_look_tag)
+		self.parent = use_parent_look_tag
 
-		p.Bind(wx.EVT_LEFT_UP, self.on_select_parent_look)
-		self.looks = []
-		look_sizer = wx.GridSizer(len(looks)/4, 4, 3, 3)
-		for look in range(len(looks)):
-			pp = Border(panel)
-			p = PassageTagLook(pp, text, look=look, colour=self.colour)
-			pp.set_child(p)
-			self.looks.append(p)
-			look_sizer.Add(pp, 0, wx.ALIGN_CENTRE)
+		use_parent_look_tag.Bind(wx.EVT_LEFT_UP, self.on_select_parent_look)
 
-			p.Bind(wx.EVT_LEFT_UP, self.on_select_look)
-
+		# Choose colour.
 		self.colours = []
-		colour_sizer = wx.GridSizer(len(colours)/self.COLUMNS, self.COLUMNS, 3, 3)
+		colour_sizer = wx.GridSizer(len(colours)/self.COLUMNS, self.COLUMNS, 0, 0)
 		for colour in range(len(colours)):
-			pp = Border(panel)
-			p = PassageTagLook(pp, text, look=self.look, colour=colour)
-			pp.set_child(p)
-			self.colours.append(p)
-			colour_sizer.Add(pp, 0, wx.ALIGN_CENTRE)
+			colour_rect_border = Border(panel, border_width=4, rounded_rectangle_radius=3)
+			colour_rect = ColourRect(colour_rect_border, colour=colour)
+			colour_rect_border.set_child(colour_rect)
+			self.colours.append(colour_rect)
+			colour_sizer.Add(colour_rect_border, 0, wx.ALIGN_CENTRE)
 
-			p.Bind(wx.EVT_LEFT_UP, self.on_select_colour)
+			colour_rect.Bind(wx.EVT_LEFT_UP, self.on_select_colour)
 
-		s1.Add(t1)
-		s1.Add(look_sizer)
-		s1.Add(t2)
-		s1.Add(colour_sizer)
+		# Choose looks.
+		self.looks = []
+		look_sizer = wx.GridSizer(len(looks)/2, 2, 3, 3)
+		for look in range(len(looks)):
+			look_tag_border = Border(panel)
+			look_tag = PassageTagLook(look_tag_border, text, look=look, colour=self.colour)
+			look_tag_border.set_child(look_tag)
+			self.looks.append(look_tag)
+			look_sizer.Add(look_tag_border, 0, wx.ALIGN_CENTRE)
+
+			look_tag.Bind(wx.EVT_LEFT_UP, self.on_select_look)
+
+		def AddItemWithPadding(item, padding):
+			new_sizer = wx.BoxSizer(wx.HORIZONTAL)
+			new_sizer.AddSpacer(padding)
+			new_sizer.Add(item)
+			new_sizer.AddSpacer(padding)
+			main_sizer.Add(new_sizer)
+
+		main_sizer.Add(use_parent_look_label, 0, wx.CENTRE)
+		AddItemWithPadding(use_parent_look_tag_border, 5)
+		main_sizer.Add(colour_label)
+		AddItemWithPadding(colour_sizer, 5)
+		main_sizer.Add(look_label)
+		AddItemWithPadding(look_sizer, 5)
+
 		self.update_borders()
 
-		panel.SetSizer (s1)
+		panel.SetSizer(main_sizer)
 		o = wx.BoxSizer(wx.HORIZONTAL)
 		o.Add(panel, 1, wx.GROW)
 		self.SetSizer(o)
@@ -478,9 +502,11 @@ class LookPicker(wx.PopupTransientWindow):
 
 	def on_select_colour(self, event):
 		self.using_parent_look = False
-		t = event.EventObject
+		colour_rect = event.EventObject
 		#self.Dismiss()
-		self.colour = t.colour
+		self.colour = colour_rect.colour
+		# Set the look to the default look for that colour.
+		self.look = colours[self.colour][2]
 		for item in self.looks:
 			item.set_scheme(item.look, self.colour)
 
@@ -492,12 +518,11 @@ class LookPicker(wx.PopupTransientWindow):
 
 	def on_select_look(self, event):
 		self.using_parent_look = False
-		t = event.EventObject
+		look_passage_tag = event.EventObject
 		#self.Dismiss()
-		self.look = t.look
+		self.look = look_passage_tag.look
 		self.update_borders()
 		for item in self.colours:
-			item.set_scheme(self.look, item.colour)
 			item.Parent.update_width(item.border)
 		self.update_borders()
 		self.Fit()
@@ -506,17 +531,13 @@ class LookPicker(wx.PopupTransientWindow):
 
 	def on_select_parent_look(self, event):
 		self.using_parent_look = True
-		t = event.EventObject
+		parent_look_passage_tag = event.EventObject
 		#self.Dismiss()
-		self.colour = t.colour
-		self.look = t.look
+		self.colour = parent_look_passage_tag.colour
+		self.look = parent_look_passage_tag.look
 		self.update_borders()
 		for item in self.looks:
 			item.set_scheme(item.look, self.colour)
-
-		for item in self.colours:
-			item.set_scheme(self.look, item.colour)
-			item.Parent.update_width(item.border)
 
 		self.update_borders()
 		self.Fit()
