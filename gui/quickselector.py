@@ -20,134 +20,47 @@ def set_theme(theme):
 	radius, opacity, back_colour, text_colour = themes[theme]
 
 set_theme(theme)
-class Line(wx.Window):
-	def __init__(self, *args, **kwargs):
-		super(Line, self).__init__(*args, **kwargs)
-		self.Bind(wx.EVT_PAINT, self.on_paint)
-		
-	def on_paint(self, event):
-		dc = wx.PaintDC(self)
-		dc.Background = wx.Brush((168,168,168))
-		dc.Clear()
 
-class TextPanel(wx.PyPanel):
-	def __init__(self, parent, style=0):
+class TextPanel(wx.TextCtrl):#PyPanel):
+	def __init__(self, parent, style=wx.TE_CENTRE|wx.TE_PROCESS_ENTER):
 		super(TextPanel, self).__init__(parent, style=style)
-		self.Bind(wx.EVT_ERASE_BACKGROUND, lambda evt:None)
-		self.Bind(wx.EVT_PAINT, self.on_paint)
 		self.Bind(wx.EVT_KILL_FOCUS, self.end_parent_modal)
-		self.text = ""
-		self.insertion_point = 0
 		self.Bind(wx.EVT_CHAR, self.add_letter)
-		#self.font = 
-		self.font = wx.Font(20, wx.SWISS, wx.NORMAL, wx.FONTWEIGHT_BOLD, False)
+		self.Bind(wx.EVT_TEXT_ENTER, self.on_enter)
+		self.SetFont(wx.Font(30, wx.SWISS, wx.NORMAL, wx.FONTWEIGHT_BOLD, False))
 		dc = wx.MemoryDC()
 		bmp = wx.EmptyBitmap(1, 1)
 		dc.SelectObject(bmp)
-		dc.SetFont(self.font)
+		dc.SetFont(self.Font)
 		w, self.height = dc.GetTextExtent(string.letters)
-		w = dc.GetTextExtent("a")[0]
-		self.w = w
-		self.Caret = wx.Caret(self, (w,3))
-		self.Caret.Show()
+		self.MinSize = 1, self.height
+#		w = dc.GetTextExtent("a")[0]
+#		self.w = w
+#		self.Caret = wx.Caret(self, (w,3))
+#		self.Caret.Show()
 	
 	def end_parent_modal(self, event):
 		event.Skip()
-		wx.CallAfter(self.Parent.EndModal, wx.CANCEL)
+		wx.CallAfter(self.TopLevelParent.EndModal, wx.CANCEL)
 
-	def on_paint(self, event):
-		dc = wx.PaintDC(self)
-		dc.Background = wx.Brush(self.BackgroundColour)
-		dc.SetFont(self.font)
-		dc.Clear()
+	@property
+	def text(self):
+		return self.Value
 
-		w, h = self.Size
-		tw, th = dc.GetTextExtent(self.text)
-		caret_pos, _ = dc.GetTextExtent(self.text[:self.insertion_point])
-		
-		p = " "
-		if self.insertion_point != len(self.text):
-			p = self.text[self.insertion_point]
-		
-		cw, _ = dc.GetTextExtent(p)
-		cw2, _ = dc.GetTextExtent(" ")
-		
-		self.Caret.SetSize((cw,3))
-		self.w = cw
-		
-		
-
-		offset = (w-tw)/2 - cw2/2, (h-th)/2
-
-		dc.TextForeground = text_colour
-		dc.DrawText(self.text, *offset)
-		self.Caret.Move((offset[0] + (caret_pos), 
-						h-3))
-		#self.Caret.Show()
-		
+	def on_enter(self, event):
+		# unbind the kill focus, or we will have cancelled it
+		self.Unbind(wx.EVT_KILL_FOCUS)
+		self.TopLevelParent.EndModal(wx.OK)
 
 	def add_letter(self, event):
-		if event.KeyCode == wx.WXK_RETURN:
-			# unbind the kill focus, or we will have cancelled it
-			self.Unbind(wx.EVT_KILL_FOCUS)
-			self.Parent.EndModal(wx.OK)
-			return
-		if event.KeyCode == wx.WXK_BACK:
-			self.text = (self.text[:self.insertion_point-1] +
-						self.text[self.insertion_point:])
-
-			self.insertion_point -= 1
-			self.insertion_point = max(0, self.insertion_point)
-			
-		
-			self.Refresh()
-			return
-
 		if event.KeyCode == wx.WXK_ESCAPE:
 			self.Unbind(wx.EVT_KILL_FOCUS)
-			self.Parent.EndModal(wx.CANCEL)
+			self.TopLevelParent.EndModal(wx.CANCEL)
+		elif event.KeyCode == wx.WXK_RETURN:
+			self.on_enter(event)
+		else:
+			event.Skip()
 		
-		if event.KeyCode == wx.WXK_LEFT:
-			self.insertion_point -= 1
-			self.insertion_point = max(0, self.insertion_point)
-			self.Refresh()
-			
-
-		if event.KeyCode == wx.WXK_RIGHT:
-			self.insertion_point += 1
-			self.insertion_point = min(len(self.text), self.insertion_point)
-			self.Refresh()
-
-		if event.KeyCode == wx.WXK_HOME:
-			self.insertion_point = 0
-			self.Refresh()
-			
-		if event.KeyCode == wx.WXK_END:
-			self.insertion_point = len(self.text)
-			self.Refresh()
-
-		if event.KeyCode == wx.WXK_DELETE:
-			if self.text[self.insertion_point:]:
-				self.text = (self.text[:self.insertion_point] +
-						self.text[self.insertion_point+1:])
-			self.Refresh()
-			
-		if event.KeyCode > 255:
-			return
-
-		allowed_keys = (string.punctuation + string.letters + " " + 
-						string.digits)
-		if chr(event.KeyCode) in allowed_keys:
-			self.text = (self.text[:self.insertion_point] + chr(event.KeyCode)
-						+ self.text[self.insertion_point:])
-			self.insertion_point += 1
-						
-			self.Refresh()
-	
-	def DoGetBestSize(self):
-		return (150, self.height)
-
-
 if osutils.is_gtk():
 	# under wxGTK, the miniframe has a border around it which we don't want
 	quick_selector_class = wx.Frame
@@ -157,8 +70,8 @@ else:
 class QuickSelector(quick_selector_class):
 	def __init__(self, parent, size=wx.DefaultSize, title="", style=0):
 		super(QuickSelector, self).__init__(parent, size=size, 
-			style=style|
-                           wx.FRAME_SHAPED
+			style=style
+                         | wx.FRAME_SHAPED
                          | wx.NO_BORDER
                          | wx.FRAME_NO_TASKBAR
                          #| wx.STAY_ON_TOP
@@ -170,32 +83,42 @@ class QuickSelector(quick_selector_class):
 			set_theme("white")
 
 		self.SetBackgroundColour(back_colour)
+		self.SetForegroundColour(text_colour)
 		
 		
-		text = wx.StaticText(self, label=title, #pos=(0, radius + 10), 
+		self.p = wx.Panel(self)
+		self.p.SetBackgroundColour(back_colour)
+		self.p.SetForegroundColour(text_colour)
+		text = wx.StaticText(self.p, label=title, #pos=(0, radius + 10), 
 			style=wx.ALIGN_CENTRE)
 
-		hrule = Line(self)
-		hrule.SetSize((-1, 1))
-		#self.text = wx.TextCtrl(self)
-		self.panel = TextPanel(self, style=wx.WANTS_CHARS)
+		text.SetBackgroundColour(back_colour)
+		text.SetForegroundColour(text_colour)
+
+		self.panel = TextPanel(self.p)
 		self.panel.SetBackgroundColour(back_colour)
+		self.panel.SetForegroundColour(text_colour)
 		
 		sizer = wx.BoxSizer(wx.VERTICAL)
 		
 
-		sizer.Add(text, 0, wx.GROW|wx.TOP|wx.LEFT|wx.RIGHT, 10)
-		sizer.Add(hrule, 0, wx.GROW|wx.LEFT|wx.RIGHT, 10)
-		sizer.Add(self.panel, 1, wx.GROW|wx.ALL, 20)
+		sizer.Add(text, 0, wx.GROW|wx.TOP|wx.LEFT|wx.RIGHT|wx.BOTTOM, 10)
+		sizer.Add(self.panel, 0, wx.GROW|wx.BOTTOM|wx.LEFT|wx.RIGHT, 20)
+		self.p.Sizer = sizer
+
+		s1 = wx.BoxSizer(wx.HORIZONTAL)
+		s1.Add(self.p, 1, wx.GROW|wx.ALL, 1)
 		
-		text.ForegroundColour = text_colour
+		self.panel.ForegroundColour = text_colour
 		f = text.Font
 		f.SetWeight(wx.FONTWEIGHT_BOLD)
 		f.SetPointSize(12)
 		text.Font = f
-		self.SetSizerAndFit(sizer)
-		self.Size = 300, self.Size[1]
-		self.Layout()
+		self.SetSizerAndFit(s1)
+#		self.Size = self.p.BestSize
+		self.SetSize((350, self.p.BestSize[1]))
+#		self.SetSize(self.p.BestSize)
+
 		if osutils.is_gtk():
 			self.Bind(wx.EVT_WINDOW_CREATE, lambda evt:self.set_shape())
 		else:
@@ -236,7 +159,7 @@ class QuickSelector(quick_selector_class):
 		def focus():
 			#self.SetFocus()
 			
-			self.panel.SetFocusIgnoringChildren()
+			self.panel.SetFocus()
 			
 		
 		#focus()
@@ -253,7 +176,7 @@ class QuickSelector(quick_selector_class):
 		else:
 			self.callback(self, success)
 
-if __name__ == "__main__":
+def main():
 	a = wx.App(0)
 	f = wx.Frame(None)
 	b = wx.Button(f, label="test")
@@ -272,3 +195,5 @@ if __name__ == "__main__":
 
 	a.MainLoop()
 
+if __name__ == "__main__":
+	main()
