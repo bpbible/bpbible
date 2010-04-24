@@ -21,8 +21,19 @@ def set_theme(theme):
 
 set_theme(theme)
 
+class Line(wx.Window):
+	def __init__(self, *args, **kwargs):
+		super(Line, self).__init__(*args, **kwargs)
+		self.Bind(wx.EVT_PAINT, self.on_paint)
+		
+	def on_paint(self, event):
+		dc = wx.PaintDC(self)
+		dc.Background = wx.Brush((168,168,168))
+		dc.Clear()
+
 class TextPanel(wx.TextCtrl):#PyPanel):
-	def __init__(self, parent, style=wx.TE_CENTRE|wx.TE_PROCESS_ENTER):
+	def __init__(self, parent,
+	style=wx.TE_CENTRE|wx.TE_PROCESS_ENTER|wx.NO_BORDER):
 		super(TextPanel, self).__init__(parent, style=style)
 		self.Bind(wx.EVT_KILL_FOCUS, self.end_parent_modal)
 		self.Bind(wx.EVT_CHAR, self.add_letter)
@@ -95,6 +106,8 @@ class QuickSelector(quick_selector_class):
 		text.SetBackgroundColour(back_colour)
 		text.SetForegroundColour(text_colour)
 
+		hrule = Line(self.p)
+		hrule.SetSize((-1, 1))
 		self.panel = TextPanel(self.p)
 		self.panel.SetBackgroundColour(back_colour)
 		self.panel.SetForegroundColour(text_colour)
@@ -103,6 +116,7 @@ class QuickSelector(quick_selector_class):
 		
 
 		sizer.Add(text, 0, wx.GROW|wx.TOP|wx.LEFT|wx.RIGHT|wx.BOTTOM, 10)
+		sizer.Add(hrule, 0, wx.GROW|wx.LEFT|wx.RIGHT|wx.BOTTOM, 10)
 		sizer.Add(self.panel, 0, wx.GROW|wx.BOTTOM|wx.LEFT|wx.RIGHT, 20)
 		self.p.Sizer = sizer
 
