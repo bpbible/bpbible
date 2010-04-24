@@ -11,6 +11,7 @@ def system(path):
 python_i18n_paths = [
 	"~/Python-2.5.2",
 	r"\Python25",
+	r"C:\Python25",
 ]
 
 ignore_strings = [
@@ -40,7 +41,7 @@ def convert_slashes(text):
 		text
 	)
 
-def gather(force=False):
+def gather(force=True):
 #	for item in languages:
 #		if os.path.exists("locales/%s.po"):
 			
@@ -66,7 +67,7 @@ msgstr ""
 	new_text = re.sub('"POT-Creation-Date: .*"', "", new_text)
 
 
-	if convert_slashes(new_text) == convert_slashes(old_text):
+	if convert_slashes(new_text) == convert_slashes(old_text) and False:
 		os.remove("locales/messages.pot.new")
 		print "Nothing to do"
 		if not force:

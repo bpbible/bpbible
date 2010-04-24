@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BPBible Hungarian 1.0\n"
-"POT-Creation-Date: 2009-09-02 13:21+EST\n"
+"POT-Creation-Date: 2010-04-24 23:35+AUS Eastern Standard Time\n"
 "PO-Revision-Date: 2009-03-22 21:08+1000\n"
 "Last-Translator: csabosz <sinkacs@gmail.com>\n"
 "Language-Team: csabosz <sinkacs@gmail.com>\n"
@@ -15,207 +15,225 @@ msgstr ""
 "X-Poedit-Language: Hungarian\n"
 "X-Poedit-Country: HUNGARY\n"
 
-#: auilayer.py:311
+#: auilayer.py:312
 msgid "Books"
 msgstr "Könyvek"
 
-#: auilayer.py:359
+#: auilayer.py:360
 msgid "History"
 msgstr "Történet"
 
-#: backend/book.py:87
+#: backend/book.py:88
 msgid "A $ sign"
 msgstr "Egy $ jel"
 
-#: backend/book.py:88
+#: backend/book.py:89
 msgid "The range of verses"
 msgstr "A versek tartománya"
 
-#: backend/book.py:89
+#: backend/book.py:90
 msgid "The version this is taken from"
 msgstr "Ez a könyv innen származik"
 
-#: backend/book.py:90
+#: backend/book.py:91
 msgid "A description of the version"
 msgstr "A könyv leírása"
 
-#: backend/book.py:94
+#: backend/book.py:95
 msgid "The text of a verse"
 msgstr "Az igevers szövege"
 
-#: backend/book.py:95
+#: backend/book.py:96
 msgid "The verse number"
 msgstr "Igevers száma"
 
-#: backend/book.py:96
+#: backend/book.py:97
 msgid "The reference for each verse"
 msgstr "Vershivatkozások"
 
-#: backend/book.py:97
+#: backend/book.py:98
 msgid "The name of the current book"
 msgstr "A jelenlegi könyv neve"
 
-#: backend/book.py:98
+#: backend/book.py:99
 msgid "A shorter abbreviation of the book name"
 msgstr "A könyv rövidítésa"
 
-#: backend/book.py:99
+#: backend/book.py:100
 msgid "The number of the chapter in the book"
 msgstr "Fejezetek száma a könyvben"
 
-#: backend/book.py:103
+#: backend/book.py:104
 msgid "The text of the heading"
 msgstr "A fejléc szövege"
 
-#: backend/book.py:612
+#: backend/book.py:626
 msgid ""
 "Couldn't save cipher key. You will have to set it again when you restart"
 msgstr "Nem található az aláírókulcs. Az újraindítás után be kell állítani"
 
-#: backend/book.py:636
+#: backend/book.py:650
 msgid "commentary"
 msgstr "Kommentár"
 
-#: backend/book.py:643 bibleframe.py:36 xrc/auifrm_xrc.py:69
+#: backend/book.py:657 bibleframe.py:36 xrc/auifrm_xrc.py:69
 msgid "Bible"
 msgstr "Biblia"
 
-#: bibleframe.py:72 bookframe.py:163 mainframe.py:255
+#: bibleframe.py:72 bookframe.py:164 mainframe.py:255
 #: search/searchpanel.py:157
 msgid "Search"
 msgstr "Keresés"
 
-#: bibleframe.py:77 xrc/harmonyfrm_xrc.py:92
+#: bibleframe.py:77
+#, fuzzy
+msgid "Go to Reference"
+msgstr "Igehely"
+
+#: bibleframe.py:80
+#, fuzzy
+msgid "Go to a reference"
+msgstr "Igehely"
+
+#: bibleframe.py:83 xrc/harmonyfrm_xrc.py:92
 msgid "Harmony"
 msgstr "Szinopszis"
 
-#: bibleframe.py:80
+#: bibleframe.py:86
 msgid "Open the harmony"
 msgstr "Szinopszis megnyitása"
 
-#: bibleframe.py:83 xrc/guess_verse_xrc.py:69
+#: bibleframe.py:89 xrc/guess_verse_xrc.py:69
 msgid "Guess the Verse"
 msgstr "Keresse a könyvet!"
 
-#: bibleframe.py:86
+#: bibleframe.py:92
 msgid "Play Guess the Verse"
 msgstr "Keresse a könyvet! játék"
 
-#: bibleframe.py:92
+#: bibleframe.py:98
 msgid "Random verse"
 msgstr "Véletlenszerű igevers"
 
-#: bibleframe.py:95
+#: bibleframe.py:101
 msgid "Go to a random verse"
 msgstr "Ugrás egy véletlenszerű igeversre"
 
-#: bibleframe.py:98
+#: bibleframe.py:104
 msgid "Copy verses"
 msgstr "Versek másolása"
 
-#: bibleframe.py:102
+#: bibleframe.py:108
 msgid "Copy verses to other applications"
 msgstr "A versek másolása más programok számára"
 
-#: bibleframe.py:106 bibleframe.py:162
+#: bibleframe.py:112 bibleframe.py:172
 msgid "Open sticky tooltip"
 msgstr "Hivatkozásablak megnyitása"
 
-#: bibleframe.py:109
+#: bibleframe.py:115
 msgid "Open a sticky tooltip with the selected verses"
 msgstr "Hivatkozásablak megnyitása a kiválasztott versekhez"
 
-#: bibleframe.py:113
+#: bibleframe.py:119
 msgid "Compare verses"
 msgstr "Fordítások összehasonlítása"
 
-#: bibleframe.py:116
+#: bibleframe.py:122
 msgid "Open the verse comparison pane to the selected verses"
 msgstr "Fordítás-összehasonlító ablak megnyitása a kiválasztott versekhez"
 
-#: bibleframe.py:122 manage_topics_frame.py:168 xrc/manage_topics_xrc.py:141
+#: bibleframe.py:128 manage_topics_frame.py:172 xrc/manage_topics_xrc.py:143
 msgid "Manage Topics"
 msgstr "Témák kezelése"
 
-#: bibleframe.py:125
+#: bibleframe.py:131
 msgid "Manages all of the topics and the passages in them."
 msgstr "Minden téma és igehely egységes kezelése."
 
-#: bibleframe.py:128
+#: bibleframe.py:134
 msgid "Tag verses"
 msgstr "Igeversek címkézése"
 
-#: bibleframe.py:132
+#: bibleframe.py:138
 msgid "Tags the currently selected verses."
 msgstr "A jelenleg kiválasztott versek címkézése."
 
-#: bibleframe.py:136
+#: bibleframe.py:142
 #, fuzzy
 msgid "Add comment to verses"
 msgstr "Ugrás az igevershez"
 
-#: bibleframe.py:139
+#: bibleframe.py:145
 #, fuzzy
 msgid "Makes a comment on the currently selected verses."
 msgstr "A jelenleg kiválasztott versek címkézése."
 
-#: bibleframe.py:197
+#: bibleframe.py:207
 msgid "Copying selected verses..."
 msgstr "A kiválasztott versek másolása..."
 
-#: bibleframe.py:273
+#: bibleframe.py:282
+msgid "Topic management is currently not available due to an error."
+msgstr ""
+
+#: bibleframe.py:283
+msgid "Error in Topic Management"
+msgstr ""
+
+#: bibleframe.py:310
 msgid "This chapter is empty."
 msgstr ""
 
-#: bookframe.py:145 mainframe.py:836
+#: bookframe.py:146 mainframe.py:836
 msgid "Show the %s pane"
 msgstr "%s ablak mutatása"
 
-#: bookframe.py:147
+#: bookframe.py:148
 msgid "Hide the %s pane"
 msgstr "%s ablak elrejtése"
 
-#: bookframe.py:156
+#: bookframe.py:157
 msgid "Shows or hides the pane"
 msgstr "Mutassa vagy elrejtse az ablakokat"
 
-#: bookframe.py:165
+#: bookframe.py:166
 msgid "Search in this book"
 msgstr "Keresés ebben a könyvben"
 
-#: bookframe.py:176
+#: bookframe.py:177
 msgid "Information..."
 msgstr "Információ..."
 
-#: bookframe.py:179
+#: bookframe.py:180
 msgid "Show information on the current book"
 msgstr "Információ a jelenlegi könyvről"
 
-#: bookframe.py:193
+#: bookframe.py:194
 msgid "Search for:"
 msgstr "Keresés:"
 
-#: bookframe.py:236
+#: bookframe.py:248
 msgid "Go to reference"
 msgstr "Igehely"
 
-#: bookframe.py:355
+#: bookframe.py:367
 msgid "Go to this reference"
 msgstr "Ugorj az igehelyre"
 
-#: bookframe.py:362
+#: bookframe.py:374
 msgid "Link the %s to the Bible"
 msgstr "Hivatkozás %s a Bibliára"
 
-#: bookframe.py:420
+#: bookframe.py:432
 msgid "Commentary"
 msgstr "Kommentár"
 
-#: bookframe.py:433
+#: bookframe.py:448
 msgid "Dictionary"
 msgstr "Szótár"
 
-#: config.py:107
+#: config.py:118
 msgid ""
 "<b>This book is not set.</b><br>\n"
 "This may be because you do not have any of this type of book installed.\n"
@@ -240,7 +258,7 @@ msgstr ""
 "SWORD útvonal beállítása</code> és mutasd meg a programnak a megfelelő "
 "útvonalat.\n"
 
-#: config.py:118
+#: config.py:129
 msgid ""
 "<p><b>[Reference clipped as the maximum verse limit (%d verses) has been "
 "exceeded.\n"
@@ -269,47 +287,47 @@ msgid ""
 msgstr ""
 "A modul nincs telepítve, így nem jeleníthetők meg a morfológiai kódok sem"
 
-#: displayframe.py:456
+#: displayframe.py:472
 msgid "Select all"
 msgstr "Mind kijelölése"
 
-#: displayframe.py:458
+#: displayframe.py:474
 msgid "Select all the text in the frame"
 msgstr "A keret teljes szövegének kijelölése"
 
-#: displayframe.py:461
+#: displayframe.py:477
 msgid "Copy selection (with links)"
 msgstr "Kijelölés másolása (hivatkozásokkal)"
 
-#: displayframe.py:464
+#: displayframe.py:480
 msgid "Copy the selected text with links"
 msgstr "A kiválasztott szöveg másolása hivatkozásokkal"
 
-#: displayframe.py:468
+#: displayframe.py:484
 msgid "Copy selection (without links)"
 msgstr "Kijelölés másolása (hivatkozások nélkül)"
 
-#: displayframe.py:471
+#: displayframe.py:487
 msgid "Copy the selected text, removing all links"
 msgstr "A kiválasztott szöveg másolása hivatkozások nélkül"
 
-#: displayframe.py:533
+#: displayframe.py:549
 msgid "the selected word"
 msgstr "a kiválasztott szó"
 
-#: displayframe.py:539
+#: displayframe.py:555
 msgid "the selected phrase"
 msgstr "a kiválasztott kifejezés"
 
-#: displayframe.py:553
+#: displayframe.py:569
 msgid "Look up %s in the dictionary"
 msgstr "A %s szó keresése a szótárban"
 
-#: displayframe.py:574
+#: displayframe.py:590
 msgid "Search for %s in the Bible"
 msgstr "Keresés a/az %s szóra a Bibliában"
 
-#: displayframe.py:576
+#: displayframe.py:592
 #, fuzzy
 msgid "Search for %s in this book"
 msgstr "Keresés ebben a könyvben"
@@ -360,14 +378,26 @@ msgstr "Próbáld újra!"
 msgid "Copy"
 msgstr "Másol"
 
-#: gui/passage_tag.py:64
+#: gui/passage_tag.py:152
 msgid "Expand"
 msgstr ""
 
-#: gui/passage_tag.py:66
+#: gui/passage_tag.py:154
 #, fuzzy
 msgid "Expand all of the passages in this topic"
 msgstr "Minden téma és igehely egységes kezelése."
+
+#: gui/passage_tag.py:426
+msgid "Use Parent Look:"
+msgstr ""
+
+#: gui/passage_tag.py:427
+msgid "Colour:"
+msgstr ""
+
+#: gui/passage_tag.py:428 xrc/manage_topics_xrc.py:146
+msgid "Appearance:"
+msgstr ""
 
 #: harmony/harmonyframe.py:213
 msgid "Loading harmony"
@@ -377,14 +407,14 @@ msgstr "Szinopszis betöltése"
 msgid "%s is not in this harmony"
 msgstr "%s nincs ebben a szinopszisban"
 
-#: header_bar.py:38
+#: header_bar.py:39
 #, fuzzy
 msgid "%s verses"
 msgstr "Igeversek címkézése"
 
 #: install_manager/install_drop_target.py:33
 #: install_manager/install_drop_target.py:56 module_manager.py:120
-#: module_manager.py:124 search/searchpanel.py:803 templatemanager.py:436
+#: module_manager.py:124 search/searchpanel.py:804 templatemanager.py:436
 #: templatemanager.py:447
 msgid "Error"
 msgstr "Hib"
@@ -432,7 +462,7 @@ msgstr ""
 msgid "Extracting %s"
 msgstr "Kibontás %s"
 
-#: install_manager/install_drop_target.py:82 search/searchpanel.py:959
+#: install_manager/install_drop_target.py:82 search/searchpanel.py:960
 msgid "Preparing"
 msgstr "Előkészítés"
 
@@ -538,7 +568,7 @@ msgstr "Verstörténet eszköztára"
 msgid "Installable books"
 msgstr "Könyvek telepítése..."
 
-#: mainframe.py:685 versecompare.py:189
+#: mainframe.py:685 versecompare.py:200
 msgid "Choose books"
 msgstr "Könyvek kiválasztása"
 
@@ -697,102 +727,102 @@ msgstr ""
 "A BPBible program GPL v2 licenszet használ. A részleteért nyisd me a LICENSE."
 "txt fájlt a programmappában!"
 
-#: manage_topics_frame.py:84
+#: manage_topics_frame.py:86
 msgid "Topics"
 msgstr "Témák"
 
-#: manage_topics_frame.py:297
+#: manage_topics_frame.py:311
 msgid "&New Topic"
 msgstr "&Új téma"
 
-#: manage_topics_frame.py:302
+#: manage_topics_frame.py:316
 msgid "Add &Passage"
 msgstr "&Igehely hozzáadása"
 
-#: manage_topics_frame.py:309 manage_topics_frame.py:582
+#: manage_topics_frame.py:323 manage_topics_frame.py:606
 msgid "Cu&t"
 msgstr "&Kivágás"
 
-#: manage_topics_frame.py:314 manage_topics_frame.py:587
+#: manage_topics_frame.py:328 manage_topics_frame.py:612
 msgid "&Copy"
 msgstr "&Másolás"
 
-#: manage_topics_frame.py:319 manage_topics_frame.py:592
+#: manage_topics_frame.py:333 manage_topics_frame.py:618
 msgid "&Paste"
 msgstr "&Beillesztés"
 
-#: manage_topics_frame.py:326
+#: manage_topics_frame.py:340
 msgid "Delete &Topic"
 msgstr "&Téma törlése"
 
-#: manage_topics_frame.py:367
+#: manage_topics_frame.py:381
 msgid "Cannot copy the topic to one of its children."
 msgstr "Nem másolható a téma önmaga alá."
 
-#: manage_topics_frame.py:368
+#: manage_topics_frame.py:382
 msgid "Copy Topic"
 msgstr "Téma másolása"
 
-#: manage_topics_frame.py:374
+#: manage_topics_frame.py:388
 msgid "Cannot delete the base topic."
 msgstr ""
 
-#: manage_topics_frame.py:375
+#: manage_topics_frame.py:389
 #, fuzzy
 msgid "Delete Topic"
 msgstr "&Téma törlése"
 
-#: manage_topics_frame.py:390
+#: manage_topics_frame.py:412
 #, fuzzy
 msgid "Search: %s"
 msgstr "Keresés"
 
-#: manage_topics_frame.py:391
+#: manage_topics_frame.py:413
 msgid "Results from the search `%s'."
 msgstr ""
 
-#: manage_topics_frame.py:424
+#: manage_topics_frame.py:446
 msgid "Passage"
 msgstr "Igehely"
 
-#: manage_topics_frame.py:425
+#: manage_topics_frame.py:447
 msgid "Comment"
 msgstr "Kommentár"
 
-#: manage_topics_frame.py:575
+#: manage_topics_frame.py:598
 msgid "&Open"
 msgstr "&Megnyitás"
 
-#: manage_topics_frame.py:599
+#: manage_topics_frame.py:625
 msgid "&Delete"
 msgstr "&Törlés"
 
-#: manage_topics_frame.py:638
+#: manage_topics_frame.py:665
 msgid "All topics."
 msgstr ""
 
-#: manage_topics_frame.py:654
+#: manage_topics_frame.py:681
 msgid ""
 "%d passages selected.\n"
 "\n"
 "Select a passage to view it."
 msgstr ""
 
-#: manage_topics_frame.py:659
+#: manage_topics_frame.py:686
 msgid "No items have been selected."
 msgstr ""
 
-#: manage_topics_frame.py:954
+#: manage_topics_frame.py:1003
 #, fuzzy
 msgid "Unordered"
 msgstr "Nem indexelt"
 
-#: manage_topics_frame.py:955
+#: manage_topics_frame.py:1004
 #, fuzzy
 msgid "Order by Passage"
 msgstr "&Igehely hozzáadása"
 
-#: manage_topics_frame.py:1158 tag_passage_dialog.py:58
+#: manage_topics_frame.py:1251 tag_passage_dialog.py:58
 msgid "Unrecognised passage `%s'."
 msgstr "Nem felismert igehely: `%s'."
 
@@ -873,7 +903,7 @@ msgstr "Más könyvek"
 msgid "Find Book..."
 msgstr "Könyv keresése..."
 
-#: module_tree.py:112
+#: module_tree.py:115
 msgid "Show information for %s"
 msgstr "Infomáció erről: %s"
 
@@ -913,7 +943,7 @@ msgstr "Könyvek olvasása..."
 msgid "Path manager"
 msgstr "Útvonal kezelő"
 
-#: preview_window.py:10 search/searchpanel.py:882 search/searchpanel.py:916
+#: preview_window.py:10 search/searchpanel.py:883 search/searchpanel.py:917
 #: xrc/copyverses_xrc.py:78 xrc/templatemanager_xrc.py:97
 msgid "Preview"
 msgstr "Előnézet"
@@ -947,22 +977,22 @@ msgstr "Érvénytelen STRONG szám: %s."
 msgid "In finding references, the reference must all be in one book"
 msgstr "A keresett hivatkozások egy könyvben kell hogy legyenek"
 
-#: search/index.py:99
+#: search/index.py:97
 msgid "A problem was detected with this book while indexing it:"
 msgstr ""
 
-#: search/index.py:101
+#: search/index.py:99
 msgid ""
 "Check whether there is a newer version of this book which might fix this "
 "problem."
 msgstr ""
 
-#: search/index.py:301
+#: search/index.py:299
 #, fuzzy
 msgid "Couldn't understand book search range '%s'"
 msgstr "Nem értelmezhető sor"
 
-#: search/index.py:376
+#: search/index.py:374
 msgid ""
 "There seems to be an error in your regular expression.\n"
 "The error message given was: %s"
@@ -970,11 +1000,11 @@ msgstr ""
 "Hiba történt a szabályos kifejezések között. \n"
 "A hibaüzenet: %s"
 
-#: search/index.py:391
+#: search/index.py:389
 msgid "You cannot search on the field %r"
 msgstr "Nem keresthetsz ezen a területen: %r"
 
-#: search/index.py:406
+#: search/index.py:404
 msgid "Done"
 msgstr "Kész"
 
@@ -987,34 +1017,34 @@ msgstr ""
 msgid "Could not understand string"
 msgstr "Nem értelmezhető sor"
 
-#: search/searchpanel.py:264 search/searchpanel.py:571
-#: search/searchpanel.py:748 search/searchpanel.py:767
-#: search/searchpanel.py:845 search/searchpanel.py:861
-#: search/searchpanel.py:899
+#: search/searchpanel.py:265 search/searchpanel.py:572
+#: search/searchpanel.py:749 search/searchpanel.py:768
+#: search/searchpanel.py:846 search/searchpanel.py:862
+#: search/searchpanel.py:900
 msgid "%d references found"
 msgstr "%d eredményt találtam"
 
-#: search/searchpanel.py:290 xrc/search_xrc.py:142
+#: search/searchpanel.py:291 xrc/search_xrc.py:142
 msgid "&Index"
 msgstr "&Indexelés"
 
-#: search/searchpanel.py:293
+#: search/searchpanel.py:294
 msgid "Unindex"
 msgstr "Index eltávolítása"
 
-#: search/searchpanel.py:315
+#: search/searchpanel.py:316
 msgid "You don't have a current %s, so you cannot search at the moment"
 msgstr "Nincs érvényes %s, így sajnos nem tudsz még keresni"
 
-#: search/searchpanel.py:322 search/searchpanel.py:359
+#: search/searchpanel.py:323 search/searchpanel.py:360
 msgid "No current version"
 msgstr "Nem érvényes verzió"
 
-#: search/searchpanel.py:333
+#: search/searchpanel.py:334
 msgid "Reading search index..."
 msgstr "Keresési index olvasása..."
 
-#: search/searchpanel.py:365
+#: search/searchpanel.py:366
 msgid ""
 "Search index does not exist for book %s. Indexing will make search much "
 "faster. Create Index?"
@@ -1022,96 +1052,96 @@ msgstr ""
 "A keresési index nem létezik a %s könyvhöz. Indexelés után gyorsabban lehet "
 "keresni. Készítesz indexet?"
 
-#: search/searchpanel.py:368
+#: search/searchpanel.py:369
 msgid "Create Index?"
 msgstr "Készítesz indexet?"
 
-#: search/searchpanel.py:402 search/searchpanel.py:603
-#: search/searchpanel.py:875 search/searchpanel.py:909 xrc/search_xrc.py:140
+#: search/searchpanel.py:403 search/searchpanel.py:604
+#: search/searchpanel.py:876 search/searchpanel.py:910 xrc/search_xrc.py:140
 msgid "&Search"
 msgstr "&Keresés"
 
-#: search/searchpanel.py:428 xrc/search_xrc.py:143 xrc/search_xrc.py:158
+#: search/searchpanel.py:429 xrc/search_xrc.py:143 xrc/search_xrc.py:158
 msgid "Search Options"
 msgstr "Keresési lehetőségek"
 
-#: search/searchpanel.py:567
+#: search/searchpanel.py:568
 msgid "&Stop"
 msgstr "&Állj!"
 
-#: search/searchpanel.py:640 search/searchpanel.py:715
+#: search/searchpanel.py:641 search/searchpanel.py:716
 msgid "Error in search"
 msgstr "Hiba a keresés során"
 
-#: search/searchpanel.py:645 search/searchpanel.py:720
+#: search/searchpanel.py:646 search/searchpanel.py:721
 msgid "The following words were not found in this %s:"
 msgstr "A következő szavak nem találhatók ebben: %s:"
 
-#: search/searchpanel.py:648 search/searchpanel.py:723
+#: search/searchpanel.py:649 search/searchpanel.py:724
 msgid "Unknown word"
 msgstr "Ismeretlen szó"
 
-#: search/searchpanel.py:750 search/searchpanel.py:770
-#: search/searchpanel.py:847 search/searchpanel.py:865
+#: search/searchpanel.py:751 search/searchpanel.py:771
+#: search/searchpanel.py:848 search/searchpanel.py:866
 msgid "1 word"
 msgstr "1 szó"
 
-#: search/searchpanel.py:751 search/searchpanel.py:771
-#: search/searchpanel.py:848 search/searchpanel.py:866
+#: search/searchpanel.py:752 search/searchpanel.py:772
+#: search/searchpanel.py:849 search/searchpanel.py:867
 msgid "%d words"
 msgstr "%d szó"
 
-#: search/searchpanel.py:754 search/searchpanel.py:776
+#: search/searchpanel.py:755 search/searchpanel.py:777
 msgid "%d hits"
 msgstr "%d találat"
 
-#: search/searchpanel.py:766 search/searchpanel.py:860
-#: search/searchpanel.py:898
+#: search/searchpanel.py:767 search/searchpanel.py:861
+#: search/searchpanel.py:899
 msgid "1 reference found"
 msgstr "1 hivatkozást találtam"
 
-#: search/searchpanel.py:775
+#: search/searchpanel.py:776
 msgid "1 hit"
 msgstr "1 találat"
 
-#: search/searchpanel.py:802
+#: search/searchpanel.py:803
 #, fuzzy
 msgid "You cannot search on fields in unindexed search"
 msgstr "Nem keresthetsz ezen a területen: %r"
 
-#: search/searchpanel.py:882 search/searchpanel.py:916
+#: search/searchpanel.py:883 search/searchpanel.py:917
 msgid "Reference"
 msgstr "Hivatkozás"
 
-#: search/searchpanel.py:895
+#: search/searchpanel.py:896
 msgid "%(version)s search - %(numresults)s"
 msgstr "%(version)s keresése - %(numresults)s"
 
-#: search/searchpanel.py:955
+#: search/searchpanel.py:956
 msgid "Processing %s"
 msgstr "Feldolgozás %s"
 
-#: search/searchpanel.py:959
+#: search/searchpanel.py:960
 msgid "Indexing %s"
 msgstr "Indexelés %s"
 
-#: search/searchpanel.py:991
+#: search/searchpanel.py:992
 msgid "Writing %s"
 msgstr "Írás: %s"
 
-#: search/searchpanel.py:1148
+#: search/searchpanel.py:1149
 msgid "Other Book Search"
 msgstr "Másik könyv keresése"
 
-#: search/searchpanel.py:1193
+#: search/searchpanel.py:1194
 msgid "Entries"
 msgstr "Bejegyzések"
 
-#: search/searchpanel.py:1200
+#: search/searchpanel.py:1201
 msgid "Dictionary Search"
 msgstr "Keresés a szótárban"
 
-#: search/searchpanel.py:1241
+#: search/searchpanel.py:1242
 msgid "Commentary Search"
 msgstr "Keresés a kommentárban"
 
@@ -1161,55 +1191,55 @@ msgstr "Felülírod?"
 msgid "Template name is already in use. Try a different name."
 msgstr "A sablonnév már használatban van. Válassz másikat!"
 
-#: tooltip.py:224
+#: tooltip.py:226
 msgid "Anchor"
 msgstr "Rögzít"
 
-#: tooltip.py:225
+#: tooltip.py:227
 msgid "Don't hide this tooltip"
 msgstr "Ne rejtse el ezt a jegyzetablakot"
 
-#: tooltip.py:228
+#: tooltip.py:230
 msgid "Copy All"
 msgstr "Az összes másolása"
 
-#: tooltip.py:229
+#: tooltip.py:231
 msgid "Copy tooltip text (with links)"
 msgstr "Az ablak szövegének másolása linkekkel"
 
-#: tooltip.py:294
+#: tooltip.py:296
 msgid "Tooltip"
 msgstr "Jegyzetablak"
 
-#: tooltip.py:505 tooltip.py:654
+#: tooltip.py:507 tooltip.py:656
 msgid "Sticky Tooltip"
 msgstr "Hivatkozásablak"
 
-#: tooltip.py:558 tooltip.py:560
+#: tooltip.py:560 tooltip.py:562
 msgid "Stay on top"
 msgstr "Mindig felül"
 
-#: tooltip.py:700
+#: tooltip.py:702
 #, fuzzy
 msgid "Find"
 msgstr "&Keres:"
 
-#: tooltip.py:702
+#: tooltip.py:704
 #, fuzzy
 msgid "Search for this strong's number in the Bible"
 msgstr "Keresés a/az %s szóra a Bibliában"
 
-#: tooltip.py:717
+#: tooltip.py:719
 msgid ""
 "Module %s is not installed, so you cannot view details for this strong's "
 "number"
 msgstr "A modul nincs telepítve, így nem jeleníthetők meg a Strong számok sem"
 
-#: tooltip.py:779
+#: tooltip.py:781
 msgid "Go to verses"
 msgstr "Ugrás az igevershez"
 
-#: tooltip.py:781
+#: tooltip.py:783
 msgid "Open this reference"
 msgstr "Igehely megnyitása"
 
@@ -1227,8 +1257,8 @@ msgstr "&Kilépés"
 msgid "Edit this comment"
 msgstr "Elem szerkesztése"
 
-#: user_comments.py:47 xrc/manage_topics_xrc.py:135
-#: xrc/manage_topics_xrc.py:136 xrc/module_manager_xrc.py:67
+#: user_comments.py:47 xrc/manage_topics_xrc.py:137
+#: xrc/manage_topics_xrc.py:138 xrc/module_manager_xrc.py:67
 msgid "Delete"
 msgstr "Másolás"
 
@@ -1246,28 +1276,28 @@ msgstr "Biztosan telepíteni szeretnéd ezt a könyvet?"
 msgid "Delete Comment"
 msgstr "Kommentár"
 
-#: versecompare.py:45
+#: versecompare.py:49
 msgid "Version Comparison"
 msgstr "Verziiók összehasonlítása"
 
-#: versecompare.py:177
+#: versecompare.py:188
 msgid "Set books to compare"
 msgstr "Könyvek beállítása az összehasonlításhoz"
 
-#: versecompare.py:179
+#: versecompare.py:190
 msgid "Set the books this version comparison will use"
 msgstr "Könyvek beállítása az összehasonlításhoz (?)"
 
-#: versecompare.py:188
+#: versecompare.py:199
 msgid "Choose books to compare in the verse comparison window"
 msgstr ""
 "Könyvek kiválasztása az összehasonlításhoz a vers-összehasonlító ablakban"
 
-#: versecompare.py:212
+#: versecompare.py:223
 msgid "Choose books to compare"
 msgstr "Könyvek kiválasztása az összehasonlításhoz"
 
-#: versecompare.py:218
+#: versecompare.py:229
 msgid "View in parallel mode"
 msgstr "Párhuzamos nézet"
 
@@ -1457,39 +1487,47 @@ msgstr ""
 msgid "Export"
 msgstr ""
 
-#: xrc/manage_topics_xrc.py:137
+#: xrc/manage_topics_xrc.py:135
+msgid "Sorts the topic in passage order"
+msgstr ""
+
+#: xrc/manage_topics_xrc.py:136
+msgid "Sort"
+msgstr ""
+
+#: xrc/manage_topics_xrc.py:139
 msgid "Undo previous action"
 msgstr "Utolsó"
 
-#: xrc/manage_topics_xrc.py:138
+#: xrc/manage_topics_xrc.py:140
 msgid "Undo"
 msgstr "Visszavonás"
 
-#: xrc/manage_topics_xrc.py:139
+#: xrc/manage_topics_xrc.py:141
 msgid "Redoes the last undone action"
 msgstr "Újra a legutóbb kitörölt akciót"
 
-#: xrc/manage_topics_xrc.py:140
+#: xrc/manage_topics_xrc.py:142
 msgid "Redo"
 msgstr "Újra"
 
-#: xrc/manage_topics_xrc.py:142
+#: xrc/manage_topics_xrc.py:144
 msgid "Name:"
 msgstr "Név:"
 
-#: xrc/manage_topics_xrc.py:143
+#: xrc/manage_topics_xrc.py:145
 msgid "Show tags"
 msgstr ""
 
-#: xrc/manage_topics_xrc.py:144
+#: xrc/manage_topics_xrc.py:147
 msgid "Description:"
 msgstr "Leírás:"
 
-#: xrc/manage_topics_xrc.py:145
+#: xrc/manage_topics_xrc.py:148
 msgid "Passage:"
 msgstr "Igehely:"
 
-#: xrc/manage_topics_xrc.py:146
+#: xrc/manage_topics_xrc.py:149
 msgid "Comment:"
 msgstr "Megjegyzés:"
 
