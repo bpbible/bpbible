@@ -15,6 +15,8 @@ Keyboard shortcuts can speed up your use of BPBible. The keyboard shortcuts are 
 || s          || Open a search quick selector; type into here to search the current book ||
 || p / Shift-n  || Go to the previous search result ||
 || n          || Go to the next search result ||
+|| Ctrl-L     || Focus the main verse navigation box. ||
+|| Ctrl-G     || Focus the navigation for the current window. ||
 
 
 
@@ -37,7 +39,8 @@ Keyboard shortcuts can speed up your use of BPBible. The keyboard shortcuts are 
 || c         || Make a comment on the selected verses. ||
 || t         || Tag the selected verses with a topic. ||
 || Ctrl-Shift-T|| Organise and comment on topics and on the passages for each topic. ||
-
+|| Alt-Left Arrow|| Go back in history. ||
+|| Alt-Right Arrow|| Go forward in history. ||
 
 ----
 
