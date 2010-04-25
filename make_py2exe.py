@@ -8,7 +8,7 @@ import config
 from util.i18n import find_languages
 
 version = sys.argv[-1]
-if re.findall("^([0-9]+\.)*[0-9]+$", version):
+if re.findall("^([0-9]+\.)*[0-9]+(b[0-9]+)?$", version):
 	del sys.argv[-1]
 else:
 	version = "None"

@@ -12,14 +12,17 @@ import sys
 from contrib import googlecode_upload
 
 make_release = False
+raw_version_number = None
 new_version = None
+is_beta = False
+beta_number = ''
 py2exe_opts = ""
 show_splashscreen = True
 portable_build = False
 portable_prerelease_status_number = None
 
 def handle_args():
-	opts, args = getopt.getopt(sys.argv[1:], "r", ["make-release", "compress", "no-splashscreen", "portable", "pre-release="])
+	opts, args = getopt.getopt(sys.argv[1:], "r", ["make-release", "compress", "no-splashscreen", "portable", "pre-release=", "beta="])
 	global py2exe_opts
 	global show_splashscreen
 	if ('--portable', '') in opts:
@@ -43,16 +46,26 @@ def handle_args():
 
 		if ('--no-splashscreen', '') in opts:
 			show_splashscreen = False
+		for o, a in opts:
+			if o == "--beta":
+				global is_beta, beta_number
+				is_beta = True
+				beta_number = a
 
-	global new_version
+	global new_version, new_version_long_name, raw_version_number
 	if len(args) != 1:
 		if make_release:
 			sys.stderr.write("Usage: make_release.py [-r] <version number>")
 			sys.exit(1)
 		else:
-			new_version = "0.0"
+			raw_version_number = "0.0"
 	else:
-		new_version = args[0]
+		raw_version_number = args[0]
+
+	new_version = new_version_long_name = raw_version_number
+	if is_beta:
+		new_version = "%sb%s" % (raw_version_number, beta_number)
+		new_version_long_name = "%s Beta %s" % (raw_version_number, beta_number)
 
 handle_args()
 
@@ -67,13 +80,13 @@ class DictWrapper(object):
 src_dist = DictWrapper(
 	file="bpbible-%s-src.zip" % new_version,
 	dir="bpbible-%s" % new_version,
-	summary="BPBible %s source code" % new_version,
+	summary="BPBible %s source code" % new_version_long_name,
 	labels=["Type-Source", "OpSys-All", "Featured"],
 )
 
 installer = DictWrapper(
 	file=os.path.join("installer", "bpbible-%s-setup.exe" % new_version),
-	summary="BPBible %s installer" % new_version,
+	summary="BPBible %s installer" % new_version_long_name,
 	labels=["Type-Installer", "OpSys-Windows", "Featured"],
 )
 
@@ -93,7 +106,7 @@ IndexPath = $DATADIR/indexes"""
 	open("dist/paths.ini", "w").write(paths_conf)
 
 from config import bpbible_configuration, release_settings, splashscreen_settings
-release_settings["version"] = new_version
+release_settings["version"] = new_version_long_name
 release_settings["is_released"] = True
 splashscreen_settings["show"] = show_splashscreen
 bpbible_configuration.save("%s/bpbible.conf" % src_dist.dir)
@@ -115,7 +128,7 @@ def tag_release():
 		return
 
 	print "Tagging the release."
-	os.system("svn cp -m \"Tagged release %(new_version)s\""
+	os.system("svn cp -m \"Tagged release %(new_version_long_name)s\""
 			" %(svn_trunk)s %(svn_release_tag)s" % globals())
 
 def build_src_dist(zip_file):
@@ -260,7 +273,7 @@ def build_installer():
 
 		print "Creating the installer."
 		iss_file = os.path.join("installer", "bpbible.iss")
-		iss_contents = open("%s.template" % iss_file, "r").read().replace("$APP_VERSION", new_version)
+		iss_contents = open("%s.template" % iss_file, "r").read().replace("$APP_VERSION_RAW_NUMBER", raw_version_number).replace("$APP_VERSION_LONG_NAME", new_version_long_name).replace("$APP_VERSION_SHORT_NAME", new_version)
 		open(iss_file, "w").write(iss_contents)
 		os.system("iscc %s" % iss_file)
 
@@ -277,6 +290,9 @@ def upload_release():
 	print "Remember to announce the release."
 
 def do_upload(user_name, password, options):
+	if ("Featured" in options.labels) and is_beta:
+		# Beta releases should not be featured.
+		options.labels.remove("Featured")
 	status, reason, url = googlecode_upload.upload(options.file, "bpbible", user_name, password,
 			options.summary, options.labels)
 

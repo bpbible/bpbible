@@ -13,26 +13,26 @@
 
 [Setup]
 AppName=BPBible
-AppVerName=BPBible $APP_VERSION
-AppPublisher=Benjamin Morgan
+AppVerName=BPBible $APP_VERSION_LONG_NAME
+AppPublisher=BPBible Development Team
 AppPublisherURL=http://BPBible.com/
 AppSupportURL=http://BPBible.com/
 AppUpdatesURL=http://BPBible.com/
 AppReadmeFile={app}\README.txt
-AppCopyright=© 2008 Benjamin Morgan
+AppCopyright=© 2007 - 2010 BPBible Development Team
 AppId=BPBible
-AppVersion=$APP_VERSION
+AppVersion=$APP_VERSION_LONG_NAME
 VersionInfoCompany=BPBible
-VersionInfoCopyright=© 2008 Benjamin Morgan
+VersionInfoCopyright=© 2007 - 2010 BBPBible Development Team
 VersionInfoDescription=BPBible is a flexible Bible Study tool...
-VersionInfoTextVersion=$APP_VERSION
-VersionInfoVersion=$APP_VERSION.0.0.0.0
+VersionInfoTextVersion=$APP_VERSION_LONG_NAME
+VersionInfoVersion=$APP_VERSION_RAW_NUMBER.0.0.0.0
 DefaultDirName={pf}\BPBible
 DefaultGroupName=BPBible
 AllowNoIcons=yes
 InfoBeforeFile=Info.rtf
 OutputDir=.
-OutputBaseFilename=bpbible-$APP_VERSION-setup
+OutputBaseFilename=bpbible-$APP_VERSION_SHORT_NAME-setup
 SetupIconFile=..\graphics\bpbible.ico
 SolidCompression=yes
 Compression=lzma/ultra
