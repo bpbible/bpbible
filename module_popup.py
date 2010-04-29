@@ -5,6 +5,7 @@ from util.unicode import to_str
 from backend.dictionary import Dictionary
 from backend.genbook import GenBook
 from swlib.pysw import SW
+from util import osutils
 
 
 class PopupList(virtuallist.VirtualListBox):
@@ -68,10 +69,13 @@ class ModulePopup(wx.PopupTransientWindow):
 		
 
 
-		s = self.box.GetBestSize() + (50, 200)
+		s = [400, 300]#self.box.GetBestSize() + (250, 200)
 
 		# don't display empty whitespace at the end of the list unless needed
 		bottom = self.box.GetItemRect(self.box.ItemCount - 1).Bottom + 1
+		if osutils.is_msw():
+			bottom += 4
+
 		if bottom < s[1]:
 			s[1] = bottom
 
