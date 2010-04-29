@@ -213,6 +213,7 @@ class BibleFrame(VerseKeyedFrame):
 		cvd = CopyVerseDialog(self)
 		cvd.copy_verses(text)
 		cvd.Destroy()	
+		d.Destroy()
 	
 		
 	def show_harmony(self):

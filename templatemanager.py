@@ -128,6 +128,8 @@ class AutoCompleteTextBox(object):#(wx.TextCtrl):
 		self.textbox.Bind(stc.EVT_STC_MODIFIED, self.OnText)
 		self.textbox.Bind(wx.EVT_KILL_FOCUS, self.KillFocus)
 		self.list.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self.Select)
+		self.textbox.Bind(wx.EVT_WINDOW_DESTROY,
+			lambda e: self.popup.Destroy())
 		
 		
 

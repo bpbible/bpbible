@@ -569,7 +569,7 @@ class AuiLayer(object):
 		# cannot have focus, nor any of its children
 		# This isn't needed under gtk, as the scroll wheel will automatically
 		# select the window underneath for scrolling
-		if not osutils.is_gtk():
+		if osutils.is_msw():
 			self.SetFocus()
 			self.Bind(wx.EVT_MOUSEWHEEL, p.box.on_mouse_wheel)
 		
@@ -582,8 +582,10 @@ class AuiLayer(object):
 			if chosen is not None:
 				frame.book.SetModule(p.box.modules[chosen])
 
-			if not osutils.is_gtk():
+			if not osutils.is_msw():
 				self.Unbind(wx.EVT_MOUSEWHEEL)
+
+			p.Destroy()
 				
 
 		p.on_dismiss += on_dismiss
