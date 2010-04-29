@@ -582,7 +582,7 @@ class AuiLayer(object):
 			if chosen is not None:
 				frame.book.SetModule(p.box.modules[chosen])
 
-			if not osutils.is_msw():
+			if osutils.is_msw():
 				self.Unbind(wx.EVT_MOUSEWHEEL)
 
 			p.Destroy()
