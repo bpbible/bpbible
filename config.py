@@ -172,8 +172,8 @@ use_system_inactive_caption_colour = False
 
 # templates
 body = (
-u'<glink href="nbible:$internal_reference">'
-u'<small><sup>$versenumber</sup></small></glink> $text $usercomments $tags')
+u'<a href="nbible:$internal_reference">'
+u'<small><sup>$versenumber</sup></small></a> $text $usercomments $tags')
 
 
 bible_template = SmartVerseTemplate(body=body)
@@ -191,16 +191,18 @@ dictionary_template = VerseTemplate(
 )
 
 
-body = (u'<glink href="nbible:$internal_reference#current" colour="#008000">'
-		u'<small><sup>$versenumber</sup></small></glink> '
-		u'<highlight-start colour="#008000">$text<highlight-end /> $usercomments $tags')
+body = (u'<a name="current"><a href="nbible:$internal_reference" style="color: #008000">'
+		u'<small><sup>$versenumber</sup></small></a> '
+		u'<span style="color: #008000">$text</span> $usercomments $tags')
+
+#		u'<highlight-start colour="#008000">$text<highlight-end /> $usercomments $tags')
 
 current_verse_template = SmartVerseTemplate(body)
 
 # TODO: do we want this to have tags? I'd guess not
 verse_compare_template = VerseTemplate(
-	u'<glink href="nbible:$internal_reference">'
-	u'<small><sup>$versenumber</sup></small></glink> $text ',
+	u'<a href="nbible:$internal_reference">'
+	u'<small><sup>$versenumber</sup></small></a> $text ',
 	
 	header=u"<p><b>(<a href='%s:$version'>$version</a>)"
 	u"</b> " % BIBLE_VERSION_PROTOCOL

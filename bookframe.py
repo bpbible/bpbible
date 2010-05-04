@@ -1,7 +1,10 @@
 import wx
 from wx import html
-from displayframe import AUIDisplayFrame
-from displayframe import IN_BOTH, IN_MENU
+# XXX: Import displayframe to beat circular dependencies.
+import displayframe
+from new_displayframe import AUIDisplayFrame
+from new_displayframe import IN_BOTH, IN_MENU
+#from displayframe import IN_BOTH, IN_MENU
 from tooltip import BiblicalPermanentTooltip
 import versetree
 
@@ -27,8 +30,9 @@ class BookFrame(AUIDisplayFrame):
 	has_menu = True
 	shows_info = True
 	use_quickselector = True
-	def __init__(self, parent, style=html.HW_DEFAULT_STYLE):
-		super(BookFrame, self).__init__(parent, style=style)
+	#def __init__(self, parent, style=html.HW_DEFAULT_STYLE):
+	def __init__(self, parent):
+		super(BookFrame, self).__init__(parent)
 		self.reference = ""
 		self.setup()
 
@@ -77,7 +81,8 @@ class BookFrame(AUIDisplayFrame):
 			#replace common values
 			#data = ReplaceUnicode(data)
 
-		self.SetPage(data, raw=raw)
+		#self.SetPage(data, raw=raw)
+		self.SetPageSource(data)
 		self.update_title()
 		
 	@property
@@ -537,7 +542,8 @@ class DictionaryFrame(BookFrame):
 			data = ref_text + text
 			data = data.replace("<!P>","</p><p>")
 
-		self.SetPage(data, raw=raw)
+		#self.SetPage(data, raw=raw)
+		self.SetPageSource(data)
 		self.update_title()
 
 	def SetReference_from_string(self, string):
