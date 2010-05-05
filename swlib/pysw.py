@@ -576,9 +576,9 @@ class LocalizedVK(EncodedVK):
 	def getText(self):
 		if LIB_SUPPORTS_SINGLE_CHAPTER_BOOKS:
 			if self.getChapterMax() == 1:
-				return u"%s %d" % (self.getBookName(), 
+				return u"%s %s" % (self.getBookName(), 
 					process_digits(
-						self.Verse(),
+						str(self.Verse()),
 						userOutput=True
 					))
 
@@ -1439,7 +1439,7 @@ def get_locale(lang, additional=None):
 	if not locale.getName() or locale.getName() == "en_US":
 		return False, SW.Locale(""), "UTF-8"
 	
-	assert locale.getEncoding() == "UTF-8", "Only UTF-8 locales supported"
+	assert locale.getEncoding() == "UTF-8", "Only UTF-8 locales supported (locale was %s)" % locale.getName()
 	return True, locale, locale.getEncoding()
 
 def change_locale(lang, abbrev_lang, additional=None):
