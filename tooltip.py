@@ -124,6 +124,9 @@ class TooltipBaseMixin(object):
 		at them. The sizing portion of this is quite fiddly and easily broken.
 		I've tried to get it as simple as I can."""
 
+		if self.DoNotShowTooltip():
+			return
+
 		# set our target to what we were over at the time
 		assert bool(position) ^ bool(self.new_target), "Target is None?!?"
 		if self.new_target:
@@ -194,6 +197,24 @@ class TooltipBaseMixin(object):
 		self.Show()
 
 		wx.CallAfter(self.maybe_scroll_to_current)
+
+	def DoNotShowTooltip(self):
+		"""If a tooltip is shown when a top level window is active, then it
+		will bring the main window up over the top of that top level window.
+		For now, we work around this by just not showing the tooltip.
+		"""
+		from manage_topics_frame import ManageTopicsFrame
+		from harmony.harmonyframe import HarmonyFrame
+		from guess_verse import GuessVerseFrame
+		window_types_to_ignore = (ManageTopicsFrame, HarmonyFrame, GuessVerseFrame)
+
+		window = wx.Window.FindFocus()
+		while window:
+			if window.__class__ in window_types_to_ignore:
+				return True
+			window = window.Parent
+
+		return False
 
 	def maybe_scroll_to_current(self):
 		if self.tooltip_config.scroll_to_current:
