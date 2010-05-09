@@ -208,9 +208,25 @@ class TooltipBaseMixin(object):
 		from guess_verse import GuessVerseFrame
 		window_types_to_ignore = (ManageTopicsFrame, HarmonyFrame, GuessVerseFrame)
 
-		window = wx.Window.FindFocus()
+		focused_window = wx.Window.FindFocus()
+		if not focused_window:
+			return False
+
+		window = focused_window
 		while window:
 			if window.__class__ in window_types_to_ignore:
+				# If the tooltip is a tooltip that is a child of this window,
+				# then it should be shown, as it will not bring another window over
+				# the top of that window.
+				return not self.window_is_ancestor(window)
+			window = window.Parent
+
+		return False
+
+	def window_is_ancestor(self, ancestor_window):
+		window = self
+		while window:
+			if window is ancestor_window:
 				return True
 			window = window.Parent
 
