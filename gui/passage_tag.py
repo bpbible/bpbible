@@ -317,12 +317,36 @@ class PassageTagLook(wx.PyWindow):
 		dc.SetBrush(wx.TRANSPARENT_BRUSH)
 		dc.SetPen(wx.Pen(outer))
 		dc.DrawRoundedRectangleRect(bdrRect, self.border + 1)
+		self.fixup_border_corners(dc, bdrRect)
 		bdrRect.Deflate(1, 1)
 		dc.SetPen(wx.Pen(inner))
 		dc.DrawRoundedRectangleRect(bdrRect, self.border)
 
 		dc.SetPen(oldpen)
 		dc.SetBrush(oldbrush)
+
+	def fixup_border_corners(self, dc, bdrRect):
+		"""If the border is too large, then the rounded rectangles that are
+		drawn will leave points of colour in the corners of the tag.
+
+		This function removes these points of colour.
+		"""
+		border_offset_to_fix = self.border - 2
+		if border_offset_to_fix <= 0:
+			return
+
+		def DrawCornerRectangle(x, y):
+			dc.DrawRectangle(x, y, border_offset_to_fix, border_offset_to_fix)
+
+		left = bdrRect.Left
+		top = bdrRect.Top
+		right = bdrRect.Right - border_offset_to_fix
+		bottom = bdrRect.Bottom - border_offset_to_fix
+
+		DrawCornerRectangle(left, top)
+		DrawCornerRectangle(right, top)
+		DrawCornerRectangle(left, bottom)
+		DrawCornerRectangle(right, bottom)
 	
 class PassageTag(PassageTagLook):
 	def __init__(self, parent, passage_list, passage_entry, *args, **kwargs):
@@ -414,6 +438,9 @@ class ColourRect(wx.PyWindow):
 		self.colour_id, white_text, default_look = colours[colour]
 		self.white_text = self.white_text and white_text
 		use_colours(self.colour_id, self.look_scheme)
+		# If the border is more than 3, then the border drawn around it when
+		# it is selected will not show.
+		self.border = min(self.border, 3)
 		self._create_bitmap()
 		self.Refresh()
 	
