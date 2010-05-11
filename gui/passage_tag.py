@@ -1,4 +1,5 @@
 import wx
+import math
 import guiconfig
 import guiutil
 import displayframe
@@ -82,6 +83,12 @@ looks = [
 	(d_unsaturated, True, 4),
 	(flat, True, 2),
 ]
+
+# The colours are ordered from red to pinky purple, to simulate a rainbow.
+colour_order = (4, 5, 6, 7, 8, 9, 0, 1, 2, 3)
+rectangle_colours_and_looks = [(colour_index, look_index)
+		for look_index in range(len(looks))
+		for colour_index in colour_order]
 
 def convert(l):
 	return [wx.Colour(
@@ -249,12 +256,6 @@ class PassageTagLook(wx.PyWindow):
 
 		dc.Clear()
 
-		# set up the dc
-		#dc.Background = wx.WHITE_BRUSH
-		#dc.Pen = wx.BLACK_PEN
-		#dc.Brush = wx.Brush(TAG_COLOUR)
-
-		#dc.DrawRoundedRectangle(0, 0, width, height, 5)
 		self.DrawVistaRectangle(dc, wx.Rect(0, 0, width, height), True)
 		if self.white_text: dc.SetTextForeground(wx.WHITE)
 		dc.DrawText(self.tag_text, self.border, self.border)
@@ -400,18 +401,113 @@ class Border(wx.Panel):
 		self.Sizer.Children[0].Border = self.border_width - self.w
 
 class ColourRect(wx.PyWindow):
-	def __init__(self, parent, colour=0, *args, **kwargs):
+	def __init__(self, parent, look=0, colour=0, *args, **kwargs):
+		self.tag_text = "a"
 		super(ColourRect, self).__init__(parent, *args, **kwargs)
+		self.set_scheme(look, colour)
+		self.Bind(wx.EVT_PAINT, self.on_paint)
 		self.SetCursor(wx.StockCursor(wx.CURSOR_HAND))
-		self.look = looks[3]
-		self.border = self.look[1]
-		self.colour = colour
-		_rgbSelectOuter, _rgbSelectInner, _rgbSelectTop, _rgbSelectBottom = get_colours(colours[self.colour][0], self.look[0])
-		self.BackgroundColour = _rgbSelectInner
-		self.Size = (12, 12)
+
+	def set_scheme(self, look, colour):
+		self.look, self.colour = look, colour
+		self.look_scheme, self.white_text, self.border = looks[look]
+		self.colour_id, white_text, default_look = colours[colour]
+		self.white_text = self.white_text and white_text
+		use_colours(self.colour_id, self.look_scheme)
+		self._create_bitmap()
+		self.Refresh()
+	
+	def on_paint(self, event):
+		wx.BufferedPaintDC(self, self.bmp)
+
+	def _create_bitmap(self):
+		dc = wx.MemoryDC()
+		dc.SetFont(self.Font)
+		dc.SelectObject(wx.EmptyBitmap(1, 1))
+
+		text_width, text_height = dc.GetTextExtent(self.tag_text)
+
+		height = text_height + self.border * 2
+		width_offset = math.floor((text_height - text_width) / 2)
+		
+		bmp = wx.EmptyBitmap(height, height)
+		dc.SelectObject(bmp)
+
+		dc.Clear()
+
+		# We assume the height will be greater than the width, so we use it
+		# for both dimensions to make a square.
+		self.DrawVistaRectangle(dc, wx.Rect(0, 0, height, height), True)
+		if self.white_text: dc.SetTextForeground(wx.WHITE)
+		dc.DrawText(self.tag_text, self.border + width_offset, self.border)
+		
+		# assign the resultant bitmap
+		del dc
+		self.bmp = bmp
+		
+		self.SetSize((height, height))
+		self.SetMinSize((height, height))
+
+	# taken from wx.lib.customtreectrl
+	def DrawVistaRectangle(self, dc, rect, hasfocus):
+		"""Draw the selected item(s) with the Windows Vista style."""
+
+		if hasfocus:
+			
+			outer = _rgbSelectOuter
+			inner = _rgbSelectInner
+			top = _rgbSelectTop
+			bottom = _rgbSelectBottom
+
+		else:
+			
+			outer = _rgbNoFocusOuter
+			inner = _rgbNoFocusInner
+			top = _rgbNoFocusTop
+			bottom = _rgbNoFocusBottom
+
+		oldpen = dc.GetPen()
+		oldbrush = dc.GetBrush()
+
+		bdrRect = wx.Rect(*rect.Get())
+		filRect = wx.Rect(*rect.Get())
+		filRect.Deflate(1,1)
+		
+		r1, g1, b1 = int(top.Red()), int(top.Green()), int(top.Blue())
+		r2, g2, b2 = int(bottom.Red()), int(bottom.Green()), int(bottom.Blue())
+
+		flrect = float(filRect.height)
+		if flrect < 1:
+			flrect = self._lineHeight
+
+		rstep = float((r2 - r1)) / flrect
+		gstep = float((g2 - g1)) / flrect
+		bstep = float((b2 - b1)) / flrect
+
+		rf, gf, bf = 0, 0, 0
+		dc.SetPen(wx.TRANSPARENT_PEN)
+		
+		for y in xrange(filRect.y, filRect.y + filRect.height):
+			currCol = (r1 + rf, g1 + gf, b1 + bf)
+			dc.SetBrush(wx.Brush(currCol, wx.SOLID))
+			dc.DrawRectangle(filRect.x, y, filRect.width, 1)
+			rf = rf + rstep
+			gf = gf + gstep
+			bf = bf + bstep
+		
+		dc.SetBrush(wx.TRANSPARENT_BRUSH)
+		dc.SetPen(wx.Pen(outer))
+		dc.DrawRoundedRectangleRect(bdrRect, self.border)
+		bdrRect.Deflate(1, 1)
+		dc.SetPen(wx.Pen(inner))
+		dc.DrawRoundedRectangleRect(bdrRect, self.border - 1)
+
+		dc.SetPen(oldpen)
+		dc.SetBrush(oldbrush)
 
 class LookPicker(wx.PopupTransientWindow):
-	COLUMNS = 5
+	# 1 column for each of the colours.
+	COLUMNS = 10
 	def __init__(self, parent, text, position, 
 		look=0, colour=0, parent_look=0, parent_colour=0, using_parent=True):
 		super(LookPicker, self).__init__(parent, style=wx.NO_BORDER)
@@ -425,10 +521,9 @@ class LookPicker(wx.PopupTransientWindow):
 		main_sizer = wx.FlexGridSizer(6, 1, 3, 6)
 		use_parent_look_label = wx.StaticText(panel, label=_("Use Parent Look:"))
 		colour_label = wx.StaticText(panel, label=_("Colour:"))
-		look_label = wx.StaticText(panel, label=_("Appearance:"))
 		label_font = use_parent_look_label.Font
 		label_font.Weight = wx.FONTWEIGHT_BOLD
-		colour_label.Font = look_label.Font = use_parent_look_label.Font = label_font
+		colour_label.Font = use_parent_look_label.Font = label_font
 		
 		# Use parent look.
 		use_parent_look_tag_border = Border(panel)
@@ -441,27 +536,15 @@ class LookPicker(wx.PopupTransientWindow):
 
 		# Choose colour.
 		self.colours = []
-		colour_sizer = wx.GridSizer(len(colours)/self.COLUMNS, self.COLUMNS, 0, 0)
-		for colour in range(len(colours)):
+		colour_sizer = wx.GridSizer(len(rectangle_colours_and_looks)/self.COLUMNS, self.COLUMNS, 0, 0)
+		for colour_index, look_index in rectangle_colours_and_looks:
 			colour_rect_border = Border(panel, border_width=4, rounded_rectangle_radius=3)
-			colour_rect = ColourRect(colour_rect_border, colour=colour)
+			colour_rect = ColourRect(colour_rect_border, look=look_index, colour=colour_index)
 			colour_rect_border.set_child(colour_rect)
 			self.colours.append(colour_rect)
 			colour_sizer.Add(colour_rect_border, 0, wx.ALIGN_CENTRE)
 
 			colour_rect.Bind(wx.EVT_LEFT_UP, self.on_select_colour)
-
-		# Choose looks.
-		self.looks = []
-		look_sizer = wx.GridSizer(len(looks)/2, 2, 3, 3)
-		for look in range(len(looks)):
-			look_tag_border = Border(panel)
-			look_tag = PassageTagLook(look_tag_border, text, look=look, colour=self.colour)
-			look_tag_border.set_child(look_tag)
-			self.looks.append(look_tag)
-			look_sizer.Add(look_tag_border, 0, wx.ALIGN_CENTRE)
-
-			look_tag.Bind(wx.EVT_LEFT_UP, self.on_select_look)
 
 		def AddItemWithPadding(item, padding):
 			new_sizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -474,8 +557,6 @@ class LookPicker(wx.PopupTransientWindow):
 		AddItemWithPadding(use_parent_look_tag_border, 5)
 		main_sizer.Add(colour_label)
 		AddItemWithPadding(colour_sizer, 5)
-		main_sizer.Add(look_label)
-		AddItemWithPadding(look_sizer, 5)
 
 		self.update_borders()
 
@@ -490,13 +571,9 @@ class LookPicker(wx.PopupTransientWindow):
 	
 	def update_borders(self):
 		for item in self.colours:
-			item.Parent.border = item.colour == self.colour
+			item.Parent.border = (item.colour == self.colour and item.look == self.look)
 			item.Parent.Refresh()
 				
-		for item in self.looks:
-			item.Parent.border = item.look == self.look
-			item.Parent.Refresh()
-			
 		self.parent.Parent.border = self.using_parent_look
 		self.parent.Parent.Refresh()
 
@@ -505,10 +582,7 @@ class LookPicker(wx.PopupTransientWindow):
 		colour_rect = event.EventObject
 		#self.Dismiss()
 		self.colour = colour_rect.colour
-		# Set the look to the default look for that colour.
-		self.look = colours[self.colour][2]
-		for item in self.looks:
-			item.set_scheme(item.look, self.colour)
+		self.look = colour_rect.look
 
 		self.update_borders()
 
@@ -535,10 +609,6 @@ class LookPicker(wx.PopupTransientWindow):
 		#self.Dismiss()
 		self.colour = parent_look_passage_tag.colour
 		self.look = parent_look_passage_tag.look
-		self.update_borders()
-		for item in self.looks:
-			item.set_scheme(item.look, self.colour)
-
 		self.update_borders()
 		self.Fit()
 		self.Layout()
