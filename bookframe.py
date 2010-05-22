@@ -260,6 +260,8 @@ class BookFrame(AUIDisplayFrame):
 			ref = self.get_verified(qs.text)
 			if ref:
 				self.notify(ref, source=QUICK_SELECTOR)
+			else:
+				return
 
 		qs.Destroy()
 

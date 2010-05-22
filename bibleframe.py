@@ -178,6 +178,8 @@ class BibleFrame(VerseKeyedFrame):
 			text = self.get_verified_multi_verses(qs.text)
 			if text:
 				self.open_tooltip(text)
+			else:
+				return
 				
 		qs.Destroy()
 	
