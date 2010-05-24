@@ -58,7 +58,7 @@ class ConfigSection(object):
 
 # RawConfigParser eats up trailing whitespace; replace each space with
 # \u0020, which the pickler can still read, but won't be eaten.
-space_replacer = re.compile("^(V.*)( +)$", re.M)
+space_replacer = re.compile("^(a?V.*)( +)$", re.M)
 
 def replace_spaces(match):
 	return match.group(1) + match.group(2).replace(" ", "\\u0020")
