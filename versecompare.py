@@ -248,5 +248,7 @@ class VerseCompareFrame(LinkedFrame):
 	def reload(self):
 		self.SetReference(self.reference, reload=True)
 
+	refresh = reload
+
 	def get_reference_textbox(self):
 		return self.gui_reference
