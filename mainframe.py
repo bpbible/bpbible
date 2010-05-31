@@ -162,6 +162,12 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.bible_observers += self.add_history_item
 
 		self.load_data()
+
+		# issue 142 - devenagari text shows up too small in windows 7,
+		# increase the base window font size.
+		if osutils.is_win7() and pysw.locale_lang in ('ne', 'hi'):
+			self.SetFont(wx.Font(11, wx.SWISS, wx.NORMAL, wx.NORMAL, False, fonts.default_fonts()[1][0]))
+
 		self.make_toolbars()
 		
 		self.create_searchers()

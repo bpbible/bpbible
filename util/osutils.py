@@ -11,6 +11,18 @@ def is_msw():
 def is_mac():
 	return "wxMac" in wx.PlatformInfo
 
+def is_win7():
+	"""
+	Return whether windows 7
+	"""
+	
+	if sys.platform == "win32":
+		major, minor, _, platform, _ = sys.getwindowsversion()
+		if platform == 2 and (major, minor) == (6, 1):
+			return True
+	
+	return False
+
 def is_win2000():
 	"""
 	Return whether windows <= 2000
