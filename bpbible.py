@@ -61,6 +61,7 @@ class MyApp(wx.App):
 	
 	def OnInit(self):
 		self.ShowSplashScreen()
+		self.InitXULRunner()
 		
 		self.starting = True
 		self.restarting = False
@@ -91,8 +92,17 @@ class MyApp(wx.App):
 		)
 		self.splash.Show()
 		self.splash.Raise()
-	
 
+	def InitXULRunner(self):
+		import wx.wc
+		xulrunner_path = "d:\\devel\\webconnect_testapp\\xr\\"
+		print xulrunner_path
+		wx.wc.WebControl.AddPluginPath("Mozilla Firefox\\Plugins")
+		wx.wc.WebControl.InitEngine(xulrunner_path)
+
+		protocol_handler = wx.wc.ProtocolHandler()
+		protocol_handler.thisown = False
+		wx.wc.RegisterProtocol("test", protocol_handler)
 
 def main():
 	inspection_imported = False

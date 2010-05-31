@@ -3,7 +3,7 @@ import string
 
 import wx
 from wx import html
-import wx.webview
+import wx.wc
 
 
 import guiconfig
@@ -259,11 +259,12 @@ class DummyHtmlSelectableWindow(DummyHtmlBase):
 		text_colour=text_colour, body_colour=body_colour)
 	"""
 				
-class DisplayFrame(TooltipDisplayer, wx.webview.WebView, DummyHtmlSelectableWindow):
+class DisplayFrame(TooltipDisplayer, wx.wc.WebControl, DummyHtmlSelectableWindow):
 	#def __init__(self, parent, style=html.HW_DEFAULT_STYLE,
 	#		logical_parent=None):
 	def __init__(self, parent, logical_parent=None, style=None):
-		super(DisplayFrame, self).__init__(parent, -1, style=wx.WANTS_CHARS) # XXX: What's the -1 for?
+		#super(DisplayFrame, self).__init__(parent, -1, style=wx.WANTS_CHARS) # XXX: What's the -1 for?
+		super(DisplayFrame, self).__init__(parent)
 
 		self.logical_parent = logical_parent
 		self.handle_links = True
@@ -281,7 +282,7 @@ class DisplayFrame(TooltipDisplayer, wx.webview.WebView, DummyHtmlSelectableWind
 		
 		self.Bind(wx.EVT_LEAVE_WINDOW, self.MouseOut)
 		self.Bind(wx.EVT_ENTER_WINDOW, self.MouseIn)
-		self.Bind(wx.webview.EVT_WEBVIEW_BEFORE_LOAD, self.BeforeLoadURL)
+		self.Bind(wx.wc.EVT_WEB_OPENURI, self.OnOpenURI)
 		
 		hover = protocol_handler.register_hover
 		# TODO: move these out somewhere else
@@ -918,7 +919,7 @@ class DisplayFrame(TooltipDisplayer, wx.webview.WebView, DummyHtmlSelectableWind
 		if kwargs:
 			print "SetPage: kwargs discarded:", kwargs
 		dprint(WARNING, "SetPage", self.__class__, len(args[0]))
-		self.SetPageSource(*args)
+		self.SetContent("test://123.456.com", args[0]) # XXX: FixMe: Give a proper URL.
 
 	"""
 	def SetPageSource(self, *args):
@@ -952,10 +953,12 @@ class DisplayFrame(TooltipDisplayer, wx.webview.WebView, DummyHtmlSelectableWind
 	def get_frame_for_search(self):
 		return guiconfig.mainfrm.bibletext
 
-	def BeforeLoadURL(self, event):
-		dprint(WARNING, "Loading URL", event.GetURL())
-		protocol_handler.on_link_opened(self, event.GetURL())
-		event.Cancel()
+	def OnOpenURI(self, event):
+		dprint(WARNING, "Loading HREF", event.GetHref())
+		if event.GetHref().startswith('test'):
+			return
+		protocol_handler.on_link_opened(self, event.GetHref())
+		event.Veto()
 
 class DisplayFrameXRC(DisplayFrame):
 	def __init__(self):

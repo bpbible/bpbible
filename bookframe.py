@@ -81,8 +81,7 @@ class BookFrame(AUIDisplayFrame):
 			#replace common values
 			#data = ReplaceUnicode(data)
 
-		#self.SetPage(data, raw=raw)
-		self.SetPageSource(data)
+		self.SetPage(data, raw=raw)
 		self.update_title()
 		
 	@property
@@ -542,8 +541,7 @@ class DictionaryFrame(BookFrame):
 			data = ref_text + text
 			data = data.replace("<!P>","</p><p>")
 
-		#self.SetPage(data, raw=raw)
-		self.SetPageSource(data)
+		self.SetPage(data, raw=raw)
 		self.update_title()
 
 	def SetReference_from_string(self, string):
