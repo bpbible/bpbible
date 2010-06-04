@@ -9,7 +9,7 @@ msgstr ""
 "Last-Translator: Jose Humberto Araque Meza <jharaquem@gmail.com>\n"
 "Language-Team: Jose Humberto Araque Meza <jharaquem@gmail.com>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: pygettext.py 1.5\n"
 "X-Poedit-Language: Spanish\n"
@@ -80,7 +80,7 @@ msgstr "comentario"
 
 #: backend/book.py:657 bibleframe.py:36 xrc/auifrm_xrc.py:69
 msgid "Bible"
-msgstr "&Biblia"
+msgstr "Biblia"
 
 #: bibleframe.py:72 bookframe.py:164 mainframe.py:255
 #: search/searchpanel.py:157
