@@ -788,6 +788,7 @@ class MainFrame(wx.Frame, AuiLayer):
 			[(text, display_name) for text, (display_name, x, y) 
 				in util.i18n.get_bookname_languages()],
 			util.i18n.locale_settings["language_book_names"].get(
+				util.i18n.locale_settings["language"],
 				util.i18n.locale_settings["language"]
 			),
 			self.on_bookname_language_choice, self.language_bookname_mapping)
