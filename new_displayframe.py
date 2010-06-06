@@ -302,8 +302,7 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl, DummyHtmlSelectableWindow
 		self.current_target = None
 		self.mouseout = False
 		
-		self.Bind(wx.EVT_CONTEXT_MENU, self.show_popup)
-		self.Bind(wx.EVT_RIGHT_UP, self.show_popup)
+		self.Bind(wx.wc.EVT_WEB_SHOWCONTEXTMENU, self.show_popup)
 		
 		self.Bind(wx.EVT_LEAVE_WINDOW, self.MouseOut)
 		self.Bind(wx.EVT_ENTER_WINDOW, self.MouseIn)
