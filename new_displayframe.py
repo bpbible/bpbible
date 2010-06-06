@@ -219,11 +219,10 @@ class DummyHtmlSelectableWindow(DummyHtmlBase):
 	def setup(self):
 		# XXX: Change to handle the selection.
 		self.m_selection = None
-		pass
+		self.Bind(wx.EVT_KEY_UP, self.on_char)
 
 	def on_char(self, event):
-		#guiutil.dispatch_keypress(self.get_actions(), event
-		pass
+		guiutil.dispatch_keypress(self.get_actions(), event)
 		
 	def OnCopy(self, event=None, with_links=True):
 		pass
