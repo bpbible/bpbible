@@ -100,6 +100,12 @@ class DummyHtmlBase(object):
 		
 		
 	
+	def CalcScrolledPosition(self, x, y):
+		pass
+
+	def SetBorders(self, _border):
+		pass
+
 	def set_page(self, text, raw=False, text_colour=None, body_colour=None):
 		"""Set the page with the given text and colour. 
 		
@@ -259,6 +265,9 @@ class DummyHtmlSelectableWindow(DummyHtmlBase):
 		text_colour=text_colour, body_colour=body_colour)
 	"""
 				
+WX_MOUSE_OVER_EVENT = 999991
+WX_MOUSE_OUT_EVENT = 999992
+
 class DisplayFrame(TooltipDisplayer, wx.wc.WebControl, DummyHtmlSelectableWindow):
 	#def __init__(self, parent, style=html.HW_DEFAULT_STYLE,
 	#		logical_parent=None):
@@ -269,10 +278,26 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl, DummyHtmlSelectableWindow
 		self.logical_parent = logical_parent
 		self.handle_links = True
 		
+	def DomContentLoaded(self, event):
+		document = self.GetDOMDocument()
+		#document.AddEventListener("mouseover", self, WX_MOUSE_OVER_EVENT, True)
+		#document.AddEventListener("mouseout", self, WX_MOUSE_OUT_EVENT, True)
+
+	def DomEventReceived(self, event):
+		pass
+		event_id = event.GetId()
+		if event_id not in (WX_MOUSE_OVER_EVENT, WX_MOUSE_OUT_EVENT):
+			return
+
+		if event_id == WX_MOUSE_OVER_EVENT:
+			print "Mouse over"
+		elif event_id == WX_MOUSE_OUT_EVENT:
+			print "Mouse out"
 
 	def setup(self):
 		self.handle_links = True
-		self.html_type = DisplayFrame
+		import displayframe
+		self.html_type = displayframe.DisplayFrame
 
 		self.current_target = None
 		self.mouseout = False
@@ -283,6 +308,10 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl, DummyHtmlSelectableWindow
 		self.Bind(wx.EVT_LEAVE_WINDOW, self.MouseOut)
 		self.Bind(wx.EVT_ENTER_WINDOW, self.MouseIn)
 		self.Bind(wx.wc.EVT_WEB_OPENURI, self.OnOpenURI)
+		self.Bind(wx.wc.EVT_WEB_DOMCONTENTLOADED, self.DomContentLoaded)
+		self.Bind(wx.wc.EVT_WEB_DOMEVENT, self.DomEventReceived)
+		self.Bind(wx.wc.EVT_WEB_MOUSEOVER, self.MouseOverEvent)
+		self.Bind(wx.wc.EVT_WEB_MOUSEOUT, self.MouseOutEvent)
 		
 		hover = protocol_handler.register_hover
 		# TODO: move these out somewhere else
@@ -356,17 +385,22 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl, DummyHtmlSelectableWindow
 		if link and self.handle_links: 
 			self.LinkClicked(link, cell)
 
-	def OnCellMouseEnter(self, cell, x, y):
+	def MouseOverEvent(self, event):
+		event.Skip()
 		self.current_target = None
 		
-		if cell.GetLink() is None or not self.handle_links:
+		element = event.GetTargetNode()
+		href = event.GetHref()
+		if not href or not self.handle_links:
 			return
 
 
 		if guiconfig.mainfrm.lost_focus: return
 
-		link = cell.GetLink()
-		href = link.GetHref()
+		# Removed complex code to find the full extent of the link.
+		# Something like this to get the right position to display the
+		# tooltip should be created.
+		"""
 		parent = cell.Parent
 		assert parent
 
@@ -427,6 +461,11 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl, DummyHtmlSelectableWindow
 		xx, yy = self.ClientToScreen(self.CalcScrolledPosition(xx, yy))
 		self.current_target = href, wx.Rect(
 			xx, yy, rect.GetWidth(), rect.GetHeight()
+		), 4
+		"""
+		x, y = wx.GetMousePosition()
+		self.current_target = href, wx.Rect(
+			x, y, 0, 0
 		), 4
 
 		if self.current_target and self.tooltip.target and \
@@ -612,12 +651,15 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl, DummyHtmlSelectableWindow
 	
 	@staticmethod
 	def on_hover_bible(frame, href, url, x, y):
-		scrolled_values = frame.CalcScrolledPosition(x, y) 
-		screen_x, screen_y = frame.ClientToScreen(scrolled_values)
+		#scrolled_values = frame.CalcScrolledPosition(x, y) 
+		#screen_x, screen_y = frame.ClientToScreen(scrolled_values)
+	
+		screen_x, screen_y = wx.GetMousePosition()
 	
 		frame.tooltip.show_bible_refs(frame, href, url, screen_x, screen_y)
 
-	def OnCellMouseLeave(self, cell, x, y):
+	def MouseOutEvent(self, event):
+		event.Skip()
 		if self.has_tooltip:
 			self.tooltip.MouseOut(None)
 

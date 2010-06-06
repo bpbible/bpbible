@@ -306,7 +306,7 @@ class Tooltip(TooltipBaseMixin, tooltip_parent):
 		
 		self.parent = parent
 		self.logical_parent = logical_parent
-		self.html_type = html_type
+		self.html_type = displayframe.DisplayFrame
 
 		# create the container panels
 		self.container_panel = wx.Panel(self, -1, style=wx.RAISED_BORDER)
@@ -520,7 +520,7 @@ class PermanentTooltip(TooltipBaseMixin, pclass):
 		self.recreate_toolbar()
 
 		# make html
-		self.html = html_type(self.container_panel, 
+		self.html = displayframe.DisplayFrame(self.container_panel, 
 			style=html.HW_SCROLLBAR_AUTO)
 
 		# make sizer for panel
@@ -887,7 +887,8 @@ class TooltipDisplayer(object):
 		if not self._tooltip:
 			self._tooltip = Tooltip(guiutil.toplevel_parent(self), 
 				style=wx.NO_BORDER,
-				html_type=self.html_type, logical_parent=self)
+				html_type=displayframe.DisplayFrame, logical_parent=self)
+			#	html_type=self.html_type, logical_parent=self)
 			#self.Bind(wx.EVT_KILL_FOCUS, self.KillFocus)
 			
 			guiconfig.mainfrm.add_toplevel(self._tooltip)

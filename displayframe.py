@@ -392,8 +392,9 @@ class DisplayFrame(TooltipDisplayer, HtmlSelectableWindow):
 	
 	@staticmethod
 	def on_hover_bible(frame, href, url, x, y):
-		scrolled_values = frame.CalcScrolledPosition(x, y) 
-		screen_x, screen_y = frame.ClientToScreen(scrolled_values)
+		#scrolled_values = frame.CalcScrolledPosition(x, y) 
+		#screen_x, screen_y = frame.ClientToScreen(scrolled_values)
+		screen_x, screen_y = wx.GetMousePosition()
 	
 		frame.tooltip.show_bible_refs(frame, href, url, screen_x, screen_y)
 
