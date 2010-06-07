@@ -267,20 +267,36 @@ class DummyHtmlSelectableWindow(DummyHtmlBase):
 WX_MOUSE_OVER_EVENT = 999991
 WX_MOUSE_OUT_EVENT = 999992
 
+# Decorator to manage functions that cannot be called while the document is
+# loading.
+def defer_till_document_loaded(function_to_decorate):
+	def function(self, *args, **kwargs):
+		if self.dom_loaded:
+			print "DOM loaded, works fine."
+			function_to_decorate(self, *args, **kwargs)
+		else:
+			print "Adding item to list of things to execute."
+			self.events_to_call_on_document_load.append((function_to_decorate, args, kwargs))
+
+	return function
+
 class DisplayFrame(TooltipDisplayer, wx.wc.WebControl, DummyHtmlSelectableWindow):
-	#def __init__(self, parent, style=html.HW_DEFAULT_STYLE,
-	#		logical_parent=None):
 	def __init__(self, parent, logical_parent=None, style=None):
-		#super(DisplayFrame, self).__init__(parent, -1, style=wx.WANTS_CHARS) # XXX: What's the -1 for?
 		super(DisplayFrame, self).__init__(parent)
 
 		self.logical_parent = logical_parent
 		self.handle_links = True
+		self.dom_loaded = True
+		self.events_to_call_on_document_load = []
 		
 	def DomContentLoaded(self, event):
 		document = self.GetDOMDocument()
 		#document.AddEventListener("mouseover", self, WX_MOUSE_OVER_EVENT, True)
 		#document.AddEventListener("mouseout", self, WX_MOUSE_OUT_EVENT, True)
+		self.dom_loaded = True
+		for function, args, kwargs in self.events_to_call_on_document_load:
+			function(self, *args, **kwargs)
+		self.events_to_call_on_document_load = []
 
 	def DomEventReceived(self, event):
 		pass
@@ -961,22 +977,12 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl, DummyHtmlSelectableWindow
 		dprint(WARNING, "SetPage", self.__class__, len(args[0]))
 		self.SetContent("test://123.456.com", args[0]) # XXX: FixMe: Give a proper URL.
 
-	"""
-	def SetPageSource(self, *args):
-		dprint(WARNING, "setPageSource begin")
-		super(DisplayFrame, self).SetPageSource(*args)
-		dprint(WARNING, "setPageSource end")
-	"""
-
 	def Scroll(self, x, y):
 		return
 
+	@defer_till_document_loaded
 	def scroll_to_current(self):
-		# XXX: This doesn't actually seem to scroll the window.
-		dprint(WARNING, "scroll_to_current", self.__class__)
-		#raise Error('a')
-		# XXX: This causes the application to crash on start up.
-		#self.RunScript('window.location.hash = "current";')
+		self.Execute('window.location.hash = "current";')
 	
 	def set_mod(self, value):
 		self._mod = value
@@ -995,6 +1001,7 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl, DummyHtmlSelectableWindow
 
 	def OnOpenURI(self, event):
 		dprint(WARNING, "Loading HREF", event.GetHref())
+		self.dom_loaded = False
 		if event.GetHref().startswith('test'):
 			return
 		protocol_handler.on_link_opened(self, event.GetHref())
