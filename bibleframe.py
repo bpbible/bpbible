@@ -331,72 +331,40 @@ class BibleFrame(VerseKeyedFrame):
 		#file.writelines(data)
 		#file.close()
 		self.update_title()
-
-	def FindVerse(self, cell, start_cell):
-		assert cell.IsTerminalCell()
-		i = linkiter(start_cell, cell)
-
-		prev = i.m_pos
-		verse = None
-		while (i):
-			#print cell, i.m_pos
-		
-			# new block
-			#if (not eq(prev.GetParent(), i.m_pos.GetParent())):
-			#	text += '\n';
-			#	faketext += '\n'
-			#print i.m_pos.ConvertToText(None)
-
-			if(i.m_pos.GetLink()):
-				match = re.match("nbible:([^#]*)(#current)?", 
-					i.m_pos.GetLink().Href)
-				#GetTarget()
-				if match:
-					verse = match.group(1)
-			
-			prev = i.m_pos
-			i.next()
-			
-		if not eq(prev, cell):
-			return None
-
-		if not verse:
-			return None
-
-		return GetVerseStr(verse, self.reference)
 	
 	def GetRangeSelected(self):
-		if not self.m_selection:
+		text = self.ExecuteScriptWithResult("""
+			(function()	{
+				var selectionRange = window.getSelection().getRangeAt(0);
+				if (selectionRange.collapsed)	{
+					return "";
+				}
+				var links = document.getElementsByTagName("a");
+				var selectionStart = "";
+				var selectionEnd = "";
+				var re = /nbible:([^#]*)(#current)?/;
+				var linkRange = document.createRange();
+				for (var index = 0; index < links.length; index++)	{
+					var link = links[index];
+					var match = re.exec(link.href);
+					if (!match)	{
+						continue;
+					}
+					linkRange.selectNode(link);
+					if (selectionRange.compareBoundaryPoints(Range.START_TO_START, linkRange) > 0)	{
+						selectionStart = match[1];
+					}
+					if (selectionRange.compareBoundaryPoints(Range.END_TO_END, linkRange) > 0)	{
+						selectionEnd = match[1];
+					}
+				}
+				return (selectionStart && selectionEnd) ? decodeURI(selectionStart) + " - " + decodeURI(selectionEnd) : "";
+			})();
+		""")
+		if not text:
 			return
 
-		from_cell = self.m_selection.GetFromCell()
-		to_cell = self.m_selection.GetToCell()
-
-		# use the first terminal as:
-		#  - it isn't the one we want (it is probably a font cell)
-		#  - we call next on it right away, so it shouldn't be a container
-		#    otherwise we may miss bits
-		start_cell = self.GetInternalRepresentation().FirstTerminal
-		first = self.FindVerse(from_cell, start_cell=start_cell)
-		
-		last = self.FindVerse(to_cell, start_cell=start_cell)
-
-		if not first:
-			first = GetVerseStr("1", self.reference)
-
-		if not last:
-			return ""
-
-		text = first + " - " + last
-		print text
 		return GetBestRange(text)
-	
-	#def CellClicked(self, cell, x, y, event):
-	#	#if(self.select): return
-	#	if(event.ControlDown()):
-	#		print cell.this, self.FindVerse(cell)
-
-	#	return super(BibleFrame, self).CellClicked(cell, x, y, event)
 
 	def CellMouseUp(self, cell, x, y, event):
 		if not self.m_tmpHadSelection and not self.m_selection and not event.Dragging():
