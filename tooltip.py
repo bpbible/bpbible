@@ -142,6 +142,7 @@ class TooltipBaseMixin(object):
 				text_colour=self.text_colour)
 		
 		# now we can get at the real size :)
+		"""
 		i = self.html.GetInternalRepresentation()
 
 		w, h = (i.GetWidth() + tooltip_settings["border"], 
@@ -149,6 +150,7 @@ class TooltipBaseMixin(object):
 
 		self.html.SetDimensions(0, 0, w, h)
 		self.resize_tooltip()
+		"""
 
 		width, height = self.GetSize()
 
@@ -306,8 +308,8 @@ class Tooltip(TooltipBaseMixin, tooltip_parent):
 		
 		self.parent = parent
 		self.logical_parent = logical_parent
-		self.html_type = displayframe.DisplayFrame
-
+		import new_displayframe
+		self.html_type = new_displayframe.DisplayFrame 
 		# create the container panels
 		self.container_panel = wx.Panel(self, -1, style=wx.RAISED_BORDER)
 		self.toolbarpanel = wx.Panel(self.container_panel, -1)
@@ -520,8 +522,10 @@ class PermanentTooltip(TooltipBaseMixin, pclass):
 		self.recreate_toolbar()
 
 		# make html
-		self.html = displayframe.DisplayFrame(self.container_panel, 
-			style=html.HW_SCROLLBAR_AUTO)
+		#self.html = displayframe.DisplayFrame(self.container_panel, 
+		#	style=html.HW_SCROLLBAR_AUTO)
+		import new_displayframe
+		self.html = new_displayframe.DisplayFrame(self.container_panel)
 
 		# make sizer for panel
 		self.global_sizer = wx.BoxSizer(wx.VERTICAL)		
@@ -884,10 +888,11 @@ class TooltipDisplayer(object):
 
 	@property
 	def tooltip(self):
+		import new_displayframe
 		if not self._tooltip:
 			self._tooltip = Tooltip(guiutil.toplevel_parent(self), 
 				style=wx.NO_BORDER,
-				html_type=displayframe.DisplayFrame, logical_parent=self)
+				html_type=new_displayframe.DisplayFrame, logical_parent=self)
 			#	html_type=self.html_type, logical_parent=self)
 			#self.Bind(wx.EVT_KILL_FOCUS, self.KillFocus)
 			
