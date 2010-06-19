@@ -1,6 +1,6 @@
 [Format]
 Type=PortableApps.comFormat
-Version=0.91
+Version=2.0
 
 [Details]
 Name=BPBible Portable
@@ -20,9 +20,6 @@ CommercialUse=true
 [Version]
 PackageVersion=$APPVERSION
 DisplayVersion=$APPDISPLAYVERSION
-
-[SpecialPaths]
-Plugins=App\BPBible\resources
 
 [Control]
 Icons=1
