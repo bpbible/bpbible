@@ -585,7 +585,7 @@ class AuiLayer(object):
 			if osutils.is_msw():
 				self.Unbind(wx.EVT_MOUSEWHEEL)
 
-			p.Destroy()
+			wx.CallAfter(p.Destroy)
 				
 
 		p.on_dismiss += on_dismiss
