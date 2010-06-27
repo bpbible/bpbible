@@ -3,11 +3,14 @@ import passage_list
 from swlib.pysw import VK, SW, GetBestRange, GetVerseStr, TOP, process_digits
 from swlib import pysw
 from backend.verse_template import VerseTemplate, SmartBody
+from backend import osisparser
 from util import observerlist
 from util import classproperty
 from util.debug import dprint, WARNING, ERROR
 from util.unicode import to_str, to_unicode
+import cgi
 import os
+import display_options
 
 import config
 
@@ -16,6 +19,10 @@ class FileSaveException(Exception):
 	pass
 
 class Book(object):
+	is_verse_keyed = False
+	is_dictionary = False
+	is_genbook = False
+	chapter_view = False
 	type = None
 	def __init__(self, parent, version = ""):
 		self.parent = parent
@@ -128,6 +135,8 @@ class Book(object):
 		#only for bible keyed books
 		if not self.mod:
 			return None
+
+		raw = raw or display_options.options["raw"]
 		
 		if template is None and self.templatelist:
 			template = self.templatelist[-1]
@@ -158,11 +167,10 @@ class Book(object):
 		# if they pass in a verselist, they can also pass in the ref they
 		# would like to go along with it. This can be useful if it also
 		# includes headings that shouldn't be seen
-		rangetext = GetBestRange(ref, context=context,
+		rangetext = GetBestRange(ref, 
 			userInput=False, userOutput=True, headings=headings)
 
-		internal_rangetext = GetBestRange(ref, context=context, 
-			headings=headings)
+		internal_rangetext = GetBestRange(ref, headings=headings)
 			
 		if rangetext == "":
 			self.vk.Headings(old_headings)
@@ -200,7 +208,8 @@ class Book(object):
 			if specialref == body_dict["internal_reference"]:
 				t = specialtemplate
 
-			verse = u""
+			verse = t.preverse.safe_substitute(body_dict)
+
 			for heading_dict in headings:
 				verse += t.headings.safe_substitute(heading_dict)
 			
@@ -211,9 +220,10 @@ class Book(object):
 		self.vk.Headings(old_headings)
 
 		text += template.finalize(u''.join(verses))
+		text += self.end_of_render
 		text += template.footer.safe_substitute(d)
 		if remove_extra_whitespace:
-			text = SmartBody.strip_whitespace_end.sub(u'', text)
+			text = SmartBody.incl_whitespace_end.sub(u'', text)
 		return text
 		
 			
@@ -230,6 +240,8 @@ class Book(object):
 		#only for bible keyed books
 		verselist.setPosition(TOP)
 		verselist.Persist(1)
+		u_vk = pysw.UserVK()
+		u_vk.Headings(1)
 		versekey = SW.VerseKey()
 		versekey.Headings(1)
 		mod = module or self.mod
@@ -239,7 +251,8 @@ class Book(object):
 		verses_left = max_verses
 
 		ERR_OK = chr(0)
-		render_text = self.get_rendertext(mod)
+		render_text, render_start, render_end = self.get_rendertext(mod)
+		if render_start: render_start()
 
 		try:
 			incrementer = mod if skip_linked_verses else verselist
@@ -255,35 +268,16 @@ class Book(object):
 				versekey.setText(key.getText())
 				#if(self.headings):
 				#	versekey.Headings(1)
+				osisRef = versekey.getOSISRef()
 				internal_reference = versekey.getText()
-				if internal_reference.endswith(":0"):
-					reference = ""
-				else:
-					reference = pysw.internal_to_user(internal_reference)
-
-
-
-				if raw:
-					text = mod.getRawEntry().decode("utf-8", "replace")
 				
-				elif stripped:
-					text = mod.StripText().decode("utf-8", "replace")
-					
-					
-				else:
-					text = render_text()
+				rawentry = mod.getRawEntryBuf()
+				if skip_linked_verses and not rawentry.length():
+					# don't include empty text; typically this may be at the
+					# start of the chapter or something...
+					incrementer.increment(1)
+					continue
 
-				user_comments = self.get_user_comments(versekey)
-
-				# XXX: This needs to be done better than this.  Move into
-				# subclass somehow.
-				if isinstance(self, Bible) and display_tags:
-					tags = self.insert_tags(versekey, exclude_topic_tag)
-				else:
-					tags = ""
-
-				mod.getKey()
-				
 				start_verse = end_verse = versekey.Verse()
 				
 				# a patch adds isLinked, not in SWORD trunk yet
@@ -319,25 +313,52 @@ class Book(object):
 					verse = "%d" % start_verse
 				else:
 					verse = "%d-%d" % (start_verse, end_verse)
+				
+				u_vk.setText(internal_reference)				
+				if internal_reference.endswith(":0"):
+					if start_verse != end_verse:
+						print "WARNING: unhandled linked verse with verse 0"
+						
+					if versekey.Chapter() == 0:
+						reference = u_vk.getBookName()
+					else:
+						reference = u_vk.get_book_chapter()
 
-				body_dict = dict(text=text,
-							versenumber = process_digits(verse,
-								userOutput=True), 
-							chapternumber = process_digits(
-								str(versekey.Chapter()),
-								userOutput=True),
-							booknumber = ord(versekey.Book()),
-							bookabbrev = versekey.getBookAbbrev(),
-							bookname = versekey.getBookName(),
-							reference = reference,
-							internal_reference = internal_reference,
-							tags = tags,
-							usercomments = user_comments,
+				else:
+					reference = u_vk.get_book_chapter()
+					reference += ":" + verse
+					
+				body_dict = dict(
+					# text comes later
+					versenumber = process_digits(verse,
+						userOutput=True), 
+					chapternumber = process_digits(
+						str(versekey.Chapter()),
+						userOutput=True),
+					booknumber = ord(versekey.Book()),
+					bookabbrev = versekey.getBookAbbrev(),
+					bookname = versekey.getBookName(),
+					reference = reference,
+					internal_reference = internal_reference,
+					osisRef = osisRef,
 				)	
-						  
+				
+				# usually RenderText flushes this out, but we haven't called
+				# that yet - but we definitely don't want extraneous headings
+				mod.getEntryAttributesMap().clear()
+
+				# we want to do our pre-verse content first, but we can't
+				# without running it through the optionFilter first.
+				# we'll then have to run it through again after, otherwise our
+				# entryattributes may go walkabout
+				if raw: rawentry_str = rawentry.c_str()
+				mod.optionFilter(rawentry, versekey)
+				if raw: option_filtered = rawentry.c_str()
+				
 				headings = self.get_headings(internal_reference, mod)
 				#versekey = VK.castTo(key)
 				heading_dicts = []
+				raw_headings = []
 				for heading, canonical in headings:
 					# the new-style pre-verse content lives wrapped up in
 					# <div>'s - it will contain the <title>, but the div will
@@ -348,23 +369,56 @@ class Book(object):
 					# employ a heuristic - if it starts with an <, it is a new
 					# one...
 					nh = heading.startswith("<")
-					if not raw:
-						if stripped:
-							heading = mod.StripText(heading).decode(
-								"utf8",
-								"replace"
-							)
-						else:
-							heading = render_text(heading)
+					if stripped:
+						heading = mod.StripText(heading).decode(
+							"utf8",
+							"replace"
+						)
+					else:
+						heading = render_text(heading).decode("utf8", "replace")
 
 					if not nh:
 						heading = '<h6 class="heading" canonical="%s">%s</h6>\n' % (canonical, heading)
 
+					if raw:
+						raw_headings.append(heading)
 					heading_dict = dict(heading=heading, canonical=canonical)
 					heading_dict.update(body_dict)
 					heading_dicts.append(heading_dict)
 					
-				yield body_dict, heading_dicts	
+
+
+
+				
+				if stripped:
+					text = mod.StripText(rawentry.c_str(), rawentry.length()).decode("utf-8", "replace")			
+
+				else:
+					# we can't use rawentry due to a static local buffer in
+					# swmodule.c; breaks gospel harmonies
+					text = (render_text(#rawentry.c_str(), rawentry.length()
+									   ).decode("utf8", "replace"))
+				
+				# get our actual text
+				if raw:
+					text = self.process_raw(rawentry_str, text, versekey, mod,
+						raw_headings, option_filtered)
+
+				user_comments = self.get_user_comments(versekey)
+
+				# XXX: This needs to be done better than this.  Move into
+				# subclass somehow.
+				if isinstance(self, Bible) and display_tags:
+					tags = self.insert_tags(versekey, exclude_topic_tag)
+				else:
+					tags = ""
+				
+				body_dict.update(dict(text=text,
+									  tags=tags,
+									  usercomments=user_comments))
+
+						  
+				yield body_dict, heading_dicts
 
 				incrementer.increment(1)
 				verses_left -= 1
@@ -372,7 +426,10 @@ class Book(object):
 		finally:
 			mod.setKey(SW.Key())
 			mod.setSkipConsecutiveLinks(old_mod_skiplinks)
-
+		
+		self.end_of_render = ""
+		if render_end:
+			self.end_of_render = render_end()
 
 	def get_user_comments(self, verse_key):
 		if not isinstance(self, Bible):
@@ -485,7 +542,7 @@ class Book(object):
 			[SW.Buf(number)][SW.Buf(field)].c_str()
 
 		# put it through the render filter before returning it
-		return mod.RenderText(data)
+		return mod.RenderText(data).decode("utf8", "replace")
 
 
 	def GetReferenceFromMod(self, mod, ref, max_verses = -1):
@@ -562,13 +619,20 @@ class Book(object):
 		module = mod or self.mod
 		render_text = module.RenderText
 
+		start = finish = None
 		if module.getConfigEntry("SourceType") in (None, "Plaintext"):
 			def render_text(*args):
 				text = module.RenderText(*args)
-				text = text.replace("\n", "<br />")
-				return re.sub(" ( +)", lambda x:"&nbsp;"*len(x.group(1)), text)
+				text = cgi.escape(text)
+				return '<span class="plaintext">%s</span>' % text
 
-		return render_text
+		else:
+			if ord(module.Markup()) == SW.FMT_OSIS:
+				start = osisparser.p.block_start
+				finish = osisparser.p.block_end
+
+
+		return render_text, start, finish
 	
 	def has_feature(self, feature, module=None):
 		if module is not None:
@@ -640,10 +704,32 @@ class Book(object):
 		# make sure it exists
 		os.stat(pp)
 		
-		return SW.Config(pp)		
+		return SW.Config(pp)
+	
+	def process_raw(self, text, rendered_text, key, module, 
+		headings=(), option_filtered=""):
+		kt = key.getOSISRefRangeText() or key.getText()
+		kt = to_unicode(kt, module)
+		if headings:
+			headings = "<ul class='raw-headings'>%s</ul>" % (
+				'\n'.join("<li>%s</li>" % cgi.escape(heading) for heading in headings))
+		else:
+			headings = ""
+
+		if option_filtered:
+			option_filtered = "<pre class='raw-option-filtered'>%s</pre>" % cgi.escape(option_filtered.decode("utf-8", "replace"))
+		return u"""
+%s
+<div class='debug-raw-details' key='%s'>
+	<pre class='raw-rendered'>%s</pre>
+	%s
+	<pre class='raw'>%s</pre>
+	%s
+</div>""" % (rendered_text, cgi.escape(kt), cgi.escape(rendered_text), headings, cgi.escape(text.decode("utf-8", "replace")), option_filtered)
 				
 class Commentary(Book):
 	type = "Commentaries"
+	is_verse_keyed = True
 
 	@classproperty
 	def noun(cls):
@@ -652,6 +738,9 @@ class Commentary(Book):
 
 class Bible(Book):
 	type = "Biblical Texts"
+	is_verse_keyed = True
+	chapter_view = True
+
 	@classproperty
 	def noun(cls):
 		return _("Bible")

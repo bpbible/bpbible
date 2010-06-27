@@ -1,0 +1,78 @@
+/* Timer */
+div.timer {
+	position: fixed;
+	right: 0px;
+	border: thin solid black;
+	background-color: hsla(0, 100%, 50%, .35);
+}
+
+body > div.timer, div.page_segment:hover div.timer, div.debug-raw-details {
+	display: block;
+}
+
+body > div.timer {
+	position: fixed;
+	bottom: 0px;
+}
+
+div.page_segment:hover div.timer {
+	top: 0px;
+	position: absolute;
+	padding: 1px;
+	margin: 2px;
+	-moz-border-radius: 5px;
+}
+
+[dir="rtl"] div.timer {
+	left: 0px;
+	right: inherit;
+}
+
+
+/* Raw details panel under each entry */
+div.debug-raw-details {
+	background-color: gray;
+	border: 1px black solid;
+}
+
+div.debug-raw-details::before {
+	content: "Key: " attr(key) "\a";
+	font-weight: bold;
+	font-size: 1.3em;
+}
+
+div.debug-raw-details .raw-rendered::before {
+	content: "Rendered:\a";
+	font-weight: bold;
+}
+
+div.debug-raw-details .raw::before {
+	content: "Raw:\a";
+	font-weight: bold;
+}
+
+div.debug-raw-details .raw-headings::before {
+	content: "Headings:\a";
+	font-weight: bold;
+}
+
+div.debug-raw-details .raw-rendered {
+	color: maroon;
+}
+
+div.debug-raw-details .raw, 
+div.debug-raw-details .raw-option-filtered,
+div.debug-raw-details .raw-rendered 
+{
+	white-space: pre-wrap;
+}
+
+div.debug-raw-details .raw-option-filtered::before {
+	content: "Raw (after options filtering):\a";
+	font-weight: bold;
+}
+
+div.debug-raw-details .raw-headings ul {
+	white-space: pre-wrap;
+	list-style: hebrew;
+}

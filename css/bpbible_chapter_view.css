@@ -1,0 +1,99 @@
+/* Chapter and verse numbers */
+.chapterview a.chapternumber {
+	float: left;
+	display: block;
+	line-height: 130%;
+	font-size: 200%;
+	text-decoration: none;
+	-moz-margin-end: 3px;
+	color: hsl(240, 35%, 60%);
+}
+
+[dir="rtl"] .chapterview a.chapternumber {
+	float: right;
+}
+
+.chapterview a.versenumber {
+	-moz-margin-end: 2px;
+	text-decoration: none;
+	font-size: small;
+	vertical-align: 0.32em;
+	line-height: 0;
+	color: hsl(240, 35%, 50%);
+	
+}
+
+.chapterview a.currentverse, .chapterview a.versenumber:hover {
+	color: hsl(120, 35%, 50%);
+}
+
+.chapterview a.currentverse.chapternumber, .chapterview a.chapternumber:hover {
+	color: hsl(120, 35%, 60%);
+}
+
+.chapterview br.verse_per_line {
+	display: none;
+}
+
+body[verse_per_line="true"] .chapterview br.verse_per_line {
+	display: inline;
+}
+
+/* Paragraphs */
+.chapterview p {
+	text-indent: 1em;
+	margin-bottom: 1px;
+	margin-top: 1px;	
+}
+
+body[verse_per_line="true"] .chapterview p {
+	text-indent: 0em;
+	margin: 1em 0;
+}
+
+.chapterview blockquote.lg > a.versenumber, 
+.chapterview blockquote.lg > span.highlight > a.versenumber
+{
+	position: relative;
+	float: left;
+	left: -2.5em;
+	line-height: inherit;
+}
+
+.chapterview blockquote.lg a.chapternumber
+{
+	-moz-margin-start: -2em;
+	line-height: 100%;
+	font-size: 150%;
+}
+
+[dir="rtl"] .chapterview blockquote.lg > a.versenumber,
+[dir="rtl"] .chapterview blockquote.lg > span.highlight > a.versenumber
+{
+	left: 0em;
+	float: right;
+	right: -2.5em;
+}
+
+.chapterview div.segment, .chapterview div.no_more_text.end-start {
+	border-bottom: solid 1px #ddd;
+	padding-bottom: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.reference_bar {
+	background: rgba(255, 100, 0, 0.95);
+	position: fixed;
+	top: 0;
+	right: 0;
+/*	width: 100%;*/
+	-moz-border-radius-bottomleft: 1em;
+	z-index: 100;
+	text-align: right;
+	height: 1.5em;
+	padding: 0.1em 0.5em;
+}
+
+body[colour_speakers="coloured_quotes"] .chapterview span.quote {
+	border-bottom: 1px dotted green;
+}

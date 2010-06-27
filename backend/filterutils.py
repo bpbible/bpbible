@@ -5,7 +5,8 @@ from util.debug import dprint, ERROR, WARNING
 import traceback
 from util.configmgr import config_manager
 
-default_ellipsis_level = 2
+# TODO: TESTING - was default_ellipsis_level = 2
+default_ellipsis_level = 0
 filter_settings = config_manager.add_section("Filter")
 filter_settings.add_item("use_osis_parser", True, item_type=bool)
 filter_settings.add_item("use_thml_parser", True, item_type=bool)
@@ -61,12 +62,19 @@ strongs_re = re.compile(r"([HG])(\d+)(!\w)?")
 word_re = re.compile(r" \d+ +([^ ]+)")
 
 
-headwords_module = None
-strongsgreek = strongshebrew = None
+# make reloading not clear out some of our variables
+try:
+	headwords_module
+except: 
+	headwords_module = None
+	strongsgreek = strongshebrew = None
+
+	registered = False
+
+tag = SW.XMLTag()
+
 strongs_cache = {}
 strongs_cacher = None
-registered = False
-
 class ParserBase(object):
 	def __init__(self):
 		super(ParserBase, self).__init__()
@@ -82,24 +90,15 @@ class ParserBase(object):
 		self.success = SW.INHERITED
 		self.u = userdata
 	
-		tag = SW.XMLTag("<%s>" % token)
+		tag.setText("<%s>" % token)		
+		which_one = "start_%s"
 		if tag.isEndTag():
-			method = getattr(self, "end_%s" % tag.getName(), None)
-			if method is not None:
-				self.success = SW.SUCCEEDED		
-				method()
-		else:
-			method = getattr(self, "start_%s" % tag.getName(), None)
-			if method is not None:
-				self.success = SW.SUCCEEDED			
+			which_one = "end_%s"
+		method = getattr(self, which_one % tag.getName(), None)
+		if method is not None:
+			self.success = SW.SUCCEEDED		
+			method(tag)
 
-				# TODO: just pass this on, don't convert to dictionary
-				attributes = {}
-				for item in (i.c_str() for i in tag.getAttributeNames()):
-					attributes[item] = tag.getAttribute(item)
-
-				return method(attributes)
-				
 	def get_strongs_headword_from_headword_module(self, value):
 		global strongs_cacher
 		
@@ -172,7 +171,7 @@ class ParserBase(object):
 			word = display_number
 
 		#TODO handle extra...
-		item = '<font size="-1"><glink href="passagestudy.jsp?action=showStrongs&type=%s&value=%s">&lt;%s&gt;</glink></font>' % (modlang, number, word)
+		item = '<a class="strongs_headword" href="strongs://%s/%s">%s</a>' % (modlang, number, word)
 		strongs_cache[value] = item
 		
 		
@@ -275,7 +274,7 @@ def ellipsize(refs, last_text="", ellipsis=None):
 			ref = pysw.VerseList(item, last_text).GetBestRange(True,
 				userOutput=True)
 			last_text = ref
-			buf.append('<a href="bible:%(internal_ref)s">%(ref)s</a>'% locals())
+			buf.append('<a href="bpbible:%(internal_ref)s">%(ref)s</a>'% locals())
 		if(left_over):
 			url = "?values=%d" % left_over
 			e = "<b><a href="
