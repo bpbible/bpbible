@@ -35,25 +35,18 @@ user_data_dir = osutils.get_user_data_dir()
 def get_path_if_exists(path, alternate_path):
 	"""Expands the given path and checks if it exists.
 
-	If it is an empty path, then alternate_path will be returned.
-	If the path does not exist, then it will be created if possible.
+	If it does, then it is returned.
+	Otherwise, alternate_path is returned.
 	"""
 	if "$DATADIR" in path:
 		path = path.replace("$DATADIR", user_data_dir)
+		if not os.path.exists(path):
+			os.makedirs(path)
 
-	if not path:
-		path = alternate_path
-
-	return path
-
-def create_path_if_not_exists(path):
-	if os.path.exists(path):
-		return
-
-	try:
-		os.makedirs(path)
-	except OSError, e:
-		sys.stderr.write(e)
+	if os.path.isdir(path):
+		return path
+	else:
+		return alternate_path
 
 if os.path.isfile(paths_file):
 	try:
@@ -102,10 +95,6 @@ if sword_paths_file[-1] not in "\\/" and sword_paths_file[-1] not in "\\/":
 
 sword_paths_file += "sword.conf"
 
-create_path_if_not_exists(data_path)
-create_path_if_not_exists(index_path)
-
-
 raw = False
 
 def name():
@@ -145,6 +134,11 @@ def is_release():
 	return release_settings["is_released"]
 
 def show_splashscreen():
+	# the splashscreen isn't working under GTK (inhibits application
+	# startup)
+	if osutils.is_gtk():
+		return False
+
 	if ("--no-splashscreen", "") in opts:
 		return False
 
@@ -170,39 +164,45 @@ use_system_inactive_caption_colour = False
 #plain_xrefs = False
 
 
+preverse = '<a name="${osisRef}_start" osisRef="$osisRef"></a>'
 # templates
-body = (
-u'<a href="nbible:$internal_reference">'
-u'<small><sup>$versenumber</sup></small></a> $text $usercomments $tags')
+verse_number = u'''
+	<a class="vnumber $numbertype%s"
+	   href="bpbible://content/page/$version/$internal_reference"
+	   osisRef="$osisRef"
+	   reference="$reference">
+	   $versenumber</a>'''
+
+body = (u'''%s $text $usercomments $tags
+	<a name="${osisRef}_end" osisRef="$osisRef"></a>''') % verse_number
+
+bible_template = SmartVerseTemplate(body=body%'', preverse=preverse)
+bible_template_without_headings = SmartVerseTemplate(body=body % '',
+	headings=u'', preverse=preverse)
 
 
-bible_template = SmartVerseTemplate(body=body)
+current_verse_template = SmartVerseTemplate(body % ' currentverse',
+											preverse=preverse)
 
-bible_template_without_headings = SmartVerseTemplate(body=body, headings=u'')
 
 #, footer="<br>$range ($version)")
 
 
-other_template = VerseTemplate(
-	body=u"<b>$range</b><br>$text<p>($description)</p> \n"
+commentary_template = VerseTemplate(
+	body=u"<div class='commentary_entry'><h3>$reference</h3>$text\n</div>"
 )
 dictionary_template = VerseTemplate(
-	body=u"<br>$text<p>($description)</p> \n"
+	body=u"<div class='dictionary_entry'><h3>$reference</h3>$text\n</div>"
+)
+genbook_template = VerseTemplate(
+	body=u"<div class='genbook_entry'><div class='genbook_key' level='$level'>$breadcrumbed_reference</div>$text\n</div>"
 )
 
-
-body = (u'<a name="current"><a href="nbible:$internal_reference" style="color: #008000">'
-		u'<small><sup>$versenumber</sup></small></a> '
-		u'<span style="color: #008000">$text</span> $usercomments $tags')
-
-#		u'<highlight-start colour="#008000">$text<highlight-end /> $usercomments $tags')
-
-current_verse_template = SmartVerseTemplate(body)
 
 # TODO: do we want this to have tags? I'd guess not
 verse_compare_template = VerseTemplate(
-	u'<a href="nbible:$internal_reference">'
-	u'<small><sup>$versenumber</sup></small></a> $text ',
+	u'<glink href="nbible:$internal_reference">'
+	u'<small><sup>$versenumber</sup></small></glink> $text ',
 	
 	header=u"<p><b>(<a href='%s:$version'>$version</a>)"
 	u"</b> " % BIBLE_VERSION_PROTOCOL
