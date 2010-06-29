@@ -1,12 +1,46 @@
+import wx.wc
 from backend.bibleinterface import biblemgr
 from swlib.pysw import SW, VK
 import os
 import config
-from util.debug import dprint, ERROR, is_debugging
+from util.debug import dprint, ERROR, MESSAGE, is_debugging
 from display_options import all_options, get_js_option_value
 from util.string_util import convert_rtf_to_html
 from util.unicode import try_unicode, to_unicode
 from util import languages, default_timer
+import urlparse
+
+class MasterProtocolHandler(wx.wc.ProtocolHandler):
+	def _breakup_url(self, url):
+		parsed_url = urlparse.urlsplit(url)
+		temp = parsed_url.path[2:]
+		d = temp.split("/", 1)
+		url_host = d[0]
+
+		assert url_host == "content", \
+			"only content is supported at the moment..."
+		assert len(d) > 1, "No path for protocol handler."
+
+		page = str(d[1])
+		d = page.split("/", 1)
+		if len(d) == 1:
+			d.append('')
+
+		protocol, path = d
+		
+		assert protocol in handlers, \
+			"No handler for host type %s" % protocol
+
+		return protocol, path
+
+	def GetContentType(self, url):
+		protocol, path = self._breakup_url(url)
+		return unicode(handlers[protocol].get_content_type(path))
+
+	def GetContent(self, url):
+		dprint(MESSAGE, "GetContent called for url:", url)
+		protocol, path = self._breakup_url(url)
+		return unicode(handlers[protocol].get_document(path))
 
 BASE_HTML = '''\
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
@@ -40,12 +74,12 @@ class ProtocolHandler(object):
 	def _get_html(self, module, content, bodyattrs="", timer="", 
 		stylesheets=[], scripts=[], contentclass=""):
 		resources = []
-		skin_prefixs = ["skin/standard", "skin"]
-		script_prefixs = ["content", "content"]
+		skin_prefixs = ["css", "css"]
+		script_prefixs = ["js", "js"]
 
-		### for testing, the file link is easier - but the chrome link is the
-		### one we should be using once it is working properly
-		prefixs = ["file:///" + os.getcwd() + "/chrome"]#, "chrome://bpbible"]
+		### Should we keep using the file:/// protocol?
+		### For the XUL port we intended to switch to using the chrome:/// protocol.
+		prefixs = ["file:///" + os.getcwd() + "/"]
 		for skin_prefix, script_prefix, prefix \
 				in zip(skin_prefixs, script_prefixs, prefixs):
 			for item in stylesheets:
@@ -344,5 +378,8 @@ handlers = {
 	'moduleinformation': ModuleInformationHandler(),
 	'quotes_skin': QuotesHandler(),
 	'tooltip': TooltipConfigHandler(),
+	# wxWebConnect always wants to get a favicon for a domain.
+	# This handler prevents exceptions when the favicon is requested.
+	'favicon.ico': wx.wc.ProtocolHandler(),
 }
 

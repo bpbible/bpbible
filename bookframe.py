@@ -69,19 +69,9 @@ class BookFrame(AUIDisplayFrame):
 
 	@guiutil.frozen
 	def SetReference(self, ref, context="", raw=None):
-		if raw is None:
-			raw = config.raw
 		self.reference = ref
-		text = self.book.GetReference(ref, context=context, raw=raw)
-		if text is None:
-			data = config.MODULE_MISSING_STRING()
-		else:
-			data = text
-			data = data.replace("<!P>","</p><p>")
-			#replace common values
-			#data = ReplaceUnicode(data)
+		self.OpenURI("bpbible://content/page/%s/%s" % (self.book.version, self.reference))
 
-		self.SetPage(data, raw=raw)
 		self.update_title()
 		
 	@property
@@ -534,14 +524,7 @@ class DictionaryFrame(BookFrame):
 		
 		ref_text = "<b>%s</b>" % snapped_ref
 
-		text = self.book.GetReference(ref, context=context, raw=raw)#bible text
-		if text is None:
-			data = config.MODULE_MISSING_STRING()
-		else:
-			data = ref_text + text
-			data = data.replace("<!P>","</p><p>")
-
-		self.SetPage(data, raw=raw)
+		self.OpenURI("bpbible://content/page/%s/%s" % (self.book.version, self.reference))
 		self.update_title()
 
 	def SetReference_from_string(self, string):

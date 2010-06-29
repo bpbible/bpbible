@@ -286,7 +286,7 @@ class BibleFrame(VerseKeyedFrame):
 		return is_available
 	
 	@guiutil.frozen
-	def SetReference(self, ref, context="", raw=None, y_pos=None):
+	def SetReference(self, ref, context=None, raw=None, y_pos=None):
 		"""Sets reference. This is set up to be an observer of the main frame,
 		so don't call internally. To set verse reference, use notify"""
 		if raw is None:
@@ -298,38 +298,8 @@ class BibleFrame(VerseKeyedFrame):
 		self.header_bar.set_current_chapter(
 			pysw.internal_to_user(chapter), chapter
 		)
-		data = ''
+		self.OpenURI("bpbible://content/page/%s/%s" % (self.book.version, self.reference))
 
-		chapter = self.book.GetChapter(ref, self.reference,
-			config.current_verse_template, context, raw=raw)
-
-		if chapter is None:
-			data = config.MODULE_MISSING_STRING()
-			self.SetPage(data, raw=raw)
-
-		elif chapter == '':
-			data = '<font color="#888888"><i>%s</i></font>' % _(
-				"This chapter is empty.")
-			self.SetPage(data, raw=raw)
-			
-		else:
-			data += chapter
-
-			data = data.replace("<!P>","</p><p>")
-			#replace common values
-			#data = ReplaceUnicode(data)
-
-			self.SetPage(data, raw=raw)
-
-			#set to current verse
-			if y_pos is not None:
-				self.Scroll(-1, y_pos)
-			else:
-				self.scroll_to_current()
-
-		#file = open("a.html","w")
-		#file.writelines(data)
-		#file.close()
 		self.update_title()
 	
 	def GetRangeSelected(self):

@@ -1004,8 +1004,9 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl, DummyHtmlSelectableWindow
 		self.dom_loaded = False
 		if event.GetHref().startswith('test'):
 			return
-		protocol_handler.on_link_opened(self, event.GetHref())
-		event.Veto()
+		if not event.GetHref().startswith("bpbible"):
+			protocol_handler.on_link_opened(self, event.GetHref())
+			event.Veto()
 
 class DisplayFrameXRC(DisplayFrame):
 	def __init__(self):

@@ -19,7 +19,8 @@ from util.debug import dprint, MESSAGE, WARNING, is_debugging
 dprint(MESSAGE, "Importing wx")
 
 import wx
-dprint(MESSAGE, "importing wx.xrc")
+dprint(MESSAGE, "importing wx.wc")
+import wx.wc
 
 dprint(MESSAGE, "/importing wx")
 
@@ -60,8 +61,8 @@ class MyApp(wx.App):
 		
 	
 	def OnInit(self):
-		self.ShowSplashScreen()
 		self.InitXULRunner()
+		self.ShowSplashScreen()
 		
 		self.starting = True
 		self.restarting = False
@@ -94,15 +95,17 @@ class MyApp(wx.App):
 		self.splash.Raise()
 
 	def InitXULRunner(self):
-		import wx.wc
+		dprint(MESSAGE, "Initialising XULRunner engine")
 		xulrunner_path = "d:\\devel\\webconnect_testapp\\xr\\"
 		print xulrunner_path
 		wx.wc.WebControl.AddPluginPath("Mozilla Firefox\\Plugins")
 		wx.wc.WebControl.InitEngine(xulrunner_path)
-
-		protocol_handler = wx.wc.ProtocolHandler()
-		protocol_handler.thisown = False
-		wx.wc.RegisterProtocol("test", protocol_handler)
+		# NOTE: DO NOT move this import into the main import section.
+		# Doing so causes InitEngine() above to fail when loading xul.dll.
+		import protocol_handlers
+		wx.wc.RegisterProtocol("test", wx.wc.ProtocolHandler())
+		wx.wc.RegisterProtocol("bpbible", protocol_handlers.MasterProtocolHandler())
+		dprint(MESSAGE, "XULRunner engine initialised")
 
 def main():
 	inspection_imported = False

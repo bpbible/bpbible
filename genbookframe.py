@@ -104,106 +104,12 @@ class GenBookFrame(BookFrame):
 
 			self.reference_text = "<empty>"
 			
-				
 			self.SetPage(data)
 			self.update_title()
 			return
 		
 		self.reference_text = self.reference.text
-		
-		root, display_children = self.book.get_display_level_root(ref)
-
-		if not display_children:
-			before = self.genbooktree.get_item(-1)
-			after = self.genbooktree.get_item(1)
-			data = '<table width="100%" VALIGN=CENTER ><tr>'
-			
-			graphics = config.graphics_path
-
-			if before:
-				data += ('<td align="LEFT" valign=CENTER>'
-						 '<a href="genbook:previous">'
-						 '<img src="%(graphics)sgo-previous.png">&nbsp;'
-						 '%(before)s</a></td>'
-				) % locals()
-			else:
-				data += '<td align=LEFT>'+ '&nbsp;'*15 + '</td>'
-						
-
-
-			bref = TK(ref)
-			breadcrumb = ['%s' % bref]
-			item = 0
-
-			while bref.parent():
-				item += 1
-				breadcrumb.append(
-					'<a href="genbook:parent%d">%s</a>' % (item , bref)
-				)
-			
-			breadcrumb[-1] = self.book.version
-
-			breadcrumb = [string_util.htmlify_unicode(b) 
-				for b in breadcrumb]
-
-			data += "<td align=CENTER><center><b>%s</b></center></td>" % \
-				" &gt; ".join(reversed(breadcrumb))
-			
-			if after:
-				data += ('<td align="RIGHT" valign=CENTER>'
-						 '<a href="genbook:next">%(after)s&nbsp;'
-						 '<img src="%(graphics)sgo-next.png">'
-						 '</a></td>'
-				) % locals()
-			else:
-				data += '<td align=RIGHT>'+ '&nbsp;'*15 + '</td>'
-
-			data += "</tr></table>\n"
-			
-
-			text = self.book.GetReference(ref, context = context)
-			data += text
-		else:
-			items = []
-			def add_items(key):
-				anchor = ""
-				bgcolor = ""
-				if key.equals(ref):
-					bgcolor = ' bgcolor="#ccccff"'
-					anchor = '<a name="current" href="#current">%s</a>' % key
-				else:
-					anchor = '<a href="genbook:%s">%s</a>' % (
-						SW.URL.encode(key.getText()).c_str(), key,
-					)
-					
-					
-					
-				items.append(
-					'<table width=100%% cellspacing=0 cellpadding=0>'
-					'<tr%s><td colspan=2px><b>%s</b>:%s</td></tr>'
-					% (bgcolor, anchor, self.book.GetReference(key))
-				)
-				items.append("</table>")
-				items.append(
-					"<table width=100% cellspacing=0 cellpadding=0>"
-				)
-
-				for child in key:
-					items.append("<tr><td width=20px></td><td>")
-					add_items(child)
-					items.append("</td></tr>")
-
-				items.append("</table>")
-
-			add_items(root)
-			data = ''.join(items)
-
-
-		data = data.replace("<!P>","</p><p>")
-
-		self.SetPage(data)
-		if display_children:
-			self.scroll_to_current()
+		self.OpenURI("bpbible://content/page/%s%s" % (self.book.version, self.reference_text))
 		
 		self.update_title()
 	
