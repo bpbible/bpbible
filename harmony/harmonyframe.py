@@ -5,7 +5,7 @@ from harmony import read_harmony
 #import ParseHarmony
 import glob
 import wx
-from swlib.pysw import GetBestRange
+from swlib.pysw import GetBestRange, GetVerseStr, VerseParsingError
 from wx import xrc
 import backend.bibleinterface as BI
 from backend.verse_template import VerseTemplate
@@ -258,8 +258,15 @@ class HarmonyPanel(xrcHarmonyPanel):
 			#Just refreshing, not a new verse
 			return self.refresh()
 
-		self.currentverse = ref
-		peri = self.harmony.top.find_reference(ref)
+		try:
+			internal_ref = GetVerseStr(ref,
+				raiseError=True, userInput=True, userOutput=False)
+		except VerseParsingError, e:
+			wx.MessageBox(e.message, config.name())
+			return
+
+		self.currentverse = internal_ref
+		peri = self.harmony.top.find_reference(internal_ref)
 		if not peri:
 			wx.MessageBox(_("%s is not in this harmony") % ref)
 			return
