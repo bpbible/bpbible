@@ -1,10 +1,14 @@
 import wx
+import wx.html
+
+import re
 
 from bookframe import LinkedFrame, BookFrame
 import config, guiconfig
 from config import BIBLE_VERSION_PROTOCOL
 from gui.multichoice import MultiChoiceDialog
 from gui import guiutil
+from gui.htmlbase import linkiter, eq
 
 from gui.menu import MenuItem
 from backend.bibleinterface import biblemgr
@@ -252,3 +256,39 @@ class VerseCompareFrame(LinkedFrame):
 
 	def get_reference_textbox(self):
 		return self.gui_reference
+
+	def get_module_for_strongs_search(self, x, y):
+		"""Finds which Bible in the comparison window this Strongs number is
+		associated with, and returns it.
+
+		This ensures that the search will be made against a version with
+		Strongs numbers.
+		"""
+		if verse_comparison_settings["parallel"]:
+			# This search will not yet pick the correct version for the
+			# parallel view.  Because of the table structure, it will pick
+			# the last one instead.
+			return None
+
+		hover_cell = self.InternalRepresentation.FindCellByPos(x, y,
+			wx.html.HTML_FIND_NEAREST_AFTER)
+		start_cell = self.GetInternalRepresentation().FirstTerminal
+		iter = linkiter(start_cell, hover_cell)
+
+		prev = iter.m_pos
+		version = None
+		while iter:
+
+			if(iter.m_pos.GetLink()):
+				match = re.match("%s:(.*)" % BIBLE_VERSION_PROTOCOL, 
+					iter.m_pos.GetLink().Href)
+				if match:
+					version = match.group(1)
+			
+			prev = iter.m_pos
+			iter.next()
+			
+		if not eq(prev, hover_cell):
+			return None
+
+		return version

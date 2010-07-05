@@ -706,6 +706,15 @@ class DisplayFrame(TooltipDisplayer, HtmlSelectableWindow):
 	def get_frame_for_search(self):
 		return guiconfig.mainfrm.bibletext
 
+	def get_module_for_strongs_search(self, x, y):
+		"""Gets the name of a particular module (with Strongs numbers) to
+		use for the search, based on the current link that is being hovered
+		over.
+
+		If None is returned, then the current Bible will be used.
+		"""
+		return None
+
 class DisplayFrameXRC(DisplayFrame):
 	def __init__(self):
 		pre = html.PreHtmlWindow()

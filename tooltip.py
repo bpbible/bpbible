@@ -70,16 +70,15 @@ class TooltipBaseMixin(object):
 
 	
 	def show_strongs_ref(self, frame, href, url, x, y):
-		dictionary = biblemgr.dictionary		
 		type = url.getParameterValue("type") #Hebrew or greek
 		value = url.getParameterValue("value") #strongs number
 		if not type or not value: 
 			print "Not type or value", href
 			return
 
-		tooltip_config = StrongsTooltipConfig(type, value)
+		module_for_search = frame.get_module_for_strongs_search(x, y)
+		tooltip_config = StrongsTooltipConfig(type, value, module_for_search)
 		frame.show_tooltip(tooltip_config)
-		
 	
 	def show_bible_refs(self, frame, href, url, x, y):
 		# don't show a tooltip if there is no bible
@@ -706,9 +705,10 @@ class TextTooltipConfig(TooltipConfig):
 		return self.text
 
 class StrongsTooltipConfig(TooltipConfig):
-	def __init__(self, type, value):
+	def __init__(self, type, value, module_for_search):
 		self.type = type
 		self.value = value
+		self.module_for_search = module_for_search
 		prefix = dict(Hebrew="H", Greek="G").get(type)
 		
 		module = "Strongs"+self.type #as module is StrongsHebrew
@@ -722,7 +722,7 @@ class StrongsTooltipConfig(TooltipConfig):
 		super(StrongsTooltipConfig, self).__init__(mod)
 	
 	def another(self):
-		return StrongsTooltipConfig(self.type, self.value)
+		return StrongsTooltipConfig(self.type, self.value, self.module_for_search)
 
 	def bind_to_toolbar(self, toolbar):
 		toolbar.Bind(wx.EVT_TOOL,
@@ -749,7 +749,7 @@ class StrongsTooltipConfig(TooltipConfig):
 		search_panel = guiconfig.mainfrm.bibletext.get_search_panel_for_frame()
 		assert search_panel, "Search panel not found for %s" % guiconfig.mainfrm.bibletext
 		self.hide_tooltip()
-		search_panel.search_and_show("strongs:%s" % self.shortened)
+		search_panel.search_and_show("strongs:%s" % self.shortened, version=self.module_for_search)
 	
 	def get_text(self):
 		if self.mod is None:

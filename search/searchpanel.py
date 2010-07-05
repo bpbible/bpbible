@@ -201,8 +201,10 @@ class SearchPanel(xrcSearchPanel):
 		item_text = self.verselist.results[event.m_itemIndex]
 		self.versepreview.SetReference(item_text)
 	
-	def search_and_show(self, key=""):
+	def search_and_show(self, key="", version=None):
 		self.searchkey.SetValue(key)
+		if version is not None:
+			self.set_version(version)
 
 		# If we call on_search from here, then it may search before asking
 		# the user about building the search index, so instead we call it
