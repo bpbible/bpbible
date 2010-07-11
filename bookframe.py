@@ -524,7 +524,7 @@ class DictionaryFrame(BookFrame):
 		
 		ref_text = "<b>%s</b>" % snapped_ref
 
-		self.OpenURI("bpbible://content/page/%s/%s" % (self.book.version, self.reference))
+		self.OpenURI("bpbible://content/page/%s/%s" % (self.book.version, self.reference), grab_focus=False)
 		self.update_title()
 
 	def SetReference_from_string(self, string):
