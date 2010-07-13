@@ -157,15 +157,8 @@ class PageProtocolHandler(ProtocolHandler):
 
 
 		elif book.is_dictionary:
-			try:
-				index = int(ref)
-				ref_id = ref
-				ref = book.GetTopics()[index]
-			except ValueError, e:
-				print "AARRGGHH, swallowing ValueError", repr(e)
-				ref_id = ref
-
 			c = book.GetReference(ref)
+			ref_id = ref
 
 		elif book.is_genbook:
 			c = book.GetReference(ref)
@@ -270,12 +263,13 @@ class PageFragmentHandler(PageProtocolHandler):
 					mod.setSkipConsecutiveLinks(old_mod_skiplinks)
 		
 		elif book.is_dictionary:
-			t = book.GetTopics()
-			index = int(ref) + dir
-			if index < 0 or index >= len(t):
-				no_more = True
+			# XXX: Would using an index rather than a reference (as the XUL code did) be more efficient?
+			book.snap_text(ref)
+			book.mod.increment(dir)
+			if mod.Error() == '\x00' and book.mod.getKey().getText():
+				new_ref = book.mod.getKey().getText().decode("utf8")
 			else:
-				new_ref = unicode(index)
+				no_more = True
 			
 		elif book.is_genbook:
 			ref = "/" + ref

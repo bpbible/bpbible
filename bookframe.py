@@ -519,10 +519,6 @@ class DictionaryFrame(BookFrame):
 			raw = config.raw
 
 		self.reference = ref
-		
-		snapped_ref = self.format_ref(self.book.mod, ref)
-		
-		ref_text = "<b>%s</b>" % snapped_ref
 
 		self.OpenURI("bpbible://content/page/%s/%s" % (self.book.version, self.reference), grab_focus=False)
 		self.update_title()
