@@ -1,5 +1,6 @@
 from gui.reference_display_frame import ReferenceDisplayFrame
 from backend.verse_template import VerseTemplate
+from backend.bibleinterface import biblemgr
 from xrc.guess_verse_xrc import xrcGuessVerseFrame
 import random
 from swlib.pysw import VK, UserVK
@@ -23,8 +24,10 @@ class GuessVerseFrame(xrcGuessVerseFrame):
 		self.Fit()
 	
 	def new_guess(self):
-		randomnum = random.randint(1, 31102)
-		self.key = VK("Gen 1:%d" % randomnum)
+		self.key = None
+		while not self.key or not biblemgr.bible.mod.hasEntry(self.key):
+			randomnum = random.randint(1, 31102)
+			self.key = VK("Gen 1:%d" % randomnum)
 		self.user_key = UserVK(self.key)
 		self.reference_frame.SetReference(self.key.getText())
 
