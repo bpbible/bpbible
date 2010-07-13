@@ -21,6 +21,7 @@ tooltip_settings.add_item("border", 6, item_type=int)
 
 class TooltipBaseMixin(object):
 	set_toolbar_background = False
+	do_not_show_tooltip = False
 	
 	def __init__(self, *args, **kwargs):
 		self.text = None
@@ -202,6 +203,9 @@ class TooltipBaseMixin(object):
 		will bring the main window up over the top of that top level window.
 		For now, we work around this by just not showing the tooltip.
 		"""
+		if self.do_not_show_tooltip:
+			return True
+
 		from manage_topics_frame import ManageTopicsFrame
 		from harmony.harmonyframe import HarmonyFrame
 		from guess_verse import GuessVerseFrame

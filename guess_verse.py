@@ -4,6 +4,7 @@ from xrc.guess_verse_xrc import xrcGuessVerseFrame
 import random
 from swlib.pysw import VK, UserVK
 import wx
+from tooltip import Tooltip
 
 class GuessVerseFrame(xrcGuessVerseFrame):
 	def __init__(self, parent):
@@ -28,14 +29,20 @@ class GuessVerseFrame(xrcGuessVerseFrame):
 		self.reference_frame.SetReference(self.key.getText())
 
 	def on_show_answer(self, event):
+		Tooltip.do_not_show_tooltip = True
 		wx.MessageBox(
 			_("The verse was %s") % UserVK(self.key).getText(),
 			parent=self
 		)
+		Tooltip.do_not_show_tooltip = False
 
 		self.new_guess()
 
 	def on_guess(self, event):
+		# XXX: We can't use the currently focused window trick to prevent
+		# tooltips from grabbing focus when using a MessageBox, since it
+		# gives the focused window as None.  Instead, we use this hack.
+		Tooltip.do_not_show_tooltip = True
 		won = self.user_key.getBookName() == self.books.StringSelection
 		if won:
 			wx.MessageBox(
@@ -53,6 +60,7 @@ class GuessVerseFrame(xrcGuessVerseFrame):
 				parent=self,
 				style=wx.OK | wx.ICON_ERROR,
 			)
+		Tooltip.do_not_show_tooltip = False
 
 if __name__ == '__main__':
 	a = wx.App(0)
