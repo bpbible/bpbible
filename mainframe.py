@@ -542,6 +542,9 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.Bind(wx.EVT_MENU, self.on_widget_inspector, 
 			id=xrc.XRCID('gui_widget_inspector'))
 		
+		self.Bind(wx.EVT_MENU, self.on_error_console, 
+			id=xrc.XRCID('gui_error_console'))
+		
 		self.locales_menu_lookup = {}
 		for item in "gather diff compile confirm".split():
 			id = xrc.XRCID('gui_locale_%s' % item)
@@ -670,6 +673,9 @@ class MainFrame(wx.Frame, AuiLayer):
 		
 	def on_widget_inspector(self, event):
 		wx.GetApp().ShowInspectionTool()
+
+	def on_error_console(self, event):
+		self.bibletext.Execute("window.open('chrome://global/content/console.xul', '', 'chrome,dialog=no,toolbar,resizable')")
 	
 	def on_path_manager(self, event):
 		PathManager(self).ShowModal()

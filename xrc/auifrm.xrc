@@ -52,6 +52,9 @@
           <label>WI</label>
           <accel>F6</accel>
         </object>
+        <object class="wxMenuItem" name="gui_error_console">
+          <label>Error Console</label>
+        </object>
         <object class="wxMenu" name="gui_locale_menu">
           <object class="wxMenuItem" name="gui_locale_gather">
             <label>gather</label>
