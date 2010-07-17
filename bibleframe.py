@@ -309,26 +309,20 @@ class BibleFrame(VerseKeyedFrame):
 				if (selectionRange.collapsed)	{
 					return "";
 				}
-				var links = document.getElementsByTagName("a");
+				var links = $("a.vnumber");
 				var selectionStart = "";
 				var selectionEnd = "";
-				var re = /nbible:([^#]*)(#current)?/;
 				var linkRange = document.createRange();
-				for (var index = 0; index < links.length; index++)	{
-					var link = links[index];
-					var match = re.exec(link.href);
-					if (!match)	{
-						continue;
-					}
-					linkRange.selectNode(link);
+				links.each(function()	{
+					linkRange.selectNode(this);
 					if (selectionRange.compareBoundaryPoints(Range.START_TO_START, linkRange) > 0)	{
-						selectionStart = match[1];
+						selectionStart = this.getAttribute("reference");
 					}
 					if (selectionRange.compareBoundaryPoints(Range.END_TO_END, linkRange) > 0)	{
-						selectionEnd = match[1];
+						selectionEnd = this.getAttribute("reference");
 					}
-				}
-				return (selectionStart && selectionEnd) ? decodeURI(selectionStart) + " - " + decodeURI(selectionEnd) : "";
+				});
+				return (selectionStart && selectionEnd) ? selectionStart + " - " + selectionEnd : "";
 			})();
 		""")
 		if not text:
