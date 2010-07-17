@@ -62,6 +62,7 @@ class MyApp(wx.App):
 	
 	def OnInit(self):
 		self.InitXULRunner()
+		self.SetWebPreferences()
 		self.ShowSplashScreen()
 		
 		self.starting = True
@@ -106,6 +107,10 @@ class MyApp(wx.App):
 		wx.wc.RegisterProtocol("test", wx.wc.ProtocolHandler())
 		wx.wc.RegisterProtocol("bpbible", protocol_handlers.MasterProtocolHandler())
 		dprint(MESSAGE, "XULRunner engine initialised")
+
+	def SetWebPreferences(self):
+		prefs = wx.wc.WebControl.preferences
+		prefs['browser.dom.window.dump.enabled'] = True
 
 def main():
 	inspection_imported = False
