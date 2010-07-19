@@ -48,12 +48,6 @@ BASE_HTML = '''\
 <html xmlns="http://www.w3.org/1999/xhtml" lang="%(lang)s">
 <head>
 	%(head)s
-	<script type="application/x-python">
-from mozutils import doAlert, doQuit
-doAlert("Security Violated!!! Aborting.")
-doQuit(True)
-</script>
-            	
 </head>
 <body %(bodyattrs)s>
 	<div id="content" class="%(contentclass)s">
