@@ -298,7 +298,13 @@ class BibleFrame(VerseKeyedFrame):
 		self.header_bar.set_current_chapter(
 			pysw.internal_to_user(chapter), chapter
 		)
-		self.OpenURI("bpbible://content/page/%s/%s" % (self.book.version, self.reference))
+		has_selected_new_verse = False
+		if self.dom_loaded:
+			has_selected_new_verse = self.ExecuteScriptWithResult('select_new_verse("%s")' % self.reference)
+			has_selected_new_verse = (has_selected_new_verse == "true")
+
+		if not has_selected_new_verse:
+			self.OpenURI("bpbible://content/page/%s/%s" % (self.book.version, self.reference))
 
 		self.update_title()
 	

@@ -83,7 +83,8 @@ $(document).ready(function() {
 });
 
 function get_current_verse() {
-	var current_verse = $("#original_segment a.currentverse");
+	//var current_verse = $("#original_segment a.currentverse");
+	var current_verse = $("a.currentverse");
 	if(current_verse.length != 1) {
 		jsdump("Wrong number of current verses: " + current_verse.length + "\n");
 		return current_verse;
@@ -94,6 +95,25 @@ function get_current_verse() {
 function get_current_verse_ref() {
 	var current_verse = get_current_verse();
 	return current_verse.attr("osisRef");
+}
+
+function select_new_verse(reference) {
+	d("select_new_verse('" + reference + '")');
+	// XXX: Use OSISRefs?
+	var reference_link = $('a.vnumber[reference="' + reference + '"]');
+	var reference_found = reference_link.length > 0;
+
+	if (reference_found)	{
+		var current_verse = get_current_verse();
+		current_verse.removeClass("currentverse");
+		unhighlight_all();
+		reference_link.addClass("currentverse");
+		highlight_verse();
+		toggle_filler(true);
+		scroll_to_current();
+	}
+
+	return reference_found;
 }
 
 function get_current_verse_bounds() {

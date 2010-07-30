@@ -85,3 +85,9 @@ function highlight_range(start, end) {
 	
 	extract_range(r);
 }
+
+// XXX: We ought to be able to just unhighlight a single range.
+// Until I figure that out, unhighlight_all will probably do just fine.
+function unhighlight_all()	{
+	$('span.highlight').removeClass('highlight');
+}
