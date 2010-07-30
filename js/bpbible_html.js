@@ -1,4 +1,5 @@
 function d(str) {
+	dump("From JS: ");
 	if (typeof console != "undefined" && console.log) console.log(str);
 	if ((typeof str == "string" && !str.match(/\n$/)) || typeof str == "number")
 		dump(str + "\n");
