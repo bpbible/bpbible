@@ -286,7 +286,7 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl, DummyHtmlSelectableWindow
 
 		self.logical_parent = logical_parent
 		self.handle_links = True
-		self.dom_loaded = True
+		self.dom_loaded = False
 		self.events_to_call_on_document_load = []
 		
 	def DomContentLoaded(self, event):
