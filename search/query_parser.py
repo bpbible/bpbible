@@ -489,7 +489,7 @@ def p_multi_query_single(p):
 
 def p_query(p):
 	'''query : query_part'''
-	p[0] = Query(p[-1])
+	p[0] = Query(p[1])
 
 def p_exclusion(p):
 	'''exclusion : MINUS query_part'''
@@ -557,7 +557,7 @@ def p_word_and_item(p):
 
 #def p_word_other(p):
 #	'''word : word inplace_item word_item'''
-#	p[0] = p[1] + p[-1]
+#	p[0] = p[1] + p[3]
 
 def p_word_trailing_item(p):
 	'''word : word inplace_item'''
@@ -578,7 +578,7 @@ def p_word(p):
 
 def p_option_parts(p):
 	'''option : option COMMA_WS query_part_without_option'''
-	p[0] = p[1] + p[-1]
+	p[0] = p[1] + p[3]
 
 def p_option_part(p):
 	'''option : query_part_without_option'''
