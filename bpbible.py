@@ -97,8 +97,8 @@ class MyApp(wx.App):
 
 	def InitXULRunner(self):
 		dprint(MESSAGE, "Initialising XULRunner engine")
-		xulrunner_path = "d:\\devel\\webconnect_testapp\\xr\\"
-		print xulrunner_path
+		xulrunner_path = self.FindXULRunnerPath()
+		dprint(MESSAGE, "XULRunner path is", xulrunner_path)
 		wx.wc.WebControl.AddPluginPath("Mozilla Firefox\\Plugins")
 		wx.wc.WebControl.InitEngine(xulrunner_path)
 		# NOTE: DO NOT move this import into the main import section.
@@ -107,6 +107,14 @@ class MyApp(wx.App):
 		wx.wc.RegisterProtocol("test", wx.wc.ProtocolHandler())
 		wx.wc.RegisterProtocol("bpbible", protocol_handlers.MasterProtocolHandler())
 		dprint(MESSAGE, "XULRunner engine initialised")
+
+	def FindXULRunnerPath(self):
+		path = os.path.join(os.getcwd(), "xulrunner")
+		if not os.path.isdir(path):
+			# XXX: Perhaps we should make this error handling a little more friendly?
+			sys.stderr.write("Unable to find XULRunner.\n")
+			sys.exit(1)
+		return path
 
 	def SetWebPreferences(self):
 		prefs = wx.wc.WebControl.preferences

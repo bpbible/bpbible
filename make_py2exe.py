@@ -82,7 +82,6 @@ if os.path.isdir('Microsoft.VC90.CRT'):
 	vc_files = glob.glob('Microsoft.VC90.CRT\\*.*')
 	data_files += [
 			("Microsoft.VC90.CRT", vc_files),
-			("lib\Microsoft.VC90.CRT", vc_files),
 	]
 
 if(setup(
@@ -101,7 +100,7 @@ if(setup(
 	],
 	zipfile=zipfile,
 )):
-	subdirs = r"xrc graphics css js resources locales locales\locales.d locales\locales.d\SWORD_1512".split()
+	subdirs = r"xrc graphics css js xulrunner resources locales locales\locales.d locales\locales.d\SWORD_1512".split()
 	subdirs += ["locales\%s\LC_MESSAGES\\" % l for l in languages]
 	for subdir in subdirs:
 		os.system(r"if not exist dist\%s mkdir dist\%s" % (subdir, subdir))
@@ -113,9 +112,10 @@ if(setup(
 	os.system("copy LICENSE.txt dist\\")
 	os.system(r"copy locales\locales.d\*.conf dist\locales\locales.d")
 	os.system(r"copy locales\locales.d\SWORD_1512\*.conf dist\locales\locales.d\SWORD_1512")	
-	os.system(r"xcopy /e resources dist\resources")	
-	os.system(r"xcopy /e css dist\css")	
-	os.system(r"xcopy /e js dist\js")	
+	os.system(r"xcopy /e /Y resources dist\resources")	
+	os.system(r"xcopy /e /Y css dist\css")
+	os.system(r"xcopy /e /Y js dist\js")
+	os.system(r"xcopy /e /Y xulrunner dist\xulrunner")
 
 	for item in languages:
 		os.system("copy locales\%s\LC_MESSAGES\messages.mo "
