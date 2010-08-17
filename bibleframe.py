@@ -29,7 +29,6 @@ import user_comments
 
 
 bible_settings = config_manager.add_section("Bible")
-bible_settings.add_item("verse_per_line", False, item_type=bool)
 bible_settings.add_item("select_verse_on_click", False, item_type=bool)
 
 class BibleFrame(VerseKeyedFrame):
@@ -49,17 +48,8 @@ class BibleFrame(VerseKeyedFrame):
 		sizer.Add(self, 1, wx.GROW)
 		self.panel.SetSizer(sizer)
 
-
-	def set_verse_per_line(self, to):
-		"""Set to either verse-per-line or not. 
-		
-		Doesn't update UI."""
-		config.bible_template.body.verse_per_line = to
-		config.current_verse_template.body.verse_per_line = to
-
 	def setup(self):
 		self.observers = ObserverList()
-		self.set_verse_per_line(bible_settings["verse_per_line"])
 		super(BibleFrame, self).setup()
 	
 	def get_window(self):

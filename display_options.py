@@ -14,6 +14,24 @@ options.add_item("morph_segmentation", False, item_type=bool)
 options.add_item("raw", False, item_type=bool)
 options.add_item("colour_speakers", "off", item_type=str)
 
+options_menu = [
+	("columns", "Columns", ""),
+	("verse_per_line", "One line per verse", "Display each verse on its own line."),
+	("continuous_scrolling", "Continuous scrolling", ""),
+	("headings", "Headings", ""),
+	("cross_references", "Cross References", ""),
+	("footnotes", "Footnotes", ""),
+	("strongs_numbers", "Strongs Numbers", ""),
+	("strongs_blocked", "Strongs Blocked", ""),
+	("morphology", "Morphology", ""),
+	("morph_segmentation", "Morph Segmentation", ""),
+	# XXX: This should be in the debug menu only, and should force the entire
+	# page to reload.
+	("raw", "Output Raw", ""),
+]
+
+# XXX: Add options to colour code speakers, and other multi-options.
+
 
 def all_options():
 	return options.items.keys()

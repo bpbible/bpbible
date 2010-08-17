@@ -64,6 +64,7 @@ from error_handling import ErrorDialog
 from util.i18n import N_
 import util.i18n
 from preview_window import PreviewWindow
+import display_options
 
 
 settings = config_manager.add_section("BPBible")
@@ -918,7 +919,9 @@ class MainFrame(wx.Frame, AuiLayer):
 			)
 
 		self.options_map = {}
-		self.options_map = {}
+		# Look at restoring this at some point for display options that our
+		# magic doesn't support.
+		"""
 		options = biblemgr.get_options()
 		for option, values in options:
 			help_text = pysw.locale.translate(
@@ -959,9 +962,13 @@ class MainFrame(wx.Frame, AuiLayer):
 				
 			self.options_map[item.Id] = option
 				
+		"""
+		import display_options
+		for option in display_options.options_menu:
+			self.add_option_to_menu(option)
 
-		if options:
-			self.options_menu.AppendSeparator()
+		#if options:
+		#	self.options_menu.AppendSeparator()
 
 		self.fill_headwords_menu()
 
@@ -970,12 +977,6 @@ class MainFrame(wx.Frame, AuiLayer):
 			wx.ID_ANY,
 			_("Expand cross-references"),
 			_("Display cross references partially expanded")
-		)
-
-		verse_per_line = self.options_menu.AppendCheckItem(
-			wx.ID_ANY,
-			_("One line per verse"),
-			_("Display each verse on its own line.")
 		)
 		
 		display_tags = self.options_menu.AppendCheckItem(
@@ -997,16 +998,23 @@ class MainFrame(wx.Frame, AuiLayer):
 			cross_references)
 		self.Bind(wx.EVT_MENU, self.toggle_display_tags, display_tags)
 		#self.Bind(wx.EVT_MENU, self.toggle_expand_topic_passages, expand_topic_passages)
-		self.Bind(wx.EVT_MENU, 
-			lambda evt:self.set_verse_per_line(evt.IsChecked()), 
-			verse_per_line)
 		
 		filter_settings = config_manager["Filter"]
 		cross_references.Check(filter_settings["footnote_ellipsis_level"])
 		display_tags.Check(passage_list.settings.display_tags)
 		#expand_topic_passages.Check(passage_list.settings.expand_topic_passages)
-		verse_per_line.Check(bible_settings["verse_per_line"])
 
+	def add_option_to_menu(self, option):
+		item = self.options_menu.AppendCheckItem(
+			wx.ID_ANY, option[1], help=option[2]
+		)
+
+		import display_options
+		if display_options.options[option[0]]:
+			item.Check()
+		
+		self.Bind(wx.EVT_MENU, self.on_option, item)
+		self.options_map[item.Id] = option[0]
 	
 	def on_headwords(self, event):
 		obj = event.GetEventObject()
@@ -1040,13 +1048,6 @@ class MainFrame(wx.Frame, AuiLayer):
 		if selected_frame is None or not isinstance(selected_frame, BookFrame):
 			selected_frame = self.bibletext
 		selected_frame.search()
-		
-	def set_verse_per_line(self, to):
-		bible_settings["verse_per_line"] = to
-		self.bibletext.set_verse_per_line(to)
-
-		self.UpdateBibleUI(settings_changed=True, source=SETTINGS_CHANGED)
-		
 
 	def on_option(self, event):
 		obj = event.GetEventObject()
@@ -1054,27 +1055,32 @@ class MainFrame(wx.Frame, AuiLayer):
 		#if not menuitem: return
 		option_menu = menuitem.GetMenu()
 		if option_menu == self.options_menu:
+			option = self.options_map[menuitem.Id]
+			value = event.Checked()
+		else:
 			
-			biblemgr.set_option(self.options_map[menuitem.Id], event.Checked()) 
-			self.UpdateBibleUI(settings_changed=True, source=SETTINGS_CHANGED)
-			
-			return
-			
-		for item in self.options_menu.MenuItems: 
-			if item.GetSubMenu() == option_menu:
-				biblemgr.set_option(
-					self.options_map[item.Id], 
-					self.options_map[menuitem.Id]
-				) 
-				self.UpdateBibleUI(
-					settings_changed=True,
-					source=SETTINGS_CHANGED
-				)
+			for item in self.options_menu.MenuItems: 
+				if item.GetSubMenu() == option_menu:
+					option = self.options_map[item.Id]
+					value = self.options_map[menuitem.Id]
 				
 				break
-		else:
-			assert False, "BLAH"
-			
+			else:
+				assert False, "BLAH"
+
+		display_options.options[option] = value
+		def SetOption(displayframe):
+			if not displayframe.dom_loaded:
+				return
+
+			displayframe.Execute("document.body.setAttribute('%s', %s);" %
+					(option, display_options.get_js_option_value(option)))
+
+		SetOption(self.bibletext)
+		SetOption(self.commentarytext)
+		SetOption(self.dictionarytext)
+		SetOption(self.genbooktext)
+
 	def on_window(self, event):
 		obj = event.GetEventObject()
 		menuitem = obj.MenuBar.FindItemById(event.Id)
