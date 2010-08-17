@@ -10,6 +10,8 @@ from util.unicode import try_unicode, to_unicode
 from util import languages, default_timer
 import urlparse
 
+counter = 0
+
 class MasterProtocolHandler(wx.wc.ProtocolHandler):
 	def _breakup_url(self, url):
 		parsed_url = urlparse.urlsplit(url)
@@ -93,7 +95,10 @@ class ProtocolHandler(object):
 			contentclass=contentclass)
 		
 		try:
-			open("tmp.html", "w").write(text.encode("utf8"))
+			global counter
+			counter += 1
+			filename = "generated_html/tmp%d.html" % counter
+			open(filename, "w").write(text.encode("utf8"))
 		except Exception, e:
 			print "Error writing tmp.html", e
 		return text
