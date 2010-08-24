@@ -53,7 +53,7 @@ def create_path_if_not_exists(path):
 	try:
 		os.makedirs(path)
 	except OSError, e:
-		sys.stderr.write(e)
+		sys.stderr.write(str(e))
 
 if os.path.isfile(paths_file):
 	try:
