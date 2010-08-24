@@ -1,4 +1,6 @@
 /* Timer */
+/* XXX: Make showing the time taken a debug setting. */
+/*
 div.timer {
 	position: fixed;
 	right: 0px;
@@ -27,6 +29,7 @@ div.page_segment:hover div.timer {
 	left: 0px;
 	right: inherit;
 }
+*/
 
 
 /* Raw details panel under each entry */
