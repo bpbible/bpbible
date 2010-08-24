@@ -182,8 +182,11 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.setup_frames()
 
 		self.bibleref.SetFocus()
-		dprint(MESSAGE, "Setting menus up")
 		
+		for display_frame in (self.bibletext, self.commentarytext, self.dictionarytext, self.genbooktext):
+			display_options.display_option_changed_observers += display_frame.change_display_option
+
+		dprint(MESSAGE, "Setting menus up")
 		self.set_menus_up()
 
 		def override_end():
@@ -857,14 +860,14 @@ class MainFrame(wx.Frame, AuiLayer):
 
 			self.MenuBar.Insert(2+idx, menu, "&" + frame.title)
 
-		if not is_debugging():
-			for idx, (menu, menu_name) in enumerate(self.MenuBar.Menus):
-				if self.MenuBar.GetMenuLabel(idx) == _("Debug"):
+		for idx, (menu, menu_name) in enumerate(self.MenuBar.Menus):
+			if self.MenuBar.GetMenuLabel(idx) == _("Debug"):
+				if is_debugging():
+					for option in display_options.debug_options_menu:
+						option.add_to_menu(self, menu)
+				else:
 					self.MenuBar.Remove(idx)
-					break
-			#else:
-			#	menu = None
-		
+				break
 	
 	def make_menu(self, items, is_popup=False):
 		menu = wx.Menu()
@@ -918,54 +921,8 @@ class MainFrame(wx.Frame, AuiLayer):
 				self.options_menu.FindItemByPosition(0)
 			)
 
-		self.options_map = {}
-		# Look at restoring this at some point for display options that our
-		# magic doesn't support.
-		"""
-		options = biblemgr.get_options()
-		for option, values in options:
-			help_text = pysw.locale.translate(
-				biblemgr.get_tip(option)).decode(pysw.locale_encoding)
-		
-			option_trans = pysw.locale.translate(
-				option).decode(pysw.locale_encoding)
-
-			if set(values) == set(("Off", "On")):
-				item = self.options_menu.AppendCheckItem(
-					wx.ID_ANY, option_trans, help=help_text
-				)
-
-				if biblemgr.options[option] == "On":
-					item.Check()
-				
-				self.Bind(wx.EVT_MENU, self.on_option, item)
-			else:
-				sub_menu = wx.Menu("")
-				
-			
-				for value in values:
-					item = sub_menu.AppendRadioItem(wx.ID_ANY, 
-					pysw.locale.translate(value).decode(pysw.locale_encoding),
-						help=help_text)
-					
-					if biblemgr.options[option] == value:
-						item.Check()
-					
-					self.options_map[item.Id] = value
-						
-					self.Bind(wx.EVT_MENU, self.on_option, item)
-				
-				item = self.options_menu.AppendSubMenu(sub_menu, option_trans, 
-					help=help_text)
-					
-				self.Bind(wx.EVT_MENU, self.on_option, item)
-				
-			self.options_map[item.Id] = option
-				
-		"""
-		import display_options
 		for option in display_options.options_menu:
-			self.add_option_to_menu(option)
+			option.add_to_menu(self, self.options_menu)
 
 		#if options:
 		#	self.options_menu.AppendSeparator()
@@ -1003,18 +960,6 @@ class MainFrame(wx.Frame, AuiLayer):
 		cross_references.Check(filter_settings["footnote_ellipsis_level"])
 		display_tags.Check(passage_list.settings.display_tags)
 		#expand_topic_passages.Check(passage_list.settings.expand_topic_passages)
-
-	def add_option_to_menu(self, option):
-		item = self.options_menu.AppendCheckItem(
-			wx.ID_ANY, option[1], help=option[2]
-		)
-
-		import display_options
-		if display_options.options[option[0]]:
-			item.Check()
-		
-		self.Bind(wx.EVT_MENU, self.on_option, item)
-		self.options_map[item.Id] = option[0]
 	
 	def on_headwords(self, event):
 		obj = event.GetEventObject()
@@ -1048,38 +993,6 @@ class MainFrame(wx.Frame, AuiLayer):
 		if selected_frame is None or not isinstance(selected_frame, BookFrame):
 			selected_frame = self.bibletext
 		selected_frame.search()
-
-	def on_option(self, event):
-		obj = event.GetEventObject()
-		menuitem = obj.MenuBar.FindItemById(event.Id)
-		#if not menuitem: return
-		option_menu = menuitem.GetMenu()
-		if option_menu == self.options_menu:
-			option = self.options_map[menuitem.Id]
-			value = event.Checked()
-		else:
-			
-			for item in self.options_menu.MenuItems: 
-				if item.GetSubMenu() == option_menu:
-					option = self.options_map[item.Id]
-					value = self.options_map[menuitem.Id]
-				
-				break
-			else:
-				assert False, "BLAH"
-
-		display_options.options[option] = value
-		def SetOption(displayframe):
-			if not displayframe.dom_loaded:
-				return
-
-			displayframe.Execute("document.body.setAttribute('%s', %s);" %
-					(option, display_options.get_js_option_value(option)))
-
-		SetOption(self.bibletext)
-		SetOption(self.commentarytext)
-		SetOption(self.dictionarytext)
-		SetOption(self.genbooktext)
 
 	def on_window(self, event):
 		obj = event.GetEventObject()
