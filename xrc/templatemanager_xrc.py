@@ -104,5 +104,5 @@ def __gettext_strings():
     _("\n$$range ($$version)")
     _("&Headings")
     _("<h5>$$heading</h5>")
-    _("Use $$text for the text of a verse, $$versenum for the\nverse number and $$reference for the reference")
+    _("Use $$text for the text of a verse, $$versenumber for the\nverse number and $$range for the reference.")
 

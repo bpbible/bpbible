@@ -200,13 +200,13 @@
       </object>
       <object class="sizeritem">
         <object class="wxStaticText" name="instructions">
-          <label>Use $$text for the text of a verse, $$versenum for the\nverse number and $$reference for the reference</label>
+          <label>Use $$text for the text of a verse, $$versenumber for the\nverse number and $$range for the reference.</label>
           <font>
             <size>10</size>
-            <family>swiss</family>
             <style>normal</style>
             <weight>normal</weight>
             <underlined>0</underlined>
+            <family>swiss</family>
             <face>Tahoma</face>
             <encoding>WINDOWS-1252</encoding>
           </font>
