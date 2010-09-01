@@ -427,6 +427,7 @@ class TemplateManager(xrcTemplateManager):
 		#assert False, "Template '%s' not found" % name
 			
 	def get_unique_name(self, name="", template=None, overwrite=False):
+		original_name = name
 		while True:
 			te = wx.TextEntryDialog(self, "New name for template...", 
 				"Rename", defaultValue=name)
@@ -437,6 +438,8 @@ class TemplateManager(xrcTemplateManager):
 						wx.MessageBox(_("Template '%s' is read only. Try a "
 						"different name.") % name, _("Error"), 
 							wx.OK|wx.ICON_ERROR)
+					elif name == original_name:
+						return name
 					else:
 						ansa = wx.MessageBox(
 						_("Template '%s' already exists. Overwrite?") % name,
