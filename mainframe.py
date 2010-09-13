@@ -2,7 +2,7 @@ import sys
 import os
 
 
-from util.debug import dprint, MESSAGE, ERROR, is_debugging
+from util.debug import dprint, MESSAGE, ERROR, WARNING, is_debugging
 
 import wx
 from wx import xrc 
