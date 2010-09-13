@@ -72,7 +72,7 @@ This allows rearranging of the order of the inserted strings. You don't need to 
 == Bible Book names ==
 Lastly, there are the bible book names. You will need to produce a .conf file for the book names, and also for abbreviations if you want them. Before you make one, see if there are any [http://crosswire.org/svn/sword/tags/sword-1-5-11/locales.d/ here] for your language already. If there are any for your language, download them and use them.
 
-Follow the steps mentioned [http://crosswire.org/wiki/index.php/DevTools:SWORD here] to produce a file for use. 
+Follow the steps mentioned [http://crosswire.org/wiki/DevTools:SWORD here] to produce a file for use. 
 
 NOTE: BPBible allows dashes in booknames. After following the steps from the page above (that is, without dashes in the booknames), add extra entries of the form `BookName=Book-Name.`
 
