@@ -34,6 +34,7 @@ div.page_segment:hover div.timer {
 
 /* Raw details panel under each entry */
 div.debug-raw-details {
+	display: block;
 	background-color: gray;
 	border: 1px black solid;
 }
