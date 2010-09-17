@@ -291,11 +291,12 @@ class BibleFrame(VerseKeyedFrame):
 		has_selected_new_verse = False
 		# If the settings have changed we want to do a complete reload anyway
 		# (since it could be something that requires a complete reload, such as changing version).
-		# XXX: If we have scrolled a long way on, we may need to change reference
-		#  (e.g. go to Genesis 9, read down to Genesis 11, then change a setting or version - we don't want to go back to Genesis 9:1).
-		if self.dom_loaded and not settings_changed:
-			has_selected_new_verse = self.ExecuteScriptWithResult('select_new_verse("%s")' % self.reference)
-			has_selected_new_verse = (has_selected_new_verse == "true")
+		if self.dom_loaded:
+			if settings_changed:
+				self.reference = self.ExecuteScriptWithResult('get_current_reference_range()')
+			else:
+				has_selected_new_verse = self.ExecuteScriptWithResult('select_new_verse("%s")' % self.reference)
+				has_selected_new_verse = (has_selected_new_verse == "true")
 
 		if not has_selected_new_verse:
 			self.OpenURI("bpbible://content/page/%s/%s" % (self.book.version, self.reference))

@@ -11,7 +11,7 @@ function highlight_verse(){
 	}
 }
 
-function fill_reference_bar() {
+function get_current_reference_range()	{
 	var top = window.scrollY;
 	var bottom = window.innerHeight + window.scrollY;
 
@@ -62,8 +62,11 @@ function fill_reference_bar() {
 			whole2 = verse2;
 		else
 			whole2 = chapter2 + ":" + verse2;
-	
-	$("div.reference_bar").text(whole1 + delim + whole2);
+	return whole1 + delim + whole2;
+}
+
+function fill_reference_bar() {
+	$("div.reference_bar").text(get_current_reference_range());
 }
 
 function create_reference_bar() {
