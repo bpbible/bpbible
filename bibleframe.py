@@ -276,7 +276,7 @@ class BibleFrame(VerseKeyedFrame):
 		return is_available
 	
 	@guiutil.frozen
-	def SetReference(self, ref, context=None, raw=None, y_pos=None):
+	def SetReference(self, ref, context=None, raw=None, y_pos=None, settings_changed=False):
 		"""Sets reference. This is set up to be an observer of the main frame,
 		so don't call internally. To set verse reference, use notify"""
 		if raw is None:
@@ -289,7 +289,11 @@ class BibleFrame(VerseKeyedFrame):
 			pysw.internal_to_user(chapter), chapter
 		)
 		has_selected_new_verse = False
-		if self.dom_loaded:
+		# If the settings have changed we want to do a complete reload anyway
+		# (since it could be something that requires a complete reload, such as changing version).
+		# XXX: If we have scrolled a long way on, we may need to change reference
+		#  (e.g. go to Genesis 9, read down to Genesis 11, then change a setting or version - we don't want to go back to Genesis 9:1).
+		if self.dom_loaded and not settings_changed:
 			has_selected_new_verse = self.ExecuteScriptWithResult('select_new_verse("%s")' % self.reference)
 			has_selected_new_verse = (has_selected_new_verse == "true")
 

@@ -1,6 +1,8 @@
 import wx
 from util.configmgr import config_manager
 from util.observerlist import ObserverList
+import guiconfig
+from events import SETTINGS_CHANGED
 
 options = config_manager.add_section("Options")
 options.add_item("columns", False, item_type=bool)
@@ -17,10 +19,11 @@ options.add_item("raw", False, item_type=bool)
 options.add_item("colour_speakers", "off", item_type=str)
 
 class BooleanOptionMenuItem(object):
-	def __init__(self, option_name, menu_text, hint=""):
+	def __init__(self, option_name, menu_text, hint="", force_complete_reload=False):
 		self.option_name = option_name
 		self.menu_text = menu_text
 		self.hint = hint
+		self.force_complete_reload = force_complete_reload
 
 	def add_to_menu(self, frame, menu):
 		item = menu.AppendCheckItem(
@@ -34,14 +37,15 @@ class BooleanOptionMenuItem(object):
 
 	def on_option_clicked(self, event):
 		options[self.option_name] = event.Checked()
-		display_option_changed_observers(self.option_name)
+		display_option_changed(self.option_name, self.force_complete_reload)
 
 class MultiOptionsMenuItem(object):
-	def __init__(self, option_name, menu_text, options):
+	def __init__(self, option_name, menu_text, options, force_complete_reload=False):
 		self.option_name = option_name
 		self.menu_text = menu_text
 		self.options = options
 		self.options_map = {}
+		self.force_complete_reload = force_complete_reload
 
 	def add_to_menu(self, frame, menu):
 		sub_menu = wx.Menu("")
@@ -63,12 +67,12 @@ class MultiOptionsMenuItem(object):
 
 	def on_option_clicked(self, event):
 		options[self.option_name] = self.options_map[event.Id]
-		display_option_changed_observers(self.option_name)
+		display_option_changed(self.option_name, self.force_complete_reload)
 
 options_menu = [
 	BooleanOptionMenuItem("columns", "Columns"),
 	BooleanOptionMenuItem("verse_per_line", "One line per verse", "Display each verse on its own line."),
-	BooleanOptionMenuItem("continuous_scrolling", "Continuous scrolling"),
+	BooleanOptionMenuItem("continuous_scrolling", "Continuous scrolling", force_complete_reload=True),
 	BooleanOptionMenuItem("headings", "Headings"),
 	BooleanOptionMenuItem("cross_references", "Cross References"),
 	BooleanOptionMenuItem("footnotes", "Footnotes"),
@@ -85,13 +89,16 @@ options_menu = [
 
 debug_options_menu = [
 	# XXX: This should force the entire page to reload.
-	BooleanOptionMenuItem("raw", "Output Raw"),
+	BooleanOptionMenuItem("raw", "Output Raw", force_complete_reload=True),
 ]
 
 display_option_changed_observers = ObserverList()
 
-# XXX: Add options to colour code speakers, and other multi-options.
-
+def display_option_changed(option_name, force_complete_reload):
+	if force_complete_reload:
+		guiconfig.mainfrm.UpdateBibleUI(settings_changed=True, source=SETTINGS_CHANGED)
+	else:
+		display_option_changed_observers(self.option_name)
 
 def all_options():
 	return options.items.keys()

@@ -116,7 +116,7 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.zoomlevel = 0
 
 		self.bible_observers = ObserverList([
-			lambda event: self.bibletext.SetReference(event.ref, y_pos=event.y_pos),
+			lambda event: self.bibletext.SetReference(event.ref, y_pos=event.y_pos, settings_changed=event.settings_changed),
 			self.set_title
 		])
 

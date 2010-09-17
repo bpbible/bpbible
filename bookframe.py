@@ -68,7 +68,7 @@ class BookFrame(AUIDisplayFrame):
 
 
 	@guiutil.frozen
-	def SetReference(self, ref, context="", raw=None):
+	def SetReference(self, ref, context="", raw=None, settings_changed=False):
 		self.reference = ref
 		self.OpenURI("bpbible://content/page/%s/%s" % (self.book.version, self.reference))
 
@@ -130,7 +130,8 @@ class BookFrame(AUIDisplayFrame):
 		if event and not event.settings_changed:
 			return
 
-		self.SetReference(self.reference)
+		settings_changed = event and event.settings_changed
+		self.SetReference(self.reference, settings_changed=settings_changed)
 
 
 	def get_menu_items(self):
@@ -429,8 +430,8 @@ class CommentaryFrame(LinkedFrame):
 		super(CommentaryFrame, self).__init__(parent)
 		self.SetBook(book)
 
-	def SetReference(self, ref, context = None):
-		super(CommentaryFrame, self).SetReference(ref)
+	def SetReference(self, ref, context = None, settings_changed=False):
+		super(CommentaryFrame, self).SetReference(ref, settings_changed=settings_changed)
 
 		self.gui_reference.SetValue(pysw.internal_to_user(ref))
 		self.gui_reference.currentverse = ref
@@ -514,7 +515,7 @@ class DictionaryFrame(BookFrame):
 		guiconfig.mainfrm.UpdateDictionaryUI(ref)
 
 	@guiutil.frozen
-	def SetReference(self, ref, context="", raw=None):
+	def SetReference(self, ref, context="", raw=None, settings_changed=False):
 		if raw is None:
 			raw = config.raw
 
