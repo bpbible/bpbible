@@ -2,6 +2,7 @@ from passage_entry import PassageEntry
 from verse_to_passage_entry_map import singleton_verse_to_passage_entry_map
 from util.observerlist import ObserverList
 from swlib.pysw import VerseList
+import sys
 import sqlite
 import bisect
 
@@ -491,6 +492,9 @@ def get_primary_passage_list_manager(filename=DEFAULT_FILENAME):
 	"""Gets the primary passage list manager for the application."""
 	global _global_passage_list_manager
 	if _global_passage_list_manager is None:
+		filesystem_encoding = sys.getfilesystemencoding()
+		if filesystem_encoding:
+			filename = filename.decode(filesystem_encoding).encode('utf8')
 		singleton_verse_to_passage_entry_map.clear()
 		#print "Loading manager with filename",filename
 		_global_passage_list_manager = sqlite.load_manager(filename)
