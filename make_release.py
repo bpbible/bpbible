@@ -14,6 +14,7 @@ from contrib import googlecode_upload
 make_release = False
 raw_version_number = None
 new_version = None
+is_alpha = False
 is_beta = False
 beta_number = ''
 py2exe_opts = ""
@@ -22,7 +23,7 @@ portable_build = False
 portable_prerelease_status_number = None
 
 def handle_args():
-	opts, args = getopt.getopt(sys.argv[1:], "r", ["make-release", "compress", "no-splashscreen", "portable", "pre-release=", "beta="])
+	opts, args = getopt.getopt(sys.argv[1:], "r", ["make-release", "compress", "no-splashscreen", "portable", "pre-release=", "beta=", "alpha="])
 	global py2exe_opts
 	global show_splashscreen
 	if ('--portable', '') in opts:
@@ -47,9 +48,12 @@ def handle_args():
 		if ('--no-splashscreen', '') in opts:
 			show_splashscreen = False
 		for o, a in opts:
+			global is_alpha, is_beta, beta_number
 			if o == "--beta":
-				global is_beta, beta_number
 				is_beta = True
+				beta_number = a
+			elif o == "--alpha":
+				is_alpha = True
 				beta_number = a
 
 	global new_version, new_version_long_name, raw_version_number
@@ -66,6 +70,9 @@ def handle_args():
 	if is_beta:
 		new_version = "%sb%s" % (raw_version_number, beta_number)
 		new_version_long_name = "%s Beta %s" % (raw_version_number, beta_number)
+	elif is_alpha:
+		new_version = "%sa%s" % (raw_version_number, beta_number)
+		new_version_long_name = "%s Alpha %s" % (raw_version_number, beta_number)
 
 handle_args()
 
@@ -290,7 +297,7 @@ def upload_release():
 	print "Remember to announce the release."
 
 def do_upload(user_name, password, options):
-	if ("Featured" in options.labels) and is_beta:
+	if ("Featured" in options.labels) and (is_alpha or is_beta):
 		# Beta releases should not be featured.
 		options.labels.remove("Featured")
 	status, reason, url = googlecode_upload.upload(options.file, "bpbible", user_name, password,
