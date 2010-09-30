@@ -55,7 +55,6 @@ Source: "..\dist\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs creat
 Source: "uninstall.ico"; DestDir: "{app}"; Flags: ignoreversion
 ; Shared library needed for Windows 2000 and down. Redistributable, so it's legal.
 Source: "gdiplus.dll"; DestDir: "{app}"; OnlyBelowVersion: 5.0,5.01
-Source: "msvcp71.dll"; DestDir: "{app}"
 
 
 [Dirs]
