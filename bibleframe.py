@@ -13,7 +13,6 @@ from util.observerlist import ObserverList
 import config, guiconfig
 from gui.menu import MenuItem, Separator
 
-from harmony.harmonyframe import HarmonyFrame
 from gui.quickselector import QuickSelector
 from events import BIBLEFRAME, RANDOM_VERSE, VERSE_LINK_SELECTED, HEADER_BAR
 from copyverses import CopyVerseDialog
@@ -68,12 +67,6 @@ class BibleFrame(VerseKeyedFrame):
 				self.focus_reference_textbox, 
 				accelerator="Ctrl-L",
 				doc=_("Go to a reference"),
-			), IN_MENU),
-			(MenuItem(
-				_("Harmony"), 
-				self.show_harmony, 
-				accelerator="Ctrl-H",
-				doc=_("Open the harmony"),
 			), IN_MENU),
 			(MenuItem(
 				_("Guess the Verse"), 
@@ -204,12 +197,6 @@ class BibleFrame(VerseKeyedFrame):
 		cvd.copy_verses(text)
 		cvd.Destroy()	
 		d.Destroy()
-	
-		
-	def show_harmony(self):
-		harmony_frame = HarmonyFrame(guiconfig.mainfrm)
-		harmony_frame.SetIcons(guiconfig.icons)
-		harmony_frame.Show()
 		
 	def show_guess_verse(self):
 		guess_frame = GuessVerseFrame(guiconfig.mainfrm)
