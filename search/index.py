@@ -112,7 +112,7 @@ class Index(object):
 	
 	@property
 	def book(self):
-		return biblemgr.bible
+		return biblemgr.get_module_book_wrapper(self.version)
 
 	def init(self, progress=lambda x:x):	
 		"""Index.init - reindxes index"""
@@ -416,10 +416,6 @@ class Index(object):
 class GenBookIndex(Index):
 	def __init__(self, version, progress=lambda x:x, booktype=IndexedText):
 		super(GenBookIndex, self).__init__(version, progress, booktype=booktype)
-	
-	@property
-	def book(self):
-		return biblemgr.genbook
 
 	def GenerateIndex(self, mod, progress = lambda x:x):
 		"""Index.GenerateIndex - Collates book indexes"""
@@ -459,10 +455,6 @@ class DictionaryIndex(GenBookIndex):
 		booktype=DictionaryIndexedText):
 		super(DictionaryIndex, self).__init__(version, progress, 
 			booktype=booktype)
-	
-	@property
-	def book(self):
-		return biblemgr.dictionary
 
 	def GenerateIndex(self, mod, progress = lambda x:x):
 		"""Index.GenerateIndex - Collates book indexes"""
@@ -513,9 +505,7 @@ class DictionaryIndex(GenBookIndex):
 		
 
 class CommentaryIndex(Index):
-	@property
-	def book(self):
-		return biblemgr.commentary
+	pass
 		
 if __name__ == '__main__':
 	import doctest

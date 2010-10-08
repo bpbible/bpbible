@@ -47,7 +47,8 @@ Books to be deleted:""") + '\n' +
 					module = item.GetData().data
 					mgr = item.GetParent().GetData().data
 					for book in (biblemgr.bible, biblemgr.commentary,
-								 biblemgr.genbook, biblemgr.dictionary):
+								 biblemgr.genbook, biblemgr.dictionary,
+								 biblemgr.harmony, biblemgr.daily_devotional):
 						#if str(module) == str(book.mod):
 						#	import code
 						#	code.InteractiveConsole(locals()).interact()

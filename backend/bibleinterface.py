@@ -8,18 +8,19 @@ from swlib.pysw import SW
 from swlib import pysw
 
 from backend.book import Bible, Commentary
-from backend.dictionary import Dictionary
+from backend.dictionary import Dictionary, DailyDevotional
 
 from util import confparser
 from util.observerlist import ObserverList
 from util.debug import dprint, MESSAGE, WARNING, ERROR
 from backend.filter import MarkupInserter
-from backend.genbook import GenBook
+from backend.genbook import GenBook, Harmony
 import config
 
 class BibleInterface(object):
 	def __init__(self, biblename="ESV", commentaryname="TSK",
-	  		dictionaryname="ISBE", genbook="Josephus"):
+	  		dictionaryname="ISBE", genbook="Josephus", daily_devotional_name="",
+			harmonyname="CompositeGospel"):
 
 		self.on_before_reload = ObserverList()
 		self.on_after_reload = ObserverList()
@@ -42,6 +43,8 @@ class BibleInterface(object):
 		self.commentary = Commentary(self, commentaryname)
 		self.dictionary = Dictionary(self, dictionaryname)
 		self.genbook = GenBook(self, genbook) 
+		self.daily_devotional = DailyDevotional(self, daily_devotional_name)
+		self.harmony = Harmony(self, harmonyname)
 		
 		self.state = []
 		self.options = {}
@@ -52,6 +55,11 @@ class BibleInterface(object):
 			self.commentary.type:	self.commentary,
 			self.dictionary.type:	self.dictionary,
 			self.genbook.type:		self.genbook,
+		}
+
+		self.book_category_map = {
+			self.daily_devotional.category:	self.daily_devotional,
+			self.harmony.category:			self.harmony,
 		}
 	
 	def init_options(self):
@@ -112,10 +120,14 @@ class BibleInterface(object):
 			dprint(ERROR, "Mod is none", module_name)
 			return None
 
-		book = self.book_type_map.get(mod.Type())
-		if book is None:
-			dprint(ERROR, "book is none", module_name, mod.Type())
-			return None
+		category = mod.getConfigEntry("Category")
+		if category and (category in self.book_category_map):
+			book = self.book_category_map[category]
+		else:
+			book = self.book_type_map.get(mod.Type())
+			if book is None:
+				dprint(ERROR, "book is none", module_name, mod.Type())
+				return None
 
 		book.SetModule(mod)
 		return book

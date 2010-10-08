@@ -49,6 +49,7 @@ from gui.menu import Separator
 from gui.htmlbase import HtmlBase
 
 from search.searchpanel import (BibleSearchPanel, GenbookSearchPanel,
+								 HarmonySearchPanel, DailyDevotionalSearchPanel,
 								 DictionarySearchPanel, CommentarySearchPanel)
 
 from fontchoice import FontChoiceDialog 
@@ -76,6 +77,8 @@ settings.add_item("dictionary", "ISBE")
 settings.add_item("dictref", "")
 settings.add_item("commentary", "TSK")
 settings.add_item("genbook", "Josephus")
+settings.add_item("harmony", "CompositeGospel")
+settings.add_item("daily_devotional", "Daily")
 
 settings.add_item("zoom_level", 0)
 settings.add_item("copy_verse", "Default",
@@ -131,7 +134,6 @@ class MainFrame(wx.Frame, AuiLayer):
 
 		biblemgr.bible.observers += self.bible_version_changed
 		biblemgr.commentary.observers += self.commentary_version_changed
-		biblemgr.dictionary.observers += self.dictionary_version_changed
 
 		biblemgr.on_after_reload += self.on_modules_reloaded
 		self.on_close += lambda: \
@@ -140,11 +142,6 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.on_close += lambda: \
 			biblemgr.commentary.observers.remove(
 				self.commentary_version_changed
-			)
-		
-		self.on_close += lambda: \
-			biblemgr.dictionary.observers.remove(
-				self.dictionary_version_changed
 			)
 		
 		self.on_close += lambda: \
@@ -183,7 +180,7 @@ class MainFrame(wx.Frame, AuiLayer):
 
 		self.bibleref.SetFocus()
 		
-		for display_frame in (self.bibletext, self.commentarytext, self.dictionarytext, self.genbooktext):
+		for display_frame in (self.bibletext, self.commentarytext, self.dictionarytext, self.genbooktext, self.harmony_frame, self.daily_devotional_frame):
 			display_options.display_option_changed_observers += display_frame.change_display_option
 
 		dprint(MESSAGE, "Setting menus up")
@@ -343,6 +340,8 @@ class MainFrame(wx.Frame, AuiLayer):
 		set_mod(biblemgr.dictionary, settings["dictionary"])
 		set_mod(biblemgr.commentary, settings["commentary"])
 		set_mod(biblemgr.genbook, settings["genbook"])
+		set_mod(biblemgr.harmony, settings["harmony"])
+		set_mod(biblemgr.daily_devotional, settings["daily_devotional"])
 		
 		
 	
@@ -376,6 +375,8 @@ class MainFrame(wx.Frame, AuiLayer):
 		settings["commentary"] = biblemgr.commentary.version
 		settings["genbook"] = biblemgr.genbook.version
 		settings["dictionary"] = biblemgr.dictionary.version
+		settings["harmony"] = biblemgr.harmony.version
+		settings["daily_devotional"] = biblemgr.daily_devotional.version
 
 		settings["options"] = biblemgr.save_state()
 
@@ -428,7 +429,9 @@ class MainFrame(wx.Frame, AuiLayer):
 	def create_searchers(self):
 		self.search_panel = BibleSearchPanel(self)
 		self.genbook_search_panel = GenbookSearchPanel(self)
+		self.harmony_search_panel = HarmonySearchPanel(self)
 		self.dictionary_search_panel = DictionarySearchPanel(self)
+		self.daily_devotional_search_panel = DailyDevotionalSearchPanel(self)
 		self.commentary_search_panel = CommentarySearchPanel(self)
 		
 		
@@ -450,6 +453,8 @@ class MainFrame(wx.Frame, AuiLayer):
 			self.genbook_search_panel,
 			self.dictionary_search_panel, 
 			self.commentary_search_panel,
+			self.harmony_search_panel,
+			self.daily_devotional_search_panel,
 		)
 
 		self.aui_callbacks = {}
@@ -471,7 +476,11 @@ class MainFrame(wx.Frame, AuiLayer):
 		
 
 		self.genbooktext = GenBookFrame(self, biblemgr.genbook)
+		# XXX: Why are we reloading a Genbook when the Bible changes?
+		# Is it to change the version of Bible references?
 		self.bible_observers += self.genbooktext.reload
+		self.harmony_frame = GenBookFrame(self, biblemgr.harmony)
+		self.harmony_frame.id = "Harmony"
 
 		self.bibletext = BibleFrame(self)
 		self.bibletext.SetBook(biblemgr.bible)
@@ -482,8 +491,9 @@ class MainFrame(wx.Frame, AuiLayer):
 
 		self.commentarytext = CommentaryFrame(self, biblemgr.commentary)
 		self.dictionarytext = DictionaryFrame(self, biblemgr.dictionary)
-
-		self.dictionary_list = self.dictionarytext.dictionary_list
+		self.daily_devotional_frame = DictionaryFrame(self,
+				biblemgr.daily_devotional)
+		self.daily_devotional_frame.id = "Daily Devotional"
 
 		self.verse_compare = VerseCompareFrame(self, biblemgr.bible)
 		#if settings["verse_comparison_modules"] is not None:
@@ -581,8 +591,6 @@ class MainFrame(wx.Frame, AuiLayer):
 				id=xrc.XRCID(xrcid))
 			
 			
-		self.dictionary_list.item_changed += self.DictionaryListSelected
-
 		self.bibleref.Bind(wx.EVT_TEXT_ENTER, self.BibleRefEnter)
 
 		# if it is selected in the drop down tree, go straight there
@@ -1048,7 +1056,8 @@ class MainFrame(wx.Frame, AuiLayer):
 		
 	def setup_frames(self):
 		self.frames = [self.bibletext, self.commentarytext, self.dictionarytext,
-			self.genbooktext, self.verse_compare]
+			self.daily_devotional_frame, self.harmony_frame, self.genbooktext,
+			self.verse_compare]
 
 		for frame in self.frames:
 			name = self.get_pane_for_frame(frame).name 
@@ -1058,7 +1067,7 @@ class MainFrame(wx.Frame, AuiLayer):
 		
 		self.set_bible_ref(settings["bibleref"] or "Genesis 1:1", 
 			LOADING_SETTINGS, userInput=False)
-		self.DictionaryListSelected()
+		self.UpdateDictionaryUI()
 		self.version_tree.recreate()
 
 	def restart(self, event=None):
@@ -1165,21 +1174,9 @@ class MainFrame(wx.Frame, AuiLayer):
 	
 	def commentary_version_changed(self, newversion):
 		self.commentarytext.refresh()
-	
-	def dictionary_version_changed(self, newversion):
-		freeze_ui = guiutil.FreezeUI(self.dictionary_list)
-		self.dictionary_list.set_book(biblemgr.dictionary)
-		
-	def DictionaryListSelected(self, event=None):
-		self.UpdateDictionaryUI()
 
 	def UpdateDictionaryUI(self, ref=""):
-		if not ref:
-			ref = self.dictionary_list.GetValue().upper()
-		else:
-			self.dictionary_list.choose_item(ref)
-
-		self.dictionarytext.SetReference(ref)
+		self.dictionarytext.UpdateUI(ref)
 
 	def UpdateBibleUIWithoutScrolling(self, source, settings_changed=False):
 		"""Updates the Bible UI without scrolling to the current verse.

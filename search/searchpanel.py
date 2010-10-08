@@ -1197,6 +1197,13 @@ class GenbookSearchPanel(SearchPanel):
 		self.options_panel.gui_search_type.Bind(
 			wx.EVT_CHOICE, self.on_search_type)
 
+class HarmonySearchPanel(GenbookSearchPanel):
+	id = N_("Harmony Search")
+
+	@property
+	def book(self):
+		return biblemgr.harmony
+
 class DictionarySearchPanel(SearchPanel):
 	id = N_("Dictionary Search")
 	@property
@@ -1237,6 +1244,13 @@ class DictionarySearchPanel(SearchPanel):
 	def get_proximity_options(self):
 		# we must be all in the same entry
 		return 1, False
+
+class DailyDevotionalSearchPanel(DictionarySearchPanel):
+	id = N_("Daily Devotional Search")
+
+	@property
+	def book(self):
+		return biblemgr.daily_devotional
 
 class CommentarySearchPanel(BibleSearchPanel):
 	id = N_("Commentary Search")

@@ -24,6 +24,8 @@ class Book(object):
 	is_genbook = False
 	chapter_view = False
 	type = None
+	category = None
+	categories_to_exclude = ()
 	def __init__(self, parent, version = ""):
 		self.parent = parent
 		self.mod = None
@@ -86,7 +88,9 @@ class Book(object):
 	
 	def GetModules(self):
 		return sorted([mod for name, mod in self.parent.modules.iteritems()
-				if mod.Type() == self.type or self.type == None], 
+				if (mod.Type() == self.type or self.type == None) and
+				(not self.category or (self.category and mod.getConfigEntry("Category") == self.category)) and
+				mod.getConfigEntry("Category") not in self.categories_to_exclude], 
 				key = lambda mod: mod.Name().lower())
 	
 	@staticmethod

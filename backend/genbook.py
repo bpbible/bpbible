@@ -1,6 +1,7 @@
 import re
 from swlib.pysw import SW, TK, VerseList
 from backend.book import Book
+from util import classproperty
 from util.unicode import to_str, to_unicode
 import display_options
 
@@ -22,10 +23,7 @@ class GenBook(Book):
 	type = 'Generic Books'	
 	noun = "book"
 	is_genbook = True
-
-	def __init__(self, parent, version=""):
-		super(GenBook, self).__init__(parent, version)
-		self._gospel_harmony_references = {}
+	categories_to_exclude = ["Harmonies"]
 
 	def GetReference(self, ref, context = None, max_verses = 500,
 			stripped=False, end_ref=None):
@@ -193,8 +191,20 @@ class GenBook(Book):
 		# don't show any children for this
 		return key, False
 
+class Harmony(GenBook):
+	category = "Harmonies"
+	categories_to_exclude = ()
+
+	def __init__(self, parent, version=""):
+		super(Harmony, self).__init__(parent, version)
+		self._harmony_references = {}
+
+	@classproperty
+	def noun(cls):
+		return _("harmony")
+
 	def find_reference(self, reference):
-		for tree_key_references in self.gospel_harmony_references:
+		for tree_key_references in self.harmony_references:
 			for harmony_reference in tree_key_references[1]:
 				if harmony_reference.VerseInRange(reference):
 					return tree_key_references[0]
@@ -202,20 +212,16 @@ class GenBook(Book):
 		return None
 
 	@property
-	def is_gospel_harmony(self):
-		return self.mod.getConfigEntry("Category") == "Gospel Harmonies"
-
-	@property
-	def gospel_harmony_references(self):
-		if self.mod is None or not self.is_gospel_harmony:
+	def harmony_references(self):
+		if self.mod is None:
 			return []
 
-		if self.mod.Name() not in self._gospel_harmony_references:
-			self._gospel_harmony_references[self.mod.Name()] = self._load_gospel_harmony_references()
+		if self.mod.Name() not in self._harmony_references:
+			self._harmony_references[self.mod.Name()] = self._load_harmony_references()
 
-		return self._gospel_harmony_references[self.mod.Name()]
+		return self._harmony_references[self.mod.Name()]
 
-	def _load_gospel_harmony_references(self):
+	def _load_harmony_references(self):
 		mod_tk = SW.TreeKey.castTo(self.mod.getKey())
 		mod_tk.root()
 		tk = TK(mod_tk, self.mod)

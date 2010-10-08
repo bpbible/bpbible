@@ -449,9 +449,15 @@ class DictionaryFrame(BookFrame):
 		#self = DictionaryFrame(self.dictsplitter, self)
 		super(DictionaryFrame, self).__init__(self.dictsplitter)
 		self.SetBook(book)
+		self.book.observers += self.dictionary_version_changed
+		parent.on_close += lambda: \
+			self.book.observers.remove(
+				self.dictionary_version_changed
+			)
 		
 
 		self.dictionary_list = DictionarySelector(self.dictsplitter, book)
+		self.dictionary_list.item_changed += lambda event=None: self.UpdateUI()
 		s = wx.BoxSizer(wx.HORIZONTAL)
 		#s.Add(self.dictionarytext, proportion=1, flag = wx.EXPAND)
 		#s.Add(self.dictionary_list, 0, wx.GROW)
@@ -511,8 +517,20 @@ class DictionaryFrame(BookFrame):
 		return self.dict
 		
 	
+	def dictionary_version_changed(self, newversion):
+		freeze_ui = guiutil.FreezeUI(self.dictionary_list)
+		self.dictionary_list.set_book(self.book)
+	
 	def notify(self, ref, source=None):
 		guiconfig.mainfrm.UpdateDictionaryUI(ref)
+
+	def UpdateUI(self, ref=""):
+		if not ref:
+			ref = self.dictionary_list.GetValue().upper()
+		else:
+			self.dictionary_list.choose_item(ref)
+
+		self.SetReference(ref)
 
 	@guiutil.frozen
 	def SetReference(self, ref, context="", raw=None, settings_changed=False):

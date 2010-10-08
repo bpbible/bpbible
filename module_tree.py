@@ -25,20 +25,22 @@ class ModuleTree(FilterableTree):
 			(_("Commentaries"), biblemgr.commentary),
 			(_("Dictionaries"), biblemgr.dictionary),
 			(_("Other books"), biblemgr.genbook),
+			(_("Daily Devotional"), biblemgr.daily_devotional),
+			(_("Harmonies"), biblemgr.harmony),
 		)
 
 		self.extra_categories = (
 			"Daily Devotional",
 			"Maps",
 			"Images",
-			"Gospel Harmonies",
+			"Harmonies",
 		)
 
 		self.all_categories = (
 			"Bibles",
 			"Commentaries",
 			"Dictionaries",
-			"Gospel Harmonies",
+			"Harmonies",
 			"Maps",
 			"Images",
 			"Daily Devotional",

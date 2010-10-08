@@ -333,9 +333,22 @@ class AuiLayer(object):
 				[],
 				[["Bottom"]]
 			],
+			[self.daily_devotional_frame.get_window(), 
+				self.daily_devotional_frame.title, 
+				self.daily_devotional_frame.id, 
+				[],
+				[["Bottom"]]
+			],
 			[self.genbooktext.get_window(), 
 				self.genbooktext.title, 
 				self.genbooktext.id, 
+				[],
+				[["Top"], 
+				["Hide"]]
+			],
+			[self.harmony_frame.get_window(), 
+				self.harmony_frame.title, 
+				self.harmony_frame.id, 
 				[],
 				[["Top"], 
 				["Hide"]]
@@ -390,7 +403,9 @@ class AuiLayer(object):
 			[self.bibletext.get_window(), "Bible", ["CloseButton", False]],
 			[self.commentarytext.get_window(), "Commentary",],
 			[self.dictionarytext.get_window(), "Dictionary"],
+			[self.daily_devotional_frame.get_window(), "Daily Devotional"],
 			[self.genbooktext.get_window(), "Other Books"],
+			[self.harmony_frame.get_window(), "Harmony"],
 			[self.verse_compare.get_window(), "Version Comparison"],			
 			
 			[self.history_pane, "History"],
@@ -403,12 +418,12 @@ class AuiLayer(object):
 		panes = (
 			self.bibletext, self.commentarytext, 
 			self.dictionarytext, self.genbooktext, self.verse_compare,
+			self.daily_devotional_frame, self.harmony_frame,
 			self.preview_window
 		)
 
 		self.panes = [(frame, frame.id) for frame in panes]
 
-		self.pane_titles = {}
 		self.pane_titles = {}
 		
 		

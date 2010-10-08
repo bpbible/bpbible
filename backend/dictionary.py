@@ -1,6 +1,7 @@
 #from Sword import *
 from swlib.pysw import SW, TOP
 from backend.book import Book
+from util import classproperty
 from util.unicode import to_str, to_unicode
 from util.debug import dprint, WARNING
 import re
@@ -201,6 +202,7 @@ class Dictionary(Book):
 	type = "Lexicons / Dictionaries"
 	noun = "dictionary"
 	is_dictionary = True
+	categories_to_exclude = ["Daily Devotional"]
 
 	def __init__(self, parent, version):
 		super(Dictionary, self).__init__(parent, version)
@@ -294,3 +296,11 @@ class Dictionary(Book):
 	@property
 	def is_daily_devotional(self):
 		return self.has_feature("DailyDevotion")
+
+class DailyDevotional(Dictionary):
+	category = "Daily Devotional"
+	categories_to_exclude = ()
+
+	@classproperty
+	def noun(cls):
+		return _("daily devotional")

@@ -154,7 +154,8 @@ class FontChoiceDialog(xrcFontChoiceDialog):
 
 		try:
 			books = [biblemgr.bible, biblemgr.commentary, 
-				biblemgr.dictionary, biblemgr.genbook]
+				biblemgr.dictionary, biblemgr.genbook,
+				biblemgr.harmony, biblemgr.daily_devotional]
 			frames = guiconfig.mainfrm.frames
 
 			for book, frame in zip(books, frames):

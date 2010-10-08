@@ -69,12 +69,12 @@ class GenBookFrame(BookFrame):
 		self.genbookpanel.SetSizer(sizer)
 		self.genbookpanel.Fit()
 		self.genbooktree.Bind(wx.EVT_COMBOBOX, self.on_genbook_change)
-		biblemgr.genbook.observers += self.genbook_version_changed
-		biblemgr.genbook.cleanup_module += self.cleanup_module
-		guiconfig.mainfrm.on_close += lambda:biblemgr.genbook.observers.remove(
+		self.book.observers += self.genbook_version_changed
+		self.book.cleanup_module += self.cleanup_module
+		guiconfig.mainfrm.on_close += lambda:self.book.observers.remove(
 			self.genbook_version_changed
 		)
-		guiconfig.mainfrm.on_close += lambda:biblemgr.genbook.cleanup_module.remove(
+		guiconfig.mainfrm.on_close += lambda:self.book.cleanup_module.remove(
 			self.cleanup_module
 		)
 		
@@ -159,7 +159,7 @@ class GenBookFrame(BookFrame):
 		)
 
 	def genbook_version_changed(self, newversion):
-		self.genbooktree.SetBook(biblemgr.genbook, self.reference_text)
+		self.genbooktree.SetBook(self.book, self.reference_text)
 	
 	def format_ref(self, module, ref):
 		k = TK(module.getKey(), module)
