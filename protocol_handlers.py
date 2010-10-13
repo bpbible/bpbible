@@ -1,6 +1,6 @@
 import wx.wc
 from backend.bibleinterface import biblemgr
-from swlib.pysw import SW, VK
+from swlib.pysw import SW, VK, SW_URL_Encode, SW_URL_Decode
 import os
 import config
 from util.debug import dprint, ERROR, MESSAGE, is_debugging
@@ -15,15 +15,19 @@ counter = 0
 class MasterProtocolHandler(wx.wc.ProtocolHandler):
 	def _breakup_url(self, url):
 		parsed_url = urlparse.urlsplit(url)
-		temp = parsed_url.path[2:]
-		d = temp.split("/", 1)
-		url_host = d[0]
+		if parsed_url.netloc:
+			url_host = parsed_url.netloc
+			page = parsed_url.path.lstrip('/')
+		else:
+			temp = parsed_url.path.lstrip('/')
+			d = temp.split("/", 1)
+			url_host = d[0]
+			assert len(d) > 1, "No path for protocol handler."
+			page = str(d[1])
 
 		assert url_host == "content", \
 			"only content is supported at the moment..."
-		assert len(d) > 1, "No path for protocol handler."
 
-		page = str(d[1])
 		d = page.split("/", 1)
 		if len(d) == 1:
 			d.append('')
@@ -112,7 +116,7 @@ class PageProtocolHandler(ProtocolHandler):
 	bible_stylesheets = ("bpbible_html.css", "bpbible_chapter_view.css", 
 						"bpbible://content/quotes_skin/")
 	def _get_document_parts(self, path):
-		ref = SW.URL.decode(path).c_str()
+		ref = SW_URL_Decode(path)
 		assert ref, "No reference"
 
 		module_name, ref = ref.split("/", 1)
@@ -171,7 +175,7 @@ class PageProtocolHandler(ProtocolHandler):
 		if not c:
 			clas = " nocontent"
 
-		c = '<div class="segment%s" ref_id="%s">%s</div>' % (clas, SW.URL.encode(ref_id.encode("utf8")).c_str(), c)
+		c = '<div class="segment%s" ref_id="%s">%s</div>' % (clas, SW_URL_Encode(ref_id), c)
 
 		return dict(
 			module=module, content=c,
@@ -210,7 +214,7 @@ class PageProtocolHandler(ProtocolHandler):
 class PageFragmentHandler(PageProtocolHandler):
 	def get_document(self, path):
 		#print "GET DOCUMENT"
-		ref = SW.URL.decode(path).c_str()
+		ref = SW_URL_Decode(path)
 		#print "GET FRAGMENT", ref
 		#assert ref.count("/") == 2, "Should be two slashes in a fragment url"
 
@@ -308,7 +312,7 @@ class PageFragmentHandler(PageProtocolHandler):
 	
 class ModuleInformationHandler(ProtocolHandler):
 	def get_document(self, path):
-		module_name = SW.URL.decode(path).c_str()
+		module_name = SW_URL_Decode(path)
 
 		book = biblemgr.get_module_book_wrapper(module_name)
 		if not book:
@@ -373,6 +377,6 @@ handlers = {
 	'tooltip': TooltipConfigHandler(),
 	# wxWebConnect always wants to get a favicon for a domain.
 	# This handler prevents exceptions when the favicon is requested.
-	'favicon.ico': wx.wc.ProtocolHandler(),
+	'favicon.ico': ProtocolHandler(),
 }
 
