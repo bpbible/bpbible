@@ -1783,12 +1783,5 @@ class VerseKeySearcher(Searcher):
 		# TODO: ;'s don't cut it - in the ISBE, they are often used		
 		return strings.split("; ")
 
-
-def SW_URL_Decode(url):
-	return SW.URL.decode(url.encode("utf8")).c_str()
-
-def SW_URL_Encode(url):
-	return SW.URL.encode(url.encode("utf8")).c_str()
-
 # allow reloading
 sys.SW_dont_do_stringmgr = True

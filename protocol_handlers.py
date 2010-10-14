@@ -1,6 +1,6 @@
 import wx.wc
 from backend.bibleinterface import biblemgr
-from swlib.pysw import SW, VK, SW_URL_Encode, SW_URL_Decode
+from swlib.pysw import SW, VK
 import os
 import config
 from util.debug import dprint, ERROR, MESSAGE, is_debugging
@@ -8,6 +8,7 @@ from display_options import all_options, get_js_option_value
 from util.string_util import convert_rtf_to_html
 from util.unicode import try_unicode, to_unicode
 from util import languages, default_timer
+import urllib
 import urlparse
 
 counter = 0
@@ -116,7 +117,7 @@ class PageProtocolHandler(ProtocolHandler):
 	bible_stylesheets = ("bpbible_html.css", "bpbible_chapter_view.css", 
 						"bpbible://content/quotes_skin/")
 	def _get_document_parts(self, path):
-		ref = SW_URL_Decode(path)
+		ref = urllib.unquote(path)
 		assert ref, "No reference"
 
 		module_name, ref = ref.split("/", 1)
@@ -175,7 +176,7 @@ class PageProtocolHandler(ProtocolHandler):
 		if not c:
 			clas = " nocontent"
 
-		c = '<div class="segment%s" ref_id="%s">%s</div>' % (clas, SW_URL_Encode(ref_id), c)
+		c = '<div class="segment%s" ref_id="%s">%s</div>' % (clas, urllib.quote(ref_id), c)
 
 		return dict(
 			module=module, content=c,
@@ -214,7 +215,7 @@ class PageProtocolHandler(ProtocolHandler):
 class PageFragmentHandler(PageProtocolHandler):
 	def get_document(self, path):
 		#print "GET DOCUMENT"
-		ref = SW_URL_Decode(path)
+		ref = urllib.unquote(path)
 		#print "GET FRAGMENT", ref
 		#assert ref.count("/") == 2, "Should be two slashes in a fragment url"
 
@@ -312,7 +313,7 @@ class PageFragmentHandler(PageProtocolHandler):
 	
 class ModuleInformationHandler(ProtocolHandler):
 	def get_document(self, path):
-		module_name = SW_URL_Decode(path)
+		module_name = urllib.unquote(path)
 
 		book = biblemgr.get_module_book_wrapper(module_name)
 		if not book:
