@@ -219,6 +219,9 @@ class VK(SW.VerseKey):#, object):
 			if isinstance(key, str):
 				self.text = key
 
+			elif isinstance(key, unicode):
+				self.text = key.encode('utf8')
+
 			elif isinstance(key, tuple):
 				min, max = key
 				tmp_lk = self.ParseVerseList(min)
