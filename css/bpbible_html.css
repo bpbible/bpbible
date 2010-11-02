@@ -355,3 +355,10 @@ table.harmonytable td {
 div.timer, div.debug-raw-details {
 	display: none;
 }
+
+a.usercomment {
+	text-decoration: none;
+	vertical-align: super;
+	font-size: 0.75em;
+	line-height: 0.5em;
+}
