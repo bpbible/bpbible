@@ -362,3 +362,8 @@ a.usercomment {
 	font-size: 0.75em;
 	line-height: 0.5em;
 }
+
+a.passage_tag {
+	text-decoration: none;
+	color: black;
+}

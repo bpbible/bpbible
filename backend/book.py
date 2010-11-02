@@ -452,7 +452,7 @@ class Book(object):
 		"""Generates and returns all the passage tags for the given verse."""
 		manager = passage_list.get_primary_passage_list_manager()
 		return "".join(
-			"<passage_tag topic_id=%d passage_entry_id=%d> &nbsp;" % (passage.parent.get_id(), passage.get_id())
+			self.get_passage_topic_div(passage)
 			for passage in manager.get_all_passage_entries_for_verse(verse_key)
 			# XXX: I had a problem with passages that had empty parents that
 			# I can't reproduce, so I just ignore these topics.
@@ -461,6 +461,20 @@ class Book(object):
 				and passage.parent.can_display_tag
 				and passage.parent is not manager)
 		)
+
+	def get_passage_topic_div(self, passage):
+		from gui import passage_tag
+		topic_text = " > ".join(passage.parent.topic_trail)
+		look, colour = passage.parent.resolve_tag_look()
+		look_scheme, look_white_text, border = passage_tag.looks[look]
+		colour_id, colour_white_text, default_look = passage_tag.colours[colour]
+		white_text = look_white_text and colour_white_text
+		_rgbSelectOuter,_rgbSelectInner,_rgbSelectTop, _rgbSelectBottom = passage_tag.get_colours(colour_id, look_scheme)
+		style = "background-color: rgb(%d, %d, %d);" % _rgbSelectTop.Get()
+		if white_text:
+			style += "color:white;"
+
+		return '<a class="passage_tag" style="%s" href="passagetag://passage/%d/%d">%s</a> &nbsp;' % (style, passage.parent.get_id(), passage.get_id(), topic_text)
 	
 	def get_headings(self, ref, mod=None):
 		"""Gets an array of the headings for the current verse. Must have just

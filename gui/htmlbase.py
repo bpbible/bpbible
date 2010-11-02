@@ -296,42 +296,11 @@ class CheckTagHandler(TagHandler):
 			
 		return False
 
-from passage_list import lookup_passage_list, lookup_passage_entry
-
-class PassageTagHandler(TagHandler):
-	"""This tag handler inserts passage tag widgets for passage tags."""
-	tags = "PASSAGE_TAG"
-
-	def HandleTag2(self, tag):
-		assert tag.HasParam("topic_id")
-		passage_list = lookup_passage_list(
-				int(tag.GetParam("topic_id"))
-			)
-		assert tag.HasParam("passage_entry_id")
-		passage_entry = lookup_passage_entry(
-				int(tag.GetParam("passage_entry_id"))
-			)
-		assert passage_entry in passage_list.passages
-		
-		parser = self.GetParser()
-		parent = parser.GetWindowInterface().GetHTMLWindow()
-		assert parent
-		from gui.passage_tag import PassageTag
-		passage_tag = PassageTag(parent, passage_list, passage_entry)
-		passage_tag.Show(True)
-		
-		floatwidth = 0
-		parser.GetContainer().InsertCell(
-				wx.html.HtmlWidgetCell(passage_tag, floatwidth))
-			
-		return False
-
 tag_handlers = [
 	GLinkTagHandler,
 	HighlightedTagHandler,
 	HighlightTagHandler,
 	CheckTagHandler,
-	PassageTagHandler,
 	LineGroupTagHandler,
 	IndentAreaTagHandler,
 	FontAreaTagHandler

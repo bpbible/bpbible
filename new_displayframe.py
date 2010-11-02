@@ -23,6 +23,8 @@ from gui import guiutil
 import display_options
 from util.debug import dprint, WARNING, TOOLTIP, MESSAGE
 from protocols import protocol_handler
+# XXX: This is just to force the protocol to be registered.
+import gui.passage_tag
 from events import LINK_CLICKED
 
 from gui import fonts
