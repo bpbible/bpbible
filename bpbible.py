@@ -45,6 +45,7 @@ dprint(MESSAGE, "/importing wx")
 import contrib
 
 import config, guiconfig
+from util import confparser
 from util.configmgr import config_manager
 
 import util.i18n
@@ -79,6 +80,7 @@ class MyApp(wx.App):
 	def OnInit(self):
 		self.InitXULRunner()
 		self.SetWebPreferences()
+		self.FindXULRunnerVersion()
 		self.ShowSplashScreen()
 		
 		self.starting = True
@@ -125,6 +127,24 @@ class MyApp(wx.App):
 	def SetWebPreferences(self):
 		prefs = wx.wc.WebControl.preferences
 		prefs['browser.dom.window.dump.enabled'] = True
+
+	def FindXULRunnerVersion(self):
+		"""Find the XULRunner version from the XULRunner platform.ini config file.
+
+		This should be provided by XULRunner (and then wxWebConnect) through
+		the nsIXULAppInfo API, but it seems this is only possible when xulrunner
+		has been run from the command line and has an application.ini and
+		XRE_Main() has been called.
+
+		Since XRE_Main() is just looking up the value in the INI file,
+		I figure it can't hurt too much to do the same here.
+		"""
+		xulrunner_ini_file = os.path.join(xulrunner_path, "platform.ini")
+		config_parser = confparser.config()
+		config_parser.read(xulrunner_ini_file)
+		if config_parser.has_option("Build", "Milestone"):
+			config.xulrunner_version = config_parser.get("Build", "Milestone")[0]
+			print config.xulrunner_version
 
 def main():
 	inspection_imported = False

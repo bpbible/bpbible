@@ -1127,13 +1127,15 @@ class MainFrame(wx.Frame, AuiLayer):
 		sysversion = sys.version.split()[0]
 		v = SW.cvar.SWVersion_currentVersion
 		swversion = v.getText()
+		xulrunner_version = config.xulrunner_version
 		
 		name = config.name()
 		text = _("""Flexible Bible study software.
 			Built Using the Sword Project from crosswire.org
 			Python Version: %(sysversion)s
 			wxPython Version: %(wxversion)s
-			SWORD Version: %(swversion)s""").expandtabs(0) %locals()
+			SWORD Version: %(swversion)s
+			XULRunner Version: %(xulrunner_version)s""").expandtabs(0) %locals()
 
 		info = wx.AboutDialogInfo()
 		info.Name = config.name()

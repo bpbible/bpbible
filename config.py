@@ -133,6 +133,8 @@ def is_release():
 	"""Checks if this is a released version of BPBible."""
 	return release_settings["is_released"]
 
+xulrunner_version = "UNKNOWN"
+
 def show_splashscreen():
 	# the splashscreen isn't working under GTK (inhibits application
 	# startup)
