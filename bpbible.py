@@ -144,7 +144,7 @@ class MyApp(wx.App):
 		config_parser.read(xulrunner_ini_file)
 		if config_parser.has_option("Build", "Milestone"):
 			config.xulrunner_version = config_parser.get("Build", "Milestone")[0]
-			print config.xulrunner_version
+			dprint(MESSAGE,"XULRunner version is %s." % config.xulrunner_version)
 
 def main():
 	inspection_imported = False
