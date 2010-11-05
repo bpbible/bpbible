@@ -413,7 +413,7 @@ class Book(object):
 				# XXX: This needs to be done better than this.  Move into
 				# subclass somehow.
 				if isinstance(self, Bible) and display_tags:
-					tags = self.insert_tags(versekey, exclude_topic_tag)
+					tags = self.insert_tags(osisRef, versekey, exclude_topic_tag)
 				else:
 					tags = ""
 				
@@ -448,19 +448,23 @@ class Book(object):
 				passage_entry.parent is manager.comments_special_topic)
 		)
 	
-	def insert_tags(self, verse_key, exclude_topic_tag):
+	def insert_tags(self, osis_ref, verse_key, exclude_topic_tag):
 		"""Generates and returns all the passage tags for the given verse."""
 		manager = passage_list.get_primary_passage_list_manager()
-		return "".join(
+		passage_tags = "".join(
 			self.get_passage_topic_div(passage)
 			for passage in manager.get_all_passage_entries_for_verse(verse_key)
 			# XXX: I had a problem with passages that had empty parents that
 			# I can't reproduce, so I just ignore these topics.
-			if (passage.parent is not None
-				and passage.parent is not exclude_topic_tag
-				and passage.parent.can_display_tag
-				and passage.parent is not manager)
+			if self.can_show_topic_tag(passage.parent, exclude_topic_tag)
 		)
+		return '<span class="passage_tag_container" osisRef="%s">%s</span>' % (osis_ref, passage_tags)
+
+	def can_show_topic_tag(self, topic, exclude_topic_tag=None):
+		return (topic is not None
+				and topic is not exclude_topic_tag
+				and topic.can_display_tag
+				and topic.parent is not None)
 
 	def get_passage_topic_div(self, passage):
 		from gui import passage_tag
@@ -474,7 +478,7 @@ class Book(object):
 		if white_text:
 			style += "color:white;"
 
-		return '<a class="passage_tag" style="%s" href="passagetag://passage/%d/%d">%s</a> &nbsp;' % (style, passage.parent.get_id(), passage.get_id(), topic_text)
+		return '<a class="passage_tag" style="%s" href="passagetag://passage/%d/%d" passageEntryId="%d">%s</a> &nbsp;' % (style, passage.parent.get_id(), passage.get_id(), passage.get_id(), topic_text)
 	
 	def get_headings(self, ref, mod=None):
 		"""Gets an array of the headings for the current verse. Must have just

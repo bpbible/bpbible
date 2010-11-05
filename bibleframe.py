@@ -1,3 +1,8 @@
+try:
+	import json
+except ImportError:
+	import simplejson as json
+
 import random
 
 import wx
@@ -9,6 +14,7 @@ from displayframe import IN_BOTH, IN_MENU, IN_POPUP
 from gui.htmlbase import linkiter, eq
 from gui import guiutil
 from util.observerlist import ObserverList
+from backend.bibleinterface import biblemgr
 
 import config, guiconfig
 from gui.menu import MenuItem, Separator
@@ -46,6 +52,9 @@ class BibleFrame(VerseKeyedFrame):
 		sizer.Add(self.header_bar, 0, wx.GROW)
 		sizer.Add(self, 1, wx.GROW)
 		self.panel.SetSizer(sizer)
+		from passage_list.verse_to_passage_entry_map import singleton_verse_to_passage_entry_map
+		singleton_verse_to_passage_entry_map.add_verses_observers += self.on_add_topic_verses
+		singleton_verse_to_passage_entry_map.remove_verses_observers += self.on_remove_topic_verses
 
 	def setup(self):
 		self.observers = ObserverList()
@@ -261,6 +270,49 @@ class BibleFrame(VerseKeyedFrame):
 				_(u"Error in Topic Management"), wx.OK | wx.ICON_ERROR, self)
 
 		return is_available
+
+	def on_add_topic_verses(self, passage_entry, added_verses):
+		if not biblemgr.bible.can_show_topic_tag(passage_entry.parent):
+			return
+
+		verses_on_screen = self.get_verses_on_screen(added_verses)
+		if verses_on_screen:
+			topic_tag = json.dumps(biblemgr.bible.get_passage_topic_div(passage_entry))
+			script_to_execute = "".join(self.get_add_command(topic_tag, osisRef) for osisRef in verses_on_screen)
+			self.Execute(script_to_execute)
+
+	def get_add_command(self, topic_tag, osisRef):
+		return """$('.passage_tag_container[osisRef="%s"]').append(%s);\n""" % (osisRef, topic_tag)
+	
+	def on_remove_topic_verses(self, passage_entry, removed_verses):
+		verses_on_screen = self.get_verses_on_screen(removed_verses)
+		if verses_on_screen:
+			script_to_execute = "".join(self.get_delete_command(passage_entry, osisRef) for osisRef in verses_on_screen)
+			self.Execute(script_to_execute)
+
+	def get_delete_command(self, passage_entry, osisRef):
+		return """$('.passage_tag_container[osisRef="%s"] .passage_tag[passageEntryId="%d"]').remove();\n""" % (osisRef, passage_entry.get_id())
+
+	def get_verses_on_screen(self, verses):
+		if not self.dom_loaded:
+			return []
+
+		osis_refs = [VK(verse).getOSISRef() for verse in verses]
+		osis_refs_on_screen = self.ExecuteScriptWithResult("""
+			(function(osis_refs) {
+				var result = [];
+				for (var index = 0; index < osis_refs.length; index++)	{
+					var osisRef = osis_refs[index];
+					var reference_found = $('[osisRef="' + osisRef + '"]').length > 0;
+					if (reference_found)	{
+						result.push(osisRef);
+					}
+				}
+				return JSON.stringify(result);
+			})(%s);
+		""" % json.dumps(osis_refs))
+
+		return json.loads(osis_refs_on_screen)
 	
 	@guiutil.frozen
 	def SetReference(self, ref, context=None, raw=None, y_pos=None, settings_changed=False):
