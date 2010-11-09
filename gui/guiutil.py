@@ -322,3 +322,8 @@ def bind_event_to_all_children(parent, event, handler,
 	parent.Bind(event, handler)
 	for child in parent.Children:
 		bind_event_to_all_children(child, event, handler, child_filter)
+
+if not hasattr(wx.MouseEvent, "X"):
+	wx.MouseEvent.m_x = wx.MouseEvent.X = property(wx.MouseEvent.GetX, wx.MouseEvent.SetX)
+	wx.MouseEvent.m_y = wx.MouseEvent.Y = property(wx.MouseEvent.GetY, wx.MouseEvent.SetY)
+

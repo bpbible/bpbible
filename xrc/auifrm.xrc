@@ -104,6 +104,6 @@
     </object>
     <size>800, 600</size>
     <title>Bible</title>
-    <style>wxDEFAULT_FRAME_STYLE|wxRESIZE_BORDER|wxRESIZE_BOX</style>
+    <style>wxDEFAULT_FRAME_STYLE|wxRESIZE_BORDER</style>
   </object>
 </resource>
