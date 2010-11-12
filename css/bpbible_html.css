@@ -140,6 +140,40 @@ div.indentedline[width="0"] {
 	text-indent: -5em;
 }
 
+/* Compress our poetry view if our window is too narrow.
+ * Width corresponds to value in bpbible_chapter_view.css */
+@media all and (max-width: 500px) {
+	blockquote.lg
+	{
+		margin: 0.5em 0em 0.5em 1.75em;
+	}
+
+	[dir="rtl"] blockquote.lg
+	{
+		margin: 0.5em 1.75em 0.5em 0em;
+	}
+
+	/* We want our indented lines to behave nicely - wrapped lines should be
+	 * indented further. text-indent undoes the wide margin only for the first
+	 * line */
+	div.indentedline[width="2"] {
+		-moz-padding-start: 4em;
+		text-indent: -3em;
+	}
+	div.indentedline[width="4"] {
+		-moz-padding-start: 5em;
+		text-indent: -3em;
+	}
+	div.indentedline[width="6"] {
+		-moz-padding-start: 6em;
+		text-indent: -3em;
+	}
+
+	div.indentedline[width="0"] {
+		-moz-padding-start: 3em;
+		text-indent: -3em;
+	}
+}
 /* Strong's headwords */
 a.strongs_headword {
 	text-decoration: none;

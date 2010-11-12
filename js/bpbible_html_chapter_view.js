@@ -4,10 +4,18 @@ function get_start_point(){
 
 
 function highlight_verse(){
+	var osisRef = get_current_verse_ref();
+	var old_highlight = $('.had_highlight[highlighted_reference="' + osisRef + '"]');
+	if (old_highlight.length) {
+		old_highlight.addClass("highlight");
+		return;
+	}
+		
 	var [start, end] = get_current_verse_bounds();
+
 	if (start[0]) {
 		// Highlight the verse's background
-		highlight_range(start[0], end[0]);
+		highlight_range(start[0], end[0], ["highlighted_reference", osisRef]);
 	}
 }
 

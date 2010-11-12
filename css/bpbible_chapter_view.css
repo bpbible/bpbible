@@ -52,27 +52,63 @@ body[verse_per_line="true"] .chapterview p {
 }
 
 .chapterview blockquote.lg > a.versenumber, 
-.chapterview blockquote.lg > span.highlight > a.versenumber
+.chapterview blockquote.lg > span.had_highlight > a.versenumber
 {
 	position: relative;
 	float: left;
-	left: -2.5em;
+	left: -4em;
+	width: 3em;
+	text-align: center;
 	line-height: inherit;
 }
 
 .chapterview blockquote.lg a.chapternumber
 {
+	width: 1.5em;
+	text-align: center;
 	-moz-margin-start: -2em;
 	line-height: 100%;
 	font-size: 150%;
 }
 
 [dir="rtl"] .chapterview blockquote.lg > a.versenumber,
-[dir="rtl"] .chapterview blockquote.lg > span.highlight > a.versenumber
+[dir="rtl"] .chapterview blockquote.lg > span.had_highlight > a.versenumber
 {
 	left: 0em;
 	float: right;
-	right: -2.5em;
+	right: -4em;
+}
+
+/* Compress our poetry view if our window is too narrow.
+ * Width corresponds to value in bpbible_html.css */
+@media all and (max-width: 500px) {
+	.chapterview blockquote.lg > a.versenumber, 
+	.chapterview blockquote.lg > span.had_highlight > a.versenumber
+	{
+		position: relative;
+		float: left;
+		left: -3em;
+		width: 3em;
+		text-align: center;
+		line-height: inherit;
+	}
+
+	.chapterview blockquote.lg a.chapternumber
+	{
+		width: 1.5em;
+		text-align: center;
+		-moz-margin-start: -1.5em;
+		line-height: 100%;
+		font-size: 150%;
+	}
+
+	[dir="rtl"] .chapterview blockquote.lg > a.versenumber,
+	[dir="rtl"] .chapterview blockquote.lg > span.had_highlight > a.versenumber
+	{
+		left: 0em;
+		float: right;
+		right: -3em;
+	}
 }
 
 .chapterview div.segment, .chapterview div.no_more_text.end-start {

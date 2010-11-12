@@ -1,19 +1,22 @@
 /* Highlighting utilities */
-function extract_range(r) {
+function extract_range(r, tag) {
 	/* pull out a range and replace with a span. 
 	 * Note: the way we use this can end up with (for example) <span>'s
 	 * being the parents of <div>'s. I'm not sure if this is strictly legal...
 	 */
 	if(!r.collapsed) {
 		var newNode = document.createElement("span");
-		newNode.className = "highlight";
+		newNode.className = "highlight had_highlight";
+		if (tag) {
+			newNode.setAttribute(tag[0], tag[1]);
+		}
 		r.surroundContents(newNode);
 		return true;
 	}
 	return false;
 }
 
-function highlight_range(start, end) {
+function highlight_range(start, end, tag) {
 	var range = document.createRange();
 	range.setStartAfter(start);
 	range.setEndBefore(end);
@@ -28,7 +31,7 @@ function highlight_range(start, end) {
 		//d("Left hand side");
 		//d(s);
 		r.setStartAfter(s);
-		extract_range(r);
+		extract_range(r, tag);
 		s = s.parentNode;
 	}
 	
@@ -61,7 +64,7 @@ function highlight_range(start, end) {
 		try_indented = (e.parentNode.className.match(/\bindentedline\b/) 
 			&& e == e.parentNode.lastChild) 
 
-		if(extract_range(r) && try_this_indented) {
+		if(extract_range(r, tag) && try_this_indented) {
 			//d("Moving up a level");
 			// We just put in another level in extract_range - we don't want
 			// to do it again - infinite loops result...
@@ -83,7 +86,7 @@ function highlight_range(start, end) {
 		r.setEndAfter(e);
 	}
 	
-	extract_range(r);
+	extract_range(r, tag);
 }
 
 // XXX: We ought to be able to just unhighlight a single range.
