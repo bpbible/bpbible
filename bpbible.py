@@ -15,7 +15,20 @@ if os.path.isdir("custom"):
 		if os.path.isfile("custom/%s" % file) and file.endswith(".py"):
 			execfile("custom/%s" % file)
 
+
+from util.debug import dprint, MESSAGE, WARNING, is_debugging
+dprint(MESSAGE, "Importing wx")
+
+import wx
+from util import osutils
 def find_xulrunner_path():
+	if osutils.is_mac():
+		path = os.getcwd() + "/../MacOS/"
+		if os.path.exists(path):
+			return path
+		else:
+			return os.getcwd() + "/dist/BPBible.app/Contents/MacOS/"
+
 	path = os.path.join(os.getcwd(), "xulrunner")
 	if not os.path.isdir(path):
 		# XXX: Perhaps we should make this error handling a little more friendly?
@@ -24,15 +37,9 @@ def find_xulrunner_path():
 	return path
 
 
-from util.debug import dprint, MESSAGE, WARNING, is_debugging
-dprint(MESSAGE, "Importing wx")
-
-import wx
-
 xulrunner_path = find_xulrunner_path()
 dprint(MESSAGE, "XULRunner path is", xulrunner_path)
 
-from util import osutils
 if osutils.is_msw():
 	os.environ['PATH'] = xulrunner_path + ';' + os.environ['PATH']
 
