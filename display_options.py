@@ -98,7 +98,7 @@ def display_option_changed(option_name, force_complete_reload):
 	if force_complete_reload:
 		guiconfig.mainfrm.UpdateBibleUI(settings_changed=True, source=SETTINGS_CHANGED)
 	else:
-		display_option_changed_observers(self.option_name)
+		display_option_changed_observers(option_name)
 
 def all_options():
 	return options.items.keys()
