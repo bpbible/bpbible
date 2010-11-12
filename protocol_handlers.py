@@ -3,6 +3,7 @@ from backend.bibleinterface import biblemgr
 from swlib.pysw import SW, VK
 import os
 import config
+import guiconfig
 from util.debug import dprint, ERROR, MESSAGE, is_debugging
 from display_options import all_options, get_js_option_value
 from util.string_util import convert_rtf_to_html
@@ -49,9 +50,15 @@ class MasterProtocolHandler(wx.wc.ProtocolHandler):
 		return unicode(handlers[protocol].get_content_type(path))
 
 	def GetContent(self, url):
-		dprint(MESSAGE, "GetContent called for url:", url)
-		protocol, path = self._breakup_url(url)
-		return unicode(handlers[protocol].get_document(path))
+		try:
+			dprint(MESSAGE, "GetContent called for url:", url)
+			protocol, path = self._breakup_url(url)
+			return unicode(handlers[protocol].get_document(path))
+		except Exception, e:
+			dprint(ERROR, "EXCEPTION in GetContent")
+			import traceback
+			traceback.print_exc()
+			raise
 
 BASE_HTML = '''\
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
@@ -77,7 +84,7 @@ class ProtocolHandler(object):
 		return "No content specified"
 	
 	def _get_html(self, module, content, bodyattrs="", timer="", 
-		stylesheets=[], scripts=[], contentclass=""):
+		stylesheets=[], scripts=[], styles="", contentclass=""):
 		resources = []
 		skin_prefixs = ["css", "css"]
 		script_prefixs = ["js", "js"]
@@ -92,11 +99,14 @@ class ProtocolHandler(object):
 					resources.append('<link rel="stylesheet" type="text/css" href="%s"/ >' % (item))
 				else:
 					resources.append('<link rel="stylesheet" type="text/css" href="%s/%s/%s"/ >' % (prefix, skin_prefix, item))
+
+			resources.append(styles)
+
 			for item in scripts:
 				resources.append('<script type="text/javascript" src="%s/%s/%s"></script>' % (prefix, script_prefix, item))
 
 		text = BASE_HTML % dict(
-			lang=module.Lang(),
+			lang=module.Lang() if module else "en",
 			head='\n'.join(resources),
 			bodyattrs=bodyattrs, 
 			content=content, 
@@ -194,12 +204,14 @@ class PageProtocolHandler(ProtocolHandler):
 		for option in all_options():
 			options.append((option, get_js_option_value(option)))
 
-		options.append(("module", module.Name()))
-		dir = {
-			SW.DIRECTION_BIDI: "bidi",
-			SW.DIRECTION_LTR:  "ltr",
-			SW.DIRECTION_RTL:  "rtl",
-		}.get(ord(module.Direction()))
+		dir = "ltr"
+		if module: 
+			options.append(("module", module.Name()))
+			dir = {
+				SW.DIRECTION_BIDI: "bidi",
+				SW.DIRECTION_LTR:  "ltr",
+				SW.DIRECTION_RTL:  "rtl",
+			}.get(ord(module.Direction()))
 
 		if not dir: 
 			print "Unknown text direction"
@@ -288,7 +300,7 @@ class PageFragmentHandler(PageProtocolHandler):
 			newtk.thisown = True
 			mod.setKey(tk)
 			print "Getting next for", ref
-			tk.setText(ref)
+			tk.set_text(ref)
 			print tk.getText()
 			if mod.Error() != '\x00':
 				print "Error on initial set?"
@@ -369,13 +381,41 @@ class TooltipConfigHandler(PageProtocolHandler):
 
 	def get_document(self, path):
 		config = self.registered.pop(path)
+		bg, textcolour = guiconfig.get_tooltip_colours()
+		style = """
+<style type="text/css">
+body {
+	background-color: %s;
+	color: %s
+}
+</style>
+""" % (bg, textcolour)
 		return self._get_html(config.get_module(), config.get_text(),
 				stylesheets=self.bible_stylesheets,
-				bodyattrs=self._get_body_attrs(config.get_module()))
+				bodyattrs=self._get_body_attrs(config.get_module()),
+				styles=style)
+
+class FragmentHandler(PageProtocolHandler):
+	registered = {}
+	upto = 0
+
+	@classmethod
+	def register(cls, text, module):
+		cls.upto += 1
+		k = str(cls.upto)
+		cls.registered[k] = text, module
+		return "bpbible://content/fragment/%s" % k
+
+	def get_document(self, path):
+		text, module = self.registered.pop(path)
+		return self._get_html(module, text,
+				stylesheets=self.bible_stylesheets,
+				bodyattrs=self._get_body_attrs(module))
 
 handlers = {
 	"page": PageProtocolHandler(), 
 	'pagefrag': PageFragmentHandler(),
+	'fragment': FragmentHandler(),
 	'': NullProtocolHandler(),
 	'moduleinformation': ModuleInformationHandler(),
 	'quotes_skin': QuotesHandler(),

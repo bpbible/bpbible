@@ -1,5 +1,6 @@
 import re
 import string
+import math
 
 import wx
 from wx import html
@@ -8,7 +9,6 @@ import wx.wc
 
 import guiconfig
 import config
-
 
 
 from swlib.pysw import GetBestRange, SW, VerseList
@@ -26,6 +26,7 @@ from protocols import protocol_handler
 # XXX: This is just to force the protocol to be registered.
 import gui.passage_tag
 from events import LINK_CLICKED
+from protocol_handlers import FragmentHandler
 
 from gui import fonts
 
@@ -970,15 +971,16 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl, DummyHtmlSelectableWindow
 	def SetPage(self, *args, **kwargs):
 		assert hasattr(self, "mod"), self
 
-		self.language_code, (self.font, self.size, gui) = \
-			fonts.get_font_params(self.mod)
+#		self.language_code, (self.font, self.size, gui) = \
+#			fonts.get_font_params(self.mod)
 
 		#super(DisplayFrame, self).SetPage(*args, **kwargs)
 		# XXX: Hack.  Deprecated.
 		if kwargs:
 			print "SetPage: kwargs discarded:", kwargs
 		dprint(WARNING, "SetPage", self.__class__, len(args[0]))
-		self.SetContent("test://123.456.com", args[0]) # XXX: FixMe: Give a proper URL.
+		self.OpenURI(FragmentHandler.register(args[0], self.mod))
+#		self.SetContent("test://123.456.com", args[0]) # XXX: FixMe: Give a proper URL.
 
 	def Scroll(self, x, y):
 		return
@@ -1020,6 +1022,21 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl, DummyHtmlSelectableWindow
 		# the WebConnect DOM API.  In practice, I haven't figured out how to.
 		self.Execute("document.body.setAttribute('%s', %s);" %
 				(option_name, display_options.get_js_option_value(option_name)))
+
+	@defer_till_document_loaded
+	def size_intelligently(self, width, func, *args, **kwargs):
+		max_height = kwargs.pop("max_height", 600)
+		self.SetSize((width, 100))
+		h = self.ExecuteScriptWithResult('window.getComputedStyle(document.body.parentNode, null).height')
+		assert h.endswith("px")
+		height = int(math.ceil(float(h[:-2])))
+		if height > max_height: 
+			height = max_height
+
+		self.SetSize((width, height))
+
+		func(width, height, *args, **kwargs)
+		#return width, height
 
 class DisplayFrameXRC(DisplayFrame):
 	def __init__(self):

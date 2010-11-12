@@ -1,10 +1,11 @@
-from displayframe import AUIDisplayFrame, DisplayFrame
+from new_displayframe import AUIDisplayFrame, DisplayFrame
 from tooltip import TooltipBaseMixin
 from backend.bibleinterface import biblemgr
 from util.i18n import N_
 from gui import guiutil
 import guiconfig
 import wx
+from protocol_handlers import TooltipConfigHandler
 
 class PreviewWindow(AUIDisplayFrame, TooltipBaseMixin):
 	id = N_("Preview")
@@ -97,7 +98,9 @@ class PreviewWindow(AUIDisplayFrame, TooltipBaseMixin):
 		return True
 	
 	def ShowTooltip(self, position=None):
-		self.html.SetPage(self.text)#, body_colour=self.colour,
+		path = TooltipConfigHandler.register(self.tooltip_config)
+		self.html.OpenURI(path)
+#		self.html.SetPage(self.text)#, body_colour=self.colour,
 #				text_colour=self.text_colour)
 	
 	def get_permanent_tooltip_position(self):

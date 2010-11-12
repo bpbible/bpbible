@@ -4,6 +4,7 @@ from backend.verse_template import VerseTemplate
 import config, guiconfig
 import displayframe
 from backend.bibleinterface import biblemgr
+from protocol_handlers import TooltipConfigHandler
 from swlib.pysw import SW, VerseParsingError, GetBestRange
 
 from gui import guiutil
@@ -130,6 +131,8 @@ class TooltipBaseMixin(object):
 			self.target, target_rect, factor = self.new_target
 		else:
 			factor = 0
+			target_rect = None
+		self.Hide()
 
 		# set the size
 		self.html.SetSize((400, 50))
@@ -138,19 +141,16 @@ class TooltipBaseMixin(object):
 		self.html.SetBorders(tooltip_settings["border"])
 
 		# and the page
-		self.html.SetPage(self.text, body_colour=self.colour,
-				text_colour=self.text_colour)
+		path = TooltipConfigHandler.register(self.tooltip_config)
+		self.html.OpenURI(path)
+#		self.html.SetPage(self.text, body_colour=self.colour,
+#				text_colour=self.text_colour)
 		
-		# now we can get at the real size :)
-		"""
-		i = self.html.GetInternalRepresentation()
-
-		w, h = (i.GetWidth() + tooltip_settings["border"], 
-				i.GetHeight() + tooltip_settings["border"])
-
-		self.html.SetDimensions(0, 0, w, h)
+		self.html.size_intelligently(400, self._position_tooltip, position, target_rect, factor)
+	
+	def _position_tooltip(self, w, h, position, target_rect, factor):
+		self.html.SetMinSize(self.html.Size)
 		self.resize_tooltip()
-		"""
 
 		width, height = self.GetSize()
 
@@ -196,6 +196,15 @@ class TooltipBaseMixin(object):
 		self.Show()
 
 		wx.CallAfter(self.maybe_scroll_to_current)
+
+	def resize_tooltip(self):
+		w, h = self.container_panel.Size
+		h += self.toolbar.Size[1]
+	
+		self.SetClientSize((w, h))
+		self.SetSize((w, h))
+		
+		self.Fit()
 
 	def maybe_scroll_to_current(self):
 		if self.tooltip_config.scroll_to_current:
@@ -312,21 +321,15 @@ class Tooltip(TooltipBaseMixin, tooltip_parent):
 		self.html_type = new_displayframe.DisplayFrame 
 		# create the container panels
 		self.container_panel = wx.Panel(self, -1, style=wx.RAISED_BORDER)
-		self.toolbarpanel = wx.Panel(self.container_panel, -1)
+		self.toolbarpanel = wx.Panel(self.container_panel)
 		self.htmlpanel = wx.Panel(self.container_panel)
 
 		# create the html control
-		self.html = html_type(self.htmlpanel, 
-			logical_parent=logical_parent, style=html.HW_SCROLLBAR_NEVER)
-
+		self.html = html_type(self.htmlpanel, logical_parent=logical_parent)
 		self.html.book = biblemgr.bible
-
 		self.html.parent = self
 
-		# create the toolbar
-		# self.create_toolbar()
-		
-		# put it on its panel
+		# create button panel
 		panel_sizer = wx.BoxSizer(wx.HORIZONTAL)
 		self.toolbarpanel.SetSizer(panel_sizer)
 		self.recreate_toolbar()
@@ -485,15 +488,6 @@ class Tooltip(TooltipBaseMixin, tooltip_parent):
 	def HideTooltip(self):
 		self.Stop()
 	
-	def resize_tooltip(self):
-		w, h = self.container_panel.Size
-		h += self.toolbar.Size[1]
-	
-		self.SetClientSize((w, h))
-		self.SetSize((w, h))
-		
-		self.Fit()
-
 # use a wxFrame to display this as we want:
 # a) an icon
 # b) it to appear in the task bar and task list
@@ -514,9 +508,19 @@ class PermanentTooltip(TooltipBaseMixin, pclass):
 		self.stayontop = True
 
 		self.container_panel = wx.Panel(self)
+		self.toolbarpanel = wx.Panel(self.container_panel)		
+		self.htmlpanel = wx.Panel(self.container_panel)
+
+		# create the html control
+		import new_displayframe
+		self.html = new_displayframe.DisplayFrame(self.htmlpanel)
+		self.html.book = biblemgr.bible
+		self.html.parent = self
+		html_sizer = wx.BoxSizer(wx.HORIZONTAL)
+		html_sizer.Add(self.html, 1, wx.GROW)
+		self.htmlpanel.SetSizer(html_sizer)
 
 		# create button panel
-		self.toolbarpanel = wx.Panel(self.container_panel, -1)		
 		self.buttonsizer = wx.BoxSizer(wx.HORIZONTAL)		
 		self.toolbarpanel.SetSizer(self.buttonsizer)		
 		self.recreate_toolbar()
@@ -524,14 +528,18 @@ class PermanentTooltip(TooltipBaseMixin, pclass):
 		# make html
 		#self.html = displayframe.DisplayFrame(self.container_panel, 
 		#	style=html.HW_SCROLLBAR_AUTO)
-		import new_displayframe
-		self.html = new_displayframe.DisplayFrame(self.container_panel)
-
 		# make sizer for panel
-		self.global_sizer = wx.BoxSizer(wx.VERTICAL)		
-		self.global_sizer.Add(self.toolbarpanel, flag=wx.GROW)
-		self.global_sizer.Add(self.html, flag=wx.GROW, proportion=3)
-		self.container_panel.SetSizer(self.global_sizer)
+		sizer = wx.BoxSizer(wx.VERTICAL)		
+		sizer.Add(self.toolbarpanel, 0, wx.ALIGN_CENTRE|wx.GROW)
+		sizer.Add(self.htmlpanel, 1, wx.GROW)
+
+		self.container_panel.SetSizer(sizer)
+		self.container_panel.Fit()
+
+		self.sizer = wx.BoxSizer(wx.HORIZONTAL)
+		self.sizer.Add(self.container_panel, 1, wx.GROW)
+		
+		self.SetSizerAndFit(self.sizer)
 		
 		# set colour
 		self.colour, self.text_colour = guiconfig.get_tooltip_colours()
@@ -595,16 +603,6 @@ class PermanentTooltip(TooltipBaseMixin, pclass):
 		self.Close()
 
 	#def SetTransparent(*args):pass
-	def resize_tooltip(self):
-		# set the container panel to fit
-		self.container_panel.Fit()
-
-		# get the required size
-		w, h = self.container_panel.Size
-		h += self.toolbar.Size[1]
-		
-		# and set our size
-		self.ClientSize = w, h
 
 def BiblicalPermanentTooltip(parent, ref):
 	"""Creates a Biblical permanent tooltip, open to the given ref."""
