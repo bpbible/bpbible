@@ -331,10 +331,13 @@ class BibleFrame(VerseKeyedFrame):
 		# If the settings have changed we want to do a complete reload anyway
 		# (since it could be something that requires a complete reload, such as changing version).
 		if self.dom_loaded:
+			# in the document we keep user verse keys, in here we keep
+			# internal ones. Do conversions as appropriate.
 			if settings_changed:
-				self.reference = self.ExecuteScriptWithResult('get_current_reference_range()')
+				self.reference = GetVerseStr(self.ExecuteScriptWithResult('get_current_reference_range()'))
 			else:
-				has_selected_new_verse = self.ExecuteScriptWithResult('select_new_verse("%s")' % self.reference)
+				ref = pysw.internal_to_user(self.reference)
+				has_selected_new_verse = self.ExecuteScriptWithResult('select_new_verse("%s")' % ref)
 				has_selected_new_verse = (has_selected_new_verse == "true")
 
 		if not has_selected_new_verse:
