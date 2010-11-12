@@ -1,12 +1,3 @@
-div.segment, div.no_more_text.end-start {
-	border: solid 1px #ddd;
-	padding: 0.5em;
-	margin-bottom: 0.5em;
-	-moz-border-radius: 3px;
-/*	margin-top: 1px;
-	margin-left: 1px;*/
-}
-
 /* In commentaries and dictionaries, we have headings, but due to the two
  * divs and the border on the div.segment, it tries to put in extra
  * whitespace. Quash it */
@@ -16,10 +7,9 @@ div.segment > div > h3:first-child {
 
 div.segment:hover,
 div.page_segment#original_segment > div.segment {
-	border: solid 1px #888;
-	-moz-border-radius: 5px;
 	margin-top: 0px;
 	margin-left: 0px;
+
 }
 
 div.page_segment#original_segment > div.segment {
@@ -29,6 +19,12 @@ div.page_segment#original_segment > div.segment {
 /* There's not much point in having whitespace at the end of an entry... */
 div.segment > div > p:last-child {
 	margin-bottom: 0px;
+}
+
+div.segment, div.no_more_text.end-start {
+	border-bottom: solid 1px #ddd;
+	padding-bottom: 0.5em;
+	margin-bottom: 0.5em;
 }
 
 div.genbook_key[level$=""] { font-size: small; }
