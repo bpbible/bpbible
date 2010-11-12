@@ -240,7 +240,7 @@ class PopupTransientWindow(PopupWindow):
 					self.child.CaptureMouse()
 		
 	def OnKillFocus(self, event):
-		event.GetWindow()
+		win = event.GetWindow()
 		while win:
 			if win == self:
 				return
