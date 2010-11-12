@@ -1,12 +1,13 @@
 from swlib.pysw import SW
 from backend.bibleinterface import biblemgr
-from tooltip import TextTooltipConfig
+from tooltip import TextTooltipConfig, StrongsTooltipConfig
 
 from util.debug import *
 from util import noop
 from util.unicode import to_unicode, to_str
 from gui import guiutil
 import guiconfig
+import wx
 
 
 class ProtocolHandler(object):
@@ -104,3 +105,29 @@ def on_sword_hover(frame, href, url, x, y):
 
 protocol_handler.register_handler("sword", on_sword_opened)
 protocol_handler.register_hover("sword", on_sword_hover)
+
+def on_strongs_click(frame, href, url):
+	dictionary = biblemgr.dictionary		
+	type = url.getHostName() #Hebrew or greek
+	value = url.getPath() #strongs number
+	type = "Strongs"+type #as module is StrongsHebrew or StrongsGreek
+	if biblemgr.dictionary.ModuleExists(type):
+		guiconfig.mainfrm.set_module(type, biblemgr.dictionary)
+		wx.CallAfter(guiconfig.mainfrm.UpdateDictionaryUI, value)
+
+	if not type or not value: 
+		print "Not type or value", href
+		return
+
+def on_strongs_hover(frame, href, url, x, y):
+	dictionary = biblemgr.dictionary		
+	type = url.getHostName() #Hebrew or greek
+	value = url.getPath() #strongs number
+	if not type or not value: 
+		print "Not type or value", href
+		return
+
+	frame.show_tooltip(StrongsTooltipConfig(type, value))
+
+protocol_handler.register_handler("strongs", on_strongs_click)
+protocol_handler.register_hover("strongs", on_strongs_hover)
