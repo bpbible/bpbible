@@ -30,21 +30,21 @@ class ModuleTree(FilterableTree):
 		)
 
 		self.extra_categories = (
-			"Daily Devotional",
-			"Maps",
-			"Images",
-			"Harmonies",
+			_("Daily Devotional"),
+			_("Maps"),
+			_("Images"),
+			_("Harmonies"),
 		)
 
 		self.all_categories = (
-			"Bibles",
-			"Commentaries",
-			"Dictionaries",
-			"Harmonies",
-			"Maps",
-			"Images",
-			"Daily Devotional",
-			"Other books",
+			_("Bibles"),
+			_("Commentaries"),
+			_("Dictionaries"),
+			_("Harmonies"),
+			_("Maps"),
+			_("Images"),
+			_("Daily Devotional"),
+			_("Other books"),
 		)
 		
 
