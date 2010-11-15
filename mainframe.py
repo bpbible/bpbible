@@ -481,6 +481,7 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.bible_observers += self.genbooktext.reload
 		self.harmony_frame = GenBookFrame(self, biblemgr.harmony)
 		self.harmony_frame.id = "Harmony"
+		self.harmony_frame.has_menu = False
 
 		self.bibletext = BibleFrame(self)
 		self.bibletext.SetBook(biblemgr.bible)
@@ -494,6 +495,7 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.daily_devotional_frame = DictionaryFrame(self,
 				biblemgr.daily_devotional)
 		self.daily_devotional_frame.id = "Daily Devotional"
+		self.daily_devotional_frame.has_menu = False
 
 		self.verse_compare = VerseCompareFrame(self, biblemgr.bible)
 		#if settings["verse_comparison_modules"] is not None:
