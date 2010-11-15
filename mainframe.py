@@ -24,7 +24,7 @@ from bookframe import BookFrame
 from bookframe import CommentaryFrame
 from bookframe import DictionaryFrame
 from displayframe import IN_MENU
-from genbookframe import GenBookFrame
+from genbookframe import GenBookFrame, HarmonyFrame
 
 from auilayer import AuiLayer
 
@@ -479,9 +479,7 @@ class MainFrame(wx.Frame, AuiLayer):
 		# XXX: Why are we reloading a Genbook when the Bible changes?
 		# Is it to change the version of Bible references?
 		self.bible_observers += self.genbooktext.reload
-		self.harmony_frame = GenBookFrame(self, biblemgr.harmony)
-		self.harmony_frame.id = "Harmony"
-		self.harmony_frame.has_menu = False
+		self.harmony_frame = HarmonyFrame(self)
 
 		self.bibletext = BibleFrame(self)
 		self.bibletext.SetBook(biblemgr.bible)
