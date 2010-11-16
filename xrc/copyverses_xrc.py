@@ -40,7 +40,7 @@ class xrcCopyVerseDialog(wx.Dialog):
         self.gui_template_list = xrc.XRCCTRL(self, "gui_template_list")
         self.collapsible_panel = xrc.XRCCTRL(self, "collapsible_panel")
         self.tp_holder = xrc.XRCCTRL(self, "tp_holder")
-        self.tp_holder = xrc.XRCCTRL(self, "tp_holder")
+        self.copy_formatted = xrc.XRCCTRL(self, "copy_formatted")
         self.gui_save_template = xrc.XRCCTRL(self, "gui_save_template")
         self.gui_load_template = xrc.XRCCTRL(self, "gui_load_template")
         self.preview = xrc.XRCCTRL(self, "preview")
@@ -72,6 +72,7 @@ def __gettext_strings():
     
     _("&Reference")
     _("&Template")
+    _("Copy formatted")
     _("&Save template")
     _("&Load Template")
     _("Edit Template...")
