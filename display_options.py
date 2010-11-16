@@ -16,6 +16,7 @@ options.add_item("strongs_blocked", True, item_type=bool)
 options.add_item("morphology", True, item_type=bool)
 options.add_item("morph_segmentation", False, item_type=bool)
 options.add_item("raw", False, item_type=bool)
+options.add_item("show_timing", False, item_type=bool)
 options.add_item("colour_speakers", "off", item_type=str)
 
 class BooleanOptionMenuItem(object):
@@ -88,8 +89,8 @@ options_menu = [
 ]
 
 debug_options_menu = [
-	# XXX: This should force the entire page to reload.
 	BooleanOptionMenuItem("raw", "Output Raw", force_complete_reload=True),
+	BooleanOptionMenuItem("show_timing", "Display timing"),
 ]
 
 display_option_changed_observers = ObserverList()
