@@ -343,7 +343,9 @@ class BibleInterface(object):
 biblemgr = BibleInterface("ESV", "TSK", "ISBE") 
 
 biblemgr.genbook.templatelist.append(config.genbook_template)
+biblemgr.harmony.templatelist.append(config.genbook_template)
 biblemgr.dictionary.templatelist.append(config.dictionary_template)
+biblemgr.daily_devotional.templatelist.append(config.dictionary_template)
 biblemgr.commentary.templatelist.append(config.commentary_template)
 biblemgr.bible.templatelist.append(config.bible_template)
 
