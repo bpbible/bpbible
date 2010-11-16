@@ -32,7 +32,7 @@ from util.observerlist import ObserverList
 from util import osutils
 #import mySearchDialog
 import versetree
-from copyverses import CopyVerseDialog
+import copyverses
 import config
 import guiconfig
 from module_tree import ModuleTree
@@ -525,7 +525,7 @@ class MainFrame(wx.Frame, AuiLayer):
 	def on_copy_button(self, event=None):
 		text = self.bibletext.get_quick_selected()
 		
-		cvd = CopyVerseDialog(self)
+		cvd = copyverses.CopyVerseDialog(self)
 		cvd.ShowModal(text)
 		cvd.Destroy()
 
@@ -569,6 +569,12 @@ class MainFrame(wx.Frame, AuiLayer):
 
 		self.Bind(wx.EVT_MENU, self.on_locale_restart, 
 			id=xrc.XRCID('gui_locale_restart'))
+		
+		self.Bind(wx.EVT_MENU, self.on_reload, 
+			id=xrc.XRCID('gui_reload'))
+
+		self.Bind(wx.EVT_MENU, self.on_reload_chrome, 
+			id=xrc.XRCID('gui_reload_chrome'))
 		
 		self.Bind(wx.EVT_MENU, id = wx.ID_EXIT, handler = self.ExitClick)
 		self.Bind(wx.EVT_MENU, id = wx.ID_ABOUT, handler = self.AboutClick)
@@ -667,6 +673,18 @@ class MainFrame(wx.Frame, AuiLayer):
 		gettext._translations.clear()
 
 		self.restart()
+
+	def on_reload_chrome(self, event):
+		print "Reloading all"
+		guiconfig.app.reload_restarting = True
+		guiconfig.app.restarting = True
+		self.MainFrameClose(None)
+		
+	def on_reload(self, event):
+		import reload_util
+		reload(reload_util)
+		reload_util.reboot_section("filtering")
+		reload_util.reboot_section("copying")
 		
 	#def history_moved(self, history_item):
 	#	self.set_bible_ref(history_item.ref, source=HISTORY)

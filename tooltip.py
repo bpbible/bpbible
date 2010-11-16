@@ -4,7 +4,7 @@ from backend.verse_template import VerseTemplate
 import config, guiconfig
 import displayframe
 from backend.bibleinterface import biblemgr
-from protocol_handlers import TooltipConfigHandler
+import protocol_handlers
 from swlib.pysw import SW, VerseParsingError, GetBestRange
 
 from gui import guiutil
@@ -141,7 +141,7 @@ class TooltipBaseMixin(object):
 		self.html.SetBorders(tooltip_settings["border"])
 
 		# and the page
-		path = TooltipConfigHandler.register(self.tooltip_config)
+		path = protocol_handlers.TooltipConfigHandler.register(self.tooltip_config)
 		self.html.OpenURI(path)
 #		self.html.SetPage(self.text, body_colour=self.colour,
 #				text_colour=self.text_colour)

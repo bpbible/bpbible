@@ -5,7 +5,7 @@ from util.i18n import N_
 from gui import guiutil
 import guiconfig
 import wx
-from protocol_handlers import TooltipConfigHandler
+import protocol_handlers
 
 class PreviewWindow(AUIDisplayFrame, TooltipBaseMixin):
 	id = N_("Preview")
@@ -98,7 +98,7 @@ class PreviewWindow(AUIDisplayFrame, TooltipBaseMixin):
 		return True
 	
 	def ShowTooltip(self, position=None):
-		path = TooltipConfigHandler.register(self.tooltip_config)
+		path = protocol_handlers.TooltipConfigHandler.register(self.tooltip_config)
 		self.html.OpenURI(path)
 #		self.html.SetPage(self.text)#, body_colour=self.colour,
 #				text_colour=self.text_colour)

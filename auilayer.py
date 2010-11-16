@@ -250,6 +250,8 @@ class AuiLayer(object):
 			aui.AUI_MGR_TRANSPARENT_HINT)
 
 
+		self.on_close += self.aui_mgr.UnInit
+
 		self.aui_uses_provider = False
 		self.maximized_pane_direction = None
 		

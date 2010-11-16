@@ -26,7 +26,7 @@ from protocols import protocol_handler
 # XXX: This is just to force the protocol to be registered.
 import gui.passage_tag
 from events import LINK_CLICKED
-from protocol_handlers import FragmentHandler
+import protocol_handlers
 
 from gui import fonts
 
@@ -290,9 +290,6 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl, DummyHtmlSelectableWindow
 
 		self.logical_parent = logical_parent
 		self.handle_links = True
-		self.dom_loaded = False
-		self.events_to_call_on_document_load = []
-		
 	def DomContentLoaded(self, event):
 		document = self.GetDOMDocument()
 		#document.AddEventListener("mouseover", self, WX_MOUSE_OVER_EVENT, True)
@@ -315,6 +312,9 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl, DummyHtmlSelectableWindow
 
 	def setup(self):
 		self.handle_links = True
+		self.dom_loaded = False
+		self.events_to_call_on_document_load = []
+		
 		import displayframe
 		self.html_type = displayframe.DisplayFrame
 
@@ -979,7 +979,7 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl, DummyHtmlSelectableWindow
 		if kwargs:
 			print "SetPage: kwargs discarded:", kwargs
 		dprint(WARNING, "SetPage", self.__class__, len(args[0]))
-		self.OpenURI(FragmentHandler.register(args[0], self.mod))
+		self.OpenURI(protocol_handlers.FragmentHandler.register(args[0], self.mod))
 #		self.SetContent("test://123.456.com", args[0]) # XXX: FixMe: Give a proper URL.
 
 	def Scroll(self, x, y):
@@ -1040,7 +1040,7 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl, DummyHtmlSelectableWindow
 
 class DisplayFrameXRC(DisplayFrame):
 	def __init__(self):
-		pre = html.PreHtmlWindow()
+		pre = wx.wc.PreWebControl()
 		self.PostCreate(pre)
 		self.setup()
 

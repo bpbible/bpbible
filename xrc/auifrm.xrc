@@ -74,6 +74,13 @@
           </object>
           <label>Locale</label>
         </object>
+        <object class="separator"/>
+        <object class="wxMenuItem" name="gui_reload">
+          <label>Reload sections</label>
+        </object>
+        <object class="wxMenuItem" name="gui_reload_chrome">
+          <label>Reload w/ chrome</label>
+        </object>
       </object>
       <object class="wxMenu" name="help">
         <label>_Help</label>

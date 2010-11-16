@@ -1,64 +1,16 @@
-import wx.wc
 from backend.bibleinterface import biblemgr
 from swlib.pysw import SW, VK
 import os
 import config
 import guiconfig
-from util.debug import dprint, ERROR, MESSAGE, is_debugging
+from util.debug import dprint, ERROR, is_debugging
 from display_options import all_options, get_js_option_value
 from util.string_util import convert_rtf_to_html
 from util.unicode import try_unicode, to_unicode
 from util import languages, default_timer
 import urllib
-import urlparse
 
 counter = 0
-
-def get_url_host_and_page(url):
-	parsed_url = urlparse.urlsplit(url)
-	if parsed_url.netloc:
-		url_host = parsed_url.netloc
-		page = parsed_url.path.lstrip('/')
-	else:
-		temp = parsed_url.path.lstrip('/')
-		d = temp.split("/", 1)
-		url_host = d[0]
-		assert len(d) > 1, "No path for protocol handler."
-		page = str(d[1])
-	return url_host, page
-
-class MasterProtocolHandler(wx.wc.ProtocolHandler):
-	def _breakup_url(self, url):
-		url_host, page = get_url_host_and_page(url)
-
-		assert url_host == "content", \
-			"only content is supported at the moment..."
-
-		d = page.split("/", 1)
-		if len(d) == 1:
-			d.append('')
-
-		protocol, path = d
-		
-		assert protocol in handlers, \
-			"No handler for host type %s" % protocol
-
-		return protocol, path
-
-	def GetContentType(self, url):
-		protocol, path = self._breakup_url(url)
-		return unicode(handlers[protocol].get_content_type(path))
-
-	def GetContent(self, url):
-		try:
-			dprint(MESSAGE, "GetContent called for url:", url)
-			protocol, path = self._breakup_url(url)
-			return unicode(handlers[protocol].get_document(path))
-		except Exception, e:
-			dprint(ERROR, "EXCEPTION in GetContent")
-			import traceback
-			traceback.print_exc()
-			raise
 
 BASE_HTML = '''\
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
@@ -139,7 +91,6 @@ class PageProtocolHandler(ProtocolHandler):
 		return self._get_document_parts_for_ref(module_name, ref)
 
 	def _get_document_parts_for_ref(self, module_name, ref, do_current_ref=True):
-		import time
 		t = default_timer()
 
 		stylesheets = list(self.bible_stylesheets)

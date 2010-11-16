@@ -92,6 +92,7 @@ class MyApp(wx.App):
 		
 		self.starting = True
 		self.restarting = False
+		self.reload_restarting = False
 	
 		dprint(MESSAGE, "App Init")
 		guiconfig.load_icons()
@@ -124,11 +125,12 @@ class MyApp(wx.App):
 		dprint(MESSAGE, "Initialising XULRunner engine")
 		wx.wc.WebControl.AddPluginPath("Mozilla Firefox\\Plugins")
 		wx.wc.WebControl.InitEngine(xulrunner_path)
+
 		# NOTE: DO NOT move this import into the main import section.
 		# Doing so causes InitEngine() above to fail when loading xul.dll.
-		import protocol_handlers
+		import gui.webconnect_protocol_handler
 		wx.wc.RegisterProtocol("test", wx.wc.ProtocolHandler())
-		wx.wc.RegisterProtocol("bpbible", protocol_handlers.MasterProtocolHandler())
+		wx.wc.RegisterProtocol("bpbible", gui.webconnect_protocol_handler.MasterProtocolHandler())
 		dprint(MESSAGE, "XULRunner engine initialised")
 
 	def SetWebPreferences(self):
@@ -185,6 +187,11 @@ def main():
 	
 	guiconfig.app = app
 	while app.starting or app.restarting:
+		if app.reload_restarting:
+			import reload_util
+			reload(reload_util)
+			reload_util.reload_all()
+
 		app.Initialize()
 		app.MainLoop()
 
