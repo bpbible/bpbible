@@ -152,7 +152,10 @@ class GenBookFrame(BookFrame):
 		if not mod: 
 			return
 
-		self.genbooktree.go_to_key(key)
+		# due to complex initialization with the bible reference changing and
+		# the genbook tree being set up, we have to use CallAfter at least for
+		# the first time (so easiest to do it for all)
+		wx.CallAfter(self.genbooktree.go_to_key, key)
 	
 	def get_window(self):
 		return self.genbookpanel
@@ -282,3 +285,7 @@ class HarmonyFrame(GenBookFrame):
 			self.gui_reference.Value = ref
 
 		return found_reference
+
+	def refresh(self):
+		self.SetReference(self.reference)
+
