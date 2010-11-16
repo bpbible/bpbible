@@ -1097,13 +1097,14 @@ class SearchList(virtuallist.VirtualListCtrlXRC):
 				'<h6 class="heading" canonical="true">(.*?)</h6>', r'\1', 
 				content)
 
-
-						 
 			bibletext = string_util.RemoveWhitespace(content)
 			
-			# trim to 500, otherwise it can be very slow on long entries		
-			if len(bibletext) > 500:
-				bibletext = bibletext[:500] + "..."
+			# trim to 250, otherwise it can be very slow on long entries		
+			# also, if over 263 characters, it looks like on windows we
+			# overwrite an internal buffer and end up with junk on the end
+			# (seen in hovering over text)
+			if len(bibletext) > 250:
+				bibletext = bibletext[:250] + "..."
 
 			return bibletext
 
