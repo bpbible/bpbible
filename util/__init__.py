@@ -16,6 +16,18 @@ def noop(*args, **kwargs):
 def is_py2exe():
 	return hasattr(sys, "frozen")	
 	
+def profile_func(f):
+	def x(*args, **kwargs): 
+		return profile(f, *args, **kwargs)
+	
+	return x
+
+def time_func(f):
+	def x(*args, **kwargs): 
+		return timeit(f, *args, **kwargs)
+	
+	return x
+
 def timeit(f, *args, **kwargs):
 	t = default_timer()
 	times = kwargs.pop("times", 1)
