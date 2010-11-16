@@ -123,7 +123,7 @@ def on_passage_tag_clicked(frame, href, url):
 
 def _get_passage_list_and_entry_from_href(href):
 	"""Gets the passage list corresponding to the given passage tag HREF."""
-	from protocol_handlers import get_url_host_and_page
+	from gui.webconnect_protocol_handler import get_url_host_and_page
 	url_host, page = get_url_host_and_page(href)
 	assert url_host == "passage"
 	page_parts = page.split("/")
