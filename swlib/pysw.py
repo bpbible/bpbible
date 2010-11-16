@@ -1284,6 +1284,9 @@ class VerseList(list):
 
 	def clone(self): return VerseList(self)
 
+	def __reduce__(self):
+		return VerseList, (self.GetBestRange(),)
+
 class BookData(object):
 	def __init__(self, bookname, testament, booknumber):
 		self.chapters=[]

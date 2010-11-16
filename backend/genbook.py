@@ -1,4 +1,6 @@
+import os
 import re
+import cPickle as pickle
 from swlib.pysw import SW, TK, VerseList
 from backend.book import Book
 from util import classproperty
@@ -216,12 +218,18 @@ class Harmony(GenBook):
 		if self.mod is None:
 			return []
 
-		if self.mod.Name() not in self._harmony_references:
-			self._harmony_references[self.mod.Name()] = self._load_harmony_references()
+		module_name = self.mod.Name()
+		if module_name not in self._harmony_references:
+			self._harmony_references[module_name] = self._load_harmony_references(module_name)
 
-		return self._harmony_references[self.mod.Name()]
+		return self._harmony_references[module_name]
 
-	def _load_harmony_references(self):
+	def _load_harmony_references(self, module_name):
+		pickle_filename = "resources/%s.refidx" % module_name
+		if os.path.exists(pickle_filename):
+			pickle_file = open(pickle_filename, "rb")
+			return pickle.load(pickle_file)
+
 		mod_tk = SW.TreeKey.castTo(self.mod.getKey())
 		mod_tk.root()
 		tk = TK(mod_tk, self.mod)
@@ -241,5 +249,8 @@ class Harmony(GenBook):
 				add_references(child_tk, references)
 
 		add_references(tk, references)
+
+		pickle_file = open(pickle_filename, "wb")
+		pickle.dump(references, pickle_file)
 
 		return references

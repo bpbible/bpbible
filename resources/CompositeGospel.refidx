@@ -1,0 +1,2872 @@
+(lp1
+(S'/1: Jesus is the Word'
+(lp2
+cswlib.pysw
+VerseList
+p3
+(S'John 1:1-5'
+tRp4
+atp5
+a(S'/2: God became a human being'
+(lp6
+g3
+(S'John 1:10-18'
+tRp7
+atp8
+a(S"/3: Jesus' ancestry back to Adam"
+(lp9
+g3
+(S'Luke 3:23-38'
+tRp10
+atp11
+a(S"/4: Jesus' ancestry from Abraham"
+(lp12
+g3
+(S'Matthew 1:1-17'
+tRp13
+atp14
+a(S"/5: Luke's purpose in writing"
+(lp15
+g3
+(S'Luke 1:1-4'
+tRp16
+atp17
+a(S'/6: The angel Gabriel promises the birth of John to Zechariah'
+(lp18
+g3
+(S'Luke 1:5-25'
+tRp19
+atp20
+a(S'/7: The angel Gabriel promises the birth of Jesus to Mary'
+(lp21
+g3
+(S'Luke 1:26-38'
+tRp22
+atp23
+a(S'/8: Mary visits Elizabeth'
+(lp24
+g3
+(S'Luke 1:39-56'
+tRp25
+atp26
+a(S'/9: John the Baptist is born'
+(lp27
+g3
+(S'Luke 1:57-80'
+tRp28
+atp29
+a(S'/10: An angel appears to Joseph'
+(lp30
+g3
+(S'Matthew 1:18-25'
+tRp31
+atp32
+a(S'/11: Jesus is born in Bethlehem'
+(lp33
+g3
+(S'Luke 2:1-7'
+tRp34
+atp35
+a(S'/12: Shepherds visit Jesus'
+(lp36
+g3
+(S'Luke 2:8-20'
+tRp37
+atp38
+a(S'/13: Wise men visit from eastern lands'
+(lp39
+g3
+(S'Matthew 2:1-12'
+tRp40
+atp41
+a(S'/14: Mary and Joseph bring Jesus to the temple'
+(lp42
+g3
+(S'Luke 2:21-38'
+tRp43
+atp44
+a(S'/15: Joseph takes his family to Egypt'
+(lp45
+g3
+(S'Matthew 2:13-18'
+tRp46
+atp47
+a(S'/16: Joseph returns with his family to Nazareth'
+(lp48
+g3
+(S'Matthew 2:19-23'
+tRp49
+atp50
+a(S'/17: Jesus grows up in Nazareth'
+(lp51
+g3
+(S'Luke 2:39-40'
+tRp52
+atp53
+a(S'/18: Jesus speaks with religious teachers in the temple'
+(lp54
+g3
+(S'Luke 2:41-52'
+tRp55
+atp56
+a(S'/19: John the Baptist comes as a witness to the light'
+(lp57
+g3
+(S'John 1:6-9'
+tRp58
+atp59
+a(S'/20: John the Baptist prepares the way for Jesus'
+(lp60
+g3
+(S'Matthew 3:1-6'
+tRp61
+ag3
+(S'Mark 1:1-6'
+tRp62
+ag3
+(S'Luke 3:1-6'
+tRp63
+atp64
+a(S'/21: John the Baptist calls for repentence'
+(lp65
+g3
+(S'Matthew 3:7-10'
+tRp66
+ag3
+(S'Luke 3:7-9'
+tRp67
+atp68
+a(S'/22: John the Baptist tells people how to show their repentence'
+(lp69
+g3
+(S'Luke 3:10-14'
+tRp70
+atp71
+a(S'/23: John the Baptist tells about the Christ'
+(lp72
+g3
+(S'Matthew 3:11-12'
+tRp73
+ag3
+(S'Mark 1:7-8'
+tRp74
+ag3
+(S'Luke 3:15-18'
+tRp75
+atp76
+a(S'/24: John baptizes Jesus'
+(lp77
+g3
+(S'Matthew 3:13-17'
+tRp78
+ag3
+(S'Mark 1:9-11'
+tRp79
+ag3
+(S'Luke 3:21-22'
+tRp80
+atp81
+a(S'/25: Satan tempts Jesus in the desert'
+(lp82
+g3
+(S'Matthew 4:1-11'
+tRp83
+ag3
+(S'Mark 1:12-13'
+tRp84
+ag3
+(S'Luke 4:1-13'
+tRp85
+atp86
+a(S'/26: John the Baptist declares his mission'
+(lp87
+g3
+(S'John 1:19-28'
+tRp88
+atp89
+a(S'/27: John the Baptist proclaims Jesus as the Messiah'
+(lp90
+g3
+(S'John 1:29-34'
+tRp91
+atp92
+a(S'/28: The first disciples follow Jesus'
+(lp93
+g3
+(S'John 1:35-51'
+tRp94
+atp95
+a(S'/29: Jesus turns water into wine'
+(lp96
+g3
+(S'John 2:1-11'
+tRp97
+atp98
+a(S'/30: Jesus stays in Capernaum'
+(lp99
+g3
+(S'John 2:12'
+tRp100
+atp101
+a(S'/31: Jesus clears the temple'
+(lp102
+g3
+(S'John 2:13-22'
+tRp103
+atp104
+a(S'/32: Jesus does not trust himself to people'
+(lp105
+g3
+(S'John 2:23-25'
+tRp106
+atp107
+a(S'/33: Nicodemus visits Jesus at night'
+(lp108
+g3
+(S'John 3:1-21'
+tRp109
+atp110
+a(S'/34: Jesus and his disciples baptize in Judea'
+(lp111
+g3
+(S'John 3:22'
+tRp112
+atp113
+a(S"/35: John the Baptist accepts Jesus' growing popularity"
+(lp114
+g3
+(S'John 3:23-36'
+tRp115
+atp116
+a(S'/36: Jesus leaves Judea for Galilee'
+(lp117
+g3
+(S'John 4:1-3'
+tRp118
+atp119
+a(S'/37: Jesus talks to a Samaritan woman at the well'
+(lp120
+g3
+(S'John 4:4-26'
+tRp121
+atp122
+a(S'/38: Jesus tells about the spiritual harvest'
+(lp123
+g3
+(S'John 4:27-38'
+tRp124
+atp125
+a(S'/39: Many Samaritans believe in Jesus'
+(lp126
+g3
+(S'John 4:39-42'
+tRp127
+atp128
+a(S'/40: Herod puts John in prison'
+(lp129
+g3
+(S'Luke 3:19-20'
+tRp130
+atp131
+a(S'/41: Jesus preaches in Galilee'
+(lp132
+g3
+(S'Matthew 4:12-17'
+tRp133
+ag3
+(S'Mark 1:14-15'
+tRp134
+ag3
+(S'Luke 4:14-15'
+tRp135
+ag3
+(S'John 4:43-45'
+tRp136
+atp137
+a(S"/42: Jesus heals a royal official's son"
+(lp138
+g3
+(S'John 4:46-54'
+tRp139
+atp140
+a(S'/43: Jesus is rejected at Nazareth'
+(lp141
+g3
+(S'Luke 4:16-30'
+tRp142
+atp143
+a(S'/44: Jesus calls four fishermen to follow him'
+(lp144
+g3
+(S'Matthew 4:18-22'
+tRp145
+ag3
+(S'Mark 1:16-20'
+tRp146
+atp147
+a(S'/45: Jesus teaches with authority'
+(lp148
+g3
+(S'Mark 1:21-28'
+tRp149
+ag3
+(S'Luke 4:31-37'
+tRp150
+atp151
+a(S"/46: Jesus heals Peter's mother-in-law and many others in Capernaum"
+(lp152
+g3
+(S'Matthew 8:14-17'
+tRp153
+ag3
+(S'Mark 1:29-34'
+tRp154
+ag3
+(S'Luke 4:38-41'
+tRp155
+atp156
+a(S'/47: Jesus goes out alone to pray'
+(lp157
+g3
+(S'Mark 1:35-38'
+tRp158
+ag3
+(S'Luke 4:42-43'
+tRp159
+atp160
+a(S'/48: Jesus preaches throughout Galilee'
+(lp161
+g3
+(S'Matthew 4:23-25'
+tRp162
+ag3
+(S'Mark 1:39'
+tRp163
+ag3
+(S'Luke 4:44'
+tRp164
+atp165
+a(S'/49: Jesus provides a miraculous catch of fish'
+(lp166
+g3
+(S'Luke 5:1-11'
+tRp167
+atp168
+a(S'/50: Jesus heals a man with leprosy'
+(lp169
+g3
+(S'Matthew 8:1-4'
+tRp170
+ag3
+(S'Mark 1:40-45'
+tRp171
+ag3
+(S'Luke 5:12-16'
+tRp172
+atp173
+a(S'/51: Jesus heals a paralyzed man'
+(lp174
+g3
+(S'Matthew 9:1-8'
+tRp175
+ag3
+(S'Mark 2:1-12'
+tRp176
+ag3
+(S'Luke 5:17-26'
+tRp177
+atp178
+a(S'/52: Jesus calls a tax collector to follow him'
+(lp179
+g3
+(S'Matthew 9:9-13'
+tRp180
+ag3
+(S'Mark 2:13-17'
+tRp181
+ag3
+(S'Luke 5:27-32'
+tRp182
+atp183
+a(S'/53: The religious leaders ask Jesus about fasting'
+(lp184
+g3
+(S'Matthew 9:14-17'
+tRp185
+ag3
+(S'Mark 2:18-22'
+tRp186
+ag3
+(S'Luke 5:33-39'
+tRp187
+atp188
+a(S'/54: Jesus heals a lame man by the pool of Bethesda'
+(lp189
+g3
+(S'John 5:1-18'
+tRp190
+atp191
+a(S"/55: Jesus claims to be God's Son"
+(lp192
+g3
+(S'John 5:19-30'
+tRp193
+atp194
+a(S"/56: Jesus supports his claim to be God's Son"
+(lp195
+g3
+(S'John 5:31-47'
+tRp196
+atp197
+a(S'/57: The disciples pick wheat on the Sabbath'
+(lp198
+g3
+(S'Matthew 12:1-8'
+tRp199
+ag3
+(S'Mark 2:23-28'
+tRp200
+ag3
+(S'Luke 6:1-5'
+tRp201
+atp202
+a(S"/58: Jesus heals a man's hand on the Sabbath"
+(lp203
+g3
+(S'Matthew 12:9-14'
+tRp204
+ag3
+(S'Mark 3:1-6'
+tRp205
+ag3
+(S'Luke 6:6-11'
+tRp206
+atp207
+a(S'/59: Large crowds follow Jesus'
+(lp208
+g3
+(S'Matthew 12:15-21'
+tRp209
+ag3
+(S'Mark 3:7-12'
+tRp210
+atp211
+a(S'/60: Jesus selects the twelve disciples'
+(lp212
+g3
+(S'Mark 3:13-19'
+tRp213
+ag3
+(S'Luke 6:12-16'
+tRp214
+atp215
+a(S'/61: Jesus gives the Beatitudes'
+(lp216
+g3
+(S'Matthew 5:1-12'
+tRp217
+ag3
+(S'Luke 6:17-23'
+tRp218
+atp219
+a(S'/62: Jesus warns against temporary comfort'
+(lp220
+g3
+(S'Luke 6:24-26'
+tRp221
+atp222
+a(S'/63: Jesus teaches about salt'
+(lp223
+g3
+(S'Matthew 5:13'
+tRp224
+atp225
+a(S'/64: Jesus teaches about light'
+(lp226
+g3
+(S'Matthew 5:14-16'
+tRp227
+ag3
+(S'Luke 11:33'
+tRp228
+atp229
+a(S'/65: Jesus teaches about fulfilling the law'
+(lp230
+g3
+(S'Matthew 5:17-20'
+tRp231
+atp232
+a(S'/66: Jesus teaches about anger'
+(lp233
+g3
+(S'Matthew 5:21-26'
+tRp234
+atp235
+a(S'/67: Jesus teaches about lust'
+(lp236
+g3
+(S'Matthew 5:27-30'
+tRp237
+atp238
+a(S'/68: Jesus teaches about divorce'
+(lp239
+g3
+(S'Matthew 5:31-32'
+tRp240
+atp241
+a(S'/69: Jesus teaches about oaths'
+(lp242
+g3
+(S'Matthew 5:33-37'
+tRp243
+atp244
+a(S'/70: Jesus teaches about retaliation'
+(lp245
+g3
+(S'Matthew 5:38-42'
+tRp246
+atp247
+a(S'/71: Jesus teaches about loving enemies'
+(lp248
+g3
+(S'Matthew 5:43-48'
+tRp249
+ag3
+(S'Luke 6:27-36'
+tRp250
+atp251
+a(S'/72: Jesus teaches about giving to the needy'
+(lp252
+g3
+(S'Matthew 6:1-4'
+tRp253
+atp254
+a(S'/73: Jesus teaches about prayer'
+(lp255
+g3
+(S'Matthew 6:5-15'
+tRp256
+atp257
+a(S'/74: Jesus teaches about fasting'
+(lp258
+g3
+(S'Matthew 6:16-18'
+tRp259
+atp260
+a(S'/75: Jesus teaches about treasure'
+(lp261
+g3
+(S'Matthew 6:19-21'
+tRp262
+ag3
+(S'Luke 12:33-34'
+tRp263
+atp264
+a(S'/76: Jesus teaches about having a sound eye'
+(lp265
+g3
+(S'Matthew 6:22-23'
+tRp266
+ag3
+(S'Luke 11:34-36'
+tRp267
+atp268
+a(S'/77: Jesus teaches about serving two masters'
+(lp269
+g3
+(S'Matthew 6:24'
+tRp270
+ag3
+(S'Luke 16:13'
+tRp271
+atp272
+a(S'/78: Jesus teaches about worry'
+(lp273
+g3
+(S'Matthew 6:25-34'
+tRp274
+ag3
+(S'Luke 12:22-32'
+tRp275
+atp276
+a(S'/79: Jesus teaches about criticizing others'
+(lp277
+g3
+(S'Matthew 7:1-5'
+tRp278
+ag3
+(S'Luke 6:37-42'
+tRp279
+atp280
+a(S'/80: Jesus teaches about profaning holy things'
+(lp281
+g3
+(S'Matthew 7:6'
+tRp282
+atp283
+a(S'/81: Jesus teaches about asking, seeking, knocking'
+(lp284
+g3
+(S'Matthew 7:7-11'
+tRp285
+ag3
+(S'Luke 11:9-13'
+tRp286
+atp287
+a(S'/82: Jesus sums up the Law'
+(lp288
+g3
+(S'Matthew 7:12'
+tRp289
+atp290
+a(S'/83: Jesus teaches about the narrow road to life'
+(lp291
+g3
+(S'Matthew 7:13-14'
+tRp292
+atp293
+a(S"/84: Jesus teaches about the fruit of people's lives"
+(lp294
+g3
+(S'Matthew 7:15-20'
+tRp295
+ag3
+(S'Luke 6:43-45'
+tRp296
+atp297
+a(S'/85: Jesus teaches about putting his words into practice'
+(lp298
+g3
+(S'Matthew 7:21-27'
+tRp299
+ag3
+(S'Luke 6:46-49'
+tRp300
+atp301
+a(S"/86: The crowds are astonished at Jesus' teaching"
+(lp302
+g3
+(S'Matthew 7:28-29'
+tRp303
+atp304
+a(S'/87: A Roman centurion shows great faith'
+(lp305
+g3
+(S'Matthew 8:5-13'
+tRp306
+ag3
+(S'Luke 7:1-10'
+tRp307
+atp308
+a(S"/88: Jesus raises a widow's son from the dead"
+(lp309
+g3
+(S'Luke 7:11-17'
+tRp310
+atp311
+a(S"/89: Jesus eases John the Baptist's doubts"
+(lp312
+g3
+(S'Matthew 11:1-6'
+tRp313
+ag3
+(S'Luke 7:18-23'
+tRp314
+atp315
+a(S'/90: Jesus teaches about John the Baptist'
+(lp316
+g3
+(S'Matthew 11:7-19'
+tRp317
+ag3
+(S'Luke 7:24-35'
+tRp318
+atp319
+a(S"/91: A sinful woman anoints Jesus' feet"
+(lp320
+g3
+(S'Luke 7:36-50'
+tRp321
+atp322
+a(S'/92: Women accompany Jesus and the disciples'
+(lp323
+g3
+(S'Luke 8:1-3'
+tRp324
+atp325
+a(S'/93: Jesus describes his true family'
+(lp326
+g3
+(S'Matthew 12:46-50'
+tRp327
+ag3
+(S'Mark 3:31-35'
+tRp328
+ag3
+(S'Luke 8:19-21'
+tRp329
+atp330
+a(S'/94: Jesus tells the parable of the four soils'
+(lp331
+g3
+(S'Matthew 13:1-9'
+tRp332
+ag3
+(S'Mark 4:1-9'
+tRp333
+ag3
+(S'Luke 8:4-8'
+tRp334
+atp335
+a(S'/95: Jesus explains why he speaks in parables'
+(lp336
+g3
+(S'Matthew 13:10-17'
+tRp337
+ag3
+(S'Mark 4:10-12'
+tRp338
+ag3
+(S'Luke 8:9-10'
+tRp339
+atp340
+a(S'/96: Jesus explains the parable of the four soils'
+(lp341
+g3
+(S'Matthew 13:18-23'
+tRp342
+ag3
+(S'Mark 4:13-20'
+tRp343
+ag3
+(S'Luke 8:11-15'
+tRp344
+atp345
+a(S'/97: Jesus teaches people to consider carefully what they hear'
+(lp346
+g3
+(S'Mark 4:21-25'
+tRp347
+ag3
+(S'Luke 8:16-18'
+tRp348
+atp349
+a(S'/98: Jesus tells the parable of the growing seed'
+(lp350
+g3
+(S'Mark 4:26-29'
+tRp351
+atp352
+a(S'/99: Jesus tells the parable of the weeds'
+(lp353
+g3
+(S'Matthew 13:24-30'
+tRp354
+atp355
+a(S'/100: Jesus tells the parable of the mustard seed'
+(lp356
+g3
+(S'Matthew 13:31-32'
+tRp357
+ag3
+(S'Mark 4:30-32'
+tRp358
+ag3
+(S'Luke 13:18-19'
+tRp359
+atp360
+a(S'/101: Jesus tells the parable of the yeast'
+(lp361
+g3
+(S'Matthew 13:33'
+tRp362
+ag3
+(S'Luke 13:20-21'
+tRp363
+atp364
+a(S'/102: Jesus uses many parables in his teaching'
+(lp365
+g3
+(S'Matthew 13:34-35'
+tRp366
+ag3
+(S'Mark 4:33-34'
+tRp367
+atp368
+a(S'/103: Jesus explains the parable of the weeds'
+(lp369
+g3
+(S'Matthew 13:36-43'
+tRp370
+atp371
+a(S'/104: Jesus tells the parable of hidden treasure'
+(lp372
+g3
+(S'Matthew 13:44'
+tRp373
+atp374
+a(S'/105: Jesus tells the parable of the pearl merchant'
+(lp375
+g3
+(S'Matthew 13:45-46'
+tRp376
+atp377
+a(S'/106: Jesus tells the parable of the fishing net'
+(lp378
+g3
+(S'Matthew 13:47-50'
+tRp379
+atp380
+a(S'/107: Jesus teaches about new and old treasure'
+(lp381
+g3
+(S'Matthew 13:51-52'
+tRp382
+atp383
+a(S'/108: Jesus calms the storm'
+(lp384
+g3
+(S'Matthew 8:23-27'
+tRp385
+ag3
+(S'Mark 4:35-41'
+tRp386
+ag3
+(S'Luke 8:22-25'
+tRp387
+atp388
+a(S'/109: Jesus sends demons into a herd of pigs'
+(lp389
+g3
+(S'Matthew 8:28-32'
+tRp390
+ag3
+(S'Mark 5:1-13'
+tRp391
+ag3
+(S'Luke 8:26-33'
+tRp392
+atp393
+a(S'/110: The Gerasenes ask Jesus to leave'
+(lp394
+g3
+(S'Matthew 8:33-34'
+tRp395
+ag3
+(S'Mark 5:14-20'
+tRp396
+ag3
+(S'Luke 8:34-39'
+tRp397
+atp398
+a(S'/111: A synagogue ruler asks Jesus to help his daughter'
+(lp399
+g3
+(S'Matthew 9:18-19'
+tRp400
+ag3
+(S'Mark 5:21-24'
+tRp401
+ag3
+(S'Luke 8:40-42'
+tRp402
+atp403
+a(S'/112: Jesus heals a bleeding woman'
+(lp404
+g3
+(S'Matthew 9:20-22'
+tRp405
+ag3
+(S'Mark 5:25-34'
+tRp406
+ag3
+(S'Luke 8:43-48'
+tRp407
+atp408
+a(S'/113: Jesus restores the daughter of a synagogue rule to life'
+(lp409
+g3
+(S'Matthew 9:23-26'
+tRp410
+ag3
+(S'Mark 5:35-43'
+tRp411
+ag3
+(S'Luke 8:49-56'
+tRp412
+atp413
+a(S'/114: Jesus heals two blind men'
+(lp414
+g3
+(S'Matthew 9:27-31'
+tRp415
+atp416
+a(S'/115: Jesus heals a mute demoniac'
+(lp417
+g3
+(S'Matthew 9:32-34'
+tRp418
+atp419
+a(S'/116: The people of Nazareth refuse to believe in Jesus'
+(lp420
+g3
+(S'Matthew 13:53-58'
+tRp421
+ag3
+(S'Mark 6:1-6'
+tRp422
+atp423
+a(S'/117: Jesus tells the disciples to pray for workers'
+(lp424
+g3
+(S'Matthew 9:35-38'
+tRp425
+atp426
+a(S'/118: Jesus sends out the twelve disciples'
+(lp427
+g3
+(S'Matthew 10:1-16'
+tRp428
+ag3
+(S'Mark 6:7-13'
+tRp429
+ag3
+(S'Luke 9:1-6'
+tRp430
+atp431
+a(S'/119: Jesus prepares the disciples for persecution'
+(lp432
+g3
+(S'Matthew 10:17-42'
+tRp433
+atp434
+a(S'/120: Herod wonders if John the Baptist has been raised from the dead'
+(lp435
+g3
+(S'Matthew 14:1-2'
+tRp436
+ag3
+(S'Mark 6:14-16'
+tRp437
+ag3
+(S'Luke 9:7-9'
+tRp438
+atp439
+a(S'/121: Herod kills John the Baptist'
+(lp440
+g3
+(S'Matthew 14:3-12'
+tRp441
+ag3
+(S'Mark 6:17-29'
+tRp442
+atp443
+a(S'/122: Jesus feeds five thousand'
+(lp444
+g3
+(S'Matthew 14:13-21'
+tRp445
+ag3
+(S'Mark 6:30-44'
+tRp446
+ag3
+(S'Luke 9:10-17'
+tRp447
+ag3
+(S'John 6:1-15'
+tRp448
+atp449
+a(S'/123: Jesus walks on water'
+(lp450
+g3
+(S'Matthew 14:22-33'
+tRp451
+ag3
+(S'Mark 6:45-52'
+tRp452
+ag3
+(S'John 6:16-21'
+tRp453
+atp454
+a(S'/124: Jesus heals all who touch him'
+(lp455
+g3
+(S'Matthew 14:34-36'
+tRp456
+ag3
+(S'Mark 6:53-56'
+tRp457
+atp458
+a(S'/125: Jesus proclaims he is the true bread from heaven'
+(lp459
+g3
+(S'John 6:22-40'
+tRp460
+atp461
+a(S'/126: The Jews disagree that Jesus is from heaven'
+(lp462
+g3
+(S'John 6:41-59'
+tRp463
+atp464
+a(S'/127: Many disciples desert Jesus'
+(lp465
+g3
+(S'John 6:60-71'
+tRp466
+atp467
+a(S'/128: The religious leaders criticize Jesus about ceremonial washing'
+(lp468
+g3
+(S'Matthew 15:1-9'
+tRp469
+ag3
+(S'Mark 7:1-13'
+tRp470
+atp471
+a(S'/129: Jesus teaches the crowd about the source of uncleanness'
+(lp472
+g3
+(S'Matthew 15:10-11'
+tRp473
+ag3
+(S'Mark 7:14-16'
+tRp474
+atp475
+a(S'/130: Jesus teaches the disciples about the source of uncleanness'
+(lp476
+g3
+(S'Matthew 15:12-20'
+tRp477
+ag3
+(S'Mark 7:17-23'
+tRp478
+atp479
+a(S'/131: Jesus sends a demon out of a girl'
+(lp480
+g3
+(S'Matthew 15:21-28'
+tRp481
+ag3
+(S'Mark 7:24-30'
+tRp482
+atp483
+a(S'/132: Jesus heals a deaf man'
+(lp484
+g3
+(S'Mark 7:31-37'
+tRp485
+atp486
+a(S"/133: The crowd marvels at Jesus' healings"
+(lp487
+g3
+(S'Matthew 15:29-31'
+tRp488
+atp489
+a(S'/134: Jesus feeds four thousand'
+(lp490
+g3
+(S'Matthew 15:32-39'
+tRp491
+ag3
+(S'Mark 8:1-10'
+tRp492
+atp493
+a(S'/135: The religious leaders ask for a sign from heaven'
+(lp494
+g3
+(S'Matthew 16:1-4'
+tRp495
+ag3
+(S'Mark 8:11-13'
+tRp496
+atp497
+a(S'/136: Jesus warns against wrong teaching'
+(lp498
+g3
+(S'Matthew 16:5-12'
+tRp499
+ag3
+(S'Mark 8:14-21'
+tRp500
+atp501
+a(S'/137: Jesus restores sight to a blind man'
+(lp502
+g3
+(S'Mark 8:22-26'
+tRp503
+atp504
+a(S'/138: Peter declares Jesus is the Messiah'
+(lp505
+g3
+(S'Matthew 16:13-20'
+tRp506
+ag3
+(S'Mark 8:27-30'
+tRp507
+ag3
+(S'Luke 9:18-21'
+tRp508
+atp509
+a(S'/139: Jesus predicts his death the first time'
+(lp510
+g3
+(S'Matthew 16:21-23'
+tRp511
+ag3
+(S'Mark 8:31-33'
+tRp512
+ag3
+(S'Luke 9:22'
+tRp513
+atp514
+a(S'/140: Jesus calls his disciples to deny themselves'
+(lp515
+g3
+(S'Matthew 16:24-28'
+tRp516
+ag3
+(S'Mark 8:34-9:1'
+tRp517
+ag3
+(S'Luke 9:23-27'
+tRp518
+atp519
+a(S'/141: Jesus is transfigured on the mountain'
+(lp520
+g3
+(S'Matthew 17:1-9'
+tRp521
+ag3
+(S'Mark 9:2-10'
+tRp522
+ag3
+(S'Luke 9:28-36'
+tRp523
+atp524
+a(S'/142: The disciples ask about the coming of Elijah'
+(lp525
+g3
+(S'Matthew 17:10-13'
+tRp526
+ag3
+(S'Mark 9:11-13'
+tRp527
+atp528
+a(S'/143: Jesus heals a demon-possessed boy'
+(lp529
+g3
+(S'Matthew 17:14-18'
+tRp530
+ag3
+(S'Mark 9:14-27'
+tRp531
+ag3
+(S'Luke 9:37-42'
+tRp532
+atp533
+a(S"/144: The disciples ask why they couldn't heal the demon-possessed boy"
+(lp534
+g3
+(S'Matthew 17:19-21'
+tRp535
+ag3
+(S'Mark 9:28-29'
+tRp536
+atp537
+a(S'/145: Jesus predicts his death the second time'
+(lp538
+g3
+(S'Matthew 17:22-23'
+tRp539
+ag3
+(S'Mark 9:30-32'
+tRp540
+ag3
+(S'Luke 9:43-45'
+tRp541
+atp542
+a(S"/146: Peter finds the coin in the fish's mouth"
+(lp543
+g3
+(S'Matthew 17:24-27'
+tRp544
+atp545
+a(S'/147: Jesus teaches about being the least of all'
+(lp546
+g3
+(S'Matthew 18:1-5'
+tRp547
+ag3
+(S'Mark 9:33-37'
+tRp548
+ag3
+(S'Luke 9:46-48'
+tRp549
+atp550
+a(S'/148: Jesus warns against forbidding others to work in his name'
+(lp551
+g3
+(S'Mark 9:38-41'
+tRp552
+ag3
+(S'Luke 9:49-50'
+tRp553
+atp554
+a(S'/149: Jesus warns against temptations to sin'
+(lp555
+g3
+(S'Matthew 18:6-9'
+tRp556
+ag3
+(S'Mark 9:42-50'
+tRp557
+ag3
+(S'Luke 17:1-2'
+tRp558
+atp559
+a(S'/150: Jesus warns against looking down on others'
+(lp560
+g3
+(S'Matthew 18:10-14'
+tRp561
+atp562
+a(S'/151: Jesus teaches how to treat a believer who sins'
+(lp563
+g3
+(S'Matthew 18:15-18'
+tRp564
+atp565
+a(S'/152: Jesus teaches about the power of agreeing in prayer'
+(lp566
+g3
+(S'Matthew 18:19-20'
+tRp567
+atp568
+a(S'/153: Jesus teaches about forgiving others'
+(lp569
+g3
+(S'Matthew 18:21-22'
+tRp570
+ag3
+(S'Luke 17:3-4'
+tRp571
+atp572
+a(S'/154: Jesus tells the parable of the unforgiving debtor'
+(lp573
+g3
+(S'Matthew 18:23-35'
+tRp574
+atp575
+a(S'/155: Jesus sends out seventy-two messengers'
+(lp576
+g3
+(S'Luke 10:1-12'
+tRp577
+atp578
+a(S'/156: Jesus warns cities that have not repented'
+(lp579
+g3
+(S'Matthew 11:20-24'
+tRp580
+ag3
+(S'Luke 10:13-15'
+tRp581
+atp582
+a(S"/157: Jesus teaches about people's response to his messengers"
+(lp583
+g3
+(S'Luke 10:16'
+tRp584
+atp585
+a(S'/158: The seventy-two messengers return'
+(lp586
+g3
+(S'Luke 10:17-20'
+tRp587
+atp588
+a(S'/159: Jesus praises the Father for revealing His truth'
+(lp589
+g3
+(S'Matthew 11:25-27'
+tRp590
+ag3
+(S'Luke 10:21-22'
+tRp591
+atp592
+a(S'/160: Jesus promises rest for the soul'
+(lp593
+g3
+(S'Matthew 11:28-30'
+tRp594
+atp595
+a(S'/161: Jesus teaches the disciples that they are blessed for what they see'
+(lp596
+g3
+(S'Luke 10:23-24'
+tRp597
+atp598
+a(S'/162: A lawyer asks Jesus about eternal life'
+(lp599
+g3
+(S'Luke 10:25-28'
+tRp600
+atp601
+a(S'/163: Jesus tells the parable of the Good Samaritan'
+(lp602
+g3
+(S'Luke 10:29-37'
+tRp603
+atp604
+a(S'/164: Jesus visits Mary and Martha'
+(lp605
+g3
+(S'Luke 10:38-42'
+tRp606
+atp607
+a(S'/165: Jesus teaches his disciples how to pray'
+(lp608
+g3
+(S'Luke 11:1-4'
+tRp609
+atp610
+a(S'/166: Jesus tells about the friend who asks for help at midnight'
+(lp611
+g3
+(S'Luke 11:5-8'
+tRp612
+atp613
+a(S'/167: Jesus answers accusers about how he drives out demons'
+(lp614
+g3
+(S'Matthew 12:22-30'
+tRp615
+ag3
+(S'Mark 3:20-27'
+tRp616
+ag3
+(S'Luke 11:14-23'
+tRp617
+atp618
+a(S'/168: Jesus warns against blaspheming the Holy Spirit'
+(lp619
+g3
+(S'Matthew 12:31-32'
+tRp620
+ag3
+(S'Mark 3:28-30'
+tRp621
+atp622
+a(S'/169: Jesus warns the religious leaders about their words and their hearts'
+(lp623
+g3
+(S'Matthew 12:33-37'
+tRp624
+atp625
+a(S'/170: Jesus warns about demons returning'
+(lp626
+g3
+(S'Matthew 12:43-45'
+tRp627
+ag3
+(S'Luke 11:24-26'
+tRp628
+atp629
+a(S"/171: Jesus tells a woman about obeying God's word"
+(lp630
+g3
+(S'Luke 11:27-28'
+tRp631
+atp632
+a(S'/172: Jesus warns against unbelief'
+(lp633
+g3
+(S'Matthew 12:38-42'
+tRp634
+ag3
+(S'Luke 11:29-32'
+tRp635
+atp636
+a(S'/173: Jesus criticizes the religious leaders'
+(lp637
+g3
+(S'Luke 11:37-54'
+tRp638
+atp639
+a(S'/174: Jesus teaches about acknowledging him before others'
+(lp640
+g3
+(S'Luke 12:1-12'
+tRp641
+atp642
+a(S'/175: Jesus tells the parable of the rich fool'
+(lp643
+g3
+(S'Luke 12:13-21'
+tRp644
+atp645
+a(S'/176: Jesus warns about coming division'
+(lp646
+g3
+(S'Luke 12:49-53'
+tRp647
+atp648
+a(S'/177: Jesus warns about the future crisis'
+(lp649
+g3
+(S'Luke 12:54-56'
+tRp650
+atp651
+a(S'/178: Jesus teaches about reconciliation'
+(lp652
+g3
+(S'Luke 12:57-59'
+tRp653
+atp654
+a(S'/179: Jesus calls people to repent'
+(lp655
+g3
+(S'Luke 13:1-5'
+tRp656
+atp657
+a(S'/180: Jesus tells the parable of the fruitless tree'
+(lp658
+g3
+(S'Luke 13:6-9'
+tRp659
+atp660
+a(S'/181: Jesus heals a crippled woman'
+(lp661
+g3
+(S'Luke 13:10-17'
+tRp662
+atp663
+a(S"/182: Jesus' brothers ridicule him"
+(lp664
+g3
+(S'John 7:1-9'
+tRp665
+atp666
+a(S'/183: Jesus is rejected at a Samaritan village'
+(lp667
+g3
+(S'Luke 9:51-56'
+tRp668
+atp669
+a(S'/184: Jesus teaches about the cost of following him'
+(lp670
+g3
+(S'Matthew 8:18-22'
+tRp671
+ag3
+(S'Luke 9:57-62'
+tRp672
+atp673
+a(S'/185: Jesus travels to Jerusalem in secret'
+(lp674
+g3
+(S'John 7:10-13'
+tRp675
+atp676
+a(S'/186: Jesus teaches openly at the temple'
+(lp677
+g3
+(S'John 7:14-31'
+tRp678
+atp679
+a(S'/187: The religious leaders attempt to arrest Jesus'
+(lp680
+g3
+(S'John 7:32-36'
+tRp681
+atp682
+a(S'/188: Jesus teaches about living water'
+(lp683
+g3
+(S'John 7:37-39'
+tRp684
+atp685
+a(S'/189: The people are divided over Jesus'
+(lp686
+g3
+(S'John 7:40-44'
+tRp687
+atp688
+a(S'/190: The religious leaders refuse to believe in Jesus'
+(lp689
+g3
+(S'John 7:45-52'
+tRp690
+atp691
+a(S'/191: Jesus forgives an adulterous woman'
+(lp692
+g3
+(S'John 7:53-8:11'
+tRp693
+atp694
+a(S'/192: Jesus is the light of the world'
+(lp695
+g3
+(S'John 8:12-20'
+tRp696
+atp697
+a(S'/193: Jesus warns of coming judgment'
+(lp698
+g3
+(S'John 8:21-30'
+tRp699
+atp700
+a(S'/194: Jesus speaks about true freedom'
+(lp701
+g3
+(S'John 8:31-36'
+tRp702
+atp703
+a(S"/195: Jesus speaks about God's true children"
+(lp704
+g3
+(S'John 8:37-47'
+tRp705
+atp706
+a(S'/196: Jesus declares that he is eternal'
+(lp707
+g3
+(S'John 8:48-59'
+tRp708
+atp709
+a(S'/197: Jesus heals a man who was born blind'
+(lp710
+g3
+(S'John 9:1-12'
+tRp711
+atp712
+a(S'/198: The religious leaders question the blind man'
+(lp713
+g3
+(S'John 9:13-34'
+tRp714
+atp715
+a(S'/199: Jesus teaches about spiritual blindness'
+(lp716
+g3
+(S'John 9:35-41'
+tRp717
+atp718
+a(S'/200: Jesus is the Good Shepherd'
+(lp719
+g3
+(S'John 10:1-18'
+tRp720
+atp721
+a(S'/201: The Jews are divided about Jesus'
+(lp722
+g3
+(S'John 10:19-21'
+tRp723
+atp724
+a(S'/202: The Jews confront Jesus at the temple'
+(lp725
+g3
+(S'John 10:22-39'
+tRp726
+atp727
+a(S'/203: Jesus goes beyond the Jordan'
+(lp728
+g3
+(S'John 10:40-42'
+tRp729
+atp730
+a(S'/204: Jesus teaches about entering the kingdom'
+(lp731
+g3
+(S'Luke 13:22-30'
+tRp732
+atp733
+a(S'/205: The Pharisees warn Jesus that Herod wants to kill Him'
+(lp734
+g3
+(S'Luke 13:31-33'
+tRp735
+atp736
+a(S'/206: Jesus grieves over Jerusalem'
+(lp737
+g3
+(S'Matthew 23:37-39'
+tRp738
+ag3
+(S'Luke 13:34-35'
+tRp739
+atp740
+a(S'/207: Jesus heals a man with dropsy'
+(lp741
+g3
+(S'Luke 14:1-6'
+tRp742
+atp743
+a(S'/208: Jesus warns against seeking honor'
+(lp744
+g3
+(S'Luke 14:7-14'
+tRp745
+atp746
+a(S'/209: Jesus tells the parable of the great feast'
+(lp747
+g3
+(S'Luke 14:15-24'
+tRp748
+atp749
+a(S'/210: Jesus teaches about the cost of being a disciple'
+(lp750
+g3
+(S'Luke 14:25-35'
+tRp751
+atp752
+a(S'/211: Jesus tells the parable of the lost sheep'
+(lp753
+g3
+(S'Luke 15:1-7'
+tRp754
+atp755
+a(S'/212: Jesus tells the parable of the lost coin'
+(lp756
+g3
+(S'Luke 15:8-10'
+tRp757
+atp758
+a(S'/213: Jesus tells the parable of the lost son'
+(lp759
+g3
+(S'Luke 15:11-32'
+tRp760
+atp761
+a(S'/214: Jesus tells the parable of the shrewd manager'
+(lp762
+g3
+(S'Luke 16:1-9'
+tRp763
+atp764
+a(S'/215: Jesus teaches about being faithful'
+(lp765
+g3
+(S'Luke 16:10-12'
+tRp766
+atp767
+a(S'/216: Jesus criticizes the Pharisees for their love of money'
+(lp768
+g3
+(S'Luke 16:14-15'
+tRp769
+atp770
+a(S'/217: Jesus teaches about the Law and the Kingdom'
+(lp771
+g3
+(S'Luke 16:16-17'
+tRp772
+atp773
+a(S'/218: Jesus tells about the rich man and the beggar'
+(lp774
+g3
+(S'Luke 16:19-31'
+tRp775
+atp776
+a(S'/219: Jesus teaches about faith'
+(lp777
+g3
+(S'Luke 17:5-6'
+tRp778
+atp779
+a(S'/220: Jesus teaches about doing your duty'
+(lp780
+g3
+(S'Luke 17:7-10'
+tRp781
+atp782
+a(S'/221: Lazarus becomes ill and dies'
+(lp783
+g3
+(S'John 11:1-16'
+tRp784
+atp785
+a(S'/222: Jesus comforts Mary and Martha'
+(lp786
+g3
+(S'John 11:17-37'
+tRp787
+atp788
+a(S'/223: Jesus raises Lazarus from the dead'
+(lp789
+g3
+(S'John 11:38-44'
+tRp790
+atp791
+a(S'/224: Caiaphas advises the religious leaders to kill Jesus'
+(lp792
+g3
+(S'John 11:45-53'
+tRp793
+atp794
+a(S'/225: Jesus withdraws to Ephraim'
+(lp795
+g3
+(S'John 11:54-57'
+tRp796
+atp797
+a(S'/226: Jesus heals ten men with leprosy'
+(lp798
+g3
+(S'Luke 17:11-19'
+tRp799
+atp800
+a(S'/227: Jesus answers the Pharisees about the coming of the Kingdom of God'
+(lp801
+g3
+(S'Luke 17:20-21'
+tRp802
+atp803
+a(S'/228: Jesus teaches about the coming day of the Son of Man'
+(lp804
+g3
+(S'Luke 17:22-37'
+tRp805
+atp806
+a(S'/229: Jesus tells the parable of the persistent widow'
+(lp807
+g3
+(S'Luke 18:1-8'
+tRp808
+atp809
+a(S'/230: Jesus tells the parable of two men who prayed'
+(lp810
+g3
+(S'Luke 18:9-14'
+tRp811
+atp812
+a(S'/231: Jesus teaches about marriage and divorce'
+(lp813
+g3
+(S'Matthew 19:1-9'
+tRp814
+ag3
+(S'Mark 10:1-9'
+tRp815
+atp816
+a(S'/232: Jesus teaches the disciples about celibacy'
+(lp817
+g3
+(S'Matthew 19:10-12'
+tRp818
+atp819
+a(S'/233: Jesus teaches the disciples about marriage and divorce'
+(lp820
+g3
+(S'Mark 10:10-12'
+tRp821
+ag3
+(S'Luke 16:18'
+tRp822
+atp823
+a(S'/234: Jesus blesses little children'
+(lp824
+g3
+(S'Matthew 19:13-15'
+tRp825
+ag3
+(S'Mark 10:13-16'
+tRp826
+ag3
+(S'Luke 18:15-17'
+tRp827
+atp828
+a(S'/235: Jesus speaks to a rich young ruler'
+(lp829
+g3
+(S'Matthew 19:16-22'
+tRp830
+ag3
+(S'Mark 10:17-22'
+tRp831
+ag3
+(S'Luke 18:18-23'
+tRp832
+atp833
+a(S'/236: Jesus teaches about riches'
+(lp834
+g3
+(S'Matthew 19:23-26'
+tRp835
+ag3
+(S'Mark 10:23-27'
+tRp836
+ag3
+(S'Luke 18:24-27'
+tRp837
+atp838
+a(S'/237: Jesus teaches about the rewards of following him'
+(lp839
+g3
+(S'Matthew 19:27-30'
+tRp840
+ag3
+(S'Mark 10:28-31'
+tRp841
+ag3
+(S'Luke 18:28-30'
+tRp842
+atp843
+a(S'/238: Jesus tells the parable of the workers paid equally'
+(lp844
+g3
+(S'Matthew 20:1-16'
+tRp845
+atp846
+a(S'/239: Jesus predicts his death the third time'
+(lp847
+g3
+(S'Matthew 20:17-19'
+tRp848
+ag3
+(S'Mark 10:32-34'
+tRp849
+ag3
+(S'Luke 18:31-34'
+tRp850
+atp851
+a(S'/240: Jesus teaches about serving others'
+(lp852
+g3
+(S'Matthew 20:20-28'
+tRp853
+ag3
+(S'Mark 10:35-45'
+tRp854
+atp855
+a(S'/241: Jesus heals a blind beggar'
+(lp856
+g3
+(S'Matthew 20:29-34'
+tRp857
+ag3
+(S'Mark 10:46-52'
+tRp858
+ag3
+(S'Luke 18:35-43'
+tRp859
+atp860
+a(S"/242: Jesus goes to Zacchaeus's house"
+(lp861
+g3
+(S'Luke 19:1-10'
+tRp862
+atp863
+a(S"/243: Jesus tells the parable of the king's ten servants"
+(lp864
+g3
+(S'Luke 19:11-27'
+tRp865
+atp866
+a(S'/244: A woman anoints Jesus with expensive perfume'
+(lp867
+g3
+(S'Matthew 26:6-13'
+tRp868
+ag3
+(S'Mark 14:3-9'
+tRp869
+ag3
+(S'John 12:1-8'
+tRp870
+atp871
+a(S'/245: The religious leaders plot to kill Lazarus'
+(lp872
+g3
+(S'John 12:9-11'
+tRp873
+atp874
+a(S'/246: Jesus rides into Jerusalem on a donkey'
+(lp875
+g3
+(S'Matthew 21:1-11'
+tRp876
+ag3
+(S'Mark 11:1-11'
+tRp877
+ag3
+(S'Luke 19:28-40'
+tRp878
+ag3
+(S'John 12:12-19'
+tRp879
+atp880
+a(S'/247: Jesus weeps over Jerusalem'
+(lp881
+g3
+(S'Luke 19:41-44'
+tRp882
+atp883
+a(S'/248: Jesus curses a fig tree'
+(lp884
+g3
+(S'Matthew 21:18-19'
+tRp885
+ag3
+(S'Mark 11:12-14'
+tRp886
+atp887
+a(S'/249: Jesus clears the temple again'
+(lp888
+g3
+(S'Matthew 21:12-17'
+tRp889
+ag3
+(S'Mark 11:15-17'
+tRp890
+ag3
+(S'Luke 19:45-46'
+tRp891
+atp892
+a(S'/250: The religious leaders conspire against Jesus'
+(lp893
+g3
+(S'Mark 11:18-19'
+tRp894
+ag3
+(S'Luke 19:47-48'
+tRp895
+atp896
+a(S'/251: Jesus explains why he must die'
+(lp897
+g3
+(S'John 12:20-36'
+tRp898
+atp899
+a(S'/252: Most of the people do not believe in Jesus'
+(lp900
+g3
+(S'John 12:37-43'
+tRp901
+atp902
+a(S'/253: Jesus summarizes his message'
+(lp903
+g3
+(S'John 12:44-50'
+tRp904
+atp905
+a(S'/254: Jesus teaches about faith and prayer'
+(lp906
+g3
+(S'Matthew 21:20-22'
+tRp907
+ag3
+(S'Mark 11:20-26'
+tRp908
+atp909
+a(S"/255: The religious leaders challenge Jesus' authority"
+(lp910
+g3
+(S'Matthew 21:23-27'
+tRp911
+ag3
+(S'Mark 11:27-33'
+tRp912
+ag3
+(S'Luke 20:1-8'
+tRp913
+atp914
+a(S'/256: Jesus tells the parable of the two sons'
+(lp915
+g3
+(S'Matthew 21:28-32'
+tRp916
+atp917
+a(S'/257: Jesus tells the parable of the wicked tenants'
+(lp918
+g3
+(S'Matthew 21:33-46'
+tRp919
+ag3
+(S'Mark 12:1-12'
+tRp920
+ag3
+(S'Luke 20:9-19'
+tRp921
+atp922
+a(S'/258: Jesus tells the parable of the wedding feast'
+(lp923
+g3
+(S'Matthew 22:1-14'
+tRp924
+atp925
+a(S'/259: The religious leaders question Jesus about paying taxes'
+(lp926
+g3
+(S'Matthew 22:15-22'
+tRp927
+ag3
+(S'Mark 12:13-17'
+tRp928
+ag3
+(S'Luke 20:20-26'
+tRp929
+atp930
+a(S'/260: The religious leaders question Jesus about the resurrection'
+(lp931
+g3
+(S'Matthew 22:23-33'
+tRp932
+ag3
+(S'Mark 12:18-27'
+tRp933
+ag3
+(S'Luke 20:27-40'
+tRp934
+atp935
+a(S'/261: The religious leaders question Jesus about the greatest commandment'
+(lp936
+g3
+(S'Matthew 22:34-40'
+tRp937
+ag3
+(S'Mark 12:28-34'
+tRp938
+atp939
+a(S'/262: Jesus questions religious leaders about the Christ'
+(lp940
+g3
+(S'Matthew 22:41-46'
+tRp941
+ag3
+(S'Mark 12:35-37'
+tRp942
+ag3
+(S'Luke 20:41-44'
+tRp943
+atp944
+a(S'/263: Jesus warns against the practices of the religious leaders'
+(lp945
+g3
+(S'Matthew 23:1-12'
+tRp946
+ag3
+(S'Mark 12:38-40'
+tRp947
+ag3
+(S'Luke 20:45-47'
+tRp948
+atp949
+a(S'/264: Jesus condemns the religious leaders'
+(lp950
+g3
+(S'Matthew 23:13-36'
+tRp951
+atp952
+a(S'/265: A poor widow gives all she has'
+(lp953
+g3
+(S'Mark 12:41-44'
+tRp954
+ag3
+(S'Luke 21:1-4'
+tRp955
+atp956
+a(S'/266: Jesus predicts the destruction of the Temple'
+(lp957
+g3
+(S'Matthew 24:1-2'
+tRp958
+ag3
+(S'Mark 13:1-2'
+tRp959
+ag3
+(S'Luke 21:5-6'
+tRp960
+atp961
+a(S'/267: Jesus predicts the signs before the end'
+(lp962
+g3
+(S'Matthew 24:3-8'
+tRp963
+ag3
+(S'Mark 13:3-8'
+tRp964
+ag3
+(S'Luke 21:7-11'
+tRp965
+atp966
+a(S'/268: Jesus predicts persecutions before the end'
+(lp967
+g3
+(S'Matthew 24:9-14'
+tRp968
+ag3
+(S'Mark 13:9-13'
+tRp969
+ag3
+(S'Luke 21:12-19'
+tRp970
+atp971
+a(S'/269: Jesus tells about the desolating sacrilege'
+(lp972
+g3
+(S'Matthew 24:15-22'
+tRp973
+ag3
+(S'Mark 13:14-20'
+tRp974
+ag3
+(S'Luke 21:20-24'
+tRp975
+atp976
+a(S'/270: Jesus warns about false Christs and prophets'
+(lp977
+g3
+(S'Matthew 24:23-28'
+tRp978
+ag3
+(S'Mark 13:21-23'
+tRp979
+atp980
+a(S'/271: Jesus tells about his return'
+(lp981
+g3
+(S'Matthew 24:29-31'
+tRp982
+ag3
+(S'Mark 13:24-27'
+tRp983
+ag3
+(S'Luke 21:25-28'
+tRp984
+atp985
+a(S'/272: Jesus tells the parable of the fig tree'
+(lp986
+g3
+(S'Matthew 24:32-36'
+tRp987
+ag3
+(S'Mark 13:28-32'
+tRp988
+ag3
+(S'Luke 21:29-33'
+tRp989
+atp990
+a(S'/273: Jesus compares his coming to the days of Noah'
+(lp991
+g3
+(S'Matthew 24:37-41'
+tRp992
+atp993
+a(S'/274: Jesus tells about remaining watchful'
+(lp994
+g3
+(S'Matthew 24:42-44'
+tRp995
+ag3
+(S'Mark 13:33-37'
+tRp996
+ag3
+(S'Luke 12:35-40'
+tRp997
+atp998
+a(S'/275: Jesus warns against not watching for his coming'
+(lp999
+g3
+(S'Luke 21:34-36'
+tRp1000
+atp1001
+a(S'/276: Jesus tells about the wise and foolish managers'
+(lp1002
+g3
+(S'Matthew 24:45-51'
+tRp1003
+ag3
+(S'Luke 12:41-48'
+tRp1004
+atp1005
+a(S'/277: Jesus tells the parable of the ten bridesmaids'
+(lp1006
+g3
+(S'Matthew 25:1-13'
+tRp1007
+atp1008
+a(S'/278: Jesus tells the parable of the loaned money'
+(lp1009
+g3
+(S'Matthew 25:14-30'
+tRp1010
+atp1011
+a(S'/279: Jesus tells about the final judgment'
+(lp1012
+g3
+(S'Matthew 25:31-46'
+tRp1013
+atp1014
+a(S'/280: Jesus teaches daily in the temple'
+(lp1015
+g3
+(S'Luke 21:37-38'
+tRp1016
+atp1017
+a(S'/281: Jesus tells his disciples about his coming crucifixion'
+(lp1018
+g3
+(S'Matthew 26:1-2'
+tRp1019
+atp1020
+a(S'/282: The religious leaders plot to kill Jesus'
+(lp1021
+g3
+(S'Matthew 26:3-5'
+tRp1022
+ag3
+(S'Mark 14:1-2'
+tRp1023
+ag3
+(S'Luke 22:1-2'
+tRp1024
+atp1025
+a(S'/283: Judas agrees to betray Jesus'
+(lp1026
+g3
+(S'Matthew 26:14-16'
+tRp1027
+ag3
+(S'Mark 14:10-11'
+tRp1028
+ag3
+(S'Luke 22:3-6'
+tRp1029
+atp1030
+a(S'/284: Disciples prepare for the Passover'
+(lp1031
+g3
+(S'Matthew 26:17-20'
+tRp1032
+ag3
+(S'Mark 14:12-17'
+tRp1033
+ag3
+(S'Luke 22:7-14'
+tRp1034
+atp1035
+a(S"/285: Jesus washes the disciples' feet"
+(lp1036
+g3
+(S'John 13:1-11'
+tRp1037
+atp1038
+a(S'/286: Jesus teaches the disciples after washing their feet'
+(lp1039
+g3
+(S'John 13:12-20'
+tRp1040
+atp1041
+a(S'/287: Jesus declares that one of the disciples will betray him'
+(lp1042
+g3
+(S'Matthew 26:21-25'
+tRp1043
+ag3
+(S'Mark 14:18-21'
+tRp1044
+ag3
+(S'Luke 22:21-23'
+tRp1045
+ag3
+(S'John 13:21-30'
+tRp1046
+atp1047
+a(S'/288: Jesus and the disciples have the Last Supper'
+(lp1048
+g3
+(S'Matthew 26:26-29'
+tRp1049
+ag3
+(S'Mark 14:22-25'
+tRp1050
+ag3
+(S'Luke 22:15-20'
+tRp1051
+atp1052
+a(S'/289: Jesus teaches about servanthood'
+(lp1053
+g3
+(S'Luke 22:24-30'
+tRp1054
+atp1055
+a(S'/290: Jesus commands the disciples to love one another'
+(lp1056
+g3
+(S'John 13:31-35'
+tRp1057
+atp1058
+a(S"/291: Jesus predicts Peter's denial"
+(lp1059
+g3
+(S'Luke 22:31-34'
+tRp1060
+ag3
+(S'John 13:36-38'
+tRp1061
+atp1062
+a(S'/292: Jesus is the way to the Father'
+(lp1063
+g3
+(S'John 14:1-14'
+tRp1064
+atp1065
+a(S'/293: Jesus promises the Holy Spirit'
+(lp1066
+g3
+(S'John 14:15-31'
+tRp1067
+atp1068
+a(S'/294: Jesus teaches about the vine and the branches'
+(lp1069
+g3
+(S'John 15:1-17'
+tRp1070
+atp1071
+a(S"/295: Jesus warns about the world's hatred"
+(lp1072
+g3
+(S'John 15:18-16:4'
+tRp1073
+atp1074
+a(S'/296: Jesus teaches about the Holy Spirit'
+(lp1075
+g3
+(S'John 16:5-15'
+tRp1076
+atp1077
+a(S'/297: Jesus tells the disciples their sorrow will turn to joy'
+(lp1078
+g3
+(S'John 16:16-22'
+tRp1079
+atp1080
+a(S'/298: Jesus teaches about using his name in prayer'
+(lp1081
+g3
+(S'John 16:23-28'
+tRp1082
+atp1083
+a(S'/299: Jesus predicts that the disciples will be scattered'
+(lp1084
+g3
+(S'John 16:29-33'
+tRp1085
+atp1086
+a(S'/300: Jesus prays for himself'
+(lp1087
+g3
+(S'John 17:1-5'
+tRp1088
+atp1089
+a(S'/301: Jesus prays for his disciples'
+(lp1090
+g3
+(S'John 17:6-19'
+tRp1091
+atp1092
+a(S'/302: Jesus prays for future believers'
+(lp1093
+g3
+(S'John 17:20-26'
+tRp1094
+atp1095
+a(S'/303: Jesus tells the disciples to prepare for his arrest'
+(lp1096
+g3
+(S'Luke 22:35-38'
+tRp1097
+atp1098
+a(S'/304: Jesus and the disciples go to the Mount of Olives'
+(lp1099
+g3
+(S'Matthew 26:30'
+tRp1100
+ag3
+(S'Mark 14:26'
+tRp1101
+ag3
+(S'Luke 22:39'
+tRp1102
+ag3
+(S'John 18:1'
+tRp1103
+atp1104
+a(S"/305: Jesus again predicts Peter's denial"
+(lp1105
+g3
+(S'Matthew 26:31-35'
+tRp1106
+ag3
+(S'Mark 14:27-31'
+tRp1107
+atp1108
+a(S'/306: Jesus agonizes in the garden'
+(lp1109
+g3
+(S'Matthew 26:36-46'
+tRp1110
+ag3
+(S'Mark 14:32-42'
+tRp1111
+ag3
+(S'Luke 22:40-46'
+tRp1112
+atp1113
+a(S'/307: Jesus is betrayed and arrested'
+(lp1114
+g3
+(S'Matthew 26:47-50'
+tRp1115
+ag3
+(S'Mark 14:43-46'
+tRp1116
+ag3
+(S'Luke 22:47-49'
+tRp1117
+ag3
+(S'John 18:2-3'
+tRp1118
+atp1119
+a(S'/308: Jesus identifies himself to those who have come to arrest him'
+(lp1120
+g3
+(S'John 18:4-9'
+tRp1121
+atp1122
+a(S"/309: Peter strikes the high priest's servant"
+(lp1123
+g3
+(S'Matthew 26:51-54'
+tRp1124
+ag3
+(S'Mark 14:47'
+tRp1125
+ag3
+(S'Luke 22:50-51'
+tRp1126
+ag3
+(S'John 18:10-11'
+tRp1127
+atp1128
+a(S'/310: Jesus questions why they have brought weapons to arrest him'
+(lp1129
+g3
+(S'Matthew 26:55-56'
+tRp1130
+ag3
+(S'Mark 14:48-50'
+tRp1131
+ag3
+(S'Luke 22:52-53'
+tRp1132
+atp1133
+a(S'/311: The last follower runs away naked'
+(lp1134
+g3
+(S'Mark 14:51-52'
+tRp1135
+atp1136
+a(S'/312: Jesus is bound and taken to Annas'
+(lp1137
+g3
+(S'John 18:12-14'
+tRp1138
+atp1139
+a(S'/313: Peter denies knowing Jesus a first time'
+(lp1140
+g3
+(S'John 18:15-18'
+tRp1141
+atp1142
+a(S'/314: Annas questions Jesus'
+(lp1143
+g3
+(S'John 18:19-24'
+tRp1144
+atp1145
+a(S'/315: Caiaphas questions Jesus'
+(lp1146
+g3
+(S'Matthew 26:57-68'
+tRp1147
+ag3
+(S'Mark 14:53-65'
+tRp1148
+atp1149
+a(S'/316: Peter denies knowing Jesus'
+(lp1150
+g3
+(S'Matthew 26:69-75'
+tRp1151
+ag3
+(S'Mark 14:66-72'
+tRp1152
+ag3
+(S'Luke 22:54-62'
+tRp1153
+ag3
+(S'John 18:25-27'
+tRp1154
+atp1155
+a(S"/317: Jesus' captors mock him"
+(lp1156
+g3
+(S'Luke 22:63-65'
+tRp1157
+atp1158
+a(S'/318: The council of religious leaders condemns Jesus'
+(lp1159
+g3
+(S'Matthew 27:1-2'
+tRp1160
+ag3
+(S'Mark 15:1'
+tRp1161
+ag3
+(S'Luke 22:66-23:1'
+tRp1162
+ag3
+(S'John 18:28'
+tRp1163
+atp1164
+a(S'/319: Judas kills himself'
+(lp1165
+g3
+(S'Matthew 27:3-5'
+tRp1166
+atp1167
+a(S"/320: The chief priests use Judas' money to buy a field"
+(lp1168
+g3
+(S'Matthew 27:6-10'
+tRp1169
+atp1170
+a(S'/321: The religious leaders accuse Jesus before Pilate'
+(lp1171
+g3
+(S'Matthew 27:11-14'
+tRp1172
+ag3
+(S'Mark 15:2-5'
+tRp1173
+ag3
+(S'Luke 23:2'
+tRp1174
+ag3
+(S'John 18:29-32'
+tRp1175
+atp1176
+a(S'/322: Pilate questions Jesus'
+(lp1177
+g3
+(S'Luke 23:3'
+tRp1178
+ag3
+(S'John 18:33-37'
+tRp1179
+atp1180
+a(S'/323: Pilate answers the religious leaders'
+(lp1181
+g3
+(S'Luke 23:4-5'
+tRp1182
+atp1183
+a(S'/324: Jesus stands trial before Herod'
+(lp1184
+g3
+(S'Luke 23:6-12'
+tRp1185
+atp1186
+a(S'/325: Pilate answers the religious leaders a second time'
+(lp1187
+g3
+(S'Matthew 27:15-21'
+tRp1188
+ag3
+(S'Mark 15:6-11'
+tRp1189
+ag3
+(S'Luke 23:13-19'
+tRp1190
+ag3
+(S'John 18:38-40'
+tRp1191
+atp1192
+a(S'/326: Jesus is flogged'
+(lp1193
+g3
+(S'John 19:1-3'
+tRp1194
+atp1195
+a(S'/327: The crowd calls for crucifixion'
+(lp1196
+g3
+(S'Matthew 27:22'
+tRp1197
+ag3
+(S'Mark 15:12-13'
+tRp1198
+ag3
+(S'Luke 23:20-21'
+tRp1199
+ag3
+(S'John 19:4-7'
+tRp1200
+atp1201
+a(S'/328: Pilate questions Jesus again'
+(lp1202
+g3
+(S'John 19:8-11'
+tRp1203
+atp1204
+a(S'/329: Pilate hands Jesus over to be crucified'
+(lp1205
+g3
+(S'Matthew 27:23-26'
+tRp1206
+ag3
+(S'Mark 15:14-15'
+tRp1207
+ag3
+(S'Luke 23:22-25'
+tRp1208
+ag3
+(S'John 19:12-16'
+tRp1209
+atp1210
+a(S'/330: Roman soldiers mock Jesus'
+(lp1211
+g3
+(S'Matthew 27:27-31'
+tRp1212
+ag3
+(S'Mark 15:16-20'
+tRp1213
+atp1214
+a(S"/331: Simon of Cyrene carries Jesus' cross"
+(lp1215
+g3
+(S'Matthew 27:32'
+tRp1216
+ag3
+(S'Mark 15:21'
+tRp1217
+ag3
+(S'Luke 23:26'
+tRp1218
+atp1219
+a(S'/332: Jesus speaks to those who follow and mourn'
+(lp1220
+g3
+(S'Luke 23:27-32'
+tRp1221
+atp1222
+a(S'/333: Jesus is crucified'
+(lp1223
+g3
+(S'Matthew 27:33-37'
+tRp1224
+ag3
+(S'Mark 15:22-26'
+tRp1225
+ag3
+(S'Luke 23:33-34'
+tRp1226
+ag3
+(S'John 19:17-27'
+tRp1227
+atp1228
+a(S'/334: Jesus is mocked on the cross'
+(lp1229
+g3
+(S'Matthew 27:38-44'
+tRp1230
+ag3
+(S'Mark 15:27-32'
+tRp1231
+ag3
+(S'Luke 23:35-38'
+tRp1232
+atp1233
+a(S'/335: A criminal asks Jesus to remember him'
+(lp1234
+g3
+(S'Luke 23:39-43'
+tRp1235
+atp1236
+a(S'/336: Jesus dies on the cross'
+(lp1237
+g3
+(S'Matthew 27:45-54'
+tRp1238
+ag3
+(S'Mark 15:33-39'
+tRp1239
+ag3
+(S'Luke 23:44-48'
+tRp1240
+ag3
+(S'John 19:28-37'
+tRp1241
+atp1242
+a(S'/337: Women watch the crucifixion from a distance'
+(lp1243
+g3
+(S'Matthew 27:55-56'
+tRp1244
+ag3
+(S'Mark 15:40-41'
+tRp1245
+ag3
+(S'Luke 23:49'
+tRp1246
+atp1247
+a(S'/338: Jesus is laid in the tomb'
+(lp1248
+g3
+(S'Matthew 27:57-61'
+tRp1249
+ag3
+(S'Mark 15:42-47'
+tRp1250
+ag3
+(S'Luke 23:50-56'
+tRp1251
+ag3
+(S'John 19:38-42'
+tRp1252
+atp1253
+a(S'/339: Guards are posted at the tomb'
+(lp1254
+g3
+(S'Matthew 27:62-66'
+tRp1255
+atp1256
+a(S'/340: Some women find the tomb empty'
+(lp1257
+g3
+(S'Matthew 28:1-7'
+tRp1258
+ag3
+(S'Mark 16:1-8'
+tRp1259
+ag3
+(S'Luke 24:1-7'
+tRp1260
+ag3
+(S'John 20:1'
+tRp1261
+atp1262
+a(S'/341: The women tell the disciples of the empty tomb'
+(lp1263
+g3
+(S'Luke 24:8-11'
+tRp1264
+ag3
+(S'John 20:2'
+tRp1265
+atp1266
+a(S'/342: Peter and John go to the empty tomb'
+(lp1267
+g3
+(S'Luke 24:12'
+tRp1268
+ag3
+(S'John 20:3-9'
+tRp1269
+atp1270
+a(S'/343: Jesus appears to Mary Magdalene'
+(lp1271
+g3
+(S'Mark 16:9-11'
+tRp1272
+ag3
+(S'John 20:10-18'
+tRp1273
+atp1274
+a(S'/344: Jesus appears to the women'
+(lp1275
+g3
+(S'Matthew 28:8-10'
+tRp1276
+atp1277
+a(S'/345: The religious leaders bribe the guards'
+(lp1278
+g3
+(S'Matthew 28:11-15'
+tRp1279
+atp1280
+a(S'/346: Jesus appears to two believers traveling on the road'
+(lp1281
+g3
+(S'Mark 16:12-13'
+tRp1282
+ag3
+(S'Luke 24:13-35'
+tRp1283
+atp1284
+a(S'/347: Jesus appears to the disciples behind locked doors'
+(lp1285
+g3
+(S'Luke 24:36-43'
+tRp1286
+ag3
+(S'John 20:19-23'
+tRp1287
+atp1288
+a(S'/348: Jesus appears to the eleven disciples as they are eating'
+(lp1289
+g3
+(S'Mark 16:14-18'
+tRp1290
+atp1291
+a(S'/349: Jesus appears to the disciples including Thomas'
+(lp1292
+g3
+(S'John 20:24-29'
+tRp1293
+atp1294
+a(S"/350: John's purpose in writing"
+(lp1295
+g3
+(S'John 20:30-31'
+tRp1296
+atp1297
+a(S'/351: Jesus appears to the disciples while fishing'
+(lp1298
+g3
+(S'John 21:1-14'
+tRp1299
+atp1300
+a(S'/352: Jesus talks with Peter'
+(lp1301
+g3
+(S'John 21:15-25'
+tRp1302
+atp1303
+a(S'/353: Jesus appears to the disciples in Jerusalem'
+(lp1304
+g3
+(S'Luke 24:44-49'
+tRp1305
+atp1306
+a(S'/354: Jesus gives the Great Commission'
+(lp1307
+g3
+(S'Matthew 28:16-20'
+tRp1308
+atp1309
+a(S'/355: Jesus ascends into heaven'
+(lp1310
+g3
+(S'Mark 16:19-20'
+tRp1311
+ag3
+(S'Luke 24:50-53'
+tRp1312
+atp1313
+a.
