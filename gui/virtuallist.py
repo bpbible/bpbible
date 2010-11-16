@@ -58,7 +58,9 @@ class VirtualListCtrl(wx.ListCtrl, ListCtrlAutoWidthMixin):
 		if key in self.cache:
 			return self.cache[key]
 		
-		data = self.get_data(item, column)
+		# return text encoded as utf-8; wxPython 2.9.1.1 on Mac crashes if
+		# non-ascii unicode text in there, but utf-8 works fine.
+		data = self.get_data(item, column).encode("utf8")
 		self.cache[key] = data
 		return data
 	
