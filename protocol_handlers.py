@@ -21,9 +21,7 @@ BASE_HTML = '''\
 </head>
 <body %(bodyattrs)s>
 	<div id="content" class="%(contentclass)s">
-	<!-- <p> -->
 	%(content)s
-	<!-- </p> -->
 	</div>
 	%(timer)s
 </body></html>'''
