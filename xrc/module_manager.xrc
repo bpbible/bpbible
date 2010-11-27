@@ -53,6 +53,6 @@
     </object>
     <size>400,300</size>
     <title>Manage books</title>
-    <style>wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxRESIZE_BOX|wxDIALOG_MODAL</style>
+    <style>wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</style>
   </object>
 </resource>
