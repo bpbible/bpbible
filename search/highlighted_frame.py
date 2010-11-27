@@ -471,8 +471,8 @@ class HighlightedDisplayFrame(ReferenceDisplayFrame):
 		
 		# don't give error if this doesn't work
 		d = wx.LogNull()
-		self.ScrollToAnchor("highlight")
-		self.ScrollLines(-1)
+		self.scroll_to_anchor("highlight")
+#		self.ScrollLines(-1)
 	
 	def get_frame_for_search(self):
 		for item in guiconfig.mainfrm.frames:

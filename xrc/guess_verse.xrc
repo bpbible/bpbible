@@ -5,7 +5,7 @@
       <object class="wxBoxSizer">
         <orient>wxVERTICAL</orient>
         <object class="sizeritem">
-          <object class="wxHtmlWindow" name="reference_frame" subclass="gui.reference_display_frame.PlainReferenceDisplayFrame">
+          <object class="wxWebControl" name="reference_frame" subclass="gui.reference_display_frame.PlainReferenceDisplayFrame">
             <size>400,300</size>
             <style>wxSUNKEN_BORDER</style>
           </object>

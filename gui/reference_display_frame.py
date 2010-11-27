@@ -1,6 +1,6 @@
 import wx
 from backend.bibleinterface import biblemgr
-from displayframe import DisplayFrameXRC
+from new_displayframe import DisplayFrameXRC
 from util import overridableproperty
 from backend.verse_template import VerseTemplate
 from swlib.pysw import GetBestRange
