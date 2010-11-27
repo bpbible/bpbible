@@ -71,6 +71,6 @@
       </object>
     </object>
     <title>Tag Passage</title>
-    <style>wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxRESIZE_BOX|wxDIALOG_MODAL</style>
+    <style>wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</style>
   </object>
 </resource>
