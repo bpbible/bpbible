@@ -223,7 +223,7 @@ class DummyHtmlSelectableWindow(DummyHtmlBase):
 	def setup(self):
 		# XXX: Change to handle the selection.
 		self.m_selection = None
-		self.Bind(wx.EVT_KEY_UP, self.on_char)
+		self.Bind(wx.EVT_KEY_DOWN, self.on_char)
 
 	def on_char(self, event):
 		guiutil.dispatch_keypress(self.get_actions(), event)
@@ -275,12 +275,7 @@ WX_MOUSE_OUT_EVENT = 999992
 # loading.
 def defer_till_document_loaded(function_to_decorate):
 	def function(self, *args, **kwargs):
-		if self.dom_loaded:
-			print "DOM loaded, works fine."
-			function_to_decorate(self, *args, **kwargs)
-		else:
-			print "Adding item to list of things to execute."
-			self.events_to_call_on_document_load.append((function_to_decorate, args, kwargs))
+		self.defer_call_till_document_loaded(function_to_decorate, *args, **kwargs)
 
 	return function
 
@@ -298,6 +293,14 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl, DummyHtmlSelectableWindow
 		for function, args, kwargs in self.events_to_call_on_document_load:
 			function(self, *args, **kwargs)
 		self.events_to_call_on_document_load = []
+
+	def defer_call_till_document_loaded(self, function, *args, **kwargs):
+		if self.dom_loaded:
+			print "DOM loaded, works fine."
+			function(self, *args, **kwargs)
+		else:
+			print "Adding item to list of things to execute."
+			self.events_to_call_on_document_load.append((function, args, kwargs))
 
 	def DomEventReceived(self, event):
 		pass
@@ -985,9 +988,12 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl, DummyHtmlSelectableWindow
 	def Scroll(self, x, y):
 		return
 
-	@defer_till_document_loaded
 	def scroll_to_current(self):
-		self.Execute('window.location.hash = "current";')
+		self.scroll_to_anchor("current")
+	
+	@defer_till_document_loaded
+	def scroll_to_anchor(self, anchor):
+		self.Execute('window.location.hash = "%s";' % anchor)
 	
 	def set_mod(self, value):
 		self._mod = value
@@ -1003,6 +1009,10 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl, DummyHtmlSelectableWindow
 
 	def get_frame_for_search(self):
 		return guiconfig.mainfrm.bibletext
+
+	def OpenURI(self, uri, flags=wx.wc.WEB_LOAD_NORMAL, post_data=None, grab_focus=False):
+		# default to not grab focus
+		super(DisplayFrame, self).OpenURI(uri, flags, post_data, grab_focus)
 
 	def OnOpenURI(self, event):
 		dprint(WARNING, "Loading HREF", event.GetHref())
@@ -1037,6 +1047,11 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl, DummyHtmlSelectableWindow
 
 		func(width, height, *args, **kwargs)
 		#return width, height
+	
+	@defer_till_document_loaded
+	def copyall(self):
+		self.SelectAll()
+		self.CopySelection()
 
 class DisplayFrameXRC(DisplayFrame):
 	def __init__(self):
