@@ -1,5 +1,5 @@
 filtering = "quotes backend.filterutils backend.osisparser backend.thmlparser protocol_handlers"
-tooltip_bits = filtering + " config display_options tooltip protocols displayframe new_displayframe bookframe bibleframe genbooktree genbookframe gui.reference_display_frame search.highlighted_frame preview_window header_bar versecompare mainframe"
+tooltip_bits = filtering + " config gui.guiutil display_options tooltip protocols displayframe new_displayframe bookframe bibleframe genbooktree genbookframe gui.reference_display_frame search.highlighted_frame preview_window header_bar versecompare mainframe"
 copying = "templatemanager copyverses"
 ALL = "filtering tooltip_bits".split()
 
