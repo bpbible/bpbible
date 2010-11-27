@@ -204,7 +204,9 @@ class BibleFrame(VerseKeyedFrame):
 
 		cvd = CopyVerseDialog(self)
 		cvd.copy_verses(text)
-		cvd.Destroy()	
+
+		# we can't destroy it until it has put the text there and copied it...
+		cvd.preview.defer_call_till_document_loaded(lambda cvdpreview:cvd.Destroy())
 		d.Destroy()
 		
 	def show_guess_verse(self):
