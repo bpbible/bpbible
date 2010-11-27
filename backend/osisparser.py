@@ -436,10 +436,10 @@ class OSISParser(filterutils.ParserBase):
 	def start_title(self, xmltag):
 		canonical = xmltag.getAttribute("canonical")
 		canonical = canonical or "false"
-		self.buf += '<h6 class="heading" canonical="%s">' % canonical
+		self.buf += '<h2 class="heading" canonical="%s">' % canonical
 	
 	def end_title(self, xmltag):
-		self.buf += '</h6>'
+		self.buf += '</h2>'
 
 	def start_lg(self, xmltag):
 		if xmltag and xmltag.getAttribute("eID"):

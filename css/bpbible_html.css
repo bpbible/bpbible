@@ -16,17 +16,17 @@ body {
 /* Headings */
 /* TODO: Matt 5:2 - <p> comes *before* heading - our text indent goes
  * missing... */
-h6.heading {
+h2.heading {
 	font-size:large;
 	margin-top: 1em;
 	margin-bottom: 0;
 }
 
-h6.heading[canonical="true"] {
+h2.heading[canonical="true"] {
 	font-style: italic;
 }
 
-body[headings="false"] h6.heading {
+body[headings="false"] h2.heading {
 	display: none;
 }
 

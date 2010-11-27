@@ -43,7 +43,7 @@ def get_chapter_headings(chapter):
 			item.Verse(1)
 		
 		headings += ((item, text) for heading, text in re.findall(
-			'(<h6 class="heading" canonical="[^"]*">(.*?)</h6>)', 
+			'(<h2 class="heading" canonical="[^"]*">(.*?)</h2>)', 
 			content, re.U))
 		
 		headings += ((item, mod.RenderText(heading))
