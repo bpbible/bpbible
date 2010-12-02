@@ -328,7 +328,7 @@ class TooltipConfigHandler(PageProtocolHandler):
 		cls.registered[k] = config
 		return "bpbible://content/tooltip/%s" % k
 
-	def get_document(self, path):
+	def _get_document_parts(self, path):
 		config = self.registered.pop(path)
 		bg, textcolour = guiconfig.get_tooltip_colours()
 		style = """
@@ -339,7 +339,7 @@ body {
 }
 </style>
 """ % (bg, textcolour)
-		return self._get_html(config.get_module(), config.get_text(),
+		return dict(module=config.get_module(), content=config.get_text(),
 				stylesheets=self.bible_stylesheets,
 				bodyattrs=self._get_body_attrs(config.get_module()),
 				styles=style)
@@ -355,9 +355,9 @@ class FragmentHandler(PageProtocolHandler):
 		cls.registered[k] = text, module
 		return "bpbible://content/fragment/%s" % k
 
-	def get_document(self, path):
+	def _get_document_parts(self, path):
 		text, module = self.registered.pop(path)
-		return self._get_html(module, text,
+		return dict(module=module, content=text,
 				stylesheets=self.bible_stylesheets,
 				bodyattrs=self._get_body_attrs(module))
 

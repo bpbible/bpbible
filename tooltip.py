@@ -793,16 +793,16 @@ class BibleTooltipConfig(TooltipConfig):
 
 	def get_text(self):
 		try:
-			template = VerseTemplate(
-				header="<a href='nbible:$internal_range'><b>$range</b></a><br>",
-				body=u'<glink href="nbible:$internal_reference">'
-					u'<small><sup>$versenumber</sup></small></glink> $text ')
+#			template = VerseTemplate(
+#				header="<a href='nbible:$internal_range'><b>$range</b></a><br>",
+#				body=u'<glink href="nbible:$internal_reference">'
+#					u'<small><sup>$versenumber</sup></small></glink> $text ')
 
 			#no footnotes
 			if tooltip_settings["plain_xrefs"]:
 				biblemgr.temporary_state(biblemgr.plainstate)
 			#apply template
-			biblemgr.bible.templatelist.append(template)
+#			biblemgr.bible.templatelist.append(template)
 
 			text = "<hr>".join(
 				displayframe.process_html_for_module(biblemgr.bible.mod, item) 
@@ -814,7 +814,7 @@ class BibleTooltipConfig(TooltipConfig):
 		finally:
 			if tooltip_settings["plain_xrefs"]:
 				biblemgr.restore_state()
-			biblemgr.bible.templatelist.pop()
+#			biblemgr.bible.templatelist.pop()
 		
 		
 	def set_ref(self, reference):
