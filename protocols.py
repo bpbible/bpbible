@@ -40,7 +40,6 @@ class ProtocolHandler(object):
 			protocol = url.getProtocol()
 		
 		if protocol in d:
-			print "HANDLING", href
 			d[protocol](frame, href, url, *args)
 		else:
 			dprint(WARNING, 
