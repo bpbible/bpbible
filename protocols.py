@@ -5,6 +5,7 @@ from tooltip import TextTooltipConfig, StrongsTooltipConfig
 from util.debug import *
 from util import noop
 from util.unicode import to_unicode, to_str
+from gui.webconnect_protocol_handler import get_url_host_and_page
 from gui import guiutil
 import guiconfig
 import wx
@@ -39,6 +40,7 @@ class ProtocolHandler(object):
 			protocol = url.getProtocol()
 		
 		if protocol in d:
+			print "HANDLING", href
 			d[protocol](frame, href, url, *args)
 		else:
 			dprint(WARNING, 
@@ -131,3 +133,44 @@ def on_strongs_hover(frame, href, url, x, y):
 
 protocol_handler.register_handler("strongs", on_strongs_click)
 protocol_handler.register_hover("strongs", on_strongs_hover)
+
+def on_bpbible_hover(frame, href, url, x, y):
+	from new_displayframe import DisplayFrame
+	host, page = get_url_host_and_page(href)
+	assert host == "content"
+	d = page.split("/", 3) + ['','','']
+	type, module, p = d[:3]
+	passage, query = (p.split("?", 1) + [''])[:2]
+
+	if type != "page":
+		print "Unhandled bpbible link", href
+		return
+
+	if passage != "passagestudy.jsp":
+		print "Unhandled bpbible link", href
+
+	u = SW.URL(p.replace(":", '%3A'))
+	return DisplayFrame.on_hover(frame, p, u, x, y)
+
+def on_bpbible_click(frame, href, url):
+	from new_displayframe import DisplayFrame
+	host, page = get_url_host_and_page(href)
+	assert host == "content"
+	d = page.split("/", 3) + ['','','']
+	type, module, p = d[:3]
+	passage, query = (p.split("?", 1) + [''])[:2]
+
+	if type != "page":
+		print "Unhandled bpbible link", href
+		return
+
+	if passage != "passagestudy.jsp":
+		print "Unhandled bpbible link", href
+
+	u = SW.URL(p.replace(":", '%3A'))
+	return DisplayFrame.on_link_clicked(frame, p, u)
+
+protocol_handler.register_handler("bpbible", on_bpbible_click)
+protocol_handler.register_hover("bpbible", on_bpbible_hover)
+
+	
