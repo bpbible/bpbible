@@ -607,7 +607,7 @@ class PermanentTooltip(TooltipBaseMixin, pclass):
 def BiblicalPermanentTooltip(parent, ref):
 	"""Creates a Biblical permanent tooltip, open to the given ref."""
 	tooltip_config = BibleTooltipConfig(ref.split("|"))
-	from displayframe import DisplayFrame
+	from new_displayframe import DisplayFrame
 	return PermanentTooltip(parent, html_type=DisplayFrame,
 			tooltip_config=tooltip_config)
 
