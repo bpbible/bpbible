@@ -2,7 +2,7 @@ import wx
 from wx import html
 from backend.verse_template import VerseTemplate
 import config, guiconfig
-import displayframe
+import new_displayframe as displayframe
 from backend.bibleinterface import biblemgr
 import protocol_handlers
 from swlib.pysw import SW, VerseParsingError, GetBestRange
@@ -317,8 +317,7 @@ class Tooltip(TooltipBaseMixin, tooltip_parent):
 		
 		self.parent = parent
 		self.logical_parent = logical_parent
-		import new_displayframe
-		self.html_type = new_displayframe.DisplayFrame 
+		self.html_type = displayframe.DisplayFrame 
 		# create the container panels
 		self.container_panel = wx.Panel(self, -1, style=wx.RAISED_BORDER)
 		self.toolbarpanel = wx.Panel(self.container_panel)
@@ -512,8 +511,7 @@ class PermanentTooltip(TooltipBaseMixin, pclass):
 		self.htmlpanel = wx.Panel(self.container_panel)
 
 		# create the html control
-		import new_displayframe
-		self.html = new_displayframe.DisplayFrame(self.htmlpanel)
+		self.html = displayframe.DisplayFrame(self.htmlpanel)
 		self.html.book = biblemgr.bible
 		self.html.parent = self
 		html_sizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -607,8 +605,7 @@ class PermanentTooltip(TooltipBaseMixin, pclass):
 def BiblicalPermanentTooltip(parent, ref):
 	"""Creates a Biblical permanent tooltip, open to the given ref."""
 	tooltip_config = BibleTooltipConfig(ref.split("|"))
-	from new_displayframe import DisplayFrame
-	return PermanentTooltip(parent, html_type=DisplayFrame,
+	return PermanentTooltip(parent, html_type=displayframe.DisplayFrame,
 			tooltip_config=tooltip_config)
 
 class TooltipConfig(object):

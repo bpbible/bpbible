@@ -1,7 +1,6 @@
 import wx
 import guiconfig
 import guiutil
-import displayframe
 from protocols import protocol_handler
 from manage_topics_frame import ManageTopicsFrame
 from topic_selector import TopicSelector

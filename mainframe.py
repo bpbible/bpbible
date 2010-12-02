@@ -23,7 +23,7 @@ from bibleframe import BibleFrame, bible_settings
 from bookframe import BookFrame
 from bookframe import CommentaryFrame
 from bookframe import DictionaryFrame
-from displayframe import IN_MENU
+from new_displayframe import IN_MENU
 from genbookframe import GenBookFrame, HarmonyFrame
 
 from auilayer import AuiLayer

@@ -1,10 +1,7 @@
 import wx
 from wx import html
-# XXX: Import displayframe to beat circular dependencies.
-import displayframe
 from new_displayframe import AUIDisplayFrame
 from new_displayframe import IN_BOTH, IN_MENU
-#from displayframe import IN_BOTH, IN_MENU
 from tooltip import BiblicalPermanentTooltip
 import versetree
 

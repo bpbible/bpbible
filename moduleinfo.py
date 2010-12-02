@@ -2,7 +2,7 @@ import wx
 from wx import html
 import re
 
-import displayframe
+import new_displayframe as displayframe
 from util.unicode import get_module_encoding
 from util import languages
 from util.i18n import N_
