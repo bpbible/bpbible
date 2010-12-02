@@ -4,7 +4,7 @@ from swlib.pysw import SW, process_digits
 from backend import chapter_headings
 from backend.bibleinterface import biblemgr
 from protocols import protocol_handler
-from displayframe import DisplayFrame
+from new_displayframe import DisplayFrame
 from gui import guiutil
 from tooltip import Tooltip, TooltipConfig, TooltipDisplayer
 import guiconfig
