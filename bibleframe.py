@@ -10,7 +10,7 @@ import wx
 from swlib.pysw import VK, GetVerseStr, GetBookChapter, GetBestRange
 from swlib import pysw
 from bookframe import VerseKeyedFrame
-from new_displayframe import IN_BOTH, IN_MENU, IN_POPUP
+from displayframe import IN_BOTH, IN_MENU, IN_POPUP
 from gui.htmlbase import linkiter, eq
 from gui import guiutil
 from util.observerlist import ObserverList

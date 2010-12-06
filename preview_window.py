@@ -1,4 +1,4 @@
-from new_displayframe import AUIDisplayFrame, DisplayFrame
+from displayframe import AUIDisplayFrame, DisplayFrame
 from tooltip import TooltipBaseMixin
 from backend.bibleinterface import biblemgr
 from util.i18n import N_

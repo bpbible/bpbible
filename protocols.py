@@ -134,7 +134,7 @@ protocol_handler.register_handler("strongs", on_strongs_click)
 protocol_handler.register_hover("strongs", on_strongs_hover)
 
 def on_bpbible_hover(frame, href, url, x, y):
-	from new_displayframe import DisplayFrame
+	from displayframe import DisplayFrame
 	host, page = get_url_host_and_page(href)
 	assert host == "content"
 	d = page.split("/", 3) + ['','','']
@@ -152,7 +152,7 @@ def on_bpbible_hover(frame, href, url, x, y):
 	return DisplayFrame.on_hover(frame, p, u, x, y)
 
 def on_bpbible_click(frame, href, url):
-	from new_displayframe import DisplayFrame
+	from displayframe import DisplayFrame
 	host, page = get_url_host_and_page(href)
 	assert host == "content"
 	d = page.split("/", 3) + ['','','']

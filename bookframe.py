@@ -1,7 +1,7 @@
 import wx
 from wx import html
-from new_displayframe import AUIDisplayFrame
-from new_displayframe import IN_BOTH, IN_MENU
+from displayframe import AUIDisplayFrame
+from displayframe import IN_BOTH, IN_MENU
 from tooltip import BiblicalPermanentTooltip
 import versetree
 

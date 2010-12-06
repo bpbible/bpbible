@@ -1,5 +1,5 @@
 import wx
-from new_displayframe import DisplayFrame
+from displayframe import DisplayFrame
 
 class ModuleInfo(wx.Dialog):
 	def __init__(self, parent, module):

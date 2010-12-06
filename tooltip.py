@@ -2,7 +2,7 @@ import wx
 from wx import html
 from backend.verse_template import VerseTemplate
 import config, guiconfig
-import new_displayframe as displayframe
+import displayframe
 from backend.bibleinterface import biblemgr
 import protocol_handlers
 from swlib.pysw import SW, VerseParsingError, GetBestRange

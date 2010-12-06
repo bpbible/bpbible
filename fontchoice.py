@@ -7,7 +7,7 @@ import guiconfig
 import config
 from gui import htmlbase
 from module_tree import LanguageModuleTree
-from new_displayframe import DisplayFrameXRC
+from displayframe import DisplayFrameXRC
 from util import osutils
 from gui import fonts
 from gui.fonts import font_settings
