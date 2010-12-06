@@ -15,9 +15,8 @@ from backend.bibleinterface import biblemgr
 from backend.verse_template import VerseTemplate
 from util import osutils
 from tooltip import Tooltip, tooltip_settings, TextTooltipConfig, TooltipDisplayer
-from gui import htmlbase
 from gui.menu import MenuItem, Separator
-from gui.htmlbase import HtmlSelectableWindow, convert_language, convert_lgs
+from gui.htmlbase import convert_language, convert_lgs
 from gui import guiutil
 import display_options
 from util.debug import dprint, WARNING, TOOLTIP, MESSAGE
@@ -664,7 +663,6 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 	def get_actions(self):
 		#actions = super(DisplayFrame, self).get_actions()
 		# XXX: Have a standard collection of actions.
-		# All there is in DummyHtmlSelectableWindow is copy.
 		actions = {}
 		actions.update({
 			wx.WXK_ESCAPE: guiconfig.mainfrm.hide_tooltips,

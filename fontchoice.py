@@ -5,7 +5,6 @@ from backend.bibleinterface import biblemgr
 from xrc.fontchoice_xrc import *
 import guiconfig
 import config
-from gui import htmlbase
 from module_tree import LanguageModuleTree
 from displayframe import DisplayFrameXRC
 from util import osutils

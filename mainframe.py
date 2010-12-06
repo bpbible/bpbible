@@ -46,7 +46,6 @@ from gui import guiutil
 from gui import fonts
 from gui.guiutil import bmp
 from gui.menu import Separator
-from gui.htmlbase import HtmlBase
 
 from search.searchpanel import (BibleSearchPanel, GenbookSearchPanel,
 								 HarmonySearchPanel, DailyDevotionalSearchPanel,
@@ -101,7 +100,6 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.setup()
 
 	def setup(self):
-		HtmlBase.override_loading_a_page = True
 		self.on_close = ObserverList()
 		
 
@@ -185,12 +183,8 @@ class MainFrame(wx.Frame, AuiLayer):
 
 		dprint(MESSAGE, "Setting menus up")
 		self.set_menus_up()
-
-		def override_end():
-			HtmlBase.override_loading_a_page = False
 		
 		wx.CallAfter(dprint, MESSAGE, "Constructed")
-		wx.CallAfter(override_end)	
 
 		dprint(MESSAGE, "Done first round of setting up")
 		self.drop_target = ModuleDropTarget(self)
