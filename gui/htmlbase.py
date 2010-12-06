@@ -1,16 +1,8 @@
-import wx
-import wx.html
-import wx.lib.wxpTag
-from wx import html
-from gui import guiutil
 from util import string_util
-import guiconfig
 import re
 from util.configmgr import config_manager
 from util.debug import dprint, ERROR, MESSAGE, WARNING
-from util import osutils
 from gui import fonts
-import sys
 from swlib import pysw
 
 

@@ -1,5 +1,4 @@
 import wx
-import wx.html
 from util.unicode import to_str, to_unicode
 from backend.bibleinterface import biblemgr
 from xrc.fontchoice_xrc import *

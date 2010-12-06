@@ -1,5 +1,4 @@
 import wx
-from wx import html
 from displayframe import AUIDisplayFrame
 from displayframe import IN_BOTH, IN_MENU
 from tooltip import BiblicalPermanentTooltip
@@ -27,7 +26,6 @@ class BookFrame(AUIDisplayFrame):
 	has_menu = True
 	shows_info = True
 	use_quickselector = True
-	#def __init__(self, parent, style=html.HW_DEFAULT_STYLE):
 	def __init__(self, parent):
 		super(BookFrame, self).__init__(parent)
 		self.reference = ""

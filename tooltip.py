@@ -1,5 +1,4 @@
 import wx
-from wx import html
 from backend.verse_template import VerseTemplate
 import config, guiconfig
 import displayframe
