@@ -9,7 +9,7 @@ class ModuleInfo(wx.Dialog):
 		panel = wx.Panel(self)
 
 		# XXX: Make the sunken border style work?
-		info_frame = DisplayFrame(panel, style=wx.SUNKEN_BORDER)
+		info_frame = DisplayFrame(panel)
 		info_frame.mod = module
 		info_sizer = wx.BoxSizer(wx.HORIZONTAL)
 		info_sizer.Add(info_frame, 1, wx.GROW)

@@ -374,18 +374,3 @@ class BibleFrame(VerseKeyedFrame):
 			return
 
 		return GetBestRange(text)
-
-	def CellMouseUp(self, cell, x, y, event):
-		if not self.m_tmpHadSelection and not self.m_selection and not event.Dragging():
-			self.maybe_select_clicked_verse(cell)
-
-	def maybe_select_clicked_verse(self, cell):
-		if not bible_settings["select_verse_on_click"]:
-			return
-
-		start_cell = self.GetInternalRepresentation().FirstTerminal
-		reference = self.FindVerse(cell, start_cell=start_cell)
-		if reference:
-			wx.CallAfter(self.suppress_scrolling,
-				lambda: self.notify(reference)
-			)

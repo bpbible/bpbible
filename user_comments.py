@@ -90,5 +90,5 @@ class UserCommentTooltipConfig(TooltipConfig):
 			self.hide_tooltip()
 			self.passage_entry.parent.remove_passage(self.passage_entry)
 			get_primary_passage_list_manager().save()
-			guiconfig.mainfrm.UpdateBibleUIWithoutScrolling(
-					source=events.COMMENT_DELETED)
+			# XXX: Change this so it doesn't do a complete reload.
+			guiconfig.mainfrm.UpdateBibleUI(source=events.COMMENT_DELETED)

@@ -1198,21 +1198,6 @@ class MainFrame(wx.Frame, AuiLayer):
 	def UpdateDictionaryUI(self, ref=""):
 		self.dictionarytext.UpdateUI(ref)
 
-	def UpdateBibleUIWithoutScrolling(self, source, settings_changed=False):
-		"""Updates the Bible UI without scrolling to the current verse.
-
-		This is used when a minor change has been made, and we want the
-		user's focus to remain on the same part of the chapter (not on the
-		currently selected verse, which will often be the first verse of a
-		chapter or something similar).
-
-		With a more capable HTML display it will not be necessary to reload
-		the whole window.
-		"""
-		self.bibletext.suppress_scrolling(
-				lambda: self.UpdateBibleUI(source, settings_changed)
-			)
-
 	def UpdateBibleUI(self, source, settings_changed=False, y_pos=None):
 		current_ypos = self.bibletext.GetViewStart()[1]
 		self.history.before_navigate()

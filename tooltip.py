@@ -18,7 +18,6 @@ from util.debug import dprint, TOOLTIP, WARNING
 tooltip_settings = config_manager.add_section("Tooltip")
 
 tooltip_settings.add_item("plain_xrefs", False, item_type=bool)
-tooltip_settings.add_item("border", 6, item_type=int)
 
 class TooltipBaseMixin(object):
 	set_toolbar_background = False
@@ -137,9 +136,6 @@ class TooltipBaseMixin(object):
 		# set the size
 		self.html.SetSize((400, 50))
 		
-		# and the borders
-		self.html.SetBorders(tooltip_settings["border"])
-
 		# and the page
 		path = protocol_handlers.TooltipConfigHandler.register(self.tooltip_config)
 		self.html.OpenURI(path)
@@ -523,9 +519,6 @@ class PermanentTooltip(TooltipBaseMixin, pclass):
 		self.toolbarpanel.SetSizer(self.buttonsizer)		
 		self.recreate_toolbar()
 
-		# make html
-		#self.html = displayframe.DisplayFrame(self.container_panel, 
-		#	style=html.HW_SCROLLBAR_AUTO)
 		# make sizer for panel
 		sizer = wx.BoxSizer(wx.VERTICAL)		
 		sizer.Add(self.toolbarpanel, 0, wx.ALIGN_CENTRE|wx.GROW)
@@ -883,11 +876,10 @@ class TooltipDisplayer(object):
 
 	@property
 	def tooltip(self):
-		import new_displayframe
 		if not self._tooltip:
 			self._tooltip = Tooltip(guiutil.toplevel_parent(self), 
 				style=wx.NO_BORDER,
-				html_type=new_displayframe.DisplayFrame, logical_parent=self)
+				html_type=displayframe.DisplayFrame, logical_parent=self)
 			#	html_type=self.html_type, logical_parent=self)
 			#self.Bind(wx.EVT_KILL_FOCUS, self.KillFocus)
 			
