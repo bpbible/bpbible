@@ -400,4 +400,19 @@ a.usercomment {
 a.passage_tag {
 	text-decoration: none;
 	color: black;
+	font: 9pt arial;
+}
+
+a.passage_tag > div, a.passage_tag > div > div {
+	border-width: 1px;
+	border-style: solid;
+	margin: 0;
+	display: inline-block;
+	white-space: nowrap;
+}
+
+a.passage_tag > div > div > div {
+	padding: 0 2px;
+	margin: 0;
+	display: inline-block;
 }
