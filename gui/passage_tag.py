@@ -214,10 +214,10 @@ class TopicTooltipConfig(TooltipConfig):
 
 		current_anchor = u""
 		if passage_entry is self.selected_passage_entry:
-			comment = u'<highlight-start colour="#008000">%s<highlight-end />' % comment
-			passage_text = u'<highlight-start colour="#008000">%s<highlight-end />' % passage_text
-			current_anchor = "#current"
-		return (u"<b><a href=\"bible:%(reference)s%(current_anchor)s\">%(localised_reference)s</a></b> "
+			comment = u'<span style="color: #008000">%s</span>' % comment
+			passage_text = u'<span style="color: #008000">%s</span>' % passage_text
+			current_anchor = u'<a name="current" />'
+		return (u"%(current_anchor)s<b><a href=\"bible:%(reference)s\">%(localised_reference)s</a></b> "
 			u"%(passage_text)s%(comment)s" % locals())
 
 protocol_handler.register_handler("passagetag", on_passage_tag_clicked)
