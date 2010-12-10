@@ -98,6 +98,7 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 		self.Bind(wx.wc.EVT_WEB_MOUSEOVER, self.MouseOverEvent)
 		self.Bind(wx.wc.EVT_WEB_MOUSEOUT, self.MouseOutEvent)
 		self.Bind(wx.EVT_KEY_DOWN, self.on_char)
+		self.DisableFavIconFetching()
 		
 		hover = protocol_handler.register_hover
 		# TODO: move these out somewhere else

@@ -369,8 +369,5 @@ handlers = {
 	'moduleinformation': ModuleInformationHandler(),
 	'quotes_skin': QuotesHandler(),
 	'tooltip': TooltipConfigHandler(),
-	# wxWebConnect always wants to get a favicon for a domain.
-	# This handler prevents exceptions when the favicon is requested.
-	'favicon.ico': ProtocolHandler(),
 }
 
