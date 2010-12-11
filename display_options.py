@@ -3,6 +3,7 @@ from util.configmgr import config_manager
 from util.observerlist import ObserverList
 import guiconfig
 from events import SETTINGS_CHANGED
+from backend.filterutils import filter_settings, set_headwords_module_from_conf
 
 options = config_manager.add_section("Options")
 options.add_item("columns", False, item_type=bool)
@@ -20,37 +21,40 @@ options.add_item("show_timing", False, item_type=bool)
 options.add_item("colour_speakers", "off", item_type=str)
 
 class BooleanOptionMenuItem(object):
-	def __init__(self, option_name, menu_text, hint="", force_complete_reload=False):
+	def __init__(self, option_name, menu_text, hint="", force_complete_reload=False, options_section=options):
 		self.option_name = option_name
 		self.menu_text = menu_text
 		self.hint = hint
 		self.force_complete_reload = force_complete_reload
+		self.options_section = options_section
 
 	def add_to_menu(self, frame, menu):
 		item = menu.AppendCheckItem(
 			wx.ID_ANY, self.menu_text, help=self.hint
 		)
 
-		if options[self.option_name]:
+		if self.options_section[self.option_name]:
 			item.Check()
 		
 		frame.Bind(wx.EVT_MENU, self.on_option_clicked, item)
 
 	def on_option_clicked(self, event):
-		options[self.option_name] = event.Checked()
+		self.options_section[self.option_name] = event.Checked()
 		display_option_changed(self.option_name, self.force_complete_reload)
 
 class MultiOptionsMenuItem(object):
-	def __init__(self, option_name, menu_text, options, force_complete_reload=False):
+	def __init__(self, option_name, menu_text, _options, force_complete_reload=False, options_section=options, on_option_selected=None):
 		self.option_name = option_name
 		self.menu_text = menu_text
-		self.options = options
+		self.options = _options
 		self.options_map = {}
 		self.force_complete_reload = force_complete_reload
+		self.options_section = options_section
+		self.on_option_selected = on_option_selected
 
 	def add_to_menu(self, frame, menu):
 		sub_menu = wx.Menu("")
-		current_option = options[self.option_name]
+		current_option = self.options_section[self.option_name]
 	
 		for option_value, menu_text in self.options:
 			item = sub_menu.AppendRadioItem(wx.ID_ANY, menu_text)
@@ -67,8 +71,14 @@ class MultiOptionsMenuItem(object):
 		#frame.Bind(wx.EVT_MENU, self.on_option_clicked, item)
 
 	def on_option_clicked(self, event):
-		options[self.option_name] = self.options_map[event.Id]
+		self.options_section[self.option_name] = self.options_map[event.Id]
+		if self.on_option_selected is not None:
+			self.on_option_selected()
 		display_option_changed(self.option_name, self.force_complete_reload)
+
+def on_headwords_module_changed():
+	from backend.bibleinterface import biblemgr
+	set_headwords_module_from_conf(biblemgr)
 
 options_menu = [
 	BooleanOptionMenuItem("columns", "Columns"),
@@ -86,6 +96,16 @@ options_menu = [
 		("coloured_quotes", "Colour code by speaker"),
 		("off", "Off"),
 	]),
+	MultiOptionsMenuItem("headwords_module", "Strong's Headwords", [
+		("HeadwordsTransliterated", "Transliterated"),
+		("HeadwordsOriginalLang", "Original Language"),
+		("HeadwordsPronunciation", "Pronunciation"),
+		("", "Strong's Numbers"),
+	],
+	options_section=filter_settings,
+	force_complete_reload=True,
+	on_option_selected=on_headwords_module_changed,
+	),
 ]
 
 debug_options_menu = [

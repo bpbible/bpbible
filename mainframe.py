@@ -899,42 +899,6 @@ class MainFrame(wx.Frame, AuiLayer):
 			item.create_item(self, menu, is_popup=is_popup)
 		return menu
 	
-	
-	def fill_headwords_menu(self):
-		self.headwords_map = {}
-		sub_menu = wx.Menu("")
-		known_headwords_modules = [
-			_("Pronunciation"),
-			_("Original Language"),
-			_("Transliterated"),
-		]
-	
-		for mod_name, module in biblemgr.headwords_modules.items() + [("", None)]:
-			if not mod_name:
-				#sub_menu.AppendSeparator()
-				headwords_desc = _("Strong's Numbers")
-			else:
-				headwords_desc = module.getConfigEntry("HeadwordsDesc")
-			
-			item = sub_menu.AppendRadioItem(wx.ID_ANY, 
-				_(headwords_desc)
-			)
-			
-			if filterutils.filter_settings["headwords_module"] == mod_name:
-				item.Check()
-			
-			self.headwords_map[item.Id] = mod_name, module
-				
-			self.Bind(wx.EVT_MENU, self.on_headwords, item)
-		
-		strongs_headwords = self.options_menu.AppendSubMenu(
-			sub_menu,
-			_("Strong's headwords"),
-#			_("Display Strong's numbers using headwords")
-		)
-	
-		
-	
 	def fill_options_menu(self):
 		while self.options_menu.MenuItems:
 			self.options_menu.DestroyItem(
@@ -947,9 +911,6 @@ class MainFrame(wx.Frame, AuiLayer):
 		#if options:
 		#	self.options_menu.AppendSeparator()
 
-		self.fill_headwords_menu()
-
-	
 		cross_references = self.options_menu.AppendCheckItem(
 			wx.ID_ANY,
 			_("Expand cross-references"),
@@ -980,13 +941,6 @@ class MainFrame(wx.Frame, AuiLayer):
 		cross_references.Check(filter_settings["footnote_ellipsis_level"])
 		display_tags.Check(passage_list.settings.display_tags)
 		#expand_topic_passages.Check(passage_list.settings.expand_topic_passages)
-	
-	def on_headwords(self, event):
-		obj = event.GetEventObject()
-		menuitem = obj.MenuBar.FindItemById(event.Id)
-		filterutils.set_headwords_module(self.headwords_map[menuitem.Id])
-
-		self.UpdateBibleUI(settings_changed=True, source=SETTINGS_CHANGED)
 
 	def toggle_expand_cross_references(self, event):
 		filter_settings = config_manager["Filter"]
