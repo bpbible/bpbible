@@ -1,6 +1,7 @@
 import wx
 from util.configmgr import config_manager
 from util.observerlist import ObserverList
+from util.i18n import N_
 import guiconfig
 from events import SETTINGS_CHANGED
 from backend.filterutils import filter_settings, set_headwords_module_from_conf
@@ -30,7 +31,7 @@ class BooleanOptionMenuItem(object):
 
 	def add_to_menu(self, frame, menu):
 		item = menu.AppendCheckItem(
-			wx.ID_ANY, self.menu_text, help=self.hint
+			wx.ID_ANY, _(self.menu_text), help=_(self.hint)
 		)
 
 		if self.options_section[self.option_name]:
@@ -57,7 +58,7 @@ class MultiOptionsMenuItem(object):
 		current_option = self.options_section[self.option_name]
 	
 		for option_value, menu_text in self.options:
-			item = sub_menu.AppendRadioItem(wx.ID_ANY, menu_text)
+			item = sub_menu.AppendRadioItem(wx.ID_ANY, _(menu_text))
 			
 			if option_value == current_option:
 				item.Check()
@@ -66,9 +67,7 @@ class MultiOptionsMenuItem(object):
 				
 			frame.Bind(wx.EVT_MENU, self.on_option_clicked, item)
 		
-		item = menu.AppendSubMenu(sub_menu, self.menu_text)
-			
-		#frame.Bind(wx.EVT_MENU, self.on_option_clicked, item)
+		item = menu.AppendSubMenu(sub_menu, _(self.menu_text))
 
 	def on_option_clicked(self, event):
 		self.options_section[self.option_name] = self.options_map[event.Id]
@@ -81,26 +80,26 @@ def on_headwords_module_changed():
 	set_headwords_module_from_conf(biblemgr)
 
 options_menu = [
-	BooleanOptionMenuItem("columns", "Columns"),
-	BooleanOptionMenuItem("verse_per_line", "One line per verse", "Display each verse on its own line."),
-	BooleanOptionMenuItem("continuous_scrolling", "Continuous scrolling", force_complete_reload=True),
-	BooleanOptionMenuItem("headings", "Headings"),
-	BooleanOptionMenuItem("cross_references", "Cross References"),
-	BooleanOptionMenuItem("footnotes", "Footnotes"),
-	BooleanOptionMenuItem("strongs_numbers", "Strongs Numbers"),
-	BooleanOptionMenuItem("strongs_blocked", "Strongs Blocked"),
-	BooleanOptionMenuItem("morphology", "Morphology"),
-	BooleanOptionMenuItem("morph_segmentation", "Morph Segmentation"),
-	MultiOptionsMenuItem("colour_speakers", "Colour code speakers", [
-		("woc_in_red", "Words of Christ in Red"),
-		("coloured_quotes", "Colour code by speaker"),
-		("off", "Off"),
+	BooleanOptionMenuItem("columns", N_("Columns")),
+	BooleanOptionMenuItem("verse_per_line", N_("One line per verse"), N_("Display each verse on its own line.")),
+	BooleanOptionMenuItem("continuous_scrolling", N_("Continuous scrolling"), force_complete_reload=True),
+	BooleanOptionMenuItem("headings", N_("Headings")),
+	BooleanOptionMenuItem("cross_references", N_("Cross References")),
+	BooleanOptionMenuItem("footnotes", N_("Footnotes")),
+	BooleanOptionMenuItem("strongs_numbers", N_("Strongs Numbers")),
+	BooleanOptionMenuItem("strongs_blocked", N_("Strongs Blocked")),
+	BooleanOptionMenuItem("morphology", N_("Morphology")),
+	BooleanOptionMenuItem("morph_segmentation", N_("Morph Segmentation")),
+	MultiOptionsMenuItem("colour_speakers", N_("Colour code speakers"), [
+		("woc_in_red", N_("Words of Christ in Red")),
+		("coloured_quotes", N_("Colour code by speaker")),
+		("off", N_("Off")),
 	]),
-	MultiOptionsMenuItem("headwords_module", "Strong's Headwords", [
-		("HeadwordsTransliterated", "Transliterated"),
-		("HeadwordsOriginalLang", "Original Language"),
-		("HeadwordsPronunciation", "Pronunciation"),
-		("", "Strong's Numbers"),
+	MultiOptionsMenuItem("headwords_module", N_("Strong's Headwords"), [
+		("HeadwordsTransliterated", N_("Transliterated")),
+		("HeadwordsOriginalLang", N_("Original Language")),
+		("HeadwordsPronunciation", N_("Pronunciation")),
+		("", N_("Strong's Numbers")),
 	],
 	options_section=filter_settings,
 	force_complete_reload=True,
