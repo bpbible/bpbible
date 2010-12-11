@@ -273,26 +273,33 @@ class BibleFrame(VerseKeyedFrame):
 		return is_available
 
 	def on_add_topic_verses(self, passage_entry, added_verses):
-		if not biblemgr.bible.can_show_topic_tag(passage_entry.parent):
+		tag_type = biblemgr.bible.get_tag_type_to_show(passage_entry)
+		if not tag_type:
 			return
 
 		verses_on_screen = self.get_verses_on_screen(added_verses)
 		if verses_on_screen:
-			topic_tag = json.dumps(biblemgr.bible.get_passage_topic_div(passage_entry))
-			script_to_execute = "".join(self.get_add_command(topic_tag, osisRef) for osisRef in verses_on_screen)
+			get_div_contents = {
+				"passage_tag": biblemgr.bible.get_passage_topic_div,
+				"usercomment": biblemgr.bible.get_user_comment_div,
+			}[tag_type]
+			tag_contents = json.dumps(get_div_contents(passage_entry))
+			script_to_execute = "".join(self.get_add_command(tag_contents, osisRef, tag_type) for osisRef in verses_on_screen)
 			self.Execute(script_to_execute)
 
-	def get_add_command(self, topic_tag, osisRef):
-		return """$('.passage_tag_container[osisRef="%s"]').append(%s);\n""" % (osisRef, topic_tag)
+	def get_add_command(self, tag_content, osisRef, tag_type):
+		return """$('.%(tag_type)s_container[osisRef="%(osisRef)s"]').append(%(tag_content)s);\n""" % locals()
 	
 	def on_remove_topic_verses(self, passage_entry, removed_verses):
+		tag_type = biblemgr.bible.get_tag_type_to_show(passage_entry)
 		verses_on_screen = self.get_verses_on_screen(removed_verses)
 		if verses_on_screen:
-			script_to_execute = "".join(self.get_delete_command(passage_entry, osisRef) for osisRef in verses_on_screen)
+			script_to_execute = "".join(self.get_delete_command(passage_entry, osisRef, tag_type) for osisRef in verses_on_screen)
 			self.Execute(script_to_execute)
 
-	def get_delete_command(self, passage_entry, osisRef):
-		return """$('.passage_tag_container[osisRef="%s"] .passage_tag[passageEntryId="%d"]').remove();\n""" % (osisRef, passage_entry.get_id())
+	def get_delete_command(self, passage_entry, osisRef, tag_type):
+		passage_entry_id = passage_entry.get_id()
+		return """$('.%(tag_type)s_container[osisRef="%(osisRef)s"] .%(tag_type)s[passageEntryId="%(passage_entry_id)d"]').remove();\n""" % locals()
 
 	def get_verses_on_screen(self, verses):
 		if not self.dom_loaded:

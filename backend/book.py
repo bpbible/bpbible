@@ -408,7 +408,7 @@ class Book(object):
 					text = self.process_raw(rawentry_str, text, versekey, mod,
 						raw_headings, option_filtered)
 
-				user_comments = self.get_user_comments(versekey)
+				user_comments = self.get_user_comments(osisRef, versekey)
 
 				# XXX: This needs to be done better than this.  Move into
 				# subclass somehow.
@@ -435,18 +435,22 @@ class Book(object):
 		if render_end:
 			self.end_of_render = render_end()
 
-	def get_user_comments(self, verse_key):
+	def get_user_comments(self, osis_ref, verse_key):
 		if not isinstance(self, Bible):
 			return u""
 
 		manager = passage_list.get_primary_passage_list_manager()
 
-		return u"".join(
-			'<a class="usercomment" href="usercomment://%d"><sup>&dagger;</sup></a>' % passage_entry.get_id()
+		comments = u"".join(
+			self.get_user_comment_div(passage_entry)
 			for passage_entry in manager.get_all_passage_entries_for_verse(verse_key)
-			if (passage_entry.parent is not None and
-				passage_entry.parent is manager.comments_special_topic)
+			if (self.get_tag_type_to_show(passage_entry) == "usercomment")
 		)
+		return u'<span class="usercomment_container" osisRef="%s">%s</span>' % (osis_ref, comments)
+
+	def get_user_comment_div(self, passage):
+		passage_id = passage.get_id()
+		return '<a class="usercomment" href="usercomment://%(passage_id)d" passageEntryId="%(passage_id)d"><sup>&dagger;</sup></a>' % locals()
 	
 	def insert_tags(self, osis_ref, verse_key, exclude_topic_tag):
 		"""Generates and returns all the passage tags for the given verse."""
@@ -454,17 +458,21 @@ class Book(object):
 		passage_tags = "".join(
 			self.get_passage_topic_div(passage)
 			for passage in manager.get_all_passage_entries_for_verse(verse_key)
-			# XXX: I had a problem with passages that had empty parents that
-			# I can't reproduce, so I just ignore these topics.
-			if self.can_show_topic_tag(passage.parent, exclude_topic_tag)
+			if (self.get_tag_type_to_show(passage, exclude_topic_tag) == "passage_tag")
 		)
-		return '<span class="passage_tag_container" osisRef="%s">%s</span>' % (osis_ref, passage_tags)
+		return u'<span class="passage_tag_container" osisRef="%s">%s</span>' % (osis_ref, passage_tags)
 
-	def can_show_topic_tag(self, topic, exclude_topic_tag=None):
-		return (topic is not None
-				and topic is not exclude_topic_tag
-				and topic.can_display_tag
-				and topic.parent is not None)
+	def get_tag_type_to_show(self, passage, exclude_topic_tag=None):
+		topic = passage.parent
+		if (topic is not None
+				and topic.parent is not None
+				and topic is not exclude_topic_tag):
+			if topic.can_display_tag:
+				return "passage_tag"
+			elif topic is passage_list.get_primary_passage_list_manager().comments_special_topic:
+				return "usercomment"
+
+		return None
 
 	def get_passage_topic_div(self, passage):
 		from gui import passage_tag

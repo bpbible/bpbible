@@ -5,6 +5,7 @@ class VerseToPassageEntryMap(object):
 		self._map = {}
 		self.add_verses_observers = ObserverList()
 		self.remove_verses_observers = ObserverList()
+		self.disable_observers = False
 
 	def update_passage_entry(self, passage_entry, old_passage):
 		old_passage_set = set(self._passage_to_list(old_passage))
@@ -35,7 +36,8 @@ class VerseToPassageEntryMap(object):
 				self._map[verse_key_text] = []
 			self._map[verse_key_text].append(passage_entry)
 
-		self.add_verses_observers(passage_entry, added_verses)
+		if not self.disable_observers:
+			self.add_verses_observers(passage_entry, added_verses)
 
 	def remove_passage_entry(self, passage_entry):
 		self._remove_verses(passage_entry, self._passage_to_list(passage_entry.passage))
@@ -44,7 +46,8 @@ class VerseToPassageEntryMap(object):
 		for verse_key_text in removed_verses:
 			self._map[verse_key_text].remove(passage_entry)
 
-		self.remove_verses_observers(passage_entry, removed_verses)
+		if not self.disable_observers:
+			self.remove_verses_observers(passage_entry, removed_verses)
 
 	def _passage_to_list(self, passage):
 		if passage is None:
