@@ -37,10 +37,10 @@ class BookFrame(AUIDisplayFrame):
 	def SetBook(self, book):
 		self.book = book
 
-	def SetPage(self, *args, **kwargs):
+	def SetPage(self, page_content):
 		# close all open tooltips
 		guiconfig.mainfrm.hide_tooltips()
-		return super(BookFrame, self).SetPage(*args, **kwargs)
+		return super(BookFrame, self).SetPage(page_content)
 
 	def get_verified_one_verse(self, ref):
 		try:

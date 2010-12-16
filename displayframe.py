@@ -674,19 +674,14 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 	def SelectionToText(self):
 		return ""
 
-	def SetPage(self, *args, **kwargs):
+	def SetPage(self, page_content):
 		assert hasattr(self, "mod"), self
 
 #		self.language_code, (self.font, self.size, gui) = \
 #			fonts.get_font_params(self.mod)
 
-		#super(DisplayFrame, self).SetPage(*args, **kwargs)
-		# XXX: Hack.  Deprecated.
-		if kwargs:
-			print "SetPage: kwargs discarded:", kwargs
-		dprint(WARNING, "SetPage", self.__class__, len(args[0]))
-		self.OpenURI(protocol_handlers.FragmentHandler.register(args[0], self.mod))
-#		self.SetContent("test://123.456.com", args[0]) # XXX: FixMe: Give a proper URL.
+		dprint(WARNING, "SetPage", self.__class__, len(page_content))
+		self.OpenURI(protocol_handlers.FragmentHandler.register(page_content, self.mod))
 
 	def Scroll(self, x, y):
 		return

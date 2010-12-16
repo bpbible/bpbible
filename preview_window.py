@@ -100,8 +100,6 @@ class PreviewWindow(AUIDisplayFrame, TooltipBaseMixin):
 	def ShowTooltip(self, position=None):
 		path = protocol_handlers.TooltipConfigHandler.register(self.tooltip_config)
 		self.html.OpenURI(path)
-#		self.html.SetPage(self.text)#, body_colour=self.colour,
-#				text_colour=self.text_colour)
 	
 	def get_permanent_tooltip_position(self):
 		return self.ScreenPosition

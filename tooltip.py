@@ -106,8 +106,7 @@ class TooltipBaseMixin(object):
 		self._SetText(self.tooltip_config.get_text())
 
 		if force:
-			self.html.SetPage(self.text, body_colour=self.colour,
-				text_colour=self.text_colour)
+			self.html.SetPage(self.text)
 			self.maybe_scroll_to_current()
 
 	def _SetText(self, text):
@@ -138,8 +137,6 @@ class TooltipBaseMixin(object):
 		# and the page
 		path = protocol_handlers.TooltipConfigHandler.register(self.tooltip_config)
 		self.html.OpenURI(path)
-#		self.html.SetPage(self.text, body_colour=self.colour,
-#				text_colour=self.text_colour)
 		
 		self.html.size_intelligently(400, self._position_tooltip, position, target_rect, factor)
 	
