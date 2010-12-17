@@ -62,7 +62,16 @@ class ProtocolHandler(object):
 			content=content, 
 			timer=timer,
 			contentclass=contentclass)
+
+		if is_debugging():
+			self.log_generated_html(text)
+
+		return text
 		
+	def log_generated_html(self, text):
+		if not os.path.isdir('generated_html'):
+			return
+
 		try:
 			global counter
 			counter += 1
@@ -70,7 +79,6 @@ class ProtocolHandler(object):
 			open(filename, "w").write(text.encode("utf8"))
 		except Exception, e:
 			print "Error writing tmp.html", e
-		return text
 
 
 class NullProtocolHandler(ProtocolHandler):
