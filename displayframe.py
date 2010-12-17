@@ -1,13 +1,13 @@
 import re
 import string
+import math
 
 import wx
-from wx import html
+import wx.wc
 
 
 import guiconfig
 import config
-
 
 
 from swlib.pysw import GetBestRange, SW, VerseList
@@ -15,13 +15,16 @@ from backend.bibleinterface import biblemgr
 from backend.verse_template import VerseTemplate
 from util import osutils
 from tooltip import Tooltip, tooltip_settings, TextTooltipConfig, TooltipDisplayer
-from gui import htmlbase
 from gui.menu import MenuItem, Separator
-from gui.htmlbase import HtmlSelectableWindow, convert_language, convert_lgs
+from gui.htmlbase import convert_language, convert_lgs
 from gui import guiutil
+import display_options
 from util.debug import dprint, WARNING, TOOLTIP, MESSAGE
 from protocols import protocol_handler
+# XXX: This is just to force the protocol to be registered.
+import gui.passage_tag
 from events import LINK_CLICKED
+import protocol_handlers
 
 from gui import fonts
 
@@ -44,29 +47,58 @@ def process_html_for_module(module, text):
 		font, size, text
 	)
 	return text
-				
 
+# Decorator to manage functions that cannot be called while the document is
+# loading.
+def defer_till_document_loaded(function_to_decorate):
+	def function(self, *args, **kwargs):
+		self.defer_call_till_document_loaded(function_to_decorate, *args, **kwargs)
 
-class DisplayFrame(TooltipDisplayer, HtmlSelectableWindow):
-	def __init__(self, parent, style=html.HW_DEFAULT_STYLE,
-			logical_parent=None):
-		super(DisplayFrame, self).__init__(parent, style=style)
+	return function
+
+class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
+	lg_width = 20
+	do_convert_lgs = True
+
+	def __init__(self, parent, logical_parent=None):
+		super(DisplayFrame, self).__init__(parent)
+
 		self.logical_parent = logical_parent
 		self.handle_links = True
-		
+
+	def DomContentLoaded(self, event):
+		document = self.GetDOMDocument()
+		self.dom_loaded = True
+		for function, args, kwargs in self.events_to_call_on_document_load:
+			function(self, *args, **kwargs)
+		self.events_to_call_on_document_load = []
+
+	def defer_call_till_document_loaded(self, function, *args, **kwargs):
+		if self.dom_loaded:
+			print "DOM loaded, works fine."
+			function(self, *args, **kwargs)
+		else:
+			print "Adding item to list of things to execute."
+			self.events_to_call_on_document_load.append((function, args, kwargs))
 
 	def setup(self):
 		self.handle_links = True
-		self.html_type = DisplayFrame
-
+		self.dom_loaded = False
+		self.events_to_call_on_document_load = []
+		
 		self.current_target = None
 		self.mouseout = False
 		
-		self.Bind(wx.EVT_CONTEXT_MENU, self.show_popup)
-		self.Bind(wx.EVT_RIGHT_UP, self.show_popup)
+		self.Bind(wx.wc.EVT_WEB_SHOWCONTEXTMENU, self.show_popup)
 		
 		self.Bind(wx.EVT_LEAVE_WINDOW, self.MouseOut)
 		self.Bind(wx.EVT_ENTER_WINDOW, self.MouseIn)
+		self.Bind(wx.wc.EVT_WEB_OPENURI, self.OnOpenURI)
+		self.Bind(wx.wc.EVT_WEB_DOMCONTENTLOADED, self.DomContentLoaded)
+		self.Bind(wx.wc.EVT_WEB_MOUSEOVER, self.MouseOverEvent)
+		self.Bind(wx.wc.EVT_WEB_MOUSEOUT, self.MouseOutEvent)
+		self.Bind(wx.EVT_KEY_DOWN, self.on_char)
+		self.DisableFavIconFetching()
 		
 		hover = protocol_handler.register_hover
 		# TODO: move these out somewhere else
@@ -99,6 +131,10 @@ class DisplayFrame(TooltipDisplayer, HtmlSelectableWindow):
 		#self.current_target = None
 		self.mouseout = True
 
+
+	def GetViewStart(self):
+		# XXX: Do better than this.
+		return (0, 0)
 
 	def MouseIn(self, event = None):
 		if event: event.Skip()
@@ -136,77 +172,21 @@ class DisplayFrame(TooltipDisplayer, HtmlSelectableWindow):
 		if link and self.handle_links: 
 			self.LinkClicked(link, cell)
 
-	def OnCellMouseEnter(self, cell, x, y):
+	def MouseOverEvent(self, event):
+		event.Skip()
 		self.current_target = None
 		
-		if cell.GetLink() is None or not self.handle_links:
+		element = event.GetTargetNode()
+		href = event.GetHref()
+		if not href or not self.handle_links:
 			return
 
 
 		if guiconfig.mainfrm.lost_focus: return
 
-		link = cell.GetLink()
-		href = link.GetHref()
-		parent = cell.Parent
-		assert parent
-
-		first = None
-		last = None
-		last_iterated = None
-		in_block = False
-		cell_found = False
-		y_level = cell.GetPosY()
-
-		child = parent.FirstChild
-		while child:
-			# skip over non-terminals, these will include font tags and colour
-			# tags
-			if child.IsTerminalCell():
-				# check we are at the right link and y level
-				#TODO: will all of a link be at the same level if sup or
-				# <font> in link? Anyway, I'm assuming it is...
-				if child.GetLink() and child.GetLink().GetHref() == href \
-					and y_level == child.GetPosY(): 
-					if not in_block:
-						first = child
-				
-					in_block = True
-
-					if cell.this == child.this:
-						cell_found = True
-
-				else:
-					if cell_found:
-						last = last_iterated
-						break
-					
-					in_block = False
-
-			last_iterated = child
-			child = child.Next
-		else:
-			assert False, "Didn't find cell!?!"
-		
-		rect = wx.Rect(first.GetPosX(), first.GetPosY(), 
-			last.GetPosX() - first.GetPosX() + last.GetWidth(),
-			last.GetPosY() - first.GetPosY() + last.GetHeight()
-		)
-
-		xx, yy = 0, 0
-		while parent:
-			rect.Offset((
-				parent.GetPosX(),
-				parent.GetPosY()
-			))
-			parent = parent.Parent
-
-		# now this value refers to somewhere on the scrolled page.
-		# so we need to find the value on the client, then turn it to a screen
-		# value...
-		xx, yy = rect.TopLeft
-		xx, yy = self.ClientToScreen(self.CalcScrolledPosition(xx, yy))
+		x, y = wx.GetMousePosition()
 		self.current_target = href, wx.Rect(
-			xx, yy, rect.GetWidth(), rect.GetHeight()
+			x, y, 0, 0
 		), 4
 
 		if self.current_target and self.tooltip.target and \
@@ -392,12 +372,12 @@ class DisplayFrame(TooltipDisplayer, HtmlSelectableWindow):
 	
 	@staticmethod
 	def on_hover_bible(frame, href, url, x, y):
-		scrolled_values = frame.CalcScrolledPosition(x, y) 
-		screen_x, screen_y = frame.ClientToScreen(scrolled_values)
+		screen_x, screen_y = wx.GetMousePosition()
 	
 		frame.tooltip.show_bible_refs(frame, href, url, screen_x, screen_y)
 
-	def OnCellMouseLeave(self, cell, x, y):
+	def MouseOutEvent(self, event):
+		event.Skip()
 		if self.has_tooltip:
 			self.tooltip.MouseOut(None)
 
@@ -462,6 +442,9 @@ class DisplayFrame(TooltipDisplayer, HtmlSelectableWindow):
 
 		guiconfig.mainfrm.set_bible_ref(host, LINK_CLICKED)
 
+	def on_char(self, event):
+		guiutil.dispatch_keypress(self.get_actions(), event)
+
 	def get_menu_items(self):
 		menu_items = (
 			(self.make_search_text(), IN_POPUP),
@@ -473,17 +456,18 @@ class DisplayFrame(TooltipDisplayer, HtmlSelectableWindow):
 				self.SelectAll,
 				_("Select all the text in the frame")
 			), IN_BOTH),
+			# XXX: Enable these menu items properly?
 			(MenuItem(
 				_("Copy selection (with links)"), 
 				self.copy_text_with_links,
-				enabled=lambda:bool(self.m_selection),
+				#enabled=lambda:bool(self.m_selection),
 				doc=_("Copy the selected text with links")
 				
 			), IN_BOTH),
 			(MenuItem(
 				_("Copy selection (without links)"), 
 				self.copy_text_no_links,
-				enabled=lambda:bool(self.m_selection),
+				#enabled=lambda:bool(self.m_selection),
 				doc=_("Copy the selected text, removing all links")
 			), IN_BOTH),
 
@@ -666,27 +650,48 @@ class DisplayFrame(TooltipDisplayer, HtmlSelectableWindow):
 			update_ui=update_ui, font=font)
 
 
+	# XXX: These dummies are required to make all these menu items work correctly.
+	# We should fix it so they are not needed.
+	def FindCell(self, x,y):
+		pass
+
 	def copy_text_no_links(self):
-		self.OnCopy(with_links=False)
+		pass
 
 	def copy_text_with_links(self):
-		self.OnCopy(with_links=True)
+		pass
 	
 	def get_actions(self):
-		actions = super(DisplayFrame, self).get_actions()
+		#actions = super(DisplayFrame, self).get_actions()
+		# XXX: Have a standard collection of actions.
+		actions = {}
 		actions.update({
 			wx.WXK_ESCAPE: guiconfig.mainfrm.hide_tooltips,
 		})
 
 		return actions
 
-	def SetPage(self, *args, **kwargs):
+	def SelectionToText(self):
+		return ""
+
+	def SetPage(self, page_content):
 		assert hasattr(self, "mod"), self
 
-		self.language_code, (self.font, self.size, gui) = \
-			fonts.get_font_params(self.mod)
+#		self.language_code, (self.font, self.size, gui) = \
+#			fonts.get_font_params(self.mod)
 
-		super(DisplayFrame, self).SetPage(*args, **kwargs)
+		dprint(WARNING, "SetPage", self.__class__, len(page_content))
+		self.OpenURI(protocol_handlers.FragmentHandler.register(page_content, self.mod))
+
+	def Scroll(self, x, y):
+		return
+
+	def scroll_to_current(self):
+		self.scroll_to_anchor("current")
+	
+	@defer_till_document_loaded
+	def scroll_to_anchor(self, anchor):
+		self.Execute('window.location.hash = "%s";' % anchor)
 	
 	def set_mod(self, value):
 		self._mod = value
@@ -699,9 +704,6 @@ class DisplayFrame(TooltipDisplayer, HtmlSelectableWindow):
 		return self.book.mod
 	
 	mod = property(get_mod, set_mod)
-	#def test_wxp(self):
-	#	import wx.lib.wxpTag
-	#	self.SetPage("3 <wxp class='CheckBox'><param label='2' /></wxp>4")
 
 	def get_frame_for_search(self):
 		return guiconfig.mainfrm.bibletext
@@ -715,9 +717,52 @@ class DisplayFrame(TooltipDisplayer, HtmlSelectableWindow):
 		"""
 		return None
 
+	def OpenURI(self, uri, flags=wx.wc.WEB_LOAD_NORMAL, post_data=None, grab_focus=False):
+		# default to not grab focus
+		super(DisplayFrame, self).OpenURI(uri, flags, post_data, grab_focus)
+
+	def OnOpenURI(self, event):
+		dprint(WARNING, "Loading HREF", event.GetHref())
+		if event.GetHref().startswith('test'):
+			return
+		if event.GetHref().startswith("bpbible"):
+			self.dom_loaded = False
+		else:
+			protocol_handler.on_link_opened(self, event.GetHref())
+			event.Veto()
+
+	def change_display_option(self, option_name):
+		if not self.dom_loaded:
+			return
+
+		# It would theoretically be possible to do this DOM twiddling through
+		# the WebConnect DOM API.  In practice, I haven't figured out how to.
+		self.Execute("document.body.setAttribute('%s', %s);" %
+				(option_name, display_options.get_js_option_value(option_name)))
+
+	@defer_till_document_loaded
+	def size_intelligently(self, width, func, *args, **kwargs):
+		max_height = kwargs.pop("max_height", 600)
+		self.SetSize((width, 100))
+		h = self.ExecuteScriptWithResult('window.getComputedStyle(document.body.parentNode, null).height')
+		assert h.endswith("px")
+		height = int(math.ceil(float(h[:-2])))
+		if height > max_height: 
+			height = max_height
+
+		self.SetSize((width, height))
+
+		func(width, height, *args, **kwargs)
+		#return width, height
+	
+	@defer_till_document_loaded
+	def copyall(self):
+		self.SelectAll()
+		self.CopySelection()
+
 class DisplayFrameXRC(DisplayFrame):
 	def __init__(self):
-		pre = html.PreHtmlWindow()
+		pre = wx.wc.PreWebControl()
 		self.PostCreate(pre)
 		self.setup()
 

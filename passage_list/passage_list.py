@@ -148,8 +148,8 @@ class BasePassageList(object):
 			if self._passage_order_passages is not None:
 				index = self._passage_order_passages.index(passage)
 				del self._passage_order_passages[index]
-			sqlite.remove_item(passage)
 			singleton_verse_to_passage_entry_map.remove_passage_entry(passage)
+			sqlite.remove_item(passage)
 			self.remove_passage_observers(passage, index)
 		except ValueError:
 			raise MissingPassageError(passage)
@@ -496,11 +496,13 @@ def get_primary_passage_list_manager(filename=DEFAULT_FILENAME):
 		if filesystem_encoding:
 			filename = filename.decode(filesystem_encoding).encode('utf8')
 		singleton_verse_to_passage_entry_map.clear()
+		singleton_verse_to_passage_entry_map.disable_observers = True
 		#print "Loading manager with filename",filename
 		_global_passage_list_manager = sqlite.load_manager(filename)
 		if not _global_passage_list_manager.has_error_on_loading:
 			import guiconfig
 			guiconfig.mainfrm.on_close += _global_passage_list_manager.close
+		singleton_verse_to_passage_entry_map.disable_observers = False
 	return _global_passage_list_manager
 
 class MissingTopicError(Exception):

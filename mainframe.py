@@ -24,7 +24,7 @@ from bookframe import BookFrame
 from bookframe import CommentaryFrame
 from bookframe import DictionaryFrame
 from displayframe import IN_MENU
-from genbookframe import GenBookFrame
+from genbookframe import GenBookFrame, HarmonyFrame
 
 from auilayer import AuiLayer
 
@@ -32,7 +32,7 @@ from util.observerlist import ObserverList
 from util import osutils
 #import mySearchDialog
 import versetree
-from copyverses import CopyVerseDialog
+import copyverses
 import config
 import guiconfig
 from module_tree import ModuleTree
@@ -46,9 +46,9 @@ from gui import guiutil
 from gui import fonts
 from gui.guiutil import bmp
 from gui.menu import Separator
-from gui.htmlbase import HtmlBase
 
 from search.searchpanel import (BibleSearchPanel, GenbookSearchPanel,
+								 HarmonySearchPanel, DailyDevotionalSearchPanel,
 								 DictionarySearchPanel, CommentarySearchPanel)
 
 from fontchoice import FontChoiceDialog 
@@ -64,6 +64,7 @@ from error_handling import ErrorDialog
 from util.i18n import N_
 import util.i18n
 from preview_window import PreviewWindow
+import display_options
 
 
 settings = config_manager.add_section("BPBible")
@@ -75,6 +76,8 @@ settings.add_item("dictionary", "ISBE")
 settings.add_item("dictref", "")
 settings.add_item("commentary", "TSK")
 settings.add_item("genbook", "Josephus")
+settings.add_item("harmony", "CompositeGospel")
+settings.add_item("daily_devotional", "Daily")
 
 settings.add_item("zoom_level", 0)
 settings.add_item("copy_verse", "Default",
@@ -97,7 +100,6 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.setup()
 
 	def setup(self):
-		HtmlBase.override_loading_a_page = True
 		self.on_close = ObserverList()
 		
 
@@ -115,7 +117,7 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.zoomlevel = 0
 
 		self.bible_observers = ObserverList([
-			lambda event: self.bibletext.SetReference(event.ref, y_pos=event.y_pos),
+			lambda event: self.bibletext.SetReference(event.ref, y_pos=event.y_pos, settings_changed=event.settings_changed),
 			self.set_title
 		])
 
@@ -130,7 +132,6 @@ class MainFrame(wx.Frame, AuiLayer):
 
 		biblemgr.bible.observers += self.bible_version_changed
 		biblemgr.commentary.observers += self.commentary_version_changed
-		biblemgr.dictionary.observers += self.dictionary_version_changed
 
 		biblemgr.on_after_reload += self.on_modules_reloaded
 		self.on_close += lambda: \
@@ -139,11 +140,6 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.on_close += lambda: \
 			biblemgr.commentary.observers.remove(
 				self.commentary_version_changed
-			)
-		
-		self.on_close += lambda: \
-			biblemgr.dictionary.observers.remove(
-				self.dictionary_version_changed
 			)
 		
 		self.on_close += lambda: \
@@ -187,15 +183,14 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.setup_frames()
 
 		self.bibleref.SetFocus()
-		dprint(MESSAGE, "Setting menus up")
 		
-		self.set_menus_up()
+		for display_frame in (self.bibletext, self.commentarytext, self.dictionarytext, self.genbooktext, self.harmony_frame, self.daily_devotional_frame):
+			display_options.display_option_changed_observers += display_frame.change_display_option
 
-		def override_end():
-			HtmlBase.override_loading_a_page = False
+		dprint(MESSAGE, "Setting menus up")
+		self.set_menus_up()
 		
 		wx.CallAfter(dprint, MESSAGE, "Constructed")
-		wx.CallAfter(override_end)	
 
 		dprint(MESSAGE, "Done first round of setting up")
 		self.drop_target = ModuleDropTarget(self)
@@ -345,6 +340,8 @@ class MainFrame(wx.Frame, AuiLayer):
 		set_mod(biblemgr.dictionary, settings["dictionary"])
 		set_mod(biblemgr.commentary, settings["commentary"])
 		set_mod(biblemgr.genbook, settings["genbook"])
+		set_mod(biblemgr.harmony, settings["harmony"])
+		set_mod(biblemgr.daily_devotional, settings["daily_devotional"])
 		
 		
 	
@@ -378,6 +375,8 @@ class MainFrame(wx.Frame, AuiLayer):
 		settings["commentary"] = biblemgr.commentary.version
 		settings["genbook"] = biblemgr.genbook.version
 		settings["dictionary"] = biblemgr.dictionary.version
+		settings["harmony"] = biblemgr.harmony.version
+		settings["daily_devotional"] = biblemgr.daily_devotional.version
 
 		settings["options"] = biblemgr.save_state()
 
@@ -430,7 +429,9 @@ class MainFrame(wx.Frame, AuiLayer):
 	def create_searchers(self):
 		self.search_panel = BibleSearchPanel(self)
 		self.genbook_search_panel = GenbookSearchPanel(self)
+		self.harmony_search_panel = HarmonySearchPanel(self)
 		self.dictionary_search_panel = DictionarySearchPanel(self)
+		self.daily_devotional_search_panel = DailyDevotionalSearchPanel(self)
 		self.commentary_search_panel = CommentarySearchPanel(self)
 		
 		
@@ -452,6 +453,8 @@ class MainFrame(wx.Frame, AuiLayer):
 			self.genbook_search_panel,
 			self.dictionary_search_panel, 
 			self.commentary_search_panel,
+			self.harmony_search_panel,
+			self.daily_devotional_search_panel,
 		)
 
 		self.aui_callbacks = {}
@@ -473,7 +476,10 @@ class MainFrame(wx.Frame, AuiLayer):
 		
 
 		self.genbooktext = GenBookFrame(self, biblemgr.genbook)
+		# XXX: Why are we reloading a Genbook when the Bible changes?
+		# Is it to change the version of Bible references?
 		self.bible_observers += self.genbooktext.reload
+		self.harmony_frame = HarmonyFrame(self)
 
 		self.bibletext = BibleFrame(self)
 		self.bibletext.SetBook(biblemgr.bible)
@@ -484,8 +490,10 @@ class MainFrame(wx.Frame, AuiLayer):
 
 		self.commentarytext = CommentaryFrame(self, biblemgr.commentary)
 		self.dictionarytext = DictionaryFrame(self, biblemgr.dictionary)
-
-		self.dictionary_list = self.dictionarytext.dictionary_list
+		self.daily_devotional_frame = DictionaryFrame(self,
+				biblemgr.daily_devotional)
+		self.daily_devotional_frame.id = "Daily Devotional"
+		self.daily_devotional_frame.has_menu = False
 
 		self.verse_compare = VerseCompareFrame(self, biblemgr.bible)
 		#if settings["verse_comparison_modules"] is not None:
@@ -517,7 +525,7 @@ class MainFrame(wx.Frame, AuiLayer):
 	def on_copy_button(self, event=None):
 		text = self.bibletext.get_quick_selected()
 		
-		cvd = CopyVerseDialog(self)
+		cvd = copyverses.CopyVerseDialog(self)
 		cvd.ShowModal(text)
 		cvd.Destroy()
 
@@ -548,6 +556,9 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.Bind(wx.EVT_MENU, self.on_widget_inspector, 
 			id=xrc.XRCID('gui_widget_inspector'))
 		
+		self.Bind(wx.EVT_MENU, self.on_error_console, 
+			id=xrc.XRCID('gui_error_console'))
+		
 		self.locales_menu_lookup = {}
 		for item in "gather diff compile confirm".split():
 			id = xrc.XRCID('gui_locale_%s' % item)
@@ -558,6 +569,12 @@ class MainFrame(wx.Frame, AuiLayer):
 
 		self.Bind(wx.EVT_MENU, self.on_locale_restart, 
 			id=xrc.XRCID('gui_locale_restart'))
+		
+		self.Bind(wx.EVT_MENU, self.on_reload, 
+			id=xrc.XRCID('gui_reload'))
+
+		self.Bind(wx.EVT_MENU, self.on_reload_chrome, 
+			id=xrc.XRCID('gui_reload_chrome'))
 		
 		self.Bind(wx.EVT_MENU, id = wx.ID_EXIT, handler = self.ExitClick)
 		self.Bind(wx.EVT_MENU, id = wx.ID_ABOUT, handler = self.AboutClick)
@@ -580,8 +597,6 @@ class MainFrame(wx.Frame, AuiLayer):
 				id=xrc.XRCID(xrcid))
 			
 			
-		self.dictionary_list.item_changed += self.DictionaryListSelected
-
 		self.bibleref.Bind(wx.EVT_TEXT_ENTER, self.BibleRefEnter)
 
 		# if it is selected in the drop down tree, go straight there
@@ -658,6 +673,18 @@ class MainFrame(wx.Frame, AuiLayer):
 		gettext._translations.clear()
 
 		self.restart()
+
+	def on_reload_chrome(self, event):
+		print "Reloading all"
+		guiconfig.app.reload_restarting = True
+		guiconfig.app.restarting = True
+		self.MainFrameClose(None)
+		
+	def on_reload(self, event):
+		import reload_util
+		reload(reload_util)
+		reload_util.reboot_section("filtering")
+		reload_util.reboot_section("copying")
 		
 	#def history_moved(self, history_item):
 	#	self.set_bible_ref(history_item.ref, source=HISTORY)
@@ -676,6 +703,9 @@ class MainFrame(wx.Frame, AuiLayer):
 		
 	def on_widget_inspector(self, event):
 		wx.GetApp().ShowInspectionTool()
+
+	def on_error_console(self, event):
+		self.bibletext.Execute("window.open('chrome://global/content/console.xul', '', 'chrome,dialog=no,toolbar,resizable')")
 	
 	def on_path_manager(self, event):
 		PathManager(self).ShowModal()
@@ -857,14 +887,14 @@ class MainFrame(wx.Frame, AuiLayer):
 
 			self.MenuBar.Insert(2+idx, menu, "&" + frame.title)
 
-		if not is_debugging():
-			for idx, (menu, menu_name) in enumerate(self.MenuBar.Menus):
-				if self.MenuBar.GetMenuLabel(idx) == _("Debug"):
+		for idx, (menu, menu_name) in enumerate(self.MenuBar.Menus):
+			if self.MenuBar.GetMenuLabel(idx) == _("Debug"):
+				if is_debugging():
+					for option in display_options.debug_options_menu:
+						option.add_to_menu(self, menu)
+				else:
 					self.MenuBar.Remove(idx)
-					break
-			#else:
-			#	menu = None
-		
+				break
 	
 	def make_menu(self, items, is_popup=False):
 		menu = wx.Menu()
@@ -876,107 +906,22 @@ class MainFrame(wx.Frame, AuiLayer):
 			item.create_item(self, menu, is_popup=is_popup)
 		return menu
 	
-	
-	def fill_headwords_menu(self):
-		self.headwords_map = {}
-		sub_menu = wx.Menu("")
-		known_headwords_modules = [
-			_("Pronunciation"),
-			_("Original Language"),
-			_("Transliterated"),
-		]
-	
-		for mod_name, module in biblemgr.headwords_modules.items() + [("", None)]:
-			if not mod_name:
-				#sub_menu.AppendSeparator()
-				headwords_desc = _("Strong's Numbers")
-			else:
-				headwords_desc = module.getConfigEntry("HeadwordsDesc")
-			
-			item = sub_menu.AppendRadioItem(wx.ID_ANY, 
-				_(headwords_desc)
-			)
-			
-			if filterutils.filter_settings["headwords_module"] == mod_name:
-				item.Check()
-			
-			self.headwords_map[item.Id] = mod_name, module
-				
-			self.Bind(wx.EVT_MENU, self.on_headwords, item)
-		
-		strongs_headwords = self.options_menu.AppendSubMenu(
-			sub_menu,
-			_("Strong's headwords"),
-#			_("Display Strong's numbers using headwords")
-		)
-	
-		
-	
 	def fill_options_menu(self):
 		while self.options_menu.MenuItems:
 			self.options_menu.DestroyItem(
 				self.options_menu.FindItemByPosition(0)
 			)
 
-		self.options_map = {}
-		self.options_map = {}
-		options = biblemgr.get_options()
-		for option, values in options:
-			help_text = pysw.locale.translate(
-				biblemgr.get_tip(option)).decode(pysw.locale_encoding)
-		
-			option_trans = pysw.locale.translate(
-				option).decode(pysw.locale_encoding)
+		for option in display_options.options_menu:
+			option.add_to_menu(self, self.options_menu)
 
-			if set(values) == set(("Off", "On")):
-				item = self.options_menu.AppendCheckItem(
-					wx.ID_ANY, option_trans, help=help_text
-				)
+		#if options:
+		#	self.options_menu.AppendSeparator()
 
-				if biblemgr.options[option] == "On":
-					item.Check()
-				
-				self.Bind(wx.EVT_MENU, self.on_option, item)
-			else:
-				sub_menu = wx.Menu("")
-				
-			
-				for value in values:
-					item = sub_menu.AppendRadioItem(wx.ID_ANY, 
-					pysw.locale.translate(value).decode(pysw.locale_encoding),
-						help=help_text)
-					
-					if biblemgr.options[option] == value:
-						item.Check()
-					
-					self.options_map[item.Id] = value
-						
-					self.Bind(wx.EVT_MENU, self.on_option, item)
-				
-				item = self.options_menu.AppendSubMenu(sub_menu, option_trans, 
-					help=help_text)
-					
-				self.Bind(wx.EVT_MENU, self.on_option, item)
-				
-			self.options_map[item.Id] = option
-				
-
-		if options:
-			self.options_menu.AppendSeparator()
-
-		self.fill_headwords_menu()
-
-	
 		cross_references = self.options_menu.AppendCheckItem(
 			wx.ID_ANY,
 			_("Expand cross-references"),
 			_("Display cross references partially expanded")
-		)
-
-		verse_per_line = self.options_menu.AppendCheckItem(
-			wx.ID_ANY,
-			_("One line per verse"),
-			_("Display each verse on its own line.")
 		)
 		
 		display_tags = self.options_menu.AppendCheckItem(
@@ -998,23 +943,11 @@ class MainFrame(wx.Frame, AuiLayer):
 			cross_references)
 		self.Bind(wx.EVT_MENU, self.toggle_display_tags, display_tags)
 		#self.Bind(wx.EVT_MENU, self.toggle_expand_topic_passages, expand_topic_passages)
-		self.Bind(wx.EVT_MENU, 
-			lambda evt:self.set_verse_per_line(evt.IsChecked()), 
-			verse_per_line)
 		
 		filter_settings = config_manager["Filter"]
 		cross_references.Check(filter_settings["footnote_ellipsis_level"])
 		display_tags.Check(passage_list.settings.display_tags)
 		#expand_topic_passages.Check(passage_list.settings.expand_topic_passages)
-		verse_per_line.Check(bible_settings["verse_per_line"])
-
-	
-	def on_headwords(self, event):
-		obj = event.GetEventObject()
-		menuitem = obj.MenuBar.FindItemById(event.Id)
-		filterutils.set_headwords_module(self.headwords_map[menuitem.Id])
-
-		self.UpdateBibleUI(settings_changed=True, source=SETTINGS_CHANGED)
 
 	def toggle_expand_cross_references(self, event):
 		filter_settings = config_manager["Filter"]
@@ -1041,41 +974,7 @@ class MainFrame(wx.Frame, AuiLayer):
 		if selected_frame is None or not isinstance(selected_frame, BookFrame):
 			selected_frame = self.bibletext
 		selected_frame.search()
-		
-	def set_verse_per_line(self, to):
-		bible_settings["verse_per_line"] = to
-		self.bibletext.set_verse_per_line(to)
 
-		self.UpdateBibleUI(settings_changed=True, source=SETTINGS_CHANGED)
-		
-
-	def on_option(self, event):
-		obj = event.GetEventObject()
-		menuitem = obj.MenuBar.FindItemById(event.Id)
-		#if not menuitem: return
-		option_menu = menuitem.GetMenu()
-		if option_menu == self.options_menu:
-			
-			biblemgr.set_option(self.options_map[menuitem.Id], event.Checked()) 
-			self.UpdateBibleUI(settings_changed=True, source=SETTINGS_CHANGED)
-			
-			return
-			
-		for item in self.options_menu.MenuItems: 
-			if item.GetSubMenu() == option_menu:
-				biblemgr.set_option(
-					self.options_map[item.Id], 
-					self.options_map[menuitem.Id]
-				) 
-				self.UpdateBibleUI(
-					settings_changed=True,
-					source=SETTINGS_CHANGED
-				)
-				
-				break
-		else:
-			assert False, "BLAH"
-			
 	def on_window(self, event):
 		obj = event.GetEventObject()
 		menuitem = obj.MenuBar.FindItemById(event.Id)
@@ -1130,7 +1029,8 @@ class MainFrame(wx.Frame, AuiLayer):
 		
 	def setup_frames(self):
 		self.frames = [self.bibletext, self.commentarytext, self.dictionarytext,
-			self.genbooktext, self.verse_compare]
+			self.daily_devotional_frame, self.harmony_frame, self.genbooktext,
+			self.verse_compare]
 
 		for frame in self.frames:
 			name = self.get_pane_for_frame(frame).name 
@@ -1140,7 +1040,7 @@ class MainFrame(wx.Frame, AuiLayer):
 		
 		self.set_bible_ref(settings["bibleref"] or "Genesis 1:1", 
 			LOADING_SETTINGS, userInput=False)
-		self.DictionaryListSelected()
+		self.UpdateDictionaryUI()
 		self.version_tree.recreate()
 
 	def restart(self, event=None):
@@ -1200,13 +1100,15 @@ class MainFrame(wx.Frame, AuiLayer):
 		sysversion = sys.version.split()[0]
 		v = SW.cvar.SWVersion_currentVersion
 		swversion = v.getText()
+		xulrunner_version = config.xulrunner_version
 		
 		name = config.name()
 		text = _("""Flexible Bible study software.
 			Built Using the Sword Project from crosswire.org
 			Python Version: %(sysversion)s
 			wxPython Version: %(wxversion)s
-			SWORD Version: %(swversion)s""").expandtabs(0) %locals()
+			SWORD Version: %(swversion)s
+			XULRunner Version: %(xulrunner_version)s""").expandtabs(0) %locals()
 
 		info = wx.AboutDialogInfo()
 		info.Name = config.name()
@@ -1247,36 +1149,9 @@ class MainFrame(wx.Frame, AuiLayer):
 	
 	def commentary_version_changed(self, newversion):
 		self.commentarytext.refresh()
-	
-	def dictionary_version_changed(self, newversion):
-		freeze_ui = guiutil.FreezeUI(self.dictionary_list)
-		self.dictionary_list.set_book(biblemgr.dictionary)
-		
-	def DictionaryListSelected(self, event=None):
-		self.UpdateDictionaryUI()
 
 	def UpdateDictionaryUI(self, ref=""):
-		if not ref:
-			ref = self.dictionary_list.GetValue().upper()
-		else:
-			self.dictionary_list.choose_item(ref)
-
-		self.dictionarytext.SetReference(ref)
-
-	def UpdateBibleUIWithoutScrolling(self, source, settings_changed=False):
-		"""Updates the Bible UI without scrolling to the current verse.
-
-		This is used when a minor change has been made, and we want the
-		user's focus to remain on the same part of the chapter (not on the
-		currently selected verse, which will often be the first verse of a
-		chapter or something similar).
-
-		With a more capable HTML display it will not be necessary to reload
-		the whole window.
-		"""
-		self.bibletext.suppress_scrolling(
-				lambda: self.UpdateBibleUI(source, settings_changed)
-			)
+		self.dictionarytext.UpdateUI(ref)
 
 	def UpdateBibleUI(self, source, settings_changed=False, y_pos=None):
 		current_ypos = self.bibletext.GetViewStart()[1]

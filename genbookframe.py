@@ -1,8 +1,12 @@
 import wx
-from swlib.pysw import TK
+from swlib.pysw import TK, VK, VerseParsingError
+from swlib.pysw import GetVerseStr, GetBestRange
+
 from bookframe import BookFrame
 import genbooktree
 from backend.bibleinterface import biblemgr
+from gui import guiutil
+import versetree
 from util import string_util, noop
 from util.debug import dprint, WARNING
 from util.unicode import to_unicode
@@ -61,25 +65,26 @@ class GenBookFrame(BookFrame):
 		super(GenBookFrame, self).__init__(self.genbookpanel)
 		self.SetBook(book)
 
-		self.genbooktree = genbooktree.GenBookTree(self.genbookpanel, 
-				book, self)
 		sizer = wx.BoxSizer(wx.VERTICAL)
-		sizer.Add(self.genbooktree, flag = wx.GROW)
+		self.add_navigation_controls(sizer)
 		sizer.Add(self, 3, flag = wx.GROW)
 		self.genbookpanel.SetSizer(sizer)
 		self.genbookpanel.Fit()
 		self.genbooktree.Bind(wx.EVT_COMBOBOX, self.on_genbook_change)
-		biblemgr.genbook.observers += self.genbook_version_changed
-		biblemgr.genbook.cleanup_module += self.cleanup_module
-		guiconfig.mainfrm.on_close += lambda:biblemgr.genbook.observers.remove(
+		self.book.observers += self.genbook_version_changed
+		self.book.cleanup_module += self.cleanup_module
+		guiconfig.mainfrm.on_close += lambda:self.book.observers.remove(
 			self.genbook_version_changed
 		)
-		guiconfig.mainfrm.on_close += lambda:biblemgr.genbook.cleanup_module.remove(
+		guiconfig.mainfrm.on_close += lambda:self.book.cleanup_module.remove(
 			self.cleanup_module
 		)
 		
 		self.reference_text = None
 		
+	def add_navigation_controls(self, sizer):
+		self.genbooktree = genbooktree.GenBookTree(self.genbookpanel, self.book, self)
+		sizer.Add(self.genbooktree, flag=wx.GROW)
 		
 	def cleanup_module(self, module):
 		if self.book.mod == module:
@@ -91,7 +96,7 @@ class GenBookFrame(BookFrame):
 			self.genbooktree.tree.DeleteChildren(self.genbooktree.tree.RootItem)
 			self.genbooktree.value = None
 
-	def SetReference(self, ref, context=""):
+	def SetReference(self, ref, context="", settings_changed=False):
 		if isinstance(ref, TK):
 			ref = TK(ref)
 		self.reference = ref
@@ -104,106 +109,12 @@ class GenBookFrame(BookFrame):
 
 			self.reference_text = "<empty>"
 			
-				
 			self.SetPage(data)
 			self.update_title()
 			return
 		
 		self.reference_text = self.reference.text
-		
-		root, display_children = self.book.get_display_level_root(ref)
-
-		if not display_children:
-			before = self.genbooktree.get_item(-1)
-			after = self.genbooktree.get_item(1)
-			data = '<table width="100%" VALIGN=CENTER ><tr>'
-			
-			graphics = config.graphics_path
-
-			if before:
-				data += ('<td align="LEFT" valign=CENTER>'
-						 '<a href="genbook:previous">'
-						 '<img src="%(graphics)sgo-previous.png">&nbsp;'
-						 '%(before)s</a></td>'
-				) % locals()
-			else:
-				data += '<td align=LEFT>'+ '&nbsp;'*15 + '</td>'
-						
-
-
-			bref = TK(ref)
-			breadcrumb = ['%s' % bref]
-			item = 0
-
-			while bref.parent():
-				item += 1
-				breadcrumb.append(
-					'<a href="genbook:parent%d">%s</a>' % (item , bref)
-				)
-			
-			breadcrumb[-1] = self.book.version
-
-			breadcrumb = [string_util.htmlify_unicode(b) 
-				for b in breadcrumb]
-
-			data += "<td align=CENTER><center><b>%s</b></center></td>" % \
-				" &gt; ".join(reversed(breadcrumb))
-			
-			if after:
-				data += ('<td align="RIGHT" valign=CENTER>'
-						 '<a href="genbook:next">%(after)s&nbsp;'
-						 '<img src="%(graphics)sgo-next.png">'
-						 '</a></td>'
-				) % locals()
-			else:
-				data += '<td align=RIGHT>'+ '&nbsp;'*15 + '</td>'
-
-			data += "</tr></table>\n"
-			
-
-			text = self.book.GetReference(ref, context = context)
-			data += text
-		else:
-			items = []
-			def add_items(key):
-				anchor = ""
-				bgcolor = ""
-				if key.equals(ref):
-					bgcolor = ' bgcolor="#ccccff"'
-					anchor = '<a name="current" href="#current">%s</a>' % key
-				else:
-					anchor = '<a href="genbook:%s">%s</a>' % (
-						SW.URL.encode(key.getText()).c_str(), key,
-					)
-					
-					
-					
-				items.append(
-					'<table width=100%% cellspacing=0 cellpadding=0>'
-					'<tr%s><td colspan=2px><b>%s</b>:%s</td></tr>'
-					% (bgcolor, anchor, self.book.GetReference(key))
-				)
-				items.append("</table>")
-				items.append(
-					"<table width=100% cellspacing=0 cellpadding=0>"
-				)
-
-				for child in key:
-					items.append("<tr><td width=20px></td><td>")
-					add_items(child)
-					items.append("</td></tr>")
-
-				items.append("</table>")
-
-			add_items(root)
-			data = ''.join(items)
-
-
-		data = data.replace("<!P>","</p><p>")
-
-		self.SetPage(data)
-		if display_children:
-			self.scroll_to_current()
+		self.OpenURI("bpbible://content/page/%s%s" % (self.book.version, self.reference_text))
 		
 		self.update_title()
 	
@@ -241,7 +152,10 @@ class GenBookFrame(BookFrame):
 		if not mod: 
 			return
 
-		self.genbooktree.go_to_key(key)
+		# due to complex initialization with the bible reference changing and
+		# the genbook tree being set up, we have to use CallAfter at least for
+		# the first time (so easiest to do it for all)
+		wx.CallAfter(self.genbooktree.go_to_key, key)
 	
 	def get_window(self):
 		return self.genbookpanel
@@ -253,7 +167,7 @@ class GenBookFrame(BookFrame):
 		)
 
 	def genbook_version_changed(self, newversion):
-		self.genbooktree.SetBook(biblemgr.genbook, self.reference_text)
+		self.genbooktree.SetBook(self.book, self.reference_text)
 	
 	def format_ref(self, module, ref):
 		k = TK(module.getKey(), module)
@@ -262,3 +176,116 @@ class GenBookFrame(BookFrame):
 
 	def get_reference_textbox(self):
 		return self.genbooktree
+
+class HarmonyFrame(GenBookFrame):
+	id = N_("Harmony")
+	has_menu = False
+	def __init__(self, parent):
+		super(HarmonyFrame, self).__init__(parent, biblemgr.harmony)
+
+		# This reference is set to the latest reference that should be
+		# displayed.  If the pane is hidden then it will not have been
+		# displayed.
+		self.latest_reference = ""
+		# True if the settings have changed since the pane was hidden.
+		self.settings_changed = False
+		guiconfig.mainfrm.bible_observers += self.bible_ref_changed
+
+	def add_navigation_controls(self, sizer):
+		super(HarmonyFrame, self).add_navigation_controls(sizer)
+		self.create_toolbar()
+		sizer.Add(self.toolbar, flag=wx.GROW)
+
+	def create_toolbar(self):
+		self.toolbar = wx.ToolBar(self.genbookpanel, style=wx.TB_FLAT)
+		self.create_toolbar_items()
+		self.toolbar.Realize()
+		self.toolbar.MinSize = self.toolbar.Size
+	
+	def create_toolbar_items(self):		
+		self.gui_reference = versetree.VerseTree(self.toolbar, with_verses=True)
+		self.gui_reference.SetSize((140, -1))
+		
+		self.gui_go = self.toolbar.AddTool(wx.ID_ANY,  
+			guiutil.bmp("accept.png"),
+			shortHelpString=_("Go to this reference"))
+
+		self.toolbar.AddSeparator()
+		
+		self.gui_link = self.toolbar.AddCheckTool(
+			wx.ID_ANY,
+			guiutil.bmp("link.png"), 
+			shortHelp=_("Link the %s to the Bible") % self.title
+		)
+
+		self.linked = True
+		self.toolbar.ToggleTool(self.gui_link.Id, True)
+
+		self.toolbar.InsertControl(0, self.gui_reference)
+
+		self.toolbar.Bind(wx.EVT_TOOL, self.set_ref, id=self.gui_go.Id)
+		self.toolbar.Bind(wx.EVT_TOOL, self.on_link, id=self.gui_link.Id)
+		self.gui_reference.Bind(wx.EVT_TEXT_ENTER, self.set_ref)
+		self.gui_reference.on_selected_in_tree += self.set_ref
+	
+	def set_ref(self, event):
+		ref = self.gui_reference.Value
+		if not ref: return
+		ref = self.get_verified(ref)
+		if not ref: return
+		self.latest_reference = ref
+		if not self.SetVerseReference(ref):
+			wx.MessageBox(_("%s is not in this harmony.") % ref, config.name())
+
+	def get_verified(self, ref):
+		try:
+			ref = GetVerseStr(ref, "", 
+				raiseError=True, userInput=True, userOutput=False)
+			return ref
+		
+		except VerseParsingError, e:
+			wx.MessageBox(e.message, config.name())
+
+	# XXX: We cannot use BookFrame's get_verified_one_verse, because it
+	# assumes that there is a valid current reference which is a verse.
+	# Our current reference is a Genbook tree reference.
+	#get_verified = BookFrame.get_verified_one_verse
+	
+	def on_link(self, event=None):
+		self.linked = not self.linked
+		if self.linked:
+			self.SetVerseReference(guiconfig.mainfrm.currentverse)
+	
+	"""
+	def on_shown(self, shown=None):
+		if shown:
+			if self.linked and self.latest_reference != self.reference:
+				self.SetVerseReference(self.latest_reference)
+		super(HarmonyFrame, self).on_shown(shown)
+	"""
+
+	def bible_ref_changed(self, event):
+		# only update if we are linked, and it isn't just a settings change
+		if self.linked and not event.settings_changed:
+			self.latest_reference = event.ref
+			if self.aui_pane.IsShown():
+				self.SetVerseReference(event.ref)
+
+		elif event.settings_changed:
+			if self.aui_pane.IsShown():
+				self.refresh()
+			else:
+				self.settings_changed = True
+
+	def SetVerseReference(self, ref, context="", raw=None, settings_changed=False):
+		genbook_key = self.book.find_reference(ref)
+		found_reference = (genbook_key is not None)
+		if found_reference:
+			self.SetReference_from_string(genbook_key)
+			self.gui_reference.Value = ref
+
+		return found_reference
+
+	def refresh(self):
+		self.SetReference(self.reference)
+

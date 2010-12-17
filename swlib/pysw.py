@@ -49,8 +49,15 @@ SW_HAS_MDB = hasattr(SW.Mgr, "loadMDBDir")
 print "SVN; SWORD 1.5.12 compatible" if LIB_1512_COMPAT else "1.5.11 compatible"
 
 locale_dir = "locales/locales.d" + ("/SWORD_1512" if LIB_1512_COMPAT else "")
-if hasattr(sys, "SW_dont_do_stringmgr"):
-	dprint(WARNING, "Skipping StringMgr initialization")
+
+# Check if we are ICU - bindings don't generate static getter here, so we can
+# use the underlying getter
+isICU = SW._Sword.SWMgr_isICU_get()
+if isICU or hasattr(sys, "SW_dont_do_stringmgr"):
+	if isICU: 
+		have_set_locale_dir = False
+	else:
+		dprint(WARNING, "Skipping StringMgr initialization")
 else:
 	# StringMgr handling
 	class MyStringMgr(SW.PyStringMgr):
@@ -209,7 +216,13 @@ class VK(SW.VerseKey):#, object):
 			SW.VerseKey.__init__(self)
 			self.Headings(1)
 			
-			if isinstance(key, tuple):
+			if isinstance(key, str):
+				self.text = key
+
+			elif isinstance(key, unicode):
+				self.text = key.encode('utf8')
+
+			elif isinstance(key, tuple):
 				min, max = key
 				tmp_lk = self.ParseVerseList(min)
 				if tmp_lk.Count():
@@ -1316,6 +1329,9 @@ class VerseList(list):
 
 	def clone(self): return VerseList(self)
 
+	def __reduce__(self):
+		return VerseList, (self.GetBestRange(),)
+
 class BookData(object):
 	def __init__(self, bookname, testament, booknumber):
 		self.chapters=[]
@@ -1817,7 +1833,6 @@ class VerseKeySearcher(Searcher):
 		
 		# TODO: ;'s don't cut it - in the ISBE, they are often used		
 		return strings.split("; ")
-
 
 # allow reloading
 sys.SW_dont_do_stringmgr = True

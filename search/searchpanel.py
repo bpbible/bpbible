@@ -1093,19 +1093,20 @@ class SearchList(virtuallist.VirtualListCtrlXRC):
 				)
 			
 			# remove non-canonical headings
-			content = re.sub('<h6 class="heading" canonical="false">.*?</h6>',
+			content = re.sub('<h2 class="heading" canonical="false">.*?</h2>',
 						 '', content)
 			content = re.sub(
-				'<h6 class="heading" canonical="true">(.*?)</h6>', r'\1', 
+				'<h2 class="heading" canonical="true">(.*?)</h2>', r'\1', 
 				content)
 
-
-						 
 			bibletext = string_util.RemoveWhitespace(content)
 			
-			# trim to 500, otherwise it can be very slow on long entries		
-			if len(bibletext) > 500:
-				bibletext = bibletext[:500] + "..."
+			# trim to 250, otherwise it can be very slow on long entries		
+			# also, if over 263 characters, it looks like on windows we
+			# overwrite an internal buffer and end up with junk on the end
+			# (seen in hovering over text)
+			if len(bibletext) > 250:
+				bibletext = bibletext[:250] + "..."
 
 			return bibletext
 
@@ -1199,6 +1200,13 @@ class GenbookSearchPanel(SearchPanel):
 		self.options_panel.gui_search_type.Bind(
 			wx.EVT_CHOICE, self.on_search_type)
 
+class HarmonySearchPanel(GenbookSearchPanel):
+	id = N_("Harmony Search")
+
+	@property
+	def book(self):
+		return biblemgr.harmony
+
 class DictionarySearchPanel(SearchPanel):
 	id = N_("Dictionary Search")
 	@property
@@ -1239,6 +1247,13 @@ class DictionarySearchPanel(SearchPanel):
 	def get_proximity_options(self):
 		# we must be all in the same entry
 		return 1, False
+
+class DailyDevotionalSearchPanel(DictionarySearchPanel):
+	id = N_("Daily Devotional Search")
+
+	@property
+	def book(self):
+		return biblemgr.daily_devotional
 
 class CommentarySearchPanel(BibleSearchPanel):
 	id = N_("Commentary Search")

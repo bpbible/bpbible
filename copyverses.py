@@ -19,6 +19,7 @@ from gui import guiutil
 from util.configmgr import config_manager
 from swlib import pysw
 from swlib.pysw import GetBestRange
+import display_options
 
 #class CopyVerseDialog(xrcCopyVerseDialog):
 #	def __init__(self, parent, settings):
@@ -48,15 +49,27 @@ class CopyVerseDialog(xrcCopyVerseDialog):
 
 		# if we are a tuple, we represent based_on, fields
 		# otherwise we are a template name
+		copy_formatted = False
 		if isinstance(settings, tuple):
-			self.is_custom = True
-			based_on, fields = settings
+			if len(settings) == 2:
+				# old style
+				based_on, fields = settings
+				self.is_custom = True
+			else:
+				based_on, fields, copy_formatted = settings
+				self.is_custom = fields != None
+
+		else:
+			# old style
+			based_on = settings
+
+		if self.is_custom:
 			self.make_custom(based_on)
 
 		else:
 			item_id = 0
 			for idx, item in enumerate(self.tm.templates):
-				if item.name == settings:
+				if item.name == based_on:
 					item_id = idx
 					break
 
@@ -76,8 +89,7 @@ class CopyVerseDialog(xrcCopyVerseDialog):
 
 		# put the template panel in
 		self.template_panel = TemplatePanel(self.tp_holder, fields, False)
-		self.tp_holder.Sizer.Add(self.template_panel, 1, wx.GROW|wx.ALL,
-			border=6)
+		self.tp_holder.Sizer.Add(self.template_panel, 1, wx.GROW)
 		self.tp_holder.Fit()
 		self.tp_holder.Parent.Parent.Label = _("Edit Template...")
 		self.Fit()
@@ -87,7 +99,10 @@ class CopyVerseDialog(xrcCopyVerseDialog):
 		# do binding
 		for event in [wx.EVT_KILL_FOCUS, wx.EVT_TEXT_ENTER]:
 			self.reference.Bind(event, self.update)
-		
+
+		self.copy_formatted.SetValue(copy_formatted)
+		self.copy_formatted.Bind(wx.EVT_CHECKBOX, self.update)
+
 		for item in self.template_panel.fields:
 			for event in [wx.EVT_KILL_FOCUS]:#, stc.EVT_STC_MODIFIED]:
 				item.Bind(event, self.update)
@@ -235,12 +250,13 @@ class CopyVerseDialog(xrcCopyVerseDialog):
 		return GetBestRange(self.reference.GetValue(), 
 				userInput=True, userOutput=False)
 		
-	def update(self, event=None):
+	def update(self, event=None, ref=None):
 		if event: 
 			event.Skip()
 
-		text = self.GetText(self.get_internal_reference())
-		self.preview.SetPage(text.replace("\n", "<br />"))
+		text = self.GetText(ref or self.get_internal_reference())
+		if not self.formatted: text = text.replace("\n", "<br />")
+		self.preview.SetPage(text)
 
 	def ShowModal(self, text):
 		# set the reference
@@ -262,29 +278,39 @@ class CopyVerseDialog(xrcCopyVerseDialog):
 						header=self.template_panel.header.GetText(),
 						body=self.template_panel.body.GetText(), 
 						footer=self.template_panel.footer.GetText()
-					)
+					), self.formatted
 				)
 
 			else:
 				config_manager["BPBible"]["copy_verse"] = (
 					self.gui_template_list.StringSelection
-				)
+				), None, self.formatted
 			
 
 		return ansa
 
+	@property
+	def formatted(self):
+		return self.copy_formatted.IsChecked()
+	
 	def copy_verses(self, ref):
-		print "Updating..."	
-		guiutil.copy(self.GetText(ref))
+		print "Updating...", ref
+		self.update(ref=ref)
+		if self.formatted:
+			self.preview.copyall()
+		else:
+			guiutil.copy(self.GetText(ref))
 
 	def GetText(self, ref):
-		print ref
+		print "Getting text for", ref
 		template = VerseTemplate(header=self.template_panel.header.GetText(),
 			body=self.template_panel.body.GetText(), 
 			footer=self.template_panel.footer.GetText())
 
 		#no footnotes
 		biblemgr.temporary_state(biblemgr.plainstate)
+		if display_options.options["colour_speakers"] == "woc_in_red":
+			biblemgr.set_option("Words of Christ in Red", "On")
 
 		#apply template
 		biblemgr.bible.templatelist.append(template)
@@ -295,9 +321,16 @@ class CopyVerseDialog(xrcCopyVerseDialog):
 
 		data = re.sub("<indent-block-end[^>]*>", "\n", data)
 		
-		data = string_util.br2nl(data)
-		data = string_util.KillTags(data)
-		data = string_util.amps_to_unicode(data)
+		if self.formatted:
+			# TODO: make it scan CSS and amalgamate rules?
+			data = data.replace("<span class='WoC'>",
+								"<span style='color: red'>")
+			data = data.replace("<span class='divineName'>",
+								"<span style='font-variant:small-caps'>")
+		else:
+			data = string_util.br2nl(data)
+			data = string_util.KillTags(data)
+			data = string_util.amps_to_unicode(data)
 
 		#restore
 		biblemgr.restore_state()

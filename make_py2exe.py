@@ -5,6 +5,7 @@ import re
 import sys
 import contrib
 import config
+import glob
 from util.i18n import find_languages
 
 version = sys.argv[-1]
@@ -39,6 +40,17 @@ manifestVersion="1.0">
         />
     </dependentAssembly>
 </dependency>
+<dependency>
+  <dependentAssembly>
+    <assemblyIdentity
+      type="win32"
+      name="Microsoft.VC90.CRT"
+      version="9.0.21022.8"
+      processorArchitecture="x86"
+      publicKeyToken="1fc8b3b9a1e18e3b"
+    />
+  </dependentAssembly>
+</dependency>
 </assembly>
 """
 
@@ -46,21 +58,35 @@ manifestVersion="1.0">
 #os.system("del /s *.xcfg")
 #os.system("del /s *.*~")
 
+py2exe_options = {
+	"optimize": 1,
+	"dll_excludes": "msvcp90.dll"
+}
 
+zipfile = "library.zip"
 if "compressed" in sys.argv:
-	options = {"py2exe": {"compressed": 1,
-						  "optimize": 1,
-						  "bundle_files": 1
-			  }}
+	py2exe_options.update({
+		"compressed": 1,
+		"bundle_files": 1,
+	})
 	sys.argv.remove("compressed")
-	zipfile=None
-else:
-	options = {"py2exe": {"optimize": 1}}
-	zipfile="library.zip"
+	zipfile = None
 
 languages = find_languages(is_release=True)
+
+data_files = []
+# You will need to include this directory when building with Python 2.6.
+# The manifest says that the directory will be there, since it depends on MSVC 9.
+# You can get the directory from VC++ 2008 Express (read redist.txt).
+if os.path.isdir('Microsoft.VC90.CRT'):
+	vc_files = glob.glob('Microsoft.VC90.CRT\\*.*')
+	data_files += [
+			("Microsoft.VC90.CRT", vc_files),
+	]
+
 if(setup(
-	options = options,
+	options = {"py2exe": py2exe_options},
+	data_files = data_files,
 	
 	windows = [
 		{
@@ -74,8 +100,7 @@ if(setup(
 	],
 	zipfile=zipfile,
 )):
-	import os
-	subdirs = r"xrc graphics harmony resources locales locales\locales.d locales\locales.d\SWORD_1512".split()
+	subdirs = r"xrc graphics css js xulrunner resources locales locales\locales.d locales\locales.d\SWORD_1512".split()
 	subdirs += ["locales\%s\LC_MESSAGES\\" % l for l in languages]
 	for subdir in subdirs:
 		os.system(r"if not exist dist\%s mkdir dist\%s" % (subdir, subdir))
@@ -84,12 +109,13 @@ if(setup(
 	for item in "png gif".split():
 		os.system("copy graphics\\*.%s dist\\graphics\\" % item)
 	
-	os.system("copy harmony\\robertson.harm dist\\harmony")
-	os.system("copy harmony\\compositeGospel.1.3.xml.harm dist\\harmony")
 	os.system("copy LICENSE.txt dist\\")
 	os.system(r"copy locales\locales.d\*.conf dist\locales\locales.d")
 	os.system(r"copy locales\locales.d\SWORD_1512\*.conf dist\locales\locales.d\SWORD_1512")	
-	os.system(r"xcopy /e resources dist\resources")	
+	os.system(r"xcopy /e /Y resources dist\resources")	
+	os.system(r"xcopy /e /Y css dist\css")
+	os.system(r"xcopy /e /Y js dist\js")
+	os.system(r"xcopy /e /Y xulrunner dist\xulrunner")
 
 	for item in languages:
 		os.system("copy locales\%s\LC_MESSAGES\messages.mo "

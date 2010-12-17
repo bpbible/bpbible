@@ -52,6 +52,9 @@
           <label>WI</label>
           <accel>F6</accel>
         </object>
+        <object class="wxMenuItem" name="gui_error_console">
+          <label>Error Console</label>
+        </object>
         <object class="wxMenu" name="gui_locale_menu">
           <object class="wxMenuItem" name="gui_locale_gather">
             <label>gather</label>
@@ -70,6 +73,13 @@
             <label>Restart</label>
           </object>
           <label>Locale</label>
+        </object>
+        <object class="separator"/>
+        <object class="wxMenuItem" name="gui_reload">
+          <label>Reload sections</label>
+        </object>
+        <object class="wxMenuItem" name="gui_reload_chrome">
+          <label>Reload w/ chrome</label>
         </object>
       </object>
       <object class="wxMenu" name="help">
@@ -101,6 +111,6 @@
     </object>
     <size>800, 600</size>
     <title>Bible</title>
-    <style>wxDEFAULT_FRAME_STYLE|wxRESIZE_BORDER|wxRESIZE_BOX</style>
+    <style>wxDEFAULT_FRAME_STYLE|wxRESIZE_BORDER</style>
   </object>
 </resource>

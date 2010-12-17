@@ -144,6 +144,8 @@ def is_release():
 	"""Checks if this is a released version of BPBible."""
 	return release_settings["is_released"]
 
+xulrunner_version = "UNKNOWN"
+
 def show_splashscreen():
 	if ("--no-splashscreen", "") in opts:
 		return False
@@ -170,32 +172,40 @@ use_system_inactive_caption_colour = False
 #plain_xrefs = False
 
 
+preverse = '<a name="${osisRef}_start" osisRef="$osisRef"></a>'
 # templates
-body = (
-u'<glink href="nbible:$internal_reference">'
-u'<small><sup>$versenumber</sup></small></glink> $text $usercomments $tags')
+verse_number = u'''
+	<a class="vnumber $numbertype%s"
+	   href="bpbible://content/page/$version/$internal_reference"
+	   osisRef="$osisRef"
+	   reference="$reference">
+	   $versenumber</a>'''
+
+body = (u'''%s $text $usercomments $tags
+	<a name="${osisRef}_end" osisRef="$osisRef"></a>''') % verse_number
+
+bible_template = SmartVerseTemplate(body=body%'', preverse=preverse)
+bible_template_without_headings = SmartVerseTemplate(body=body % '',
+	headings=u'', preverse=preverse)
 
 
-bible_template = SmartVerseTemplate(body=body)
+current_verse_template = SmartVerseTemplate(body % ' currentverse',
+											preverse=preverse)
 
-bible_template_without_headings = SmartVerseTemplate(body=body, headings=u'')
 
 #, footer="<br>$range ($version)")
 
 
-other_template = VerseTemplate(
-	body=u"<b>$range</b><br>$text<p>($description)</p> \n"
+commentary_template = VerseTemplate(
+	body=u"<div class='commentary_entry'><h3>$reference</h3>$text\n</div>"
 )
 dictionary_template = VerseTemplate(
-	body=u"<br>$text<p>($description)</p> \n"
+	body=u"<div class='dictionary_entry'><h3>$reference</h3>$text\n</div>"
+)
+genbook_template = VerseTemplate(
+	body=u"<div class='genbook_entry'><div class='genbook_key' level='$level'>$breadcrumbed_reference</div>$text\n</div>"
 )
 
-
-body = (u'<glink href="nbible:$internal_reference#current" colour="#008000">'
-		u'<small><sup>$versenumber</sup></small></glink> '
-		u'<highlight-start colour="#008000">$text<highlight-end /> $usercomments $tags')
-
-current_verse_template = SmartVerseTemplate(body)
 
 # TODO: do we want this to have tags? I'd guess not
 verse_compare_template = VerseTemplate(

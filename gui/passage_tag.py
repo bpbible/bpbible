@@ -2,7 +2,6 @@ import wx
 import math
 import guiconfig
 import guiutil
-import displayframe
 from protocols import protocol_handler
 from manage_topics_frame import ManageTopicsFrame
 from topic_selector import TopicSelector
@@ -121,13 +120,22 @@ def on_passage_tag_hover(frame, href, url, x, y):
 
 	frame.show_tooltip(TopicTooltipConfig(passage_list, passage_entry))
 
+def on_passage_tag_clicked(frame, href, url):
+	passage_list, passage_entry = _get_passage_list_and_entry_from_href(href)
+	guiconfig.mainfrm.hide_tooltips()
+	frame = ManageTopicsFrame(guiconfig.mainfrm)
+	frame.select_topic_and_passage(passage_list, passage_entry)
+	frame.Show()
+
 def _get_passage_list_and_entry_from_href(href):
 	"""Gets the passage list corresponding to the given passage tag HREF."""
-	href_parts = href.split(":")
-	assert len(href_parts) == 3
-	assert href_parts[0] == "passage_tag"
-	passage_list_id = int(href_parts[1])
-	passage_entry_id = int(href_parts[2])
+	from gui.webconnect_protocol_handler import get_url_host_and_page
+	url_host, page = get_url_host_and_page(href)
+	assert url_host == "passage"
+	page_parts = page.split("/")
+	assert len(page_parts) == 2
+	passage_list_id = int(page_parts[0])
+	passage_entry_id = int(page_parts[1])
 	return (lookup_passage_list(passage_list_id),
 			lookup_passage_entry(passage_entry_id))
 
@@ -213,13 +221,14 @@ class TopicTooltipConfig(TooltipConfig):
 
 		current_anchor = u""
 		if passage_entry is self.selected_passage_entry:
-			comment = u'<highlight-start colour="#008000">%s<highlight-end />' % comment
-			passage_text = u'<highlight-start colour="#008000">%s<highlight-end />' % passage_text
-			current_anchor = "#current"
-		return (u"<b><a href=\"bible:%(reference)s%(current_anchor)s\">%(localised_reference)s</a></b> "
+			comment = u'<span style="color: #008000">%s</span>' % comment
+			passage_text = u'<span style="color: #008000">%s</span>' % passage_text
+			current_anchor = u'<a name="current" />'
+		return (u"%(current_anchor)s<b><a href=\"bible:%(reference)s\">%(localised_reference)s</a></b> "
 			u"%(passage_text)s%(comment)s" % locals())
 
-protocol_handler.register_hover("passage_tag", on_passage_tag_hover)
+protocol_handler.register_handler("passagetag", on_passage_tag_clicked)
+protocol_handler.register_hover("passagetag", on_passage_tag_hover)
 
 class PassageTagLook(wx.PyWindow):
 	def __init__(self, parent, tag_text, look=0, colour=0, *args, **kwargs):

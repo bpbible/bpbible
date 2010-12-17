@@ -5,11 +5,12 @@ from swlib.pysw import process_digits
 class VerseTemplate(object):
 	"""VerseTemplate is a class which defines templates for Bible Text""" 
 	def __init__(self, body=u"$text", header=u"", footer=u"", 
-	headings=u'$heading\n'):
+	headings=u'$heading\n', preverse=""):
 		self.header = str_template(header)
 		self.body = str_template(body)
 		self.footer = str_template(footer)
 		self.headings = str_template(headings)
+		self.preverse = str_template(preverse)
 	
 	def finalize(self, text):
 		return text
@@ -49,28 +50,29 @@ class Template(VerseTemplate):
 		return item in self.keys()
 
 class SmartBody(object):
-	indent_block = "(?:INDENT-BLOCK-(?:START|END)[^>]*>)|"
-	whitespace_template = "<(?:%s(?:br( [^>]*)?>)|(?:p( [^>]*)?>)|(?:!P>))"
-	whitespace = whitespace_template % indent_block
-	whitespace_without_indent = whitespace_template % ''
-	included_whitespace_template = "(?:%s)(?:%s|\s)*"
-	included_whitespace = included_whitespace_template % (whitespace, whitespace)
-	included_whitespace_without_indent = included_whitespace_template % (whitespace_without_indent, whitespace_without_indent)
-	vpl_text = '<br class="verse_per_line">'
+	# don't ever use capturing groups in here - they are slow
+	whitespace = '<(?:(?:blockquote[^>]*>)|(?:/blockquote>)|(?:br ?[^>]*>)|(?:p ?[^>]*>)|(?:!P>)|(?:/div>))'
+	### We just include the </div> in our whitespace; if we include the
+	### opening div, then our verse numbers are moved into the indentedline,
+	### which we don't want
+	### |(<div class="indentedline"[^>]*>)|(</div>)'
+	
+	included_whitespace = "(?:%s)(?:%s|\s)*" % (whitespace, whitespace)
+	vpl_text = '<br class="verse_per_line" />'
 	
 	incl_whitespace_start = re.compile("^" + included_whitespace, re.IGNORECASE)
 	incl_whitespace_end = re.compile(included_whitespace + "$", re.IGNORECASE)
-	strip_whitespace_end = re.compile(included_whitespace_without_indent + "$", re.IGNORECASE)
+	a_tags = '<a name="[^"]*_(?:start|end)" osisRef="[^"]*"></a>'
 	incl_whitespace_br_start = re.compile(
-		u"(?P<ws>%s)%s" % (included_whitespace, vpl_text),
+		u"(?P<ws>%s(?:%s)*)%s" % (included_whitespace, a_tags, vpl_text),
 		re.IGNORECASE
 	)
 	incl_whitespace_br_end = re.compile(
-		u"%s(?P<ws>%s)" % (vpl_text, included_whitespace),
+		u"%s(?P<ws>(?:%s)*%s)" % (vpl_text, a_tags, included_whitespace),
 		re.IGNORECASE
 	)
 	
-	empty_versenumber = re.compile(u"<glink href=[^>]+><small><sup></sup></small></glink>\s?")
+	empty_versenumber = re.compile(u"<a class=\"(?:verse|chapter)number[^\"]*\"[^>]+></a>\s?")
 	
 	def __init__(self, body, verse_per_line=True):
 		self.body = body
@@ -84,7 +86,12 @@ class SmartBody(object):
 		
 		if verse_0:
 			dict["versenumber"] = u""
-			
+
+		if dict["versenumber"] == process_digits("1", userOutput=True):
+			dict["versenumber"] = dict["chapternumber"]
+			dict["numbertype"] = "chapternumber"
+		else:
+			dict["numbertype"] = "versenumber"
 		
 		whitespace = []
 		def collect(match):
@@ -102,11 +109,15 @@ class SmartBody(object):
 		
 		dict["text"] = text
 
+		verse_per_line = self.verse_per_line
+		if verse_0:
+			verse_per_line = False
+
 		ret = u"%s%s%s%s\n" % (
 			u''.join(leading_whitespace),
 			self.body.safe_substitute(dict),
 			u''.join(whitespace),
-			self.vpl_text * self.verse_per_line,			
+			self.vpl_text * verse_per_line
 		)
 		
 		# remove empty verse number

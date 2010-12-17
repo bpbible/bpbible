@@ -1,9 +1,10 @@
 from backend import filterutils
 from swlib.pysw import SW, GetVerseStr, GetBestRange
 from util.debug import dprint, MESSAGE
+from util.unicode import to_unicode
 
 class ThMLParser(filterutils.ParserBase):
-	def start_scripRef(self, attributes):
+	def start_scripRef(self, xmltag):
 		if (#self.u.module.Type() ==  "Biblical Texts" or 
 			not	filterutils.filter_settings["expand_thml_refs"]):
 			# we don't do anything here. This may change when I have a module
@@ -11,17 +12,17 @@ class ThMLParser(filterutils.ParserBase):
 			self.success = SW.INHERITED
 			return
 		
-		self.start_tag = attributes
+		self.scripRef_passage = xmltag.getAttribute("passage")
 		self.u.suspendTextPassThru = True
 	
-	def end_scripRef(self):
+	def end_scripRef(self, xmltag):
 		if (#self.u.module.Type() ==  "Biblical Texts" or 
 			not	filterutils.filter_settings["expand_thml_refs"]):
 		
 			self.success = SW.INHERITED
 			return
 
-		refList = self.start_tag.get("passage", None)
+		refList = self.scripRef_passage
 		if self.u.module.Type() == "Biblical Texts":
 			#self.success = SW.INHERITED
 			if refList:
@@ -54,7 +55,7 @@ class ThMLParser(filterutils.ParserBase):
 			last = GetVerseStr(self.u.key.getText())
 			for item in refList.split(";"):
 				vref = item
-				vref = GetBestRange(vref, context=last, use_bpbible_locale=True)
+				vref = GetBestRange(to_unicode(vref), context=last, use_bpbible_locale=True)
 				items.append('<a href="bible:%s">%s</a>' %(vref, item))
 				last = vref
 			self.buf += "; ".join(items)
@@ -62,22 +63,52 @@ class ThMLParser(filterutils.ParserBase):
 		# let text resume to output again
 		self.u.suspendTextPassThru = False
 	
-	def start_sync(self, attributes):
+	def start_sync(self, xmltag):
 		# This handles strongs numbers
 
 		# <sync type="Strongs" value="G1985" />
-		if ("type" not in attributes or attributes["type"]!="Strongs" or 
-			"value" not in attributes):
+		type = xmltag.getAttribute("type")
+		value = xmltag.getAttribute("value")
+		if type != "Strongs" or not value:
 			#not filterutils.filter_settings["strongs_headwords"]):
 			self.success = SW.INHERITED
 			return
 			
-		headword = self.get_strongs_headword(attributes["value"])
+		headword = self.get_strongs_headword(value)
 		if not headword:
 			self.success = SW.INHERITED	
 			return
 
 		self.buf += headword
+
+	def start_harmonytable(self, xmltag):
+		from backend.bibleinterface import biblemgr
+		references = xmltag.getAttribute('refs').split("|")
+		if not references:
+			return
+
+		header_row = u"<tr>%s</tr>" % (
+			u"".join(
+				u"<th>%s</th>" % GetBestRange(reference, userOutput=True)
+				for reference in references
+			))
+		# This is a nasty hack to work around the fact that OSIS rendering in
+		# SWORD is not properly reentrant.
+		# Without copying the internal dictionary some references do not
+		# display at all.
+		my_internal_dict = self.__dict__.copy()
+		body_row = u"<tr>%s</tr>" % (
+			u"".join(
+				u"<td>%s</td>" % biblemgr.bible.GetReference(reference)
+				for reference in references
+			))
+		self.__dict__ = my_internal_dict
+		table = u'<table class="harmonytable chapterview">%s%s</table>' % (header_row, body_row)
+		self.buf += table.encode("utf8")
+
+	def end_harmonytable(self, xmltag):
+		# Prevent SWORD choking on this.
+		pass
 
 class THMLRenderer(SW.RenderCallback):
 	def __init__(self):

@@ -94,9 +94,6 @@ def tag_passage(parent, passage, topic_to_apply=None, title=None):
 
 		get_primary_passage_list_manager().save()
 
-		if not editing_comment:
-			guiconfig.mainfrm.UpdateBibleUIWithoutScrolling(
-					source=events.PASSAGE_TAGGED)
 	dialog.Destroy()
 
 

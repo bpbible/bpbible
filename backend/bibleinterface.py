@@ -8,18 +8,19 @@ from swlib.pysw import SW
 from swlib import pysw
 
 from backend.book import Bible, Commentary
-from backend.dictionary import Dictionary
+from backend.dictionary import Dictionary, DailyDevotional
 
 from util import confparser
 from util.observerlist import ObserverList
-from util.debug import dprint, MESSAGE, WARNING
+from util.debug import dprint, MESSAGE, WARNING, ERROR
 from backend.filter import MarkupInserter
-from backend.genbook import GenBook
+from backend.genbook import GenBook, Harmony
 import config
 
 class BibleInterface(object):
 	def __init__(self, biblename="ESV", commentaryname="TSK",
-	  		dictionaryname="ISBE", genbook="Josephus"):
+	  		dictionaryname="ISBE", genbook="Josephus", daily_devotional_name="",
+			harmonyname="CompositeGospel"):
 
 		self.on_before_reload = ObserverList()
 		self.on_after_reload = ObserverList()
@@ -42,10 +43,24 @@ class BibleInterface(object):
 		self.commentary = Commentary(self, commentaryname)
 		self.dictionary = Dictionary(self, dictionaryname)
 		self.genbook = GenBook(self, genbook) 
+		self.daily_devotional = DailyDevotional(self, daily_devotional_name)
+		self.harmony = Harmony(self, harmonyname)
 		
 		self.state = []
 		self.options = {}
 		self.init_options()
+
+		self.book_type_map = {
+			self.bible.type:		self.bible,
+			self.commentary.type:	self.commentary,
+			self.dictionary.type:	self.dictionary,
+			self.genbook.type:		self.genbook,
+		}
+
+		self.book_category_map = {
+			self.daily_devotional.category:	self.daily_devotional,
+			self.harmony.category:			self.harmony,
+		}
 	
 	def init_options(self):
 		for option, values in self.get_options():
@@ -98,9 +113,28 @@ class BibleInterface(object):
 	
 	def get_module(self, mod):
 		return self.modules.get(mod)
+
+	def get_module_book_wrapper(self, module_name):
+		mod = self.modules_with_lowercase_name.get(module_name.lower())
+		if mod is None:
+			dprint(ERROR, "Mod is none", module_name)
+			return None
+
+		category = mod.getConfigEntry("Category")
+		if category and (category in self.book_category_map):
+			book = self.book_category_map[category]
+		else:
+			book = self.book_type_map.get(mod.Type())
+			if book is None:
+				dprint(ERROR, "book is none", module_name, mod.Type())
+				return None
+
+		book.SetModule(mod)
+		return book
 	
 	def _get_modules(self):
 		self.modules = {}
+		self.modules_with_lowercase_name = {}
 		self.headwords_modules = {}
 		for path, mgr, modules in self.mgrs:
 			headwords_modules = [(name, module) for name, module in modules if
@@ -111,6 +145,8 @@ class BibleInterface(object):
 
 			self.modules.update(modules)
 			self.headwords_modules.update(headwords_modules)
+			self.modules_with_lowercase_name.update(
+					(name.lower(), module) for  name, module in modules)
 
 	@property
 	def all_modules(self):
@@ -294,7 +330,7 @@ class BibleInterface(object):
 		markup_inserter = MarkupInserter(self)
 		
 		markup = SW.MyMarkup(markup_inserter, 
-			SW.FMT_HTMLHREF, SW.ENC_HTML)
+			SW.FMT_HTMLHREF)#, SW.ENC_HTML)
 		
 		#markup = SW.MarkupFilterMgr(SW.FMT_HTMLHREF, SW.ENC_HTML)
 		markup.thisown = False
@@ -306,6 +342,14 @@ class BibleInterface(object):
 
 biblemgr = BibleInterface("ESV", "TSK", "ISBE") 
 
+biblemgr.genbook.templatelist.append(config.genbook_template)
+biblemgr.harmony.templatelist.append(config.genbook_template)
 biblemgr.dictionary.templatelist.append(config.dictionary_template)
-biblemgr.commentary.templatelist.append(config.other_template)
+biblemgr.daily_devotional.templatelist.append(config.dictionary_template)
+biblemgr.commentary.templatelist.append(config.commentary_template)
 biblemgr.bible.templatelist.append(config.bible_template)
+
+# TODO: TESTING
+for option, values in biblemgr.get_options():
+	if "On" in values:
+		biblemgr.set_option(option, "On")

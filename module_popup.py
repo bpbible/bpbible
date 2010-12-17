@@ -1,7 +1,7 @@
 import wx
 from util.observerlist import ObserverList
 from gui import virtuallist
-from util.unicode import to_str
+from util.unicode import to_str, to_unicode
 from backend.dictionary import Dictionary
 from backend.genbook import GenBook
 from swlib.pysw import SW
@@ -13,7 +13,10 @@ class PopupList(virtuallist.VirtualListBox):
 		super(PopupList, self).__init__(parent)
 		self.book = book
 		self.modules = book.GetModules()
-		self.set_data(list("%s - %s" % (x.Name(), x.Description()) for x in self.modules))
+		self.set_data(list(
+			u"%s - %s" % (to_unicode(mod.Name(), mod), to_unicode(mod.Description(), mod))
+			for mod in self.modules
+		))
 		for idx, item in enumerate(self.modules):
 			if item == book.mod:
 				self.EnsureVisible(idx)

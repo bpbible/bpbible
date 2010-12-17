@@ -15,7 +15,9 @@ class KeyPad(wx.PopupTransientWindow):
 		if font:
 			panel.SetFont(font)
 		
-		sizer = wx.GridSizer(len(keys)/self.COLUMNS, self.COLUMNS, 1, 1)
+		sizer = wx.GridSizer(0,
+			#len(keys)/self.COLUMNS, 
+			self.COLUMNS, 1, 1)
 		for key in sorted(keys):
 			button = wx.Button(panel, label=key, style=wx.BU_EXACTFIT)
 			button.SetToolTipString(

@@ -51,3 +51,19 @@ def to_unicode_2(text, module):
 		return
 		
 	return text.decode(get_module_encoding(module), "replace")
+
+def try_unicode(text, mod):
+	if text is None: return ""
+	encodings = ["utf8", "cp1252"]
+	enc = get_module_encoding(mod)
+	i = encodings.index(enc)
+	try:
+		return text.decode(enc)
+	except UnicodeDecodeError:
+		try:
+			# ESV doesn't properly utf-8 copyright symbol in its about
+			# so if we can't convert it to unicode, leave it as it is
+			return text.decode(encodings[not i])
+		except UnicodeDecodeError:
+			return text.decode(enc, "replace")
+	

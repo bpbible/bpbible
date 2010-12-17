@@ -1,11 +1,9 @@
 import wx
-import wx.html
 from util.unicode import to_str, to_unicode
 from backend.bibleinterface import biblemgr
 from xrc.fontchoice_xrc import *
 import guiconfig
 import config
-from gui import htmlbase
 from module_tree import LanguageModuleTree
 from displayframe import DisplayFrameXRC
 from util import osutils
@@ -154,7 +152,8 @@ class FontChoiceDialog(xrcFontChoiceDialog):
 
 		try:
 			books = [biblemgr.bible, biblemgr.commentary, 
-				biblemgr.dictionary, biblemgr.genbook]
+				biblemgr.dictionary, biblemgr.genbook,
+				biblemgr.harmony, biblemgr.daily_devotional]
 			frames = guiconfig.mainfrm.frames
 
 			for book, frame in zip(books, frames):

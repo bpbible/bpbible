@@ -1,5 +1,4 @@
 import wx
-import wx.html
 
 import re
 
@@ -8,7 +7,6 @@ import config, guiconfig
 from config import BIBLE_VERSION_PROTOCOL
 from gui.multichoice import MultiChoiceDialog
 from gui import guiutil
-from gui.htmlbase import linkiter, eq
 
 from gui.menu import MenuItem
 from backend.bibleinterface import biblemgr
@@ -264,6 +262,9 @@ class VerseCompareFrame(LinkedFrame):
 		This ensures that the search will be made against a version with
 		Strongs numbers.
 		"""
+		return None
+		# XXX: Restore support for finding the current module.
+		"""
 		if verse_comparison_settings["parallel"]:
 			# This search will not yet pick the correct version for the
 			# parallel view.  Because of the table structure, it will pick
@@ -292,3 +293,4 @@ class VerseCompareFrame(LinkedFrame):
 			return None
 
 		return version
+		"""

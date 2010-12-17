@@ -1,12 +1,14 @@
 from swlib.pysw import SW
 from backend.bibleinterface import biblemgr
-from tooltip import TextTooltipConfig
+from tooltip import TextTooltipConfig, StrongsTooltipConfig
 
 from util.debug import *
 from util import noop
 from util.unicode import to_unicode, to_str
+from gui.webconnect_protocol_handler import get_url_host_and_page
 from gui import guiutil
 import guiconfig
+import wx
 
 
 class ProtocolHandler(object):
@@ -104,3 +106,70 @@ def on_sword_hover(frame, href, url, x, y):
 
 protocol_handler.register_handler("sword", on_sword_opened)
 protocol_handler.register_hover("sword", on_sword_hover)
+
+def on_strongs_click(frame, href, url):
+	dictionary = biblemgr.dictionary		
+	type = url.getHostName() #Hebrew or greek
+	value = url.getPath() #strongs number
+	type = "Strongs"+type #as module is StrongsHebrew or StrongsGreek
+	if biblemgr.dictionary.ModuleExists(type):
+		guiconfig.mainfrm.set_module(type, biblemgr.dictionary)
+		wx.CallAfter(guiconfig.mainfrm.UpdateDictionaryUI, value)
+
+	if not type or not value: 
+		print "Not type or value", href
+		return
+
+def on_strongs_hover(frame, href, url, x, y):
+	dictionary = biblemgr.dictionary		
+	type = url.getHostName() #Hebrew or greek
+	value = url.getPath() #strongs number
+	if not type or not value: 
+		print "Not type or value", href
+		return
+
+	frame.show_tooltip(StrongsTooltipConfig(type, value))
+
+protocol_handler.register_handler("strongs", on_strongs_click)
+protocol_handler.register_hover("strongs", on_strongs_hover)
+
+def on_bpbible_hover(frame, href, url, x, y):
+	from displayframe import DisplayFrame
+	host, page = get_url_host_and_page(href)
+	assert host == "content"
+	d = page.split("/", 3) + ['','','']
+	type, module, p = d[:3]
+	passage, query = (p.split("?", 1) + [''])[:2]
+
+	if type != "page":
+		print "Unhandled bpbible link", href
+		return
+
+	if passage != "passagestudy.jsp":
+		print "Unhandled bpbible link", href
+
+	u = SW.URL(p.replace(":", '%3A'))
+	return DisplayFrame.on_hover(frame, p, u, x, y)
+
+def on_bpbible_click(frame, href, url):
+	from displayframe import DisplayFrame
+	host, page = get_url_host_and_page(href)
+	assert host == "content"
+	d = page.split("/", 3) + ['','','']
+	type, module, p = d[:3]
+	passage, query = (p.split("?", 1) + [''])[:2]
+
+	if type != "page":
+		print "Unhandled bpbible link", href
+		return
+
+	if passage != "passagestudy.jsp":
+		print "Unhandled bpbible link", href
+
+	u = SW.URL(p.replace(":", '%3A'))
+	return DisplayFrame.on_link_clicked(frame, p, u)
+
+protocol_handler.register_handler("bpbible", on_bpbible_click)
+protocol_handler.register_hover("bpbible", on_bpbible_hover)
+
+	

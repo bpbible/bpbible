@@ -1,3 +1,8 @@
+try:
+	import json
+except ImportError:
+	import simplejson as json
+
 import random
 
 import wx
@@ -6,14 +11,13 @@ from swlib.pysw import VK, GetVerseStr, GetBookChapter, GetBestRange
 from swlib import pysw
 from bookframe import VerseKeyedFrame
 from displayframe import IN_BOTH, IN_MENU, IN_POPUP
-from gui.htmlbase import linkiter, eq
 from gui import guiutil
 from util.observerlist import ObserverList
+from backend.bibleinterface import biblemgr
 
 import config, guiconfig
 from gui.menu import MenuItem, Separator
 
-from harmony.harmonyframe import HarmonyFrame
 from gui.quickselector import QuickSelector
 from events import BIBLEFRAME, RANDOM_VERSE, VERSE_LINK_SELECTED, HEADER_BAR
 from copyverses import CopyVerseDialog
@@ -29,7 +33,6 @@ import user_comments
 
 
 bible_settings = config_manager.add_section("Bible")
-bible_settings.add_item("verse_per_line", False, item_type=bool)
 bible_settings.add_item("select_verse_on_click", False, item_type=bool)
 
 class BibleFrame(VerseKeyedFrame):
@@ -48,18 +51,12 @@ class BibleFrame(VerseKeyedFrame):
 		sizer.Add(self.header_bar, 0, wx.GROW)
 		sizer.Add(self, 1, wx.GROW)
 		self.panel.SetSizer(sizer)
-
-
-	def set_verse_per_line(self, to):
-		"""Set to either verse-per-line or not. 
-		
-		Doesn't update UI."""
-		config.bible_template.body.verse_per_line = to
-		config.current_verse_template.body.verse_per_line = to
+		from passage_list.verse_to_passage_entry_map import singleton_verse_to_passage_entry_map
+		singleton_verse_to_passage_entry_map.add_verses_observers += self.on_add_topic_verses
+		singleton_verse_to_passage_entry_map.remove_verses_observers += self.on_remove_topic_verses
 
 	def setup(self):
 		self.observers = ObserverList()
-		self.set_verse_per_line(bible_settings["verse_per_line"])
 		super(BibleFrame, self).setup()
 	
 	def get_window(self):
@@ -78,12 +75,6 @@ class BibleFrame(VerseKeyedFrame):
 				self.focus_reference_textbox, 
 				accelerator="Ctrl-L",
 				doc=_("Go to a reference"),
-			), IN_MENU),
-			(MenuItem(
-				_("Harmony"), 
-				self.show_harmony, 
-				accelerator="Ctrl-H",
-				doc=_("Open the harmony"),
 			), IN_MENU),
 			(MenuItem(
 				_("Guess the Verse"), 
@@ -214,14 +205,10 @@ class BibleFrame(VerseKeyedFrame):
 
 		cvd = CopyVerseDialog(self)
 		cvd.copy_verses(text)
-		cvd.Destroy()	
+
+		# we can't destroy it until it has put the text there and copied it...
+		cvd.preview.defer_call_till_document_loaded(lambda cvdpreview:cvd.Destroy())
 		d.Destroy()
-	
-		
-	def show_harmony(self):
-		harmony_frame = HarmonyFrame(guiconfig.mainfrm)
-		harmony_frame.SetIcons(guiconfig.icons)
-		harmony_frame.Show()
 		
 	def show_guess_verse(self):
 		guess_frame = GuessVerseFrame(guiconfig.mainfrm)
@@ -286,9 +273,59 @@ class BibleFrame(VerseKeyedFrame):
 				_(u"Error in Topic Management"), wx.OK | wx.ICON_ERROR, self)
 
 		return is_available
+
+	def on_add_topic_verses(self, passage_entry, added_verses):
+		tag_type = biblemgr.bible.get_tag_type_to_show(passage_entry)
+		if not tag_type:
+			return
+
+		verses_on_screen = self.get_verses_on_screen(added_verses)
+		if verses_on_screen:
+			get_div_contents = {
+				"passage_tag": biblemgr.bible.get_passage_topic_div,
+				"usercomment": biblemgr.bible.get_user_comment_div,
+			}[tag_type]
+			tag_contents = json.dumps(get_div_contents(passage_entry))
+			script_to_execute = "".join(self.get_add_command(tag_contents, osisRef, tag_type) for osisRef in verses_on_screen)
+			self.Execute(script_to_execute)
+
+	def get_add_command(self, tag_content, osisRef, tag_type):
+		return """$('.%(tag_type)s_container[osisRef="%(osisRef)s"]').append(%(tag_content)s);\n""" % locals()
+	
+	def on_remove_topic_verses(self, passage_entry, removed_verses):
+		tag_type = biblemgr.bible.get_tag_type_to_show(passage_entry)
+		verses_on_screen = self.get_verses_on_screen(removed_verses)
+		if verses_on_screen:
+			script_to_execute = "".join(self.get_delete_command(passage_entry, osisRef, tag_type) for osisRef in verses_on_screen)
+			self.Execute(script_to_execute)
+
+	def get_delete_command(self, passage_entry, osisRef, tag_type):
+		passage_entry_id = passage_entry.get_id()
+		return """$('.%(tag_type)s_container[osisRef="%(osisRef)s"] .%(tag_type)s[passageEntryId="%(passage_entry_id)d"]').remove();\n""" % locals()
+
+	def get_verses_on_screen(self, verses):
+		if not self.dom_loaded:
+			return []
+
+		osis_refs = [VK(verse).getOSISRef() for verse in verses]
+		osis_refs_on_screen = self.ExecuteScriptWithResult("""
+			(function(osis_refs) {
+				var result = [];
+				for (var index = 0; index < osis_refs.length; index++)	{
+					var osisRef = osis_refs[index];
+					var reference_found = $('[osisRef="' + osisRef + '"]').length > 0;
+					if (reference_found)	{
+						result.push(osisRef);
+					}
+				}
+				return JSON.stringify(result);
+			})(%s);
+		""" % json.dumps(osis_refs))
+
+		return json.loads(osis_refs_on_screen)
 	
 	@guiutil.frozen
-	def SetReference(self, ref, context="", raw=None, y_pos=None):
+	def SetReference(self, ref, context=None, raw=None, y_pos=None, settings_changed=False):
 		"""Sets reference. This is set up to be an observer of the main frame,
 		so don't call internally. To set verse reference, use notify"""
 		if raw is None:
@@ -300,117 +337,48 @@ class BibleFrame(VerseKeyedFrame):
 		self.header_bar.set_current_chapter(
 			pysw.internal_to_user(chapter), chapter
 		)
-		data = ''
-
-		chapter = self.book.GetChapter(ref, self.reference,
-			config.current_verse_template, context, raw=raw)
-
-		if chapter is None:
-			data = config.MODULE_MISSING_STRING()
-			self.SetPage(data, raw=raw)
-
-		elif chapter == '':
-			data = '<font color="#888888"><i>%s</i></font>' % _(
-				"This chapter is empty.")
-			self.SetPage(data, raw=raw)
-			
-		else:
-			data += chapter
-
-			data = data.replace("<!P>","</p><p>")
-			#replace common values
-			#data = ReplaceUnicode(data)
-
-			self.SetPage(data, raw=raw)
-
-			#set to current verse
-			if y_pos is not None:
-				self.Scroll(-1, y_pos)
+		has_selected_new_verse = False
+		# If the settings have changed we want to do a complete reload anyway
+		# (since it could be something that requires a complete reload, such as changing version).
+		if self.dom_loaded:
+			# in the document we keep user verse keys, in here we keep
+			# internal ones. Do conversions as appropriate.
+			if settings_changed:
+				self.reference = GetVerseStr(self.ExecuteScriptWithResult('get_current_reference_range()'))
 			else:
-				self.scroll_to_current()
+				ref = pysw.internal_to_user(self.reference)
+				has_selected_new_verse = self.ExecuteScriptWithResult('select_new_verse("%s")' % ref)
+				has_selected_new_verse = (has_selected_new_verse == "true")
 
-		#file = open("a.html","w")
-		#file.writelines(data)
-		#file.close()
+		if not has_selected_new_verse:
+			self.OpenURI("bpbible://content/page/%s/%s" % (self.book.version, self.reference))
+
 		self.update_title()
-
-	def FindVerse(self, cell, start_cell):
-		assert cell.IsTerminalCell()
-		i = linkiter(start_cell, cell)
-
-		prev = i.m_pos
-		verse = None
-		while (i):
-			#print cell, i.m_pos
-		
-			# new block
-			#if (not eq(prev.GetParent(), i.m_pos.GetParent())):
-			#	text += '\n';
-			#	faketext += '\n'
-			#print i.m_pos.ConvertToText(None)
-
-			if(i.m_pos.GetLink()):
-				match = re.match("nbible:([^#]*)(#current)?", 
-					i.m_pos.GetLink().Href)
-				#GetTarget()
-				if match:
-					verse = match.group(1)
-			
-			prev = i.m_pos
-			i.next()
-			
-		if not eq(prev, cell):
-			return None
-
-		if not verse:
-			return None
-
-		return GetVerseStr(verse, self.reference)
 	
 	def GetRangeSelected(self):
-		if not self.m_selection:
+		text = self.ExecuteScriptWithResult("""
+			(function()	{
+				var selectionRange = window.getSelection().getRangeAt(0);
+				if (selectionRange.collapsed)	{
+					return "";
+				}
+				var links = $("a.vnumber");
+				var selectionStart = "";
+				var selectionEnd = "";
+				var linkRange = document.createRange();
+				links.each(function()	{
+					linkRange.selectNode(this);
+					if (selectionRange.compareBoundaryPoints(Range.START_TO_START, linkRange) > 0)	{
+						selectionStart = this.getAttribute("reference");
+					}
+					if (selectionRange.compareBoundaryPoints(Range.END_TO_END, linkRange) > 0)	{
+						selectionEnd = this.getAttribute("reference");
+					}
+				});
+				return (selectionStart && selectionEnd) ? selectionStart + " - " + selectionEnd : "";
+			})();
+		""")
+		if not text:
 			return
 
-		from_cell = self.m_selection.GetFromCell()
-		to_cell = self.m_selection.GetToCell()
-
-		# use the first terminal as:
-		#  - it isn't the one we want (it is probably a font cell)
-		#  - we call next on it right away, so it shouldn't be a container
-		#    otherwise we may miss bits
-		start_cell = self.GetInternalRepresentation().FirstTerminal
-		first = self.FindVerse(from_cell, start_cell=start_cell)
-		
-		last = self.FindVerse(to_cell, start_cell=start_cell)
-
-		if not first:
-			first = GetVerseStr("1", self.reference)
-
-		if not last:
-			return ""
-
-		text = first + " - " + last
-		print text
 		return GetBestRange(text)
-	
-	#def CellClicked(self, cell, x, y, event):
-	#	#if(self.select): return
-	#	if(event.ControlDown()):
-	#		print cell.this, self.FindVerse(cell)
-
-	#	return super(BibleFrame, self).CellClicked(cell, x, y, event)
-
-	def CellMouseUp(self, cell, x, y, event):
-		if not self.m_tmpHadSelection and not self.m_selection and not event.Dragging():
-			self.maybe_select_clicked_verse(cell)
-
-	def maybe_select_clicked_verse(self, cell):
-		if not bible_settings["select_verse_on_click"]:
-			return
-
-		start_cell = self.GetInternalRepresentation().FirstTerminal
-		reference = self.FindVerse(cell, start_cell=start_cell)
-		if reference:
-			wx.CallAfter(self.suppress_scrolling,
-				lambda: self.notify(reference)
-			)

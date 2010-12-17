@@ -4,13 +4,14 @@ __all__ = [
 ]
 import wx.xrc
 from wx import xrc
+import wx.wc
 import os
 import xrc_stc
 
 def Load(self, resourcepath):
 	self.AddHandler(xrc_stc.STCXmlHandler())
 	self.AddHandler(xrc_stc.CPXmlHandler())
-	
+	wx.wc.WebControl.InstallXRCHandler(self)
 
 	if os.path.exists(resourcepath):
 		self.original_Load(resourcepath)

@@ -1,9 +1,14 @@
 #from Sword import *
 from swlib.pysw import SW, TOP
 from backend.book import Book
+from util import classproperty
 from util.unicode import to_str, to_unicode
 from util.debug import dprint, WARNING
 import re
+import datetime
+import display_options
+
+current_year = datetime.date.today().year
 
 topics_dict = dict()
 
@@ -130,10 +135,74 @@ class LazyTopicList(object):
 				
 
 		return self.topics[item]
+
+class DateConverterLazyTopicList(object):
+	def __init__(self, object):
+		self.object = object
+	
+	def __len__(self):
+		return len(self.object)
+	
+	def __getitem__(self, item):
+		return mmdd_to_date(self.object[item]) or self.object[item]
+	
+	@property
+	def has_new_methods(self):
+		return self.object.has_new_methods
+	
+	@property
+	def mod(self):
+		return self.object.mod
+
+def is_date_conversion_supported():
+	# vietnamese under windows doesn't complete the loop
+	#return wx.DateTime.Now().ParseFormat(wx.DateTime.Now().Format("%B %d"), "%B %d") != -1
+	# True for now.
+	return True
+
+def date_to_mmdd(date, return_formatted=True):
+	if not return_formatted and not is_date_conversion_supported():
+		try:
+			month, day = map(int, date.split(".", 1))
+		except ValueError:
+			pass
+		else:
+			return datetime.date(current_year, month, day)
+
+	# tack the following bits on the end to see if they help give us dates
+	# the second is February -> February 1
+	additions = ["", " 1"]
+
+	for addition in additions:
+		try:
+			date = datetime.datetime.strptime(date + addition, "%B %d")
+			if return_formatted:
+				return date.strftime("%m.%d")
+			return datetime.date(current_year, date.month, date.day)
+		except ValueError:
+			pass
+		
+	return None
+
+def mmdd_to_date(date):
+	if not is_date_conversion_supported():
+		return None
+
+	try:
+		month, day = map(int, date.split(".", 1))
+	except ValueError:
+		return None
+	else:
+		date = datetime.date(2008, month, day)
+
+	return date.strftime("%B ") + str(date.day)
+
 		
 class Dictionary(Book):
 	type = "Lexicons / Dictionaries"
 	noun = "dictionary"
+	is_dictionary = True
+	categories_to_exclude = ["Daily Devotional"]
 
 	def __init__(self, parent, version):
 		super(Dictionary, self).__init__(parent, version)
@@ -149,7 +218,10 @@ class Dictionary(Book):
 
 		assert not end_ref, "Dictionaries don't support ranges"
 
-		render_text = self.get_rendertext()
+		raw = raw or display_options.options["raw"]
+
+		render_text, render_start, render_end = self.get_rendertext()
+		#TODO: use render_start and render_end?
 		
 		template = self.templatelist[-1]
 		key = self.mod.getKey()
@@ -162,7 +234,7 @@ class Dictionary(Book):
 		if stripped:
 			text = self.mod.StripText().decode("utf-8", "replace")
 		else:
-			text = render_text()
+			text = render_text().decode("utf-8", "replace")
 		
 		d = dict(
 			# render text so that we convert utf-8 into html
@@ -172,12 +244,16 @@ class Dictionary(Book):
 			reference_encoded=SW.URL.encode(self.mod.getKeyText()).c_str(),
 			
 		)
-		d["reference"] = d["range"]
-
+		if self.is_daily_devotional:
+			d["reference"] = mmdd_to_date(d["range"]) or d["range"]
+		else:
+			d["reference"] = d["range"]
 		verses = template.header.safe_substitute(d)
+
 		d1 = d
 		if raw:
-			d1["text"] = self.mod.getRawEntry()
+			d1["text"] = self.process_raw(self.mod.getRawEntry(), text,
+											self.mod.getKey(), self.mod)
 		else:
 			d1["text"] = text
 
@@ -189,19 +265,22 @@ class Dictionary(Book):
 	def clear_cache(self, parent=None):
 		topics_dict.clear()
 			
-	def GetTopics(self):#gets topic lists
+	def GetTopics(self, user_output=False):
 		if not self.mod:
 			return []
 		
 		# cache the topic lists
 		name = self.mod.Name()
-		if name in topics_dict:
-			return topics_dict[name]
-		
-		topics = LazyTopicList(self.mod)
-		topics_dict[name] = topics
+		if name not in topics_dict:
+			topics = LazyTopicList(self.mod)
+			topics_dict[name] = topics
+		else:
+			topics = topics_dict[name]
+
+		if user_output and self.is_daily_devotional:
+			return DateConverterLazyTopicList(topics)
 		return topics
-	
+
 	def snap_text(self, text, module=None):
 		mod = module or self.mod
 		if mod is None:
@@ -214,3 +293,14 @@ class Dictionary(Book):
 		mod.getRawEntryBuf()
 		return to_unicode(mod.getKeyText(), mod)
 
+	@property
+	def is_daily_devotional(self):
+		return self.has_feature("DailyDevotion")
+
+class DailyDevotional(Dictionary):
+	category = "Daily Devotional"
+	categories_to_exclude = ()
+
+	@classproperty
+	def noun(cls):
+		return _("daily devotional")

@@ -32,8 +32,8 @@ regex = r"""
 		([^>]*>.*?</a>) 		 	   
 	\)) 							 |
 	
-	(<h6\ class="heading"\ 
-		canonical="false">.*?</h6>)	 | # a heading (not canonical) and contents
+	(<h2\ class="heading"\ 
+		canonical="false">.*?</h2>)	 | # a heading (not canonical) and contents
 	(<[^>]+>)						 | # any other html tag - not contents
 	(&(?P<amps>[^;]*);)				 | # a html escape
 	(.)							  	   # anything else
@@ -449,7 +449,7 @@ class HighlightedDisplayFrame(ReferenceDisplayFrame):
 		# e.g. /word\nanother/
 
 		# remove non-canonical headings
-		content = re.sub('(<h6 class="heading" canonical="false">.*?</h6>)',
+		content = re.sub('(<h2 class="heading" canonical="false">.*?</h2>)',
 						 '', content)	
 
 		content = remove_amps(KillTags(ReplaceUnicode(content)))
@@ -471,8 +471,8 @@ class HighlightedDisplayFrame(ReferenceDisplayFrame):
 		
 		# don't give error if this doesn't work
 		d = wx.LogNull()
-		self.ScrollToAnchor("highlight")
-		self.ScrollLines(-1)
+		self.scroll_to_anchor("highlight")
+#		self.ScrollLines(-1)
 	
 	def get_frame_for_search(self):
 		for item in guiconfig.mainfrm.frames:

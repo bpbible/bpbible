@@ -260,12 +260,14 @@ class DictionarySelector(wx.Panel):
 		self.text_entry = TextEntry(self)
 		self.list = DictionaryList(self, book)
 		self.set_book(book)
+		self.timer = wx.Timer(self)
 		
 		sizer = wx.BoxSizer(wx.VERTICAL)
 		sizer.Add(self.text_entry, 0, wx.GROW)
 		sizer.Add(self.list, 1, wx.GROW)
 		self.text_entry.text.Bind(wx.EVT_TEXT, self.on_text)
 		self.list.Bind(wx.EVT_LIST_ITEM_SELECTED, self.on_list)
+		self.Bind(wx.EVT_TIMER, self.on_timer, self.timer)
 		width = 200
 
 		self.SetSizerAndFit(sizer)
@@ -284,13 +286,21 @@ class DictionarySelector(wx.Panel):
 		self.text_entry.text.Font = font
 		self.Layout()
 		
-
 	def on_text(self, event):
+		self.change_selected_text(is_user_typing=True)
+
+	def change_selected_text(self, is_user_typing=False):
 		# unbind the selected event so that we don't go into an infinite loop
 		# TODO: check whether this is really necessary
 		self.list.Unbind(wx.EVT_LIST_ITEM_SELECTED)
 		self.list.choose_item(self.GetValue().upper())
 		self.list.Bind(wx.EVT_LIST_ITEM_SELECTED, self.on_list)
+		if is_user_typing:
+			self.timer.Start(100, oneShot=True)
+		else:
+			self.item_changed()
+
+	def on_timer(self, event):
 		self.item_changed()
 
 	def on_list(self, event):
@@ -302,7 +312,7 @@ class DictionarySelector(wx.Panel):
 		self.text_entry.set_value(text)
 
 		# scroll to the correct entry, and fire off an item_changed
-		wx.CallAfter(self.on_text, None)
+		wx.CallAfter(self.change_selected_text)
 
 
 

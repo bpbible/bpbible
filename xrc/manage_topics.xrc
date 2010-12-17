@@ -171,7 +171,6 @@
         <minsize>200,75</minsize>
       </object>
       <cols>2</cols>
-      <rows>2</rows>
       <vgap>6</vgap>
       <hgap>6</hgap>
       <growablecols>1</growablecols>
@@ -222,7 +221,7 @@
       <object class="sizeritem">
         <object class="wxBoxSizer">
           <object class="sizeritem">
-            <object class="wxHtmlWindow" name="passage_preview" subclass="gui.reference_display_frame.ReferenceDisplayFrame">
+            <object class="wxWebControl" name="passage_preview" subclass="gui.reference_display_frame.ReferenceDisplayFrame">
               <style>wxSUNKEN_BORDER</style>
             </object>
             <option>1</option>

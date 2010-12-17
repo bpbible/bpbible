@@ -42,8 +42,20 @@
               <border>6</border>
             </object>
             <object class="sizeritem">
+              <object class="wxBoxSizer">
+                <object class="sizeritem">
+                  <object class="wxCheckBox" name="copy_formatted">
+                    <label>Copy formatted</label>
+                  </object>
+                </object>
+                <orient>wxVERTICAL</orient>
+              </object>
+              <flag>wxLEFT|wxRIGHT|wxBOTTOM|wxGROW</flag>
+              <border>6</border>
+            </object>
+            <object class="sizeritem">
               <object class="wxCollapsiblePane" name="collapsible_panel">
-                <object class="panewindow" name="tp_holder">
+                <object class="panewindow">
                   <object class="wxBoxSizer">
                     <!--<label>Template</label>-->
                     <orient>wxVERTICAL</orient>
@@ -85,14 +97,15 @@
                 <!-- this gets overwritten <collapsed>1</collapsed> -->
                 <collapsed>1</collapsed>
               </object>
-              <flag>wxGROW</flag>
+              <flag>wxGROW|wxLEFT|wxRIGHT</flag>
+			  <border>6</border>
             </object>
             <object class="sizeritem">
               <object class="wxStaticBoxSizer">
                 <label>Preview</label>
                 <orient>wxVERTICAL</orient>
                 <object class="sizeritem">
-                  <object class="wxHtmlWindow" name="preview" subclass="displayframe.DisplayFrameXRC">
+                  <object class="wxWebControl" name="preview" subclass="new_displayframe.DisplayFrameXRC">
                     <borders>1</borders>
                   </object>
                   <option>2</option>
@@ -127,7 +140,7 @@
           </object>
         </object>
         <flag>wxTOP|wxBOTTOM|wxGROW</flag>
-        <border>10</border>
+        <border>0</border>
       </object>
     </object>
     <title>Copy Verses</title>

@@ -1,5 +1,4 @@
 import wx
-from wx import html
 from displayframe import AUIDisplayFrame
 from displayframe import IN_BOTH, IN_MENU
 from tooltip import BiblicalPermanentTooltip
@@ -27,8 +26,8 @@ class BookFrame(AUIDisplayFrame):
 	has_menu = True
 	shows_info = True
 	use_quickselector = True
-	def __init__(self, parent, style=html.HW_DEFAULT_STYLE):
-		super(BookFrame, self).__init__(parent, style=style)
+	def __init__(self, parent):
+		super(BookFrame, self).__init__(parent)
 		self.reference = ""
 		self.setup()
 
@@ -38,10 +37,10 @@ class BookFrame(AUIDisplayFrame):
 	def SetBook(self, book):
 		self.book = book
 
-	def SetPage(self, *args, **kwargs):
+	def SetPage(self, page_content):
 		# close all open tooltips
 		guiconfig.mainfrm.hide_tooltips()
-		return super(BookFrame, self).SetPage(*args, **kwargs)
+		return super(BookFrame, self).SetPage(page_content)
 
 	def get_verified_one_verse(self, ref):
 		try:
@@ -64,20 +63,10 @@ class BookFrame(AUIDisplayFrame):
 
 
 	@guiutil.frozen
-	def SetReference(self, ref, context="", raw=None):
-		if raw is None:
-			raw = config.raw
+	def SetReference(self, ref, context="", raw=None, settings_changed=False):
 		self.reference = ref
-		text = self.book.GetReference(ref, context=context, raw=raw)
-		if text is None:
-			data = config.MODULE_MISSING_STRING()
-		else:
-			data = text
-			data = data.replace("<!P>","</p><p>")
-			#replace common values
-			#data = ReplaceUnicode(data)
+		self.OpenURI("bpbible://content/page/%s/%s" % (self.book.version, self.reference))
 
-		self.SetPage(data, raw=raw)
 		self.update_title()
 		
 	@property
@@ -136,7 +125,8 @@ class BookFrame(AUIDisplayFrame):
 		if event and not event.settings_changed:
 			return
 
-		self.SetReference(self.reference)
+		settings_changed = event and event.settings_changed
+		self.SetReference(self.reference, settings_changed=settings_changed)
 
 
 	def get_menu_items(self):
@@ -437,8 +427,8 @@ class CommentaryFrame(LinkedFrame):
 		super(CommentaryFrame, self).__init__(parent)
 		self.SetBook(book)
 
-	def SetReference(self, ref, context = None):
-		super(CommentaryFrame, self).SetReference(ref)
+	def SetReference(self, ref, context = None, settings_changed=False):
+		super(CommentaryFrame, self).SetReference(ref, settings_changed=settings_changed)
 
 		self.gui_reference.SetValue(pysw.internal_to_user(ref))
 		self.gui_reference.currentverse = ref
@@ -456,9 +446,15 @@ class DictionaryFrame(BookFrame):
 		#self = DictionaryFrame(self.dictsplitter, self)
 		super(DictionaryFrame, self).__init__(self.dictsplitter)
 		self.SetBook(book)
+		self.book.observers += self.dictionary_version_changed
+		parent.on_close += lambda: \
+			self.book.observers.remove(
+				self.dictionary_version_changed
+			)
 		
 
 		self.dictionary_list = DictionarySelector(self.dictsplitter, book)
+		self.dictionary_list.item_changed += lambda event=None: self.UpdateUI()
 		s = wx.BoxSizer(wx.HORIZONTAL)
 		#s.Add(self.dictionarytext, proportion=1, flag = wx.EXPAND)
 		#s.Add(self.dictionary_list, 0, wx.GROW)
@@ -518,28 +514,29 @@ class DictionaryFrame(BookFrame):
 		return self.dict
 		
 	
+	def dictionary_version_changed(self, newversion):
+		freeze_ui = guiutil.FreezeUI(self.dictionary_list)
+		self.dictionary_list.set_book(self.book)
+	
 	def notify(self, ref, source=None):
 		guiconfig.mainfrm.UpdateDictionaryUI(ref)
 
+	def UpdateUI(self, ref=""):
+		if not ref:
+			ref = self.dictionary_list.GetValue().upper()
+		else:
+			self.dictionary_list.choose_item(ref)
+
+		self.SetReference(ref)
+
 	@guiutil.frozen
-	def SetReference(self, ref, context="", raw=None):
+	def SetReference(self, ref, context="", raw=None, settings_changed=False):
 		if raw is None:
 			raw = config.raw
 
 		self.reference = ref
-		
-		snapped_ref = self.format_ref(self.book.mod, ref)
-		
-		ref_text = "<b>%s</b>" % snapped_ref
 
-		text = self.book.GetReference(ref, context=context, raw=raw)#bible text
-		if text is None:
-			data = config.MODULE_MISSING_STRING()
-		else:
-			data = ref_text + text
-			data = data.replace("<!P>","</p><p>")
-
-		self.SetPage(data, raw=raw)
+		self.OpenURI("bpbible://content/page/%s/%s" % (self.book.version, self.reference), grab_focus=False)
 		self.update_title()
 
 	def SetReference_from_string(self, string):

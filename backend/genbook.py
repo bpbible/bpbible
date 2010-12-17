@@ -1,7 +1,11 @@
-#from swlib.Sword import *
-from swlib.pysw import SW, TK
+import os
+import re
+import cPickle as pickle
+from swlib.pysw import SW, TK, VerseList
 from backend.book import Book
+from util import classproperty
 from util.unicode import to_str, to_unicode
+import display_options
 
 class TreeNode(object):
 	def __init__(self, parent, data): 
@@ -20,6 +24,8 @@ class TreeNode(object):
 class GenBook(Book):
 	type = 'Generic Books'	
 	noun = "book"
+	is_genbook = True
+	categories_to_exclude = ["Harmonies"]
 
 	def GetReference(self, ref, context = None, max_verses = 500,
 			stripped=False, end_ref=None):
@@ -31,7 +37,9 @@ class GenBook(Book):
 			return None
 		
 		template = self.templatelist[-1]
-		render_text = self.get_rendertext()
+		render_text, render_start, render_end = self.get_rendertext()
+		#TODO: use render_start and render_end?
+		
 		module = self.mod
 		
 		if isinstance(ref, TK) and end_ref:
@@ -68,19 +76,27 @@ class GenBook(Book):
 		
 		d1 = d.copy()
 		
-		
+		raw = display_options.options["raw"]
+	
 		while True:
 			if stripped:
 				text = module.StripText(entry).decode("utf-8", "replace")
 			else:
-				text = render_text(entry)
+				# we can't specify entry here for the same reasons as in
+				# book.py
+				text = render_text(#entry
+				).decode("utf-8", "replace")
+
+			if raw:
+				text = self.process_raw(entry, text, ref, module)
 
 			d1["reference"] = to_unicode(module.getKeyText(), module)
 			d1["reference_encoded"] = \
 				SW.URL.encode(module.getKeyText()).c_str()
 			
 			d1["text"] = text
-			d1["breadcrumbed_reference"] = ref.breadcrumb(delimiter=">")
+			d1["breadcrumbed_reference"] = ref.breadcrumb(delimiter=" > ")		
+			d1["level"] = ref.getLevel()
 			
 			verses += template.body.substitute(d1)
 			if not end_ref or end_ref == ref:
@@ -95,12 +111,14 @@ class GenBook(Book):
 		return verses
 			
 			
-	def GetKey(self):
+	def GetKey(self, key_text=None):
 		if not self.mod:
 			return None
 		mod_tk = SW.TreeKey.castTo(self.mod.getKey())
 		mod_tk.root()
 		tk = TK(mod_tk, self.mod)
+		if key_text is not None:
+			tk.setText(to_str(key_text, self.mod))
 		return tk
 	
 	def GetTopicsTree(self):#gets topic lists
@@ -174,3 +192,65 @@ class GenBook(Book):
 
 		# don't show any children for this
 		return key, False
+
+class Harmony(GenBook):
+	category = "Harmonies"
+	categories_to_exclude = ()
+
+	def __init__(self, parent, version=""):
+		super(Harmony, self).__init__(parent, version)
+		self._harmony_references = {}
+
+	@classproperty
+	def noun(cls):
+		return _("harmony")
+
+	def find_reference(self, reference):
+		for tree_key_references in self.harmony_references:
+			for harmony_reference in tree_key_references[1]:
+				if harmony_reference.VerseInRange(reference):
+					return tree_key_references[0]
+
+		return None
+
+	@property
+	def harmony_references(self):
+		if self.mod is None:
+			return []
+
+		module_name = self.mod.Name()
+		if module_name not in self._harmony_references:
+			self._harmony_references[module_name] = self._load_harmony_references(module_name)
+
+		return self._harmony_references[module_name]
+
+	def _load_harmony_references(self, module_name):
+		pickle_filename = "resources/%s.refidx" % module_name
+		if os.path.exists(pickle_filename):
+			pickle_file = open(pickle_filename, "rb")
+			return pickle.load(pickle_file)
+
+		mod_tk = SW.TreeKey.castTo(self.mod.getKey())
+		mod_tk.root()
+		tk = TK(mod_tk, self.mod)
+		references = []
+
+		def add_references(tk, references):
+			self.mod.setKey(tk)
+			entry = self.mod.getRawEntry()
+			entry_references = '|'.join(re.findall('<harmonytable refs="([^"]*)"></harmonytable>', entry))
+			if entry_references:
+				references.append((
+					tk.getText(),
+					[VerseList(reference, userInput=False) for reference in entry_references.split('|')]
+				))
+
+			for child_tk in tk:
+				add_references(child_tk, references)
+
+		add_references(tk, references)
+
+		pickle_file = open(pickle_filename, "wb")
+		pickle.dump(references, pickle_file)
+
+		return references

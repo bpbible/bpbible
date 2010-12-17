@@ -15,11 +15,36 @@ if os.path.isdir("custom"):
 		if os.path.isfile("custom/%s" % file) and file.endswith(".py"):
 			execfile("custom/%s" % file)
 
+
 from util.debug import dprint, MESSAGE, WARNING, is_debugging
 dprint(MESSAGE, "Importing wx")
 
 import wx
-dprint(MESSAGE, "importing wx.xrc")
+from util import osutils
+def find_xulrunner_path():
+	if osutils.is_mac():
+		path = os.getcwd() + "/../MacOS/"
+		if os.path.exists(path):
+			return path
+		else:
+			return os.getcwd() + "/dist/BPBible.app/Contents/MacOS/"
+
+	path = os.path.join(os.getcwd(), "xulrunner")
+	if not os.path.isdir(path):
+		# XXX: Perhaps we should make this error handling a little more friendly?
+		sys.stderr.write("Unable to find XULRunner.\n")
+		sys.exit(1)
+	return path
+
+
+xulrunner_path = find_xulrunner_path()
+dprint(MESSAGE, "XULRunner path is", xulrunner_path)
+
+if osutils.is_msw():
+	os.environ['PATH'] = xulrunner_path + ';' + os.environ['PATH']
+
+dprint(MESSAGE, "importing wx.wc")
+import wx.wc
 
 dprint(MESSAGE, "/importing wx")
 
@@ -27,7 +52,7 @@ dprint(MESSAGE, "/importing wx")
 import contrib
 
 import config, guiconfig
-from util import osutils
+from util import confparser
 from util.configmgr import config_manager
 
 import util.i18n
@@ -60,10 +85,14 @@ class MyApp(wx.App):
 		
 	
 	def OnInit(self):
+		self.InitXULRunner()
+		self.SetWebPreferences()
+		self.FindXULRunnerVersion()
 		self.ShowSplashScreen()
 		
 		self.starting = True
 		self.restarting = False
+		self.reload_restarting = False
 	
 		dprint(MESSAGE, "App Init")
 		guiconfig.load_icons()
@@ -91,8 +120,40 @@ class MyApp(wx.App):
 		)
 		self.splash.Show()
 		self.splash.Raise()
-	
 
+	def InitXULRunner(self):
+		dprint(MESSAGE, "Initialising XULRunner engine")
+		wx.wc.WebControl.AddPluginPath("Mozilla Firefox\\Plugins")
+		wx.wc.WebControl.InitEngine(xulrunner_path)
+
+		# NOTE: DO NOT move this import into the main import section.
+		# Doing so causes InitEngine() above to fail when loading xul.dll.
+		import gui.webconnect_protocol_handler
+		wx.wc.RegisterProtocol("test", wx.wc.ProtocolHandler())
+		wx.wc.RegisterProtocol("bpbible", gui.webconnect_protocol_handler.MasterProtocolHandler())
+		dprint(MESSAGE, "XULRunner engine initialised")
+
+	def SetWebPreferences(self):
+		prefs = wx.wc.WebControl.preferences
+		prefs['browser.dom.window.dump.enabled'] = True
+
+	def FindXULRunnerVersion(self):
+		"""Find the XULRunner version from the XULRunner platform.ini config file.
+
+		This should be provided by XULRunner (and then wxWebConnect) through
+		the nsIXULAppInfo API, but it seems this is only possible when xulrunner
+		has been run from the command line and has an application.ini and
+		XRE_Main() has been called.
+
+		Since XRE_Main() is just looking up the value in the INI file,
+		I figure it can't hurt too much to do the same here.
+		"""
+		xulrunner_ini_file = os.path.join(xulrunner_path, "platform.ini")
+		config_parser = confparser.config()
+		config_parser.read(xulrunner_ini_file)
+		if config_parser.has_option("Build", "Milestone"):
+			config.xulrunner_version = config_parser.get("Build", "Milestone")[0]
+			dprint(MESSAGE,"XULRunner version is %s." % config.xulrunner_version)
 
 def main():
 	inspection_imported = False
@@ -126,6 +187,11 @@ def main():
 	
 	guiconfig.app = app
 	while app.starting or app.restarting:
+		if app.reload_restarting:
+			import reload_util
+			reload(reload_util)
+			reload_util.reload_all()
+
 		app.Initialize()
 		app.MainLoop()
 

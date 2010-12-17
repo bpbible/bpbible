@@ -1,3 +1,4 @@
+from collections import defaultdict
 import wx
 from backend.bibleinterface import biblemgr
 from swlib.pysw import SW
@@ -24,6 +25,26 @@ class ModuleTree(FilterableTree):
 			(_("Commentaries"), biblemgr.commentary),
 			(_("Dictionaries"), biblemgr.dictionary),
 			(_("Other books"), biblemgr.genbook),
+			(_("Daily Devotional"), biblemgr.daily_devotional),
+			(_("Harmonies"), biblemgr.harmony),
+		)
+
+		self.extra_categories = (
+			_("Daily Devotional"),
+			_("Maps"),
+			_("Images"),
+			_("Harmonies"),
+		)
+
+		self.all_categories = (
+			_("Bibles"),
+			_("Commentaries"),
+			_("Dictionaries"),
+			_("Harmonies"),
+			_("Maps"),
+			_("Images"),
+			_("Daily Devotional"),
+			_("Other books"),
 		)
 		
 
@@ -65,7 +86,8 @@ class ModuleTree(FilterableTree):
 		parent_data = parent_data.data
 
 		if isinstance(item_data, SW.Module):
-			self.on_module_choice(item_data, parent_data)
+			book = biblemgr.get_module_book_wrapper(item_data.Name())
+			self.on_module_choice(book.mod, book)
 		else:
 			self.on_category_choice(item_data, parent_data)
 		
@@ -119,12 +141,20 @@ class ModuleTree(FilterableTree):
 	
 	
 	def add_first_level_groups(self):
-		for text, book in self.module_types:
-			self.model.add_child(text, data=book, filterable=False)	
+		modules = defaultdict(lambda: [])
+		for book_category, book in self.module_types:
+			for module in book.GetModules():
+				category = module.getConfigEntry("Category")
+				if category not in self.extra_categories:
+					category = book_category
+				modules[category].append(module)
+		for category in self.all_categories:
+			if modules[category]:
+				# XXX: Will this do horrible things and hold onto reference to all the modules for ever and a day?
+				self.model.add_child(category, data=modules[category], filterable=False)	
 
 	def add_children(self, tree_item):
-		modules = tree_item.data.GetModules()
-		for module in modules: 
+		for module in tree_item.data: 
 			self.add_module(tree_item, module)
 	
 	def add_module(self, tree_item, module, inactive_description=""):
