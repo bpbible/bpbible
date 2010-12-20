@@ -63,7 +63,7 @@ class BookFrame(AUIDisplayFrame):
 
 
 	@guiutil.frozen
-	def SetReference(self, ref, context="", raw=None, settings_changed=False):
+	def SetReference(self, ref, context="", settings_changed=False):
 		self.reference = ref
 		self.OpenURIForCurrentBook("bpbible://content/page/%s/%s" % (self.book.version, self.reference))
 
@@ -536,10 +536,7 @@ class DictionaryFrame(BookFrame):
 		self.SetReference(ref)
 
 	@guiutil.frozen
-	def SetReference(self, ref, context="", raw=None, settings_changed=False):
-		if raw is None:
-			raw = config.raw
-
+	def SetReference(self, ref, context="", settings_changed=False):
 		self.reference = ref
 
 		self.OpenURIForCurrentBook("bpbible://content/page/%s/%s" % (self.book.version, self.reference))

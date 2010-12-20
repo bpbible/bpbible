@@ -15,7 +15,7 @@ from gui import guiutil
 from util.observerlist import ObserverList
 from backend.bibleinterface import biblemgr
 
-import config, guiconfig
+import guiconfig
 from gui.menu import MenuItem, Separator
 
 from gui.quickselector import QuickSelector
@@ -325,12 +325,9 @@ class BibleFrame(VerseKeyedFrame):
 		return json.loads(osis_refs_on_screen)
 	
 	@guiutil.frozen
-	def SetReference(self, ref, context=None, raw=None, y_pos=None, settings_changed=False):
+	def SetReference(self, ref, context=None, y_pos=None, settings_changed=False):
 		"""Sets reference. This is set up to be an observer of the main frame,
 		so don't call internally. To set verse reference, use notify"""
-		if raw is None:
-			raw = config.raw
-
 		self.reference = GetVerseStr(ref)
 
 		chapter = GetBookChapter(self.reference)
