@@ -83,12 +83,14 @@ class Book(object):
 
 	def GetModuleList(self):
 		return sorted([name for name, mod in self.parent.modules.iteritems()
-				if mod.Type() == self.type or self.type is None], 
+				if (mod.Type() == self.type or self.type is None) and
+				(not self.category or (self.category and mod.getConfigEntry("Category") == self.category)) and
+				mod.getConfigEntry("Category") not in self.categories_to_exclude], 
 				key=lambda name:name.lower())
 	
 	def GetModules(self):
 		return sorted([mod for name, mod in self.parent.modules.iteritems()
-				if (mod.Type() == self.type or self.type == None) and
+				if (mod.Type() == self.type or self.type is None) and
 				(not self.category or (self.category and mod.getConfigEntry("Category") == self.category)) and
 				mod.getConfigEntry("Category") not in self.categories_to_exclude], 
 				key = lambda mod: mod.Name().lower())
