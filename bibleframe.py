@@ -351,7 +351,7 @@ class BibleFrame(VerseKeyedFrame):
 				has_selected_new_verse = (has_selected_new_verse == "true")
 
 		if not has_selected_new_verse:
-			self.OpenURI("bpbible://content/page/%s/%s" % (self.book.version, self.reference))
+			self.OpenURIForCurrentBook("bpbible://content/page/%s/%s" % (self.book.version, self.reference))
 
 		self.update_title()
 	

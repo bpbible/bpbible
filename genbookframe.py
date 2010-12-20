@@ -114,7 +114,7 @@ class GenBookFrame(BookFrame):
 			return
 		
 		self.reference_text = self.reference.text
-		self.OpenURI("bpbible://content/page/%s%s" % (self.book.version, self.reference_text))
+		self.OpenURIForCurrentBook("bpbible://content/page/%s%s" % (self.book.version, self.reference_text))
 		
 		self.update_title()
 	
