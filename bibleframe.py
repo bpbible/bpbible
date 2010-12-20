@@ -341,7 +341,7 @@ class BibleFrame(VerseKeyedFrame):
 			# in the document we keep user verse keys, in here we keep
 			# internal ones. Do conversions as appropriate.
 			if settings_changed:
-				self.reference = GetVerseStr(self.ExecuteScriptWithResult('get_current_reference_range()'))
+				self.reference = GetVerseStr(self.ExecuteScriptWithResult('get_current_reference_range()')) or self.reference
 			else:
 				ref = pysw.internal_to_user(self.reference)
 				has_selected_new_verse = self.ExecuteScriptWithResult('select_new_verse("%s")' % ref)
