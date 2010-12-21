@@ -123,11 +123,14 @@ def display_option_changed(option_name, force_complete_reload):
 def all_options():
 	return options.items.keys()
 
-def get_js_option_value(option):
+def get_js_option_value(option, quote_string=False):
 	type = options.item_types[option]
 	if type not in (str, bool):
 		raise TypeError("Only bool and str supported at the moment (option: %s)" % option)
 	if type == bool:
 		return "true" if options[option] else "false"
 	else:
-		return "'%s'" % options[option].encode("utf8")
+		option_value = options[option].encode("utf8")
+		if quote_string:
+			option_value = "'%s'" % option_value
+		return option_value

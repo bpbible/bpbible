@@ -738,7 +738,7 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 		# It would theoretically be possible to do this DOM twiddling through
 		# the WebConnect DOM API.  In practice, I haven't figured out how to.
 		self.Execute("document.body.setAttribute('%s', %s);" %
-				(option_name, display_options.get_js_option_value(option_name)))
+				(option_name, display_options.get_js_option_value(option_name, quote_string=True)))
 
 	@defer_till_document_loaded
 	def size_intelligently(self, width, func, *args, **kwargs):
