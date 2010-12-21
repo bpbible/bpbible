@@ -309,6 +309,16 @@ body[columns="true"] > #content {
 	top: 0;
 }
 
+/* Remove the filler, which causes strange loading text to appear. */
+body[columns="true"] .filler {
+	display: none;
+}
+
+/* Remove the reference bar, since it just says the entire chapter anyway. */
+body[columns="true"] .reference_bar {
+	display: none;
+}
+
 /* if we really have blocked strong's, we'd like to be able to turn
  * justification off. However, we can't easily check this at the moment, so we
  * won't worry too much */
