@@ -29,6 +29,11 @@ def find_xulrunner_path():
 		else:
 			return os.getcwd() + "/dist/BPBible.app/Contents/MacOS/"
 
+	if osutils.is_gtk():
+		xulrunner_path = osutils.find_file_in_path("xulrunner")
+		if xulrunner_path:
+			return os.path.dirname(os.path.realpath(xulrunner_path))
+
 	path = os.path.join(os.getcwd(), "xulrunner")
 	if not os.path.isdir(path):
 		# XXX: Perhaps we should make this error handling a little more friendly?

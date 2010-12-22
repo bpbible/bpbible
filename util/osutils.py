@@ -74,3 +74,9 @@ def get_user_data_dir():
 		return os.path.join(home_dir, "Library", "Application Support", appname)
 	else:
 		return os.path.join(home_dir, ".%s" % appname)
+
+def find_file_in_path(filename):
+	for path in os.environ["PATH"].split(os.pathsep):
+		filepath = os.path.join(path, filename)
+		if os.path.exists(filepath):
+			return filepath
