@@ -105,7 +105,7 @@
                 <label>Preview</label>
                 <orient>wxVERTICAL</orient>
                 <object class="sizeritem">
-                  <object class="wxWebControl" name="preview" subclass="new_displayframe.DisplayFrameXRC">
+                  <object class="wxWebControl" name="preview" subclass="displayframe.DisplayFrameXRC">
                     <borders>1</borders>
                   </object>
                   <option>2</option>

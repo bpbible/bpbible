@@ -104,7 +104,7 @@
                           </object>
                         </object>
                         <object class="sizeritem">
-                          <object class="wxHtmlWindow" name="preview" subclass="displayframe.DisplayFrameXRC">
+                          <object class="wxWebControl" name="preview" subclass="displayframe.DisplayFrameXRC">
                             <style>wxSUNKEN_BORDER</style>
                             <borders>1</borders>
                           </object>

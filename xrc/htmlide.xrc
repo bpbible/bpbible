@@ -29,7 +29,7 @@
               </object>
             </object>
           </object>
-          <object class="wxHtmlWindow" name="html_window" subclass="displayframe.DisplayFrameXRC">
+          <object class="wxWebControl" name="html_window" subclass="displayframe.DisplayFrameXRC">
             <XRCED>
               <assign_var>1</assign_var>
             </XRCED>
