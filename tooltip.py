@@ -830,6 +830,7 @@ class BibleTooltipConfig(TooltipConfig):
 			#apply template
 #			biblemgr.bible.templatelist.append(template)
 
+			import displayframe
 			text = "<hr>".join(
 				displayframe.process_html_for_module(biblemgr.bible.mod, item) 
 				for item in biblemgr.bible.GetReferences(self.references)
