@@ -161,6 +161,13 @@ class MyApp(wx.App):
 			dprint(MESSAGE,"XULRunner version is %s." % config.xulrunner_version)
 
 def main():
+	# convenience for when packaged (i.e. py2exe or py2app during dev on mac) 
+	# - we can supply the name of a .py file and it will execfile it
+	if len(sys.argv) > 1:
+		if sys.argv[1].endswith(".py"):
+			f = sys.argv.pop(1)
+			return execfile(f, globals(), globals())
+
 	inspection_imported = False
 	try:
 		from wx.lib.mixins.inspect import InspectionMixin
