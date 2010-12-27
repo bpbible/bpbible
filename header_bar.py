@@ -6,7 +6,7 @@ from backend.bibleinterface import biblemgr
 from protocols import protocol_handler
 from displayframe import DisplayFrame
 from gui import guiutil
-from tooltip import Tooltip, TooltipConfig, TooltipDisplayer
+from tooltip import TooltipConfig, TooltipDisplayer
 import guiconfig
 from util.observerlist import ObserverList
 from util import osutils
@@ -31,11 +31,11 @@ class ChapterHeadingsTooltipConfig(TooltipConfig):
 
 	def get_text(self):
 		vk = pysw.UserVK(self.ref)
-		html = '<font size=+1><b><a href="nbible:%s">%s</a></b></font>' % (
+		html = u'<font size=+1><b><a href="nbible:%s">%s</a></b></font>' % (
 			self.ref, vk.get_book_chapter()
 		)
 	
-		html += ": %s<br>" % (_("%s verses") % 
+		html += u": %s<br>" % (_("%s verses") % 
 			process_digits(str(
 				vk.verseCount(
 					ord(vk.Testament()), 
@@ -43,10 +43,10 @@ class ChapterHeadingsTooltipConfig(TooltipConfig):
 					vk.Chapter())
 				), userOutput=True))
 	
-		html += "<ul>"
+		html += u"<ul>"
 		for vk, text in chapter_headings.get_chapter_headings(self.ref):
-			html += '<li><a href="nbible:%s">%s</a>' % (vk, text)
-		html += "</ul>"
+			html += u'<li><a href="nbible:%s">%s</a>' % (vk, text)
+		html += u"</ul>"
 
 		return html
 
@@ -226,8 +226,6 @@ class Line(wx.Window):
 	
 class HeaderBar(TooltipDisplayer, wx.Panel):
 	def __init__(self, parent, i_current_chapter, style=wx.NO_BORDER):
-		self.html_type = DisplayFrame
-		
 		super(HeaderBar, self).__init__(parent, style=style)
 		
 		self.i_current_chapter = i_current_chapter

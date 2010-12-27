@@ -1,10 +1,8 @@
 import wx
-from backend.verse_template import VerseTemplate
 import config, guiconfig
-import displayframe
 from backend.bibleinterface import biblemgr
 import protocol_handlers
-from swlib.pysw import SW, VerseParsingError, GetBestRange
+from swlib.pysw import VerseParsingError, GetBestRange
 
 from gui import guiutil
 from gui.guiutil import bmp
@@ -47,7 +45,7 @@ class TooltipBaseMixin(object):
 		self.toolbar_creator = type(self.tooltip_config)
 
 	def stay_on_top(self, evt):
-		new = PermanentTooltip(guiconfig.mainfrm, self.html_type,
+		new = PermanentTooltip(guiconfig.mainfrm,
 			tooltip_config=self.tooltip_config.another(),)
 
 		if not hasattr(self.html, "reference"):
@@ -327,7 +325,7 @@ class Tooltip(TooltipBaseMixin, tooltip_parent):
 
 	set_toolbar_background = True
 
-	def __init__(self, parent, style, logical_parent, html_type):
+	def __init__(self, parent, style, logical_parent):
 		self.style = style
 		if tooltip_parent != wx.PopupWindow:
 			self.style |= (
@@ -349,14 +347,15 @@ class Tooltip(TooltipBaseMixin, tooltip_parent):
 		
 		self.parent = parent
 		self.logical_parent = logical_parent
-		self.html_type = displayframe.DisplayFrame 
+
 		# create the container panels
 		self.container_panel = wx.Panel(self, -1, style=wx.RAISED_BORDER)
 		self.toolbarpanel = wx.Panel(self.container_panel)
 		self.htmlpanel = wx.Panel(self.container_panel)
 
 		# create the html control
-		self.html = html_type(self.htmlpanel, logical_parent=logical_parent)
+		import displayframe
+		self.html = displayframe.DisplayFrame(self.htmlpanel, logical_parent=logical_parent)
 		self.html.book = biblemgr.bible
 		self.html.parent = self
 
@@ -525,7 +524,7 @@ class Tooltip(TooltipBaseMixin, tooltip_parent):
 pclass = wx.Frame
 class PermanentTooltip(TooltipBaseMixin, pclass):
 	"""A permanent tooltip with some HTML in it."""
-	def __init__(self, parent, html_type, 
+	def __init__(self, parent,
 		style=wx.DEFAULT_FRAME_STYLE & ~(wx.MAXIMIZE_BOX), 
 			tooltip_config=None):
 
@@ -543,6 +542,7 @@ class PermanentTooltip(TooltipBaseMixin, pclass):
 		self.htmlpanel = wx.Panel(self.container_panel)
 
 		# create the html control
+		import displayframe
 		self.html = displayframe.DisplayFrame(self.htmlpanel)
 		self.html.book = biblemgr.bible
 		self.html.parent = self
@@ -634,8 +634,7 @@ class PermanentTooltip(TooltipBaseMixin, pclass):
 def BiblicalPermanentTooltip(parent, ref):
 	"""Creates a Biblical permanent tooltip, open to the given ref."""
 	tooltip_config = BibleTooltipConfig(ref.split("|"))
-	return PermanentTooltip(parent, html_type=displayframe.DisplayFrame,
-			tooltip_config=tooltip_config)
+	return PermanentTooltip(parent, tooltip_config=tooltip_config)
 
 class TooltipConfig(object):
 	def __init__(self, mod=None, book=None):
@@ -915,9 +914,7 @@ class TooltipDisplayer(object):
 	def tooltip(self):
 		if not self._tooltip:
 			self._tooltip = Tooltip(guiutil.toplevel_parent(self), 
-				style=wx.NO_BORDER,
-				html_type=displayframe.DisplayFrame, logical_parent=self)
-			#	html_type=self.html_type, logical_parent=self)
+				style=wx.NO_BORDER, logical_parent=self)
 			#self.Bind(wx.EVT_KILL_FOCUS, self.KillFocus)
 			
 			guiconfig.mainfrm.add_toplevel(self._tooltip)

@@ -14,7 +14,7 @@ from swlib.pysw import GetBestRange, SW, VerseList
 from backend.bibleinterface import biblemgr
 from backend.verse_template import VerseTemplate
 from util import osutils
-from tooltip import Tooltip, tooltip_settings, TextTooltipConfig, TooltipDisplayer
+from tooltip import tooltip_settings, TextTooltipConfig, TooltipDisplayer
 from gui.menu import MenuItem, Separator
 from gui.htmlbase import convert_language, convert_lgs
 from gui import guiutil
