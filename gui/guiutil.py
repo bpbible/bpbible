@@ -146,6 +146,8 @@ def handle(signal, sender, command, source, more, **kwargs):
 	from types import MethodType
 	
 	import util.i18n
+	if util.i18n.dummy_translator:
+		return
 	
 	# if the _ isn't correct, move builtin _ into the local _ 
 	if not isinstance(_, MethodType) or _.im_self is not util.i18n.mytranslation:
@@ -327,3 +329,14 @@ if not hasattr(wx.MouseEvent, "X"):
 	wx.MouseEvent.m_x = wx.MouseEvent.X = property(wx.MouseEvent.GetX, wx.MouseEvent.SetX)
 	wx.MouseEvent.m_y = wx.MouseEvent.Y = property(wx.MouseEvent.GetY, wx.MouseEvent.SetY)
 
+
+def bootstrap_frame(frametype, *args, **kwargs):
+	from wx.lib.mixins.inspection import InspectableApp
+	import util.i18n
+	app = InspectableApp(0)
+	guiconfig.load_icons()
+	util.i18n.install_dummy_translator()
+	frame = frametype(*args, **kwargs)
+	frame.Show()
+	app.ShowInspectionTool()
+	app.MainLoop()

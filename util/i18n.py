@@ -21,6 +21,13 @@ locale_settings.add_item("language_book_names", {"en": "bpbible"}, item_type="pi
 localedir = "locales"
 domain = "messages"             # the translation file is messages.mo
 
+dummy_translator = False
+def install_dummy_translator():
+	import __builtin__
+	__builtin__._ = lambda str: str
+	global dummy_translator
+	dummy_translator = True
+	
 def initialize():
 	global langid, mytranslation, ngettext
 	langid = locale_settings["language"]
