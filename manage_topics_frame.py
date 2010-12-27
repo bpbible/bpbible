@@ -1271,9 +1271,5 @@ class OperationsContext(BaseOperationsContext):
 		return self._frame.is_passage_selected
 
 if __name__ == "__main__":
-	app = wx.App(0)
-	guiconfig.load_icons()
-	__builtins__._ = lambda str: str
-	frame = ManageTopicsFrame(None)
-	frame.Show()
-	app.MainLoop()
+	from gui.guiutil import bootstrap_frame
+	bootstrap_frame(ManageTopicsFrame, None)
