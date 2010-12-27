@@ -1090,8 +1090,8 @@ def _check_get_all_passage_entries_for_verse(manager, topic):
 	for passage_entry in topic.passages:
 		for verse_key in passage_entry.passage:
 			for verse in verse_key:
-				assert (passage_entry in manager.get_all_passage_entries_for_verse(verse),
-					repr(passage_entry) + " not contained in " + str(verse))
+				assert passage_entry in manager.get_all_passage_entries_for_verse(verse), \
+					repr(passage_entry) + " not contained in " + str(verse)
 	for subtopic in topic.subtopics:
 		_check_get_all_passage_entries_for_verse(manager, subtopic)
 
