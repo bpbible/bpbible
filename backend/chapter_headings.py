@@ -1,4 +1,5 @@
 from backend.bibleinterface import biblemgr
+from util.unicode import to_unicode
 from swlib.pysw import EncodedVK
 import re
 
@@ -36,7 +37,7 @@ def get_chapter_headings(chapter):
 	headings = []
 	for item in vk:	
 		mod.setKey(item)
-		content = mod.RenderText()
+		content = to_unicode(mod.RenderText(), mod)
 
 		# if it was in verse 0, link to verse 1 for now
 		if item.Verse() == 0:
@@ -46,7 +47,7 @@ def get_chapter_headings(chapter):
 			'(<h2 class="heading" canonical="[^"]*">(.*?)</h2>)', 
 			content, re.U))
 		
-		headings += ((item, mod.RenderText(heading))
+		headings += ((item, to_unicode(mod.RenderText(heading), mod))
 			for heading, canonical in biblemgr.bible.get_headings(item.getText()))
 	
 	biblemgr.restore_state()
