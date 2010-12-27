@@ -115,7 +115,7 @@ def generate_new_colour():
 		use_colours(upto, original)
 		print "UPTO", upto
 
-def on_passage_tag_hover(frame, href, url, x, y):
+def on_passage_tag_hover(frame, href, url, element, x, y):
 	passage_list, passage_entry = _get_passage_list_and_entry_from_href(href)
 
 	frame.show_tooltip(TopicTooltipConfig(passage_list, passage_entry))
@@ -399,7 +399,7 @@ class PassageTag(PassageTagLook):
 			return
 
 		href = "passage_tag:%d:%d" % (self._passage_list.get_id(), self._passage_entry.get_id())
-		protocol_handler.on_hover(self.Parent, href, x, y)
+		protocol_handler.on_hover(self.Parent, href, None, x, y)
 
 	def on_leave(self, event):
 		self.Parent.current_target = None

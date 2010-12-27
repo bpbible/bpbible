@@ -124,15 +124,16 @@ class VerseCompareFrame(LinkedFrame):
 					text.pop() 
 					break
 
-				text.append("<td>")
+				text.append(u'<td class="parallel_verse" module="%s">' % module.Name())
 				
 				t = ""
 				for heading_dict in headings:
 					t += biblemgr.bible.templatelist[-1].\
 						headings.safe_substitute(heading_dict)
 				
-				t += (u'<glink href="nbible:%(internal_reference)s">' 
-					u'<small><sup>%(versenumber)s</sup></small></glink> %(text)s' % body_dict)
+				# XXX: Fix nbible reference.
+				t += (u'<a href="nbible:%(internal_reference)s">' 
+					u'<small><sup>%(versenumber)s</sup></small></a> %(text)s' % body_dict)
 				t = process_html_for_module(module, t)
 
 				text.append(t)
@@ -166,9 +167,10 @@ class VerseCompareFrame(LinkedFrame):
 					self.book.mod = item
 					# We exclude tags since otherwise the same tags appear in
 					# every version, which isn't very sensible.
-					text += process_html_for_module(item, 
+					module_text = process_html_for_module(item, 
 						self.book.GetReference(ref, display_tags=False)
 					)
+					text += u'<span class="parallel_verse" module="%s">%s</span>' % (item.Name(), module_text)
 
 		finally:
 			self.book.mod = mod
@@ -255,42 +257,20 @@ class VerseCompareFrame(LinkedFrame):
 	def get_reference_textbox(self):
 		return self.gui_reference
 
-	def get_module_for_strongs_search(self, x, y):
+	def get_module_for_strongs_search(self, element):
 		"""Finds which Bible in the comparison window this Strongs number is
 		associated with, and returns it.
 
 		This ensures that the search will be made against a version with
 		Strongs numbers.
 		"""
-		return None
-		# XXX: Restore support for finding the current module.
-		"""
-		if verse_comparison_settings["parallel"]:
-			# This search will not yet pick the correct version for the
-			# parallel view.  Because of the table structure, it will pick
-			# the last one instead.
-			return None
+		def get_attribute(element, attribute_name):
+			attributes = element.GetAttributes()
+			attribute = attributes.GetNamedItem(attribute_name)
+			return attribute.GetNodeValue()
 
-		hover_cell = self.InternalRepresentation.FindCellByPos(x, y,
-			wx.html.HTML_FIND_NEAREST_AFTER)
-		start_cell = self.GetInternalRepresentation().FirstTerminal
-		iter = linkiter(start_cell, hover_cell)
+		while element.IsOk():
+			if get_attribute(element, "class") == "parallel_verse":
+				return get_attribute(element, "module")
 
-		prev = iter.m_pos
-		version = None
-		while iter:
-
-			if(iter.m_pos.GetLink()):
-				match = re.match("%s:(.*)" % BIBLE_VERSION_PROTOCOL, 
-					iter.m_pos.GetLink().Href)
-				if match:
-					version = match.group(1)
-			
-			prev = iter.m_pos
-			iter.next()
-			
-		if not eq(prev, hover_cell):
-			return None
-
-		return version
-		"""
+			element = element.GetParentNode()

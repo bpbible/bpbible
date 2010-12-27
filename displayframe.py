@@ -194,10 +194,10 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 			return 
 
 		
-		protocol_handler.on_hover(self, href, x, y)
+		protocol_handler.on_hover(self, href, element, x, y)
 
 	@staticmethod
-	def on_hover(frame, href, url, x, y):
+	def on_hover(frame, href, url, element, x, y):
 		tooltip_config = TextTooltipConfig("", mod=frame.mod)
 		def SetText(text):
 			tooltip_config.text = text
@@ -218,7 +218,7 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 		frame.tooltip.html.reference = frame.reference
 
 		if action == "showStrongs":
-			frame.tooltip.show_strongs_ref(frame, href, url, x, y)
+			frame.tooltip.show_strongs_ref(frame, href, url, element, x, y)
 			return
 
 		elif action=="showMorph":
@@ -371,7 +371,7 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 		frame.show_tooltip(tooltip_config)
 	
 	@staticmethod
-	def on_hover_bible(frame, href, url, x, y):
+	def on_hover_bible(frame, href, url, element, x, y):
 		screen_x, screen_y = wx.GetMousePosition()
 	
 		frame.tooltip.show_bible_refs(frame, href, url, screen_x, screen_y)
@@ -708,7 +708,7 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 	def get_frame_for_search(self):
 		return guiconfig.mainfrm.bibletext
 
-	def get_module_for_strongs_search(self, x, y):
+	def get_module_for_strongs_search(self, element):
 		"""Gets the name of a particular module (with Strongs numbers) to
 		use for the search, based on the current link that is being hovered
 		over.

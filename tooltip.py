@@ -67,14 +67,14 @@ class TooltipBaseMixin(object):
 		pass
 
 	
-	def show_strongs_ref(self, frame, href, url, x, y):
+	def show_strongs_ref(self, frame, href, url, element, x, y):
 		type = url.getParameterValue("type") #Hebrew or greek
 		value = url.getParameterValue("value") #strongs number
 		if not type or not value: 
 			print "Not type or value", href
 			return
 
-		module_for_search = frame.get_module_for_strongs_search(x, y)
+		module_for_search = frame.get_module_for_strongs_search(element)
 		tooltip_config = StrongsTooltipConfig(type, value, module_for_search)
 		frame.show_tooltip(tooltip_config)
 	

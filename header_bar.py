@@ -12,7 +12,7 @@ from util.observerlist import ObserverList
 from util import osutils
 
 
-def on_headings_hover(frame, href, url, x, y):
+def on_headings_hover(frame, href, url, element, x, y):
 	if url is None:
 		url = SW.URL(href)
 	
@@ -121,7 +121,7 @@ class ChapterItem(wx.Panel):
 
 		# print self.internal_text
 		protocol_handler.on_hover(self.Parent, 
-			"headings:%s" % self.internal_text, x, y)
+			"headings:%s" % self.internal_text, None, x, y)
 
 	def on_leave(self, event=None):
 		if event: event.Skip()

@@ -24,8 +24,8 @@ class ProtocolHandler(object):
 	def register_handler(self, protocol, handler):
 		self.protocols[protocol] = handler
 		
-	def on_hover(self, frame, href, x, y):
-		self._handle(self.hover, frame, href, x, y)
+	def on_hover(self, frame, href, element, x, y):
+		self._handle(self.hover, frame, href, element, x, y)
 	
 	def on_link_opened(self, frame, href):
 		self._handle(self.protocols, frame, href)
@@ -77,7 +77,7 @@ def on_sword_opened(frame, href, url):
 	)
 	
 
-def on_sword_hover(frame, href, url, x, y):
+def on_sword_hover(frame, href, url, element, x, y):
 	tooltip_config = TextTooltipConfig("", mod=None)
 
 	module = url.getHostName()
@@ -120,20 +120,21 @@ def on_strongs_click(frame, href, url):
 		print "Not type or value", href
 		return
 
-def on_strongs_hover(frame, href, url, x, y):
-	dictionary = biblemgr.dictionary		
+def on_strongs_hover(frame, href, url, element, x, y):
 	type = url.getHostName() #Hebrew or greek
 	value = url.getPath() #strongs number
 	if not type or not value: 
 		print "Not type or value", href
 		return
 
-	frame.show_tooltip(StrongsTooltipConfig(type, value))
+	module_for_search = frame.get_module_for_strongs_search(element)
+	tooltip_config = StrongsTooltipConfig(type, value, module_for_search)
+	frame.show_tooltip(tooltip_config)
 
 protocol_handler.register_handler("strongs", on_strongs_click)
 protocol_handler.register_hover("strongs", on_strongs_hover)
 
-def on_bpbible_hover(frame, href, url, x, y):
+def on_bpbible_hover(frame, href, url, element, x, y):
 	from displayframe import DisplayFrame
 	host, page = get_url_host_and_page(href)
 	assert host == "content"
@@ -149,7 +150,7 @@ def on_bpbible_hover(frame, href, url, x, y):
 		print "Unhandled bpbible link", href
 
 	u = SW.URL(p.replace(":", '%3A'))
-	return DisplayFrame.on_hover(frame, p, u, x, y)
+	return DisplayFrame.on_hover(frame, p, u, element, x, y)
 
 def on_bpbible_click(frame, href, url):
 	from displayframe import DisplayFrame

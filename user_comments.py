@@ -19,7 +19,7 @@ def on_usercomment_opened(frame, href, url):
 	# from here needs a bit of care, otherwise we can end up in a nasty state
 	wx.CallLater(150, edit_comment, frame, passage_entry)
 
-def on_usercomment_hover(frame, href, url, x, y):
+def on_usercomment_hover(frame, href, url, element, x, y):
 	passage_entry = find_passage_entry(url)
 	tooltip_config = UserCommentTooltipConfig(passage_entry)
 	frame.show_tooltip(tooltip_config)
