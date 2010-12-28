@@ -28,7 +28,7 @@ class VerseTree(LazyTreeCombo):
 	def has_children(self, item):
 		data = self.get_data(item)
 		if not self.with_verses:
-			if pysw.LIB_SUPPORTS_SINGLE_CHAPTER_BOOKS and len(data) == 1:
+			if len(data) == 1:
 				return False
 
 			return isinstance(data, BookData)
@@ -45,7 +45,7 @@ class VerseTree(LazyTreeCombo):
 
 		elif isinstance(data, ChapterData):
 			parent_data = self.get_data(self.tree.GetItemParent(item))
-			if len(parent_data) == 1 and pysw.LIB_SUPPORTS_SINGLE_CHAPTER_BOOKS:
+			if len(parent_data) == 1:
 				return "%s" % parent_data
 
 			return pysw.process_digits("%s %s" % (parent_data, data),
@@ -94,8 +94,7 @@ class VerseTree(LazyTreeCombo):
 					
 
 		verse_key = UserVK(VK(self.currentverse))
-		single_chapter_book = pysw.LIB_SUPPORTS_SINGLE_CHAPTER_BOOKS \
-			and verse_key.getChapterMax() == 1
+		single_chapter_book = verse_key.getChapterMax() == 1
 
 		book, chapter = verse_key.getBookName(), verse_key.Chapter()
 		verse = verse_key.Verse()

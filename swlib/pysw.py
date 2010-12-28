@@ -44,20 +44,16 @@ for a in dir(SW):
 	if(a[:2]=="SW"):
 		setattr(SW, a[2:], getattr(SW, a))
 
-LIB_1512_COMPAT = SW.Version().currentVersion > SW.Version("1.5.11")
-SW_HAS_MDB = hasattr(SW.Mgr, "loadMDBDir")
-print "SVN; SWORD 1.5.12 compatible" if LIB_1512_COMPAT else "1.5.11 compatible"
+assert (SW.Version().currentVersion >= SW.Version("1.6")), \
+	"BPBible requires at least SWORD 1.6.0"
 
-locale_dir = "locales/locales.d" + ("/SWORD_1512" if LIB_1512_COMPAT else "")
+locale_dir = "locales/locales.d"
 
 # Check if we are ICU - bindings don't generate static getter here, so we can
 # use the underlying getter
 isICU = SW._Sword.SWMgr_isICU_get()
-if isICU or hasattr(sys, "SW_dont_do_stringmgr"):
-	if isICU: 
-		have_set_locale_dir = False
-	else:
-		dprint(WARNING, "Skipping StringMgr initialization")
+if hasattr(sys, "SW_dont_do_stringmgr") and (not isICU):
+	dprint(WARNING, "Skipping StringMgr initialization")
 else:
 	# StringMgr handling
 	class MyStringMgr(SW.PyStringMgr):
@@ -90,41 +86,18 @@ else:
 	
 	# we don't own this, the system string mgr holder does
 	m.thisown = False
-	have_set_locale_dir = False
-	try:
-		### TODO: remove this pre-1.6.0 hack sometime
-		SW.StringMgr.setSystemStringMgr(m, locale_dir)
-		have_set_locale_dir = True
-	except TypeError, e:
-		#if LIB_1512_COMPAT:
-		#	print "Don't we have those patches???", e
-
-		SW.StringMgr.setSystemStringMgr(m)
+	SW.StringMgr.setSystemStringMgr(m)
 	
 # *only* after we've set the system string mgr can we set the system 
 # locale mgr...
-if not have_set_locale_dir:
-	locale_mgr = SW.LocaleMgr(locale_dir)
-	locale_mgr.thisown = False
-	SW.LocaleMgr.setSystemLocaleMgr(locale_mgr)
-	have_set_locale_dir = True
+locale_mgr = SW.LocaleMgr(locale_dir)
+locale_mgr.thisown = False
+SW.LocaleMgr.setSystemLocaleMgr(locale_mgr)
 
 #if locale_mgr.getLocale("bpbible"):
 #	locale_mgr.setDefaultLocaleName("bpbible")
 #else:
 #	dprint(WARNING, "bpbible locale not found")
-try:
-	vk = SW.VerseKey()
-	vk.ParseVerseList("", "", False, False)
-	LIB_SUPPORTS_SINGLE_CHAPTER_BOOKS = True
-	
-except (TypeError, NotImplementedError), e:
-	if LIB_1512_COMPAT:
-		print "Extended ParseVerseList not supported???", e
-	LIB_SUPPORTS_SINGLE_CHAPTER_BOOKS = False
-		
-del vk
-
 
 class VerseParsingError(Exception): 
 	def __str__(self):
@@ -294,11 +267,8 @@ class VK(SW.VerseKey):#, object):
 
 	@property
 	def v_books(self):
-		if LIB_1512_COMPAT:
-			v11n = self.getVersificationSystem()
-			return get_books(v11n)[0]
-
-		return localized_books	
+		v11n = self.getVersificationSystem()
+		return get_books(v11n)[0]
 
 	def __cmp__(self, other): return self.compare(other)
 	def __lt__( self, other): return self.compare(other)<0
@@ -334,11 +304,6 @@ class VK(SW.VerseKey):#, object):
 	def __isub__(self, amount):
 		self.decrement(amount)
 		return self
-	
-	if not LIB_SUPPORTS_SINGLE_CHAPTER_BOOKS:
-		def ParseVerseList(self, a, b="", c=False, d=False):
-			return SW.VerseKey.ParseVerseList(self, a, b, c)
-				
 
 	def get_text(self):
 		return self.__str__()
@@ -467,30 +432,17 @@ class VK(SW.VerseKey):#, object):
 	UpperBound_VK = SW.VerseKey.UpperBound
 	LowerBound_VK = SW.VerseKey.LowerBound
 
-	def LowerBound_VK_1511(self, key):
-		SW.VerseKey.LowerBound(self, key.getText())
-
-	def UpperBound_VK_1511(self, key):
-		SW.VerseKey.UpperBound(self, key.getText())
-
-	def UpperBound_1512(self, to=None):
+	def UpperBound(self, to=None):
 		if to is None:
 			return VK(super(VK, self).UpperBound())
 		
 		super(VK, self).UpperBound(SW.VerseKey(to))
 		
-	def LowerBound_1512(self, to=None):
+	def LowerBound(self, to=None):
 		if to is None:
 			return VK(super(VK, self).LowerBound())
 		
 		super(VK, self).LowerBound(SW.VerseKey(to))
-	
-	if LIB_1512_COMPAT:
-		LowerBound = LowerBound_1512
-		UpperBound = UpperBound_1512
-	else:
-		LowerBound_VK = LowerBound_VK_1511
-		UpperBound_VK = UpperBound_VK_1511
 		
 		
 	#def UpperBound(self, to=None):
@@ -587,20 +539,18 @@ class LocalizedVK(EncodedVK):
 		return process_digits(str(self.Chapter()), userOutput=True)
 	
 	def get_book_chapter(self):
-		if LIB_SUPPORTS_SINGLE_CHAPTER_BOOKS:
-			if self.getChapterMax() == 1:
-				return u"%s" % (self.getBookName())
+		if self.getChapterMax() == 1:
+			return u"%s" % (self.getBookName())
 
 		return super(LocalizedVK, self).get_book_chapter()
 
 	def getText(self):
-		if LIB_SUPPORTS_SINGLE_CHAPTER_BOOKS:
-			if self.getChapterMax() == 1:
-				return u"%s %s" % (self.getBookName(), 
-					process_digits(
-						str(self.Verse()),
-						userOutput=True
-					))
+		if self.getChapterMax() == 1:
+			return u"%s %s" % (self.getBookName(), 
+				process_digits(
+					str(self.Verse()),
+					userOutput=True
+				))
 
 		return process_digits(
 			u"%s %d:%d" % (self.getBookName(), 
@@ -657,11 +607,8 @@ class UserVK(LocalizedVK):
 
 	@property
 	def v_books(self):
-		if LIB_1512_COMPAT:
-			v11n = self.getVersificationSystem()
-			return get_books(v11n)[1]
-
-		return localized_books
+		v11n = self.getVersificationSystem()
+		return get_books(v11n)[1]
 
 class BPBibleLocaleVK(UserVK):
 	def __init__(self, arg=None):
@@ -1127,8 +1074,6 @@ class VerseList(list):
 		'Genesis 4:5'
 		"""
 
-		single_chapter_books = LIB_SUPPORTS_SINGLE_CHAPTER_BOOKS and userOutput
-		
 		def getdetails(versekey):
 			if userOutput:
 				# translate twice so that we get our -'s in
@@ -1204,13 +1149,13 @@ class VerseList(list):
 				range += separator
 
 				if (book1, chapter1) != (book2, chapter2):
-					if single_chapter_books and chapter_count1 == 1:
+					if userOutput and chapter_count1 == 1:
 						range += "%s-" % book1
 					else:
 						range += "%s %s-" % (book1, uc1)
 				
 					if book1 != book2:
-						if single_chapter_books and chapter_count2 == 1:
+						if userOutput and chapter_count2 == 1:
 							range += "%s" % book2
 						else:
 							range += "%s %s" % (book2, uc2)
@@ -1218,7 +1163,7 @@ class VerseList(list):
 						range += "%s" % (uc2)
 					
 				else:
-					if single_chapter_books and chapter_count2 == 1:
+					if userOutput and chapter_count2 == 1:
 						range += "%s" % book2
 					else:
 						range += "%s %s" % (book2, uc2)
@@ -1249,7 +1194,7 @@ class VerseList(list):
 				range += separator
 
 				done = False
-				if single_chapter_books and chapters == 1:
+				if userOutput and chapters == 1:
 					if book != lastbook:
 						range += "%s %s" % (book, uv)
 						done = True
@@ -1370,7 +1315,7 @@ class LocalizedBookData(BookData):
 		)
 	
 	def __iter__(self):
-		if LIB_SUPPORTS_SINGLE_CHAPTER_BOOKS and len(self.chapters) == 1:
+		if len(self.chapters) == 1:
 			l = LocalizedChapterData(
 				1, 
 				i_vk.verseCount(self.testament, self.booknumber, 1),
@@ -1421,8 +1366,7 @@ def get_books(v11n):
 	localized_books = []
 
 	vk = VK()
-	if LIB_1512_COMPAT:
-		vk.setVersificationSystem(v11n)
+	vk.setVersificationSystem(v11n)
 
 	vk.Book(1)
 
@@ -1462,16 +1406,13 @@ def find_bookidx(name):
 	abbrevs = locale.getBookAbbrevs()
 	d = bisect.bisect_left(abbrevs, name)
 	while d < len(abbrevs) and abbrevs[d].ab.startswith(name):
-		if LIB_1512_COMPAT:
-			# if the locale has additional versification translations, move
-			# along until we find a good one
-			e = i_vk.getBookNumberByOSISName(abbrevs[d].osis)
-			if e != -1:
-				return e - 1
-			
-			d += 1
-		else:
-			return abbrevs[d].book - 1
+		# if the locale has additional versification translations, move
+		# along until we find a good one
+		e = i_vk.getBookNumberByOSISName(abbrevs[d].osis)
+		if e != -1:
+			return e - 1
+		
+		d += 1
 	
 	return None
 	

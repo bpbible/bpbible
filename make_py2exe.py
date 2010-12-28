@@ -100,7 +100,7 @@ if(setup(
 	],
 	zipfile=zipfile,
 )):
-	subdirs = r"xrc graphics css js xulrunner resources locales locales\locales.d locales\locales.d\SWORD_1512".split()
+	subdirs = r"xrc graphics css js xulrunner resources locales locales\locales.d".split()
 	subdirs += ["locales\%s\LC_MESSAGES\\" % l for l in languages]
 	for subdir in subdirs:
 		os.system(r"if not exist dist\%s mkdir dist\%s" % (subdir, subdir))
@@ -111,7 +111,6 @@ if(setup(
 	
 	os.system("copy LICENSE.txt dist\\")
 	os.system(r"copy locales\locales.d\*.conf dist\locales\locales.d")
-	os.system(r"copy locales\locales.d\SWORD_1512\*.conf dist\locales\locales.d\SWORD_1512")	
 	os.system(r"xcopy /e /Y resources dist\resources")	
 	os.system(r"xcopy /e /Y css dist\css")
 	os.system(r"xcopy /e /Y js dist\js")

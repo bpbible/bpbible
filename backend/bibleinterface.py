@@ -218,9 +218,8 @@ class BibleInterface(object):
 		config_parser.set("Install", "DataPath", paths[0])
 		config_parser.set("Install", "AugmentPath", [])
 
-		# 1.5.12+ will listen to localepath and only look there, so set it to
-		# a dummy location... (we would like to set it to 
-		# locales/locales.d/SWORD_1512, but it needs it to end in locales.d :(
+		# We set the locale path to a dummy directory to give us greater
+		# control of the locale setup process.
 		config_parser.set("Install", "LocalePath", "locales\\dummy")
 		
 		augment_paths = config_parser.get("Install", "AugmentPath")

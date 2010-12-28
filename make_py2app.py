@@ -36,7 +36,7 @@ if setup(
     setup_requires=['py2app'],
 ):
 	if "-A" not in sys.argv:
-		subdirs = r"xrc graphics css js xulrunner resources locales locales/locales.d locales/locales.d/SWORD_1512".split()
+		subdirs = r"xrc graphics css js xulrunner resources locales locales/locales.d".split()
 		subdirs += ["locales/%s/LC_MESSAGES/" % l for l in languages]
 		for subdir in subdirs:
 			sh(r"mkdir -p dist/bpbible.app/Contents/Resources/%s" % subdir)
@@ -47,7 +47,6 @@ if setup(
 		
 		sh("cp LICENSE.txt dist/bpbible.app/Contents/Resources")
 		sh(r"cp locales/locales.d/*.conf dist/bpbible.app/Contents/Resources/locales/locales.d")
-		sh(r"cp locales/locales.d/SWORD_1512/*.conf dist/bpbible.app/Contents/Resources/locales/locales.d/SWORD_1512")	
 		sh(r"rm -rf dist/bpbible.app/Contents/Resources/resources")
 		sh(r"rm -rf dist/bpbible.app/Contents/Resources/css")
 		sh(r"rm -rf dist/bpbible.app/Contents/Resources/js")
