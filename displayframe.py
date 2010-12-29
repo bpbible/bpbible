@@ -456,21 +456,6 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 				self.SelectAll,
 				_("Select all the text in the frame")
 			), IN_BOTH),
-			# XXX: Enable these menu items properly?
-			(MenuItem(
-				_("Copy selection (with links)"), 
-				self.copy_text_with_links,
-				#enabled=lambda:bool(self.m_selection),
-				doc=_("Copy the selected text with links")
-				
-			), IN_BOTH),
-			(MenuItem(
-				_("Copy selection (without links)"), 
-				self.copy_text_no_links,
-				#enabled=lambda:bool(self.m_selection),
-				doc=_("Copy the selected text, removing all links")
-			), IN_BOTH),
-
 		)
 		return menu_items
 
@@ -653,12 +638,6 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 	# XXX: These dummies are required to make all these menu items work correctly.
 	# We should fix it so they are not needed.
 	def FindCell(self, x,y):
-		pass
-
-	def copy_text_no_links(self):
-		pass
-
-	def copy_text_with_links(self):
 		pass
 	
 	def get_actions(self):
