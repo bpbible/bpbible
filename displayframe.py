@@ -651,7 +651,7 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 		return actions
 
 	def SelectionToText(self):
-		return ""
+		return self.ExecuteScriptWithResult("window.getSelection();")
 
 	def SetPage(self, page_content):
 		assert hasattr(self, "mod"), self
