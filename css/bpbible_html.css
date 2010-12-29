@@ -77,6 +77,10 @@ span.divineName, span.small-caps {
 	font-variant: small-caps;
 }
 
+span.crossreference {
+	font-size: 70%;
+}
+
 /* block level elements which are children of our inline highlighting span
  * should get its background colour, but don't unless we use the second
  * selector... 

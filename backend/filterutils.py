@@ -5,8 +5,7 @@ from util.debug import dprint, ERROR, WARNING
 import traceback
 from util.configmgr import config_manager
 
-# TODO: TESTING - was default_ellipsis_level = 2
-default_ellipsis_level = 0
+default_ellipsis_level = 2
 filter_settings = config_manager.add_section("Filter")
 filter_settings.add_item("use_osis_parser", True, item_type=bool)
 filter_settings.add_item("use_thml_parser", True, item_type=bool)
@@ -252,11 +251,9 @@ def register_biblemgr(biblemgr):
 OSISUserData = get_user_data_desc(SW.PyOSISHTMLHREF)
 ThMLUserData = get_user_data_desc(SW.PyThMLHTMLHREF)
 
-def ellipsize(refs, last_text="", ellipsis=None):
+def ellipsize(version, refs, last_text="", ellipsis=None, type="crossReference"):
 	if ellipsis is None:
 		ellipsis = filter_settings["footnote_ellipsis_level"]
-	
-	intable = 0
 	
 	buf = []
 	e = ""
@@ -271,20 +268,20 @@ def ellipsize(refs, last_text="", ellipsis=None):
 
 		for item in refs[:ellipsis]:
 			internal_ref = pysw.VerseList(item, last_text).GetBestRange(True)
+			internal_ref = SW.URL.encode(internal_ref).c_str()
 			ref = pysw.VerseList(item, last_text).GetBestRange(True,
 				userOutput=True)
 			last_text = ref
-			buf.append('<a href="bpbible:%(internal_ref)s">%(ref)s</a>'% locals())
+			buf.append('<a href="passagestudy.jsp?action=showRef&type=scripRef&module=%(version)s&value=%(internal_ref)s">%(ref)s</a>'% locals())
 		if(left_over):
-			url = "?values=%d" % left_over
-			e = "<b><a href="
+			parameters = "action=showMultiRef&values=%d" % left_over
 			for idx, item in enumerate(refs[ellipsis:]):
 				ref = pysw.VerseList(item, last_text).GetBestRange(True)
 				last_text = ref
 			
-				url += "&val%d=%s" % (idx, ref)
+				parameters += "&val%d=%s" % (idx, ref)
 
-			e = '<b><a href="bible:%s">...</a></b>' % SW.URL.encode(url).c_str()
+			e = '<b><a href="passagestudy.jsp?%s">...</a></b>' % SW.URL.encode(parameters).c_str()
 		refs = []
 		
 	
@@ -300,25 +297,6 @@ def ellipsize(refs, last_text="", ellipsis=None):
 	if ellipsis and left_over:
 		buf.append(e)
 
+	i = " ".join(buf)
 
-	#TABLE BEHAVIOUR
-	if intable:
-		rows = 2
-		cols = max(1, len(buf)/rows)
-		buf2 = "<table>"
-		for id, a in enumerate(buf):
-			if(id%cols==0):
-				buf2 += "<tr>"				
-		
-			buf2 += "<td>" + a + "</td>"
-			
-			if(id%cols==rows - 1):
-				buf2 += "</tr>"				
-			
-		buf2 += "</table>"
-
-		i = buf2
-	else:
-		i = " ".join(buf)
-
-	return " <small>%s</small> " % i.encode("utf8")
+	return ' <span class="crossreference">%s</span> ' % i.encode("utf8")

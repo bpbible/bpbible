@@ -14,7 +14,7 @@ from swlib.pysw import GetBestRange, SW, VerseList
 from backend.bibleinterface import biblemgr
 from backend.verse_template import VerseTemplate
 from util import osutils
-from tooltip import tooltip_settings, TextTooltipConfig, TooltipDisplayer
+from tooltip import tooltip_settings, TextTooltipConfig, BibleTooltipConfig, TooltipDisplayer
 from gui.menu import MenuItem, Separator
 from gui.htmlbase import convert_language, convert_lgs
 from gui import guiutil
@@ -265,9 +265,9 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 			elif type == "x":
 				#make this plain
 				template = VerseTemplate(
-				header="<a href='nbible:$internal_range'><b>$range</b></a><br>",
-				body=u'<glink href="nbible:$internal_reference">'
-					u'<small><sup>$versenumber</sup></small></glink> $text ')
+					header="<a href='nbible:$internal_range'><b>$range</b></a><br>",
+					body=(config.body % ''),
+				)
 				try:
 					#no footnotes
 					if tooltip_settings["plain_xrefs"]:
@@ -361,6 +361,17 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 				if tooltip_settings["plain_xrefs"]:
 					biblemgr.restore_state()
 				biblemgr.bible.templatelist.pop()
+
+		elif action == "showMultiRef":
+			values = url.getParameterValue("values")
+			if not values:
+				return
+
+			references = [
+				url.getParameterValue("val%s" % value)
+				for value in range(int(values))
+			]
+			tooltip_config = BibleTooltipConfig(references)
 
 		elif action == "showImage":
 			return

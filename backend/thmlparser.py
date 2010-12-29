@@ -32,7 +32,7 @@ class ThMLParser(filterutils.ParserBase):
 				
 			else:
 				refs = self.u.lastTextNode.c_str().split(";")
-				self.buf += filterutils.ellipsize(refs, self.u.key.getText())
+				self.buf += filterutils.ellipsize(self.u.version.c_str(), refs, self.u.key.getText())
 
 			self.u.suspendTextPassThru = False
 			
