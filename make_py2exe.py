@@ -1,6 +1,7 @@
 from distutils.core import setup
 import py2exe
 import os
+import shutil
 import re
 import sys
 import contrib
@@ -111,10 +112,13 @@ if(setup(
 	
 	os.system("copy LICENSE.txt dist\\")
 	os.system(r"copy locales\locales.d\*.conf dist\locales\locales.d")
-	os.system(r"xcopy /e /Y resources dist\resources")	
-	os.system(r"xcopy /e /Y css dist\css")
-	os.system(r"xcopy /e /Y js dist\js")
-	os.system(r"xcopy /e /Y xulrunner dist\xulrunner")
+	complete_copy_dirs = "resources css js xulrunner".split()
+	for subdir in complete_copy_dirs:
+		os.system(r"xcopy /e /Y %s dist\%s" % (subdir, subdir))
+		for root, dirs, files in os.walk('dist\\%s' % subdir):
+			if '.svn' in dirs:
+				shutil.rmtree(os.path.join(root, '.svn'))
+				dirs.remove('.svn')
 
 	for item in languages:
 		os.system("copy locales\%s\LC_MESSAGES\messages.mo "
