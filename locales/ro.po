@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Romanian Language\n"
-"POT-Creation-Date: 2010-04-24 23:35+AUS Eastern Standard Time\n"
+"POT-Creation-Date: 2010-12-31 01:33+AUS Eastern Daylight Time\n"
 "PO-Revision-Date: 2009-07-01 10:43+0200\n"
 "Last-Translator: Laurentiu Nica <nick.laurentiu.nica@gmail.com>\n"
 "Language-Team: Translator's Team <nick.laurentiu.nica@gmail.com>\n"
@@ -17,221 +17,218 @@ msgstr ""
 "X-Poedit-Country: ROMANIA\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: auilayer.py:312
+#: auilayer.py:314
 msgid "Books"
 msgstr "Cărţi"
 
-#: auilayer.py:360
+#: auilayer.py:375
 msgid "History"
 msgstr "Istorie"
 
-#: backend/book.py:88
+#: backend/book.py:101
 msgid "A $ sign"
 msgstr "Semn de $"
 
-#: backend/book.py:89
+#: backend/book.py:102
 msgid "The range of verses"
 msgstr "Rangul de versete"
 
-#: backend/book.py:90
+#: backend/book.py:103
 msgid "The version this is taken from"
 msgstr "Versiunea din care este luat acesta"
 
-#: backend/book.py:91
+#: backend/book.py:104
 msgid "A description of the version"
 msgstr "O descriere a versiunii"
 
-#: backend/book.py:95
+#: backend/book.py:108
 msgid "The text of a verse"
 msgstr "Textul unui verset"
 
-#: backend/book.py:96
+#: backend/book.py:109
 msgid "The verse number"
 msgstr "Versetul numărul"
 
-#: backend/book.py:97
+#: backend/book.py:110
 msgid "The reference for each verse"
 msgstr "Referinţa pentru fiecare verset"
 
-#: backend/book.py:98
+#: backend/book.py:111
 msgid "The name of the current book"
 msgstr "Numele cărţii curente"
 
-#: backend/book.py:99
+#: backend/book.py:112
 msgid "A shorter abbreviation of the book name"
 msgstr "O arbeviere mai scurtă a numelui cărţii"
 
-#: backend/book.py:100
+#: backend/book.py:113
 msgid "The number of the chapter in the book"
 msgstr "Numărul capitolului din carte"
 
-#: backend/book.py:104
+#: backend/book.py:117
 msgid "The text of the heading"
 msgstr "Textul titlului"
 
-#: backend/book.py:626
+#: backend/book.py:750
 msgid ""
 "Couldn't save cipher key. You will have to set it again when you restart"
 msgstr "Nu am putut salva cheia "
 
-#: backend/book.py:650
+#: backend/book.py:796
 msgid "commentary"
 msgstr "comentariu"
 
-#: backend/book.py:657 bibleframe.py:36 xrc/auifrm_xrc.py:69
+#: backend/book.py:806 bibleframe.py:39 xrc/auifrm_xrc.py:72
 msgid "Bible"
 msgstr "Biblie"
 
-#: bibleframe.py:72 bookframe.py:164 mainframe.py:255
+#: backend/dictionary.py:306
+msgid "daily devotional"
+msgstr ""
+
+#: backend/genbook.py:206
+#, fuzzy
+msgid "harmony"
+msgstr "Concordanţă"
+
+#: bibleframe.py:69 bookframe.py:160 mainframe.py:256
 #: search/searchpanel.py:157
 msgid "Search"
 msgstr "Caută"
 
-#: bibleframe.py:77
+#: bibleframe.py:74
 #, fuzzy
 msgid "Go to Reference"
 msgstr "Mergi la referinţă"
 
-#: bibleframe.py:80
+#: bibleframe.py:77
 #, fuzzy
 msgid "Go to a reference"
 msgstr "Mergi la referinţă"
 
-#: bibleframe.py:83 xrc/harmonyfrm_xrc.py:92
-msgid "Harmony"
-msgstr "Concordanţă"
-
-#: bibleframe.py:86
-msgid "Open the harmony"
-msgstr "Deschide concordanţa"
-
-#: bibleframe.py:89 xrc/guess_verse_xrc.py:69
+#: bibleframe.py:80 xrc/guess_verse_xrc.py:69
 msgid "Guess the Verse"
 msgstr "Ghiceste Versetul"
 
-#: bibleframe.py:92
+#: bibleframe.py:83
 msgid "Play Guess the Verse"
 msgstr "Joacă Ghiceşte Versetul"
 
-#: bibleframe.py:98
+#: bibleframe.py:89
 msgid "Random verse"
 msgstr "Verset aleatoriu"
 
-#: bibleframe.py:101
+#: bibleframe.py:92
 msgid "Go to a random verse"
 msgstr "Mergi la un verset aleatoriu"
 
-#: bibleframe.py:104
+#: bibleframe.py:95
 msgid "Copy verses"
 msgstr "Copiază versetele"
 
-#: bibleframe.py:108
+#: bibleframe.py:99
 msgid "Copy verses to other applications"
 msgstr "Copiază versetele într-o altă aplicaţie"
 
-#: bibleframe.py:112 bibleframe.py:172
+#: bibleframe.py:103 bibleframe.py:163
 msgid "Open sticky tooltip"
 msgstr "Deschide balon info important"
 
-#: bibleframe.py:115
+#: bibleframe.py:106
 msgid "Open a sticky tooltip with the selected verses"
 msgstr "Deschide un balon info important cu versetele selectate"
 
-#: bibleframe.py:119
+#: bibleframe.py:110
 msgid "Compare verses"
 msgstr "Compară versetele"
 
-#: bibleframe.py:122
+#: bibleframe.py:113
 msgid "Open the verse comparison pane to the selected verses"
 msgstr "Deschide panoul de comparare versete pentru cele selectate"
 
-#: bibleframe.py:128 manage_topics_frame.py:172 xrc/manage_topics_xrc.py:143
+#: bibleframe.py:119 manage_topics_frame.py:172 xrc/manage_topics_xrc.py:143
 msgid "Manage Topics"
 msgstr "Administrează Topice"
 
-#: bibleframe.py:131
+#: bibleframe.py:122
 msgid "Manages all of the topics and the passages in them."
 msgstr "Administrează toate topicele si pasajele din ele."
 
-#: bibleframe.py:134
+#: bibleframe.py:125
 msgid "Tag verses"
 msgstr "Etichetează versetele"
 
-#: bibleframe.py:138
+#: bibleframe.py:129
 msgid "Tags the currently selected verses."
 msgstr "Etichetează versetele selectate acum."
 
-#: bibleframe.py:142
+#: bibleframe.py:133
 #, fuzzy
 msgid "Add comment to verses"
 msgstr "Mergi la versetele"
 
-#: bibleframe.py:145
+#: bibleframe.py:136
 #, fuzzy
 msgid "Makes a comment on the currently selected verses."
 msgstr "Etichetează versetele selectate acum."
 
-#: bibleframe.py:207
+#: bibleframe.py:200
 msgid "Copying selected verses..."
 msgstr "Copiază versetele selectate..."
 
-#: bibleframe.py:282
+#: bibleframe.py:272
 msgid "Topic management is currently not available due to an error."
 msgstr ""
 
-#: bibleframe.py:283
+#: bibleframe.py:273
 msgid "Error in Topic Management"
 msgstr ""
 
-#: bibleframe.py:310
-msgid "This chapter is empty."
-msgstr "Acest capitol este gol."
-
-#: bookframe.py:146 mainframe.py:836
+#: bookframe.py:142 mainframe.py:873
 msgid "Show the %s pane"
 msgstr "Arată panoul %s"
 
-#: bookframe.py:148
+#: bookframe.py:144
 msgid "Hide the %s pane"
 msgstr "Ascunde panoul %s"
 
-#: bookframe.py:157
+#: bookframe.py:153
 msgid "Shows or hides the pane"
 msgstr "Arată sau ascunde panoul"
 
-#: bookframe.py:166
+#: bookframe.py:162
 msgid "Search in this book"
 msgstr "Caută în această carte"
 
-#: bookframe.py:177
+#: bookframe.py:173
 msgid "Information..."
 msgstr "Informaţii..."
 
-#: bookframe.py:180
+#: bookframe.py:176
 msgid "Show information on the current book"
 msgstr "Arată informaţii despre cartea curentă"
 
-#: bookframe.py:194
+#: bookframe.py:190
 msgid "Search for:"
 msgstr "Caută:"
 
-#: bookframe.py:248
+#: bookframe.py:244
 msgid "Go to reference"
 msgstr "Mergi la referinţă"
 
-#: bookframe.py:367
+#: bookframe.py:365 genbookframe.py:211
 msgid "Go to this reference"
 msgstr "Mergi la această referinţă"
 
-#: bookframe.py:374
+#: bookframe.py:372 genbookframe.py:218
 msgid "Link the %s to the Bible"
 msgstr "Fă link la %s cu Biblia"
 
-#: bookframe.py:432
+#: bookframe.py:430
 msgid "Commentary"
 msgstr "Comentariu"
 
-#: bookframe.py:448
+#: bookframe.py:446
 msgid "Dictionary"
 msgstr "Dicţionar"
 
@@ -269,19 +266,105 @@ msgstr ""
 "depăşită.\n"
 "<br>Aceasta probabil înseamnă că referinţa a fost invalidă]</b>"
 
-#: copyverses.py:82 xrc/copyverses_xrc.py:77
+#: copyverses.py:94 xrc/copyverses_xrc.py:78
 msgid "Edit Template..."
 msgstr "Editează Şablon..."
 
-#: copyverses.py:133
+#: copyverses.py:148
 msgid "<custom: based on %s>"
 msgstr "<la comandă: bazat pe %s>"
 
-#: displayframe.py:248
+#: display_options.py:83
+msgid "Columns"
+msgstr ""
+
+#: display_options.py:84
+msgid "Display each verse on its own line."
+msgstr "Afişează fiecare verset pe linia sa"
+
+#: display_options.py:84
+msgid "One line per verse"
+msgstr "O linie per verset"
+
+#: display_options.py:85
+msgid "Continuous scrolling"
+msgstr ""
+
+#: display_options.py:86
+#, fuzzy
+msgid "Headings"
+msgstr "&Titluri"
+
+#: display_options.py:87
+#, fuzzy
+msgid "Cross References"
+msgstr "Referinţă"
+
+#: display_options.py:88
+#, fuzzy
+msgid "Footnotes"
+msgstr "&Subsol"
+
+#: display_options.py:89
+#, fuzzy
+msgid "Strongs Numbers"
+msgstr "Numere Strong"
+
+#: display_options.py:90
+#, fuzzy
+msgid "Strongs Blocked"
+msgstr "Nu e blocată"
+
+#: display_options.py:91
+msgid "Morphology"
+msgstr ""
+
+#: display_options.py:92
+msgid "Morph Segmentation"
+msgstr ""
+
+#: display_options.py:93
+msgid "Colour code speakers"
+msgstr ""
+
+#: display_options.py:94
+msgid "Words of Christ in Red"
+msgstr ""
+
+#: display_options.py:95
+msgid "Colour code by speaker"
+msgstr ""
+
+#: display_options.py:96
+msgid "Off"
+msgstr ""
+
+#: display_options.py:98
+#, fuzzy
+msgid "Strong's Headwords"
+msgstr "Cuvinte principale Strong"
+
+#: display_options.py:99
+msgid "Transliterated"
+msgstr "Transliterat"
+
+#: display_options.py:100
+msgid "Original Language"
+msgstr "Limba Originală"
+
+#: display_options.py:101
+msgid "Pronunciation"
+msgstr "Pronunţare"
+
+#: display_options.py:102
+msgid "Strong's Numbers"
+msgstr "Numere Strong"
+
+#: displayframe.py:228
 msgid "Don't know how to open this morphology type:"
 msgstr "Nu ştiu cum să deschid acest tip de morfologie:"
 
-#: displayframe.py:258
+#: displayframe.py:238
 msgid ""
 "Module %s is not installed, so you cannot view details for this "
 "morphological code"
@@ -289,47 +372,31 @@ msgstr ""
 "Modului %s nu este instalat, aşa că nu poţi vedea detaliile pentru acest cod "
 "morfologic"
 
-#: displayframe.py:472
+#: displayframe.py:466
 msgid "Select all"
 msgstr "Selectează toate"
 
-#: displayframe.py:474
+#: displayframe.py:468
 msgid "Select all the text in the frame"
 msgstr "Selectează tot textul din cadru"
 
-#: displayframe.py:477
-msgid "Copy selection (with links)"
-msgstr "Copiază selecţia (cu link-uri)"
-
-#: displayframe.py:480
-msgid "Copy the selected text with links"
-msgstr "Copiază textul selectat cu link-uri"
-
-#: displayframe.py:484
-msgid "Copy selection (without links)"
-msgstr "Copiază selecţia (fără link-uri)"
-
-#: displayframe.py:487
-msgid "Copy the selected text, removing all links"
-msgstr "Copiază textul selectate, scoţând toate link-urile"
-
-#: displayframe.py:549
+#: displayframe.py:529
 msgid "the selected word"
 msgstr "cuvântul selectat"
 
-#: displayframe.py:555
+#: displayframe.py:535
 msgid "the selected phrase"
 msgstr "fraza selectată"
 
-#: displayframe.py:569
+#: displayframe.py:549
 msgid "Look up %s in the dictionary"
 msgstr "Caută %s în dicţionar"
 
-#: displayframe.py:590
+#: displayframe.py:570
 msgid "Search for %s in the Bible"
 msgstr "Caută %s în Biblie"
 
-#: displayframe.py:592
+#: displayframe.py:572
 msgid "Search for %s in this book"
 msgstr "Caută %s in această carte"
 
@@ -349,27 +416,36 @@ msgstr "A avut loc o eroare."
 msgid "Above exception was ignored"
 msgstr "Peste excepţie s-a ignorat"
 
-#: genbookframe.py:57
+#: genbookframe.py:61
 msgid "Other Books"
 msgstr "Alte Cărţi"
 
-#: guess_verse.py:32
+#: genbookframe.py:181 xrc/harmonyfrm_xrc.py:92
+msgid "Harmony"
+msgstr "Concordanţă"
+
+#: genbookframe.py:238
+#, fuzzy
+msgid "%s is not in this harmony."
+msgstr "%s nu este în această concordanţă"
+
+#: guess_verse.py:37
 msgid "The verse was %s"
 msgstr "Versetul era %s"
 
-#: guess_verse.py:42
+#: guess_verse.py:52
 msgid "Yes, you are right. The verse was %s"
 msgstr "Da, ai nimerit. Versetul era %s"
 
-#: guess_verse.py:44
+#: guess_verse.py:54
 msgid "Correct"
 msgstr "Corect"
 
-#: guess_verse.py:51
+#: guess_verse.py:61
 msgid "No, you are wrong. Try again."
 msgstr "Nu, ai greşit. Încearcă din nou."
 
-#: guess_verse.py:52
+#: guess_verse.py:62
 msgid "Try again."
 msgstr "Încearcă din nou."
 
@@ -378,43 +454,39 @@ msgstr "Încearcă din nou."
 msgid "Copy"
 msgstr "Copiază"
 
-#: gui/passage_tag.py:152
+#: gui/passage_tag.py:167
 msgid "Expand"
 msgstr ""
 
-#: gui/passage_tag.py:154
+#: gui/passage_tag.py:169
 #, fuzzy
 msgid "Expand all of the passages in this topic"
 msgstr "Administrează toate topicele si pasajele din ele."
 
-#: gui/passage_tag.py:426
+#: gui/passage_tag.py:558
 msgid "Use Parent Look:"
 msgstr ""
 
-#: gui/passage_tag.py:427
+#: gui/passage_tag.py:559
 msgid "Colour:"
-msgstr ""
-
-#: gui/passage_tag.py:428 xrc/manage_topics_xrc.py:146
-msgid "Appearance:"
 msgstr ""
 
 #: harmony/harmonyframe.py:213
 msgid "Loading harmony"
 msgstr "Încarc concordanţa"
 
-#: harmony/harmonyframe.py:264
+#: harmony/harmonyframe.py:271
 msgid "%s is not in this harmony"
 msgstr "%s nu este în această concordanţă"
 
-#: header_bar.py:39
+#: header_bar.py:38
 msgid "%s verses"
 msgstr "%s versete"
 
 #: install_manager/install_drop_target.py:33
-#: install_manager/install_drop_target.py:56 module_manager.py:120
-#: module_manager.py:124 search/searchpanel.py:804 templatemanager.py:436
-#: templatemanager.py:447
+#: install_manager/install_drop_target.py:56 module_manager.py:121
+#: module_manager.py:125 search/searchpanel.py:806 templatemanager.py:439
+#: templatemanager.py:452
 msgid "Error"
 msgstr "Eroare"
 
@@ -459,7 +531,7 @@ msgstr ""
 msgid "Extracting %s"
 msgstr "Extrag %s"
 
-#: install_manager/install_drop_target.py:82 search/searchpanel.py:960
+#: install_manager/install_drop_target.py:82 search/searchpanel.py:962
 msgid "Preparing"
 msgstr "Pregătesc"
 
@@ -487,181 +559,155 @@ msgstr "Informaţii"
 msgid "Cannot read book metadata in file %s"
 msgstr "Nu pot citi metadata cărţii din fişierul %s"
 
-#: mainframe.py:251
+#: mainframe.py:252
 msgid "Go to verse"
 msgstr "Mergi la versetul"
 
-#: mainframe.py:252
+#: mainframe.py:253
 msgid "Go to this verse"
 msgstr "Mergi la acest verset"
 
-#: mainframe.py:256
+#: mainframe.py:257
 msgid "Search in the current book"
 msgstr "Caută în cartea curentă"
 
-#: mainframe.py:259 xrc/copyverses_xrc.py:80
+#: mainframe.py:260 xrc/copyverses_xrc.py:81
 msgid "Copy Verses"
 msgstr "Copiază Versetele"
 
-#: mainframe.py:260
+#: mainframe.py:261
 msgid "Open the Copy Verses dialog"
 msgstr "Deschide dialogul de Copiere Versete"
 
-#: mainframe.py:265
+#: mainframe.py:266
 msgid "Back"
 msgstr "Înapoi"
 
-#: mainframe.py:266
+#: mainframe.py:267
 msgid "Go back a verse"
 msgstr "Mergi înapoi cu un verset"
 
-#: mainframe.py:269
+#: mainframe.py:270
 msgid "Forward"
 msgstr "Înainte"
 
-#: mainframe.py:270
+#: mainframe.py:271
 msgid "Go forward a verse"
 msgstr "Mergi înainte cu un verset"
 
-#: mainframe.py:274
+#: mainframe.py:275
 msgid "Zoom In"
 msgstr "Măreşte"
 
-#: mainframe.py:275
+#: mainframe.py:276
 msgid "Make text bigger"
 msgstr "Fă textul mai mare"
 
-#: mainframe.py:278
+#: mainframe.py:279
 msgid "Default Zoom"
 msgstr "Mărire Implicită"
 
-#: mainframe.py:279
+#: mainframe.py:280
 msgid "Return text to default size"
 msgstr "Adu textul la mărimea implicită"
 
-#: mainframe.py:282
+#: mainframe.py:283
 msgid "Zoom Out"
 msgstr "Micşorează"
 
-#: mainframe.py:283
+#: mainframe.py:284
 msgid "Make text smaller"
 msgstr "Fă textul mai mic"
 
-#: mainframe.py:312
+#: mainframe.py:313
 msgid "Navigation"
 msgstr "Navigare"
 
-#: mainframe.py:314
+#: mainframe.py:315
 msgid "Zoom"
 msgstr "Mărire"
 
-#: mainframe.py:316
+#: mainframe.py:317
 msgid "History toolbar"
 msgstr "Bara de istorie"
 
-#: mainframe.py:682
+#: mainframe.py:718
 msgid "Installable books"
 msgstr "Cărţi instalabile"
 
-#: mainframe.py:685 versecompare.py:200
+#: mainframe.py:721 versecompare.py:204
 msgid "Choose books"
 msgstr "Alege cărţile"
 
-#: mainframe.py:760 xrc/auifrm_xrc.py:44
+#: mainframe.py:796 xrc/auifrm_xrc.py:44
 msgid "&Language"
 msgstr "&Limba"
 
-#: mainframe.py:763 xrc/auifrm_xrc.py:45
+#: mainframe.py:799 xrc/auifrm_xrc.py:45
 msgid "&Bible book names"
 msgstr ""
 
-#: mainframe.py:794 xrc/auifrm_xrc.py:49
+#: mainframe.py:831 xrc/auifrm_xrc.py:49
 msgid "&Display"
 msgstr "&Afişaj"
 
-#: mainframe.py:799 xrc/auifrm_xrc.py:52
+#: mainframe.py:836 xrc/auifrm_xrc.py:52
 msgid "&Windows"
 msgstr "&Ferestre"
 
-#: mainframe.py:804 xrc/auifrm_xrc.py:51
+#: mainframe.py:841 xrc/auifrm_xrc.py:51
 msgid "Toolbars"
 msgstr "Toolbar-uri"
 
-#: mainframe.py:832
+#: mainframe.py:869
 msgid "Show the %s toolbar"
 msgstr "Arată bara %s"
 
-#: mainframe.py:855 xrc/auifrm_xrc.py:53
+#: mainframe.py:891 xrc/auifrm_xrc.py:53
 msgid "Debug"
 msgstr "Debug"
 
-#: mainframe.py:877
-msgid "Pronunciation"
-msgstr "Pronunţare"
-
-#: mainframe.py:878
-msgid "Original Language"
-msgstr "Limba Originală"
-
-#: mainframe.py:879
-msgid "Transliterated"
-msgstr "Transliterat"
-
-#: mainframe.py:885
-msgid "Strong's Numbers"
-msgstr "Numere Strong"
-
-#: mainframe.py:902
-msgid "Strong's headwords"
-msgstr "Cuvinte principale Strong"
-
-#: mainframe.py:965
+#: mainframe.py:923
 msgid "Expand cross-references"
 msgstr "Extinde trimiterile"
 
-#: mainframe.py:966
+#: mainframe.py:924
 msgid "Display cross references partially expanded"
 msgstr "Afişează trimiterile parţial extinse"
 
-#: mainframe.py:971
-msgid "One line per verse"
-msgstr "O linie per verset"
-
-#: mainframe.py:972
-msgid "Display each verse on its own line."
-msgstr "Afişează fiecare verset pe linia sa"
-
-#: mainframe.py:977
+#: mainframe.py:929
 msgid "Topic Tags"
 msgstr "Etichete de Topic"
 
-#: mainframe.py:978
+#: mainframe.py:930
 msgid "Display the topics that each verse is tagged with."
 msgstr "Afişează topicele cu care sunt etichetate fiecare versete."
 
-#: mainframe.py:1142
+#: mainframe.py:1049
 msgid "BPBible will now quickly restart to change your language."
 msgstr "BPBible va restarta rapid pentru a schimba limba."
 
-#: mainframe.py:1143
+#: mainframe.py:1050
 msgid "Restarting"
 msgstr "Restartare"
 
-#: mainframe.py:1162
+#: mainframe.py:1069
 msgid "An error occurred on closing:"
 msgstr "A avut loc o eroare la închidere:"
 
-#: mainframe.py:1174 mainframe.py:1175
+#: mainframe.py:1081 mainframe.py:1082
 msgid "search "
 msgstr "caută"
 
-#: mainframe.py:1198
+#: mainframe.py:1106
+#, fuzzy
 msgid ""
 "Flexible Bible study software.\n"
 "\t\t\tBuilt Using the Sword Project from crosswire.org\n"
 "\t\t\tPython Version: %(sysversion)s\n"
 "\t\t\twxPython Version: %(wxversion)s\n"
-"\t\t\tSWORD Version: %(swversion)s"
+"\t\t\tSWORD Version: %(swversion)s\n"
+"\t\t\tXULRunner Version: %(xulrunner_version)s"
 msgstr ""
 "Soft de Studiu Biblic Flexibil.\n"
 "\t\t\tConstruit cu Proiectul Sword de la crosswire.org\n"
@@ -669,35 +715,35 @@ msgstr ""
 "\t\t\twxPython Version: %(wxversion)s\n"
 "\t\t\tSWORD Version: %(swversion)s"
 
-#: mainframe.py:1209
+#: mainframe.py:1118
 msgid "BPBible website"
 msgstr "Site BPBible"
 
-#: mainframe.py:1211
+#: mainframe.py:1120
 msgid "BPBible development team"
 msgstr "Echipa de dezvoltare BPBible"
 
-#: mainframe.py:1212
+#: mainframe.py:1121
 msgid "SWORD library developers"
 msgstr "Developerii librăriei SWORD"
 
-#: mainframe.py:1216
+#: mainframe.py:1125
 msgid "Developers"
 msgstr "Developerii"
 
-#: mainframe.py:1217
+#: mainframe.py:1126
 msgid "Artists"
 msgstr "Artişti"
 
-#: mainframe.py:1218
+#: mainframe.py:1127
 msgid "Translators"
 msgstr "Traducători"
 
-#: mainframe.py:1220
+#: mainframe.py:1129
 msgid "translator-credits"
 msgstr "credite-traducători"
 
-#: mainframe.py:1224
+#: mainframe.py:1133
 msgid ""
 "Icons used are from famfamfam\n"
 "http://www.famfamfam.com/lab/icons/silk\n"
@@ -709,7 +755,7 @@ msgstr ""
 "şi Tango Desktop Project\n"
 "http://tango.freedesktop.org/Tango_Desktop_Project"
 
-#: mainframe.py:1230
+#: mainframe.py:1139
 msgid ""
 "BPBible is licensed under the GPL v2. For more details, refer to the LICENSE."
 "txt file in the application directory"
@@ -845,81 +891,78 @@ msgstr ""
 msgid "Confirm book deletion"
 msgstr "Confirmă ştergerea cărţii"
 
-#: module_manager.py:94
+#: module_manager.py:95
 msgid "Please select a book to unlock"
 msgstr "Selectează te rog o carte pentru deblocare"
 
-#: module_manager.py:95
+#: module_manager.py:96
 msgid "Select a book"
 msgstr "Selectează o carte"
 
-#: module_manager.py:104
+#: module_manager.py:105
 msgid "This book is not locked at all, and doesn't need to be unlocked"
 msgstr "Aceată carte nu este blocată, şi nu are nevoie să fie deblocată"
 
-#: module_manager.py:105
+#: module_manager.py:106
 msgid "Not locked"
 msgstr "Nu e blocată"
 
-#: module_manager.py:110
+#: module_manager.py:111
 msgid "Unlock code for %s"
 msgstr "Cod de deblocare pentru %s"
 
-#: module_manager.py:111
+#: module_manager.py:112
 msgid "Unlock code"
 msgstr "Cod deblocare"
 
-#: module_manager.py:123
+#: module_manager.py:124
 msgid "Couldn't find config file. Error given was:"
 msgstr "Nu s-a găsit fişierul config. Eroarea dată a fost:"
 
-#: module_tree.py:23
+#: module_tree.py:24 module_tree.py:40
 msgid "Bibles"
 msgstr "Biblii"
 
-#: module_tree.py:24
+#: module_tree.py:25 module_tree.py:41
 msgid "Commentaries"
 msgstr "Comentarii"
 
-#: module_tree.py:25
+#: module_tree.py:26 module_tree.py:42
 msgid "Dictionaries"
 msgstr "Dicţionare"
 
-#: module_tree.py:26
+#: module_tree.py:27 module_tree.py:47
 msgid "Other books"
 msgstr "Alte cărţi"
 
-#: module_tree.py:35
+#: module_tree.py:28 module_tree.py:33 module_tree.py:46
+msgid "Daily Devotional"
+msgstr ""
+
+#: module_tree.py:29 module_tree.py:36 module_tree.py:43
+#, fuzzy
+msgid "Harmonies"
+msgstr "Concordanţă"
+
+#: module_tree.py:34 module_tree.py:44
+msgid "Maps"
+msgstr ""
+
+#: module_tree.py:35 module_tree.py:45
+msgid "Images"
+msgstr ""
+
+#: module_tree.py:56
 msgid "Find Book..."
 msgstr "Caută Cartea..."
 
-#: module_tree.py:115
+#: module_tree.py:137
 msgid "Show information for %s"
 msgstr "Arată informaţii pentru %s"
 
-#: moduleinfo.py:78
+#: moduleinfo.py:6
 msgid "Book Information"
 msgstr "Informaţii Carte"
-
-#: moduleinfo.py:85
-msgid "Name"
-msgstr "Nume"
-
-#: moduleinfo.py:86
-msgid "Description"
-msgstr "Descriere"
-
-#: moduleinfo.py:88
-msgid "Language"
-msgstr "Limba"
-
-#: moduleinfo.py:93
-msgid "About"
-msgstr "Despre"
-
-#: moduleinfo.py:95
-msgid "License"
-msgstr "Licenţă"
 
 #: pathmanager.py:25
 msgid "New"
@@ -933,26 +976,26 @@ msgstr "Citesc cărţile..."
 msgid "Path manager"
 msgstr "Administrare cale"
 
-#: preview_window.py:10 search/searchpanel.py:883 search/searchpanel.py:917
-#: xrc/copyverses_xrc.py:78 xrc/templatemanager_xrc.py:97
+#: preview_window.py:11 search/searchpanel.py:885 search/searchpanel.py:919
+#: xrc/copyverses_xrc.py:79 xrc/templatemanager_xrc.py:97
 msgid "Preview"
 msgstr "Previzualizare"
 
-#: preview_window.py:34
+#: preview_window.py:35
 msgid "Move over a link to see a preview for it"
 msgstr ""
 "Mergi cu mouse-ul peste un link pentru a vedea o previzualizare pentru "
 "aceasta"
 
-#: preview_window.py:57
+#: preview_window.py:56
 msgid "Show in tooltip"
 msgstr "Arată în balon"
 
-#: preview_window.py:58
+#: preview_window.py:57
 msgid "Show this in a tooltip"
 msgstr "Arată aceasta într-un balon info"
 
-#: protocols.py:99
+#: protocols.py:101
 msgid ""
 "The book '%s' is not installed, so you cannot view details for this entry (%"
 "s)"
@@ -1012,34 +1055,34 @@ msgstr ""
 msgid "Could not understand string"
 msgstr "Nu am putut înţelege şirul"
 
-#: search/searchpanel.py:265 search/searchpanel.py:572
-#: search/searchpanel.py:749 search/searchpanel.py:768
-#: search/searchpanel.py:846 search/searchpanel.py:862
-#: search/searchpanel.py:900
+#: search/searchpanel.py:267 search/searchpanel.py:574
+#: search/searchpanel.py:751 search/searchpanel.py:770
+#: search/searchpanel.py:848 search/searchpanel.py:864
+#: search/searchpanel.py:902
 msgid "%d references found"
 msgstr "%d referinţe găsite"
 
-#: search/searchpanel.py:291 xrc/search_xrc.py:142
+#: search/searchpanel.py:293 xrc/search_xrc.py:142
 msgid "&Index"
 msgstr "&Indexare"
 
-#: search/searchpanel.py:294
+#: search/searchpanel.py:296
 msgid "Unindex"
 msgstr "Neindexare"
 
-#: search/searchpanel.py:316
+#: search/searchpanel.py:318
 msgid "You don't have a current %s, so you cannot search at the moment"
 msgstr "Nu ai un %s curent, aşa că nu poţi căutat în acest moment"
 
-#: search/searchpanel.py:323 search/searchpanel.py:360
+#: search/searchpanel.py:325 search/searchpanel.py:362
 msgid "No current version"
 msgstr "Nici o versiune curentă"
 
-#: search/searchpanel.py:334
+#: search/searchpanel.py:336
 msgid "Reading search index..."
 msgstr "Citesc indexul de căutare..."
 
-#: search/searchpanel.py:366
+#: search/searchpanel.py:368
 msgid ""
 "Search index does not exist for book %s. Indexing will make search much "
 "faster. Create Index?"
@@ -1047,113 +1090,123 @@ msgstr ""
 "Indexul de căutare nu există pentru cartea %s. Indexarea va face căutarea "
 "mult mai rapidă. Să creez Indexul?"
 
-#: search/searchpanel.py:369
+#: search/searchpanel.py:371
 msgid "Create Index?"
 msgstr "Creez Indexare?"
 
-#: search/searchpanel.py:403 search/searchpanel.py:604
-#: search/searchpanel.py:876 search/searchpanel.py:910 xrc/search_xrc.py:140
+#: search/searchpanel.py:405 search/searchpanel.py:606
+#: search/searchpanel.py:878 search/searchpanel.py:912 xrc/search_xrc.py:140
 msgid "&Search"
 msgstr "&Caută"
 
-#: search/searchpanel.py:429 xrc/search_xrc.py:143 xrc/search_xrc.py:158
+#: search/searchpanel.py:431 xrc/search_xrc.py:143 xrc/search_xrc.py:158
 msgid "Search Options"
 msgstr "Opţiuni Căutare"
 
-#: search/searchpanel.py:568
+#: search/searchpanel.py:570
 msgid "&Stop"
 msgstr "&Stop"
 
-#: search/searchpanel.py:641 search/searchpanel.py:716
+#: search/searchpanel.py:643 search/searchpanel.py:718
 msgid "Error in search"
 msgstr "Eroare în căutare"
 
-#: search/searchpanel.py:646 search/searchpanel.py:721
+#: search/searchpanel.py:648 search/searchpanel.py:723
 msgid "The following words were not found in this %s:"
 msgstr "Următoarele cuvinte nu au fost găsite in această %s:"
 
-#: search/searchpanel.py:649 search/searchpanel.py:724
+#: search/searchpanel.py:651 search/searchpanel.py:726
 msgid "Unknown word"
 msgstr "Cuvânt necunoscut"
 
-#: search/searchpanel.py:751 search/searchpanel.py:771
-#: search/searchpanel.py:848 search/searchpanel.py:866
+#: search/searchpanel.py:753 search/searchpanel.py:773
+#: search/searchpanel.py:850 search/searchpanel.py:868
 msgid "1 word"
 msgstr "1 cuvânt"
 
-#: search/searchpanel.py:752 search/searchpanel.py:772
-#: search/searchpanel.py:849 search/searchpanel.py:867
+#: search/searchpanel.py:754 search/searchpanel.py:774
+#: search/searchpanel.py:851 search/searchpanel.py:869
 msgid "%d words"
 msgstr "%d cuvinte"
 
-#: search/searchpanel.py:755 search/searchpanel.py:777
+#: search/searchpanel.py:757 search/searchpanel.py:779
 msgid "%d hits"
 msgstr "%d rezultate"
 
-#: search/searchpanel.py:767 search/searchpanel.py:861
-#: search/searchpanel.py:899
+#: search/searchpanel.py:769 search/searchpanel.py:863
+#: search/searchpanel.py:901
 msgid "1 reference found"
 msgstr "1 referinţă găsită"
 
-#: search/searchpanel.py:776
+#: search/searchpanel.py:778
 msgid "1 hit"
 msgstr "1 rezultat"
 
-#: search/searchpanel.py:803
+#: search/searchpanel.py:805
 msgid "You cannot search on fields in unindexed search"
 msgstr "Nu poţi căuta în câmpurile din căutarea neindexată"
 
-#: search/searchpanel.py:883 search/searchpanel.py:917
+#: search/searchpanel.py:885 search/searchpanel.py:919
 msgid "Reference"
 msgstr "Referinţă"
 
-#: search/searchpanel.py:896
+#: search/searchpanel.py:898
 msgid "%(version)s search - %(numresults)s"
 msgstr "căutare %(version)s - %(numresults)s"
 
-#: search/searchpanel.py:956
+#: search/searchpanel.py:958
 msgid "Processing %s"
 msgstr "Procesez %s"
 
-#: search/searchpanel.py:960
+#: search/searchpanel.py:962
 msgid "Indexing %s"
 msgstr "Indexare %s"
 
-#: search/searchpanel.py:992
+#: search/searchpanel.py:994
 msgid "Writing %s"
 msgstr "Scriere %s"
 
-#: search/searchpanel.py:1149
+#: search/searchpanel.py:1152
 msgid "Other Book Search"
 msgstr "Căutare Altă Carte"
 
-#: search/searchpanel.py:1194
+#: search/searchpanel.py:1197
 msgid "Entries"
 msgstr "Intrări"
 
-#: search/searchpanel.py:1201
+#: search/searchpanel.py:1204
+#, fuzzy
+msgid "Harmony Search"
+msgstr "Concordanţă"
+
+#: search/searchpanel.py:1211
 msgid "Dictionary Search"
 msgstr "Căutare Dicţionar"
 
-#: search/searchpanel.py:1242
+#: search/searchpanel.py:1252
+#, fuzzy
+msgid "Daily Devotional Search"
+msgstr "Căutare Dicţionar"
+
+#: search/searchpanel.py:1259
 msgid "Commentary Search"
 msgstr "Căutare Comentariu"
 
-#: swlib/pysw.py:139 swlib/pysw.py:691
+#: swlib/pysw.py:119 swlib/pysw.py:658
 msgid "There are only %(chapters)d chapters in %(book)s (given %(given)d)"
 msgstr "Există doar %(chapters)d capitole în %(book)s (given %(given)d)"
 
-#: swlib/pysw.py:157 swlib/pysw.py:702
+#: swlib/pysw.py:137 swlib/pysw.py:669
 msgid ""
 "There are only %(verses)d verses in %(book)s %(chapter)s (given %(given)d)"
 msgstr ""
 "Există doar %(verse)d versete în %(book)s %(chapter)s (given %(given)d)"
 
-#: swlib/pysw.py:876 swlib/pysw.py:1657
+#: swlib/pysw.py:843 swlib/pysw.py:1659
 msgid "Invalid Reference: %s"
 msgstr "Referinţă Invalidă: %s"
 
-#: swlib/pysw.py:1645
+#: swlib/pysw.py:1647
 msgid "Invalid empty reference"
 msgstr "Referinţă goală invalidă"
 
@@ -1161,64 +1214,64 @@ msgstr "Referinţă goală invalidă"
 msgid "Tag %s"
 msgstr "Eticheta %s"
 
-#: tag_passage_dialog.py:108 tag_passage_dialog.py:116 user_comments.py:66
+#: tag_passage_dialog.py:105 tag_passage_dialog.py:113 user_comments.py:66
 #, fuzzy
 msgid "Comment on %s"
 msgstr "Comentariu"
 
-#: templatemanager.py:435
+#: templatemanager.py:438
 msgid "Template '%s' is read only. Try a different name."
 msgstr "Şablonul '%s' este doar pentru citire. Încearcă un nume diferit."
 
-#: templatemanager.py:440
+#: templatemanager.py:445
 msgid "Template '%s' already exists. Overwrite?"
 msgstr "Şablonul '%s' există deja. Suprascriu?"
 
-#: templatemanager.py:441
+#: templatemanager.py:446
 msgid "Overwrite?"
 msgstr "Suprascriu?"
 
-#: templatemanager.py:446
+#: templatemanager.py:451
 msgid "Template name is already in use. Try a different name."
 msgstr "Numele de şablon este deja în folosire. Încearcă un nume diferit."
 
-#: tooltip.py:226
+#: tooltip.py:268
 msgid "Anchor"
 msgstr "Ancoră"
 
-#: tooltip.py:227
+#: tooltip.py:269
 msgid "Don't hide this tooltip"
 msgstr "Nu şterge acest balon de info"
 
-#: tooltip.py:230
+#: tooltip.py:272
 msgid "Copy All"
 msgstr "Copiază tot"
 
-#: tooltip.py:231
+#: tooltip.py:273
 msgid "Copy tooltip text (with links)"
 msgstr "Copiază balonul de info (cu link-uri)"
 
-#: tooltip.py:296
+#: tooltip.py:338
 msgid "Tooltip"
 msgstr "Balon info"
 
-#: tooltip.py:507 tooltip.py:656
+#: tooltip.py:534 tooltip.py:684
 msgid "Sticky Tooltip"
 msgstr "Balon info Important"
 
-#: tooltip.py:560 tooltip.py:562
+#: tooltip.py:600 tooltip.py:602
 msgid "Stay on top"
 msgstr "Stai în vârf"
 
-#: tooltip.py:702
+#: tooltip.py:731
 msgid "Find"
 msgstr "Găseşte"
 
-#: tooltip.py:704
+#: tooltip.py:733
 msgid "Search for this strong's number in the Bible"
 msgstr "Caută numărul Strong's în Biblie"
 
-#: tooltip.py:719
+#: tooltip.py:748
 msgid ""
 "Module %s is not installed, so you cannot view details for this strong's "
 "number"
@@ -1226,11 +1279,11 @@ msgstr ""
 "Modulul %s nu este instalat, aşadar nu poţi vedea detaliile pentru numărul "
 "Strong's"
 
-#: tooltip.py:781
+#: tooltip.py:810
 msgid "Go to verses"
 msgstr "Mergi la versetele"
 
-#: tooltip.py:783
+#: tooltip.py:812
 msgid "Open this reference"
 msgstr "Deschide această referinţă"
 
@@ -1267,27 +1320,27 @@ msgstr "Eşti sigur că vrei să instalezi cartea aceasta?"
 msgid "Delete Comment"
 msgstr "Comentariu"
 
-#: versecompare.py:49
+#: versecompare.py:51
 msgid "Version Comparison"
 msgstr "Comparare Versiune"
 
-#: versecompare.py:188
+#: versecompare.py:192
 msgid "Set books to compare"
 msgstr "Setează cărţi pentru comparare"
 
-#: versecompare.py:190
+#: versecompare.py:194
 msgid "Set the books this version comparison will use"
 msgstr "Setează cărţile pe care le va folosi această comparaţie"
 
-#: versecompare.py:199
+#: versecompare.py:203
 msgid "Choose books to compare in the verse comparison window"
 msgstr "Alege cărţile de comparat in aceastră fereastră de comparaţie"
 
-#: versecompare.py:223
+#: versecompare.py:227
 msgid "Choose books to compare"
 msgstr "Alege cărţile pentru comparaţie"
 
-#: versecompare.py:229
+#: versecompare.py:233
 msgid "View in parallel mode"
 msgstr "Vezi în mod paralel"
 
@@ -1332,54 +1385,67 @@ msgid "WI"
 msgstr "WI"
 
 #: xrc/auifrm_xrc.py:56
+#, fuzzy
+msgid "Error Console"
+msgstr "Eroare în căutare"
+
+#: xrc/auifrm_xrc.py:57
 msgid "gather"
 msgstr "adună"
 
-#: xrc/auifrm_xrc.py:57
+#: xrc/auifrm_xrc.py:58
 msgid "diff"
 msgstr "dif"
 
-#: xrc/auifrm_xrc.py:58
+#: xrc/auifrm_xrc.py:59
 msgid "confirm"
 msgstr "confirm"
 
-#: xrc/auifrm_xrc.py:59
+#: xrc/auifrm_xrc.py:60
 msgid "compile"
 msgstr "compilez"
 
-#: xrc/auifrm_xrc.py:60
+#: xrc/auifrm_xrc.py:61
 msgid "Restart"
 msgstr "Restartez"
 
-#: xrc/auifrm_xrc.py:61
+#: xrc/auifrm_xrc.py:62
 msgid "Locale"
 msgstr "Limba"
 
-#: xrc/auifrm_xrc.py:62
+#: xrc/auifrm_xrc.py:63
+msgid "Reload"
+msgstr ""
+
+#: xrc/auifrm_xrc.py:64
+msgid "Reload w/ chrome"
+msgstr ""
+
+#: xrc/auifrm_xrc.py:65
 msgid "&Help"
 msgstr "&Ajutor"
 
-#: xrc/auifrm_xrc.py:63
+#: xrc/auifrm_xrc.py:66
 msgid "BPBible Website"
 msgstr "Site BPBible"
 
-#: xrc/auifrm_xrc.py:64
+#: xrc/auifrm_xrc.py:67
 msgid "Documentation..."
 msgstr "Documentaţie..."
 
-#: xrc/auifrm_xrc.py:65
+#: xrc/auifrm_xrc.py:68
 msgid "Report a problem..."
 msgstr "Raportează o problemă..."
 
-#: xrc/auifrm_xrc.py:66
+#: xrc/auifrm_xrc.py:69
 msgid "Download books..."
 msgstr "Download cărţi..."
 
-#: xrc/auifrm_xrc.py:67
+#: xrc/auifrm_xrc.py:70
 msgid "&About..."
 msgstr "&Despre..."
 
-#: xrc/auifrm_xrc.py:68
+#: xrc/auifrm_xrc.py:71
 msgid "Show about dialog"
 msgstr "Arată dialogul despre"
 
@@ -1392,14 +1458,18 @@ msgid "&Template"
 msgstr "&Şablon"
 
 #: xrc/copyverses_xrc.py:75
+msgid "Copy formatted"
+msgstr ""
+
+#: xrc/copyverses_xrc.py:76
 msgid "&Save template"
 msgstr "&Salvare şablon"
 
-#: xrc/copyverses_xrc.py:76
+#: xrc/copyverses_xrc.py:77
 msgid "&Load Template"
 msgstr "&Încarcă Şablon"
 
-#: xrc/copyverses_xrc.py:79 xrc/templatemanager_xrc.py:99
+#: xrc/copyverses_xrc.py:80 xrc/templatemanager_xrc.py:99
 msgid "&Cancel"
 msgstr "&Anulare"
 
@@ -1507,6 +1577,10 @@ msgstr "Nume:"
 #: xrc/manage_topics_xrc.py:145
 msgid "Show tags"
 msgstr "Arată etichete"
+
+#: xrc/manage_topics_xrc.py:146
+msgid "Appearance:"
+msgstr ""
 
 #: xrc/manage_topics_xrc.py:147
 msgid "Description:"
@@ -1691,9 +1765,43 @@ msgid "&Headings"
 msgstr "&Titluri"
 
 #: xrc/templatemanager_xrc.py:107
+#, fuzzy
 msgid ""
-"Use $$text for the text of a verse, $$versenum for the\n"
-"verse number and $$reference for the reference"
+"Use $$text for the text of a verse, $$versenumber for the\n"
+"verse number and $$range for the reference."
 msgstr ""
 "Foloseşte $$text pentru textul unui verset, $$versenum pentru\n"
 "număr verset si $$reference pentru referinţă"
+
+#~ msgid "Open the harmony"
+#~ msgstr "Deschide concordanţa"
+
+#~ msgid "This chapter is empty."
+#~ msgstr "Acest capitol este gol."
+
+#~ msgid "Copy selection (with links)"
+#~ msgstr "Copiază selecţia (cu link-uri)"
+
+#~ msgid "Copy the selected text with links"
+#~ msgstr "Copiază textul selectat cu link-uri"
+
+#~ msgid "Copy selection (without links)"
+#~ msgstr "Copiază selecţia (fără link-uri)"
+
+#~ msgid "Copy the selected text, removing all links"
+#~ msgstr "Copiază textul selectate, scoţând toate link-urile"
+
+#~ msgid "Name"
+#~ msgstr "Nume"
+
+#~ msgid "Description"
+#~ msgstr "Descriere"
+
+#~ msgid "Language"
+#~ msgstr "Limba"
+
+#~ msgid "About"
+#~ msgstr "Despre"
+
+#~ msgid "License"
+#~ msgstr "Licenţă"

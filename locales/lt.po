@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Lithuanian BPBible v1.4.5.1\n"
-"POT-Creation-Date: 2010-04-24 23:35+AUS Eastern Standard Time\n"
+"POT-Creation-Date: 2010-12-31 01:33+AUS Eastern Daylight Time\n"
 "PO-Revision-Date: 2010-02-13 23:18+0200\n"
 "Last-Translator: Vidmantas Valickis <vidas3vp@gmail.com>\n"
 "Language-Team: Vidmantas Valickis <vidas3vp@gmail.com>\n"
@@ -16,223 +16,220 @@ msgstr ""
 "Generated-By: pygettext.py 1.5\n"
 "X-Poedit-Country: LITHUANIA\n"
 
-#: auilayer.py:312
+#: auilayer.py:314
 msgid "Books"
 msgstr "Knygos"
 
-#: auilayer.py:360
+#: auilayer.py:375
 msgid "History"
 msgstr "Praeitis"
 
-#: backend/book.py:88
+#: backend/book.py:101
 msgid "A $ sign"
 msgstr "Vienas $ ženklas"
 
-#: backend/book.py:89
+#: backend/book.py:102
 msgid "The range of verses"
 msgstr "nuo eilutės iki eilutės"
 
-#: backend/book.py:90
+#: backend/book.py:103
 msgid "The version this is taken from"
 msgstr "Ši versija paimta iš"
 
-#: backend/book.py:91
+#: backend/book.py:104
 msgid "A description of the version"
 msgstr "Versijos apibūdinimas"
 
-#: backend/book.py:95
+#: backend/book.py:108
 msgid "The text of a verse"
 msgstr "Teksto eilutė"
 
-#: backend/book.py:96
+#: backend/book.py:109
 msgid "The verse number"
 msgstr "Eilutės numeris"
 
-#: backend/book.py:97
+#: backend/book.py:110
 msgid "The reference for each verse"
 msgstr "Kiekvienos eilutės nurodyma"
 
-#: backend/book.py:98
+#: backend/book.py:111
 msgid "The name of the current book"
 msgstr "Šios knygos pavadinimas"
 
-#: backend/book.py:99
+#: backend/book.py:112
 msgid "A shorter abbreviation of the book name"
 msgstr "Sutrumpintas knygos pavadinimas"
 
-#: backend/book.py:100
+#: backend/book.py:113
 msgid "The number of the chapter in the book"
 msgstr "Skyriaus numeris knygoje"
 
-#: backend/book.py:104
+#: backend/book.py:117
 msgid "The text of the heading"
 msgstr "Antraštės tekstas"
 
-#: backend/book.py:626
+#: backend/book.py:750
 msgid ""
 "Couldn't save cipher key. You will have to set it again when you restart"
 msgstr ""
 "Negaliu išsaugoti šifro rakto. Jums teks nurodyti jį vėl paleisite programą "
 "iš naujo"
 
-#: backend/book.py:650
+#: backend/book.py:796
 msgid "commentary"
 msgstr "komentarai"
 
-#: backend/book.py:657 bibleframe.py:36 xrc/auifrm_xrc.py:69
+#: backend/book.py:806 bibleframe.py:39 xrc/auifrm_xrc.py:72
 msgid "Bible"
 msgstr "Biblija"
 
-#: bibleframe.py:72 bookframe.py:164 mainframe.py:255
+#: backend/dictionary.py:306
+msgid "daily devotional"
+msgstr ""
+
+#: backend/genbook.py:206
+#, fuzzy
+msgid "harmony"
+msgstr "Harmonija"
+
+#: bibleframe.py:69 bookframe.py:160 mainframe.py:256
 #: search/searchpanel.py:157
 msgid "Search"
 msgstr "Paieška"
 
-#: bibleframe.py:77
+#: bibleframe.py:74
 #, fuzzy
 msgid "Go to Reference"
 msgstr "Pereiti prie nuorodos"
 
-#: bibleframe.py:80
+#: bibleframe.py:77
 #, fuzzy
 msgid "Go to a reference"
 msgstr "Pereiti prie nuorodos"
 
-#: bibleframe.py:83 xrc/harmonyfrm_xrc.py:92
-msgid "Harmony"
-msgstr "Harmonija"
-
-#: bibleframe.py:86
-msgid "Open the harmony"
-msgstr "Atidaryti harmoniją"
-
-#: bibleframe.py:89 xrc/guess_verse_xrc.py:69
+#: bibleframe.py:80 xrc/guess_verse_xrc.py:69
 msgid "Guess the Verse"
 msgstr "Atspėti eilutę"
 
-#: bibleframe.py:92
+#: bibleframe.py:83
 msgid "Play Guess the Verse"
 msgstr "Pradėti eilučių spėjimą"
 
-#: bibleframe.py:98
+#: bibleframe.py:89
 msgid "Random verse"
 msgstr "Atsitiktinė eilutė"
 
-#: bibleframe.py:101
+#: bibleframe.py:92
 msgid "Go to a random verse"
 msgstr "Pereiti į atsitiktinę eilutę"
 
-#: bibleframe.py:104
+#: bibleframe.py:95
 msgid "Copy verses"
 msgstr "Kopijuoti eilutes"
 
-#: bibleframe.py:108
+#: bibleframe.py:99
 msgid "Copy verses to other applications"
 msgstr "Kopijuoti eilutes į kitą programą"
 
-#: bibleframe.py:112 bibleframe.py:172
+#: bibleframe.py:103 bibleframe.py:163
 msgid "Open sticky tooltip"
 msgstr "Atidaryti atskirame langelyje"
 
-#: bibleframe.py:115
+#: bibleframe.py:106
 msgid "Open a sticky tooltip with the selected verses"
 msgstr "Atidaryti atskirą langelį su pasirinktomis eilutėmis"
 
-#: bibleframe.py:119
+#: bibleframe.py:110
 msgid "Compare verses"
 msgstr "Palyginti eilutes"
 
-#: bibleframe.py:122
+#: bibleframe.py:113
 msgid "Open the verse comparison pane to the selected verses"
 msgstr "Atverti eilučių palyginimo polangį ties pažymėtomis eilutėmis"
 
-#: bibleframe.py:128 manage_topics_frame.py:172 xrc/manage_topics_xrc.py:143
+#: bibleframe.py:119 manage_topics_frame.py:172 xrc/manage_topics_xrc.py:143
 msgid "Manage Topics"
 msgstr "Valdyti temas"
 
-#: bibleframe.py:131
+#: bibleframe.py:122
 msgid "Manages all of the topics and the passages in them."
 msgstr "Valdo visas temas ir fragmentus jose"
 
-#: bibleframe.py:134
+#: bibleframe.py:125
 msgid "Tag verses"
 msgstr "Priskirti gaires eilutėms"
 
-#: bibleframe.py:138
+#: bibleframe.py:129
 msgid "Tags the currently selected verses."
 msgstr "Priskiria gaires dabar pažymėtoms eilutėms"
 
-#: bibleframe.py:142
+#: bibleframe.py:133
 #, fuzzy
 msgid "Add comment to verses"
 msgstr "Eiti į eilutes"
 
-#: bibleframe.py:145
+#: bibleframe.py:136
 #, fuzzy
 msgid "Makes a comment on the currently selected verses."
 msgstr "Priskiria gaires dabar pažymėtoms eilutėms"
 
-#: bibleframe.py:207
+#: bibleframe.py:200
 msgid "Copying selected verses..."
 msgstr "Kopijuojamos pažymėtos eilutės"
 
-#: bibleframe.py:282
+#: bibleframe.py:272
 msgid "Topic management is currently not available due to an error."
 msgstr ""
 
-#: bibleframe.py:283
+#: bibleframe.py:273
 msgid "Error in Topic Management"
 msgstr ""
 
-#: bibleframe.py:310
-msgid "This chapter is empty."
-msgstr ""
-
-#: bookframe.py:146 mainframe.py:836
+#: bookframe.py:142 mainframe.py:873
 msgid "Show the %s pane"
 msgstr "Rodyti  polangį  %s"
 
-#: bookframe.py:148
+#: bookframe.py:144
 msgid "Hide the %s pane"
 msgstr "Paslėpti  polangį  %s"
 
-#: bookframe.py:157
+#: bookframe.py:153
 msgid "Shows or hides the pane"
 msgstr "Parodo arba paslepia polangį"
 
-#: bookframe.py:166
+#: bookframe.py:162
 msgid "Search in this book"
 msgstr "Paieška šioje knygoje"
 
-#: bookframe.py:177
+#: bookframe.py:173
 msgid "Information..."
 msgstr "Informacija..."
 
-#: bookframe.py:180
+#: bookframe.py:176
 msgid "Show information on the current book"
 msgstr "Parodyti informaciją apie šią knygą"
 
-#: bookframe.py:194
+#: bookframe.py:190
 msgid "Search for:"
 msgstr "Paieška..."
 
-#: bookframe.py:248
+#: bookframe.py:244
 msgid "Go to reference"
 msgstr "Pereiti prie nuorodos"
 
-#: bookframe.py:367
+#: bookframe.py:365 genbookframe.py:211
 msgid "Go to this reference"
 msgstr "Pereiti prie šios nuorodos"
 
-#: bookframe.py:374
+#: bookframe.py:372 genbookframe.py:218
 msgid "Link the %s to the Bible"
 msgstr "Susiekite %s su Biblija"
 
-#: bookframe.py:432
+#: bookframe.py:430
 msgid "Commentary"
 msgstr "Komentarai"
 
-#: bookframe.py:448
+#: bookframe.py:446
 msgid "Dictionary"
 msgstr "Žodynas"
 
@@ -272,19 +269,108 @@ msgstr ""
 "viršyta \n"
 " <br> Tai turbūt reiškia, kad nuoroda buvo netinkama] </b>"
 
-#: copyverses.py:82 xrc/copyverses_xrc.py:77
+#: copyverses.py:94 xrc/copyverses_xrc.py:78
 msgid "Edit Template..."
 msgstr "Redaguoti šabloną..."
 
-#: copyverses.py:133
+#: copyverses.py:148
 msgid "<custom: based on %s>"
 msgstr "<pasirinkti: remiantis %s>"
 
-#: displayframe.py:248
+#: display_options.py:83
+msgid "Columns"
+msgstr ""
+
+#: display_options.py:84
+msgid "Display each verse on its own line."
+msgstr "Rodyti kiekvieną eilutę savo linijoje."
+
+#: display_options.py:84
+msgid "One line per verse"
+msgstr "Viena linija eilutei"
+
+#: display_options.py:85
+msgid "Continuous scrolling"
+msgstr ""
+
+#: display_options.py:86
+#, fuzzy
+msgid "Headings"
+msgstr "&Antraštės"
+
+#: display_options.py:87
+#, fuzzy
+msgid "Cross References"
+msgstr "Nuoroda"
+
+#: display_options.py:88
+#, fuzzy
+msgid "Footnotes"
+msgstr "&Paraštė"
+
+#: display_options.py:89
+#, fuzzy
+msgid "Strongs Numbers"
+msgstr "Klaidingas strongo numeris %s."
+
+#: display_options.py:90
+#, fuzzy
+msgid "Strongs Blocked"
+msgstr "Nėra užrakinta"
+
+#: display_options.py:91
+msgid "Morphology"
+msgstr ""
+
+#: display_options.py:92
+msgid "Morph Segmentation"
+msgstr ""
+
+#: display_options.py:93
+msgid "Colour code speakers"
+msgstr ""
+
+#: display_options.py:94
+msgid "Words of Christ in Red"
+msgstr ""
+
+#: display_options.py:95
+msgid "Colour code by speaker"
+msgstr ""
+
+#: display_options.py:96
+msgid "Off"
+msgstr ""
+
+#: display_options.py:98
+#, fuzzy
+msgid "Strong's Headwords"
+msgstr "Naudoti Strongo raktinius žodžius"
+
+#: display_options.py:99
+#, fuzzy
+msgid "Transliterated"
+msgstr "Vertėjai"
+
+#: display_options.py:100
+#, fuzzy
+msgid "Original Language"
+msgstr "Kalba"
+
+#: display_options.py:101
+msgid "Pronunciation"
+msgstr ""
+
+#: display_options.py:102
+#, fuzzy
+msgid "Strong's Numbers"
+msgstr "Klaidingas strongo numeris %s."
+
+#: displayframe.py:228
 msgid "Don't know how to open this morphology type:"
 msgstr "Nežinau, kaip atidaryti šį morfologijos tipą:"
 
-#: displayframe.py:258
+#: displayframe.py:238
 msgid ""
 "Module %s is not installed, so you cannot view details for this "
 "morphological code"
@@ -292,47 +378,31 @@ msgstr ""
 "Modulis %s nėra įdiegtas, tokiu būdu jūs negalite matyti išsamią informaciją "
 "šiam morfologiniam kodui"
 
-#: displayframe.py:472
+#: displayframe.py:466
 msgid "Select all"
 msgstr "Pažymėti viską"
 
-#: displayframe.py:474
+#: displayframe.py:468
 msgid "Select all the text in the frame"
 msgstr "Pažymėkite visą tekstą langelyje"
 
-#: displayframe.py:477
-msgid "Copy selection (with links)"
-msgstr "Kopijuoti pažymėtą sritį (su nuorodomis)"
-
-#: displayframe.py:480
-msgid "Copy the selected text with links"
-msgstr "Kopijuoti pažymėtą tekstą su nuorodomis"
-
-#: displayframe.py:484
-msgid "Copy selection (without links)"
-msgstr "kopijuoti pažymėtą sritį (be nuorodų)"
-
-#: displayframe.py:487
-msgid "Copy the selected text, removing all links"
-msgstr "Kopijuoti pažymėtą tekstą, pašalinant nuorodas"
-
-#: displayframe.py:549
+#: displayframe.py:529
 msgid "the selected word"
 msgstr "pažymėtas žodis"
 
-#: displayframe.py:555
+#: displayframe.py:535
 msgid "the selected phrase"
 msgstr "pažymėtas išsireiškimas"
 
-#: displayframe.py:569
+#: displayframe.py:549
 msgid "Look up %s in the dictionary"
 msgstr "Paieška %s žodyne"
 
-#: displayframe.py:590
+#: displayframe.py:570
 msgid "Search for %s in the Bible"
 msgstr "Paieška %s Biblijoje"
 
-#: displayframe.py:592
+#: displayframe.py:572
 #, fuzzy
 msgid "Search for %s in this book"
 msgstr "Paieška šioje knygoje"
@@ -353,28 +423,37 @@ msgstr "Įvyko klaida."
 msgid "Above exception was ignored"
 msgstr "Ankstesnė išimtis buvo ignoruota"
 
-#: genbookframe.py:57
+#: genbookframe.py:61
 msgid "Other Books"
 msgstr "Kitos knygos"
 
-#: guess_verse.py:32
+#: genbookframe.py:181 xrc/harmonyfrm_xrc.py:92
+msgid "Harmony"
+msgstr "Harmonija"
+
+#: genbookframe.py:238
+#, fuzzy
+msgid "%s is not in this harmony."
+msgstr "%s nėra harmonijoje"
+
+#: guess_verse.py:37
 #, fuzzy
 msgid "The verse was %s"
 msgstr "Eilutės numeris"
 
-#: guess_verse.py:42
+#: guess_verse.py:52
 msgid "Yes, you are right. The verse was %s"
 msgstr "Taip, jūs esate teisus. Tai buvo eilutė %s"
 
-#: guess_verse.py:44
+#: guess_verse.py:54
 msgid "Correct"
 msgstr "Teisingai"
 
-#: guess_verse.py:51
+#: guess_verse.py:61
 msgid "No, you are wrong. Try again."
 msgstr "Ne, jūs suklydote. Bandykite dar kartą."
 
-#: guess_verse.py:52
+#: guess_verse.py:62
 msgid "Try again."
 msgstr "Bandykite iš naujo."
 
@@ -383,44 +462,40 @@ msgstr "Bandykite iš naujo."
 msgid "Copy"
 msgstr "Kopijuoti"
 
-#: gui/passage_tag.py:152
+#: gui/passage_tag.py:167
 msgid "Expand"
 msgstr ""
 
-#: gui/passage_tag.py:154
+#: gui/passage_tag.py:169
 #, fuzzy
 msgid "Expand all of the passages in this topic"
 msgstr "Valdo visas temas ir fragmentus jose"
 
-#: gui/passage_tag.py:426
+#: gui/passage_tag.py:558
 msgid "Use Parent Look:"
 msgstr ""
 
-#: gui/passage_tag.py:427
+#: gui/passage_tag.py:559
 msgid "Colour:"
-msgstr ""
-
-#: gui/passage_tag.py:428 xrc/manage_topics_xrc.py:146
-msgid "Appearance:"
 msgstr ""
 
 #: harmony/harmonyframe.py:213
 msgid "Loading harmony"
 msgstr "Atidaroma harmonija"
 
-#: harmony/harmonyframe.py:264
+#: harmony/harmonyframe.py:271
 msgid "%s is not in this harmony"
 msgstr "%s nėra harmonijoje"
 
-#: header_bar.py:39
+#: header_bar.py:38
 #, fuzzy
 msgid "%s verses"
 msgstr "Priskirti gaires eilutėms"
 
 #: install_manager/install_drop_target.py:33
-#: install_manager/install_drop_target.py:56 module_manager.py:120
-#: module_manager.py:124 search/searchpanel.py:804 templatemanager.py:436
-#: templatemanager.py:447
+#: install_manager/install_drop_target.py:56 module_manager.py:121
+#: module_manager.py:125 search/searchpanel.py:806 templatemanager.py:439
+#: templatemanager.py:452
 msgid "Error"
 msgstr "Klaida"
 
@@ -466,7 +541,7 @@ msgstr ""
 msgid "Extracting %s"
 msgstr "Išskleidžiama %s"
 
-#: install_manager/install_drop_target.py:82 search/searchpanel.py:960
+#: install_manager/install_drop_target.py:82 search/searchpanel.py:962
 msgid "Preparing"
 msgstr "Ruošiama"
 
@@ -494,188 +569,158 @@ msgstr "Informacija"
 msgid "Cannot read book metadata in file %s"
 msgstr "Negaliu perskaityti knygos metaduomenų faile %s"
 
-#: mainframe.py:251
+#: mainframe.py:252
 msgid "Go to verse"
 msgstr "Eiti į eilutę"
 
-#: mainframe.py:252
+#: mainframe.py:253
 msgid "Go to this verse"
 msgstr "Eiti į šią eilutę"
 
-#: mainframe.py:256
+#: mainframe.py:257
 #, fuzzy
 msgid "Search in the current book"
 msgstr "Paieška šioje knygoje"
 
-#: mainframe.py:259 xrc/copyverses_xrc.py:80
+#: mainframe.py:260 xrc/copyverses_xrc.py:81
 msgid "Copy Verses"
 msgstr "Kopijuoti"
 
-#: mainframe.py:260
+#: mainframe.py:261
 msgid "Open the Copy Verses dialog"
 msgstr "Atidaryti eilučių kopijavimo langą"
 
-#: mainframe.py:265
+#: mainframe.py:266
 msgid "Back"
 msgstr "Atgal"
 
-#: mainframe.py:266
+#: mainframe.py:267
 msgid "Go back a verse"
 msgstr "Vieną eilutę atgal"
 
-#: mainframe.py:269
+#: mainframe.py:270
 msgid "Forward"
 msgstr "Į priekį"
 
-#: mainframe.py:270
+#: mainframe.py:271
 msgid "Go forward a verse"
 msgstr "Viena eilute į priekį"
 
-#: mainframe.py:274
+#: mainframe.py:275
 msgid "Zoom In"
 msgstr "Padidinti"
 
-#: mainframe.py:275
+#: mainframe.py:276
 msgid "Make text bigger"
 msgstr "Padaryti tekstą didesnį"
 
-#: mainframe.py:278
+#: mainframe.py:279
 msgid "Default Zoom"
 msgstr "Pradinis"
 
-#: mainframe.py:279
+#: mainframe.py:280
 msgid "Return text to default size"
 msgstr "Atstatyti teksto dydį"
 
-#: mainframe.py:282
+#: mainframe.py:283
 msgid "Zoom Out"
 msgstr "Sumažinti"
 
-#: mainframe.py:283
+#: mainframe.py:284
 msgid "Make text smaller"
 msgstr "Padaryti tekstą mažesnį"
 
-#: mainframe.py:312
+#: mainframe.py:313
 msgid "Navigation"
 msgstr "Valdymas"
 
-#: mainframe.py:314
+#: mainframe.py:315
 msgid "Zoom"
 msgstr "Didinimas - mažinimas"
 
-#: mainframe.py:316
+#: mainframe.py:317
 msgid "History toolbar"
 msgstr "Praeities įrankių juosta"
 
-#: mainframe.py:682
+#: mainframe.py:718
 #, fuzzy
 msgid "Installable books"
 msgstr "Įdiegti knygas..."
 
-#: mainframe.py:685 versecompare.py:200
+#: mainframe.py:721 versecompare.py:204
 msgid "Choose books"
 msgstr "Pasirinkite knygas"
 
-#: mainframe.py:760 xrc/auifrm_xrc.py:44
+#: mainframe.py:796 xrc/auifrm_xrc.py:44
 msgid "&Language"
 msgstr "&Kalba"
 
-#: mainframe.py:763 xrc/auifrm_xrc.py:45
+#: mainframe.py:799 xrc/auifrm_xrc.py:45
 msgid "&Bible book names"
 msgstr ""
 
-#: mainframe.py:794 xrc/auifrm_xrc.py:49
+#: mainframe.py:831 xrc/auifrm_xrc.py:49
 msgid "&Display"
 msgstr "&Rodyti"
 
-#: mainframe.py:799 xrc/auifrm_xrc.py:52
+#: mainframe.py:836 xrc/auifrm_xrc.py:52
 msgid "&Windows"
 msgstr "&Išdėstymas"
 
-#: mainframe.py:804 xrc/auifrm_xrc.py:51
+#: mainframe.py:841 xrc/auifrm_xrc.py:51
 msgid "Toolbars"
 msgstr "Įrankių juostos"
 
-#: mainframe.py:832
+#: mainframe.py:869
 msgid "Show the %s toolbar"
 msgstr "Rodyti %s įrankių juostos"
 
-#: mainframe.py:855 xrc/auifrm_xrc.py:53
+#: mainframe.py:891 xrc/auifrm_xrc.py:53
 msgid "Debug"
 msgstr "Ištirti"
 
-#: mainframe.py:877
-msgid "Pronunciation"
-msgstr ""
-
-#: mainframe.py:878
-#, fuzzy
-msgid "Original Language"
-msgstr "Kalba"
-
-#: mainframe.py:879
-#, fuzzy
-msgid "Transliterated"
-msgstr "Vertėjai"
-
-#: mainframe.py:885
-#, fuzzy
-msgid "Strong's Numbers"
-msgstr "Klaidingas strongo numeris %s."
-
-#: mainframe.py:902
-#, fuzzy
-msgid "Strong's headwords"
-msgstr "Naudoti Strongo raktinius žodžius"
-
-#: mainframe.py:965
+#: mainframe.py:923
 msgid "Expand cross-references"
 msgstr "Išskleisti lygiagrečias eilutes"
 
-#: mainframe.py:966
+#: mainframe.py:924
 msgid "Display cross references partially expanded"
 msgstr "Rodyti lygiagrečias eilutes dalinai išskleistas"
 
-#: mainframe.py:971
-msgid "One line per verse"
-msgstr "Viena linija eilutei"
-
-#: mainframe.py:972
-msgid "Display each verse on its own line."
-msgstr "Rodyti kiekvieną eilutę savo linijoje."
-
-#: mainframe.py:977
+#: mainframe.py:929
 msgid "Topic Tags"
 msgstr "Temų gairės"
 
-#: mainframe.py:978
+#: mainframe.py:930
 msgid "Display the topics that each verse is tagged with."
 msgstr "Parodyti visas temas pagal kurias kiekviena eilutė yra sužymėta"
 
-#: mainframe.py:1142
+#: mainframe.py:1049
 msgid "BPBible will now quickly restart to change your language."
 msgstr ""
 
-#: mainframe.py:1143
+#: mainframe.py:1050
 #, fuzzy
 msgid "Restarting"
 msgstr "Paleisti iš naujo"
 
-#: mainframe.py:1162
+#: mainframe.py:1069
 msgid "An error occurred on closing:"
 msgstr "Įvyko klaida uždarant:"
 
-#: mainframe.py:1174 mainframe.py:1175
+#: mainframe.py:1081 mainframe.py:1082
 msgid "search "
 msgstr "paieška"
 
-#: mainframe.py:1198
+#: mainframe.py:1106
+#, fuzzy
 msgid ""
 "Flexible Bible study software.\n"
 "\t\t\tBuilt Using the Sword Project from crosswire.org\n"
 "\t\t\tPython Version: %(sysversion)s\n"
 "\t\t\twxPython Version: %(wxversion)s\n"
-"\t\t\tSWORD Version: %(swversion)s"
+"\t\t\tSWORD Version: %(swversion)s\n"
+"\t\t\tXULRunner Version: %(xulrunner_version)s"
 msgstr ""
 "Lanksti Biblijos tyrinėjimo programa. \n"
 "\t\t\tPadaryta naudojant Sword Project iš crosswire.org\n"
@@ -683,35 +728,35 @@ msgstr ""
 "\t\t\twxPython Version: %(wxversion)s\n"
 "\t\t\tSWORD Version: %(swversion)s"
 
-#: mainframe.py:1209
+#: mainframe.py:1118
 msgid "BPBible website"
 msgstr "BPBiblijos programos tinklalapis"
 
-#: mainframe.py:1211
+#: mainframe.py:1120
 msgid "BPBible development team"
 msgstr "BPBiblijos kūrėjų komanda"
 
-#: mainframe.py:1212
+#: mainframe.py:1121
 msgid "SWORD library developers"
 msgstr "SWORD bibliotekos kūrėjai"
 
-#: mainframe.py:1216
+#: mainframe.py:1125
 msgid "Developers"
 msgstr "Kūrėjai"
 
-#: mainframe.py:1217
+#: mainframe.py:1126
 msgid "Artists"
 msgstr "Dailininkai"
 
-#: mainframe.py:1218
+#: mainframe.py:1127
 msgid "Translators"
 msgstr "Vertėjai"
 
-#: mainframe.py:1220
+#: mainframe.py:1129
 msgid "translator-credits"
 msgstr "į lietuvių kalbą išvertė Vidmantas Valickis"
 
-#: mainframe.py:1224
+#: mainframe.py:1133
 msgid ""
 "Icons used are from famfamfam\n"
 "http://www.famfamfam.com/lab/icons/silk\n"
@@ -723,7 +768,7 @@ msgstr ""
 "Ir iš Tango Desktop Project\n"
 "http://tango.freedesktop.org/Tango_Desktop_Project"
 
-#: mainframe.py:1230
+#: mainframe.py:1139
 msgid ""
 "BPBible is licensed under the GPL v2. For more details, refer to the LICENSE."
 "txt file in the application directory"
@@ -859,81 +904,78 @@ msgstr ""
 msgid "Confirm book deletion"
 msgstr "Patvirtinkite kad sutinkate ištrinti knygas"
 
-#: module_manager.py:94
+#: module_manager.py:95
 msgid "Please select a book to unlock"
 msgstr "Pasirinkite knygą kurią norite atrakinti"
 
-#: module_manager.py:95
+#: module_manager.py:96
 msgid "Select a book"
 msgstr "Pasirinkite knygą"
 
-#: module_manager.py:104
+#: module_manager.py:105
 msgid "This book is not locked at all, and doesn't need to be unlocked"
 msgstr "Ši knyga nėra užrakinta todėl jos nereikia atrakinti"
 
-#: module_manager.py:105
+#: module_manager.py:106
 msgid "Not locked"
 msgstr "Nėra užrakinta"
 
-#: module_manager.py:110
+#: module_manager.py:111
 msgid "Unlock code for %s"
 msgstr "Atrakinimo kodas %s"
 
-#: module_manager.py:111
+#: module_manager.py:112
 msgid "Unlock code"
 msgstr "Atrakinimo kodas"
 
-#: module_manager.py:123
+#: module_manager.py:124
 msgid "Couldn't find config file. Error given was:"
 msgstr "Negaliu rasti konfigūracijos rinkmenos. Įvykusi klaida tokia:"
 
-#: module_tree.py:23
+#: module_tree.py:24 module_tree.py:40
 msgid "Bibles"
 msgstr "Biblijos"
 
-#: module_tree.py:24
+#: module_tree.py:25 module_tree.py:41
 msgid "Commentaries"
 msgstr "Komentarai"
 
-#: module_tree.py:25
+#: module_tree.py:26 module_tree.py:42
 msgid "Dictionaries"
 msgstr "Žodynai"
 
-#: module_tree.py:26
+#: module_tree.py:27 module_tree.py:47
 msgid "Other books"
 msgstr "Kitos knygos"
 
-#: module_tree.py:35
+#: module_tree.py:28 module_tree.py:33 module_tree.py:46
+msgid "Daily Devotional"
+msgstr ""
+
+#: module_tree.py:29 module_tree.py:36 module_tree.py:43
+#, fuzzy
+msgid "Harmonies"
+msgstr "Harmonija"
+
+#: module_tree.py:34 module_tree.py:44
+msgid "Maps"
+msgstr ""
+
+#: module_tree.py:35 module_tree.py:45
+msgid "Images"
+msgstr ""
+
+#: module_tree.py:56
 msgid "Find Book..."
 msgstr "Surasti knygą..."
 
-#: module_tree.py:115
+#: module_tree.py:137
 msgid "Show information for %s"
 msgstr "Parodyti informaciją %s"
 
-#: moduleinfo.py:78
+#: moduleinfo.py:6
 msgid "Book Information"
 msgstr "Knygos informacija"
-
-#: moduleinfo.py:85
-msgid "Name"
-msgstr "Pavadinimas"
-
-#: moduleinfo.py:86
-msgid "Description"
-msgstr "Aprašymas"
-
-#: moduleinfo.py:88
-msgid "Language"
-msgstr "Kalba"
-
-#: moduleinfo.py:93
-msgid "About"
-msgstr "Apie"
-
-#: moduleinfo.py:95
-msgid "License"
-msgstr "Licensija"
 
 #: pathmanager.py:25
 msgid "New"
@@ -947,26 +989,26 @@ msgstr "Skaitant knygas..."
 msgid "Path manager"
 msgstr "failų ar knygų buvimo vieta"
 
-#: preview_window.py:10 search/searchpanel.py:883 search/searchpanel.py:917
-#: xrc/copyverses_xrc.py:78 xrc/templatemanager_xrc.py:97
+#: preview_window.py:11 search/searchpanel.py:885 search/searchpanel.py:919
+#: xrc/copyverses_xrc.py:79 xrc/templatemanager_xrc.py:97
 msgid "Preview"
 msgstr "Peržiūra"
 
-#: preview_window.py:34
+#: preview_window.py:35
 msgid "Move over a link to see a preview for it"
 msgstr ""
 
-#: preview_window.py:57
+#: preview_window.py:56
 #, fuzzy
 msgid "Show in tooltip"
 msgstr "Informacijos langelis"
 
-#: preview_window.py:58
+#: preview_window.py:57
 #, fuzzy
 msgid "Show this in a tooltip"
 msgstr "Rodyti %s įrankių juostos"
 
-#: protocols.py:99
+#: protocols.py:101
 #, fuzzy
 msgid ""
 "The book '%s' is not installed, so you cannot view details for this entry (%"
@@ -1023,36 +1065,36 @@ msgstr ""
 msgid "Could not understand string"
 msgstr "negaliu suprasti eilutės"
 
-#: search/searchpanel.py:265 search/searchpanel.py:572
-#: search/searchpanel.py:749 search/searchpanel.py:768
-#: search/searchpanel.py:846 search/searchpanel.py:862
-#: search/searchpanel.py:900
+#: search/searchpanel.py:267 search/searchpanel.py:574
+#: search/searchpanel.py:751 search/searchpanel.py:770
+#: search/searchpanel.py:848 search/searchpanel.py:864
+#: search/searchpanel.py:902
 msgid "%d references found"
 msgstr "%d nuorodų rasta"
 
-#: search/searchpanel.py:291 xrc/search_xrc.py:142
+#: search/searchpanel.py:293 xrc/search_xrc.py:142
 msgid "&Index"
 msgstr "&Rodyklė"
 
-#: search/searchpanel.py:294
+#: search/searchpanel.py:296
 msgid "Unindex"
 msgstr "Nenaudoti rodyklės"
 
-#: search/searchpanel.py:316
+#: search/searchpanel.py:318
 msgid "You don't have a current %s, so you cannot search at the moment"
 msgstr ""
 "Jūs neturite dabartinės %s, tokiu būdu jūs negalite naudoti paieškos šiuo "
 "metu"
 
-#: search/searchpanel.py:323 search/searchpanel.py:360
+#: search/searchpanel.py:325 search/searchpanel.py:362
 msgid "No current version"
 msgstr "Nėra dabartinės versijos"
 
-#: search/searchpanel.py:334
+#: search/searchpanel.py:336
 msgid "Reading search index..."
 msgstr "Skaitomas paieškos turinys..."
 
-#: search/searchpanel.py:366
+#: search/searchpanel.py:368
 msgid ""
 "Search index does not exist for book %s. Indexing will make search much "
 "faster. Create Index?"
@@ -1060,114 +1102,124 @@ msgstr ""
 "Paieškos rodyklė neegzistuoja %s knygai. Indeksavimas padarys paiešką daug "
 "greitesnę. Sukurti Rodyklę?"
 
-#: search/searchpanel.py:369
+#: search/searchpanel.py:371
 msgid "Create Index?"
 msgstr "Sukurti Rodyklę?"
 
-#: search/searchpanel.py:403 search/searchpanel.py:604
-#: search/searchpanel.py:876 search/searchpanel.py:910 xrc/search_xrc.py:140
+#: search/searchpanel.py:405 search/searchpanel.py:606
+#: search/searchpanel.py:878 search/searchpanel.py:912 xrc/search_xrc.py:140
 msgid "&Search"
 msgstr "&Paieška"
 
-#: search/searchpanel.py:429 xrc/search_xrc.py:143 xrc/search_xrc.py:158
+#: search/searchpanel.py:431 xrc/search_xrc.py:143 xrc/search_xrc.py:158
 msgid "Search Options"
 msgstr "Paieškos nuostatos"
 
-#: search/searchpanel.py:568
+#: search/searchpanel.py:570
 msgid "&Stop"
 msgstr "&Sustabdyti"
 
-#: search/searchpanel.py:641 search/searchpanel.py:716
+#: search/searchpanel.py:643 search/searchpanel.py:718
 msgid "Error in search"
 msgstr "Klaida naudojant paiešką"
 
-#: search/searchpanel.py:646 search/searchpanel.py:721
+#: search/searchpanel.py:648 search/searchpanel.py:723
 msgid "The following words were not found in this %s:"
 msgstr "Šie žodžiai nebuvo surasti šiame %s:"
 
-#: search/searchpanel.py:649 search/searchpanel.py:724
+#: search/searchpanel.py:651 search/searchpanel.py:726
 msgid "Unknown word"
 msgstr "Nežinomas žodis"
 
-#: search/searchpanel.py:751 search/searchpanel.py:771
-#: search/searchpanel.py:848 search/searchpanel.py:866
+#: search/searchpanel.py:753 search/searchpanel.py:773
+#: search/searchpanel.py:850 search/searchpanel.py:868
 msgid "1 word"
 msgstr "1 žodis"
 
-#: search/searchpanel.py:752 search/searchpanel.py:772
-#: search/searchpanel.py:849 search/searchpanel.py:867
+#: search/searchpanel.py:754 search/searchpanel.py:774
+#: search/searchpanel.py:851 search/searchpanel.py:869
 msgid "%d words"
 msgstr "%d žodžių"
 
-#: search/searchpanel.py:755 search/searchpanel.py:777
+#: search/searchpanel.py:757 search/searchpanel.py:779
 msgid "%d hits"
 msgstr "%d teigiamų rezultatų"
 
-#: search/searchpanel.py:767 search/searchpanel.py:861
-#: search/searchpanel.py:899
+#: search/searchpanel.py:769 search/searchpanel.py:863
+#: search/searchpanel.py:901
 msgid "1 reference found"
 msgstr "rasta 1 nuoroda"
 
-#: search/searchpanel.py:776
+#: search/searchpanel.py:778
 msgid "1 hit"
 msgstr "1 teigiamas rezultatas"
 
-#: search/searchpanel.py:803
+#: search/searchpanel.py:805
 #, fuzzy
 msgid "You cannot search on fields in unindexed search"
 msgstr "Jūs negalite naudoti paieškos lauke %r"
 
-#: search/searchpanel.py:883 search/searchpanel.py:917
+#: search/searchpanel.py:885 search/searchpanel.py:919
 msgid "Reference"
 msgstr "Nuoroda"
 
-#: search/searchpanel.py:896
+#: search/searchpanel.py:898
 msgid "%(version)s search - %(numresults)s"
 msgstr "%(version)s paieška - %(numresults)s"
 
-#: search/searchpanel.py:956
+#: search/searchpanel.py:958
 msgid "Processing %s"
 msgstr "Vykdoma %s"
 
-#: search/searchpanel.py:960
+#: search/searchpanel.py:962
 msgid "Indexing %s"
 msgstr "Kuriama duomenų bazė %s"
 
-#: search/searchpanel.py:992
+#: search/searchpanel.py:994
 msgid "Writing %s"
 msgstr "Įrašoma %s"
 
-#: search/searchpanel.py:1149
+#: search/searchpanel.py:1152
 msgid "Other Book Search"
 msgstr "Paieška kitose knygose"
 
-#: search/searchpanel.py:1194
+#: search/searchpanel.py:1197
 msgid "Entries"
 msgstr "Įrašai"
 
-#: search/searchpanel.py:1201
+#: search/searchpanel.py:1204
+#, fuzzy
+msgid "Harmony Search"
+msgstr "Harmonija"
+
+#: search/searchpanel.py:1211
 msgid "Dictionary Search"
 msgstr "Paieška žodyne"
 
-#: search/searchpanel.py:1242
+#: search/searchpanel.py:1252
+#, fuzzy
+msgid "Daily Devotional Search"
+msgstr "Paieška žodyne"
+
+#: search/searchpanel.py:1259
 msgid "Commentary Search"
 msgstr "Paieška komentaruose"
 
-#: swlib/pysw.py:139 swlib/pysw.py:691
+#: swlib/pysw.py:119 swlib/pysw.py:658
 msgid "There are only %(chapters)d chapters in %(book)s (given %(given)d)"
 msgstr "Yra tiktai %(chapters)d skyriai šioje %(book)s (given %(given)d)"
 
-#: swlib/pysw.py:157 swlib/pysw.py:702
+#: swlib/pysw.py:137 swlib/pysw.py:669
 msgid ""
 "There are only %(verses)d verses in %(book)s %(chapter)s (given %(given)d)"
 msgstr ""
 "Yra tiktai %(verses)d eilutės šioje %(book)s %(chapter)s (given %(given)d)"
 
-#: swlib/pysw.py:876 swlib/pysw.py:1657
+#: swlib/pysw.py:843 swlib/pysw.py:1659
 msgid "Invalid Reference: %s"
 msgstr "Klaidinga nuoroda: %s"
 
-#: swlib/pysw.py:1645
+#: swlib/pysw.py:1647
 msgid "Invalid empty reference"
 msgstr "Klaidinga tuščia nuoroda"
 
@@ -1175,67 +1227,67 @@ msgstr "Klaidinga tuščia nuoroda"
 msgid "Tag %s"
 msgstr "Gairė %s"
 
-#: tag_passage_dialog.py:108 tag_passage_dialog.py:116 user_comments.py:66
+#: tag_passage_dialog.py:105 tag_passage_dialog.py:113 user_comments.py:66
 #, fuzzy
 msgid "Comment on %s"
 msgstr "Komentarai"
 
-#: templatemanager.py:435
+#: templatemanager.py:438
 msgid "Template '%s' is read only. Try a different name."
 msgstr ""
 "Šablonas '%s' yra tik skaitomas. Pabandykite įrašyti kitokį pavadinimą."
 
-#: templatemanager.py:440
+#: templatemanager.py:445
 msgid "Template '%s' already exists. Overwrite?"
 msgstr "Šablonas '%s' jau egzistuoja. Keisti?"
 
-#: templatemanager.py:441
+#: templatemanager.py:446
 msgid "Overwrite?"
 msgstr "Keisti?"
 
-#: templatemanager.py:446
+#: templatemanager.py:451
 msgid "Template name is already in use. Try a different name."
 msgstr "Šablono vardas yra jau naudojamas. Pabandykite skirtingą vardą."
 
-#: tooltip.py:226
+#: tooltip.py:268
 msgid "Anchor"
 msgstr "Prieraišas"
 
-#: tooltip.py:227
+#: tooltip.py:269
 msgid "Don't hide this tooltip"
 msgstr "Neslėpti šios informacijos langelio"
 
-#: tooltip.py:230
+#: tooltip.py:272
 msgid "Copy All"
 msgstr "Kopijuoti viską"
 
-#: tooltip.py:231
+#: tooltip.py:273
 msgid "Copy tooltip text (with links)"
 msgstr "Kopijuoti informacijos langelio tekstą (su nuorodomis)"
 
-#: tooltip.py:296
+#: tooltip.py:338
 msgid "Tooltip"
 msgstr "Mygtuko etiketė"
 
-#: tooltip.py:507 tooltip.py:656
+#: tooltip.py:534 tooltip.py:684
 msgid "Sticky Tooltip"
 msgstr "Informacijos langelis"
 
-#: tooltip.py:560 tooltip.py:562
+#: tooltip.py:600 tooltip.py:602
 msgid "Stay on top"
 msgstr "Laikyti virš kitų"
 
-#: tooltip.py:702
+#: tooltip.py:731
 #, fuzzy
 msgid "Find"
 msgstr "&Rasti:"
 
-#: tooltip.py:704
+#: tooltip.py:733
 #, fuzzy
 msgid "Search for this strong's number in the Bible"
 msgstr "Paieška %s Biblijoje"
 
-#: tooltip.py:719
+#: tooltip.py:748
 msgid ""
 "Module %s is not installed, so you cannot view details for this strong's "
 "number"
@@ -1243,11 +1295,11 @@ msgstr ""
 "Modulis %s nėra įdiegtas, tokiu būdu jūs negalite matyti išsamią informaciją "
 "šio strongo žodyno numeriui"
 
-#: tooltip.py:781
+#: tooltip.py:810
 msgid "Go to verses"
 msgstr "Eiti į eilutes"
 
-#: tooltip.py:783
+#: tooltip.py:812
 msgid "Open this reference"
 msgstr "Atidaryti šią nuorodą"
 
@@ -1284,27 +1336,27 @@ msgstr "Ar jūs tikrai norite įdiegti šią knygą?"
 msgid "Delete Comment"
 msgstr "Komentarai"
 
-#: versecompare.py:49
+#: versecompare.py:51
 msgid "Version Comparison"
 msgstr "Eilučių palyginimas"
 
-#: versecompare.py:188
+#: versecompare.py:192
 msgid "Set books to compare"
 msgstr "Pasirinkite knygas palyginimui"
 
-#: versecompare.py:190
+#: versecompare.py:194
 msgid "Set the books this version comparison will use"
 msgstr "Nustatykite knygas, kurias šis knygų versijų palyginimas panaudos"
 
-#: versecompare.py:199
+#: versecompare.py:203
 msgid "Choose books to compare in the verse comparison window"
 msgstr "Parinkite knygas, kad palygintumėte eilučių palyginimo lange"
 
-#: versecompare.py:223
+#: versecompare.py:227
 msgid "Choose books to compare"
 msgstr "Pasirinkite knygas palyginimui"
 
-#: versecompare.py:229
+#: versecompare.py:233
 msgid "View in parallel mode"
 msgstr "Peržiūrėti lygiagrečioje būsenoje"
 
@@ -1349,54 +1401,67 @@ msgid "WI"
 msgstr "WI"
 
 #: xrc/auifrm_xrc.py:56
+#, fuzzy
+msgid "Error Console"
+msgstr "Klaida naudojant paiešką"
+
+#: xrc/auifrm_xrc.py:57
 msgid "gather"
 msgstr "rinkti"
 
-#: xrc/auifrm_xrc.py:57
+#: xrc/auifrm_xrc.py:58
 msgid "diff"
 msgstr "skirtumai"
 
-#: xrc/auifrm_xrc.py:58
+#: xrc/auifrm_xrc.py:59
 msgid "confirm"
 msgstr "patvirtinti"
 
-#: xrc/auifrm_xrc.py:59
+#: xrc/auifrm_xrc.py:60
 msgid "compile"
 msgstr "kompiliuoti"
 
-#: xrc/auifrm_xrc.py:60
+#: xrc/auifrm_xrc.py:61
 msgid "Restart"
 msgstr "Paleisti iš naujo"
 
-#: xrc/auifrm_xrc.py:61
+#: xrc/auifrm_xrc.py:62
 msgid "Locale"
 msgstr "Lokalė"
 
-#: xrc/auifrm_xrc.py:62
+#: xrc/auifrm_xrc.py:63
+msgid "Reload"
+msgstr ""
+
+#: xrc/auifrm_xrc.py:64
+msgid "Reload w/ chrome"
+msgstr ""
+
+#: xrc/auifrm_xrc.py:65
 msgid "&Help"
 msgstr "&Pagalba"
 
-#: xrc/auifrm_xrc.py:63
+#: xrc/auifrm_xrc.py:66
 msgid "BPBible Website"
 msgstr "BPBible tinklalapis"
 
-#: xrc/auifrm_xrc.py:64
+#: xrc/auifrm_xrc.py:67
 msgid "Documentation..."
 msgstr "Dokumentacija..."
 
-#: xrc/auifrm_xrc.py:65
+#: xrc/auifrm_xrc.py:68
 msgid "Report a problem..."
 msgstr "Pranešti apie problemą..."
 
-#: xrc/auifrm_xrc.py:66
+#: xrc/auifrm_xrc.py:69
 msgid "Download books..."
 msgstr "Atsisiųsti knygas..."
 
-#: xrc/auifrm_xrc.py:67
+#: xrc/auifrm_xrc.py:70
 msgid "&About..."
 msgstr "&Apie..."
 
-#: xrc/auifrm_xrc.py:68
+#: xrc/auifrm_xrc.py:71
 msgid "Show about dialog"
 msgstr ""
 
@@ -1409,14 +1474,18 @@ msgid "&Template"
 msgstr "&Šablonas"
 
 #: xrc/copyverses_xrc.py:75
+msgid "Copy formatted"
+msgstr ""
+
+#: xrc/copyverses_xrc.py:76
 msgid "&Save template"
 msgstr "&Išsaugoti šabloną"
 
-#: xrc/copyverses_xrc.py:76
+#: xrc/copyverses_xrc.py:77
 msgid "&Load Template"
 msgstr "&Atidaryti šabloną"
 
-#: xrc/copyverses_xrc.py:79 xrc/templatemanager_xrc.py:99
+#: xrc/copyverses_xrc.py:80 xrc/templatemanager_xrc.py:99
 msgid "&Cancel"
 msgstr "&Atšaukti"
 
@@ -1524,6 +1593,10 @@ msgstr "Pavadinimas:"
 
 #: xrc/manage_topics_xrc.py:145
 msgid "Show tags"
+msgstr ""
+
+#: xrc/manage_topics_xrc.py:146
+msgid "Appearance:"
 msgstr ""
 
 #: xrc/manage_topics_xrc.py:147
@@ -1706,12 +1779,43 @@ msgid "&Headings"
 msgstr "&Antraštės"
 
 #: xrc/templatemanager_xrc.py:107
+#, fuzzy
 msgid ""
-"Use $$text for the text of a verse, $$versenum for the\n"
-"verse number and $$reference for the reference"
+"Use $$text for the text of a verse, $$versenumber for the\n"
+"verse number and $$range for the reference."
 msgstr ""
 "Panaudokite $$text tekstui eilučių, $$versenum for the\n"
 " eilutės numeriui ir $$reference nuorodyti"
+
+#~ msgid "Open the harmony"
+#~ msgstr "Atidaryti harmoniją"
+
+#~ msgid "Copy selection (with links)"
+#~ msgstr "Kopijuoti pažymėtą sritį (su nuorodomis)"
+
+#~ msgid "Copy the selected text with links"
+#~ msgstr "Kopijuoti pažymėtą tekstą su nuorodomis"
+
+#~ msgid "Copy selection (without links)"
+#~ msgstr "kopijuoti pažymėtą sritį (be nuorodų)"
+
+#~ msgid "Copy the selected text, removing all links"
+#~ msgstr "Kopijuoti pažymėtą tekstą, pašalinant nuorodas"
+
+#~ msgid "Name"
+#~ msgstr "Pavadinimas"
+
+#~ msgid "Description"
+#~ msgstr "Aprašymas"
+
+#~ msgid "Language"
+#~ msgstr "Kalba"
+
+#~ msgid "About"
+#~ msgstr "Apie"
+
+#~ msgid "License"
+#~ msgstr "Licensija"
 
 #~ msgid "BPBible"
 #~ msgstr "BPBiblija"
