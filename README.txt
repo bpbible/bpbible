@@ -38,9 +38,10 @@ Running from source
 To build from source, you will need to have the following:
 
 1. wxPython 2.8 (preferably at least 2.8.7) 
-2. Python 2.5 (though older versions may work)
-3. SWORD 1.6
-4. Windows, Linux or Mac
+2. wxWebConnect with Python bindings (get the latest versions from https://github.com/jonmmorgan/wxwebconnect/ and https://github.com/jonmmorgan/pywebconnect/).
+3. Python 2.6 (though older versions may work)
+4. SWORD 1.6
+5. Windows, Linux or Mac
 
 BPBible works mostly under Mac. Certain features, like the quickselectors, do not appear correctly. Also, users must compile it themselves - there is no binary distribution yet.
 
