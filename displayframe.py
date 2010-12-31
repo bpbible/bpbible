@@ -712,13 +712,15 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 		super(DisplayFrame, self).OpenURI(uri, flags, post_data, grab_focus)
 
 	def OnOpenURI(self, event):
-		dprint(WARNING, "Loading HREF", event.GetHref())
-		if event.GetHref().startswith('test'):
+		href = event.GetHref()
+		dprint(WARNING, "Loading HREF", href)
+		if href.startswith('test'):
 			return
-		if event.GetHref().startswith("bpbible"):
+
+		if href.startswith("bpbible"):
 			self.dom_loaded = False
 		else:
-			protocol_handler.on_link_opened(self, event.GetHref())
+			protocol_handler.on_link_opened(self, href)
 			event.Veto()
 
 	def change_display_option(self, option_name):
