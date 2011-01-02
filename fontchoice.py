@@ -190,8 +190,8 @@ class FontChoiceDialog(xrcFontChoiceDialog):
 				#	ref = pysw.internal_to_user(ref)
 				#else:
 				#	ref = to_unicode(ref, self.mod)
-				self.preview.SetPage("%s (%s)<br>%s" % (
-					ref, self.mod.Name(), text
+				self.preview.SetPage(u"%s (%s)<br>%s" % (
+					ref, self.mod.Name().decode("utf8"), text.decode("utf8")
 				))
 				
 		finally:
