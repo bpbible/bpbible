@@ -537,6 +537,14 @@ class DictionaryFrame(BookFrame):
 
 	@guiutil.frozen
 	def SetReference(self, ref, context="", settings_changed=False):
+		if not ref:
+			# Initially, we start with no reference.
+			# Since this causes an exception in the protocol handler,
+			# we just force it to be the first available topic.
+			topics = self.book.GetTopics()
+			if topics:
+				ref = topics[0].upper()
+
 		self.reference = ref
 
 		self.OpenURIForCurrentBook("bpbible://content/page/%s/%s" % (self.book.version, self.reference))
