@@ -17,7 +17,7 @@ class OSISParser(filterutils.ParserBase):
 		self.was_sword_ref = False
 		self.in_indent = False
 		self.in_morph_seg = False
-		self._end_hi = ""
+		self._end_hi_stack = []
 		self.in_lg = False
 		self._quotes = []
 		self._quotes_data = []
@@ -155,10 +155,10 @@ class OSISParser(filterutils.ParserBase):
 		
 		start, end = types[type]
 		self.buf += start
-		self._end_hi = end
+		self._end_hi_stack.append(end)
 	
 	def end_hi(self, xmltag):
-		self.buf += self._end_hi
+		self.buf += self._end_hi_stack.pop()
 		
 	def start_reference(self, xmltag):
 		self.ref = xmltag.getAttribute("osisRef")
