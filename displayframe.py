@@ -13,7 +13,8 @@ import config
 from swlib.pysw import GetBestRange, SW, VerseList
 from backend.bibleinterface import biblemgr
 from backend.verse_template import VerseTemplate
-from util import osutils
+from util import osutils, classproperty
+from util.configmgr import config_manager
 from tooltip import tooltip_settings, TextTooltipConfig, BibleTooltipConfig, TooltipDisplayer
 from gui.menu import MenuItem, Separator
 from gui.htmlbase import convert_language, convert_lgs
@@ -47,6 +48,44 @@ def process_html_for_module(module, text):
 		font, size, text
 	)
 	return text
+
+html_settings = config_manager.add_section("Html")
+html_settings.add_item("zoom_level", 0, item_type=int)
+
+# some magic zoom constants
+zoom_levels = {-2: 0.75, 
+			   -1: 0.83, 
+			   	0: 1, 
+				1: 1.2, 
+				2: 1.44, 
+				3: 1.73, 
+				4: 2,
+				5: 2.5,
+				6: 3,
+				7: 3.5
+				}
+
+class DisplayFrameManager(object):
+	active_display_frames = []
+
+	@classmethod
+	def zoom(cls, direction):
+		cls.set_zoom_level(html_settings["zoom_level"] + direction)
+
+	@classmethod
+	def reset_zoom_level(cls):
+		cls.set_zoom_level(0)
+
+	@classmethod
+	def set_zoom_level(cls, zoom_level):
+		# Make sure the zoom level is within bounds.
+		html_settings["zoom_level"] = max(min(zoom_level, 7), -2)
+		for displayframe in cls.active_display_frames:
+			displayframe.SetTextZoom(cls.xulrunner_zoom_level)
+
+	@classproperty
+	def xulrunner_zoom_level(cls):
+		return zoom_levels[html_settings["zoom_level"]]
 
 # Decorator to manage functions that cannot be called while the document is
 # loading.
@@ -112,8 +151,13 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 
 		click("", self.on_link_clicked)
 
+		DisplayFrameManager.active_display_frames.append(self)
+		self.SetTextZoom(DisplayFrameManager.xulrunner_zoom_level)
 
 		super(DisplayFrame, self).setup()
+
+	def __del__(self):
+		DisplayFrameManager.active_display_frames.remove(self)
 	
 	#def KillFocus(self, event):
 	#	self.tooltip.Stop()

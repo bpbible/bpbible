@@ -6,41 +6,6 @@ from gui import fonts
 from swlib import pysw
 
 
-html_settings = config_manager.add_section("Html")
-html_settings.add_item("zoom_level", 0, item_type=int)
-
-# some magic zoom constants
-zoom_levels = {-2: 0.75, 
-			   -1: 0.83, 
-			   	0: 1, 
-				1: 1.2, 
-				2: 1.44, 
-				3: 1.73, 
-				4: 2,
-				5: 2.5,
-				6: 3,
-				7: 3.5
-				}
-
-
-def get_text_size(base):
-	ansa = zoom_levels[html_settings["zoom_level"]] * base
-	return ansa
-
-def zoom(direction):
-	if direction == 0:
-		# reset zoom
-		html_settings["zoom_level"] = 0
-	else:
-		html_settings["zoom_level"] += direction
-
-		# but make sure it is in bounds
-		html_settings["zoom_level"] = (
-			max(min(html_settings["zoom_level"], 7), -2)
-		)
-	
-
-
 def convert_lgs(text, width):
 	blocks = []
 	#def extractor(text):

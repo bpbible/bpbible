@@ -1,6 +1,6 @@
 import wx
 from util.observerlist import ObserverList
-from gui import fonts, htmlbase
+from gui import fonts
 from gui.guiutil import FreezeUI
 from events import HISTORY
 import guiconfig
@@ -18,7 +18,6 @@ class HistoryItem(object):
 		self.y_pos = None
 		self.bible_version = None
 		self.font_params = None
-		self.zoom_level = None
 	
 	def trim(self, child):
 		assert child in self.children, "Can't trim item when not in children"
@@ -36,8 +35,7 @@ class HistoryItem(object):
 		and should not be used.
 		"""
 		return ((self.bible_version != biblemgr.bible.version) or
-				(self.font_params != fonts.get_module_font_params(biblemgr.bible.mod)) or
-				(self.zoom_level != htmlbase.html_settings["zoom_level"]))
+				(self.font_params != fonts.get_module_font_params(biblemgr.bible.mod)))
 
 class History(object):
 	"""Manages history
@@ -127,7 +125,6 @@ class History(object):
 		self.current_item.y_pos = guiconfig.mainfrm.bibletext.GetViewStart()[1]
 		self.current_item.bible_version = biblemgr.bible.version
 		self.current_item.font_params = fonts.get_module_font_params(biblemgr.bible.mod)
-		self.current_item.zoom_level = htmlbase.html_settings["zoom_level"]
 
 	def clear(self):
 		self.history = HistoryItem(None, None)

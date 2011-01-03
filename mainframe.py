@@ -23,7 +23,7 @@ from bibleframe import BibleFrame, bible_settings
 from bookframe import BookFrame
 from bookframe import CommentaryFrame
 from bookframe import DictionaryFrame
-from displayframe import IN_MENU
+from displayframe import IN_MENU, DisplayFrameManager
 from genbookframe import GenBookFrame, HarmonyFrame
 
 from auilayer import AuiLayer
@@ -41,7 +41,6 @@ from module_manager import ModuleManagerDialog
 
 
 dprint(MESSAGE, "Importing gui")
-from gui import htmlbase
 from gui import guiutil
 from gui import fonts
 from gui.guiutil import bmp
@@ -617,13 +616,13 @@ class MainFrame(wx.Frame, AuiLayer):
 		
 		self.Bind(wx.EVT_TOOL, self.do_search, self.tool_search)
 		
-		self.Bind(wx.EVT_TOOL, lambda x:self.zoom(1),
+		self.Bind(wx.EVT_TOOL, lambda x:DisplayFrameManager.zoom(1),
 			self.tool_zoom_in)
 			
-		self.Bind(wx.EVT_TOOL, lambda x:self.zoom(-1),
+		self.Bind(wx.EVT_TOOL, lambda x:DisplayFrameManager.zoom(-1),
 			self.tool_zoom_out)
 		
-		self.Bind(wx.EVT_TOOL, lambda x:self.zoom(0),
+		self.Bind(wx.EVT_TOOL, lambda x:DisplayFrameManager.reset_zoom_level(),
 			self.tool_zoom_default)
 			
 		self.Bind(wx.EVT_TOOL, lambda x:self.move_history(-1),
@@ -741,11 +740,6 @@ class MainFrame(wx.Frame, AuiLayer):
 		dialog.Destroy()
 		if ansa == wx.ID_OK:
 			fonts.fonts_changed()
-
-	def zoom(self, direction):	
-		htmlbase.zoom(direction)
-
-		self.refresh_all_pages()
 
 	def get_menu(self, label):
 		for idx, (menu, menu_name) in enumerate(self.MenuBar.Menus):
