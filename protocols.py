@@ -108,7 +108,6 @@ protocol_handler.register_handler("sword", on_sword_opened)
 protocol_handler.register_hover("sword", on_sword_hover)
 
 def on_strongs_click(frame, href, url):
-	dictionary = biblemgr.dictionary		
 	type = url.getHostName() #Hebrew or greek
 	value = url.getPath() #strongs number
 	type = "Strongs"+type #as module is StrongsHebrew or StrongsGreek
@@ -133,6 +132,41 @@ def on_strongs_hover(frame, href, url, element, x, y):
 
 protocol_handler.register_handler("strongs", on_strongs_click)
 protocol_handler.register_hover("strongs", on_strongs_hover)
+
+def on_morph_click(frame, href, url):
+	if url.getHostName().split(":")[0] not in ("robinson", "Greek"):
+		return
+
+	type = "Robinson"
+	value = url.getPath()
+	if biblemgr.dictionary.ModuleExists(type):
+		guiconfig.mainfrm.set_module(type, biblemgr.dictionary)
+		wx.CallAfter(guiconfig.mainfrm.UpdateDictionaryUI, value)
+
+def on_morph_hover(frame, href, url, element, x, y):
+	tooltip_config = TextTooltipConfig("", mod=None)
+	types = url.getHostName().split(":", 1)
+	if types[0] not in ("robinson", "Greek"):
+		tooltipdata = _("Don't know how to open this morphology type:")
+		tooltipdata += "<br>%s" % type
+	else:
+		value = url.getPath()
+		module = biblemgr.get_module("Robinson")
+		if not value:
+			return
+		
+		tooltip_config.mod = module
+		if not module:
+			tooltipdata = _("Module %s is not installed, so you "
+			"cannot view details for this morphological code") % type
+		else:
+			tooltipdata = biblemgr.dictionary.GetReferenceFromMod(module, value)
+
+	tooltip_config.text = tooltipdata
+	frame.show_tooltip(tooltip_config)
+
+protocol_handler.register_handler("morph", on_morph_click)
+protocol_handler.register_hover("morph", on_morph_hover)
 
 def on_bpbible_hover(frame, href, url, element, x, y):
 	from displayframe import DisplayFrame
