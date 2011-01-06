@@ -30,7 +30,8 @@ def find_xulrunner_path():
 			return os.getcwd() + "/dist/BPBible.app/Contents/MacOS/"
 
 	if osutils.is_gtk():
-		xulrunner_path = osutils.find_file_in_path("xulrunner")
+		xulrunner_path = osutils.find_file_in_path("xulrunner") or
+			osutils.find_file_in_path("xulrunner-stub")
 		if xulrunner_path:
 			return os.path.dirname(os.path.realpath(xulrunner_path))
 
