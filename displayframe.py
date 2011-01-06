@@ -758,9 +758,6 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 	def OnOpenURI(self, event):
 		href = event.GetHref()
 		dprint(WARNING, "Loading HREF", href)
-		if href.startswith('test'):
-			return
-
 		if href.startswith("bpbible"):
 			self.dom_loaded = False
 		else:

@@ -30,8 +30,8 @@ def find_xulrunner_path():
 			return os.getcwd() + "/dist/BPBible.app/Contents/MacOS/"
 
 	if osutils.is_gtk():
-		xulrunner_path = osutils.find_file_in_path("xulrunner") or
-			osutils.find_file_in_path("xulrunner-stub")
+		xulrunner_path = (osutils.find_file_in_path("xulrunner") or
+			osutils.find_file_in_path("xulrunner-stub"))
 		if xulrunner_path:
 			return os.path.dirname(os.path.realpath(xulrunner_path))
 
@@ -135,7 +135,6 @@ class MyApp(wx.App):
 		# NOTE: DO NOT move this import into the main import section.
 		# Doing so causes InitEngine() above to fail when loading xul.dll.
 		import gui.webconnect_protocol_handler
-		wx.wc.RegisterProtocol("test", wx.wc.ProtocolHandler())
 		wx.wc.RegisterProtocol("bpbible", gui.webconnect_protocol_handler.MasterProtocolHandler())
 		dprint(MESSAGE, "XULRunner engine initialised")
 
