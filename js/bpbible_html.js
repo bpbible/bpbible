@@ -194,7 +194,7 @@ function load_text(item, before) {
 	} catch (e) {
 		// Fallback for in firebug in firefox or something - pretty boring
 		d(e);
-		t = "<div class='page_segment'><div class='segment' ref_id='test'>text<br>test<ul><li>item1<li>item2</ul></div></div>";
+		t = "";
 	}
 	return $(t);
 }
