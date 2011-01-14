@@ -170,39 +170,22 @@ protocol_handler.register_hover("morph", on_morph_hover)
 
 def on_bpbible_hover(frame, href, url, element, x, y):
 	from displayframe import DisplayFrame
-	host, page = get_url_host_and_page(href)
-	assert host == "content"
-	d = page.split("/", 3) + ['','','']
-	type, module, p = d[:3]
-	passage, query = (p.split("?", 1) + [''])[:2]
-
-	if type != "page":
-		print "Unhandled bpbible link", href
-		return
-
-	if passage != "passagestudy.jsp":
-		print "Unhandled bpbible link", href
-
-	u = SW.URL(p.replace(":", '%3A'))
-	return DisplayFrame.on_hover(frame, p, u, element, x, y)
+	passage_study_href, passage_study_url = find_passage_study_url(href)
+	return DisplayFrame.on_hover(frame, passage_study_href, passage_study_url, element, x, y)
 
 def on_bpbible_click(frame, href, url):
 	from displayframe import DisplayFrame
-	host, page = get_url_host_and_page(href)
-	assert host == "content"
-	d = page.split("/", 3) + ['','','']
-	type, module, p = d[:3]
-	passage, query = (p.split("?", 1) + [''])[:2]
+	passage_study_href, passage_study_url = find_passage_study_url(href)
+	return DisplayFrame.on_link_clicked(frame, passage_study_href, passage_study_url)
 
-	if type != "page":
+def find_passage_study_url(href):
+	try:
+		p = href[href.index("passagestudy.jsp"):]
+	except ValueError:
 		print "Unhandled bpbible link", href
 		return
 
-	if passage != "passagestudy.jsp":
-		print "Unhandled bpbible link", href
-
-	u = SW.URL(p.replace(":", '%3A'))
-	return DisplayFrame.on_link_clicked(frame, p, u)
+	return p, SW.URL(p.replace(":", '%3A'))
 
 protocol_handler.register_handler("bpbible", on_bpbible_click)
 protocol_handler.register_hover("bpbible", on_bpbible_hover)
