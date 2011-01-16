@@ -170,13 +170,15 @@ protocol_handler.register_hover("morph", on_morph_hover)
 
 def on_bpbible_hover(frame, href, url, element, x, y):
 	from displayframe import DisplayFrame
-	passage_study_href, passage_study_url = find_passage_study_url(href)
-	return DisplayFrame.on_hover(frame, passage_study_href, passage_study_url, element, x, y)
+	href_and_url = find_passage_study_url(href)
+	if href_and_url:
+		DisplayFrame.on_hover(frame, href_and_url[0], href_and_url[1], element, x, y)
 
 def on_bpbible_click(frame, href, url):
 	from displayframe import DisplayFrame
-	passage_study_href, passage_study_url = find_passage_study_url(href)
-	return DisplayFrame.on_link_clicked(frame, passage_study_href, passage_study_url)
+	href_and_url = find_passage_study_url(href)
+	if href_and_url:
+		DisplayFrame.on_link_clicked(frame, href_and_url[0], href_and_url[1])
 
 def find_passage_study_url(href):
 	try:
