@@ -415,18 +415,30 @@ a.passage_tag {
 	text-decoration: none;
 	color: black;
 	font: 9pt arial;
+	padding: 0;
 }
 
-a.passage_tag > div, a.passage_tag > div > div {
-	border-width: 1px;
-	border-style: solid;
-	margin: 0;
+a.passage_tag {
+	position: relative;
+	z-index: 1;
+	padding: 1px;
 	display: inline-block;
-	white-space: nowrap;
+	margin-left: 2px;
+	margin-right: 3px;
+	text-indent: 0;
 }
 
-a.passage_tag > div > div > div {
+a.passage_tag:before {
+	content: "";
+	display: block;
+	position: absolute;
+	z-index: -1;
+	top: 0;
+	left: 0;
+	right: 0; 
+	bottom: 0;
+}
+
+a.passage_tag div {
 	padding: 0 2px;
-	margin: 0;
-	display: inline-block;
 }

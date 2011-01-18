@@ -1,0 +1,645 @@
+
+/* Colour = 0, Look = 0. */
+
+a.passage_tag.passage_tag_0_0 {
+border: 1px solid rgb(169, 199, 245);
+-moz-border-radius: 2px;
+-moz-border-radius: 2px;
+}
+a.passage_tag.passage_tag_0_0:before {
+border: 1px solid rgb(230, 250, 250);
+-moz-border-radius: 2px;
+}
+a.passage_tag.passage_tag_0_0 div {
+background-image: -moz-linear-gradient(top center, rgb(210, 239, 250) 20%, rgb(185, 215, 250) 80%);
+-moz-border-radius: 2px;
+}
+
+/* Colour = 0, Look = 1. */
+
+a.passage_tag.passage_tag_0_1 {
+border: 1px solid rgb(98, 156, 245);
+-moz-border-radius: 2px;
+-moz-border-radius: 2px;
+}
+a.passage_tag.passage_tag_0_1:before {
+border: 1px solid rgb(210, 250, 250);
+-moz-border-radius: 2px;
+}
+a.passage_tag.passage_tag_0_1 div {
+background-image: -moz-linear-gradient(top center, rgb(170, 230, 250) 20%, rgb(119, 180, 250) 80%);
+-moz-border-radius: 2px;
+}
+
+/* Colour = 0, Look = 2. */
+
+a.passage_tag.passage_tag_0_2 {
+border: 1px solid rgb(215, 227, 245);
+-moz-border-radius: 4px;
+-moz-border-radius: 4px;
+}
+a.passage_tag.passage_tag_0_2:before {
+border: 1px solid rgb(170, 250, 250);
+-moz-border-radius: 4px;
+}
+a.passage_tag.passage_tag_0_2 div {
+background-image: -moz-linear-gradient(top center, rgb(89, 250, 250) 20%, rgb(2, 101, 250) 80%);
+-moz-border-radius: 4px;
+}
+
+/* Colour = 0, Look = 3. */
+
+a.passage_tag.passage_tag_0_3 {
+border: 2px solid rgb(2, 175, 250);
+-moz-border-radius: 2px;
+padding: 0;
+}
+a.passage_tag.passage_tag_0_3:before {
+padding: 0;
+border: 0;
+}
+a.passage_tag.passage_tag_0_3 div {
+background-color: rgb(2, 175, 250);
+}
+
+/* Colour = 1, Look = 0. */
+
+a.passage_tag.passage_tag_1_0 {
+border: 1px solid rgb(184, 169, 245);
+-moz-border-radius: 2px;
+-moz-border-radius: 2px;
+}
+a.passage_tag.passage_tag_1_0:before {
+border: 1px solid rgb(230, 238, 250);
+-moz-border-radius: 2px;
+}
+a.passage_tag.passage_tag_1_0 div {
+background-image: -moz-linear-gradient(top center, rgb(210, 216, 250) 20%, rgb(193, 185, 250) 80%);
+-moz-border-radius: 2px;
+}
+
+/* Colour = 1, Look = 1. */
+
+a.passage_tag.passage_tag_1_1 {
+border: 1px solid rgb(127, 98, 245);
+-moz-border-radius: 2px;
+-moz-border-radius: 2px;
+}
+a.passage_tag.passage_tag_1_1:before {
+border: 1px solid rgb(210, 226, 250);
+-moz-border-radius: 2px;
+}
+a.passage_tag.passage_tag_1_1 div {
+background-image: -moz-linear-gradient(top center, rgb(170, 182, 250) 20%, rgb(137, 119, 250) 80%);
+-moz-border-radius: 2px;
+}
+
+/* Colour = 1, Look = 2. */
+
+a.passage_tag.passage_tag_1_2 {
+border: 1px solid rgb(221, 215, 245);
+-moz-border-radius: 4px;
+-moz-border-radius: 4px;
+}
+a.passage_tag.passage_tag_1_2:before {
+border: 1px solid rgb(170, 202, 250);
+-moz-border-radius: 4px;
+}
+a.passage_tag.passage_tag_1_2 div {
+background-image: -moz-linear-gradient(top center, rgb(89, 154, 250) 20%, rgb(51, 2, 250) 80%);
+color: white;
+-moz-border-radius: 4px;
+}
+
+/* Colour = 1, Look = 3. */
+
+a.passage_tag.passage_tag_1_3 {
+border: 2px solid rgb(2, 27, 250);
+-moz-border-radius: 2px;
+padding: 0;
+}
+a.passage_tag.passage_tag_1_3:before {
+padding: 0;
+border: 0;
+}
+a.passage_tag.passage_tag_1_3 div {
+background-color: rgb(2, 27, 250);
+color: white;
+}
+
+/* Colour = 2, Look = 0. */
+
+a.passage_tag.passage_tag_2_0 {
+border: 1px solid rgb(229, 169, 245);
+-moz-border-radius: 2px;
+-moz-border-radius: 2px;
+}
+a.passage_tag.passage_tag_2_0:before {
+border: 1px solid rgb(234, 230, 250);
+-moz-border-radius: 2px;
+}
+a.passage_tag.passage_tag_2_0 div {
+background-image: -moz-linear-gradient(top center, rgb(227, 210, 250) 20%, rgb(232, 185, 250) 80%);
+-moz-border-radius: 2px;
+}
+
+/* Colour = 2, Look = 1. */
+
+a.passage_tag.passage_tag_2_1 {
+border: 1px solid rgb(215, 98, 245);
+-moz-border-radius: 2px;
+-moz-border-radius: 2px;
+}
+a.passage_tag.passage_tag_2_1:before {
+border: 1px solid rgb(217, 210, 250);
+-moz-border-radius: 2px;
+}
+a.passage_tag.passage_tag_2_1 div {
+background-image: -moz-linear-gradient(top center, rgb(205, 170, 250) 20%, rgb(215, 119, 250) 80%);
+-moz-border-radius: 2px;
+}
+
+/* Colour = 2, Look = 2. */
+
+a.passage_tag.passage_tag_2_2 {
+border: 1px solid rgb(239, 215, 245);
+-moz-border-radius: 4px;
+-moz-border-radius: 4px;
+}
+a.passage_tag.passage_tag_2_2:before {
+border: 1px solid rgb(185, 170, 250);
+-moz-border-radius: 4px;
+}
+a.passage_tag.passage_tag_2_2 div {
+background-image: -moz-linear-gradient(top center, rgb(121, 89, 250) 20%, rgb(200, 2, 250) 80%);
+color: white;
+-moz-border-radius: 4px;
+}
+
+/* Colour = 2, Look = 3. */
+
+a.passage_tag.passage_tag_2_3 {
+border: 2px solid rgb(126, 2, 250);
+-moz-border-radius: 2px;
+padding: 0;
+}
+a.passage_tag.passage_tag_2_3:before {
+padding: 0;
+border: 0;
+}
+a.passage_tag.passage_tag_2_3 div {
+background-color: rgb(126, 2, 250);
+color: white;
+}
+
+/* Colour = 3, Look = 0. */
+
+a.passage_tag.passage_tag_3_0 {
+border: 1px solid rgb(245, 169, 214);
+-moz-border-radius: 2px;
+-moz-border-radius: 2px;
+}
+a.passage_tag.passage_tag_3_0:before {
+border: 1px solid rgb(246, 230, 250);
+-moz-border-radius: 2px;
+}
+a.passage_tag.passage_tag_3_0 div {
+background-image: -moz-linear-gradient(top center, rgb(250, 210, 248) 20%, rgb(250, 185, 228) 80%);
+-moz-border-radius: 2px;
+}
+
+/* Colour = 3, Look = 1. */
+
+a.passage_tag.passage_tag_3_1 {
+border: 1px solid rgb(245, 98, 186);
+-moz-border-radius: 2px;
+-moz-border-radius: 2px;
+}
+a.passage_tag.passage_tag_3_1:before {
+border: 1px solid rgb(242, 210, 250);
+-moz-border-radius: 2px;
+}
+a.passage_tag.passage_tag_3_1 div {
+background-image: -moz-linear-gradient(top center, rgb(250, 170, 246) 20%, rgb(250, 119, 206) 80%);
+-moz-border-radius: 2px;
+}
+
+/* Colour = 3, Look = 2. */
+
+a.passage_tag.passage_tag_3_2 {
+border: 1px solid rgb(245, 215, 233);
+-moz-border-radius: 4px;
+-moz-border-radius: 4px;
+}
+a.passage_tag.passage_tag_3_2:before {
+border: 1px solid rgb(234, 170, 250);
+-moz-border-radius: 4px;
+}
+a.passage_tag.passage_tag_3_2 div {
+background-image: -moz-linear-gradient(top center, rgb(218, 89, 250) 20%, rgb(250, 2, 150) 80%);
+color: white;
+-moz-border-radius: 4px;
+}
+
+/* Colour = 3, Look = 3. */
+
+a.passage_tag.passage_tag_3_3 {
+border: 2px solid rgb(250, 2, 225);
+-moz-border-radius: 2px;
+padding: 0;
+}
+a.passage_tag.passage_tag_3_3:before {
+padding: 0;
+border: 0;
+}
+a.passage_tag.passage_tag_3_3 div {
+background-color: rgb(250, 2, 225);
+color: white;
+}
+
+/* Colour = 4, Look = 0. */
+
+a.passage_tag.passage_tag_4_0 {
+border: 1px solid rgb(245, 169, 169);
+-moz-border-radius: 2px;
+-moz-border-radius: 2px;
+}
+a.passage_tag.passage_tag_4_0:before {
+border: 1px solid rgb(250, 230, 242);
+-moz-border-radius: 2px;
+}
+a.passage_tag.passage_tag_4_0 div {
+background-image: -moz-linear-gradient(top center, rgb(250, 210, 223) 20%, rgb(250, 185, 189) 80%);
+-moz-border-radius: 2px;
+}
+
+/* Colour = 4, Look = 1. */
+
+a.passage_tag.passage_tag_4_1 {
+border: 1px solid rgb(245, 98, 98);
+-moz-border-radius: 2px;
+-moz-border-radius: 2px;
+}
+a.passage_tag.passage_tag_4_1:before {
+border: 1px solid rgb(250, 210, 234);
+-moz-border-radius: 2px;
+}
+a.passage_tag.passage_tag_4_1 div {
+background-image: -moz-linear-gradient(top center, rgb(250, 170, 197) 20%, rgb(250, 119, 128) 80%);
+-moz-border-radius: 2px;
+}
+
+/* Colour = 4, Look = 2. */
+
+a.passage_tag.passage_tag_4_2 {
+border: 1px solid rgb(245, 215, 215);
+-moz-border-radius: 4px;
+-moz-border-radius: 4px;
+}
+a.passage_tag.passage_tag_4_2:before {
+border: 1px solid rgb(250, 170, 217);
+-moz-border-radius: 4px;
+}
+a.passage_tag.passage_tag_4_2 div {
+background-image: -moz-linear-gradient(top center, rgb(250, 89, 185) 20%, rgb(250, 2, 2) 80%);
+color: white;
+-moz-border-radius: 4px;
+}
+
+/* Colour = 4, Look = 3. */
+
+a.passage_tag.passage_tag_4_3 {
+border: 2px solid rgb(250, 2, 76);
+-moz-border-radius: 2px;
+padding: 0;
+background-color: rgb(250, 2, 76);
+}
+a.passage_tag.passage_tag_4_3:before {
+padding: 0;
+border: 0;
+background-color: rgb(250, 2, 76);
+}
+a.passage_tag.passage_tag_4_3 div {
+background-color: rgb(250, 2, 76);
+color: white;
+}
+
+/* Colour = 5, Look = 0. */
+
+a.passage_tag.passage_tag_5_0 {
+border: 1px solid rgb(245, 214, 169);
+-moz-border-radius: 2px;
+-moz-border-radius: 2px;
+}
+a.passage_tag.passage_tag_5_0:before {
+border: 1px solid rgb(250, 230, 230);
+-moz-border-radius: 2px;
+}
+a.passage_tag.passage_tag_5_0 div {
+background-image: -moz-linear-gradient(top center, rgb(250, 219, 210) 20%, rgb(250, 219, 185) 80%);
+-moz-border-radius: 2px;
+}
+
+/* Colour = 5, Look = 1. */
+
+a.passage_tag.passage_tag_5_1 {
+border: 1px solid rgb(245, 186, 98);
+-moz-border-radius: 2px;
+-moz-border-radius: 2px;
+}
+a.passage_tag.passage_tag_5_1:before {
+border: 1px solid rgb(250, 210, 210);
+-moz-border-radius: 2px;
+}
+a.passage_tag.passage_tag_5_1 div {
+background-image: -moz-linear-gradient(top center, rgb(250, 190, 170) 20%, rgb(250, 189, 119) 80%);
+-moz-border-radius: 2px;
+}
+
+/* Colour = 5, Look = 2. */
+
+a.passage_tag.passage_tag_5_2 {
+border: 1px solid rgb(245, 233, 215);
+-moz-border-radius: 4px;
+-moz-border-radius: 4px;
+}
+a.passage_tag.passage_tag_5_2:before {
+border: 1px solid rgb(250, 170, 170);
+-moz-border-radius: 4px;
+}
+a.passage_tag.passage_tag_5_2 div {
+background-image: -moz-linear-gradient(top center, rgb(250, 89, 89) 20%, rgb(250, 151, 2) 80%);
+color: white;
+-moz-border-radius: 4px;
+}
+
+/* Colour = 5, Look = 3. */
+
+a.passage_tag.passage_tag_5_3 {
+border: 2px solid rgb(250, 76, 2);
+-moz-border-radius: 2px;
+padding: 0;
+}
+a.passage_tag.passage_tag_5_3:before {
+padding: 0;
+border: 0;
+}
+a.passage_tag.passage_tag_5_3 div {
+background-color: rgb(250, 76, 2);
+color: white;
+}
+
+/* Colour = 6, Look = 0. */
+
+a.passage_tag.passage_tag_6_0 {
+border: 1px solid rgb(229, 245, 169);
+-moz-border-radius: 2px;
+-moz-border-radius: 2px;
+}
+a.passage_tag.passage_tag_6_0:before {
+border: 1px solid rgb(250, 242, 230);
+-moz-border-radius: 2px;
+}
+a.passage_tag.passage_tag_6_0 div {
+background-image: -moz-linear-gradient(top center, rgb(250, 243, 210) 20%, rgb(241, 250, 185) 80%);
+-moz-border-radius: 2px;
+}
+
+/* Colour = 6, Look = 1. */
+
+a.passage_tag.passage_tag_6_1 {
+border: 1px solid rgb(215, 245, 98);
+-moz-border-radius: 2px;
+-moz-border-radius: 2px;
+}
+a.passage_tag.passage_tag_6_1:before {
+border: 1px solid rgb(250, 234, 210);
+-moz-border-radius: 2px;
+}
+a.passage_tag.passage_tag_6_1 div {
+background-image: -moz-linear-gradient(top center, rgb(250, 237, 170) 20%, rgb(232, 250, 119) 80%);
+-moz-border-radius: 2px;
+}
+
+/* Colour = 6, Look = 2. */
+
+a.passage_tag.passage_tag_6_2 {
+border: 1px solid rgb(239, 245, 215);
+-moz-border-radius: 4px;
+-moz-border-radius: 4px;
+}
+a.passage_tag.passage_tag_6_2:before {
+border: 1px solid rgb(250, 218, 170);
+-moz-border-radius: 4px;
+}
+a.passage_tag.passage_tag_6_2 div {
+background-image: -moz-linear-gradient(top center, rgb(250, 186, 89) 20%, rgb(200, 250, 2) 80%);
+-moz-border-radius: 4px;
+}
+
+/* Colour = 6, Look = 3. */
+
+a.passage_tag.passage_tag_6_3 {
+border: 2px solid rgb(250, 225, 2);
+-moz-border-radius: 2px;
+padding: 0;
+}
+a.passage_tag.passage_tag_6_3:before {
+padding: 0;
+border: 0;
+}
+a.passage_tag.passage_tag_6_3 div {
+background-color: rgb(250, 225, 2);
+}
+
+/* Colour = 7, Look = 0. */
+
+a.passage_tag.passage_tag_7_0 {
+border: 1px solid rgb(184, 245, 169);
+-moz-border-radius: 2px;
+-moz-border-radius: 2px;
+}
+a.passage_tag.passage_tag_7_0:before {
+border: 1px solid rgb(245, 250, 230);
+-moz-border-radius: 2px;
+}
+a.passage_tag.passage_tag_7_0 div {
+background-image: -moz-linear-gradient(top center, rgb(232, 250, 210) 20%, rgb(202, 250, 185) 80%);
+-moz-border-radius: 2px;
+}
+
+/* Colour = 7, Look = 1. */
+
+a.passage_tag.passage_tag_7_1 {
+border: 1px solid rgb(127, 245, 98);
+-moz-border-radius: 2px;
+-moz-border-radius: 2px;
+}
+a.passage_tag.passage_tag_7_1:before {
+border: 1px solid rgb(242, 250, 210);
+-moz-border-radius: 2px;
+}
+a.passage_tag.passage_tag_7_1 div {
+background-image: -moz-linear-gradient(top center, rgb(213, 250, 170) 20%, rgb(154, 250, 119) 80%);
+-moz-border-radius: 2px;
+}
+
+/* Colour = 7, Look = 2. */
+
+a.passage_tag.passage_tag_7_2 {
+border: 1px solid rgb(221, 245, 215);
+-moz-border-radius: 4px;
+-moz-border-radius: 4px;
+}
+a.passage_tag.passage_tag_7_2:before {
+border: 1px solid rgb(234, 250, 170);
+-moz-border-radius: 4px;
+}
+a.passage_tag.passage_tag_7_2 div {
+background-image: -moz-linear-gradient(top center, rgb(217, 250, 89) 20%, rgb(51, 250, 2) 80%);
+-moz-border-radius: 4px;
+}
+
+/* Colour = 7, Look = 3. */
+
+a.passage_tag.passage_tag_7_3 {
+border: 2px solid rgb(126, 250, 2);
+-moz-border-radius: 2px;
+padding: 0;
+}
+a.passage_tag.passage_tag_7_3:before {
+padding: 0;
+border: 0;
+}
+a.passage_tag.passage_tag_7_3 div {
+background-color: rgb(126, 250, 2);
+}
+
+/* Colour = 8, Look = 0. */
+
+a.passage_tag.passage_tag_8_0 {
+border: 1px solid rgb(169, 245, 199);
+-moz-border-radius: 2px;
+-moz-border-radius: 2px;
+}
+a.passage_tag.passage_tag_8_0:before {
+border: 1px solid rgb(234, 250, 230);
+-moz-border-radius: 2px;
+}
+a.passage_tag.passage_tag_8_0 div {
+background-image: -moz-linear-gradient(top center, rgb(210, 250, 211) 20%, rgb(185, 250, 206) 80%);
+-moz-border-radius: 2px;
+}
+
+/* Colour = 8, Look = 1. */
+
+a.passage_tag.passage_tag_8_1 {
+border: 1px solid rgb(98, 245, 156);
+-moz-border-radius: 2px;
+-moz-border-radius: 2px;
+}
+a.passage_tag.passage_tag_8_1:before {
+border: 1px solid rgb(218, 250, 210);
+-moz-border-radius: 2px;
+}
+a.passage_tag.passage_tag_8_1 div {
+background-image: -moz-linear-gradient(top center, rgb(170, 250, 173) 20%, rgb(119, 250, 163) 80%);
+-moz-border-radius: 2px;
+}
+
+/* Colour = 8, Look = 2. */
+
+a.passage_tag.passage_tag_8_2 {
+border: 1px solid rgb(215, 245, 227);
+-moz-border-radius: 4px;
+-moz-border-radius: 4px;
+}
+a.passage_tag.passage_tag_8_2:before {
+border: 1px solid rgb(186, 250, 170);
+-moz-border-radius: 4px;
+}
+a.passage_tag.passage_tag_8_2 div {
+background-image: -moz-linear-gradient(top center, rgb(122, 250, 89) 20%, rgb(2, 250, 101) 80%);
+-moz-border-radius: 4px;
+}
+
+/* Colour = 8, Look = 3. */
+
+a.passage_tag.passage_tag_8_3 {
+border: 2px solid rgb(2, 250, 27);
+-moz-border-radius: 2px;
+padding: 0;
+background-color: rgb(2, 250, 27);
+}
+a.passage_tag.passage_tag_8_3:before {
+padding: 0;
+border: 0;
+background-color: rgb(2, 250, 27);
+width:0;
+}
+a.passage_tag.passage_tag_8_3 div {
+background-color: rgb(2, 250, 27);
+}
+
+/* Colour = 9, Look = 0. */
+
+a.passage_tag.passage_tag_9_0 {
+border: 1px solid rgb(169, 245, 245);
+-moz-border-radius: 2px;
+-moz-border-radius: 2px;
+}
+a.passage_tag.passage_tag_9_0:before {
+border: 1px solid rgb(230, 250, 238);
+-moz-border-radius: 2px;
+}
+a.passage_tag.passage_tag_9_0 div {
+background-image: -moz-linear-gradient(top center, rgb(210, 250, 236) 20%, rgb(185, 250, 245) 80%);
+-moz-border-radius: 2px;
+}
+
+/* Colour = 9, Look = 1. */
+
+a.passage_tag.passage_tag_9_1 {
+border: 1px solid rgb(98, 245, 245);
+-moz-border-radius: 2px;
+-moz-border-radius: 2px;
+}
+a.passage_tag.passage_tag_9_1:before {
+border: 1px solid rgb(210, 250, 226);
+-moz-border-radius: 2px;
+}
+a.passage_tag.passage_tag_9_1 div {
+background-image: -moz-linear-gradient(top center, rgb(170, 250, 222) 20%, rgb(119, 250, 241) 80%);
+-moz-border-radius: 2px;
+}
+
+/* Colour = 9, Look = 2. */
+
+a.passage_tag.passage_tag_9_2 {
+border: 1px solid rgb(215, 245, 245);
+-moz-border-radius: 4px;
+-moz-border-radius: 4px;
+}
+a.passage_tag.passage_tag_9_2:before {
+border: 1px solid rgb(170, 250, 202);
+-moz-border-radius: 4px;
+}
+a.passage_tag.passage_tag_9_2 div {
+background-image: -moz-linear-gradient(top center, rgb(89, 250, 154) 20%, rgb(2, 250, 250) 80%);
+-moz-border-radius: 4px;
+}
+
+/* Colour = 9, Look = 3. */
+
+a.passage_tag.passage_tag_9_3 {
+border: 2px solid rgb(2, 250, 175);
+-moz-border-radius: 2px;
+padding: 0;
+}
+a.passage_tag.passage_tag_9_3:before {
+padding: 0;
+border: 0;
+}
+a.passage_tag.passage_tag_9_3 div {
+background-color: rgb(2, 250, 175);
+}

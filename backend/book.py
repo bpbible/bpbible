@@ -480,42 +480,15 @@ class Book(object):
 		from gui import passage_tag
 		topic_text = " > ".join(passage.parent.topic_trail)
 		look, colour = passage.parent.resolve_tag_look()
-		look_scheme, look_white_text, border = passage_tag.looks[look]
-		colour_id, colour_white_text, default_look = passage_tag.colours[colour]
-		white_text = look_white_text and colour_white_text
-		_rgbSelectOuter,_rgbSelectInner,_rgbSelectTop, _rgbSelectBottom = passage_tag.get_colours(colour_id, look_scheme)
-		border_radius_style = "-moz-border-radius: %dpx;" % border
-		outer_border_style = "border-color: rgb(%d, %d, %d);" % _rgbSelectOuter.Get()
-		inner_border_style = "border-color: rgb(%d, %d, %d);" % _rgbSelectInner.Get()
-
-		# Only use gradients if the colours are different.
-		if _rgbSelectTop == _rgbSelectBottom:
-			passage_tag_style = "background-color: rgb(%d, %d, %d);" % _rgbSelectTop.Get()
-			# We get weird artefacts if all the divs are the same colour and we
-			# apply rounded corners to them, so we only apply to the outmost one.
-			outer_border_style += border_radius_style
-			border_radius_style = ""
-		else:
-			passage_tag_style = "background-image: -moz-linear-gradient(top center, rgb(%d, %d, %d) 20%%, rgb(%d, %d, %d) 80%%);" % (_rgbSelectTop.Get() + _rgbSelectBottom.Get())
-
-		if white_text:
-			passage_tag_style += "color:white;"
-
-		passage_tag_style += border_radius_style
-		outer_border_style += border_radius_style
-		inner_border_style += border_radius_style
-
 		topic_id = passage.parent.get_id()
 		passage_id = passage.get_id()
-
 		return """
-			<a class="passage_tag" href="passagetag://passage/%(topic_id)d/%(passage_id)d" passageEntryId="%(passage_id)d">
-				<div style="%(outer_border_style)s">
-					<div style="%(inner_border_style)s">
-						<div style="%(passage_tag_style)s">%(topic_text)s</div>
-					</div>
+			<a href="passagetag://passage/%(topic_id)d/%(passage_id)d"
+				class="passage_tag passage_tag_%(colour)d_%(look)d" passageEntryId="%(passage_id)d">
+				<div>
+					%(topic_text)s
 				</div>
-			</a> &nbsp;
+			</a>
 		""" % locals()
 	
 	def get_headings(self, ref, mod=None):

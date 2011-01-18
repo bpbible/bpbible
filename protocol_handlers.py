@@ -87,6 +87,7 @@ class NullProtocolHandler(ProtocolHandler):
 
 class PageProtocolHandler(ProtocolHandler):
 	bible_stylesheets = ("bpbible_html.css", "bpbible_chapter_view.css", 
+						"passage_tag.css",
 						"bpbible://content/quotes_skin/")
 	def _get_document_parts(self, path):
 		module_name, ref = path.split("/", 1)
