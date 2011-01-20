@@ -152,7 +152,7 @@ def show_splashscreen():
 
 	return splashscreen_settings["show"]
 
-BIBLE_VERSION_PROTOCOL = "set_bible_version"
+BIBLE_VERSION_PROTOCOL = "setbibleversion"
 
 title_str = "%(verse)s - %(name)s"
 
@@ -212,6 +212,6 @@ verse_compare_template = VerseTemplate(
 	u'<glink href="nbible:$internal_reference">'
 	u'<small><sup>$versenumber</sup></small></glink> $text ',
 	
-	header=u"<p><b>(<a href='%s:$version'>$version</a>)"
+	header=u"<p><b>(<a href=\"%s://content/$version\">$version</a>)"
 	u"</b> " % BIBLE_VERSION_PROTOCOL
 )

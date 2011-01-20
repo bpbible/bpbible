@@ -41,7 +41,8 @@ verse_comparison_settings.add_item(
 )
 
 def on_bible_version(frame, href, url):
-	biblemgr.bible.SetModule(url.getHostName())
+	module_name = SW.URL.decode(url.getPath()).c_str()
+	biblemgr.bible.SetModule(module_name)
 
 protocol_handler.register_handler(BIBLE_VERSION_PROTOCOL, on_bible_version)
 protocol_handler.register_hover(BIBLE_VERSION_PROTOCOL, noop)
