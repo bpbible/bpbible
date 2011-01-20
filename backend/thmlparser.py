@@ -92,7 +92,7 @@ class ThMLParser(filterutils.ParserBase):
 				u"<th>%s</th>" % GetBestRange(reference, userOutput=True)
 				for reference in references
 			))
-		# This is a nasty hack to work around the fact that OSIS rendering in
+		# This is a nasty hack to work around the fact that ThML rendering in
 		# SWORD is not properly reentrant.
 		# Without copying the internal dictionary some references do not
 		# display at all.
