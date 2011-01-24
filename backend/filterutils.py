@@ -251,7 +251,7 @@ def register_biblemgr(biblemgr):
 OSISUserData = get_user_data_desc(SW.PyOSISHTMLHREF)
 ThMLUserData = get_user_data_desc(SW.PyThMLHTMLHREF)
 
-def ellipsize(version, refs, last_text="", ellipsis=None, type="crossReference"):
+def ellipsize(refs, last_text="", ellipsis=None):
 	if ellipsis is None:
 		ellipsis = filter_settings["footnote_ellipsis_level"]
 	
@@ -272,16 +272,16 @@ def ellipsize(version, refs, last_text="", ellipsis=None, type="crossReference")
 			ref = pysw.VerseList(item, last_text).GetBestRange(True,
 				userOutput=True)
 			last_text = ref
-			buf.append('<a href="newbible://content/passagestudy.jsp?action=showRef&type=scripRef&module=%(version)s&value=%(internal_ref)s">%(ref)s</a>'% locals())
+			buf.append('<a href="bible:%(internal_ref)s">%(ref)s</a>'% locals())
 		if(left_over):
-			parameters = "action=showMultiRef&values=%d" % left_over
+			url = "?values=%d" % left_over
 			for idx, item in enumerate(refs[ellipsis:]):
 				ref = pysw.VerseList(item, last_text).GetBestRange(True)
 				last_text = ref
 			
-				parameters += "&val%d=%s" % (idx, ref)
+				url += "&val%d=%s" % (idx, ref)
 
-			e = '<b><a href="newbible://content/passagestudy.jsp?%s">...</a></b>' % SW.URL.encode(parameters).c_str()
+			e = '<b><a href="bible:%s">...</a></b>' % SW.URL.encode(url).c_str()
 		refs = []
 		
 	

@@ -358,11 +358,9 @@ class OSISParser(filterutils.ParserBase):
 			self.u.inXRefNote = True
 			
 			self.buf += filterutils.ellipsize(
-				self.u.version.c_str(),
 				refs.split(";"), 
 				self.u.key.getText(),
-				int(filterutils.filter_settings["footnote_ellipsis_level"]),
-				type=type,
+				int(filterutils.filter_settings["footnote_ellipsis_level"])
 			)
 		else:
 			c = "footnote footnote_%s" % type

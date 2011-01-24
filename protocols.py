@@ -178,7 +178,6 @@ def on_bpbible_click(frame, href, url):
 	from displayframe import DisplayFrame
 	href_and_url = find_passage_study_url(href)
 	if href_and_url:
-		print "Link clicked", href_and_url
 		DisplayFrame.on_link_clicked(frame, href_and_url[0], href_and_url[1])
 
 def find_passage_study_url(href):
