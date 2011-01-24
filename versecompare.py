@@ -54,6 +54,7 @@ class VerseCompareFrame(LinkedFrame):
 	shows_info = False
 
 	def __init__(self, parent, book):
+		self.mod = None
 		super(VerseCompareFrame, self).__init__(parent)
 		self.SetBook(book)
 		#verse_comparison_settings["comparison_modules"] = book.GetModuleList()
