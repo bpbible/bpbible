@@ -102,8 +102,6 @@ def convert_language(text, language_code):
 		if language_code in dont_use_for:
 			continue
 
-		default, (font, size, use_in_gui) = \
-			fonts.get_language_font_params(lang_code)
-		text = string_util.insert_language_font(text, letters, font, size)
+		text = string_util.insert_language_font(text, letters, lang_code)
 
 	return text

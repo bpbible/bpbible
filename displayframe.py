@@ -43,11 +43,7 @@ def process_html_for_module(module, text):
 
 	text = convert_language(text, language_code)
 		
-	# now put it in the right font				
-	text = '<fontarea basefont="%s" basesize="%s">%s</fontarea>' % (
-		font, size, text
-	)
-	return text
+	return '<span module="%s" lang="%s">%s</span>' % (module.Name(), language_code, text)
 
 html_settings = config_manager.add_section("Html")
 html_settings.add_item("zoom_level", 0, item_type=int)
@@ -711,9 +707,6 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 	def SetPage(self, page_content):
 		assert hasattr(self, "mod"), self
 
-#		self.language_code, (self.font, self.size, gui) = \
-#			fonts.get_font_params(self.mod)
-
 		dprint(WARNING, "SetPage", self.__class__, len(page_content))
 		self.OpenURI(protocol_handlers.FragmentHandler.register(page_content, self.mod))
 
@@ -772,6 +765,12 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 		# the WebConnect DOM API.  In practice, I haven't figured out how to.
 		self.Execute("document.body.setAttribute('%s', %s);" %
 				(option_name, display_options.get_js_option_value(option_name, quote_string=True)))
+
+	def fonts_changed(self):
+		if not self.dom_loaded:
+			return
+
+		self.Execute("force_stylesheet_reload('bpbible://content/fonts/');")
 
 	@defer_till_document_loaded
 	def size_intelligently(self, width, func, *args, **kwargs):

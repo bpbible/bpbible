@@ -144,14 +144,6 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.on_close += lambda: \
 			biblemgr.on_after_reload.remove(self.on_modules_reloaded)
 		
-		fonts.fonts_changed += self.refresh_all_pages
-		self.on_close += lambda: \
-			fonts.fonts_changed.remove(self.refresh_all_pages)
-
-		
-		
-		#self.Freeze()
-
 		self.lost_focus = False
 		self.history = History()
 		self.bible_observers += self.add_history_item
@@ -185,6 +177,9 @@ class MainFrame(wx.Frame, AuiLayer):
 		
 		for display_frame in (self.bibletext, self.commentarytext, self.dictionarytext, self.genbooktext, self.harmony_frame, self.daily_devotional_frame):
 			display_options.display_option_changed_observers += display_frame.change_display_option
+			fonts.fonts_changed += display_frame.fonts_changed
+
+		fonts.fonts_changed += self.verse_compare.fonts_changed
 
 		dprint(MESSAGE, "Setting menus up")
 		self.set_menus_up()

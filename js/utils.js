@@ -19,3 +19,9 @@ function jserror(str)
 {
 	Components.utils.reportError(str);
 }
+
+function force_stylesheet_reload(stylesheet)	{
+	// Add a unique parameter to prevent caching.
+	var new_stylesheet = stylesheet + "?forceReload=true&time=" + (new Date().valueOf());
+	$('link[href^="' + stylesheet + '"]').attr("href", new_stylesheet);
+}

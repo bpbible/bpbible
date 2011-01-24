@@ -6,10 +6,9 @@ import cgi
 greek = u'\u0370-\u03e1\u03f0-\u03ff\u1f00-\u1fff'
 hebrew = u'\u0590-\u05ff\ufb1d-\ufb4f'
 
-def insert_language_font(text, language_letters, font, size,
-	replacement=r'<fontarea basefont="%(font)s" basesize="%(size)s">\1</fontarea>'):
+def insert_language_font(text, language_letters, lang_code):
 	return re.sub("(([%s]\s*)+)" % language_letters, 
-		replacement % {"font": font, "size": size}, text)
+		u'<span lang="%s">\\1</span>' % lang_code, text)
 
 def ReplaceUnicode(data):
 	""" This replaces common unicode characters with ASCII equivalents """

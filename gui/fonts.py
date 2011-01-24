@@ -71,3 +71,31 @@ def get_module_gui_font(module, default_to_None=False):
 	return font#use_in_gui, font
 
 fonts_changed = ObserverList()
+
+font_css = ""
+css_loaded = False
+
+def fonts_have_changed():
+	global css_loaded
+	css_loaded = False
+
+fonts_changed += fonts_have_changed
+
+def get_css():
+	global font_css, css_loaded
+
+	if not css_loaded:
+		css_loaded = True
+		# We add the rule for [module] to revert to the default font for any
+		# module that does not have a custom font.
+		font_css = get_css_rule("html, [module]", default_fonts()[1])
+		for lang_code, font in font_settings["language_fonts"].iteritems():
+			font_css += get_css_rule('[lang="%s"]' % lang_code, font)
+
+		for module, font in font_settings["module_fonts"].iteritems():
+			font_css += get_css_rule('[module="%s"]' % module, font)
+
+	return font_css
+
+def get_css_rule(selector, font):
+	return "%s { font-family: %s; font-size: %spt; }\n" % (selector, font[0], font[1])

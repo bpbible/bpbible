@@ -9,6 +9,7 @@ from util.string_util import convert_rtf_to_html
 from util.unicode import try_unicode, to_unicode
 from util import languages, default_timer
 import urllib
+from gui.htmlbase import convert_language
 
 counter = 0
 
@@ -50,7 +51,8 @@ class ProtocolHandler(object):
 				else:
 					resources.append('<link rel="stylesheet" type="text/css" href="%s/%s/%s"/ >' % (prefix, skin_prefix, item))
 
-			resources.append(styles)
+			if styles:
+				resources.append('<style type="text/css">%s</style>' % styles)
 
 			for item in scripts:
 				resources.append('<script type="text/javascript" src="%s/%s/%s"></script>' % (prefix, script_prefix, item))
@@ -88,7 +90,10 @@ class NullProtocolHandler(ProtocolHandler):
 class PageProtocolHandler(ProtocolHandler):
 	bible_stylesheets = ("bpbible_html.css", "bpbible_chapter_view.css", 
 						"passage_tag.css",
-						"bpbible://content/quotes_skin/")
+						"bpbible://content/quotes_skin/",
+						"bpbible://content/fonts/")
+	standard_scripts = ["jquery-1.3.2.js", "utils.js"]
+
 	def _get_document_parts(self, path):
 		module_name, ref = path.split("/", 1)
 		if ref.startswith("passagestudy.jsp"):
@@ -110,8 +115,7 @@ class PageProtocolHandler(ProtocolHandler):
 		t = default_timer()
 
 		stylesheets = list(self.bible_stylesheets)
-		scripts = ["jquery-1.3.2.js", "highlight.js", "bpbible_html.js",
-				  "hyphenate.js", "columns.js"]
+		scripts = self.standard_scripts + ["highlight.js", "bpbible_html.js", "hyphenate.js", "columns.js"]
 
 		book = biblemgr.get_module_book_wrapper(module_name)
 		assert book, "Module wrapper not found for book " + module_name
@@ -157,6 +161,8 @@ class PageProtocolHandler(ProtocolHandler):
 		if not c:
 			clas = " nocontent"
 
+		lang = module.Lang() if module else "en",
+		c = convert_language(c, lang)
 		c = '<div class="segment%s" ref_id="%s">%s</div>' % (clas, urllib.quote(ref_id), c)
 
 		return dict(
@@ -334,6 +340,14 @@ class QuotesHandler(ProtocolHandler):
 		import quotes
 		style, mapping = quotes.get_quotes()
 		return style
+	
+class FontsHandler(ProtocolHandler):
+	def get_content_type(self, path):
+		return 'text/css'
+	
+	def get_document(self, path):
+		from gui import fonts
+		return fonts.get_css()
 
 class TooltipConfigHandler(PageProtocolHandler):
 	registered = {}
@@ -350,12 +364,10 @@ class TooltipConfigHandler(PageProtocolHandler):
 		config = self.registered.pop(path)
 		bg, textcolour = guiconfig.get_tooltip_colours()
 		style = """
-<style type="text/css">
 body {
 	background-color: %s;
 	color: %s
 }
-</style>
 """ % (bg, textcolour)
 		return dict(module=config.get_module(), content=config.get_text(),
 				stylesheets=self.bible_stylesheets,
@@ -377,6 +389,7 @@ class FragmentHandler(PageProtocolHandler):
 		text, module = self.registered.pop(path)
 		return dict(module=module, content=text,
 				stylesheets=self.bible_stylesheets,
+				scripts=self.standard_scripts,
 				bodyattrs=self._get_body_attrs(module))
 
 handlers = {
@@ -386,6 +399,7 @@ handlers = {
 	'': NullProtocolHandler(),
 	'moduleinformation': ModuleInformationHandler(),
 	'quotes_skin': QuotesHandler(),
+	'fonts': FontsHandler(),
 	'tooltip': TooltipConfigHandler(),
 }
 
