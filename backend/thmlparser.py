@@ -41,7 +41,7 @@ class ThMLParser(filterutils.ParserBase):
 		# if we have a ref list, then we need to display the text and just
 		# pop up usual thing
 		if refList:
-			self.buf += ("<a href=\"passagestudy.jsp?action=showRef&type=scripRef&value=%s&module=%s\">") % (
+			self.buf += ("<a href=\"newbible://content/passagestudy.jsp?action=showRef&type=scripRef&value=%s&module=%s\">") % (
 				SW.URL.encode(refList).c_str(), ""
 			)
 			self.buf += self.u.lastTextNode.c_str()

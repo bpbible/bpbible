@@ -366,7 +366,7 @@ class OSISParser(filterutils.ParserBase):
 			)
 		else:
 			c = "footnote footnote_%s" % type
-			self.buf += "<a class=\"%s\" href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\">%s</a>" % (
+			self.buf += "<a class=\"%s\" href=\"newbible://content/passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\">%s</a>" % (
 								c,
 								footnote_type,
 								SW.URL.encode(footnoteNumber).c_str(), 

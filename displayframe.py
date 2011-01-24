@@ -483,6 +483,11 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 				dprint(MESSAGE, "Opening image", filepath)
 				osutils.system_open_file(filepath)
 
+		if action == "showRef":
+			if url.getParameterValue("type") == "scripRef":
+				ref = url.getParameterValue("value")
+				guiconfig.mainfrm.set_bible_ref(ref, LINK_CLICKED)
+
 	@staticmethod
 	def on_link_clicked_bible(frame, href, url):
 		host = url.getHostName()

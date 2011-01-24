@@ -96,20 +96,11 @@ class PageProtocolHandler(ProtocolHandler):
 
 	def _get_document_parts(self, path):
 		module_name, ref = path.split("/", 1)
-		if ref.startswith("passagestudy.jsp"):
-			ref = self._find_ref_from_passagestudy_url(ref.encode("utf8"))
-		else:
-			ref = urllib.unquote(ref)
-		ref = ref.decode("utf8")
+		ref = urllib.unquote(ref)
 		assert ref, "No reference"
+		ref = ref.decode("utf8")
 
 		return self._get_document_parts_for_ref(module_name, ref)
-
-	def _find_ref_from_passagestudy_url(self, ref):
-		url = SW.URL(ref)
-		if url.getParameterValue("type") == "scripRef":
-			return url.getParameterValue("value")
-		return ref
 
 	def _get_document_parts_for_ref(self, module_name, ref, do_current_ref=True):
 		t = default_timer()

@@ -272,7 +272,7 @@ def ellipsize(version, refs, last_text="", ellipsis=None, type="crossReference")
 			ref = pysw.VerseList(item, last_text).GetBestRange(True,
 				userOutput=True)
 			last_text = ref
-			buf.append('<a href="passagestudy.jsp?action=showRef&type=scripRef&module=%(version)s&value=%(internal_ref)s">%(ref)s</a>'% locals())
+			buf.append('<a href="newbible://content/passagestudy.jsp?action=showRef&type=scripRef&module=%(version)s&value=%(internal_ref)s">%(ref)s</a>'% locals())
 		if(left_over):
 			parameters = "action=showMultiRef&values=%d" % left_over
 			for idx, item in enumerate(refs[ellipsis:]):
@@ -281,7 +281,7 @@ def ellipsize(version, refs, last_text="", ellipsis=None, type="crossReference")
 			
 				parameters += "&val%d=%s" % (idx, ref)
 
-			e = '<b><a href="passagestudy.jsp?%s">...</a></b>' % SW.URL.encode(parameters).c_str()
+			e = '<b><a href="newbible://content/passagestudy.jsp?%s">...</a></b>' % SW.URL.encode(parameters).c_str()
 		refs = []
 		
 	
