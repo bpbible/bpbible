@@ -1,24 +1,3 @@
-function d(str) {
-	dump("From JS: ");
-	if (typeof console != "undefined" && console.log) console.log(str);
-	if ((typeof str == "string" && !str.match(/\n$/)) || typeof str == "number")
-		dump(str + "\n");
-	else dump(str);
-}
-
-// dump to the js console (xulrunner -jsconsole)
-function jsdump(str)
-{
-	dump(str);
-/*	Components.classes['@mozilla.org/consoleservice;1']
-			  .getService(Components.interfaces.nsIConsoleService)
-			  .logStringMessage(str);*/
-}
-
-function jserror(str)
-{
-	Components.utils.reportError(str);
-}
 
 function pick_element(selector, range, before) {
 	var last = null;
@@ -318,5 +297,3 @@ function scroll_to_current(start) {
 	d(t + "," + l);
 
 }
-
-
