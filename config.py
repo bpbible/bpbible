@@ -176,7 +176,7 @@ preverse = '<a name="${osisRef}_start" osisRef="$osisRef"></a>'
 # templates
 verse_number = u'''
 	<a class="vnumber $numbertype%s"
-	   href="bpbible://content/page/$version/$internal_reference"
+	   href="nbible://$internal_reference"
 	   osisRef="$osisRef"
 	   reference="$reference">
 	   $versenumber</a>'''
