@@ -297,3 +297,48 @@ function scroll_to_current(start) {
 	d(t + "," + l);
 
 }
+
+$(document).mousedown(function(event) {
+	if (event.which != 3) {
+		return;
+	}
+	window.right_click_word = "";
+	var rangeOffset = event.originalEvent.rangeOffset;
+	var rangeParent = event.originalEvent.rangeParent;
+	if (rangeParent.nodeType !== Node.TEXT_NODE) {
+		return;
+	}
+	var range = document.createRange();
+	var startOffset = rangeOffset;
+	var endOffset = rangeOffset;
+	range.setStart(rangeParent, rangeOffset);
+	range.setEnd(rangeParent, rangeOffset);
+	// XXX: Expand the list of whitespace.  This most definitely doesn't
+	// handle word segmentation systems like Thai.
+	var whitespace = " \t\".,";
+	for (startOffset = rangeOffset - 1; startOffset > 0; startOffset--)	{
+		range.setStart(rangeParent, startOffset);
+		range.setEnd(rangeParent, startOffset + 1);
+		if (whitespace.indexOf(range.toString()) > -1)	{
+			startOffset++;
+			break;
+		}
+	}
+	startOffset = Math.max(startOffset, 0);
+
+	for (endOffset = rangeOffset; endOffset < rangeParent.length; endOffset++)	{
+		try {
+			range.setStart(rangeParent, endOffset);
+			range.setEnd(rangeParent, endOffset + 1);
+		} catch (e)	{
+			break;
+		}
+
+		if (whitespace.indexOf(range.toString()) > -1)	{
+			break;
+		}
+	}
+	range.setStart(rangeParent, startOffset);
+	range.setEnd(rangeParent, endOffset);
+	window.right_click_word = range.toString();
+});

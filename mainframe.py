@@ -868,7 +868,6 @@ class MainFrame(wx.Frame, AuiLayer):
 		
 		for idx, frame in enumerate(self.frames):
 			if not frame.has_menu: continue
-			#items = frame.get_menu_items()
 			items = [x for (x, where_shown) in frame.get_menu_items() 
 				if where_shown & IN_MENU]
 			

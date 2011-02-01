@@ -135,7 +135,7 @@ class BookFrame(AUIDisplayFrame):
 		self.SetReference(self.reference, settings_changed=settings_changed)
 
 
-	def get_menu_items(self):
+	def get_menu_items(self, event=None):
 		def set_text():
 			pane = self.aui_pane
 			if not pane.IsShown():
@@ -165,7 +165,7 @@ class BookFrame(AUIDisplayFrame):
 			(Separator, IN_MENU),
 		)
 		
-		items = extras + super(BookFrame, self).get_menu_items()
+		items = extras + super(BookFrame, self).get_menu_items(event)
 		if self.shows_info:
 			items += (
 			(Separator, IN_BOTH),

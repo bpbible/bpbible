@@ -197,21 +197,6 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 			u'\N{LEFT SINGLE QUOTATION MARK}'
 		)
 
-	def CellClicked(self, cell, x, y, event):
-		if(self.select or event.Dragging()): 
-			return
-
-		if(event.ControlDown()):
-			word = cell.ConvertToText(None)
-			word = self.strip_text(word)
-			if(word): 
-				wx.CallAfter(guiconfig.mainfrm.UpdateDictionaryUI, word)
-			return
-
-		link = cell.GetLink()
-		if link and self.handle_links: 
-			self.LinkClicked(link, cell)
-
 	def MouseOverEvent(self, event):
 		event.Skip()
 		self.current_target = None
@@ -501,10 +486,11 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 	def on_char(self, event):
 		guiutil.dispatch_keypress(self.get_actions(), event)
 
-	def get_menu_items(self):
+	def get_menu_items(self, event=None):
+		href = event.GetHref() if event else u""
 		menu_items = (
-			(self.make_search_text(), IN_POPUP),
-			(self.make_lookup_text(), IN_POPUP),
+			(self.make_search_text(href), IN_POPUP),
+			(self.make_lookup_text(href), IN_POPUP),
 			(Separator, IN_POPUP),
 		
 			(MenuItem(
@@ -521,7 +507,7 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 		self.popup_position = guiutil.get_mouse_pos(event_object)
 		
 		menu = guiconfig.mainfrm.make_menu(
-			[x for (x, where_shown) in self.get_menu_items() 
+			[x for (x, where_shown) in self.get_menu_items(event) 
 				if where_shown & IN_POPUP],
 			is_popup=True)
 		
@@ -530,38 +516,27 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 
 		event_object.PopupMenu(menu, self.popup_position)
 
-	def get_popup_menu_items(self):
-		return ((self.make_search_text(), self.make_lookup_text(), Separator) + 
-			self.get_menu_items())
-
-	def _get_text(self, lookup_text, is_search=False):
+	def _get_text(self, lookup_text, href, is_search=False):
 		def update_ui(event):
 			text = self.SelectionToText()
 
 			if not text and is_search:
 				# only display text reference if 
-				cell = self.FindCell(*self.popup_position)
-				if cell:
-					link = cell.GetLink()
-					if link:
-						match = re.match(u'n?bible:([^#]*)(#.*)?', 
-							link.GetHref())
-						if match:
-							text = GetBestRange(match.group(1),
-								userOutput=True)
-
-
-						match = re.match(
+				if href:
+					match = (re.match(u'n?bible:([^#]*)(#.*)?', href) or
+						re.match(
 							u'passagestudy.jsp\?action=showRef&type=scripRef&'
-							'value=([^&]*)&module=.*', link.GetHref())
-						if match:
-							text = GetBestRange(
-								SW.URL.decode(str(match.group(1))).c_str(),
-								userOutput=True)
+							'value=([^&]*)&module=.*', href))
+					if match:
+						ref = SW.URL.decode(str(match.group(1))).c_str()
+						text = GetBestRange(ref, userOutput=True)
 						
-						if text:
-							event.SetText(lookup_text % text)
-							return
+					if text:
+						event.SetText(lookup_text % text)
+						return
+
+			if (not text) and (href.startswith('strongs') or href.startswith('morph')):
+				text = self.get_link_text_from_href(href)
 								
 			if not text:
 				text = self.get_clicked_cell_text()
@@ -583,15 +558,14 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 
 		return update_ui
 
+	def get_link_text_from_href(self, href):
+		return self.ExecuteScriptWithResult('encode_utf8(document.querySelector(\'a[href="%s"]\').textContent)' % href)
+
 	def get_clicked_cell_text(self):
-		cell = self.FindCell(*self.popup_position)
-		if not cell: 
-			return None
+		return self.ExecuteScriptWithResult('encode_utf8(window.right_click_word)')
 
-		return cell.ConvertToText(None)
-
-	def make_lookup_text(self):
-		update_ui = self._get_text(_("Look up %s in the dictionary"))
+	def make_lookup_text(self, href):
+		update_ui = self._get_text(_("Look up %s in the dictionary"), href)
 
 		def on_lookup_click():
 			"""Lookup the selected text in the dictionary"""
@@ -609,7 +583,7 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 			update_ui=update_ui, font=font)
 
 
-	def make_search_text(self):
+	def make_search_text(self, href):
 		frame = self.get_frame_for_search()
 		if frame.book == biblemgr.bible:
 			search_text = _("Search for %s in the Bible")
@@ -617,17 +591,15 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 			search_text = _("Search for %s in this book")
 		update_ui = self._get_text(
 			search_text,
+			href,
 			is_search=True)
 
 		def on_search_click():
 			"""Search for the selected word in the Bible"""
-			cell = self.FindCell(*self.popup_position)
-			link = cell.GetLink()
 			strongs_number = None
 			text = None
-			if link:
-				match = re.match(u'passagestudy.jsp\?action=showStrongs&type='
-						  '(Greek|Hebrew)&value=(\d+)(!\w+)?', link.GetHref())
+			if href:
+				match = re.match(u'strongs://(Greek|Hebrew)/(\d+)(!\w+)?', href)
 				if match:
 					prefix, number, extra = match.group(1, 2, 3)
 					strongs_number = "HG"[prefix=="Greek"] + number
@@ -637,35 +609,28 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 					text = "strongs:" + strongs_number
 				
 				if not text:
-					match = re.match(u'passagestudy.jsp\?action=showMorph&'
-						'type=(\w*)((:|%3A)[^&]+)?&value=([\w-]+)',
-						link.GetHref())
+					match = re.match(u'morph://(\w*)((:|%3A)[^/]+)/([\w-]+)', href)
 					if match:
 						module, value = match.group(1, 4)
 						if module == "Greek": module = "Robinson"
 						text = "morph:%s:%s" % (module, value)
 
+				ref = None
 				if not text:
-					match = re.match(u'n?bible:([^#]*)(#.*)?', link.GetHref())
+					match = (re.match(u'n?bible:([^#]*)(#.*)?', href) or
+						re.match(
+							u'passagestudy.jsp\?action=showRef&type=scripRef&'
+							'value=([^&]*)&module=.*', href))
 					if match:
-						vl = VerseList(match.group(1))	
+						ref = match.group(1)
 
-						# only search on the first item or range
-						text = 'ref:"%s"' % VerseList([vl[0]]).GetBestRange(
-							userOutput=True)
-				if not text:
-					match = re.match(
-						u'passagestudy.jsp\?action=showRef&type=scripRef&'
-						'value=([^&]*)&module=.*', link.GetHref())
-					if match:
-						vl = VerseList(
-							SW.URL.decode(str(match.group(1))).c_str()
-						)
+				if ref:
+					ref = SW.URL.decode(str(ref)).c_str()
+					vl = VerseList(ref)
+					first_ref = VerseList([vl[0]]).GetBestRange(userOutput=True)
 
-						# only search on the first item or range				
-						text = 'ref:"%s"' % VerseList([vl[0]]).GetBestRange(
-							userOutput=True)
-							
+					# only search on the first item or range				
+					text = 'ref:"%s"' % first_ref
 
 			if not text:
 				text = self.SelectionToText()
@@ -689,12 +654,6 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 		font = fonts.get_module_gui_font(self.mod, default_to_None=True)
 		return MenuItem("Search on word", on_search_click, 
 			update_ui=update_ui, font=font)
-
-
-	# XXX: These dummies are required to make all these menu items work correctly.
-	# We should fix it so they are not needed.
-	def FindCell(self, x,y):
-		pass
 	
 	def get_actions(self):
 		#actions = super(DisplayFrame, self).get_actions()

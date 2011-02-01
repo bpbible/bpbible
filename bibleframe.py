@@ -62,8 +62,8 @@ class BibleFrame(VerseKeyedFrame):
 	def get_window(self):
 		return self.panel
 
-	def get_menu_items(self):
-		items = super(BibleFrame, self).get_menu_items()
+	def get_menu_items(self, event=None):
+		items = super(BibleFrame, self).get_menu_items(event)
 		
 		for item, scope in items:
 			if item != Separator and item.text == _("Search"):

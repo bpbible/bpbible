@@ -20,6 +20,14 @@ function jserror(str)
 	Components.utils.reportError(str);
 }
 
+/*
+ Strings which may contain unicode need to be encoded to UTF-8 so that they
+ will be correctly converted to Unicode by wxWebConnect's ExecuteScriptWithResult().
+*/
+function encode_utf8(str)	{
+	return unescape(encodeURIComponent(str));
+}
+
 function force_stylesheet_reload(stylesheet)	{
 	// Add a unique parameter to prevent caching.
 	var new_stylesheet = stylesheet + "?forceReload=true&time=" + (new Date().valueOf());

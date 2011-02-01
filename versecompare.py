@@ -187,8 +187,8 @@ class VerseCompareFrame(LinkedFrame):
 		text = "%s - %s" % (self.title, ref)
 		m.set_pane_title(p.name, text)
 		
-	def get_menu_items(self):
-		actions = super(VerseCompareFrame, self).get_menu_items()
+	def get_menu_items(self, event=None):
+		actions = super(VerseCompareFrame, self).get_menu_items(event)
 		actions = (
 			(MenuItem(
 				_("Set books to compare"), 
