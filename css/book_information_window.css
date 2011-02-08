@@ -6,7 +6,7 @@ table {
 	width: 100%;
 }
 
-.module_information_key {
+.module_information_key, .config_file_entries_combo {
 /*	background-color: green;*/
 	width: 0px;
 	padding-right: .4em;
@@ -25,3 +25,10 @@ table {
 	content: ":";
 }
 
+/*
+This scrunches the combo box, but makes the rest of the key fields not take up
+too much space.
+*/
+#config_file_entries {
+	max-width: 100px;
+}

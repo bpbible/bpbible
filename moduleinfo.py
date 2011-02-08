@@ -28,7 +28,6 @@ class ModuleInfo(wx.Dialog):
 		self.SetSizerAndFit(sizer)
 		# XXX: Make sizing work properly later.
 		self.Size = (600, 500)
-		# XXX: Add an option to view all of the conf options that were in the combo box which has been removed.
 
 if __name__ == '__main__':
 	from backend.bibleinterface import biblemgr

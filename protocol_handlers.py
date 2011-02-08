@@ -10,6 +10,7 @@ from util.unicode import try_unicode, to_unicode
 from util import languages, default_timer
 import urllib
 from gui.htmlbase import convert_language
+import json
 
 counter = 0
 
@@ -35,7 +36,7 @@ class ProtocolHandler(object):
 		return "No content specified"
 	
 	def _get_html(self, module, content, bodyattrs="", timer="", 
-		stylesheets=[], scripts=[], styles="", contentclass=""):
+		stylesheets=[], scripts=[], javascript_block="", styles="", contentclass=""):
 		resources = []
 		skin_prefixs = ["css", "css"]
 		script_prefixs = ["js", "js"]
@@ -51,11 +52,14 @@ class ProtocolHandler(object):
 				else:
 					resources.append('<link rel="stylesheet" type="text/css" href="%s/%s/%s"/ >' % (prefix, skin_prefix, item))
 
-			if styles:
-				resources.append('<style type="text/css">%s</style>' % styles)
-
 			for item in scripts:
 				resources.append('<script type="text/javascript" src="%s/%s/%s"></script>' % (prefix, script_prefix, item))
+
+		if styles:
+			resources.append('<style type="text/css">%s</style>' % styles)
+
+		if javascript_block:
+			resources.append('<script type="text/javascript">%s</script>' % javascript_block)
 
 		text = BASE_HTML % dict(
 			lang=module.Lang() if module else "en",
@@ -292,6 +296,8 @@ class PageFragmentHandler(PageProtocolHandler):
 		return '<div class="page_segment">%(content)s%(timer)s</div>' % self._get_document_parts_for_ref(module_name, new_ref, do_current_ref=False)
 	
 class ModuleInformationHandler(ProtocolHandler):
+	config_entries_to_ignore = ["Name", "Description", "DistributionLicense", "UnlockURL", "ShortPromo", "Lang", "About"]
+
 	def get_document(self, path):
 		module_name = urllib.unquote(path)
 
@@ -303,25 +309,79 @@ class ModuleInformationHandler(ProtocolHandler):
 		module = book.mod
 		
 		rows = []
-		t = u"<table class='module_information'>%s</table>"
-		for key, value in (
-			("Name", module.Name()), 
-			("Description", module.Description()),
+		name = u"%s - %s" % (module.Name(), to_unicode(module.Description(), module))
+		default_items = (
+			("Name", name),
 			("Language", languages.get_language_description(module.Lang())),
-			("License", module.getConfigEntry("DistributionLicense")),
-			("About", module.getConfigEntry("About")), 
-		):
-			rows.append('''
-			<tr>
-				<th class="module_information_key">%s</th>
-				<td class="module_information_value">%s</td>
-			</tr>''' % (
-				key, convert_rtf_to_html(try_unicode(value, module))
-			))
+			("License", self.get_formatted_config_entry(module, "DistributionLicense")),
+			("Unlock", self.get_formatted_unlock_url(module)),
+			("More", self.get_formatted_config_entry(module, "ShortPromo")),
+			("About", self.get_formatted_config_entry(module, "About")),
+		)
+		for key, value in default_items:
+			if value:
+				rows.append('''
+				<tr>
+					<th class="module_information_key">%s</th>
+					<td class="module_information_value">%s</td>
+				</tr>''' % (key, value))
 
-		t %= ''.join(rows)
+		html, javascript = self.add_additional_config_entries(module)
+		rows.append(html)
+		table = u"<table class='module_information'>%s</table>" % (''.join(rows))
 
-		return self._get_html(module, t, stylesheets=["book_information_window.css"])
+		return self._get_html(module, table, stylesheets=["book_information_window.css"],
+				scripts=PageProtocolHandler.standard_scripts, javascript_block=javascript)
+
+	def add_additional_config_entries(self, module):
+		config_map = self.get_config_map(module)
+
+		config_file_options = ''.join('<option value="%s">%s</option>' % (index, name) for index, (name, value) in enumerate(config_map))
+		html = '''
+		<tr>
+			<td class="config_file_entries_combo">
+				<select name="config_file_entries" id="config_file_entries">%s</select>
+			</td>
+			<td class="module_information_value" id="current_config_file_entry"></td>
+		</tr>''' % config_file_options
+
+		javascript = """
+			var config_entry_values = %s;
+
+			function on_config_file_entry_changed()	{
+				var new_entry_index = document.getElementById("config_file_entries").selectedIndex;
+				$("#current_config_file_entry").html(config_entry_values[new_entry_index]);
+			}
+
+			$(document).ready(function() {
+				$("#config_file_entries").change(on_config_file_entry_changed);
+				on_config_file_entry_changed();
+			});
+		""" % json.dumps([value for key, value in config_map])
+
+		return html, javascript
+
+	def get_formatted_config_entry(self, module, entry):
+		value = module.getConfigEntry(entry)
+		return convert_rtf_to_html(try_unicode(value, module))
+
+	def get_formatted_unlock_url(self, module):
+		unlock_url = self.get_formatted_config_entry(module, "UnlockURL")
+		if not unlock_url:
+			return ""
+
+		message = _('Click here to unlock this book')
+		return u'<a href="%s">%s</a>' % (unlock_url, message)
+
+	def get_config_map(self, module):
+		return [
+			(
+				item.c_str(), 
+				convert_rtf_to_html(try_unicode(value.c_str(), module))
+			)
+			for item, value in module.getConfigMap().items()
+			if item.c_str() not in self.config_entries_to_ignore
+		]
 	
 class QuotesHandler(ProtocolHandler):
 	def get_content_type(self, path):
