@@ -1,0 +1,27 @@
+body {
+	background-color: white;
+}
+
+table {
+	width: 100%;
+}
+
+.module_information_key {
+/*	background-color: green;*/
+	width: 0px;
+	padding-right: .4em;
+	padding-top: 3px;
+
+	vertical-align: top;
+	text-align: right;
+}
+.module_information_value {
+	border: 1px solid #eee;
+	-moz-border-radius: 3px;
+	padding: 3px;
+}
+
+.module_information_key:after {
+	content: ":";
+}
+
