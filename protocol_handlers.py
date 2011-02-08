@@ -38,22 +38,20 @@ class ProtocolHandler(object):
 	def _get_html(self, module, content, bodyattrs="", timer="", 
 		stylesheets=[], scripts=[], javascript_block="", styles="", contentclass=""):
 		resources = []
-		skin_prefixs = ["css", "css"]
-		script_prefixs = ["js", "js"]
 
 		### Should we keep using the file:/// protocol?
 		### For the XUL port we intended to switch to using the chrome:/// protocol.
-		prefixs = ["file:///" + os.getcwd() + "/"]
-		for skin_prefix, script_prefix, prefix \
-				in zip(skin_prefixs, script_prefixs, prefixs):
-			for item in stylesheets:
-				if "://" in item:
-					resources.append('<link rel="stylesheet" type="text/css" href="%s"/ >' % (item))
-				else:
-					resources.append('<link rel="stylesheet" type="text/css" href="%s/%s/%s"/ >' % (prefix, skin_prefix, item))
+		prefix = "file:///" + os.getcwd() + "/"
+		css_dir = "css"
+		script_dir = "js"
+		for item in stylesheets:
+			if "://" in item:
+				resources.append('<link rel="stylesheet" type="text/css" href="%s"/ >' % (item))
+			else:
+				resources.append('<link rel="stylesheet" type="text/css" href="%s/%s/%s"/ >' % (prefix, css_dir, item))
 
-			for item in scripts:
-				resources.append('<script type="text/javascript" src="%s/%s/%s"></script>' % (prefix, script_prefix, item))
+		for item in scripts:
+			resources.append('<script type="text/javascript" src="%s/%s/%s"></script>' % (prefix, script_dir, item))
 
 		if styles:
 			resources.append('<style type="text/css">%s</style>' % styles)
