@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: German BPBible v1.3\n"
-"POT-Creation-Date: 2010-12-31 01:33+AUS Eastern Daylight Time\n"
+"POT-Creation-Date: 2011-02-10 23:42+AUS Eastern Daylight Time\n"
 "PO-Revision-Date: 2010-05-09 18:41-0300\n"
 "Last-Translator: Daniel Rios <danielrios@live.dk>\n"
 "Language-Team: Markusch <markuschmichael@gmx.de>\n"
@@ -69,18 +69,18 @@ msgstr "O número do capítulo no livro"
 msgid "The text of the heading"
 msgstr "O texto do cabeçalho"
 
-#: backend/book.py:750
+#: backend/book.py:723
 msgid ""
 "Couldn't save cipher key. You will have to set it again when you restart"
 msgstr ""
 "Não foi possível salvar a cipher key. Você terá que configurar novamente "
 "quando reiniciar."
 
-#: backend/book.py:796
+#: backend/book.py:769
 msgid "commentary"
 msgstr "comentário"
 
-#: backend/book.py:806 bibleframe.py:39 xrc/auifrm_xrc.py:72
+#: backend/book.py:779 bibleframe.py:39 xrc/auifrm_xrc.py:72
 msgid "Bible"
 msgstr "Bíblia"
 
@@ -93,7 +93,7 @@ msgstr ""
 msgid "harmony"
 msgstr "Concordância"
 
-#: bibleframe.py:69 bookframe.py:160 mainframe.py:256
+#: bibleframe.py:69 bookframe.py:160 mainframe.py:250
 #: search/searchpanel.py:157
 msgid "Search"
 msgstr "Buscar"
@@ -188,7 +188,7 @@ msgstr ""
 msgid "Error in Topic Management"
 msgstr ""
 
-#: bookframe.py:142 mainframe.py:873
+#: bookframe.py:142 mainframe.py:862
 msgid "Show the %s pane"
 msgstr "Mostrar o painel %s"
 
@@ -309,15 +309,15 @@ msgstr "Concordância"
 msgid "Footnotes"
 msgstr "Notas de rodapé"
 
-#: display_options.py:89
+#: display_options.py:89 display_options.py:102
 #, fuzzy
 msgid "Strongs Numbers"
 msgstr "Números fortes"
 
 #: display_options.py:90
 #, fuzzy
-msgid "Strongs Blocked"
-msgstr "Não bloqueado"
+msgid "Strongs Underneath"
+msgstr "Números fortes"
 
 #: display_options.py:91
 msgid "Morphology"
@@ -345,7 +345,7 @@ msgstr ""
 
 #: display_options.py:98
 #, fuzzy
-msgid "Strong's Headwords"
+msgid "Strongs Headwords"
 msgstr "Palavras de cabeçalho fortes"
 
 #: display_options.py:99
@@ -360,16 +360,11 @@ msgstr "Linguagem original"
 msgid "Pronunciation"
 msgstr "Pronúncia"
 
-#: display_options.py:102
-#, fuzzy
-msgid "Strong's Numbers"
-msgstr "Números fortes"
-
-#: displayframe.py:228
+#: displayframe.py:253 protocols.py:150
 msgid "Don't know how to open this morphology type:"
 msgstr "Não sei como abrir este tipo de morfologia:"
 
-#: displayframe.py:238
+#: displayframe.py:263 protocols.py:160
 #, fuzzy
 msgid ""
 "Module %s is not installed, so you cannot view details for this "
@@ -378,31 +373,31 @@ msgstr ""
 "O módulo %s não está instalado. Por isso você não poderá ver detalhes deste "
 "código morfológico"
 
-#: displayframe.py:466
+#: displayframe.py:497
 msgid "Select all"
 msgstr "Selecionar todos"
 
-#: displayframe.py:468
+#: displayframe.py:499
 msgid "Select all the text in the frame"
 msgstr "Selecionar todo o texto na tela"
 
-#: displayframe.py:529
+#: displayframe.py:549
 msgid "the selected word"
 msgstr "a palavra selecionada"
 
-#: displayframe.py:535
+#: displayframe.py:555
 msgid "the selected phrase"
 msgstr "a frase selecionada"
 
-#: displayframe.py:549
+#: displayframe.py:568
 msgid "Look up %s in the dictionary"
 msgstr "Procure %s no dicionário"
 
-#: displayframe.py:570
+#: displayframe.py:589
 msgid "Search for %s in the Bible"
 msgstr "Busque por %s na Bíblia"
 
-#: displayframe.py:572
+#: displayframe.py:591
 msgid "Search for %s in this book"
 msgstr "Busque por %s neste livro"
 
@@ -567,151 +562,151 @@ msgstr "Informação"
 msgid "Cannot read book metadata in file %s"
 msgstr "Não foi possível ler metadados do livro no arquivo %s"
 
-#: mainframe.py:252
+#: mainframe.py:246
 msgid "Go to verse"
 msgstr "Ir para verso"
 
-#: mainframe.py:253
+#: mainframe.py:247
 msgid "Go to this verse"
 msgstr "Ir para este verso"
 
-#: mainframe.py:257
+#: mainframe.py:251
 msgid "Search in the current book"
 msgstr "Procurar no livro atual"
 
-#: mainframe.py:260 xrc/copyverses_xrc.py:81
+#: mainframe.py:254 xrc/copyverses_xrc.py:81
 msgid "Copy Verses"
 msgstr "Copiar versos"
 
-#: mainframe.py:261
+#: mainframe.py:255
 #, fuzzy
 msgid "Open the Copy Verses dialog"
 msgstr "Abrir a janela \"Copiar versos\""
 
-#: mainframe.py:266
+#: mainframe.py:260
 msgid "Back"
 msgstr "Voltar"
 
-#: mainframe.py:267
+#: mainframe.py:261
 msgid "Go back a verse"
 msgstr "Voltar ao verso anterior"
 
-#: mainframe.py:270
+#: mainframe.py:264
 msgid "Forward"
 msgstr "Avançar"
 
-#: mainframe.py:271
+#: mainframe.py:265
 msgid "Go forward a verse"
 msgstr "Ir para o próximo verso"
 
-#: mainframe.py:275
+#: mainframe.py:269
 msgid "Zoom In"
 msgstr "Aumentar zoom"
 
-#: mainframe.py:276
+#: mainframe.py:270
 msgid "Make text bigger"
 msgstr "Aumentar texto"
 
-#: mainframe.py:279
+#: mainframe.py:273
 msgid "Default Zoom"
 msgstr "Zoom padrão"
 
-#: mainframe.py:280
+#: mainframe.py:274
 msgid "Return text to default size"
 msgstr "Voltar ao tamanho padrão do texto"
 
-#: mainframe.py:283
+#: mainframe.py:277
 msgid "Zoom Out"
 msgstr "Diminuir zoom"
 
-#: mainframe.py:284
+#: mainframe.py:278
 msgid "Make text smaller"
 msgstr "Diminuir texto"
 
-#: mainframe.py:313
+#: mainframe.py:307
 msgid "Navigation"
 msgstr "Navegação"
 
-#: mainframe.py:315
+#: mainframe.py:309
 msgid "Zoom"
 msgstr "Zoom"
 
-#: mainframe.py:317
+#: mainframe.py:311
 msgid "History toolbar"
 msgstr "Barra de ferramentas histórico"
 
-#: mainframe.py:718
+#: mainframe.py:712
 msgid "Installable books"
 msgstr "Livros instaláveis"
 
-#: mainframe.py:721 versecompare.py:204
+#: mainframe.py:715 versecompare.py:206
 msgid "Choose books"
 msgstr "Escolher livros"
 
-#: mainframe.py:796 xrc/auifrm_xrc.py:44
+#: mainframe.py:785 xrc/auifrm_xrc.py:44
 msgid "&Language"
 msgstr "&Linguagem"
 
-#: mainframe.py:799 xrc/auifrm_xrc.py:45
+#: mainframe.py:788 xrc/auifrm_xrc.py:45
 msgid "&Bible book names"
 msgstr ""
 
-#: mainframe.py:831 xrc/auifrm_xrc.py:49
+#: mainframe.py:820 xrc/auifrm_xrc.py:49
 msgid "&Display"
 msgstr "&Mostrar"
 
-#: mainframe.py:836 xrc/auifrm_xrc.py:52
+#: mainframe.py:825 xrc/auifrm_xrc.py:52
 msgid "&Windows"
 msgstr "&Janelas"
 
-#: mainframe.py:841 xrc/auifrm_xrc.py:51
+#: mainframe.py:830 xrc/auifrm_xrc.py:51
 msgid "Toolbars"
 msgstr "Barras de ferramentas"
 
-#: mainframe.py:869
+#: mainframe.py:858
 msgid "Show the %s toolbar"
 msgstr "Mostrar a barra de ferramentas %s"
 
-#: mainframe.py:891 xrc/auifrm_xrc.py:53
+#: mainframe.py:879 xrc/auifrm_xrc.py:53
 msgid "Debug"
 msgstr "Debug"
 
-#: mainframe.py:923
+#: mainframe.py:911
 #, fuzzy
 msgid "Expand cross-references"
 msgstr "Expandir referências"
 
-#: mainframe.py:924
+#: mainframe.py:912
 #, fuzzy
 msgid "Display cross references partially expanded"
 msgstr "Mostrar referências parcialmente expandidas"
 
-#: mainframe.py:929
+#: mainframe.py:917
 #, fuzzy
 msgid "Topic Tags"
 msgstr "Classificações por tópico"
 
-#: mainframe.py:930
+#: mainframe.py:918
 msgid "Display the topics that each verse is tagged with."
 msgstr "Mostrar os tópicos com os quais cada verso está classificado"
 
-#: mainframe.py:1049
+#: mainframe.py:1037
 msgid "BPBible will now quickly restart to change your language."
 msgstr "BPBible irá agora reiniciar para mudar sua linguagem."
 
-#: mainframe.py:1050
+#: mainframe.py:1038
 msgid "Restarting"
 msgstr "Reiniciando"
 
-#: mainframe.py:1069
+#: mainframe.py:1057
 msgid "An error occurred on closing:"
 msgstr "Um erro ocorreu ao fechar:"
 
-#: mainframe.py:1081 mainframe.py:1082
+#: mainframe.py:1069 mainframe.py:1070
 msgid "search "
 msgstr "buscar"
 
-#: mainframe.py:1106
+#: mainframe.py:1094
 #, fuzzy
 msgid ""
 "Flexible Bible study software.\n"
@@ -727,35 +722,35 @@ msgstr ""
 "\t\t\twxPython Version: %(wxversion)s\n"
 "\t\t\tSWORD Version: %(swversion)s"
 
-#: mainframe.py:1118
+#: mainframe.py:1106
 msgid "BPBible website"
 msgstr "Site da BPBible"
 
-#: mainframe.py:1120
+#: mainframe.py:1108
 msgid "BPBible development team"
 msgstr "Time de desenvolvimento BPBible"
 
-#: mainframe.py:1121
+#: mainframe.py:1109
 msgid "SWORD library developers"
 msgstr "Desenvolvedores da biblioteca SWORD"
 
-#: mainframe.py:1125
+#: mainframe.py:1113
 msgid "Developers"
 msgstr "Desenvolvedores"
 
-#: mainframe.py:1126
+#: mainframe.py:1114
 msgid "Artists"
 msgstr "Artistas"
 
-#: mainframe.py:1127
+#: mainframe.py:1115
 msgid "Translators"
 msgstr "Tradutores"
 
-#: mainframe.py:1129
+#: mainframe.py:1117
 msgid "translator-credits"
 msgstr "créditos dos tradutores"
 
-#: mainframe.py:1133
+#: mainframe.py:1121
 msgid ""
 "Icons used are from famfamfam\n"
 "http://www.famfamfam.com/lab/icons/silk\n"
@@ -767,7 +762,7 @@ msgstr ""
 "e do Tango Desktop Project\n"
 "http://tango.freedesktop.org/Tango_Desktop_Project verwendet."
 
-#: mainframe.py:1139
+#: mainframe.py:1127
 msgid ""
 "BPBible is licensed under the GPL v2. For more details, refer to the LICENSE."
 "txt file in the application directory"
@@ -1007,6 +1002,10 @@ msgstr "Mostrar na tooltip"
 #, fuzzy
 msgid "Show this in a tooltip"
 msgstr "Mostrar isto em um tooltip"
+
+#: protocol_handlers.py:371
+msgid "Click here to unlock this book"
+msgstr ""
 
 #: protocols.py:101
 msgid ""
@@ -1333,27 +1332,27 @@ msgstr "Você está certo de que deseja instalar este livro?"
 msgid "Delete Comment"
 msgstr "Comentário"
 
-#: versecompare.py:51
+#: versecompare.py:52
 msgid "Version Comparison"
 msgstr "Comparação de versos"
 
-#: versecompare.py:192
+#: versecompare.py:194
 msgid "Set books to compare"
 msgstr "Definir livros para comparar"
 
-#: versecompare.py:194
+#: versecompare.py:196
 msgid "Set the books this version comparison will use"
 msgstr "Definir os livros que esta comparação de versões irá usar"
 
-#: versecompare.py:203
+#: versecompare.py:205
 msgid "Choose books to compare in the verse comparison window"
 msgstr "Escolha livros para comparar nesta janela de comparação de versões"
 
-#: versecompare.py:227
+#: versecompare.py:229
 msgid "Choose books to compare"
 msgstr "Escolha livros para comparar"
 
-#: versecompare.py:233
+#: versecompare.py:235
 msgid "View in parallel mode"
 msgstr "Ver em modo paralelo"
 
@@ -1786,6 +1785,14 @@ msgid ""
 msgstr ""
 "Use $$text para o texto de um verso, $$versenum para o \n"
 "número do verso e $$reference para a referência"
+
+#, fuzzy
+#~ msgid "Strongs Blocked"
+#~ msgstr "Não bloqueado"
+
+#, fuzzy
+#~ msgid "Strong's Numbers"
+#~ msgstr "Números fortes"
 
 #~ msgid "Open the harmony"
 #~ msgstr "Abrir a concordância"

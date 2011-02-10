@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-12-31 01:33+AUS Eastern Daylight Time\n"
+"POT-Creation-Date: 2011-02-10 23:42+AUS Eastern Daylight Time\n"
 "PO-Revision-Date: 2009-03-31 20:23+0800\n"
 "Last-Translator: Paulos <paulos@yahoo.cn>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -66,16 +66,16 @@ msgstr "章节数"
 msgid "The text of the heading"
 msgstr "正文标题"
 
-#: backend/book.py:750
+#: backend/book.py:723
 msgid ""
 "Couldn't save cipher key. You will have to set it again when you restart"
 msgstr "保存密钥出错，你需要重起BPBible后重新设置"
 
-#: backend/book.py:796
+#: backend/book.py:769
 msgid "commentary"
 msgstr "圣经注释"
 
-#: backend/book.py:806 bibleframe.py:39 xrc/auifrm_xrc.py:72
+#: backend/book.py:779 bibleframe.py:39 xrc/auifrm_xrc.py:72
 msgid "Bible"
 msgstr "圣经"
 
@@ -88,7 +88,7 @@ msgstr ""
 msgid "harmony"
 msgstr "四福音合参"
 
-#: bibleframe.py:69 bookframe.py:160 mainframe.py:256
+#: bibleframe.py:69 bookframe.py:160 mainframe.py:250
 #: search/searchpanel.py:157
 msgid "Search"
 msgstr "搜索"
@@ -181,7 +181,7 @@ msgstr ""
 msgid "Error in Topic Management"
 msgstr ""
 
-#: bookframe.py:142 mainframe.py:873
+#: bookframe.py:142 mainframe.py:862
 msgid "Show the %s pane"
 msgstr "显示%s"
 
@@ -300,15 +300,15 @@ msgstr "相关项"
 msgid "Footnotes"
 msgstr "&页脚"
 
-#: display_options.py:89
+#: display_options.py:89 display_options.py:102
 #, fuzzy
 msgid "Strongs Numbers"
 msgstr "strong's 编号"
 
 #: display_options.py:90
 #, fuzzy
-msgid "Strongs Blocked"
-msgstr "未锁定"
+msgid "Strongs Underneath"
+msgstr "strong's 编号"
 
 #: display_options.py:91
 msgid "Morphology"
@@ -336,7 +336,7 @@ msgstr ""
 
 #: display_options.py:98
 #, fuzzy
-msgid "Strong's Headwords"
+msgid "Strongs Headwords"
 msgstr "Strong's中心词"
 
 #: display_options.py:99
@@ -351,45 +351,41 @@ msgstr "原文"
 msgid "Pronunciation"
 msgstr "发音"
 
-#: display_options.py:102
-msgid "Strong's Numbers"
-msgstr "strong's 编号"
-
-#: displayframe.py:228
+#: displayframe.py:253 protocols.py:150
 msgid "Don't know how to open this morphology type:"
 msgstr "无法打开morphology类型："
 
-#: displayframe.py:238
+#: displayframe.py:263 protocols.py:160
 msgid ""
 "Module %s is not installed, so you cannot view details for this "
 "morphological code"
 msgstr "模块%s未安装,所以你不能够查看morphological code详细"
 
-#: displayframe.py:466
+#: displayframe.py:497
 msgid "Select all"
 msgstr "选择所有"
 
-#: displayframe.py:468
+#: displayframe.py:499
 msgid "Select all the text in the frame"
 msgstr "选择窗口中所有文本"
 
-#: displayframe.py:529
+#: displayframe.py:549
 msgid "the selected word"
 msgstr "选中的词"
 
-#: displayframe.py:535
+#: displayframe.py:555
 msgid "the selected phrase"
 msgstr "选中的词组"
 
-#: displayframe.py:549
+#: displayframe.py:568
 msgid "Look up %s in the dictionary"
 msgstr "在字典中查找%s"
 
-#: displayframe.py:570
+#: displayframe.py:589
 msgid "Search for %s in the Bible"
 msgstr "在圣经中查找%s"
 
-#: displayframe.py:572
+#: displayframe.py:591
 msgid "Search for %s in this book"
 msgstr "在本电子书中查找%s"
 
@@ -553,147 +549,147 @@ msgstr "信息"
 msgid "Cannot read book metadata in file %s"
 msgstr "无法从文件%s读取metadata"
 
-#: mainframe.py:252
+#: mainframe.py:246
 msgid "Go to verse"
 msgstr "到这节圣经"
 
-#: mainframe.py:253
+#: mainframe.py:247
 msgid "Go to this verse"
 msgstr "到本节圣经"
 
-#: mainframe.py:257
+#: mainframe.py:251
 msgid "Search in the current book"
 msgstr "在本电子书中查找"
 
-#: mainframe.py:260 xrc/copyverses_xrc.py:81
+#: mainframe.py:254 xrc/copyverses_xrc.py:81
 msgid "Copy Verses"
 msgstr "复制经文"
 
-#: mainframe.py:261
+#: mainframe.py:255
 msgid "Open the Copy Verses dialog"
 msgstr "打开复制经文对话框"
 
-#: mainframe.py:266
+#: mainframe.py:260
 msgid "Back"
 msgstr "回退"
 
-#: mainframe.py:267
+#: mainframe.py:261
 msgid "Go back a verse"
 msgstr "回退到这节圣经"
 
-#: mainframe.py:270
+#: mainframe.py:264
 msgid "Forward"
 msgstr "前进"
 
-#: mainframe.py:271
+#: mainframe.py:265
 msgid "Go forward a verse"
 msgstr "到这节圣经"
 
-#: mainframe.py:275
+#: mainframe.py:269
 msgid "Zoom In"
 msgstr "放大"
 
-#: mainframe.py:276
+#: mainframe.py:270
 msgid "Make text bigger"
 msgstr "放大文本"
 
-#: mainframe.py:279
+#: mainframe.py:273
 msgid "Default Zoom"
 msgstr "还原"
 
-#: mainframe.py:280
+#: mainframe.py:274
 msgid "Return text to default size"
 msgstr "设置为默认字体"
 
-#: mainframe.py:283
+#: mainframe.py:277
 msgid "Zoom Out"
 msgstr "缩小"
 
-#: mainframe.py:284
+#: mainframe.py:278
 msgid "Make text smaller"
 msgstr "缩小文本"
 
-#: mainframe.py:313
+#: mainframe.py:307
 msgid "Navigation"
 msgstr "导航"
 
-#: mainframe.py:315
+#: mainframe.py:309
 msgid "Zoom"
 msgstr "缩放"
 
-#: mainframe.py:317
+#: mainframe.py:311
 msgid "History toolbar"
 msgstr "历史工具栏"
 
-#: mainframe.py:718
+#: mainframe.py:712
 msgid "Installable books"
 msgstr "可安装的电子书"
 
-#: mainframe.py:721 versecompare.py:204
+#: mainframe.py:715 versecompare.py:206
 msgid "Choose books"
 msgstr "选择电子书"
 
-#: mainframe.py:796 xrc/auifrm_xrc.py:44
+#: mainframe.py:785 xrc/auifrm_xrc.py:44
 msgid "&Language"
 msgstr "&语言"
 
-#: mainframe.py:799 xrc/auifrm_xrc.py:45
+#: mainframe.py:788 xrc/auifrm_xrc.py:45
 msgid "&Bible book names"
 msgstr ""
 
-#: mainframe.py:831 xrc/auifrm_xrc.py:49
+#: mainframe.py:820 xrc/auifrm_xrc.py:49
 msgid "&Display"
 msgstr "&显示"
 
-#: mainframe.py:836 xrc/auifrm_xrc.py:52
+#: mainframe.py:825 xrc/auifrm_xrc.py:52
 msgid "&Windows"
 msgstr "&窗口"
 
-#: mainframe.py:841 xrc/auifrm_xrc.py:51
+#: mainframe.py:830 xrc/auifrm_xrc.py:51
 msgid "Toolbars"
 msgstr "工具栏"
 
-#: mainframe.py:869
+#: mainframe.py:858
 msgid "Show the %s toolbar"
 msgstr "显示%s工具栏"
 
-#: mainframe.py:891 xrc/auifrm_xrc.py:53
+#: mainframe.py:879 xrc/auifrm_xrc.py:53
 msgid "Debug"
 msgstr "调试"
 
-#: mainframe.py:923
+#: mainframe.py:911
 msgid "Expand cross-references"
 msgstr "打开cross-references"
 
-#: mainframe.py:924
+#: mainframe.py:912
 msgid "Display cross references partially expanded"
 msgstr "展开cross references"
 
-#: mainframe.py:929
+#: mainframe.py:917
 msgid "Topic Tags"
 msgstr "主题标签"
 
-#: mainframe.py:930
+#: mainframe.py:918
 msgid "Display the topics that each verse is tagged with."
 msgstr "显示经文打标签的主题"
 
-#: mainframe.py:1049
+#: mainframe.py:1037
 msgid "BPBible will now quickly restart to change your language."
 msgstr "BPBible将快速的切换到您设置的语言"
 
-#: mainframe.py:1050
+#: mainframe.py:1038
 msgid "Restarting"
 msgstr "重起中"
 
-#: mainframe.py:1069
+#: mainframe.py:1057
 msgid "An error occurred on closing:"
 msgstr "关闭的时候发生错误"
 
-#: mainframe.py:1081 mainframe.py:1082
+#: mainframe.py:1069 mainframe.py:1070
 msgid "search "
 msgstr "搜索"
 
-#: mainframe.py:1106
+#: mainframe.py:1094
 #, fuzzy
 msgid ""
 "Flexible Bible study software.\n"
@@ -709,35 +705,35 @@ msgstr ""
 "\t\t\twxPython Version: %(wxversion)s\n"
 "\t\t\tSWORD Version: %(swversion)s"
 
-#: mainframe.py:1118
+#: mainframe.py:1106
 msgid "BPBible website"
 msgstr "BPBible 网站"
 
-#: mainframe.py:1120
+#: mainframe.py:1108
 msgid "BPBible development team"
 msgstr "BPBible 开发团队"
 
-#: mainframe.py:1121
+#: mainframe.py:1109
 msgid "SWORD library developers"
 msgstr "SWORD library 开发人员"
 
-#: mainframe.py:1125
+#: mainframe.py:1113
 msgid "Developers"
 msgstr "开发人员"
 
-#: mainframe.py:1126
+#: mainframe.py:1114
 msgid "Artists"
 msgstr "美术"
 
-#: mainframe.py:1127
+#: mainframe.py:1115
 msgid "Translators"
 msgstr "翻译"
 
-#: mainframe.py:1129
+#: mainframe.py:1117
 msgid "translator-credits"
 msgstr "translator-credits"
 
-#: mainframe.py:1133
+#: mainframe.py:1121
 msgid ""
 "Icons used are from famfamfam\n"
 "http://www.famfamfam.com/lab/icons/silk\n"
@@ -749,7 +745,7 @@ msgstr ""
 "and the Tango Desktop Project\n"
 "http://tango.freedesktop.org/Tango_Desktop_Project"
 
-#: mainframe.py:1139
+#: mainframe.py:1127
 msgid ""
 "BPBible is licensed under the GPL v2. For more details, refer to the LICENSE."
 "txt file in the application directory"
@@ -984,6 +980,10 @@ msgstr "在提示工具中显示"
 #: preview_window.py:57
 msgid "Show this in a tooltip"
 msgstr "在提示工具中显示"
+
+#: protocol_handlers.py:371
+msgid "Click here to unlock this book"
+msgstr ""
 
 #: protocols.py:101
 msgid ""
@@ -1298,27 +1298,27 @@ msgstr "确定安装该电子书？"
 msgid "Delete Comment"
 msgstr "评论"
 
-#: versecompare.py:51
+#: versecompare.py:52
 msgid "Version Comparison"
 msgstr "圣经版本对比"
 
-#: versecompare.py:192
+#: versecompare.py:194
 msgid "Set books to compare"
 msgstr "设置比较的书"
 
-#: versecompare.py:194
+#: versecompare.py:196
 msgid "Set the books this version comparison will use"
 msgstr "设置为比较书籍"
 
-#: versecompare.py:203
+#: versecompare.py:205
 msgid "Choose books to compare in the verse comparison window"
 msgstr "选择要对比的圣经版本"
 
-#: versecompare.py:227
+#: versecompare.py:229
 msgid "Choose books to compare"
 msgstr "选择要比较的圣经版本"
 
-#: versecompare.py:233
+#: versecompare.py:235
 msgid "View in parallel mode"
 msgstr "并排显示"
 
@@ -1747,6 +1747,13 @@ msgid ""
 msgstr ""
 "使用 $$text 代表经节的内容, $$versenum 代表\n"
 "经节数，$$reference 代表参考"
+
+#, fuzzy
+#~ msgid "Strongs Blocked"
+#~ msgstr "未锁定"
+
+#~ msgid "Strong's Numbers"
+#~ msgstr "strong's 编号"
 
 #~ msgid "Open the harmony"
 #~ msgstr "打开四福音合参"

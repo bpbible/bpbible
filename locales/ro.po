@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Romanian Language\n"
-"POT-Creation-Date: 2010-12-31 01:33+AUS Eastern Daylight Time\n"
+"POT-Creation-Date: 2011-02-10 23:42+AUS Eastern Daylight Time\n"
 "PO-Revision-Date: 2009-07-01 10:43+0200\n"
 "Last-Translator: Laurentiu Nica <nick.laurentiu.nica@gmail.com>\n"
 "Language-Team: Translator's Team <nick.laurentiu.nica@gmail.com>\n"
@@ -69,16 +69,16 @@ msgstr "Numărul capitolului din carte"
 msgid "The text of the heading"
 msgstr "Textul titlului"
 
-#: backend/book.py:750
+#: backend/book.py:723
 msgid ""
 "Couldn't save cipher key. You will have to set it again when you restart"
 msgstr "Nu am putut salva cheia "
 
-#: backend/book.py:796
+#: backend/book.py:769
 msgid "commentary"
 msgstr "comentariu"
 
-#: backend/book.py:806 bibleframe.py:39 xrc/auifrm_xrc.py:72
+#: backend/book.py:779 bibleframe.py:39 xrc/auifrm_xrc.py:72
 msgid "Bible"
 msgstr "Biblie"
 
@@ -91,7 +91,7 @@ msgstr ""
 msgid "harmony"
 msgstr "Concordanţă"
 
-#: bibleframe.py:69 bookframe.py:160 mainframe.py:256
+#: bibleframe.py:69 bookframe.py:160 mainframe.py:250
 #: search/searchpanel.py:157
 msgid "Search"
 msgstr "Caută"
@@ -184,7 +184,7 @@ msgstr ""
 msgid "Error in Topic Management"
 msgstr ""
 
-#: bookframe.py:142 mainframe.py:873
+#: bookframe.py:142 mainframe.py:862
 msgid "Show the %s pane"
 msgstr "Arată panoul %s"
 
@@ -305,15 +305,15 @@ msgstr "Referinţă"
 msgid "Footnotes"
 msgstr "&Subsol"
 
-#: display_options.py:89
+#: display_options.py:89 display_options.py:102
 #, fuzzy
 msgid "Strongs Numbers"
 msgstr "Numere Strong"
 
 #: display_options.py:90
 #, fuzzy
-msgid "Strongs Blocked"
-msgstr "Nu e blocată"
+msgid "Strongs Underneath"
+msgstr "Numere Strong"
 
 #: display_options.py:91
 msgid "Morphology"
@@ -341,7 +341,7 @@ msgstr ""
 
 #: display_options.py:98
 #, fuzzy
-msgid "Strong's Headwords"
+msgid "Strongs Headwords"
 msgstr "Cuvinte principale Strong"
 
 #: display_options.py:99
@@ -356,15 +356,11 @@ msgstr "Limba Originală"
 msgid "Pronunciation"
 msgstr "Pronunţare"
 
-#: display_options.py:102
-msgid "Strong's Numbers"
-msgstr "Numere Strong"
-
-#: displayframe.py:228
+#: displayframe.py:253 protocols.py:150
 msgid "Don't know how to open this morphology type:"
 msgstr "Nu ştiu cum să deschid acest tip de morfologie:"
 
-#: displayframe.py:238
+#: displayframe.py:263 protocols.py:160
 msgid ""
 "Module %s is not installed, so you cannot view details for this "
 "morphological code"
@@ -372,31 +368,31 @@ msgstr ""
 "Modului %s nu este instalat, aşa că nu poţi vedea detaliile pentru acest cod "
 "morfologic"
 
-#: displayframe.py:466
+#: displayframe.py:497
 msgid "Select all"
 msgstr "Selectează toate"
 
-#: displayframe.py:468
+#: displayframe.py:499
 msgid "Select all the text in the frame"
 msgstr "Selectează tot textul din cadru"
 
-#: displayframe.py:529
+#: displayframe.py:549
 msgid "the selected word"
 msgstr "cuvântul selectat"
 
-#: displayframe.py:535
+#: displayframe.py:555
 msgid "the selected phrase"
 msgstr "fraza selectată"
 
-#: displayframe.py:549
+#: displayframe.py:568
 msgid "Look up %s in the dictionary"
 msgstr "Caută %s în dicţionar"
 
-#: displayframe.py:570
+#: displayframe.py:589
 msgid "Search for %s in the Bible"
 msgstr "Caută %s în Biblie"
 
-#: displayframe.py:572
+#: displayframe.py:591
 msgid "Search for %s in this book"
 msgstr "Caută %s in această carte"
 
@@ -559,147 +555,147 @@ msgstr "Informaţii"
 msgid "Cannot read book metadata in file %s"
 msgstr "Nu pot citi metadata cărţii din fişierul %s"
 
-#: mainframe.py:252
+#: mainframe.py:246
 msgid "Go to verse"
 msgstr "Mergi la versetul"
 
-#: mainframe.py:253
+#: mainframe.py:247
 msgid "Go to this verse"
 msgstr "Mergi la acest verset"
 
-#: mainframe.py:257
+#: mainframe.py:251
 msgid "Search in the current book"
 msgstr "Caută în cartea curentă"
 
-#: mainframe.py:260 xrc/copyverses_xrc.py:81
+#: mainframe.py:254 xrc/copyverses_xrc.py:81
 msgid "Copy Verses"
 msgstr "Copiază Versetele"
 
-#: mainframe.py:261
+#: mainframe.py:255
 msgid "Open the Copy Verses dialog"
 msgstr "Deschide dialogul de Copiere Versete"
 
-#: mainframe.py:266
+#: mainframe.py:260
 msgid "Back"
 msgstr "Înapoi"
 
-#: mainframe.py:267
+#: mainframe.py:261
 msgid "Go back a verse"
 msgstr "Mergi înapoi cu un verset"
 
-#: mainframe.py:270
+#: mainframe.py:264
 msgid "Forward"
 msgstr "Înainte"
 
-#: mainframe.py:271
+#: mainframe.py:265
 msgid "Go forward a verse"
 msgstr "Mergi înainte cu un verset"
 
-#: mainframe.py:275
+#: mainframe.py:269
 msgid "Zoom In"
 msgstr "Măreşte"
 
-#: mainframe.py:276
+#: mainframe.py:270
 msgid "Make text bigger"
 msgstr "Fă textul mai mare"
 
-#: mainframe.py:279
+#: mainframe.py:273
 msgid "Default Zoom"
 msgstr "Mărire Implicită"
 
-#: mainframe.py:280
+#: mainframe.py:274
 msgid "Return text to default size"
 msgstr "Adu textul la mărimea implicită"
 
-#: mainframe.py:283
+#: mainframe.py:277
 msgid "Zoom Out"
 msgstr "Micşorează"
 
-#: mainframe.py:284
+#: mainframe.py:278
 msgid "Make text smaller"
 msgstr "Fă textul mai mic"
 
-#: mainframe.py:313
+#: mainframe.py:307
 msgid "Navigation"
 msgstr "Navigare"
 
-#: mainframe.py:315
+#: mainframe.py:309
 msgid "Zoom"
 msgstr "Mărire"
 
-#: mainframe.py:317
+#: mainframe.py:311
 msgid "History toolbar"
 msgstr "Bara de istorie"
 
-#: mainframe.py:718
+#: mainframe.py:712
 msgid "Installable books"
 msgstr "Cărţi instalabile"
 
-#: mainframe.py:721 versecompare.py:204
+#: mainframe.py:715 versecompare.py:206
 msgid "Choose books"
 msgstr "Alege cărţile"
 
-#: mainframe.py:796 xrc/auifrm_xrc.py:44
+#: mainframe.py:785 xrc/auifrm_xrc.py:44
 msgid "&Language"
 msgstr "&Limba"
 
-#: mainframe.py:799 xrc/auifrm_xrc.py:45
+#: mainframe.py:788 xrc/auifrm_xrc.py:45
 msgid "&Bible book names"
 msgstr ""
 
-#: mainframe.py:831 xrc/auifrm_xrc.py:49
+#: mainframe.py:820 xrc/auifrm_xrc.py:49
 msgid "&Display"
 msgstr "&Afişaj"
 
-#: mainframe.py:836 xrc/auifrm_xrc.py:52
+#: mainframe.py:825 xrc/auifrm_xrc.py:52
 msgid "&Windows"
 msgstr "&Ferestre"
 
-#: mainframe.py:841 xrc/auifrm_xrc.py:51
+#: mainframe.py:830 xrc/auifrm_xrc.py:51
 msgid "Toolbars"
 msgstr "Toolbar-uri"
 
-#: mainframe.py:869
+#: mainframe.py:858
 msgid "Show the %s toolbar"
 msgstr "Arată bara %s"
 
-#: mainframe.py:891 xrc/auifrm_xrc.py:53
+#: mainframe.py:879 xrc/auifrm_xrc.py:53
 msgid "Debug"
 msgstr "Debug"
 
-#: mainframe.py:923
+#: mainframe.py:911
 msgid "Expand cross-references"
 msgstr "Extinde trimiterile"
 
-#: mainframe.py:924
+#: mainframe.py:912
 msgid "Display cross references partially expanded"
 msgstr "Afişează trimiterile parţial extinse"
 
-#: mainframe.py:929
+#: mainframe.py:917
 msgid "Topic Tags"
 msgstr "Etichete de Topic"
 
-#: mainframe.py:930
+#: mainframe.py:918
 msgid "Display the topics that each verse is tagged with."
 msgstr "Afişează topicele cu care sunt etichetate fiecare versete."
 
-#: mainframe.py:1049
+#: mainframe.py:1037
 msgid "BPBible will now quickly restart to change your language."
 msgstr "BPBible va restarta rapid pentru a schimba limba."
 
-#: mainframe.py:1050
+#: mainframe.py:1038
 msgid "Restarting"
 msgstr "Restartare"
 
-#: mainframe.py:1069
+#: mainframe.py:1057
 msgid "An error occurred on closing:"
 msgstr "A avut loc o eroare la închidere:"
 
-#: mainframe.py:1081 mainframe.py:1082
+#: mainframe.py:1069 mainframe.py:1070
 msgid "search "
 msgstr "caută"
 
-#: mainframe.py:1106
+#: mainframe.py:1094
 #, fuzzy
 msgid ""
 "Flexible Bible study software.\n"
@@ -715,35 +711,35 @@ msgstr ""
 "\t\t\twxPython Version: %(wxversion)s\n"
 "\t\t\tSWORD Version: %(swversion)s"
 
-#: mainframe.py:1118
+#: mainframe.py:1106
 msgid "BPBible website"
 msgstr "Site BPBible"
 
-#: mainframe.py:1120
+#: mainframe.py:1108
 msgid "BPBible development team"
 msgstr "Echipa de dezvoltare BPBible"
 
-#: mainframe.py:1121
+#: mainframe.py:1109
 msgid "SWORD library developers"
 msgstr "Developerii librăriei SWORD"
 
-#: mainframe.py:1125
+#: mainframe.py:1113
 msgid "Developers"
 msgstr "Developerii"
 
-#: mainframe.py:1126
+#: mainframe.py:1114
 msgid "Artists"
 msgstr "Artişti"
 
-#: mainframe.py:1127
+#: mainframe.py:1115
 msgid "Translators"
 msgstr "Traducători"
 
-#: mainframe.py:1129
+#: mainframe.py:1117
 msgid "translator-credits"
 msgstr "credite-traducători"
 
-#: mainframe.py:1133
+#: mainframe.py:1121
 msgid ""
 "Icons used are from famfamfam\n"
 "http://www.famfamfam.com/lab/icons/silk\n"
@@ -755,7 +751,7 @@ msgstr ""
 "şi Tango Desktop Project\n"
 "http://tango.freedesktop.org/Tango_Desktop_Project"
 
-#: mainframe.py:1139
+#: mainframe.py:1127
 msgid ""
 "BPBible is licensed under the GPL v2. For more details, refer to the LICENSE."
 "txt file in the application directory"
@@ -994,6 +990,10 @@ msgstr "Arată în balon"
 #: preview_window.py:57
 msgid "Show this in a tooltip"
 msgstr "Arată aceasta într-un balon info"
+
+#: protocol_handlers.py:371
+msgid "Click here to unlock this book"
+msgstr ""
 
 #: protocols.py:101
 msgid ""
@@ -1320,27 +1320,27 @@ msgstr "Eşti sigur că vrei să instalezi cartea aceasta?"
 msgid "Delete Comment"
 msgstr "Comentariu"
 
-#: versecompare.py:51
+#: versecompare.py:52
 msgid "Version Comparison"
 msgstr "Comparare Versiune"
 
-#: versecompare.py:192
+#: versecompare.py:194
 msgid "Set books to compare"
 msgstr "Setează cărţi pentru comparare"
 
-#: versecompare.py:194
+#: versecompare.py:196
 msgid "Set the books this version comparison will use"
 msgstr "Setează cărţile pe care le va folosi această comparaţie"
 
-#: versecompare.py:203
+#: versecompare.py:205
 msgid "Choose books to compare in the verse comparison window"
 msgstr "Alege cărţile de comparat in aceastră fereastră de comparaţie"
 
-#: versecompare.py:227
+#: versecompare.py:229
 msgid "Choose books to compare"
 msgstr "Alege cărţile pentru comparaţie"
 
-#: versecompare.py:233
+#: versecompare.py:235
 msgid "View in parallel mode"
 msgstr "Vezi în mod paralel"
 
@@ -1772,6 +1772,13 @@ msgid ""
 msgstr ""
 "Foloseşte $$text pentru textul unui verset, $$versenum pentru\n"
 "număr verset si $$reference pentru referinţă"
+
+#, fuzzy
+#~ msgid "Strongs Blocked"
+#~ msgstr "Nu e blocată"
+
+#~ msgid "Strong's Numbers"
+#~ msgstr "Numere Strong"
 
 #~ msgid "Open the harmony"
 #~ msgstr "Deschide concordanţa"
