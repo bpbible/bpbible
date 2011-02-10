@@ -87,7 +87,7 @@ options_menu = [
 	BooleanOptionMenuItem("cross_references", N_("Cross References")),
 	BooleanOptionMenuItem("footnotes", N_("Footnotes")),
 	BooleanOptionMenuItem("strongs_numbers", N_("Strongs Numbers")),
-	BooleanOptionMenuItem("strongs_blocked", N_("Strongs Blocked")),
+	BooleanOptionMenuItem("strongs_blocked", N_("Strongs Underneath")),
 	BooleanOptionMenuItem("morphology", N_("Morphology")),
 	BooleanOptionMenuItem("morph_segmentation", N_("Morph Segmentation")),
 	MultiOptionsMenuItem("colour_speakers", N_("Colour code speakers"), [
@@ -95,11 +95,11 @@ options_menu = [
 		("coloured_quotes", N_("Colour code by speaker")),
 		("off", N_("Off")),
 	]),
-	MultiOptionsMenuItem("headwords_module", N_("Strong's Headwords"), [
+	MultiOptionsMenuItem("headwords_module", N_("Strongs Headwords"), [
 		("HeadwordsTransliterated", N_("Transliterated")),
 		("HeadwordsOriginalLang", N_("Original Language")),
 		("HeadwordsPronunciation", N_("Pronunciation")),
-		("", N_("Strong's Numbers")),
+		("", N_("Strongs Numbers")),
 	],
 	options_section=filter_settings,
 	force_complete_reload=True,
