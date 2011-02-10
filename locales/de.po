@@ -289,22 +289,18 @@ msgid "Continuous scrolling"
 msgstr ""
 
 #: display_options.py:86
-#, fuzzy
 msgid "Headings"
-msgstr "&Überschriften"
+msgstr "Überschriften"
 
 #: display_options.py:87
-#, fuzzy
 msgid "Cross References"
-msgstr "Referenz"
+msgstr "Querverweise"
 
 #: display_options.py:88
-#, fuzzy
 msgid "Footnotes"
-msgstr "&Fußzeile:"
+msgstr "Fußnoten"
 
 #: display_options.py:89
-#, fuzzy
 msgid "Strongs Numbers"
 msgstr "Sprachschlüssel"
 
@@ -315,11 +311,11 @@ msgstr "Nicht gesperrt"
 
 #: display_options.py:91
 msgid "Morphology"
-msgstr ""
+msgstr "Grammatikalischen Bestimmungen"
 
 #: display_options.py:92
 msgid "Morph Segmentation"
-msgstr ""
+msgstr "Morpheme Segmentierung"
 
 #: display_options.py:93
 msgid "Colour code speakers"
@@ -327,7 +323,7 @@ msgstr ""
 
 #: display_options.py:94
 msgid "Words of Christ in Red"
-msgstr ""
+msgstr "Wörter von Christus hervorheben"
 
 #: display_options.py:95
 msgid "Colour code by speaker"

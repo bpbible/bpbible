@@ -283,24 +283,20 @@ msgid "Continuous scrolling"
 msgstr ""
 
 #: display_options.py:86
-#, fuzzy
 msgid "Headings"
-msgstr "&शिर्षकहरू"
+msgstr "शीर्षकहरू"
 
 #: display_options.py:87
-#, fuzzy
 msgid "Cross References"
-msgstr "संदर्भ"
+msgstr "अन्तर-संदर्भ"
 
 #: display_options.py:88
-#, fuzzy
 msgid "Footnotes"
-msgstr "&पुच्छरको भाग"
+msgstr "फुटनोटस्"
 
 #: display_options.py:89
-#, fuzzy
 msgid "Strongs Numbers"
-msgstr "स्ट्रोङ्गको अङ्कहरू"
+msgstr "स्ट्रोङ्गको संख्याहरू"
 
 #: display_options.py:90
 #, fuzzy
@@ -309,11 +305,11 @@ msgstr "बन्द नगरिएको"
 
 #: display_options.py:91
 msgid "Morphology"
-msgstr ""
+msgstr "Morphologhical ट्यागहरू"
 
 #: display_options.py:92
 msgid "Morph Segmentation"
-msgstr ""
+msgstr "रूपिम विभाजन"
 
 #: display_options.py:93
 msgid "Colour code speakers"
@@ -321,7 +317,7 @@ msgstr ""
 
 #: display_options.py:94
 msgid "Words of Christ in Red"
-msgstr ""
+msgstr "ख्रीष्‍टको शब्द रातोमा"
 
 #: display_options.py:95
 msgid "Colour code by speaker"
