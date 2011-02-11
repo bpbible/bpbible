@@ -981,7 +981,10 @@ class VerseList(list):
 		#if not(vklist): #lastrange and range==lastrange):
 		#	vklist=GetVKs(range, context)
 		try:
-			vk = VerseList(verse)[0]
+			if isinstance(verse, SW.VerseKey):
+				vk = verse
+			else:
+				vk = VerseList(verse)[0]
 			vk_lower, vk_upper = VK.get_bounds(vk)
 		except VerseParsingError, e:
 			return False
