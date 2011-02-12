@@ -158,6 +158,9 @@ class ModuleTree(FilterableTree):
 			self.add_module(tree_item, module)
 	
 	def add_module(self, tree_item, module, inactive_description=""):
+		if self.hide_module(module):
+			return
+
 		text = "%s - %s" % (
 			module.Name(), to_unicode(module.Description(), module))
 		
@@ -165,6 +168,9 @@ class ModuleTree(FilterableTree):
 			text += inactive_description
 
 		tree_item.add_child(text, data=module)
+
+	def hide_module(self, module):
+		return (module.Name() in biblemgr.headwords_modules)
 	
 class PathModuleTree(ModuleTree):
 	def CreateTreeCtrl(self, parent, style):
@@ -181,7 +187,10 @@ class PathModuleTree(ModuleTree):
 	
 	def add_first_level_groups(self):
 		for path, mgr, modules in reversed(biblemgr.mgrs):
-			self.model.add_child(path, data=mgr)
+			# If all the modules in a path are hidden, then showing that path
+			# looks wrong.
+			if not all(self.hide_module(module) for name, module in modules):
+				self.model.add_child(path, data=mgr)
 	
 	def add_children(self, tree_item):
 		for path, mgr, modules in reversed(biblemgr.mgrs):
