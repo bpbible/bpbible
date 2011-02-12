@@ -17,7 +17,7 @@ import guiconfig
 #TODO: highlight Aenon - AE joined up, that is - in KJV
 
 regex = r"""
-	(<glink[^>]*>.*?</glink>)		 | # a strongs number and contents
+	(<a\ class="strongs_headword"[^>]*>.*?</a>) | # a strongs number and contents
 	(&lt;<a\ [^>]*>.*?</a>&gt;) 	 | # a link with <> around and contents		
 	(<a\ href="genbook:[^>]+>.*?</a>)| # a genbook link 
 	
@@ -27,10 +27,9 @@ regex = r"""
 		(action=showRef[^>]*>)  	 | # a reference - don't include text
 		([^>]*>.*?</a>) 		 	   # or another sword link and contents	
 	))								 |
-	(\(<a\ href="passagestudy.jsp\?
-		action=showMorph 			   # a morph link and text with brackets
+	(<a\ class="morph"\ href="morph:// # a morph link and text with brackets
 		([^>]*>.*?</a>) 		 	   
-	\)) 							 |
+	)	 							 |
 	
 	(<h2\ class="heading"\ 
 		canonical="false">.*?</h2>)	 | # a heading (not canonical) and contents
@@ -247,9 +246,8 @@ def highlight_section(results, start, end, start_tag, end_tag):
 		
 
 def highlight(string1, string2, is_bible, regexes, fields=(),
-		start_tag='<a href="#highlight" name="highlight"></a>'
-		'<b><font color="#008800">', 
-		end_tag='</font></b>'):
+		start_tag='<a name="highlight"></a><span class="search_highlight">',
+		end_tag='</span>'):
 	"""Highlight string2 with the regular expressions regexes, being matched
 	on string1
 
@@ -285,25 +283,16 @@ def highlight(string1, string2, is_bible, regexes, fields=(),
 			if extra:
 				number += "!%s" % extra
 
-			href = r"passagestudy.jsp\?action=showStrongs&type=%s" \
-				"&value=0*%s(?:!\w)?"	% (lang, number)
-			glink_matcher = re.compile(
-				'^<glink([^>]*)(href="%s")([^>]*)>([^<]*)</glink>$' % href
-			)
-			strongs_matcher = re.compile(
-				'^(&lt;<a [^>]*href="%s"[^>]*>)([^<]*)(</a>&gt;)$' % href
+			href = r"strongs://%s/0*%s(?:!\w)?" % (lang, number)
+			link_matcher = re.compile(
+				'^<a([^>]*)(href="%s")([^>]*)>([^<]*)</a>$' % href
 			)
 
 			for tokens in results:
 				for idx, token in enumerate(tokens):
 					# highlight strong's numbers...
-					# TODO: scroll to these?
-					token = glink_matcher.sub(
-						r'<b><glink colour="#008800"\1\2\3>\4</glink></b>',
-						token)
-
-					tokens[idx] = strongs_matcher.sub(
-						r'<b><font color="#008800">\1<font color="#008800">\2</font>\3</font></b>',
+					tokens[idx] = link_matcher.sub(
+						r'<a name="highlight"></a><span class="search_highlight"><a \1\2\3>\4</a></span>',
 						token)
 
 		elif key == "morph":
@@ -316,16 +305,18 @@ def highlight(string1, string2, is_bible, regexes, fields=(),
 			if k == "Robinson":
 				k = "(?:Robinson|Greek)"
 
+			k = '%s:%s' % (k, v)
+			k = SW.URL.encode(str(k)).c_str()
 			v = SW.URL.encode(str(v)).c_str()
 
-			d = r'^(\(<a href="passagestudy.jsp\?action=showMorph&type=%s[^&]*&value=%s">)([^<]*)(</a>\))$' % (k, v)			
+			d = r'^(<a class="morph" href="morph://%s/%s">)([^<]*)(</a>)$' % (k, v)
 
 			count = 0
 			morph_matcher = re.compile(d)
 			for tokens in results:
 				for idx, token in enumerate(tokens):
 					tokens[idx], c = morph_matcher.subn(
-						r'<b><font color="#008800">\1<font color="#008800">\2</font>\3</font></b>',
+						r'<a name="highlight"></a><span class="search_highlight">\1\2\3</span>',
 						token
 					)
 					count += c
@@ -358,12 +349,13 @@ def highlight(string1, string2, is_bible, regexes, fields=(),
 							for value in range(int(values))
 						])
 					else:
-						references = VerseList(match.group(2))
+						reference_text = SW.URL.decode(str(match.group(2))).c_str()
+						references = VerseList(reference_text)
 				else:
 					# our closing </a>?
 					if not is_bible and in_ref[0] and match.group(4):
 						in_ref[0] = False
-						return "</font></b>%s" % match.group(4)
+						return "</span>%s" % match.group(4)
 
 					return match.group(0)
 
@@ -372,12 +364,12 @@ def highlight(string1, string2, is_bible, regexes, fields=(),
 						if references.VerseInRange(i):
 							if is_bible:
 								# wrap the contents of the <a> in formatting
-								return '%s<b><font color="#008800">%s</font></b>%s' % match.group(1, 4, 5)
+								return '%s<a name="highlight"></a><span class="search_highlight">%s</span>%s' % match.group(1, 4, 5)
 							else:
 								# start the formatting, to be completed with
 								# the </a> tag handling above
 								in_ref[0] = True
-								return '%s<b><font color="#008800">' % \
+								return '%s<a name="highlight"></a><span class="search_highlight">' % \
 									match.group(1)
 
 				return match.group(0)
