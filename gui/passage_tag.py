@@ -186,18 +186,18 @@ class TopicTooltipConfig(TooltipConfig):
 			return self.text
 
 		try:
-			html = u"<p><b>%s</b></p>" % text2html(self.topic.full_name)
+			html = u'<h2 class="topic_title">%s</h2>' % text2html(self.topic.full_name)
 		except AttributeError:
 			# The topic has been deleted.
 			return u""
 		description = text2html(self.topic.description)
 		if description:
-			html += u"<p>%s</p>" % description
+			html += u'<div class="topic_description">%s</div>' % description
 
-		passage_html = u"<br>".join(self._passage_entry_text(passage_entry)
+		passage_html = u"".join(self._passage_entry_text(passage_entry)
 				for passage_entry in self.topic.passages)
 		if passage_html:
-			html += u"<p>%s</p>" % passage_html
+			html += u'<div class="topic_passages">%s</div>' % passage_html
 	
 		self.text = html
 		self.text_needs_reloading = False
@@ -212,8 +212,8 @@ class TopicTooltipConfig(TooltipConfig):
 		reference = str(passage_entry)
 		localised_reference = text2html(passage_entry.passage.GetBestRange(userOutput=True))
 		if self.expand_passages:
-			passage_text = u"<br>" + biblemgr.bible.GetReference(
-				reference, exclude_topic_tag=self.topic, remove_extra_whitespace=True)
+			passage_text = u'<div class="topic_passage_text">%s</div>' % (
+				biblemgr.bible.GetReference(reference, exclude_topic_tag=self.topic, remove_extra_whitespace=True))
 			if comment:
 				comment = u"<p>%s<p>" % comment
 		else:
@@ -224,8 +224,8 @@ class TopicTooltipConfig(TooltipConfig):
 			comment = u'<span style="color: #008000">%s</span>' % comment
 			passage_text = u'<span style="color: #008000">%s</span>' % passage_text
 			current_anchor = u'<a name="current" />'
-		return (u"%(current_anchor)s<b><a href=\"bible:%(reference)s\">%(localised_reference)s</a></b> "
-			u"%(passage_text)s%(comment)s" % locals())
+		return (u'<div class="topic_passage">%(current_anchor)s<b><a href=\"bible:%(reference)s\">%(localised_reference)s</a></b> '
+			u'%(passage_text)s%(comment)s</div>' % locals())
 
 protocol_handler.register_handler("passagetag", on_passage_tag_clicked)
 protocol_handler.register_hover("passagetag", on_passage_tag_hover)

@@ -404,6 +404,7 @@ div.timer, div.debug-raw-details {
 	display: none;
 }
 
+/* Styling for user comments and passage tags. */
 a.usercomment {
 	text-decoration: none;
 	vertical-align: super;
@@ -443,6 +444,28 @@ a.passage_tag div {
 	padding: 0 2px;
 }
 
+/* Styling for the topic tooltip text. */
+h2.topic_title {
+	font-size: 110%;
+	font-weight: bold;
+	margin: 0.3em 0;
+}
+
+div.topic_description {
+	margin-bottom: 6px;
+}
+
+div.topic_passage {
+	padding-left: 20px;
+	text-indent: -20px;
+}
+
+div.topic_passage_text, div.topic_passages p {
+	padding-left: 0px;
+	text-indent: 0px;
+}
+
+/* Styling for the highlighted search frame. */
 span.search_highlight, span.search_highlight a {
 	font-weight: bold;
 	color: #008800;
