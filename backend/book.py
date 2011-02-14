@@ -173,10 +173,10 @@ class Book(object):
 		# if they pass in a verselist, they can also pass in the ref they
 		# would like to go along with it. This can be useful if it also
 		# includes headings that shouldn't be seen
-		rangetext = GetBestRange(ref, 
+		rangetext = GetBestRange(ref, context=context,
 			userInput=False, userOutput=True, headings=headings)
 
-		internal_rangetext = GetBestRange(ref, headings=headings)
+		internal_rangetext = GetBestRange(ref, context=context, headings=headings)
 			
 		if rangetext == "":
 			self.vk.Headings(old_headings)
