@@ -23,10 +23,10 @@ regex = r"""
 	
 	%s								   # if we are in a bible, exclude text
 									   # from cross-reference links
-	(<a\ href="passagestudy.jsp\?(
-		(action=showRef[^>]*>)  	 | # a reference - don't include text
+	(<a\ class="footnote[^>]*>.*?</a>)| # a reference - don't include text
+	(<a\ href="passagestudy.jsp\?
 		([^>]*>.*?</a>) 		 	   # or another sword link and contents	
-	))								 |
+	)								 |
 	(<a\ class="morph"\ href="morph:// # a morph link and text with brackets
 		([^>]*>.*?</a>) 		 	   
 	)	 							 |
