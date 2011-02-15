@@ -755,6 +755,7 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 	def copyall(self):
 		self.SelectAll()
 		self.CopySelection()
+		self.SelectNone()
 
 class DisplayFrameXRC(DisplayFrame):
 	def __init__(self):

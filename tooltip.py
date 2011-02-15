@@ -407,8 +407,7 @@ class Tooltip(TooltipBaseMixin, tooltip_parent):
 		
 
 	def copy_all(self, event):
-		text = self.html.ToText()
-		guiutil.copy(text)
+		self.html.copyall()
 
 	def MouseIn(self, event=None):
 		#TODO: make frame and this be able to veto tooltip goaway
