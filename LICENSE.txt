@@ -1,4 +1,4 @@
-BPBible is (c) 2007-2010 BPBible development team, and is licensed under the terms of the GNU GPL, which is reproduced below. BPBible also uses PyStemmer, which contains its own licensing agreements; these are noted below.
+BPBible is (c) 2007-2011 BPBible development team, and is licensed under the terms of the GNU GPL, which is reproduced below. BPBible also uses PyStemmer, which contains its own licensing agreements; these are noted below.
 
 _________________________________________________________________
 
