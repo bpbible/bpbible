@@ -1134,6 +1134,11 @@ class VerseList(list):
 		range = ""
 
 		for vk in self:
+			# Special verse keys (such as Module and Testament headings) do
+			# not have book names, so we just return the key text as is.
+			if ord(vk.Book()) < 1:
+				return vk.text
+
 			item = get_bounds_details(vk)
 			# take details of first and last for each VK
 			((book1, chapter1, verse1, verse_count1, chapter_count1, uc1, uv1), 
