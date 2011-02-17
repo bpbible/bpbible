@@ -323,13 +323,11 @@ class OSISParser(filterutils.ParserBase):
 		if was_xref:
 			footnote_type = "x"
 
-		do_xref = filterutils.filter_settings["footnote_ellipsis_level"]
+		expand_crossref = filterutils.filter_settings["footnote_ellipsis_level"]
 		footnotes = SW.Buf("Footnote")
 		refList = SW.Buf("refList")
 		n = SW.Buf("n")
 		number = SW.Buf(footnoteNumber)
-		#if not do_xref:
-		#	self.success = SW.INHERITED
 
 		map = self.u.module.getEntryAttributesMap()
 		footnote = map[footnotes][number]
@@ -339,26 +337,20 @@ class OSISParser(filterutils.ParserBase):
 			if was_xref: footnote_char = "x"
 			else: footnote_char = "n"
 
-		if do_xref:
+		refs_to_expand = None
+		if expand_crossref:
 			try:			
-				refs = footnote[refList].c_str()
+				refs_to_expand = footnote[refList].c_str()
 			
 			except IndexError:
 				dprint(WARNING, "Error getting Footnote '%s' refList" % 
 					footnoteNumber)
-				self.success = SW.INHERITED
-				return
 
-			if not refs:
-				# if there weren't any references, just do the usual
-				self.success = SW.INHERITED
-				return
-			
-
+		if refs_to_expand:
 			self.u.inXRefNote = True
 			
 			self.buf += filterutils.ellipsize(
-				refs.split(";"), 
+				refs_to_expand.split(";"), 
 				self.u.key.getText(),
 				int(filterutils.filter_settings["footnote_ellipsis_level"])
 			)
