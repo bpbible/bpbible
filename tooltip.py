@@ -1,7 +1,7 @@
 import wx
 import config, guiconfig
 from backend.bibleinterface import biblemgr
-from backend.verse_template import VerseTemplate
+from backend.verse_template import SmartVerseTemplate
 import protocol_handlers
 from swlib.pysw import VerseParsingError, GetBestRange
 
@@ -819,7 +819,7 @@ class BibleTooltipConfig(TooltipConfig):
 
 	def get_text(self):
 		try:
-			template = VerseTemplate(
+			template = SmartVerseTemplate(
 				header="<a href='nbible:$internal_range'><b>$range</b></a><br>",
 				body=(config.body % ''),
 			)

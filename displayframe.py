@@ -12,7 +12,7 @@ import config
 
 from swlib.pysw import GetBestRange, SW, VerseList
 from backend.bibleinterface import biblemgr
-from backend.verse_template import VerseTemplate
+from backend.verse_template import SmartVerseTemplate
 from util import osutils, classproperty
 from util.configmgr import config_manager
 from tooltip import tooltip_settings, TextTooltipConfig, BibleTooltipConfig, TooltipDisplayer
@@ -289,7 +289,7 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 
 			elif type == "x":
 				#make this plain
-				template = VerseTemplate(
+				template = SmartVerseTemplate(
 					header="<a href='nbible:$internal_range'><b>$range</b></a><br>",
 					body=(config.body % ''),
 				)
@@ -346,12 +346,10 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 			tooltip_config.mod = module
 			
 			#make this plain
-			#template = VerseTemplate(header = "$range<br>", 
-			#body = '<font color = "blue"><small><sup>$versenumber</sup></small></font> $text')
-			template = VerseTemplate(
+			template = SmartVerseTemplate(
 				header="<a href='bible:$internal_range'><b>$range</b></a><br>", 
-				body=u'<glink href="nbible:$internal_reference">'
-					u'<small><sup>$versenumber</sup></small></glink> $text ')
+				body=(config.body % ''),
+			)
 
 			try:
 				if tooltip_settings["plain_xrefs"]: 
