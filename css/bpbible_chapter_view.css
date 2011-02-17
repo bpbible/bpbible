@@ -111,12 +111,6 @@ body[verse_per_line="true"] .chapterview p {
 	}
 }
 
-.chapterview div.segment, .chapterview div.no_more_text.end-start {
-	border-bottom: solid 1px #ddd;
-	padding-bottom: 0.5em;
-	margin-bottom: 0.5em;
-}
-
 .reference_bar {
 	background: rgba(255, 100, 0, 0.95);
 	position: fixed;

@@ -21,12 +21,6 @@ div.segment > div > p:last-child {
 	margin-bottom: 0px;
 }
 
-div.segment, div.no_more_text.end-start {
-	border-bottom: solid 1px #ddd;
-	padding-bottom: 0.5em;
-	margin-bottom: 0.5em;
-}
-
 div.genbook_key[level$=""] { font-size: small; }
 div.genbook_key[level="1"] { font-size: 1.5em; }
 div.genbook_key[level="2"] { font-size: 1.3em; }

@@ -281,15 +281,15 @@ class PageFragmentHandler(PageProtocolHandler):
 			print "Book type not handled", module_name
 		
 		if no_more:
+			message = (_("You are at the start of this book.") if dir == -1
+				else _("You are at the end of this book."))
+			class_name = "book-%s" % ("start" if dir == -1 else "end")
 			return '''
 			<div class="page_segment" empty="true">
-				<div class='no_more_text end-%(end)s'>
-					You are at the %(end)s of this book
+				<div class='no_more_text %(class_name)s'>
+					%(message)s
 				</div>
-			</div>''' % dict(end={
-				-1: "start",
-				 1: "end",
-			}[dir])
+			</div>''' % locals()
 		
 		return '<div class="page_segment">%(content)s%(timer)s</div>' % self._get_document_parts_for_ref(module_name, new_ref, do_current_ref=False)
 	

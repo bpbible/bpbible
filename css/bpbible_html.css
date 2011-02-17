@@ -369,7 +369,7 @@ div.page_segment[empty] {
 	position: relative;
 }
 
-div.no_more_text.end-start {
+div.no_more_text.book-start {
 	position: absolute;
 	bottom: 0;
 	left: 0;
@@ -378,6 +378,12 @@ div.no_more_text.end-start {
 
 div.segment.nocontent {
 	display: none;
+}
+
+div.segment, div.no_more_text.book-start {
+	border-bottom: solid 1px #ddd;
+	padding-bottom: 0.5em;
+	margin-bottom: 0.5em;
 }
 
 /* Styling for the gospel harmony reference tables. */
