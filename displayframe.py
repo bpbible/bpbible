@@ -288,46 +288,18 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 
 
 			elif type == "x":
-				#make this plain
-				template = SmartVerseTemplate(
-					header="<a href='nbible:$internal_range'><b>$range</b></a><br>",
-					body=(config.body % ''),
-				)
-				try:
-					#no footnotes
-					if tooltip_settings["plain_xrefs"]:
-						biblemgr.temporary_state(biblemgr.plainstate)
-					
-					#apply template
-					biblemgr.bible.templatelist.append(template)
-
-					#find reference list
-					reflist = bible.GetFootnoteData(module, passage, value, "refList")
-					#it seems note may be as following - 
-					#ESV: John.3.1.xref_i "See Luke 24:20"
-					#treat as footnote then. not sure if this is intended behaviour
-					#could lead to weird things
-					data = ""
-					if(not reflist):
-						data = bible.GetFootnoteData(module, passage, value, "body")
-					else:
-						reflist = reflist.split("; ")
-						# get refs - not from module as module is the module
-						# the cross-reference is in - may be a
-						# commentary, for example - use our primary bible
-						verselist = bible.GetReferences(reflist)
-						data += '<hr>'.join(
-							process_html_for_module(bible.mod, ref)
-							for ref in verselist
-						)
-
+				#find reference list
+				reflist = bible.GetFootnoteData(module, passage, value, "refList")
+				#it seems note may be as following - 
+				#ESV: John.3.1.xref_i "See Luke 24:20"
+				#treat as footnote then. not sure if this is intended behaviour
+				#could lead to weird things
+				if(not reflist):
+					data = bible.GetFootnoteData(module, passage, value, "body")
 					SetText(data)
-
-				finally:
-					#put it back how it was
-					if tooltip_settings["plain_xrefs"]:
-						biblemgr.restore_state()
-					biblemgr.bible.templatelist.pop()
+				else:
+					reflist = reflist.split("; ")
+					tooltip_config = BibleTooltipConfig(reflist)
 
 
 		elif action=="showRef":
@@ -343,47 +315,8 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 			if not value:
 				return
 
-			tooltip_config.mod = module
-			
-			#make this plain
-			template = SmartVerseTemplate(
-				header="<a href='bible:$internal_range'><b>$range</b></a><br>", 
-				body=(config.body % ''),
-			)
-
-			try:
-				if tooltip_settings["plain_xrefs"]: 
-					#no footnotes
-					biblemgr.temporary_state(biblemgr.plainstate)
-					#apply template
-				biblemgr.bible.templatelist.append(template)
-
-				value = value.split("; ")
-				
-				context = frame.reference
-				
-				# Gen books have references that are really tree keys...
-				if not isinstance(context, basestring):
-					context = "%s" % context
-
-				
-				#get refs
-				refs = bible.GetReferencesFromMod(module, value, 
-					context=context)
-
-				data = '<hr>'.join(
-					process_html_for_module(module, ref)
-					for ref in refs
-				)
-
-				#set tooltip text
-				SetText(data)
-
-			finally:
-				#put it back how it was
-				if tooltip_settings["plain_xrefs"]:
-					biblemgr.restore_state()
-				biblemgr.bible.templatelist.pop()
+			refs = value.split("; ")
+			tooltip_config = BibleTooltipConfig(refs)
 
 		elif action == "showMultiRef":
 			values = url.getParameterValue("values")
