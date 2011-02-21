@@ -180,6 +180,7 @@ class GenBookFrame(BookFrame):
 class HarmonyFrame(GenBookFrame):
 	id = N_("Harmony")
 	has_menu = False
+	allow_search = False
 	def __init__(self, parent):
 		super(HarmonyFrame, self).__init__(parent, biblemgr.harmony)
 

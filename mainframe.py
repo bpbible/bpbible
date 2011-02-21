@@ -423,7 +423,7 @@ class MainFrame(wx.Frame, AuiLayer):
 	def create_searchers(self):
 		self.search_panel = BibleSearchPanel(self)
 		self.genbook_search_panel = GenbookSearchPanel(self)
-		self.harmony_search_panel = HarmonySearchPanel(self)
+		#self.harmony_search_panel = HarmonySearchPanel(self)
 		self.dictionary_search_panel = DictionarySearchPanel(self)
 		self.daily_devotional_search_panel = DailyDevotionalSearchPanel(self)
 		self.commentary_search_panel = CommentarySearchPanel(self)
@@ -447,7 +447,7 @@ class MainFrame(wx.Frame, AuiLayer):
 			self.genbook_search_panel,
 			self.dictionary_search_panel, 
 			self.commentary_search_panel,
-			self.harmony_search_panel,
+			#self.harmony_search_panel,
 			self.daily_devotional_search_panel,
 		)
 

@@ -94,6 +94,7 @@ def defer_till_document_loaded(function_to_decorate):
 class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 	lg_width = 20
 	do_convert_lgs = True
+	allow_search = True
 
 	def __init__(self, parent, logical_parent=None):
 		super(DisplayFrame, self).__init__(parent)
@@ -419,8 +420,12 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 
 	def get_menu_items(self, event=None):
 		href = event.GetHref() if event else u""
-		menu_items = (
-			(self.make_search_text(href), IN_POPUP),
+
+		search_menu_item = ()
+		if self.allow_search:
+			search_menu_item = ((self.make_search_text(href), IN_POPUP),)
+
+		menu_items = search_menu_item + (
 			(self.make_lookup_text(href), IN_POPUP),
 			(Separator, IN_POPUP),
 		
