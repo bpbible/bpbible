@@ -434,6 +434,11 @@ class CommentaryFrame(LinkedFrame):
 		self.SetBook(book)
 
 	def SetReference(self, ref, context = None, settings_changed=False):
+		if self.book.is_personal_commentary:
+			self.reference = ref
+			self.SetPage(config.PERSONAL_COMMENTARY_UNSUPPORTED_MESSAGE())
+			return
+
 		super(CommentaryFrame, self).SetReference(ref, settings_changed=settings_changed)
 
 		self.gui_reference.SetValue(pysw.internal_to_user(ref))

@@ -79,8 +79,6 @@ class Book(object):
 		if self.mod:
 			return self.mod.Name()
 
-		#return "<No module>"
-
 	def GetModuleList(self):
 		return sorted([name for name, mod in self.parent.modules.iteritems()
 				if (mod.Type() == self.type or self.type is None) and
@@ -767,6 +765,10 @@ class Commentary(Book):
 	@classproperty
 	def noun(cls):
 		return _("commentary")
+
+	@property
+	def is_personal_commentary(self):
+		return self.version == "Personal"
 
 
 class Bible(Book):

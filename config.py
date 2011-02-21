@@ -129,6 +129,13 @@ def MAX_VERSES_EXCEEDED():
 	return _("""<p><b>[Reference clipped as the maximum verse limit (%d verses) has been exceeded.
 <br>This probably means the reference was invalid]</b>""")
 
+def PERSONAL_COMMENTARY_UNSUPPORTED_MESSAGE():
+	return _("""<h4>The Personal Commentary is not supported</h4>
+<p>To make notes on verses, use "Bible > Topic Management", "Bible > Tag Verses"
+and "Bible > Comment on Verses".</p>
+<p>For more information, see the documentation on <a href="http://code.google.com/p/bpbible/wiki/UserNotes">creating and using user notes in BPBible</a>.</p>
+""")
+
 from util.configmgr import ConfigManager
 bpbible_configuration = ConfigManager("bpbible.conf")
 release_settings = bpbible_configuration.add_section("Release")
