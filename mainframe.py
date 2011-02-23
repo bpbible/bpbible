@@ -1092,7 +1092,7 @@ class MainFrame(wx.Frame, AuiLayer):
 		
 		name = config.name()
 		text = _("""Flexible Bible study software.
-			Built Using the Sword Project from crosswire.org
+			Built Using the SWORD Project from crosswire.org
 			Python Version: %(sysversion)s
 			wxPython Version: %(wxversion)s
 			SWORD Version: %(swversion)s
