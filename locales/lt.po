@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Lithuanian BPBible v1.4.5.1\n"
-"POT-Creation-Date: 2011-02-10 23:42+AUS Eastern Daylight Time\n"
+"POT-Creation-Date: 2011-02-24 00:24+AUS Eastern Daylight Time\n"
 "PO-Revision-Date: 2010-02-13 23:18+0200\n"
 "Last-Translator: Vidmantas Valickis <vidas3vp@gmail.com>\n"
 "Language-Team: Vidmantas Valickis <vidas3vp@gmail.com>\n"
@@ -24,62 +24,62 @@ msgstr "Knygos"
 msgid "History"
 msgstr "Praeitis"
 
-#: backend/book.py:101
+#: backend/book.py:99
 msgid "A $ sign"
 msgstr "Vienas $ ženklas"
 
-#: backend/book.py:102
+#: backend/book.py:100
 msgid "The range of verses"
 msgstr "nuo eilutės iki eilutės"
 
-#: backend/book.py:103
+#: backend/book.py:101
 msgid "The version this is taken from"
 msgstr "Ši versija paimta iš"
 
-#: backend/book.py:104
+#: backend/book.py:102
 msgid "A description of the version"
 msgstr "Versijos apibūdinimas"
 
-#: backend/book.py:108
+#: backend/book.py:106
 msgid "The text of a verse"
 msgstr "Teksto eilutė"
 
-#: backend/book.py:109
+#: backend/book.py:107
 msgid "The verse number"
 msgstr "Eilutės numeris"
 
-#: backend/book.py:110
+#: backend/book.py:108
 msgid "The reference for each verse"
 msgstr "Kiekvienos eilutės nurodyma"
 
-#: backend/book.py:111
+#: backend/book.py:109
 msgid "The name of the current book"
 msgstr "Šios knygos pavadinimas"
 
-#: backend/book.py:112
+#: backend/book.py:110
 msgid "A shorter abbreviation of the book name"
 msgstr "Sutrumpintas knygos pavadinimas"
 
-#: backend/book.py:113
+#: backend/book.py:111
 msgid "The number of the chapter in the book"
 msgstr "Skyriaus numeris knygoje"
 
-#: backend/book.py:117
+#: backend/book.py:115
 msgid "The text of the heading"
 msgstr "Antraštės tekstas"
 
-#: backend/book.py:723
+#: backend/book.py:721
 msgid ""
 "Couldn't save cipher key. You will have to set it again when you restart"
 msgstr ""
 "Negaliu išsaugoti šifro rakto. Jums teks nurodyti jį vėl paleisite programą "
 "iš naujo"
 
-#: backend/book.py:769
+#: backend/book.py:767
 msgid "commentary"
 msgstr "komentarai"
 
-#: backend/book.py:779 bibleframe.py:39 xrc/auifrm_xrc.py:72
+#: backend/book.py:781 bibleframe.py:39 xrc/auifrm_xrc.py:72
 msgid "Bible"
 msgstr "Biblija"
 
@@ -217,11 +217,11 @@ msgstr "Paieška..."
 msgid "Go to reference"
 msgstr "Pereiti prie nuorodos"
 
-#: bookframe.py:365 genbookframe.py:211
+#: bookframe.py:365 genbookframe.py:212
 msgid "Go to this reference"
 msgstr "Pereiti prie šios nuorodos"
 
-#: bookframe.py:372 genbookframe.py:218
+#: bookframe.py:372 genbookframe.py:219
 msgid "Link the %s to the Bible"
 msgstr "Susiekite %s su Biblija"
 
@@ -229,7 +229,7 @@ msgstr "Susiekite %s su Biblija"
 msgid "Commentary"
 msgstr "Komentarai"
 
-#: bookframe.py:446
+#: bookframe.py:451
 msgid "Dictionary"
 msgstr "Žodynas"
 
@@ -268,6 +268,17 @@ msgstr ""
 "<p><b> [Nuoroda, iškirpta nes maksimali eiučių riba (%d eilučių), buvo "
 "viršyta \n"
 " <br> Tai turbūt reiškia, kad nuoroda buvo netinkama] </b>"
+
+#: config.py:133
+msgid ""
+"<h4>The Personal Commentary is not supported</h4>\n"
+"<p>To make notes on verses, use \"Bible > Topic Management\", \"Bible > Tag "
+"Verses\"\n"
+"and \"Bible > Comment on Verses\".</p>\n"
+"<p>For more information, see the documentation on <a href=\"http://code."
+"google.com/p/bpbible/wiki/UserNotes\">creating and using user notes in "
+"BPBible</a>.</p>\n"
+msgstr ""
 
 #: copyverses.py:94 xrc/copyverses_xrc.py:78
 msgid "Edit Template..."
@@ -361,11 +372,11 @@ msgstr "Kalba"
 msgid "Pronunciation"
 msgstr ""
 
-#: displayframe.py:253 protocols.py:150
+#: displayframe.py:254 protocols.py:150
 msgid "Don't know how to open this morphology type:"
 msgstr "Nežinau, kaip atidaryti šį morfologijos tipą:"
 
-#: displayframe.py:263 protocols.py:160
+#: displayframe.py:264 protocols.py:160
 msgid ""
 "Module %s is not installed, so you cannot view details for this "
 "morphological code"
@@ -373,31 +384,31 @@ msgstr ""
 "Modulis %s nėra įdiegtas, tokiu būdu jūs negalite matyti išsamią informaciją "
 "šiam morfologiniam kodui"
 
-#: displayframe.py:497
+#: displayframe.py:433
 msgid "Select all"
 msgstr "Pažymėti viską"
 
-#: displayframe.py:499
+#: displayframe.py:435
 msgid "Select all the text in the frame"
 msgstr "Pažymėkite visą tekstą langelyje"
 
-#: displayframe.py:549
+#: displayframe.py:485
 msgid "the selected word"
 msgstr "pažymėtas žodis"
 
-#: displayframe.py:555
+#: displayframe.py:491
 msgid "the selected phrase"
 msgstr "pažymėtas išsireiškimas"
 
-#: displayframe.py:568
+#: displayframe.py:504
 msgid "Look up %s in the dictionary"
 msgstr "Paieška %s žodyne"
 
-#: displayframe.py:589
+#: displayframe.py:525
 msgid "Search for %s in the Bible"
 msgstr "Paieška %s Biblijoje"
 
-#: displayframe.py:591
+#: displayframe.py:527
 #, fuzzy
 msgid "Search for %s in this book"
 msgstr "Paieška šioje knygoje"
@@ -426,7 +437,7 @@ msgstr "Kitos knygos"
 msgid "Harmony"
 msgstr "Harmonija"
 
-#: genbookframe.py:238
+#: genbookframe.py:239
 #, fuzzy
 msgid "%s is not in this harmony."
 msgstr "%s nėra harmonijoje"
@@ -1003,6 +1014,14 @@ msgstr "Informacijos langelis"
 msgid "Show this in a tooltip"
 msgstr "Rodyti %s įrankių juostos"
 
+#: protocol_handlers.py:284
+msgid "You are at the start of this book."
+msgstr ""
+
+#: protocol_handlers.py:285
+msgid "You are at the end of this book."
+msgstr ""
+
 #: protocol_handlers.py:371
 msgid "Click here to unlock this book"
 msgstr ""
@@ -1214,11 +1233,11 @@ msgid ""
 msgstr ""
 "Yra tiktai %(verses)d eilutės šioje %(book)s %(chapter)s (given %(given)d)"
 
-#: swlib/pysw.py:843 swlib/pysw.py:1659
+#: swlib/pysw.py:843 swlib/pysw.py:1667
 msgid "Invalid Reference: %s"
 msgstr "Klaidinga nuoroda: %s"
 
-#: swlib/pysw.py:1647
+#: swlib/pysw.py:1655
 msgid "Invalid empty reference"
 msgstr "Klaidinga tuščia nuoroda"
 
@@ -1268,25 +1287,25 @@ msgstr "Kopijuoti informacijos langelio tekstą (su nuorodomis)"
 msgid "Tooltip"
 msgstr "Mygtuko etiketė"
 
-#: tooltip.py:534 tooltip.py:684
+#: tooltip.py:533 tooltip.py:683
 msgid "Sticky Tooltip"
 msgstr "Informacijos langelis"
 
-#: tooltip.py:600 tooltip.py:602
+#: tooltip.py:599 tooltip.py:601
 msgid "Stay on top"
 msgstr "Laikyti virš kitų"
 
-#: tooltip.py:731
+#: tooltip.py:730
 #, fuzzy
 msgid "Find"
 msgstr "&Rasti:"
 
-#: tooltip.py:733
+#: tooltip.py:732
 #, fuzzy
 msgid "Search for this strong's number in the Bible"
 msgstr "Paieška %s Biblijoje"
 
-#: tooltip.py:748
+#: tooltip.py:747
 msgid ""
 "Module %s is not installed, so you cannot view details for this strong's "
 "number"
@@ -1294,11 +1313,11 @@ msgstr ""
 "Modulis %s nėra įdiegtas, tokiu būdu jūs negalite matyti išsamią informaciją "
 "šio strongo žodyno numeriui"
 
-#: tooltip.py:810
+#: tooltip.py:809
 msgid "Go to verses"
 msgstr "Eiti į eilutes"
 
-#: tooltip.py:812
+#: tooltip.py:811
 msgid "Open this reference"
 msgstr "Atidaryti šią nuorodą"
 

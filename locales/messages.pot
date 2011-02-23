@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2011-02-10 23:42+AUS Eastern Daylight Time\n"
+"POT-Creation-Date: 2011-02-24 00:24+AUS Eastern Daylight Time\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,59 +23,59 @@ msgstr ""
 msgid "History"
 msgstr ""
 
-#: backend/book.py:101
+#: backend/book.py:99
 msgid "A $ sign"
 msgstr ""
 
-#: backend/book.py:102
+#: backend/book.py:100
 msgid "The range of verses"
 msgstr ""
 
-#: backend/book.py:103
+#: backend/book.py:101
 msgid "The version this is taken from"
 msgstr ""
 
-#: backend/book.py:104
+#: backend/book.py:102
 msgid "A description of the version"
 msgstr ""
 
-#: backend/book.py:108
+#: backend/book.py:106
 msgid "The text of a verse"
 msgstr ""
 
-#: backend/book.py:109
+#: backend/book.py:107
 msgid "The verse number"
 msgstr ""
 
-#: backend/book.py:110
+#: backend/book.py:108
 msgid "The reference for each verse"
 msgstr ""
 
-#: backend/book.py:111
+#: backend/book.py:109
 msgid "The name of the current book"
 msgstr ""
 
-#: backend/book.py:112
+#: backend/book.py:110
 msgid "A shorter abbreviation of the book name"
 msgstr ""
 
-#: backend/book.py:113
+#: backend/book.py:111
 msgid "The number of the chapter in the book"
 msgstr ""
 
-#: backend/book.py:117
+#: backend/book.py:115
 msgid "The text of the heading"
 msgstr ""
 
-#: backend/book.py:723
+#: backend/book.py:721
 msgid "Couldn't save cipher key. You will have to set it again when you restart"
 msgstr ""
 
-#: backend/book.py:769
+#: backend/book.py:767
 msgid "commentary"
 msgstr ""
 
-#: backend/book.py:779 bibleframe.py:39 xrc/auifrm_xrc.py:72
+#: backend/book.py:781 bibleframe.py:39 xrc/auifrm_xrc.py:72
 msgid "Bible"
 msgstr ""
 
@@ -209,11 +209,11 @@ msgstr ""
 msgid "Go to reference"
 msgstr ""
 
-#: bookframe.py:365 genbookframe.py:211
+#: bookframe.py:365 genbookframe.py:212
 msgid "Go to this reference"
 msgstr ""
 
-#: bookframe.py:372 genbookframe.py:218
+#: bookframe.py:372 genbookframe.py:219
 msgid "Link the %s to the Bible"
 msgstr ""
 
@@ -221,7 +221,7 @@ msgstr ""
 msgid "Commentary"
 msgstr ""
 
-#: bookframe.py:446
+#: bookframe.py:451
 msgid "Dictionary"
 msgstr ""
 
@@ -241,6 +241,14 @@ msgstr ""
 msgid ""
 "<p><b>[Reference clipped as the maximum verse limit (%d verses) has been exceeded.\n"
 "<br>This probably means the reference was invalid]</b>"
+msgstr ""
+
+#: config.py:133
+msgid ""
+"<h4>The Personal Commentary is not supported</h4>\n"
+"<p>To make notes on verses, use \"Bible > Topic Management\", \"Bible > Tag Verses\"\n"
+"and \"Bible > Comment on Verses\".</p>\n"
+"<p>For more information, see the documentation on <a href=\"http://code.google.com/p/bpbible/wiki/UserNotes\">creating and using user notes in BPBible</a>.</p>\n"
 msgstr ""
 
 #: copyverses.py:94 xrc/copyverses_xrc.py:78
@@ -327,39 +335,39 @@ msgstr ""
 msgid "Pronunciation"
 msgstr ""
 
-#: displayframe.py:253 protocols.py:150
+#: displayframe.py:254 protocols.py:150
 msgid "Don't know how to open this morphology type:"
 msgstr ""
 
-#: displayframe.py:263 protocols.py:160
+#: displayframe.py:264 protocols.py:160
 msgid "Module %s is not installed, so you cannot view details for this morphological code"
 msgstr ""
 
-#: displayframe.py:497
+#: displayframe.py:433
 msgid "Select all"
 msgstr ""
 
-#: displayframe.py:499
+#: displayframe.py:435
 msgid "Select all the text in the frame"
 msgstr ""
 
-#: displayframe.py:549
+#: displayframe.py:485
 msgid "the selected word"
 msgstr ""
 
-#: displayframe.py:555
+#: displayframe.py:491
 msgid "the selected phrase"
 msgstr ""
 
-#: displayframe.py:568
+#: displayframe.py:504
 msgid "Look up %s in the dictionary"
 msgstr ""
 
-#: displayframe.py:589
+#: displayframe.py:525
 msgid "Search for %s in the Bible"
 msgstr ""
 
-#: displayframe.py:591
+#: displayframe.py:527
 msgid "Search for %s in this book"
 msgstr ""
 
@@ -387,7 +395,7 @@ msgstr ""
 msgid "Harmony"
 msgstr ""
 
-#: genbookframe.py:238
+#: genbookframe.py:239
 msgid "%s is not in this harmony."
 msgstr ""
 
@@ -918,6 +926,14 @@ msgstr ""
 msgid "Show this in a tooltip"
 msgstr ""
 
+#: protocol_handlers.py:284
+msgid "You are at the start of this book."
+msgstr ""
+
+#: protocol_handlers.py:285
+msgid "You are at the end of this book."
+msgstr ""
+
 #: protocol_handlers.py:371
 msgid "Click here to unlock this book"
 msgstr ""
@@ -1108,11 +1124,11 @@ msgstr ""
 msgid "There are only %(verses)d verses in %(book)s %(chapter)s (given %(given)d)"
 msgstr ""
 
-#: swlib/pysw.py:843 swlib/pysw.py:1659
+#: swlib/pysw.py:843 swlib/pysw.py:1667
 msgid "Invalid Reference: %s"
 msgstr ""
 
-#: swlib/pysw.py:1647
+#: swlib/pysw.py:1655
 msgid "Invalid empty reference"
 msgstr ""
 
@@ -1161,31 +1177,31 @@ msgstr ""
 msgid "Tooltip"
 msgstr ""
 
-#: tooltip.py:534 tooltip.py:684
+#: tooltip.py:533 tooltip.py:683
 msgid "Sticky Tooltip"
 msgstr ""
 
-#: tooltip.py:600 tooltip.py:602
+#: tooltip.py:599 tooltip.py:601
 msgid "Stay on top"
 msgstr ""
 
-#: tooltip.py:731
+#: tooltip.py:730
 msgid "Find"
 msgstr ""
 
-#: tooltip.py:733
+#: tooltip.py:732
 msgid "Search for this strong's number in the Bible"
 msgstr ""
 
-#: tooltip.py:748
+#: tooltip.py:747
 msgid "Module %s is not installed, so you cannot view details for this strong's number"
 msgstr ""
 
-#: tooltip.py:810
+#: tooltip.py:809
 msgid "Go to verses"
 msgstr ""
 
-#: tooltip.py:812
+#: tooltip.py:811
 msgid "Open this reference"
 msgstr ""
 

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2011-02-10 23:42+AUS Eastern Daylight Time\n"
+"POT-Creation-Date: 2011-02-24 00:24+AUS Eastern Daylight Time\n"
 "PO-Revision-Date: 2010-11-09 09:15+0545\n"
 "Last-Translator: Tim\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,60 +22,60 @@ msgstr "किताबहरू"
 msgid "History"
 msgstr "इतिहास"
 
-#: backend/book.py:101
+#: backend/book.py:99
 msgid "A $ sign"
 msgstr "$ चिन्ह"
 
-#: backend/book.py:102
+#: backend/book.py:100
 msgid "The range of verses"
 msgstr "पदहरुको तालिका"
 
-#: backend/book.py:103
+#: backend/book.py:101
 msgid "The version this is taken from"
 msgstr "यो संस्करण यसबाट लिइएको"
 
-#: backend/book.py:104
+#: backend/book.py:102
 msgid "A description of the version"
 msgstr "संस्करणको व्याख्या"
 
-#: backend/book.py:108
+#: backend/book.py:106
 msgid "The text of a verse"
 msgstr "पदको खण्ड (लिखत)"
 
-#: backend/book.py:109
+#: backend/book.py:107
 msgid "The verse number"
 msgstr "पदको क्रम संख्या"
 
-#: backend/book.py:110
+#: backend/book.py:108
 msgid "The reference for each verse"
 msgstr "हरेक पदको संदर्भ"
 
-#: backend/book.py:111
+#: backend/book.py:109
 msgid "The name of the current book"
 msgstr "सम्बन्धित पुस्तकको नाम"
 
-#: backend/book.py:112
+#: backend/book.py:110
 msgid "A shorter abbreviation of the book name"
 msgstr "यस पुस्तकको संक्षिप्‍त नाम"
 
-#: backend/book.py:113
+#: backend/book.py:111
 msgid "The number of the chapter in the book"
 msgstr "पुस्तकमा भएको अध्यायको संख्या"
 
-#: backend/book.py:117
+#: backend/book.py:115
 msgid "The text of the heading"
 msgstr "शीर्षक"
 
-#: backend/book.py:723
+#: backend/book.py:721
 msgid ""
 "Couldn't save cipher key. You will have to set it again when you restart"
 msgstr "'सिफर' सूचकलाई सञ्‍चित गर्न सकिएन, कृपया फेरि चलाउँदा यसलाई मिलाउनुहोस्।"
 
-#: backend/book.py:769
+#: backend/book.py:767
 msgid "commentary"
 msgstr "टिप्पणी"
 
-#: backend/book.py:779 bibleframe.py:39 xrc/auifrm_xrc.py:72
+#: backend/book.py:781 bibleframe.py:39 xrc/auifrm_xrc.py:72
 msgid "Bible"
 msgstr "बाइबल"
 
@@ -209,11 +209,11 @@ msgstr "खोजी गर्दै:"
 msgid "Go to reference"
 msgstr "संदर्भमा जानुहोस्"
 
-#: bookframe.py:365 genbookframe.py:211
+#: bookframe.py:365 genbookframe.py:212
 msgid "Go to this reference"
 msgstr "यस संदर्भमा जानुहोस्"
 
-#: bookframe.py:372 genbookframe.py:218
+#: bookframe.py:372 genbookframe.py:219
 msgid "Link the %s to the Bible"
 msgstr "बाइबलमा %s लिङ्क गर्नुहोस्"
 
@@ -221,7 +221,7 @@ msgstr "बाइबलमा %s लिङ्क गर्नुहोस्"
 msgid "Commentary"
 msgstr "टिप्पणी"
 
-#: bookframe.py:446
+#: bookframe.py:451
 msgid "Dictionary"
 msgstr "शब्दकोश"
 
@@ -257,6 +257,17 @@ msgid ""
 msgstr ""
 "<p><b>[संदर्भ काट्यिो जसै त्यो अधिकतम पद सिमा (%d पदहरू) भन्दा बढी गए।\n"
 "<br>शायद यसको मतलब संदर्भ अमान्य थियो]</b>"
+
+#: config.py:133
+msgid ""
+"<h4>The Personal Commentary is not supported</h4>\n"
+"<p>To make notes on verses, use \"Bible > Topic Management\", \"Bible > Tag "
+"Verses\"\n"
+"and \"Bible > Comment on Verses\".</p>\n"
+"<p>For more information, see the documentation on <a href=\"http://code."
+"google.com/p/bpbible/wiki/UserNotes\">creating and using user notes in "
+"BPBible</a>.</p>\n"
+msgstr ""
 
 #: copyverses.py:94 xrc/copyverses_xrc.py:78
 msgid "Edit Template..."
@@ -344,11 +355,11 @@ msgstr "मौलिक भाषा"
 msgid "Pronunciation"
 msgstr "उच्चारण"
 
-#: displayframe.py:253 protocols.py:150
+#: displayframe.py:254 protocols.py:150
 msgid "Don't know how to open this morphology type:"
 msgstr "यस स्वरूपका शब्दहरू खोल्न जानिएन:"
 
-#: displayframe.py:263 protocols.py:160
+#: displayframe.py:264 protocols.py:160
 msgid ""
 "Module %s is not installed, so you cannot view details for this "
 "morphological code"
@@ -356,31 +367,31 @@ msgstr ""
 "यसको नमूना %s लागू गरिएको छैन, त्यसकारण तपाईं यस स्वरूपका शब्द सूचकहरूको विस्तृत व्याख्या "
 "हेर्न सक्‍नु हुन्‍न"
 
-#: displayframe.py:497
+#: displayframe.py:433
 msgid "Select all"
 msgstr "सबै छान्‍नुहोस्"
 
-#: displayframe.py:499
+#: displayframe.py:435
 msgid "Select all the text in the frame"
 msgstr "फ्रेममा भएका सबै वाक्यहरुलाई छान्‍नुहोस्"
 
-#: displayframe.py:549
+#: displayframe.py:485
 msgid "the selected word"
 msgstr "छानिएको शब्द"
 
-#: displayframe.py:555
+#: displayframe.py:491
 msgid "the selected phrase"
 msgstr "छानिएको वाक्यांश"
 
-#: displayframe.py:568
+#: displayframe.py:504
 msgid "Look up %s in the dictionary"
 msgstr "शब्दकोशमा %s का लागि हेर्नोस्"
 
-#: displayframe.py:589
+#: displayframe.py:525
 msgid "Search for %s in the Bible"
 msgstr "%s बाइबलमा खोज्नुहोस्"
 
-#: displayframe.py:591
+#: displayframe.py:527
 msgid "Search for %s in this book"
 msgstr "%s पुस्तकमा खोज्‍नुहोस्"
 
@@ -408,7 +419,7 @@ msgstr "अरू किताबहरू"
 msgid "Harmony"
 msgstr "मिलाप (उस्तै)"
 
-#: genbookframe.py:238
+#: genbookframe.py:239
 #, fuzzy
 msgid "%s is not in this harmony."
 msgstr "%s यस मिलापमा छैन"
@@ -974,6 +985,14 @@ msgstr "टूलटिपमा देखाउनुहोस्"
 msgid "Show this in a tooltip"
 msgstr "यसलाई टूलटिपमा देखाउनुहोस्"
 
+#: protocol_handlers.py:284
+msgid "You are at the start of this book."
+msgstr ""
+
+#: protocol_handlers.py:285
+msgid "You are at the end of this book."
+msgstr ""
+
 #: protocol_handlers.py:371
 msgid "Click here to unlock this book"
 msgstr ""
@@ -1180,11 +1199,11 @@ msgid ""
 msgstr ""
 "त्यहाँ मात्र %(verses)d पदहरु भित्र %(book)s %(chapter)s (given %(given)d) छन्"
 
-#: swlib/pysw.py:843 swlib/pysw.py:1659
+#: swlib/pysw.py:843 swlib/pysw.py:1667
 msgid "Invalid Reference: %s"
 msgstr "अनाधिकृत संदर्भ: %s"
 
-#: swlib/pysw.py:1647
+#: swlib/pysw.py:1655
 msgid "Invalid empty reference"
 msgstr "अनाधिकृत रित्तो संदर्भ"
 
@@ -1232,33 +1251,33 @@ msgstr "टूलटिप भएका वाक्यहरू (लिङ्�
 msgid "Tooltip"
 msgstr "टूलटिप"
 
-#: tooltip.py:534 tooltip.py:684
+#: tooltip.py:533 tooltip.py:683
 msgid "Sticky Tooltip"
 msgstr "जोडिएर आउने टूलटिप"
 
-#: tooltip.py:600 tooltip.py:602
+#: tooltip.py:599 tooltip.py:601
 msgid "Stay on top"
 msgstr "शिर्षमा रहने"
 
-#: tooltip.py:731
+#: tooltip.py:730
 msgid "Find"
 msgstr "पत्ता लगाउने"
 
-#: tooltip.py:733
+#: tooltip.py:732
 msgid "Search for this strong's number in the Bible"
 msgstr "बाइबल भित्र यो स्ट्रोङ्गको अङ्कको खोजी गर्नुहोस्"
 
-#: tooltip.py:748
+#: tooltip.py:747
 msgid ""
 "Module %s is not installed, so you cannot view details for this strong's "
 "number"
 msgstr "माँड्‌यूल %s स्थापना भएको छैन, त्यसैले तपाईं यस स्ट्रोङ्गको अङ्कको विवरण हेर्न सक्‍नुहुन्‍न"
 
-#: tooltip.py:810
+#: tooltip.py:809
 msgid "Go to verses"
 msgstr "पदहरूमा जानुहोस्"
 
-#: tooltip.py:812
+#: tooltip.py:811
 msgid "Open this reference"
 msgstr "यो संदर्भ खोल्नुहोस्"
 

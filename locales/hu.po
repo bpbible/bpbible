@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BPBible Hungarian 1.0\n"
-"POT-Creation-Date: 2011-02-10 23:42+AUS Eastern Daylight Time\n"
+"POT-Creation-Date: 2011-02-24 00:24+AUS Eastern Daylight Time\n"
 "PO-Revision-Date: 2009-03-22 21:08+1000\n"
 "Last-Translator: csabosz <sinkacs@gmail.com>\n"
 "Language-Team: csabosz <sinkacs@gmail.com>\n"
@@ -23,60 +23,60 @@ msgstr "Könyvek"
 msgid "History"
 msgstr "Történet"
 
-#: backend/book.py:101
+#: backend/book.py:99
 msgid "A $ sign"
 msgstr "Egy $ jel"
 
-#: backend/book.py:102
+#: backend/book.py:100
 msgid "The range of verses"
 msgstr "A versek tartománya"
 
-#: backend/book.py:103
+#: backend/book.py:101
 msgid "The version this is taken from"
 msgstr "Ez a könyv innen származik"
 
-#: backend/book.py:104
+#: backend/book.py:102
 msgid "A description of the version"
 msgstr "A könyv leírása"
 
-#: backend/book.py:108
+#: backend/book.py:106
 msgid "The text of a verse"
 msgstr "Az igevers szövege"
 
-#: backend/book.py:109
+#: backend/book.py:107
 msgid "The verse number"
 msgstr "Igevers száma"
 
-#: backend/book.py:110
+#: backend/book.py:108
 msgid "The reference for each verse"
 msgstr "Vershivatkozások"
 
-#: backend/book.py:111
+#: backend/book.py:109
 msgid "The name of the current book"
 msgstr "A jelenlegi könyv neve"
 
-#: backend/book.py:112
+#: backend/book.py:110
 msgid "A shorter abbreviation of the book name"
 msgstr "A könyv rövidítésa"
 
-#: backend/book.py:113
+#: backend/book.py:111
 msgid "The number of the chapter in the book"
 msgstr "Fejezetek száma a könyvben"
 
-#: backend/book.py:117
+#: backend/book.py:115
 msgid "The text of the heading"
 msgstr "A fejléc szövege"
 
-#: backend/book.py:723
+#: backend/book.py:721
 msgid ""
 "Couldn't save cipher key. You will have to set it again when you restart"
 msgstr "Nem található az aláírókulcs. Az újraindítás után be kell állítani"
 
-#: backend/book.py:769
+#: backend/book.py:767
 msgid "commentary"
 msgstr "Kommentár"
 
-#: backend/book.py:779 bibleframe.py:39 xrc/auifrm_xrc.py:72
+#: backend/book.py:781 bibleframe.py:39 xrc/auifrm_xrc.py:72
 msgid "Bible"
 msgstr "Biblia"
 
@@ -214,11 +214,11 @@ msgstr "Keresés:"
 msgid "Go to reference"
 msgstr "Igehely"
 
-#: bookframe.py:365 genbookframe.py:211
+#: bookframe.py:365 genbookframe.py:212
 msgid "Go to this reference"
 msgstr "Ugorj az igehelyre"
 
-#: bookframe.py:372 genbookframe.py:218
+#: bookframe.py:372 genbookframe.py:219
 msgid "Link the %s to the Bible"
 msgstr "Hivatkozás %s a Bibliára"
 
@@ -226,7 +226,7 @@ msgstr "Hivatkozás %s a Bibliára"
 msgid "Commentary"
 msgstr "Kommentár"
 
-#: bookframe.py:446
+#: bookframe.py:451
 msgid "Dictionary"
 msgstr "Szótár"
 
@@ -264,6 +264,17 @@ msgstr ""
 "<p><b>[A hivatkozás a túllépés miatt rövidítve a maximális verseszámhoz (%d "
 "vers).\n"
 "<br>Ez azt is jelentheti, hogy a hivatkozás érvénytelen volt.]</b>"
+
+#: config.py:133
+msgid ""
+"<h4>The Personal Commentary is not supported</h4>\n"
+"<p>To make notes on verses, use \"Bible > Topic Management\", \"Bible > Tag "
+"Verses\"\n"
+"and \"Bible > Comment on Verses\".</p>\n"
+"<p>For more information, see the documentation on <a href=\"http://code."
+"google.com/p/bpbible/wiki/UserNotes\">creating and using user notes in "
+"BPBible</a>.</p>\n"
+msgstr ""
 
 #: copyverses.py:94 xrc/copyverses_xrc.py:78
 msgid "Edit Template..."
@@ -357,42 +368,42 @@ msgstr "Nyelv"
 msgid "Pronunciation"
 msgstr ""
 
-#: displayframe.py:253 protocols.py:150
+#: displayframe.py:254 protocols.py:150
 msgid "Don't know how to open this morphology type:"
 msgstr "Nem tudom, hogyan nyissam meg ezt a morfológiatípust:"
 
-#: displayframe.py:263 protocols.py:160
+#: displayframe.py:264 protocols.py:160
 msgid ""
 "Module %s is not installed, so you cannot view details for this "
 "morphological code"
 msgstr ""
 "A modul nincs telepítve, így nem jeleníthetők meg a morfológiai kódok sem"
 
-#: displayframe.py:497
+#: displayframe.py:433
 msgid "Select all"
 msgstr "Mind kijelölése"
 
-#: displayframe.py:499
+#: displayframe.py:435
 msgid "Select all the text in the frame"
 msgstr "A keret teljes szövegének kijelölése"
 
-#: displayframe.py:549
+#: displayframe.py:485
 msgid "the selected word"
 msgstr "a kiválasztott szó"
 
-#: displayframe.py:555
+#: displayframe.py:491
 msgid "the selected phrase"
 msgstr "a kiválasztott kifejezés"
 
-#: displayframe.py:568
+#: displayframe.py:504
 msgid "Look up %s in the dictionary"
 msgstr "A %s szó keresése a szótárban"
 
-#: displayframe.py:589
+#: displayframe.py:525
 msgid "Search for %s in the Bible"
 msgstr "Keresés a/az %s szóra a Bibliában"
 
-#: displayframe.py:591
+#: displayframe.py:527
 #, fuzzy
 msgid "Search for %s in this book"
 msgstr "Keresés ebben a könyvben"
@@ -421,7 +432,7 @@ msgstr "Más könyvek"
 msgid "Harmony"
 msgstr "Szinopszis"
 
-#: genbookframe.py:238
+#: genbookframe.py:239
 #, fuzzy
 msgid "%s is not in this harmony."
 msgstr "%s nincs ebben a szinopszisban"
@@ -999,6 +1010,14 @@ msgstr "Hivatkozásablak"
 msgid "Show this in a tooltip"
 msgstr "%s eszköztár mutatása"
 
+#: protocol_handlers.py:284
+msgid "You are at the start of this book."
+msgstr ""
+
+#: protocol_handlers.py:285
+msgid "You are at the end of this book."
+msgstr ""
+
 #: protocol_handlers.py:371
 msgid "Click here to unlock this book"
 msgstr ""
@@ -1209,11 +1228,11 @@ msgstr ""
 "Csak %(verses)d vers van a %(chapter)s. fejezetben ebben a könyvben: %(book)"
 "s. (Összesen %(given)d)"
 
-#: swlib/pysw.py:843 swlib/pysw.py:1659
+#: swlib/pysw.py:843 swlib/pysw.py:1667
 msgid "Invalid Reference: %s"
 msgstr "Érvénytelen hivatkozás: %s"
 
-#: swlib/pysw.py:1647
+#: swlib/pysw.py:1655
 msgid "Invalid empty reference"
 msgstr "Érvénytelen üres hivatkozás"
 
@@ -1262,35 +1281,35 @@ msgstr "Az ablak szövegének másolása linkekkel"
 msgid "Tooltip"
 msgstr "Jegyzetablak"
 
-#: tooltip.py:534 tooltip.py:684
+#: tooltip.py:533 tooltip.py:683
 msgid "Sticky Tooltip"
 msgstr "Hivatkozásablak"
 
-#: tooltip.py:600 tooltip.py:602
+#: tooltip.py:599 tooltip.py:601
 msgid "Stay on top"
 msgstr "Mindig felül"
 
-#: tooltip.py:731
+#: tooltip.py:730
 #, fuzzy
 msgid "Find"
 msgstr "&Keres:"
 
-#: tooltip.py:733
+#: tooltip.py:732
 #, fuzzy
 msgid "Search for this strong's number in the Bible"
 msgstr "Keresés a/az %s szóra a Bibliában"
 
-#: tooltip.py:748
+#: tooltip.py:747
 msgid ""
 "Module %s is not installed, so you cannot view details for this strong's "
 "number"
 msgstr "A modul nincs telepítve, így nem jeleníthetők meg a Strong számok sem"
 
-#: tooltip.py:810
+#: tooltip.py:809
 msgid "Go to verses"
 msgstr "Ugrás az igevershez"
 
-#: tooltip.py:812
+#: tooltip.py:811
 msgid "Open this reference"
 msgstr "Igehely megnyitása"
 

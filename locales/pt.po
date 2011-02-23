@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: German BPBible v1.3\n"
-"POT-Creation-Date: 2011-02-10 23:42+AUS Eastern Daylight Time\n"
+"POT-Creation-Date: 2011-02-24 00:24+AUS Eastern Daylight Time\n"
 "PO-Revision-Date: 2010-05-09 18:41-0300\n"
 "Last-Translator: Daniel Rios <danielrios@live.dk>\n"
 "Language-Team: Markusch <markuschmichael@gmx.de>\n"
@@ -23,64 +23,64 @@ msgstr "Livros"
 msgid "History"
 msgstr "Histórico"
 
-#: backend/book.py:101
+#: backend/book.py:99
 #, fuzzy
 msgid "A $ sign"
 msgstr "Um sinal $"
 
-#: backend/book.py:102
+#: backend/book.py:100
 #, fuzzy
 msgid "The range of verses"
 msgstr "O intervalo dos versículos"
 
-#: backend/book.py:103
+#: backend/book.py:101
 msgid "The version this is taken from"
 msgstr "A versão de onde isto foi tirado"
 
-#: backend/book.py:104
+#: backend/book.py:102
 msgid "A description of the version"
 msgstr "Uma descrição da versão"
 
-#: backend/book.py:108
+#: backend/book.py:106
 msgid "The text of a verse"
 msgstr "O texto de um verso"
 
-#: backend/book.py:109
+#: backend/book.py:107
 msgid "The verse number"
 msgstr "O número do verso"
 
-#: backend/book.py:110
+#: backend/book.py:108
 msgid "The reference for each verse"
 msgstr "A referência para cada verso"
 
-#: backend/book.py:111
+#: backend/book.py:109
 msgid "The name of the current book"
 msgstr "O nome do livro atual"
 
-#: backend/book.py:112
+#: backend/book.py:110
 msgid "A shorter abbreviation of the book name"
 msgstr "Uma abreviação mais curta do nome do livro"
 
-#: backend/book.py:113
+#: backend/book.py:111
 msgid "The number of the chapter in the book"
 msgstr "O número do capítulo no livro"
 
-#: backend/book.py:117
+#: backend/book.py:115
 msgid "The text of the heading"
 msgstr "O texto do cabeçalho"
 
-#: backend/book.py:723
+#: backend/book.py:721
 msgid ""
 "Couldn't save cipher key. You will have to set it again when you restart"
 msgstr ""
 "Não foi possível salvar a cipher key. Você terá que configurar novamente "
 "quando reiniciar."
 
-#: backend/book.py:769
+#: backend/book.py:767
 msgid "commentary"
 msgstr "comentário"
 
-#: backend/book.py:779 bibleframe.py:39 xrc/auifrm_xrc.py:72
+#: backend/book.py:781 bibleframe.py:39 xrc/auifrm_xrc.py:72
 msgid "Bible"
 msgstr "Bíblia"
 
@@ -220,11 +220,11 @@ msgstr "Buscar por:"
 msgid "Go to reference"
 msgstr "Ir para referência"
 
-#: bookframe.py:365 genbookframe.py:211
+#: bookframe.py:365 genbookframe.py:212
 msgid "Go to this reference"
 msgstr "Ir para esta referência"
 
-#: bookframe.py:372 genbookframe.py:218
+#: bookframe.py:372 genbookframe.py:219
 msgid "Link the %s to the Bible"
 msgstr "Relacionar o %s à Bíblia"
 
@@ -232,7 +232,7 @@ msgstr "Relacionar o %s à Bíblia"
 msgid "Commentary"
 msgstr "Comentário"
 
-#: bookframe.py:446
+#: bookframe.py:451
 msgid "Dictionary"
 msgstr "Dicionário"
 
@@ -272,6 +272,17 @@ msgstr ""
 "<p><b>[Referência selecionada como o limite máximo de verso (%d verses) foi "
 "excedido.\n"
 "<br>Isto provavelmente significa que a referência era inválida]</b>"
+
+#: config.py:133
+msgid ""
+"<h4>The Personal Commentary is not supported</h4>\n"
+"<p>To make notes on verses, use \"Bible > Topic Management\", \"Bible > Tag "
+"Verses\"\n"
+"and \"Bible > Comment on Verses\".</p>\n"
+"<p>For more information, see the documentation on <a href=\"http://code."
+"google.com/p/bpbible/wiki/UserNotes\">creating and using user notes in "
+"BPBible</a>.</p>\n"
+msgstr ""
 
 #: copyverses.py:94 xrc/copyverses_xrc.py:78
 msgid "Edit Template..."
@@ -360,11 +371,11 @@ msgstr "Linguagem original"
 msgid "Pronunciation"
 msgstr "Pronúncia"
 
-#: displayframe.py:253 protocols.py:150
+#: displayframe.py:254 protocols.py:150
 msgid "Don't know how to open this morphology type:"
 msgstr "Não sei como abrir este tipo de morfologia:"
 
-#: displayframe.py:263 protocols.py:160
+#: displayframe.py:264 protocols.py:160
 #, fuzzy
 msgid ""
 "Module %s is not installed, so you cannot view details for this "
@@ -373,31 +384,31 @@ msgstr ""
 "O módulo %s não está instalado. Por isso você não poderá ver detalhes deste "
 "código morfológico"
 
-#: displayframe.py:497
+#: displayframe.py:433
 msgid "Select all"
 msgstr "Selecionar todos"
 
-#: displayframe.py:499
+#: displayframe.py:435
 msgid "Select all the text in the frame"
 msgstr "Selecionar todo o texto na tela"
 
-#: displayframe.py:549
+#: displayframe.py:485
 msgid "the selected word"
 msgstr "a palavra selecionada"
 
-#: displayframe.py:555
+#: displayframe.py:491
 msgid "the selected phrase"
 msgstr "a frase selecionada"
 
-#: displayframe.py:568
+#: displayframe.py:504
 msgid "Look up %s in the dictionary"
 msgstr "Procure %s no dicionário"
 
-#: displayframe.py:589
+#: displayframe.py:525
 msgid "Search for %s in the Bible"
 msgstr "Busque por %s na Bíblia"
 
-#: displayframe.py:591
+#: displayframe.py:527
 msgid "Search for %s in this book"
 msgstr "Busque por %s neste livro"
 
@@ -425,7 +436,7 @@ msgstr "Outros livros"
 msgid "Harmony"
 msgstr "Concordância"
 
-#: genbookframe.py:238
+#: genbookframe.py:239
 #, fuzzy
 msgid "%s is not in this harmony."
 msgstr "%s não está nesta concordância"
@@ -1003,6 +1014,15 @@ msgstr "Mostrar na tooltip"
 msgid "Show this in a tooltip"
 msgstr "Mostrar isto em um tooltip"
 
+#: protocol_handlers.py:284
+#, fuzzy
+msgid "You are at the start of this book."
+msgstr ""
+
+#: protocol_handlers.py:285
+msgid "You are at the end of this book."
+msgstr ""
+
 #: protocol_handlers.py:371
 msgid "Click here to unlock this book"
 msgstr ""
@@ -1214,11 +1234,11 @@ msgid ""
 msgstr ""
 "Existem apenas %(verses)d versos in %(book)s %(chapter)s (given %(given)d)"
 
-#: swlib/pysw.py:843 swlib/pysw.py:1659
+#: swlib/pysw.py:843 swlib/pysw.py:1667
 msgid "Invalid Reference: %s"
 msgstr "Referência inválida: %s"
 
-#: swlib/pysw.py:1647
+#: swlib/pysw.py:1655
 msgid "Invalid empty reference"
 msgstr "Referência vazia inválida"
 
@@ -1267,23 +1287,23 @@ msgstr "Copiar texto de tooltip (com links)"
 msgid "Tooltip"
 msgstr "Tooltip"
 
-#: tooltip.py:534 tooltip.py:684
+#: tooltip.py:533 tooltip.py:683
 msgid "Sticky Tooltip"
 msgstr "Sticky Tooltip"
 
-#: tooltip.py:600 tooltip.py:602
+#: tooltip.py:599 tooltip.py:601
 msgid "Stay on top"
 msgstr "Permanecer no topo"
 
-#: tooltip.py:731
+#: tooltip.py:730
 msgid "Find"
 msgstr "Buscar"
 
-#: tooltip.py:733
+#: tooltip.py:732
 msgid "Search for this strong's number in the Bible"
 msgstr "Buscar por este strong's number na Bíblia"
 
-#: tooltip.py:748
+#: tooltip.py:747
 msgid ""
 "Module %s is not installed, so you cannot view details for this strong's "
 "number"
@@ -1291,11 +1311,11 @@ msgstr ""
 "Módulo %s não está instalado, então você não pode ver detalhes para este "
 "strong's number"
 
-#: tooltip.py:810
+#: tooltip.py:809
 msgid "Go to verses"
 msgstr "Ir para versos"
 
-#: tooltip.py:812
+#: tooltip.py:811
 msgid "Open this reference"
 msgstr "Abrir esta referência"
 
