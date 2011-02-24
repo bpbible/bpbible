@@ -93,28 +93,9 @@ Footnotes=Notes of foot
 }}}
 
 The strings you may need to translate are list below.
-The more common ones are:
-{{{
-Headings
-Toggles Headings On and Off if they exist
-Cross-references
-Toggles Scripture Cross-references On and Off if they exist
-Footnotes
-Toggles Footnotes On and Off if they exist
-Words of Christ in Red
-Toggles Red Coloring for Words of Christ On and Off if they are marked
-Strong's Numbers
-Toggles Strong's Numbers On and Off if they exist
-Morphological Tags
-Toggles Morphological Tags On and Off if they exist
-}}}
-
-And less commonly (i.e. with Hebrew and Greek texts).
 {{{
 Hebrew Cantillation
 Toggles Hebrew Cantillation Marks
-Morpheme Segmentation
-Toggles Morpheme Segmentation On and Off, when present
 Greek Accents
 Toggles Greek Accents
 Hebrew Vowel Points
