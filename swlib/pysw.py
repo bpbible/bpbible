@@ -1648,7 +1648,7 @@ class ImmutableTK(TK):
 
 # -- Utility functions
 def GetVerseStr(verse, context = "", raiseError=False, 
-	userInput=False, userOutput=False):
+	userInput=False, userOutput=False, osisRefOutput=False):
 	"""Returns a standardized verse string"""
 	if not verse:
 		if raiseError:
@@ -1670,6 +1670,9 @@ def GetVerseStr(verse, context = "", raiseError=False,
 			return ""
 	
 	vk = vklist[0]
+
+	if osisRefOutput:
+		return vk.LowerBound().getOSISRef()
 
 	if userInput != userOutput:
 		assert userInput

@@ -19,6 +19,24 @@ function highlight_verse(){
 	}
 }
 
+/* Find the current reference on screen to use when changing versions, etc.
+ * This returns the actual current reference if it is on or near the screen.
+ * Otherwise, it returns the top verse currently visible on the screen.
+ */
+function get_current_reference_on_screen()	{
+	var CURRENT_VERSE_OFFSCREEN_ALLOWANCE = 200;
+	var top = window.scrollY - CURRENT_VERSE_OFFSCREEN_ALLOWANCE;
+	var bottom = window.innerHeight + window.scrollY +CURRENT_VERSE_OFFSCREEN_ALLOWANCE;
+	var [start, end] = get_current_verse_bounds();
+	var current_reference_top = start.offset().top;
+	var current_reference_bottom = end.offset().top + end.attr('offsetHeight');
+	if (current_reference_top < bottom && current_reference_bottom > top)	{
+		return start.get(0).getAttribute("reference");
+	}
+
+	return get_current_reference_range();
+}
+
 function get_current_reference_range()	{
 	var top = window.scrollY;
 	var bottom = window.innerHeight + window.scrollY;

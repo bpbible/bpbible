@@ -330,18 +330,16 @@ class BibleFrame(VerseKeyedFrame):
 		so don't call internally. To set verse reference, use notify"""
 		self.reference = GetVerseStr(ref)
 
-		chapter = GetBookChapter(self.reference)
-		self.header_bar.set_current_chapter(
-			pysw.internal_to_user(chapter), chapter
-		)
 		has_selected_new_verse = False
+		ref_to_scroll_to = None
 		# If the settings have changed we want to do a complete reload anyway
 		# (since it could be something that requires a complete reload, such as changing version).
 		if self.dom_loaded:
 			# in the document we keep user verse keys, in here we keep
 			# internal ones. Do conversions as appropriate.
 			if settings_changed:
-				self.reference = GetVerseStr(self.ExecuteScriptWithResult('get_current_reference_range()')) or self.reference
+				self.reference = GetVerseStr(self.ExecuteScriptWithResult('get_current_reference_on_screen()')) or self.reference
+				ref_to_scroll_to = GetVerseStr(self.ExecuteScriptWithResult('get_current_reference_range()'), osisRefOutput=True)
 			else:
 				ref = pysw.internal_to_user(self.reference)
 				has_selected_new_verse = self.ExecuteScriptWithResult('select_new_verse("%s")' % ref)
@@ -350,7 +348,18 @@ class BibleFrame(VerseKeyedFrame):
 		if not has_selected_new_verse:
 			self.OpenURIForCurrentBook("bpbible://content/page/%s/%s" % (self.book.version, self.reference))
 
+		chapter = GetBookChapter(self.reference)
+		self.header_bar.set_current_chapter(
+			pysw.internal_to_user(chapter), chapter
+		)
+
+		if ref_to_scroll_to:
+			self.scroll_to_osis_ref(ref_to_scroll_to)
+
 		self.update_title()
+
+	def scroll_to_osis_ref(self, osisRef):
+		self.scroll_to_anchor(osisRef + '_start');
 	
 	def GetRangeSelected(self):
 		text = self.ExecuteScriptWithResult("""
