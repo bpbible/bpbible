@@ -83,11 +83,18 @@ function get_current_reference_range()	{
 	var [whole2, book2, chapter2, verse2] = extract_reference(ref2);
 
 	var delim = "-";
-	if (book1 == book2)
-		if(chapter1 == chapter2 || !chapter2)
+	if (book1 == book2)	{
+		if(chapter1 == chapter2 || !chapter2)	{
 			whole2 = verse2;
-		else
+			if (verse1 == verse2) {
+				/* If the two references are the same, only show the first one. */
+				whole2 = "";
+				delim = "";
+			}
+		} else	{
 			whole2 = chapter2 + ":" + verse2;
+		}
+	}
 	return whole1 + delim + whole2;
 }
 
