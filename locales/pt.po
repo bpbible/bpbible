@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: German BPBible v1.3\n"
-"POT-Creation-Date: 2011-02-24 00:24+AUS Eastern Daylight Time\n"
+"POT-Creation-Date: 2011-03-02 23:45+AUS Eastern Daylight Time\n"
 "PO-Revision-Date: 2010-05-09 18:41-0300\n"
 "Last-Translator: Daniel Rios <danielrios@live.dk>\n"
 "Language-Team: Markusch <markuschmichael@gmx.de>\n"
@@ -721,7 +721,7 @@ msgstr "buscar"
 #, fuzzy
 msgid ""
 "Flexible Bible study software.\n"
-"\t\t\tBuilt Using the Sword Project from crosswire.org\n"
+"\t\t\tBuilt Using the SWORD Project from crosswire.org\n"
 "\t\t\tPython Version: %(sysversion)s\n"
 "\t\t\twxPython Version: %(wxversion)s\n"
 "\t\t\tSWORD Version: %(swversion)s\n"
@@ -1015,7 +1015,6 @@ msgid "Show this in a tooltip"
 msgstr "Mostrar isto em um tooltip"
 
 #: protocol_handlers.py:284
-#, fuzzy
 msgid "You are at the start of this book."
 msgstr ""
 
