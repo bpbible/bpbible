@@ -272,6 +272,9 @@ function set_continuous(to) {
 	}
 }
 
+/* Try and keep in middle
+ -40 is to correct for verse length, as we do not want start of 
+ verse to start half way down, but the middle to be in the middle */
 function get_scroll_point() {
 	return {top:  window.innerHeight < 240 ? 
 		Math.max(window.innerHeight/2 - 40, 0) : 120,
@@ -279,19 +282,28 @@ function get_scroll_point() {
 }
 
 function scroll_to_current(start) {
+	do_scroll_to_current(start, 0);
+}
+
+function do_scroll_to_current(start, call_count) {
 	// get_start_point define in page_view and chapter_view
 	if(!start) start = get_start_point();
-	//alert(start);
 	// Now scroll down to the right point
 	var off = start.offset();
 	var t = off.top;
 	var l = off.left;
-	/* Try and keep in middle
-	 -40 is to correct for verse length, as we do not want start of 
-	 verse to start half way down, but the middle to be in the middle */
 	var offset = get_scroll_point();
 	t -= offset.top;
 	l -= offset.left;
+	/*
+	 * If the window does not yet have enough content to make this the top
+	 * element on screen by scrolling it, then wait a bit and try scrolling
+	 * again.
+	 */
+	if ((t + window.innerHeight > document.height) && call_count <= 10) {
+		window.setTimeout(do_scroll_to_current, 25, start, call_count + 1);
+		return;
+	}
 	
 	window.scrollTo(l, t);
 	d(t + "," + l);
