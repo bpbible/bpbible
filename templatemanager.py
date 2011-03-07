@@ -462,16 +462,15 @@ class TemplateManager(xrcTemplateManager):
 	def read_templates(self):
 		try:
 			f = open(template_file, "rb")
-			data = f.read()
-			
-			# issue 26			
-			# upgrade templates from 0.3 to 0.4
-			data = data.replace(
-				"(cutil.util\nTemplate",
-				"(cbackend.verse_template\nTemplate"
-			)
-
-			self.templates = pickle.loads(data)
+			self.templates = pickle.load(f)
+			for template in self.templates:
+				# If we are loading a pickled template from 0.4.x, the
+				# preverse template will not be present.
+				# If it is not, then we give it a default so it doesn't
+				# crash.
+				if not hasattr(template, "preverse"):
+					from backend.verse_template import str_template
+					template.preverse = str_template("")
 		except Exception, e:
 			dprint(WARNING, "Template loading exception", e)
 			self.templates = default_templates[:]
