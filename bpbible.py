@@ -194,6 +194,10 @@ def main():
 			dprint(WARNING, "Could not load inspection")
 
 		app = MyApp(0)
+
+	# Don't display warnings in distributed code unless it is in debugging mode.
+	import warnings
+	warnings.simplefilter("error" if is_debugging() else "ignore")
 	
 	dprint(MESSAGE, "App created")
 	
