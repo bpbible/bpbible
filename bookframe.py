@@ -49,7 +49,7 @@ class BookFrame(AUIDisplayFrame):
 			return ref
 		
 		except VerseParsingError, e:
-			wx.MessageBox(e.message, config.name())
+			wx.MessageBox(str(e), config.name())
 		
 	def get_verified_multi_verses(self, ref):
 		try:
@@ -58,7 +58,7 @@ class BookFrame(AUIDisplayFrame):
 			return ref
 		
 		except VerseParsingError, e:
-			wx.MessageBox(e.message, config.name())	
+			wx.MessageBox(str(e), config.name())	
 		
 
 

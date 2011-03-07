@@ -640,7 +640,7 @@ class SearchPanel(xrcSearchPanel):
 			)
 
 		except SearchException, myexcept:
-			wx.MessageBox(myexcept.message, _("Error in search"), parent=self)
+			wx.MessageBox(str(myexcept), _("Error in search"), parent=self)
 			succeeded = False
 
 		except SpellingException, spell:
@@ -715,7 +715,7 @@ class SearchPanel(xrcSearchPanel):
 			)
 
 		except SearchException, myexcept:
-			wx.MessageBox(myexcept.message, _("Error in search"), parent=self)
+			wx.MessageBox(str(myexcept), _("Error in search"), parent=self)
 			succeeded = False
 		
 		except SpellingException, spell:
@@ -977,7 +977,7 @@ class SearchPanel(xrcSearchPanel):
 
 			except index.BadBook, e:
 				self.index = e.index
-				error = e.message
+				error = str(e)
 			
 			self.set_index_available(True)
 			self.show_keyboard_button()

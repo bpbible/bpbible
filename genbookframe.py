@@ -245,7 +245,7 @@ class HarmonyFrame(GenBookFrame):
 			return ref
 		
 		except VerseParsingError, e:
-			wx.MessageBox(e.message, config.name())
+			wx.MessageBox(str(e), config.name())
 
 	# XXX: We cannot use BookFrame's get_verified_one_verse, because it
 	# assumes that there is a valid current reference which is a verse.

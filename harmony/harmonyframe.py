@@ -262,7 +262,7 @@ class HarmonyPanel(xrcHarmonyPanel):
 			internal_ref = GetVerseStr(ref,
 				raiseError=True, userInput=True, userOutput=False)
 		except VerseParsingError, e:
-			wx.MessageBox(e.message, config.name())
+			wx.MessageBox(str(e), config.name())
 			return
 
 		self.currentverse = internal_ref

@@ -100,8 +100,7 @@ SW.LocaleMgr.setSystemLocaleMgr(locale_mgr)
 #	dprint(WARNING, "bpbible locale not found")
 
 class VerseParsingError(Exception): 
-	def __str__(self):
-		return self.message
+	pass
 
 def KeyExists(key_text, base_key=None):
 	if base_key is None:

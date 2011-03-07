@@ -7,11 +7,11 @@ class Error(Exception):
 	"""Base class for ConfigParser exceptions."""
 
 	def __init__(self, msg=''):
-		self.message = msg
+		self.msg = msg
 		Exception.__init__(self, msg)
 
 	def __repr__(self):
-		return self.message
+		return self.msg
 
 	__str__ = __repr__
 
@@ -48,7 +48,7 @@ class ParsingError(Error):
 
 	def append(self, lineno, line):
 		self.errors.append((lineno, line))
-		self.message += '\n\t[line %2d]: %s' % (lineno, line)
+		self.msg += '\n\t[line %2d]: %s' % (lineno, line)
 
 class MissingSectionHeaderError(ParsingError):
 	"""Raised when a key-value pair is found before any section header."""

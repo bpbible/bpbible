@@ -388,12 +388,10 @@ class MainFrame(wx.Frame, AuiLayer):
 			config_manager.save()
 		
 		except (OSError, EnvironmentError), e:
-			wx.MessageBox("OSError on saving settings\n%s" % 
-				e.message)
+			wx.MessageBox("OSError on saving settings\n%s" % str(e))
 
 		except Exception, e:
-			wx.MessageBox("Error on saving settings\n%s" % 
-				e.message)
+			wx.MessageBox("Error on saving settings\n%s" % str(e))
 		
 		
 			
@@ -1077,7 +1075,7 @@ class MainFrame(wx.Frame, AuiLayer):
 				self.set_bible_ref(self.bibleref.GetValue(),
 					source=BIBLE_REF_ENTER, userInput=True)
 			except pysw.VerseParsingError, e:
-				wx.MessageBox(e.message, config.name())
+				wx.MessageBox(str(e), config.name())
 
 	def ExitClick(self, event):
 		self.Close()
