@@ -48,20 +48,17 @@ def get_chapter_headings(chapter):
 		# see comment in book.py for why we are checking if it starts with <
 		# (short version - pre-verse div's)
 		# try to handle pre-verse headings in div's
-		content = '\n'.join(mod.RenderText(heading)
+		content = '\n'.join(to_unicode(mod.RenderText(heading), mod)
 			for heading, canonical in hs if heading.startswith("<")) + content
 		
 		# and non-div pre-verse headings
-		headings += ((item, mod.RenderText(heading))
+		headings += ((item, to_unicode(mod.RenderText(heading), mod))
 			for heading, canonical in hs if not heading.startswith("<"))
 
 		headings += ((item, text) for heading, text in re.findall(
 			'(<h2 class="heading" canonical="[^"]*">(.*?)</h2>)', 
 			content, re.U) if text)
 		
-		headings += ((item, to_unicode(mod.RenderText(heading), mod))
-			for heading, canonical in biblemgr.bible.get_headings(item.getText()))
-	
 	biblemgr.restore_state()
 	version_headings[chapter] = headings
 	return headings
