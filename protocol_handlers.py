@@ -98,9 +98,7 @@ class PageProtocolHandler(ProtocolHandler):
 
 	def _get_document_parts(self, path):
 		module_name, ref = path.split("/", 1)
-		ref = urllib.unquote(ref)
 		assert ref, "No reference"
-		ref = ref.decode("utf8")
 
 		return self._get_document_parts_for_ref(module_name, ref)
 
@@ -156,7 +154,7 @@ class PageProtocolHandler(ProtocolHandler):
 
 		lang = module.Lang() if module else "en",
 		c = convert_language(c, lang)
-		c = '<div class="segment%s" ref_id="%s">%s</div>' % (clas, urllib.quote(ref_id), c)
+		c = '<div class="segment%s" ref_id="%s">%s</div>' % (clas, urllib.quote(ref_id.encode("utf8")), c)
 
 		return dict(
 			module=module, content=c,
@@ -197,7 +195,6 @@ class PageProtocolHandler(ProtocolHandler):
 class PageFragmentHandler(PageProtocolHandler):
 	def get_document(self, path):
 		#print "GET DOCUMENT"
-		ref = urllib.unquote(path)
 		#print "GET FRAGMENT", ref
 		#assert ref.count("/") == 2, "Should be two slashes in a fragment url"
 
@@ -253,7 +250,7 @@ class PageFragmentHandler(PageProtocolHandler):
 			book.snap_text(ref)
 			book.mod.increment(dir)
 			if mod.Error() == '\x00' and book.mod.getKey().getText():
-				new_ref = book.mod.getKey().getText().decode("utf8")
+				new_ref = to_unicode(mod.getKey().getText(), mod)
 			else:
 				no_more = True
 			
@@ -297,7 +294,7 @@ class ModuleInformationHandler(ProtocolHandler):
 	config_entries_to_ignore = ["Name", "Description", "DistributionLicense", "UnlockURL", "ShortPromo", "Lang", "About"]
 
 	def get_document(self, path):
-		module_name = urllib.unquote(path)
+		module_name = path
 
 		book = biblemgr.get_module_book_wrapper(module_name)
 		if not book:
