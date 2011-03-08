@@ -140,7 +140,7 @@ class MyApp(wx.App):
 
 	def SetWebPreferences(self):
 		prefs = wx.wc.WebControl.preferences
-		prefs['browser.dom.window.dump.enabled'] = True
+		prefs['browser.dom.window.dump.enabled'] = is_debugging()
 
 	def FindXULRunnerVersion(self):
 		"""Find the XULRunner version from the XULRunner platform.ini config file.
