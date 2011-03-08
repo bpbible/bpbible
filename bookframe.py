@@ -15,7 +15,7 @@ import config
 import guiconfig
 from moduleinfo import ModuleInfo
 from gui.menu import MenuItem, Separator
-from dictionarylist import DictionarySelector, mmdd_to_date
+from dictionarylist import DictionarySelector
 from gui.quickselector import QuickSelector
 
 from events import SETTINGS_CHANGED, CHAPTER_MOVE, VERSE_MOVE, QUICK_SELECTOR
@@ -514,12 +514,7 @@ class DictionaryFrame(BookFrame):
 		m.set_pane_title(p.name, text)
 	
 	def format_ref(self, module, ref):
-		ref = self.book.snap_text(ref, module=module)
-
-		if self.book.has_feature("DailyDevotion", module=module):
-			ref = mmdd_to_date(ref) or ref
-
-		return ref
+		return self.book.format_ref(module, ref)
 		
 	def get_window(self):
 		return self.dict

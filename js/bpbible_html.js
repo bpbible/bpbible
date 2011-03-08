@@ -107,7 +107,13 @@ function load_below() {
 	
 	var cnt = 0;
 	while (window.scrollMaxY - window.scrollY < LOAD_OFFSET && cnt < 10) {
-		var c = load_text($(".page_segment:last-child")[0], false);
+		// We used to do .page_segment:last-child but it broke when we
+		// encountered bad html in AmTract (e.g. article Lord) where it didn't
+		// close the <b> tags and parsing went awry
+		var page_segments = $(".page_segment");
+		if (!page_segments.length) alert("No page segments found!!!");
+		var last_page_segment = page_segments[page_segments.length-1];
+		var c = load_text(last_page_segment, false);
 		if (!c) break;
 		c.appendTo("#content");
 		process_new_text(c);
@@ -146,6 +152,11 @@ function ensure_sufficient_content() {
 }
 
 function load_text(item, before) {
+	d("Load text " + item + ", " + before);
+	if (!item) {
+		d("ERROR!!!!! Load text, but not item");
+		return null;
+	}
 	var i = item.getElementsByClassName("segment");
 	if (!i.length) {
 		//d("Reached first/last item, quitting\n");

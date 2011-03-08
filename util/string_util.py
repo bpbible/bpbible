@@ -153,4 +153,23 @@ def convert_rtf_to_html(info):
 	
 	return info
 
+
+def _lowerme(m):
+	return m.group(1).lower()
+
+def _upperme(m):
+	return m.group(1).upper()
+
+def titlecase(item):
+	text = item.title()
+	# TODO i18n of this???
+	# Roman numerals :-/
+	text = re.sub(r"(\b[IV][iv]*\b)", _upperme, text)
 	
+	return re.sub(r"("
+		# of/the not at the start means we should not 
+		# capitalize - but don't be caught by just leading spaces
+		r"(?<=[^ ]) *(Of|The|In|And|Or|To|From|A)\b"
+	    u"|['\u2019]S\\b"       # Don't submit to such travesties as Joseph'S
+		r"|-[A-Z]"     # Body-Guard or Body-guard? I'm inclined to the latter
+	")", _lowerme, text)

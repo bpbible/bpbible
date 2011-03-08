@@ -1,22 +1,24 @@
 import wx.wc
 import protocol_handlers
 from util.debug import dprint, ERROR, MESSAGE
-import urlparse
+import urlparse, urllib
 
 def get_url_host_and_page(url):
 	parsed_url = urlparse.urlsplit(url)
 	if parsed_url.netloc:
 		url_host = parsed_url.netloc
-		page = parsed_url.path.lstrip('/')
+		page = str(parsed_url.path.lstrip('/'))
 	else:
 		temp = parsed_url.path.lstrip('/')
 		d = temp.split("/", 1)
 		url_host = d[0]
 		assert len(d) > 1, "No path for protocol handler."
 		page = str(d[1])
+	
+	page = urllib.unquote(page)
+	page = page.decode("utf8")
+	
 	return url_host, page
-
-
 
 class MasterProtocolHandler(wx.wc.ProtocolHandler):
 	def _breakup_url(self, url):

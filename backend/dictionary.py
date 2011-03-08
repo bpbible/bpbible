@@ -4,7 +4,7 @@ from backend.book import Book
 from util import classproperty
 from util.unicode import to_str, to_unicode
 from util.debug import dprint, WARNING
-import re
+from util import string_util
 import datetime
 import display_options
 
@@ -136,7 +136,7 @@ class LazyTopicList(object):
 
 		return self.topics[item]
 
-class DateConverterLazyTopicList(object):
+class ListDataWrapper(object):
 	def __init__(self, object):
 		self.object = object
 	
@@ -144,7 +144,7 @@ class DateConverterLazyTopicList(object):
 		return len(self.object)
 	
 	def __getitem__(self, item):
-		return mmdd_to_date(self.object[item]) or self.object[item]
+		raise NotImplementedError
 	
 	@property
 	def has_new_methods(self):
@@ -153,6 +153,14 @@ class DateConverterLazyTopicList(object):
 	@property
 	def mod(self):
 		return self.object.mod
+
+class DateConverterLazyTopicList(ListDataWrapper):
+	def __getitem__(self, item):
+		return mmdd_to_date(self.object[item]) or self.object[item]
+
+class TitleCaseConverterLazyTopicList(ListDataWrapper):
+	def __getitem__(self, item):
+		return string_util.titlecase(self.object[item])
 
 def is_date_conversion_supported():
 	# vietnamese under windows doesn't complete the loop
@@ -211,6 +219,18 @@ class Dictionary(Book):
 		parent.on_before_reload += self.clear_cache
 
 
+	def format_ref(self, module, ref, snap=True):
+		if snap: 
+			ref = self.snap_text(ref, module=module)
+
+		if self.has_feature("DailyDevotion", module=module):
+			ref = mmdd_to_date(ref) or ref
+		else:
+			ref = string_util.titlecase(ref)
+			
+		return ref
+		
+	
 	def GetReference(self, ref, context = None, max_verses = 500,
 			stripped=False, raw=False, end_ref=None):
 		if not self.mod:
@@ -244,10 +264,7 @@ class Dictionary(Book):
 			reference_encoded=SW.URL.encode(self.mod.getKeyText()).c_str(),
 			
 		)
-		if self.is_daily_devotional:
-			d["reference"] = mmdd_to_date(d["range"]) or d["range"]
-		else:
-			d["reference"] = d["range"]
+		d["reference"] = self.format_ref(self.mod, d["range"], snap=False)
 		verses = template.header.safe_substitute(d)
 
 		d1 = d
@@ -277,8 +294,12 @@ class Dictionary(Book):
 		else:
 			topics = topics_dict[name]
 
-		if user_output and self.is_daily_devotional:
-			return DateConverterLazyTopicList(topics)
+		if user_output:
+			if self.is_daily_devotional:
+				return DateConverterLazyTopicList(topics)
+			else:
+				return TitleCaseConverterLazyTopicList(topics)
+
 		return topics
 
 	def snap_text(self, text, module=None):

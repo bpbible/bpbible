@@ -5,6 +5,7 @@ import wx
 import wx.calendar
 
 from backend.bibleinterface import biblemgr
+from backend.dictionary import ListDataWrapper
 from util.observerlist import ObserverList
 from gui.virtuallist import VirtualListBox
 from gui.guiutil import bmp
@@ -15,24 +16,6 @@ from gui import fonts
 import guiconfig
 
 _disabled = False#True
-
-class DateConverter(object):
-	def __init__(self, object):
-		self.object = object
-	
-	def __len__(self):
-		return len(self.object)
-	
-	def __getitem__(self, item):
-		return mmdd_to_date(self.object[item]) or self.object[item]
-	
-	@property
-	def has_new_methods(self):
-		return self.object.has_new_methods
-	
-	@property
-	def mod(self):
-		return self.object.mod
 
 class Upper(object):
 	def __init__(self, object):
@@ -58,13 +41,11 @@ class DictionaryList(VirtualListBox):
 		self.book = book
 		b = wx.BusyInfo("Getting dictionary topic list...")
 		if not _disabled:
-			self.topics = book.GetTopics()
 			# TODO: this is broken if we don't have a proper module and get
 			# returned a list...
-			self._upper_topics = Upper(self.topics)
 			
-			if book.has_feature("DailyDevotion"):
-				self.topics = DateConverter(self.topics)
+			self.topics = book.GetTopics(user_output=True)
+			self._upper_topics = Upper(self.topics)
 			
 		else:
 			self.topics = ["DISABLED"]
@@ -130,16 +111,16 @@ def date_to_mmdd(date, return_formatted=True):
 	return None
 
 	
-def mmdd_to_date(date):
-	if not is_date_conversion_supported():
-		return None
-
-	dt = wx.DateTime()
-	ansa = dt.ParseFormat(date, "%m.%d", leap_year_default_date)
-	if ansa == -1:
-		return None
-
-	return dt.Format("%B ") + str(dt.Day)
+#def mmdd_to_date(date):
+#	if not is_date_conversion_supported():
+#		return None
+#
+#	dt = wx.DateTime()
+#	ansa = dt.ParseFormat(date, "%m.%d", leap_year_default_date)
+#	if ansa == -1:
+#		return None
+#
+#	return dt.Format("%B ") + str(dt.Day)
 
 class TextEntry(wx.Panel):
 	def __init__(self, parent):
