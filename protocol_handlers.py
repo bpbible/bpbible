@@ -194,15 +194,9 @@ class PageProtocolHandler(ProtocolHandler):
 
 class PageFragmentHandler(PageProtocolHandler):
 	def get_document(self, path):
-		#print "GET DOCUMENT"
-		#print "GET FRAGMENT", ref
-		#assert ref.count("/") == 2, "Should be two slashes in a fragment url"
-
-		#print "REF was", ref
-		module_name, rest = ref.split("/", 1)
+		module_name, rest = path.split("/", 1)
 		ref, direction = rest.rsplit("/", 1)
 		assert direction in ("next", "previous")
-		#print module_name, ref, direction
 
 		dir = {"next": 1, "previous": -1}[direction]
 		book = biblemgr.get_module_book_wrapper(module_name)
