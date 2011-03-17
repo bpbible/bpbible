@@ -1,5 +1,6 @@
 import wx
 from displayframe import DisplayFrame
+import protocol_handlers
 
 class ModuleInfo(wx.Dialog):
 	def __init__(self, parent, module):
@@ -14,7 +15,9 @@ class ModuleInfo(wx.Dialog):
 		info_sizer = wx.BoxSizer(wx.HORIZONTAL)
 		info_sizer.Add(info_frame, 1, wx.GROW)
 		panel.SetSizer(info_sizer)
-		info_frame.OpenURI("bpbible://content/moduleinformation/%s" % module.Name())
+
+		# it's not in our usual book hierarchy, we have to supply a module
+		info_frame.OpenURI(protocol_handlers.ModuleInformationHandlerModule.register(module))
 		
 		# now put the OK button on
 		b = wx.Button(self, id=wx.ID_OK)

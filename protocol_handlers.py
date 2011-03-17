@@ -284,19 +284,10 @@ class PageFragmentHandler(PageProtocolHandler):
 		
 		return '<div class="page_segment">%(content)s%(timer)s</div>' % self._get_document_parts_for_ref(module_name, new_ref, do_current_ref=False)
 	
-class ModuleInformationHandler(ProtocolHandler):
+class ModuleInformationHandlerBase(ProtocolHandler):
 	config_entries_to_ignore = ["Name", "Description", "DistributionLicense", "UnlockURL", "ShortPromo", "Lang", "About"]
 
-	def get_document(self, path):
-		module_name = path
-
-		book = biblemgr.get_module_book_wrapper(module_name)
-		if not book:
-			dprint(ERROR, "Book `%s' not found." % module_name)
-			return "Error: Book `%s' not found." % module_name
-
-		module = book.mod
-		
+	def _get_moduleinfo(self, module):
 		rows = []
 		name = u"%s - %s" % (module.Name(), to_unicode(module.Description(), module))
 		default_items = (
@@ -372,6 +363,35 @@ class ModuleInformationHandler(ProtocolHandler):
 			if item.c_str() not in self.config_entries_to_ignore
 		]
 	
+class ModuleInformationHandler(ModuleInformationHandlerBase):
+	def get_document(self, path):
+		module_name = path
+
+		book = biblemgr.get_module_book_wrapper(module_name)
+		if not book:
+			dprint(ERROR, "Book `%s' not found." % module_name)
+			return "Error: Book `%s' not found." % module_name
+
+		module = book.mod
+		return self._get_moduleinfo(module)
+	
+class ModuleInformationHandlerModule(ModuleInformationHandlerBase):
+	# Used in install_module for modules which aren't in the standard
+	# hierarchy
+	registered = {}
+	upto = 0
+
+	@classmethod
+	def register(cls, config):
+		cls.upto += 1
+		k = str(cls.upto)
+		cls.registered[k] = config
+		return "bpbible://content/moduleinformationmodule/%s" % k
+
+	def get_document(self, path):
+		module = self.registered.pop(path)
+		return self._get_moduleinfo(module)
+		
 class QuotesHandler(ProtocolHandler):
 	def get_content_type(self, path):
 		return 'text/css'
@@ -438,6 +458,7 @@ handlers = {
 	'fragment': FragmentHandler(),
 	'': NullProtocolHandler(),
 	'moduleinformation': ModuleInformationHandler(),
+	'moduleinformationmodule': ModuleInformationHandlerModule(),
 	'quotes_skin': QuotesHandler(),
 	'fonts': FontsHandler(),
 	'tooltip': TooltipConfigHandler(),
