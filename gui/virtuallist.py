@@ -1,5 +1,6 @@
 import wx
 from wx.lib.mixins.listctrl import ListCtrlAutoWidthMixin
+from util import osutils
 
 class VirtualListCtrl(wx.ListCtrl, ListCtrlAutoWidthMixin):
 	def __init__(self, parent, style):
@@ -60,7 +61,10 @@ class VirtualListCtrl(wx.ListCtrl, ListCtrlAutoWidthMixin):
 		
 		# return text encoded as utf-8; wxPython 2.9.1.1 on Mac crashes if
 		# non-ascii unicode text in there, but utf-8 works fine.
-		data = self.get_data(item, column).encode("utf8")
+		data = self.get_data(item, column)
+		if osutils.is_mac():
+			data = data.encode("utf8")
+		
 		self.cache[key] = data
 		return data
 	
