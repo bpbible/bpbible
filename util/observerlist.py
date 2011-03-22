@@ -1,4 +1,5 @@
 class ObserverList(object):
+	__slots__ = ["on_hold", "deferred", "observers"]
 	def __init__(self, observers=[]):
 		self.on_hold = False
 		self.deferred = []

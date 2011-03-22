@@ -14,6 +14,7 @@ class PassageEntry(object):
 	"""
 	__table__ = "passage"
 	__fields_to_store__ = ["passage", "comment", "order_number", "parent"]
+	__slots__ = ["passage_changed_observers", "comment_changed_observers", "_passage", "_comment", "parent", "order_number", "id"]
 
 	def __init__(self, passage, comment=""):
 		self.passage_changed_observers = ObserverList()

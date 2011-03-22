@@ -1285,6 +1285,7 @@ class VerseList(list):
 		return VerseList, (self.GetBestRange(),)
 
 class BookData(object):
+	__slots__ = ["chapters", "bookname", "testament", "booknumber"]
 	def __init__(self, bookname, testament, booknumber):
 		self.chapters=[]
 		self.bookname=bookname
@@ -1343,6 +1344,7 @@ class LocalizedBookData(BookData):
 		
 class ChapterData(object):
 	"""A class so that we can tell it is chapter data"""
+	__slots__ = ["chapter_number", "chapter_length"]
 	def __init__(self, chapter_number, chapter_length):
 		self.chapter_number = chapter_number
 		self.chapter_length = chapter_length
