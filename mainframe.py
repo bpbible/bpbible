@@ -116,7 +116,7 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.zoomlevel = 0
 
 		self.bible_observers = ObserverList([
-			lambda event: self.bibletext.SetReference(event.ref, y_pos=event.y_pos, settings_changed=event.settings_changed),
+			lambda event: self.bibletext.SetReference(event.ref, ref_to_scroll_to=event.ref_to_scroll_to, settings_changed=event.settings_changed),
 			self.set_title
 		])
 
@@ -686,8 +686,7 @@ class MainFrame(wx.Frame, AuiLayer):
 
 	def move_history(self, direction):
 		history_item = self.history.go(direction)
-		y_pos = history_item.y_pos if not history_item.have_settings_changed() else None
-		self.set_bible_ref(history_item.ref, y_pos=y_pos, source=HISTORY)
+		self.set_bible_ref(history_item.ref, ref_to_scroll_to=history_item.ref_to_scroll_to, source=HISTORY)
 	
 	def on_html_ide(self, event):
 		ide = HtmlIde(self)
@@ -1139,15 +1138,16 @@ class MainFrame(wx.Frame, AuiLayer):
 	def UpdateDictionaryUI(self, ref=""):
 		self.dictionarytext.UpdateUI(ref)
 
-	def UpdateBibleUI(self, source, settings_changed=False, y_pos=None):
-		current_ypos = self.bibletext.GetViewStart()[1]
-		self.history.before_navigate()
+	def UpdateBibleUI(self, source, settings_changed=False, ref_to_scroll_to=None):
+		if source != HISTORY:
+			self.history.before_navigate()
+
 		self.bible_observers(
 			BibleEvent(
 				ref=self.currentverse,
 				settings_changed=settings_changed,
 				source=source,
-				y_pos=y_pos,
+				ref_to_scroll_to=ref_to_scroll_to,
 			)
 		)
 	
@@ -1159,7 +1159,7 @@ class MainFrame(wx.Frame, AuiLayer):
 											 verse=pysw.internal_to_user(event.ref)))
 	
 	def set_bible_ref(self, ref, source, settings_changed=False, 
-			userInput=False, y_pos=None):
+			userInput=False, ref_to_scroll_to=None):
 		"""Sets the current Bible reference to the given reference.
 
 		This will trigger a Bible reference update event.
@@ -1169,17 +1169,17 @@ class MainFrame(wx.Frame, AuiLayer):
 			The possible sources are defined in events.py.
 		settings_changed: This is true if the settings have been changed.
 		userInput: was this user input (i.e. using user locale)?
-		y_pos: The y position to return to.  Used by the history to make
-			sure we return to the same y position, rather than the selected
-			verse which is often verse 1 and generally not what the user
-			was at before they clicked on a hyperlink.
+		ref_to_scroll_to: An OSISRef to scroll the top of the screen to.
+			Used by the history to make sure we return to the same position,
+			rather than the selected verse which is often verse 1 and generally
+			not what the user was at before they clicked on a hyperlink.
 		"""
 		self.currentverse = pysw.GetVerseStr(
 			ref, self.currentverse, raiseError=True, 
 			userInput=userInput
 		)
 		
-		self.UpdateBibleUI(source, settings_changed, y_pos)
+		self.UpdateBibleUI(source, settings_changed, ref_to_scroll_to)
 
 class MainFrameXRC(MainFrame):
 	def __init__(self):

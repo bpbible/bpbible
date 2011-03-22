@@ -1,6 +1,5 @@
 import wx
 from util.observerlist import ObserverList
-from gui import fonts
 from gui.guiutil import FreezeUI
 from events import HISTORY
 import guiconfig
@@ -15,9 +14,7 @@ class HistoryItem(object):
 		self.parent = parent
 		self.children = []
 		self.ref = ref
-		self.y_pos = None
-		self.bible_version = None
-		self.font_params = None
+		self.ref_to_scroll_to = None
 	
 	def trim(self, child):
 		assert child in self.children, "Can't trim item when not in children"
@@ -26,16 +23,6 @@ class HistoryItem(object):
 	@property
 	def user_ref(self):
 		return pysw.internal_to_user(self.ref)
-
-	def have_settings_changed(self):
-		"""Checks if any important settings changes have occurred.
-
-		These include the Bible version, the module font or the zoom level.
-		If any of these change, then the current screen position will be unreliable
-		and should not be used.
-		"""
-		return ((self.bible_version != biblemgr.bible.version) or
-				(self.font_params != fonts.get_module_font_params(biblemgr.bible.mod)))
 
 class History(object):
 	"""Manages history
@@ -122,9 +109,10 @@ class History(object):
 		The settings must be saved since it makes no sense to return to the
 		current position if the settings have changed.
 		"""
-		self.current_item.y_pos = guiconfig.mainfrm.bibletext.GetViewStart()[1]
-		self.current_item.bible_version = biblemgr.bible.version
-		self.current_item.font_params = fonts.get_module_font_params(biblemgr.bible.mod)
+		current_reference, ref_to_scroll_to = guiconfig.mainfrm.bibletext.GetCurrentReferenceAndPosition()
+		if current_reference:
+			self.current_item.ref = current_reference
+			self.current_item.ref_to_scroll_to = ref_to_scroll_to
 
 	def clear(self):
 		self.history = HistoryItem(None, None)
@@ -190,7 +178,7 @@ class HistoryTree(wx.TreeCtrl):
 				self.history.new_location(history_item.ref)
 
 		guiconfig.mainfrm.set_bible_ref(history_item.ref, source=HISTORY,
-				y_pos=history_item.y_pos
+				ref_to_scroll_to=history_item.ref_to_scroll_to
 			)
 		wx.CallAfter(self.rebuild_tree)
 

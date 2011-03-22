@@ -325,21 +325,19 @@ class BibleFrame(VerseKeyedFrame):
 		return json.loads(osis_refs_on_screen)
 	
 	@guiutil.frozen
-	def SetReference(self, ref, context=None, y_pos=None, settings_changed=False):
+	def SetReference(self, ref, context=None, ref_to_scroll_to=None, settings_changed=False):
 		"""Sets reference. This is set up to be an observer of the main frame,
 		so don't call internally. To set verse reference, use notify"""
 		self.reference = GetVerseStr(ref)
 
 		has_selected_new_verse = False
-		ref_to_scroll_to = None
 		# If the settings have changed we want to do a complete reload anyway
 		# (since it could be something that requires a complete reload, such as changing version).
 		if self.dom_loaded:
 			# in the document we keep user verse keys, in here we keep
 			# internal ones. Do conversions as appropriate.
 			if settings_changed:
-				self.reference = GetVerseStr(self.ExecuteScriptWithResult('get_current_reference_on_screen()')) or self.reference
-				ref_to_scroll_to = GetVerseStr(self.ExecuteScriptWithResult('get_current_reference_range()'), osisRefOutput=True)
+				self.reference, ref_to_scroll_to = self.GetCurrentReferenceAndPosition()
 			else:
 				ref = pysw.internal_to_user(self.reference)
 				has_selected_new_verse = self.ExecuteScriptWithResult('select_new_verse("%s")' % ref)
@@ -360,6 +358,14 @@ class BibleFrame(VerseKeyedFrame):
 
 	def scroll_to_osis_ref(self, osisRef):
 		self.scroll_to_anchor(osisRef + '_start');
+
+	def GetCurrentReferenceAndPosition(self):
+		if not self.dom_loaded:
+			return ('', None)
+
+		current_reference = GetVerseStr(self.ExecuteScriptWithResult('get_current_reference_on_screen()')) or self.reference
+		ref_to_scroll_to = GetVerseStr(self.ExecuteScriptWithResult('get_current_reference_range()'), osisRefOutput=True)
+		return (current_reference, ref_to_scroll_to)
 	
 	def GetRangeSelected(self):
 		text = self.ExecuteScriptWithResult("""

@@ -172,11 +172,6 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 		#self.current_target = None
 		self.mouseout = True
 
-
-	def GetViewStart(self):
-		# XXX: Do better than this.
-		return (0, 0)
-
 	def MouseIn(self, event = None):
 		if event: event.Skip()
 	
