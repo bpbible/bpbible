@@ -88,7 +88,27 @@ class TooltipBaseMixin(object):
 		if ref:
 			# split up the references in case one OSIS reference encodes
 			# multiple ones - issue 141
-			references = re.split("[;,]", ref)
+			def find_split_points(m):
+				digit1, separator, digit2 = m.groups()
+				if int(digit2) == int(digit1) + 1:
+					# don't split reference if consecutive verses
+					# mark for not splitting. 
+					# 
+					# e.g. in TSK there are a few like Genesis 1:3,4
+					# We lose the ; but I don't think this matters
+					return digit1 + '\x01' + digit2
+
+				# otherwise just leave as is; we'll split on it
+				return digit1 + separator + digit2
+
+			# if we have a digit then a comma, then a digit which looks like
+			# a verse number, keep it with the previous reference
+			references = re.sub(r"(?<=[ :\-])(\d+)([;,])\s*(\d+)\s*(?![:\-])",
+				find_split_points, ref)
+			references = re.split("[;,]", references)
+
+			# put back the comma if we had one we didn't split on
+			references = [x.replace("\x01", ",") for x in references]
 		else:
 			values = url.getParameterValue("values")
 			if not values:
