@@ -85,7 +85,6 @@ function load_above() {
 		var c = load_text($(".page_segment:first-child")[0], true);
 		if (!c) break;
 		c.prependTo("#content");
-		process_new_text(c);
 		var diff = $(ref).offset().top - ref_height;
 		if (diff != Math.ceil(diff)) 
 			d("Non-rounded pixel values in load_above: " + diff);
@@ -116,7 +115,6 @@ function load_below() {
 		var c = load_text(last_page_segment, false);
 		if (!c) break;
 		c.appendTo("#content");
-		process_new_text(c);
 		cnt++;
 	}
 	if(cnt == 10) d("Didn't work\n");
@@ -152,14 +150,12 @@ function ensure_sufficient_content() {
 }
 
 function load_text(item, before) {
-	d("Load text " + item + ", " + before);
 	if (!item) {
 		d("ERROR!!!!! Load text, but not item");
 		return null;
 	}
 	var i = item.getElementsByClassName("segment");
 	if (!i.length) {
-		//d("Reached first/last item, quitting\n");
 		return null;
 	}
 
@@ -188,43 +184,6 @@ function load_text(item, before) {
 	}
 	return $(t);
 }
-
-function dispatch_event(firer, leaving) {
-	d("Dispatching event\n");
-	var element = document.createElement("MyExtensionDataElement");
-	element.setAttribute("id", "process_tooltip");
-	element.setAttribute("href", firer.getAttribute("href"));
-	element.setAttribute("leaving", leaving ? "true" : "false");
-	var hadId = Boolean(firer.id);
-	if (hadId) {
-		alert("Had ID?!?");
-		var old_id = firer.getAttribute("id");
-	} else {
-		firer.id = "firer";
-	}
-	element.setAttribute("firer", firer.id);
-	document.documentElement.appendChild(element);
-
-	var evt = document.createEvent("Event");
-	evt.initEvent("process_tooltip", true, false);
-	element.dispatchEvent(evt);
-
-	/* I hope/presume that dispatchEvent is synchronous... :D */
-	element.parentNode.removeChild(element);
-	if (!hadId) {
-		firer.id = "";
-	}
-}
-
-function process_new_text(c) {
-	c.find('a[href]').bind("mouseleave", function(){
-		dispatch_event(this, true);
-	});
-		
-	c.find('a[href]').bind("mouseenter", function(){
-		dispatch_event(this, false);
-	});
-}
 	
 
 $(document).ready(function(){
@@ -245,8 +204,6 @@ $(document).ready(function(){
 	});
 
 	set_continuous($('body[continuous_scrolling="true"]').length);
-	process_new_text($("#content"));
-	
 });
 
 function toggle_filler(to) {
@@ -260,7 +217,6 @@ function toggle_filler(to) {
 			$("div.infiller").height(120);
 		}
 	} else {
-		d("removing it");
 		$(".filler").remove();
 	}
 
@@ -317,8 +273,6 @@ function do_scroll_to_current(start, call_count) {
 	}
 	
 	window.scrollTo(l, t);
-	d(t + "," + l);
-
 }
 
 $(document).mousedown(function(event) {
