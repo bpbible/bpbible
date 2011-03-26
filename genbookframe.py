@@ -287,6 +287,14 @@ class HarmonyFrame(GenBookFrame):
 
 		return found_reference
 
+	def SetReference(self, ref, context="", settings_changed=False):
+		if biblemgr.bible.mod is None:
+			self.reference = ref
+			self.SetPage(config.HARMONY_UNSUPPORTED_MESSAGE())
+			return
+
+		super(HarmonyFrame, self).SetReference(ref, context, settings_changed)
+
 	def refresh(self):
 		self.SetReference(self.reference)
 

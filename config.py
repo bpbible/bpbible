@@ -136,6 +136,11 @@ and "Bible > Comment on Verses".</p>
 <p>For more information, see the documentation on <a href="http://code.google.com/p/bpbible/wiki/UserNotes">creating and using user notes in BPBible</a>.</p>
 """)
 
+def HARMONY_UNSUPPORTED_MESSAGE():
+	return _("""<h4>This harmony requires a Bible installed</h4>
+<p>In order for this harmony to work, you need to have a Bible installed.</p>
+""")
+
 from util.configmgr import ConfigManager
 bpbible_configuration = ConfigManager("bpbible.conf")
 release_settings = bpbible_configuration.add_section("Release")
