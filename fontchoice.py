@@ -72,7 +72,7 @@ class FontChoiceDialog(xrcFontChoiceDialog):
 		self.item_section[self.item_to_set] = font, size, gui
 		self.update_preview()
 
-	def on_item_choice(self, data, parent_data, font_details_getter):
+	def on_item_choice(self, data, font_details_getter):
 		self.font_details_getter = font_details_getter
 		default, (font, size, use_in_gui) = font_details_getter(data)
 		self.set_font_params(font, size, use_in_gui)
@@ -89,17 +89,17 @@ class FontChoiceDialog(xrcFontChoiceDialog):
 		# else
 		self.Refresh()
 	
-	def on_module_choice(self, data, parent_data):
+	def on_module_choice(self, data):
 		self.mod = data
 		self.preview.mod = data
 		self.item_section = font_settings["module_fonts"]
 		self.item_to_set = data.Name()
 		
-		self.on_item_choice(data, parent_data, fonts.get_module_font_params)
+		self.on_item_choice(data, fonts.get_module_font_params)
 
-	def on_category_choice(self, data, parent_data):
+	def on_category_choice(self, data):
 		if data == DefaultFont:
-			return self.on_default_choice(data, parent_data)
+			return self.on_default_choice(data)
 		
 		# set the preview's mod to None, as we don't want any font based on
 		# the module we happen to be preview with
@@ -127,17 +127,16 @@ class FontChoiceDialog(xrcFontChoiceDialog):
 		self.item_section = font_settings["language_fonts"]
 		self.item_to_set = data
 		
-		self.on_item_choice(data, parent_data, fonts.get_language_font_params)
+		self.on_item_choice(data, fonts.get_language_font_params)
 	
-	def on_default_choice(self, data=DefaultFont, parent_data=None):
+	def on_default_choice(self, data=DefaultFont):
 		self.item_section = font_settings
 		self.item_to_set = "default_fonts"
 		self.preview.mod = None
 		self.mod = biblemgr.bible.mod
 		
 		
-		self.on_item_choice(data, parent_data, 
-			lambda data:fonts.default_fonts())
+		self.on_item_choice(data, lambda data:fonts.default_fonts())
 		
 		
 	

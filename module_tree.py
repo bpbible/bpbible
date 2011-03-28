@@ -86,8 +86,7 @@ class ModuleTree(FilterableTree):
 		parent_data = parent_data.data
 
 		if isinstance(item_data, SW.Module):
-			book = biblemgr.get_module_book_wrapper(item_data.Name())
-			self.on_module_choice(book.mod, book)
+			self.on_module_choice(item_data)
 		else:
 			self.on_category_choice(item_data, parent_data)
 		

@@ -462,7 +462,7 @@ class MainFrame(wx.Frame, AuiLayer):
 
 	def create_aui_items(self):
 		self.version_tree = ModuleTree(self)
-		self.version_tree.on_module_choice += self.set_module
+		self.version_tree.on_module_choice += self.set_module_from_module_choice
 		
 		self.preview_window = PreviewWindow(self)
 		
@@ -497,6 +497,10 @@ class MainFrame(wx.Frame, AuiLayer):
 		sizer = wx.BoxSizer(wx.VERTICAL)
 		sizer.Add(self.history_tree, 1, wx.GROW)
 		self.history_pane.SetSizer(sizer)
+
+	def set_module_from_module_choice(self, mod):
+		book = biblemgr.get_module_book_wrapper(mod.Name())
+		self.set_module(book.mod, book)
 
 	def set_module(self, module, book):
 		# if the pane is not shown, show it
