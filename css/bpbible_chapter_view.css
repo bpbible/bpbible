@@ -95,9 +95,9 @@ body[verse_per_line="true"] .chapterview p {
 
 	.chapterview blockquote.lg a.chapternumber
 	{
-		width: 1.5em;
+		width: 2.1em;
 		text-align: center;
-		-moz-margin-start: -1.5em;
+		-moz-margin-start: -1.9em;
 		line-height: 100%;
 		font-size: 150%;
 	}
