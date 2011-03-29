@@ -398,6 +398,7 @@ div.timer, div.debug-raw-details {
 /* Styling for user comments and passage tags. */
 a.usercomment {
 	text-decoration: none;
+	-moz-user-select: none;
 	vertical-align: super;
 	font-size: 0.75em;
 	line-height: 0.5em;
@@ -405,6 +406,7 @@ a.usercomment {
 
 a.passage_tag {
 	text-decoration: none;
+	-moz-user-select: none;
 	color: black;
 	font: 9pt arial;
 	padding: 0;
