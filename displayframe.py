@@ -104,6 +104,9 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 
 	def DomContentLoaded(self, event):
 		document = self.GetDOMDocument()
+		for event_name, (handler, event_id) in self.custom_dom_event_listeners.iteritems():
+			document.AddEventListener(event_name, self, event_id, True)
+
 		self.dom_loaded = True
 		for function, args, kwargs in self.events_to_call_on_document_load:
 			function(self, *args, **kwargs)
@@ -111,7 +114,6 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 
 	def defer_call_till_document_loaded(self, function, *args, **kwargs):
 		if self.dom_loaded:
-			print "DOM loaded, works fine."
 			function(self, *args, **kwargs)
 		else:
 			print "Adding item to list of things to execute."
@@ -121,6 +123,9 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 		self.handle_links = True
 		self.dom_loaded = False
 		self.events_to_call_on_document_load = []
+		self.custom_dom_event_listeners = {}
+		self.custom_dom_event_id_handlers = {}
+		self.custom_dom_event_id_counter = 999991
 		
 		self.current_target = None
 		self.mouseout = False
@@ -159,7 +164,24 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 	#def KillFocus(self, event):
 	#	self.tooltip.Stop()
 	#	event.Skip()
+
+	def add_custom_dom_event_listener(self, event_name, handler):
+		if not self.custom_dom_event_listeners:
+			self.Bind(wx.wc.EVT_WEB_DOMEVENT, self.DomEventReceived)
+
+		event_id = self.custom_dom_event_id_counter 
+		self.custom_dom_event_id_counter += 1
+		self.custom_dom_event_listeners[event_name] = (handler, event_id)
+		self.custom_dom_event_id_handlers[event_id] = handler
 		
+	def DomEventReceived(self, event):
+		event_id = event.GetId()
+		try:
+			handler = self.custom_dom_event_id_handlers[event_id]
+			handler()
+		except KeyError:
+			pass
+
 	def MouseOut(self, event = None):
 		if event: event.Skip()
 

@@ -98,6 +98,11 @@ function get_current_reference_range()	{
 	return whole1 + delim + whole2;
 }
 
+function show_current_reference() {
+	fill_reference_bar();
+	update_header_bar();
+}
+
 function fill_reference_bar() {
 	$("div.reference_bar").text(get_current_reference_range());
 }
@@ -106,12 +111,39 @@ function create_reference_bar() {
 	$("body").prepend('<div class="reference_bar">This should give the current reference</div>');
 }
 
+var last_chapter_in_header_bar = null;
+function update_header_bar() {
+	var current_chapter = find_current_chapter();
+	if (current_chapter == last_chapter_in_header_bar) {
+		return;
+	}
+
+	last_chapter_in_header_bar = current_chapter;
+	var event = document.createEvent("Event");
+	event.initEvent('ChangeChapter', true, true);
+	document.body.dispatchEvent(event);
+}
+
+function find_current_chapter() {
+	var top = window.scrollY + get_scroll_point().top;
+	var chapter1 = '';
+	var page_segments = $('.page_segment');
+	page_segments.each(function() {
+		if ($(this).offset().top + this.offsetHeight >= top) {
+			chapter1 = this.firstChild.firstChild.getAttribute('osisRef');
+			return false;
+		}
+		return true;
+	});
+	return chapter1;
+}
+
 $(document).ready(function() {
 	highlight_verse();
 	create_reference_bar();
-	$(window).scroll(function() {fill_reference_bar()});
-	$(window).resize(function() {fill_reference_bar()});
-	fill_reference_bar();
+	$(window).scroll(function() {show_current_reference()});
+	$(window).resize(function() {show_current_reference()});
+	show_current_reference();
 
 /*	var [start, end] = get_current_verse_bounds();
 	scroll_to_current(start);*/
