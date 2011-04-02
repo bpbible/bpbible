@@ -204,6 +204,7 @@ $(document).ready(function(){
 	});
 
 	set_continuous($('body[continuous_scrolling="true"]').length);
+	setup_drag_drop_handler();
 });
 
 function toggle_filler(to) {
@@ -319,3 +320,46 @@ $(document).mousedown(function(event) {
 	range.setEnd(rangeParent, endOffset);
 	window.right_click_word = range.toString();
 });
+
+// Drag & Drop support.
+function setup_drag_drop_handler()	{
+	document.body.addEventListener("dragenter", checkDrag, true);
+	document.body.addEventListener("dragover", checkDrag, true);
+	document.body.addEventListener("dragdrop", onDrop, true);
+}
+
+function checkDrag(event)	{
+	var hasFile = event.dataTransfer.types.contains('text/x-moz-url');
+	// XXX: Does effectAllowed and dropEffect do anything?
+	event.dataTransfer.effectAllowed = (hasFile ? 'link': 'none');
+	event.dataTransfer.dropEffect = (hasFile ? 'link': 'none');
+	return hasFile;
+}
+
+var dropped_file_urls = null;
+
+function onDrop(event) {
+	event.stopPropagation();
+	event.preventDefault();
+	var dataTransfer = event.dataTransfer;
+	var count = dataTransfer.mozItemCount;
+	dropped_file_urls = [];
+	for (var index = 0; index < count; index++)	{
+		try	{
+			var fileURL = dataTransfer.mozGetDataAt('text/x-moz-url', index);
+			if (fileURL.indexOf('file:') == 0)	{
+				dropped_file_urls.push(fileURL);
+			}
+		} catch(ex)	{
+			// Do nothing.
+		}
+	}
+	
+	if (dropped_file_urls.length == 0) {
+		return false;
+	}
+
+	var event = document.createEvent("Event");
+	event.initEvent('DropFiles', true, true);
+	document.body.dispatchEvent(event);
+}

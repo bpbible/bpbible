@@ -144,6 +144,7 @@ $(document).ready(function() {
 	$(window).scroll(function() {show_current_reference()});
 	$(window).resize(function() {show_current_reference()});
 	show_current_reference();
+	setup_drag_drop_handler();
 
 /*	var [start, end] = get_current_verse_bounds();
 	scroll_to_current(start);*/

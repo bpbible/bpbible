@@ -14,9 +14,10 @@ class ModuleDropTarget(wx.FileDropTarget):
 	def OnDropFiles(self, x, y, filenames):
 		# use call after, otherwise we cannot go click on our explorer window
 		# until message box is dismissed
-		wx.CallAfter(self.handle_dropped_files, filenames)
+		wx.CallAfter(self.handle_dropped_files, filenames, self.window)
 	
-	def handle_dropped_files(self, filenames):
+	@classmethod
+	def handle_dropped_files(cls, filenames, window):
 		bad_files = []
 		modules = []
 		for filename in filenames:
@@ -57,10 +58,10 @@ class ModuleDropTarget(wx.FileDropTarget):
 
 		else:
 			try:
-				dlg = ModuleInstallDialog(self.window, modules)
+				dlg = ModuleInstallDialog(window, modules)
 				ansa = dlg.ShowModal()
 				if ansa == wx.ID_OK:
-					self.install_modules(modules, dlg.dest_dir)
+					cls.install_modules(modules, dlg.dest_dir)
 
 				dlg.Destroy()
 			except Exception, e:
@@ -71,7 +72,8 @@ class ModuleDropTarget(wx.FileDropTarget):
 					"The error given was:") + "\n" + traceback.format_exc(), 
 					"Error installing modules")
 				
-	def install_modules(self, modules, dest_dir):
+	@staticmethod
+	def install_modules(modules, dest_dir):
 		def callback(progress, text):
 			continuing, skip = p.Update(progress, text)
 			wx.GetApp().Yield()

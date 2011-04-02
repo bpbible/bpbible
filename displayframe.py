@@ -1,6 +1,8 @@
 import re
 import string
 import math
+import json
+import urllib
 
 import wx
 import wx.wc
@@ -157,6 +159,7 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 		self.SetTextZoom(DisplayFrameManager.xulrunner_zoom_level)
 
 		super(DisplayFrame, self).setup()
+		self.add_custom_dom_event_listener('DropFiles', self.on_drop_files_from_javascript)
 
 	def __del__(self):
 		DisplayFrameManager.active_display_frames.remove(self)
@@ -709,6 +712,20 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 		self.SelectAll()
 		self.CopySelection()
 		self.SelectNone()
+
+	def on_drop_files_from_javascript(self):
+		dropped_file_urls = json.loads(self.ExecuteScriptWithResult(
+			'JSON.stringify(dropped_file_urls)'
+		))
+		# The string gets automatically turned into a Unicode by the JSON
+		# reading functionality.  However, it is really UTF-8, so we have to
+		# encode with cp1252 to recover the original UTF-8 string before
+		# decoding it.
+		filenames = [urllib.url2pathname(re.sub('^file:\/+', '', filename)).encode('cp1252').decode('utf8')
+			for filename in dropped_file_urls
+		]
+		from install_manager.install_drop_target import ModuleDropTarget
+		ModuleDropTarget.handle_dropped_files(filenames, guiconfig.mainfrm)
 
 class DisplayFrameXRC(DisplayFrame):
 	def __init__(self):
