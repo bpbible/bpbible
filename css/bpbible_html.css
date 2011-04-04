@@ -178,10 +178,18 @@ a.morph {
 	font-style: italic;
 	-moz-user-select: none;	
 }
-body[strongs_blocked="false"] a.morph:before { content: "(" }
-body[strongs_blocked="false"] a.morph:after { content: ")" }
 
-body[strongs_blocked="true"] span.strongs-block * {
+body[strongs_blocked="false"] a.morph:before,
+body[strongs_blocked="true"][morphology="true"][strongs_numbers="false"] a.morph:before {
+	content: "(";
+}
+
+body[strongs_blocked="false"] a.morph:after,
+body[strongs_blocked="true"][morphology="true"][strongs_numbers="false"] a.morph:after {
+	content: ")";
+}
+
+body[strongs_blocked="true"][strongs_numbers="true"] span.strongs-block * {
 	display: inline;
 	line-height: 1em;
 	text-indent: 0;
@@ -189,20 +197,20 @@ body[strongs_blocked="true"] span.strongs-block * {
 	white-space: nowrap;
 }
 
-body[strongs_blocked="true"] span.strongs * {
+body[strongs_blocked="true"][strongs_numbers="true"] span.strongs * {
 	display: inline;
 }
 
-body[strongs_blocked="true"] span.strongs {
+body[strongs_blocked="true"][strongs_numbers="true"] span.strongs {
 /*	margin: auto;*/
 }
 
-body[strongs_blocked="true"] span.strongs-block:hover {
+body[strongs_blocked="true"][strongs_numbers="true"] span.strongs-block:hover {
 /*	background-color: hsl(240, 50%, 90%);*/
 	background-color: hsl(240, 50%, 93%);
 }
 
-body[strongs_blocked="true"] span.strongs-block {
+body[strongs_blocked="true"][strongs_numbers="true"] span.strongs-block {
 	line-height: 1em;
 	text-indent: 0;	
 
@@ -213,13 +221,13 @@ body[strongs_blocked="true"] span.strongs-block {
 	-moz-padding-end: 2px;*/
 }
 
-body[strongs_blocked="true"] span.strongs-block > *, 
-body[strongs_blocked="true"] span.strongs > * {
+body[strongs_blocked="true"][strongs_numbers="true"] span.strongs-block > *, 
+body[strongs_blocked="true"][strongs_numbers="true"] span.strongs > * {
 	display: table-row-group;
 }
 
-body[strongs_blocked="true"] span.strongs-block, 
-body[strongs_blocked="true"] span.strongs {
+body[strongs_blocked="true"][strongs_numbers="true"] span.strongs-block, 
+body[strongs_blocked="true"][strongs_numbers="true"] span.strongs {
 	display: inline-table;
 	border-spacing: 1px;
 }
@@ -229,7 +237,7 @@ span.strongs {
 	display: none;
 }
 
-body[strongs_blocked="true"] span.strongs {
+body[strongs_blocked="true"][strongs_numbers="true"] span.strongs {
 	width: 100%;
 }
 
@@ -240,7 +248,7 @@ body[strongs_blocked="true"][strongs_numbers="true"] span.strongs > span.strongs
 
 body[strongs_blocked="true"][strongs_numbers="true"] 
 span.strongs > span.strongs_headwords > a.strongs_headword + a.strongs_headword,
-body[strongs_blocked="true"][strongs_numbers="true"] 
+body[strongs_blocked="true"][strongs_numbers="true"][morphology="true"] 
 span.strongs > span.strongs_morph > a.morph + a.morph 
 {
 	padding-left: 0.5em;
@@ -250,17 +258,17 @@ body[strongs_blocked="true"][morphology="true"] span.strongs > span.strongs_morp
 	display: table-footer-group;
 
 }
-body[strongs_blocked="true"] span.strongs > span.strongs_morph > a.morph {
+body[strongs_blocked="true"][strongs_numbers="true"][morphology="true"] span.strongs > span.strongs_morph > a.morph {
 	display: table-cell;
 	font-size: 80%;
 }
 
 /* Below each strong's block, put 1/2em of space */
-body[strongs_blocked="true"] span.strongs-block {
+body[strongs_blocked="true"][strongs_numbers="true"] span.strongs-block {
 	margin: 0 0 0.5em 0
 }
 
-body[morphology="false"] a.morph, body[morphology="false"] span.strongs_morph {
+body[morphology="false"] span.strongs a.morph, body[morphology="false"] span.strongs span.strongs_morph {
 	display: none;
 }
 
