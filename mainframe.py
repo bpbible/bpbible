@@ -468,9 +468,6 @@ class MainFrame(wx.Frame, AuiLayer):
 		
 
 		self.genbooktext = GenBookFrame(self, biblemgr.genbook)
-		# XXX: Why are we reloading a Genbook when the Bible changes?
-		# Is it to change the version of Bible references?
-		self.bible_observers += self.genbooktext.reload
 		self.harmony_frame = HarmonyFrame(self)
 
 		self.bibletext = BibleFrame(self)
