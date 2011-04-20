@@ -108,7 +108,8 @@ if not portable_build:
 	paths_conf = """\
 [BPBiblePaths]
 DataPath = $DATADIR
-IndexPath = $DATADIR/indexes"""
+IndexPath = $DATADIR/indexes
+SwordPath = $DATADIR"""
 	open("%s/paths.ini" % src_dist.dir, "w").write(paths_conf)
 	open("dist/paths.ini", "w").write(paths_conf)
 

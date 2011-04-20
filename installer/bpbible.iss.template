@@ -66,14 +66,16 @@ procedure CurStepChanged(CurStep: TSetupStep);
 var SWORDPath: String;
 begin
 	if CurStep=ssPostInstall then begin
+		// Move the path configuration file into the user directory if it has been installed in the app directory (BPBible 0.4.x and down).
+		if FileExists(ExpandConstant('{app}\sword.conf')) then begin
+			FileCopy(ExpandConstant('{app}\sword.conf'), ExpandConstant('{userappdata}\bpbible\sword.conf'), True);
+		end;
+
 		// Detect The SWORD Project for Windows and set the resources path to include it.
-		if RegQueryStringValue(HKEY_LOCAL_MACHINE, 'SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\sword.exe', 'Path', SWORDPath) then begin
-			SetIniString('Install', 'DataPath', SWORDPath, ExpandConstant('{app}\sword.conf'));
-			SetIniString('Install', 'AugmentPath', ExpandConstant('{app}\resources'), ExpandConstant('{app}\sword.conf'));
-			// MsgBox('The SWORD Project was found in ' + SWORDPath + '.'+#10+'If you extract your modules to there (or use the SWORD Project install manager), then you can use them in BPBible as well as The SWORD Project.' + #10 + 'To make modules functional for BPBible only, extract them to ' + ExpandConstant('{app}\resources') + '.', mbInformation, MB_OK);
-		end else begin
-			SetIniString('Install', 'DataPath', ExpandConstant('{app}\resources'), ExpandConstant('{app}\sword.conf'));
-			// MsgBox('The SWORD Project was not found on your computer.'+#10+#10+'The easiest place to extract your modules to is ' + ExpandConstant('{app}\resources'), mbInformation, MB_OK);
+		if (not FileExists(ExpandConstant('{userappdata}\bpbible\sword.conf'))) and
+			RegQueryStringValue(HKEY_LOCAL_MACHINE, 'SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\sword.exe', 'Path', SWORDPath) then
+		begin
+			SetIniString('Install', 'DataPath', SWORDPath, ExpandConstant('{userappdata}\bpbible\sword.conf'));
 		end;
 	end;
 end;
@@ -92,6 +94,7 @@ Type: files; Name: "{app}\bpbible.exe.log"
 Type: files; Name: "{app}\paths.ini"
 ;SWORD modules path configuration file
 Type: files; Name: "{app}\sword.conf"
+Type: files; Name: "{userappdata}\bpbible\sword.conf"
 ;BPBible data
 Type: files; Name: "{app}\data\data.conf"
 Type: files; Name: "{userappdata}\bpbible\data.conf"
