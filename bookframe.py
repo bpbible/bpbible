@@ -466,7 +466,7 @@ class DictionaryFrame(BookFrame):
 
 		self.dictionary_list = DictionarySelector(self.dictsplitter, book)
 		self.dictionary_list_index = -1
-		self.dictionary_list.item_changed += self.list_item_changed
+		self.dictionary_list.item_changed_observers += self.list_item_changed
 		s = wx.BoxSizer(wx.HORIZONTAL)
 		#s.Add(self.dictionarytext, proportion=1, flag = wx.EXPAND)
 		#s.Add(self.dictionary_list, 0, wx.GROW)

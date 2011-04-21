@@ -200,6 +200,7 @@ class SearchPanel(xrcSearchPanel):
 	def on_list(self, event):
 		item_text = self.verselist.results[event.m_itemIndex]
 		self.versepreview.SetReference(item_text)
+		self.verselist.SetFocus()
 	
 	def search_and_show(self, key="", version=None):
 		self.searchkey.SetValue(key)

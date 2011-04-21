@@ -242,6 +242,7 @@ class DictionarySelector(wx.Panel):
 		self.list = DictionaryList(self, book)
 		self.set_book(book)
 		self.timer = wx.Timer(self)
+		self.item_to_focus_on = None
 		
 		sizer = wx.BoxSizer(wx.VERTICAL)
 		sizer.Add(self.text_entry, 0, wx.GROW)
@@ -252,7 +253,7 @@ class DictionarySelector(wx.Panel):
 		width = 200
 
 		self.SetSizerAndFit(sizer)
-		self.item_changed = ObserverList()
+		self.item_changed_observers = ObserverList()
 		fonts.fonts_changed += self.set_font
 		guiconfig.mainfrm.on_close += lambda:\
 			fonts.fonts_changed.remove(self.set_font)
@@ -268,6 +269,7 @@ class DictionarySelector(wx.Panel):
 		self.Layout()
 		
 	def on_text(self, event):
+		self.item_to_focus_on = self.text_entry
 		self.change_selected_text(is_user_typing=True)
 
 	def change_selected_text(self, is_user_typing=False):
@@ -285,6 +287,7 @@ class DictionarySelector(wx.Panel):
 		self.item_changed()
 
 	def on_list(self, event):
+		self.item_to_focus_on = self.list
 		text = self.list.GetItemText(event.m_itemIndex)
 		self.choose_item(text)
 
@@ -294,6 +297,12 @@ class DictionarySelector(wx.Panel):
 
 		# scroll to the correct entry, and fire off an item_changed
 		wx.CallAfter(self.change_selected_text)
+
+	def item_changed(self):
+		self.item_changed_observers()
+		if self.item_to_focus_on:
+			self.item_to_focus_on.SetFocus()
+			self.item_to_focus_on = None
 
 
 
