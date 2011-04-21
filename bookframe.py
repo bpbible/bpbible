@@ -465,7 +465,8 @@ class DictionaryFrame(BookFrame):
 		
 
 		self.dictionary_list = DictionarySelector(self.dictsplitter, book)
-		self.dictionary_list.item_changed += lambda event=None: self.UpdateUI()
+		self.dictionary_list_index = -1
+		self.dictionary_list.item_changed += self.list_item_changed
 		s = wx.BoxSizer(wx.HORIZONTAL)
 		#s.Add(self.dictionarytext, proportion=1, flag = wx.EXPAND)
 		#s.Add(self.dictionary_list, 0, wx.GROW)
@@ -487,6 +488,12 @@ class DictionaryFrame(BookFrame):
 #		self.dictionary_list = xrc.XRCCTRL(self, 'DictionaryValue')
 		#self.Center()
 	
+	def list_item_changed(self, event=None):
+		# Only force everything to reload if the list index has changed.
+		dictionary_list_index = self.dictionary_list.list.GetFirstSelected()
+		if dictionary_list_index != self.dictionary_list_index:
+			self.dictionary_list_index = dictionary_list_index
+			self.UpdateUI()
 
 	def chapter_move(self, amount):
 		mod = self.book.mod
@@ -523,6 +530,7 @@ class DictionaryFrame(BookFrame):
 	def dictionary_version_changed(self, newversion):
 		freeze_ui = guiutil.FreezeUI(self.dictionary_list)
 		self.dictionary_list.set_book(self.book)
+		self.dictionary_list_index = -1
 	
 	def notify(self, ref, source=None):
 		guiconfig.mainfrm.UpdateDictionaryUI(ref)

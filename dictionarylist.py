@@ -277,7 +277,7 @@ class DictionarySelector(wx.Panel):
 		self.list.choose_item(self.GetValue().upper())
 		self.list.Bind(wx.EVT_LIST_ITEM_SELECTED, self.on_list)
 		if is_user_typing:
-			self.timer.Start(100, oneShot=True)
+			self.timer.Start(200, oneShot=True)
 		else:
 			self.item_changed()
 
