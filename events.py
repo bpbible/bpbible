@@ -8,8 +8,11 @@ sources = (
 	BIBLEFRAME,
 	LINK_CLICKED,
 	SETTINGS_CHANGED,
+	BIBLE_MODULE_CHANGED,
 	RANDOM_VERSE,
 	VERSE_LINK_SELECTED,
+	DISPLAY_TAGS_TOGGLED,
+	EXPAND_CROSS_REFERENCES_TOGGLED,
 	VERSE_MOVE,
 	CHAPTER_MOVE,
 	HARMONY,
@@ -19,7 +22,13 @@ sources = (
 	PASSAGE_TAGGED,
 	HEADER_BAR,
 	COMMENT_DELETED,
-) = range(18)
+) = range(21)
+
+sources_not_to_reload_linked_frames_for = (
+	DISPLAY_TAGS_TOGGLED,
+	EXPAND_CROSS_REFERENCES_TOGGLED,
+	BIBLE_MODULE_CHANGED,
+)
 
 class BibleEvent(object):
 	def __init__(self, ref, settings_changed=False, source=None, ref_to_scroll_to=None):

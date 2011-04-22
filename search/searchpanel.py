@@ -29,7 +29,7 @@ from util.debug import dprint, WARNING, is_debugging
 from gui import virtuallist
 from gui import reference_display_frame
 from gui import fonts
-from events import SEARCH
+import events
 from util.configmgr import config_manager
 from manage_topics_frame import ManageTopicsFrame
 
@@ -401,7 +401,7 @@ class SearchPanel(xrcSearchPanel):
 	def go_to_reference(self, idx):
 		item_text = self.verselist.results[idx]
 		
-		guiconfig.mainfrm.set_bible_ref(item_text, source=SEARCH)
+		guiconfig.mainfrm.set_bible_ref(item_text, source=events.SEARCH)
 			
 	def _post_init(self):
 		self.search_button.SetLabel(_("&Search"))

@@ -19,7 +19,7 @@ import guiconfig
 from gui.menu import MenuItem, Separator
 
 from gui.quickselector import QuickSelector
-from events import BIBLEFRAME, RANDOM_VERSE, VERSE_LINK_SELECTED, HEADER_BAR
+import events
 from copyverses import CopyVerseDialog
 
 from util.configmgr import config_manager
@@ -45,7 +45,7 @@ class BibleFrame(VerseKeyedFrame):
 		super(BibleFrame, self).__init__(self.panel)
 		self.header_bar = header_bar.HeaderBar(self.panel, "Genesis 1")
 		self.header_bar.on_click += lambda chapter: \
-			guiconfig.mainfrm.set_bible_ref(chapter, HEADER_BAR)
+			guiconfig.mainfrm.set_bible_ref(chapter, events.HEADER_BAR)
 		
 		sizer = wx.BoxSizer(wx.VERTICAL)
 		sizer.Add(self.header_bar, 0, wx.GROW)
@@ -229,7 +229,7 @@ class BibleFrame(VerseKeyedFrame):
 	def random_verse(self):
 		randomnum = random.randint(1, 31102)
 		ref = VK("Gen 1:%d" % randomnum).text
-		self.notify(ref, source=RANDOM_VERSE)
+		self.notify(ref, source=events.RANDOM_VERSE)
 
 	def history_go_back(self):
 		if guiconfig.mainfrm.history.can_back():
@@ -239,8 +239,7 @@ class BibleFrame(VerseKeyedFrame):
 		if guiconfig.mainfrm.history.can_forward():
 			guiconfig.mainfrm.move_history(1)
 	
-	def notify(self, reference, source=BIBLEFRAME):
-		#event = BibleEvent(ref=reference, source=source)
+	def notify(self, reference, source=events.BIBLEFRAME):
 		self.observers(reference, source)
  
 	def manage_topics(self):

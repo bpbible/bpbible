@@ -1,7 +1,7 @@
 import wx
 from util.observerlist import ObserverList
 from gui.guiutil import FreezeUI
-from events import HISTORY
+import events
 import guiconfig
 from swlib import pysw
 from util import osutils
@@ -177,7 +177,7 @@ class HistoryTree(wx.TreeCtrl):
 			else:
 				self.history.new_location(history_item.ref)
 
-		guiconfig.mainfrm.set_bible_ref(history_item.ref, source=HISTORY,
+		guiconfig.mainfrm.set_bible_ref(history_item.ref, source=events.HISTORY,
 				ref_to_scroll_to=history_item.ref_to_scroll_to
 			)
 		wx.CallAfter(self.rebuild_tree)

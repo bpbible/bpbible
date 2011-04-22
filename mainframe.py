@@ -53,8 +53,8 @@ from search.searchpanel import (BibleSearchPanel, GenbookSearchPanel,
 from fontchoice import FontChoiceDialog 
 from versecompare import VerseCompareFrame
 from htmlide import HtmlIde
-from events import BibleEvent, SETTINGS_CHANGED, BIBLE_REF_ENTER, HISTORY
-from events import LOADING_SETTINGS, VERSE_TREE
+import events
+from events import BibleEvent
 from history import History, HistoryTree
 from util.configmgr import config_manager
 from install_manager.install_drop_target import ModuleDropTarget
@@ -123,7 +123,7 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.all_observers = ObserverList([
 			lambda:self.bible_observers(
 				BibleEvent(ref=self.currentverse, settings_changed=True,
-				source=SETTINGS_CHANGED)
+				source=events.SETTINGS_CHANGED)
 			),
 
 			lambda:self.dictionarytext.reload(),
@@ -598,7 +598,7 @@ class MainFrame(wx.Frame, AuiLayer):
 		if guiconfig.use_versetree:
 			self.bibleref.on_selected_in_tree += lambda text: \
 			wx.CallAfter(self.set_bible_ref, text, 
-				userInput=True, source=VERSE_TREE)
+				userInput=True, source=events.VERSE_TREE)
 		else:
 			self.bibleref.Bind(wx.EVT_COMBOBOX, self.BibleRefEnter)
 
@@ -679,15 +679,13 @@ class MainFrame(wx.Frame, AuiLayer):
 		reload_util.reboot_section("filtering")
 		reload_util.reboot_section("copying")
 		
-	#def history_moved(self, history_item):
-	#	self.set_bible_ref(history_item.ref, source=HISTORY)
 	def add_history_item(self, event):
-		if event.source != HISTORY:
+		if event.source != events.HISTORY:
 			self.history.new_location(event.ref)
 
 	def move_history(self, direction):
 		history_item = self.history.go(direction)
-		self.set_bible_ref(history_item.ref, ref_to_scroll_to=history_item.ref_to_scroll_to, source=HISTORY)
+		self.set_bible_ref(history_item.ref, ref_to_scroll_to=history_item.ref_to_scroll_to, source=events.HISTORY)
 	
 	def on_html_ide(self, event):
 		ide = HtmlIde(self)
@@ -941,11 +939,11 @@ class MainFrame(wx.Frame, AuiLayer):
 		filter_settings["footnote_ellipsis_level"] = \
 			event.IsChecked() * filterutils.default_ellipsis_level
 
-		self.UpdateBibleUI(settings_changed=True, source=SETTINGS_CHANGED)
+		self.UpdateBibleUI(settings_changed=True, source=events.EXPAND_CROSS_REFERENCES_TOGGLED)
 
 	def toggle_display_tags(self, event):
 		passage_list.settings.display_tags = event.IsChecked()
-		self.UpdateBibleUI(settings_changed=True, source=SETTINGS_CHANGED)
+		self.UpdateBibleUI(settings_changed=True, source=events.DISPLAY_TAGS_TOGGLED)
 
 	"""
 	def toggle_expand_topic_passages(self, event):
@@ -1025,7 +1023,7 @@ class MainFrame(wx.Frame, AuiLayer):
 		dprint(MESSAGE, "Setting initial bibleref")
 		
 		self.set_bible_ref(settings["bibleref"] or "Genesis 1:1", 
-			LOADING_SETTINGS, userInput=False)
+			events.LOADING_SETTINGS, userInput=False)
 		self.UpdateDictionaryUI()
 		self.version_tree.recreate()
 
@@ -1073,7 +1071,7 @@ class MainFrame(wx.Frame, AuiLayer):
 		else:
 			try:
 				self.set_bible_ref(self.bibleref.GetValue(),
-					source=BIBLE_REF_ENTER, userInput=True)
+					source=events.BIBLE_REF_ENTER, userInput=True)
 			except pysw.VerseParsingError, e:
 				wx.MessageBox(str(e), config.name())
 
@@ -1131,7 +1129,7 @@ class MainFrame(wx.Frame, AuiLayer):
 		wx.AboutBox(info)
 
 	def bible_version_changed(self, newversion):
-		self.UpdateBibleUI(settings_changed=True, source=SETTINGS_CHANGED)
+		self.UpdateBibleUI(settings_changed=True, source=events.BIBLE_MODULE_CHANGED)
 	
 	def commentary_version_changed(self, newversion):
 		self.commentarytext.refresh()
@@ -1140,7 +1138,7 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.dictionarytext.UpdateUI(ref)
 
 	def UpdateBibleUI(self, source, settings_changed=False, ref_to_scroll_to=None):
-		if source != HISTORY:
+		if source != events.HISTORY:
 			self.history.before_navigate()
 
 		self.bible_observers(

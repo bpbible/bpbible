@@ -1,7 +1,7 @@
 import wx
 from wx.lib.mixins.listctrl import ListCtrlAutoWidthMixin
 import guiconfig
-from events import TOPIC_LIST
+import events
 from passage_list import (get_primary_passage_list_manager,
 		lookup_passage_entry, PassageList, PassageEntry)
 from xrc.manage_topics_xrc import (xrcManageTopicsFrame,
@@ -549,7 +549,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 
 	def _passage_activated(self, event):
 		passage_entry = self.selected_topic.passages[event.GetIndex()]
-		guiconfig.mainfrm.set_bible_ref(str(passage_entry), source=TOPIC_LIST)
+		guiconfig.mainfrm.set_bible_ref(str(passage_entry), source=events.TOPIC_LIST)
 		guiconfig.mainfrm.Raise()
 
 	def select_passages(self, passages, focused_passage):

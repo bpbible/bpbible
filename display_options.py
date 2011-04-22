@@ -3,7 +3,7 @@ from util.configmgr import config_manager
 from util.observerlist import ObserverList
 from util.i18n import N_
 import guiconfig
-from events import SETTINGS_CHANGED
+import events
 from backend.filterutils import filter_settings, set_headwords_module_from_conf
 
 options = config_manager.add_section("Options")
@@ -116,7 +116,7 @@ display_option_changed_observers = ObserverList()
 
 def display_option_changed(option_name, force_complete_reload):
 	if force_complete_reload:
-		guiconfig.mainfrm.UpdateBibleUI(settings_changed=True, source=SETTINGS_CHANGED)
+		guiconfig.mainfrm.UpdateBibleUI(settings_changed=True, source=events.SETTINGS_CHANGED)
 	else:
 		display_option_changed_observers(option_name)
 

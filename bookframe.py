@@ -18,7 +18,7 @@ from gui.menu import MenuItem, Separator
 from dictionarylist import DictionarySelector
 from gui.quickselector import QuickSelector
 
-from events import SETTINGS_CHANGED, CHAPTER_MOVE, VERSE_MOVE, QUICK_SELECTOR
+import events
 from util.i18n import N_
 
 
@@ -255,7 +255,7 @@ class BookFrame(AUIDisplayFrame):
 		if ansa == wx.OK:
 			ref = self.get_verified(qs.text)
 			if ref:
-				self.notify(ref, source=QUICK_SELECTOR)
+				self.notify(ref, source=events.QUICK_SELECTOR)
 			else:
 				return
 
@@ -275,12 +275,12 @@ class VerseKeyedFrame(BookFrame):
 		vk = VK(self.reference)
 		vk.chapter += number
 		if not vk.Error():
-			self.notify(vk.text, source=CHAPTER_MOVE)
+			self.notify(vk.text, source=events.CHAPTER_MOVE)
 	
 	def verse_move(self, number):
 		vk = VK(self.reference)
 		vk += number
-		self.notify(vk.text, source=VERSE_MOVE)
+		self.notify(vk.text, source=events.VERSE_MOVE)
 	
 	def get_actions(self):
 		actions = super(VerseKeyedFrame, self).get_actions()
@@ -414,7 +414,7 @@ class LinkedFrame(VerseKeyedFrame):
 			if self.aui_pane.IsShown():
 				self.notify(event.ref)
 
-		elif event.settings_changed:
+		elif event.settings_changed and event.source not in events.sources_not_to_reload_linked_frames_for:
 			if self.aui_pane.IsShown():
 				self.refresh()
 			else:
@@ -510,7 +510,7 @@ class DictionaryFrame(BookFrame):
 		#		topics.append(self.mod.getKeyText());
 		mod.increment(amount);
 		ref = to_unicode(mod.getKeyText(), mod)
-		self.notify(ref, source=CHAPTER_MOVE)
+		self.notify(ref, source=events.CHAPTER_MOVE)
 	
 	def update_title(self, shown=None):
 		m = guiconfig.mainfrm

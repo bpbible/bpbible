@@ -26,7 +26,7 @@ from util.debug import dprint, WARNING, TOOLTIP, MESSAGE
 from protocols import protocol_handler
 # XXX: This is just to force the protocol to be registered.
 import gui.passage_tag
-from events import LINK_CLICKED
+import events
 import protocol_handlers
 
 from gui import fonts
@@ -423,7 +423,7 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 		if action == "showRef":
 			if url.getParameterValue("type") == "scripRef":
 				ref = url.getParameterValue("value")
-				guiconfig.mainfrm.set_bible_ref(ref, LINK_CLICKED)
+				guiconfig.mainfrm.set_bible_ref(ref, events.LINK_CLICKED)
 
 	@staticmethod
 	def on_link_clicked_bible(frame, href, url):
@@ -433,7 +433,7 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 		if not host: 
 			return
 
-		guiconfig.mainfrm.set_bible_ref(host, LINK_CLICKED)
+		guiconfig.mainfrm.set_bible_ref(host, events.LINK_CLICKED)
 
 	def on_char(self, event):
 		guiutil.dispatch_keypress(self.get_actions(), event)
