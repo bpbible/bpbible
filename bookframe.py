@@ -494,6 +494,8 @@ class DictionaryFrame(BookFrame):
 		if dictionary_list_index != self.dictionary_list_index:
 			self.dictionary_list_index = dictionary_list_index
 			self.UpdateUI()
+			if self.dictionary_list.item_to_focus_on:
+				self.ForceKillFocus()
 
 	def chapter_move(self, amount):
 		mod = self.book.mod
