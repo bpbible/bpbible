@@ -219,10 +219,10 @@ genbook_template = VerseTemplate(
 )
 
 
-# TODO: do we want this to have tags? I'd guess not
 verse_compare_template = VerseTemplate(
-	u'<glink href="nbible:$internal_reference">'
-	u'<small><sup>$versenumber</sup></small></glink> $text ',
+		u'<a href="nbible:$internal_reference" '
+		u'	style="text-decoration: none; font-size: small; vertical-align: 0.32em; color: hsl(240, 35%, 50%);">'
+		u'		$versenumber</a> $text ',
 	
 	header=u"<p><b>(<a href=\"%s://content/$version\">$version</a>)"
 	u"</b> " % BIBLE_VERSION_PROTOCOL
