@@ -19,7 +19,7 @@ from util import osutils, classproperty
 from util.configmgr import config_manager
 from tooltip import tooltip_settings, TextTooltipConfig, BibleTooltipConfig, TooltipDisplayer
 from gui.menu import MenuItem, Separator
-from gui.htmlbase import convert_language, convert_lgs
+from gui.htmlbase import convert_language
 from gui import guiutil
 import display_options
 from util.debug import dprint, WARNING, TOOLTIP, MESSAGE
@@ -36,10 +36,6 @@ IN_MENU = 2
 IN_BOTH = IN_POPUP | IN_MENU
 
 def process_html_for_module(module, text):
-	# process lgs individually for each block.
-	# this stops lgs flowing on to the next block
-	text = convert_lgs(text, width=30)
-
 	language_code, (font, size, gui) = \
 		fonts.get_font_params(module)
 
@@ -95,7 +91,6 @@ def defer_till_document_loaded(function_to_decorate):
 
 class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 	lg_width = 20
-	do_convert_lgs = True
 	allow_search = True
 
 	def __init__(self, parent, logical_parent=None):

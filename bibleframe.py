@@ -37,7 +37,6 @@ bible_settings.add_item("select_verse_on_click", False, item_type=bool)
 
 class BibleFrame(VerseKeyedFrame):
 	id = N_("Bible")
-	do_convert_lgs = True
 	lg_width = 60
 
 	def __init__(self, parent):
