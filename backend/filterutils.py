@@ -13,7 +13,6 @@ filter_settings.add_item("expand_thml_refs", True, item_type=bool)
 filter_settings.add_item("footnote_ellipsis_level", default_ellipsis_level, 
 	item_type=int)
 filter_settings.add_item("headwords_module", "HeadwordsTransliterated", item_type=str)
-filter_settings.add_item("strongs_colour", "#0000ff")
 
 parser_modes = (
 	NORMAL_PARSER_MODE,

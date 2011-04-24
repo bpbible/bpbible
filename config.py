@@ -169,19 +169,7 @@ BIBLE_VERSION_PROTOCOL = "setbibleversion"
 title_str = "%(verse)s - %(name)s"
 
 # settings
-#search_disappear_on_doubleclick = True
-verse_per_line = False
 use_system_inactive_caption_colour = False
-#
-#use_osis_parser = True
-#use_thml_parser = True
-#
-#expand_thml_refs = True
-#footnote_ellipsis_level = 2
-#
-#strongs_headwords = True
-#strongs_colour = "#0000ff"
-#plain_xrefs = False
 
 
 preverse = '<a name="${osisRef}_start" osisRef="$osisRef"></a>'
