@@ -9,6 +9,7 @@ import re
 from xrc.copyverses_xrc import xrcCopyVerseDialog
 from backend.bibleinterface import biblemgr
 from backend.verse_template import VerseTemplate, Template
+from backend.filterutils import COPY_VERSES_PLAIN_TEXT_PARSER_MODE, NORMAL_PARSER_MODE
 from util import string_util
 
 from wx import stc
@@ -314,13 +315,13 @@ class CopyVerseDialog(xrcCopyVerseDialog):
 
 		#apply template
 		biblemgr.bible.templatelist.append(template)
+		if not self.formatted:
+			biblemgr.parser_mode = COPY_VERSES_PLAIN_TEXT_PARSER_MODE
 		
 		data = biblemgr.bible.GetReference(ref)
 		if data is None:
 			data = config.MODULE_MISSING_STRING()
 
-		data = re.sub("<indent-block-end[^>]*>", "\n", data)
-		
 		if self.formatted:
 			# TODO: make it scan CSS and amalgamate rules?
 			data = data.replace("<span class='WoC'>",
@@ -335,6 +336,7 @@ class CopyVerseDialog(xrcCopyVerseDialog):
 		#restore
 		biblemgr.restore_state()
 		biblemgr.bible.templatelist.pop()
+		biblemgr.parser_mode = NORMAL_PARSER_MODE
 		return data
 	
 

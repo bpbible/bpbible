@@ -514,6 +514,8 @@ class OSISParser(filterutils.ParserBase):
 	def end_l(self, xmltag):
 		if self.in_indent:
 			self.blocklevel_end()			
+			if self.biblemgr.parser_mode == filterutils.COPY_VERSES_PLAIN_TEXT_PARSER_MODE:
+				self.buf += "<br>"
 			self.buf += "</div>"
 			self.in_indent = False
 			

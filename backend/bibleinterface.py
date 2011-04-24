@@ -14,6 +14,7 @@ from util import confparser
 from util.observerlist import ObserverList
 from util.debug import dprint, MESSAGE, WARNING, ERROR
 from backend.filter import MarkupInserter
+from backend.filterutils import NORMAL_PARSER_MODE
 from backend.genbook import GenBook, Harmony
 import config
 
@@ -61,6 +62,8 @@ class BibleInterface(object):
 			self.daily_devotional.category:	self.daily_devotional,
 			self.harmony.category:			self.harmony,
 		}
+
+		self.parser_mode = NORMAL_PARSER_MODE
 	
 	def init_options(self):
 		for option, values in self.get_options():
