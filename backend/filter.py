@@ -55,8 +55,7 @@ def make_thml():
 	items.append(thmlrenderer)
 	thml = SW.PyThMLHTMLHREF(thmlrenderer)
 	thml.thisown = False
-	#thmlrenderer
-	return thml
+	return thmlrenderer, thml
 
 def make_osis():
 	osisrenderer = osisparser.OSISRenderer()
@@ -68,10 +67,10 @@ def make_osis():
 		osis.removeTokenSubstitute("lg")
 		osis.removeTokenSubstitute("/lg")
 	
-	return osis
+	return osisrenderer, osis
  
-osis = make_osis()
-thml = make_thml()
+osisrenderer, osis = make_osis()
+thmlrenderer, thml = make_thml()
 osis2 = SW.OSISHTMLHREF()
 thml2 = SW.ThMLHTMLHREF()
 

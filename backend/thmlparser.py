@@ -82,7 +82,6 @@ class ThMLParser(filterutils.ParserBase):
 		self.buf += headword
 
 	def start_harmonytable(self, xmltag):
-		from backend.bibleinterface import biblemgr
 		references = xmltag.getAttribute('refs').split("|")
 		if not references:
 			return
@@ -99,7 +98,7 @@ class ThMLParser(filterutils.ParserBase):
 		my_internal_dict = self.__dict__.copy()
 		body_row = u"<tr>%s</tr>" % (
 			u"".join(
-				u"<td>%s</td>" % biblemgr.bible.GetReference(reference)
+				u"<td>%s</td>" % self.biblemgr.bible.GetReference(reference)
 				for reference in references
 			))
 		self.__dict__ = my_internal_dict

@@ -209,6 +209,10 @@ def setup(biblemgr):
 	# if we are refreshing biblemgr, then we should load from config
 	set_headwords_module_from_conf(biblemgr)
 
+	from backend import filter
+	filter.osisrenderer.set_biblemgr(biblemgr)
+	filter.thmlrenderer.set_biblemgr(biblemgr)
+
 
 def set_headwords_module_from_conf(biblemgr):
 	preferred = filter_settings["headwords_module"]
