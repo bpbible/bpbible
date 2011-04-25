@@ -145,12 +145,8 @@ class FontChoiceDialog(xrcFontChoiceDialog):
 			return
 
 		try:
-			books = [biblemgr.bible, biblemgr.commentary, 
-				biblemgr.dictionary, biblemgr.genbook,
-				biblemgr.harmony, biblemgr.daily_devotional]
-			frames = guiconfig.mainfrm.frames
-
-			for book, frame in zip(books, frames):
+			for frame in guiconfig.mainfrm.frames:
+				book = frame.book
 				if self.mod.Name() not in book.GetModuleList():
 					continue
 
