@@ -21,7 +21,7 @@ BASE_HTML = '''\
 <head>
 	%(head)s
 </head>
-<body %(bodyattrs)s>
+<body lang="%(lang)s" %(bodyattrs)s>
 	<div id="content" class="%(contentclass)s">
 	%(content)s
 	</div>
