@@ -439,16 +439,17 @@ class FragmentHandler(PageProtocolHandler):
 	upto = 0
 
 	@classmethod
-	def register(cls, text, module):
+	def register(cls, text, module, include_stock_stylesheets):
 		cls.upto += 1
 		k = str(cls.upto)
-		cls.registered[k] = text, module
+		cls.registered[k] = text, module, include_stock_stylesheets
 		return "bpbible://content/fragment/%s" % k
 
 	def _get_document_parts(self, path):
-		text, module = self.registered.pop(path)
+		text, module, include_stock_stylesheets = self.registered.pop(path)
+		stylesheets = self.bible_stylesheets if include_stock_stylesheets else ()
 		return dict(module=module, content=text,
-				stylesheets=self.bible_stylesheets,
+				stylesheets=stylesheets,
 				scripts=self.standard_scripts,
 				bodyattrs=self._get_body_attrs(module))
 

@@ -257,7 +257,7 @@ class CopyVerseDialog(xrcCopyVerseDialog):
 
 		text = self.GetText(ref or self.get_internal_reference())
 		if not self.formatted: text = text.replace("\n", "<br />")
-		self.preview.SetPage(text)
+		self.preview.SetPage(text, include_stock_stylesheets=False)
 
 	def ShowModal(self, text):
 		# set the reference

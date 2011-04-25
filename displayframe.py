@@ -619,11 +619,10 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 	def SelectionToText(self):
 		return self.ExecuteScriptWithResult("window.getSelection();")
 
-	def SetPage(self, page_content):
+	def SetPage(self, page_content, include_stock_stylesheets=True):
 		assert hasattr(self, "mod"), self
 
-		dprint(WARNING, "SetPage", self.__class__, len(page_content))
-		self.OpenURI(protocol_handlers.FragmentHandler.register(page_content, self.mod))
+		self.OpenURI(protocol_handlers.FragmentHandler.register(page_content, self.mod, include_stock_stylesheets))
 
 	def Scroll(self, x, y):
 		return
