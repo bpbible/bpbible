@@ -445,11 +445,13 @@ class OSISParser(filterutils.ParserBase):
 		if not xmltag:
 			clas = " forced_lg"
 
-		self.buf += '<blockquote class="lg" width="0">'
+		if not self.in_copy_verses_mode:
+			self.buf += '<blockquote class="lg" width="0">'
 	
 	def end_lg(self, xmltag):
 		self.in_lg = False
-		self.buf += '</blockquote>'
+		if not self.in_copy_verses_mode:
+			self.buf += '</blockquote>'
 	
 	def write(self, text):
 		if self.u.suspendTextPassThru:
@@ -506,17 +508,14 @@ class OSISParser(filterutils.ParserBase):
 			dprint(WARNING, "Nested indented l's", self.u.key.getText())
 
 		self.in_indent = True
-		self.buf += '<div class="indentedline" width="%d" source="l">' % indent
+		if not self.in_copy_verses_mode:
+			self.buf += '<div class="indentedline" width="%d" source="l">' % indent
 		self.blocklevel_start()
-		#else:
-		#	self.success = SW.INHERITED
 
 	def end_l(self, xmltag):
 		if self.in_indent:
 			self.blocklevel_end()			
-			if self.biblemgr.parser_mode == filterutils.COPY_VERSES_PLAIN_TEXT_PARSER_MODE:
-				self.buf += "<br>"
-			self.buf += "</div>"
+			self.buf += "<br>" if self.in_copy_verses_mode else "</div>"
 			self.in_indent = False
 			
 		else:
@@ -551,6 +550,10 @@ class OSISParser(filterutils.ParserBase):
 			
 		else:
 			self.success = SW.INHERITED
+
+	@property
+	def in_copy_verses_mode(self):
+		return (self.biblemgr.parser_mode == filterutils.COPY_VERSES_PARSER_MODE)
 		
 class OSISRenderer(SW.RenderCallback):
 	def __init__(self):

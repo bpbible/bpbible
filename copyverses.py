@@ -9,14 +9,14 @@ import re
 from xrc.copyverses_xrc import xrcCopyVerseDialog
 from backend.bibleinterface import biblemgr
 from backend.verse_template import VerseTemplate, Template
-from backend.filterutils import COPY_VERSES_PLAIN_TEXT_PARSER_MODE, NORMAL_PARSER_MODE
+from backend.filterutils import COPY_VERSES_PARSER_MODE, NORMAL_PARSER_MODE
 from util import string_util
 
 from wx import stc
 from templatemanager import TemplatePanel, TemplateManager
 import guiconfig
 import config
-from gui import guiutil
+from gui import guiutil, fonts
 from util.configmgr import config_manager
 from swlib import pysw
 from swlib.pysw import GetBestRange
@@ -315,8 +315,7 @@ class CopyVerseDialog(xrcCopyVerseDialog):
 
 		#apply template
 		biblemgr.bible.templatelist.append(template)
-		if not self.formatted:
-			biblemgr.parser_mode = COPY_VERSES_PLAIN_TEXT_PARSER_MODE
+		biblemgr.parser_mode = COPY_VERSES_PARSER_MODE
 		
 		data = biblemgr.bible.GetReference(ref)
 		if data is None:
@@ -328,6 +327,14 @@ class CopyVerseDialog(xrcCopyVerseDialog):
 								"<span style='color: red'>")
 			data = data.replace("<span class='divineName'>",
 								"<span style='font-variant:small-caps'>")
+
+			# Use the font that has been selected for the module.
+			# XXX: We could still use language specific fonts for particular
+			# sections of the text, but I'm not sure it's worth doing.
+			# It would probably only apply to Hebrew and Greek (which we
+			# treat specially) anyway.
+			default, (font, size, in_gui) = fonts.get_module_font_params(biblemgr.bible.mod)
+			data = u"<span style=\"font-family: %s; font-size: %spt;\">%s</span>" % (font, size, data)
 		else:
 			data = string_util.br2nl(data)
 			data = string_util.KillTags(data)

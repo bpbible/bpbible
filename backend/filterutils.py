@@ -16,7 +16,7 @@ filter_settings.add_item("headwords_module", "HeadwordsTransliterated", item_typ
 
 parser_modes = (
 	NORMAL_PARSER_MODE,
-	COPY_VERSES_PLAIN_TEXT_PARSER_MODE,
+	COPY_VERSES_PARSER_MODE,
 ) = range(2)
 
 def return_success(func):
