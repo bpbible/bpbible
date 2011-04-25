@@ -73,6 +73,7 @@ class FontChoiceDialog(xrcFontChoiceDialog):
 		self.update_preview()
 
 	def on_item_choice(self, data, font_details_getter):
+		self.preview.mod = self.mod
 		self.font_details_getter = font_details_getter
 		default, (font, size, use_in_gui) = font_details_getter(data)
 		self.set_font_params(font, size, use_in_gui)
@@ -91,7 +92,6 @@ class FontChoiceDialog(xrcFontChoiceDialog):
 	
 	def on_module_choice(self, data):
 		self.mod = data
-		self.preview.mod = data
 		self.item_section = font_settings["module_fonts"]
 		self.item_to_set = data.Name()
 		
@@ -103,7 +103,6 @@ class FontChoiceDialog(xrcFontChoiceDialog):
 		
 		# set the preview's mod to None, as we don't want any font based on
 		# the module we happen to be preview with
-		self.preview.mod = data
 		
 		self.mod = None
 		books = [biblemgr.bible, biblemgr.commentary, 
@@ -132,7 +131,6 @@ class FontChoiceDialog(xrcFontChoiceDialog):
 	def on_default_choice(self, data=DefaultFont):
 		self.item_section = font_settings
 		self.item_to_set = "default_fonts"
-		self.preview.mod = None
 		self.mod = biblemgr.bible.mod
 		
 		
@@ -142,9 +140,6 @@ class FontChoiceDialog(xrcFontChoiceDialog):
 	
 
 	def update_preview(self):
-		#self.preview.font 
-		# self.preview.SetStandardFonts(self.font_size.Value, 
-		#	self.font_face.StringSelection, "")
 		if self.mod is None:
 			self.preview.SetPage(config.MODULE_MISSING_STRING())
 			return

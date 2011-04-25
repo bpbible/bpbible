@@ -79,16 +79,10 @@ class ModuleTree(FilterableTree):
 
 		item_data = self.tree.GetPyData(item).data
 
-		parent = self.tree.GetItemParent(item)
-		assert parent, "Item hadn't a parent!!!"
-
-		parent_data = self.tree.GetPyData(parent)
-		parent_data = parent_data.data
-
 		if isinstance(item_data, SW.Module):
 			self.on_module_choice(item_data)
 		else:
-			self.on_category_choice(item_data, parent_data)
+			self.on_category_choice(item_data)
 		
 	def recreate(self):
 		self.model = TreeItem("Hidden root")
