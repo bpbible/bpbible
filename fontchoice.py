@@ -189,7 +189,10 @@ class FontChoiceDialog(xrcFontChoiceDialog):
 				)
 				preview_text = u'<span style="font-family: %s; font-size: %spt;">%s</span>' % \
 						(self.font_face.StringSelection, self.font_size.Value, preview_text)
+				item_to_focus_on = wx.Window.FindFocus()
 				self.preview.SetPage(preview_text)
+				self.preview.ForceKillFocus()
+				item_to_focus_on.SetFocus()
 				
 		finally:
 			pass

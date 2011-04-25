@@ -525,6 +525,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 		self._change_selected_passages()
 
 	def _change_selected_passages(self):
+		self.passage_list_ctrl.SetFocus()
 		self.selected_passages = self._find_selected_passages()
 		self._change_passage_details(self.selected_passages)
 
@@ -1208,6 +1209,7 @@ class PassageDetailsPanel(xrcPassageDetailsPanel):
 		self.passage_preview.SetReference(
 				reference, exclude_topic_tag=self.passage.parent
 			)
+		self.passage_preview.ForceKillFocus()
 
 	def _save_passage(self):
 		"""Saves the current passage.
