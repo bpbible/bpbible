@@ -70,7 +70,6 @@ function get_normalized_selection(){
 
 function get_scroll_offset() {
 	return 300;
-	return window.innerHeight;
 }
 
 var reached_top = false;
@@ -120,15 +119,60 @@ function load_below() {
 	if(cnt == 10) d("Didn't work\n");
 }
 
+function remove_excess_page_segments() {
+	var page_segments = $(".page_segment");
+	var start_segment_index = -1;
+	var end_segment_index = -1;
+	var startY = window.scrollY;
+	var endY = window.scrollY + window.innerHeight;
+	for (var index = 0; index < page_segments.length; index++)	{
+		var page_segment = $(page_segments.get(index));
+		var segment_top = page_segment.offset().top;
+		var segment_bottom = segment_top + page_segment.attr('offsetHeight');
+		var is_on_screen = (segment_top < endY && segment_bottom > startY);
+		if (is_on_screen)	{
+			if (start_segment_index == -1)	{
+				start_segment_index = index;
+			}
+			end_segment_index = index;
+		}
+	}
+
+	var MIN_SEGMENTS_TO_LEAVE = 2;
+	var MIN_PIXELS_TO_LEAVE = 800;
+	for (index = page_segments.length - 1; index > end_segment_index + MIN_SEGMENTS_TO_LEAVE; index--)	{
+		page_segment = $(page_segments.get(index));
+		segment_top = page_segment.offset().top;
+		segment_bottom = segment_top + page_segment.attr('offsetHeight');
+		if (page_segment.offset().top > endY + MIN_PIXELS_TO_LEAVE)	{
+			page_segment.remove();
+		} else {
+			break;
+		}
+	}
+
+	var deleted_items_height = 0;
+	for (index = start_segment_index - MIN_SEGMENTS_TO_LEAVE - 1; index >= 0; index--)	{
+		var page_segment = $(page_segments.get(index));
+		var segment_bottom = page_segment.offset().top + page_segment.attr('offsetHeight');
+		if (segment_bottom < startY - MIN_PIXELS_TO_LEAVE)	{
+			deleted_items_height += page_segment.attr('offsetHeight');
+			page_segment.remove();
+		}
+	}
+
+	if (deleted_items_height > 0)	{
+		window.scrollTo(window.scrollX, startY - deleted_items_height);
+	}
+}
+
 var reentrancy_check = false;
 function ensure_sufficient_content() {
-//	dump("Ensure sufficient content being called\n");
 	var ref =  $("#content").children()[0];
 	var ref_height = $(ref).offset().top;
-//	dump(window.scrollY + "\n");
 	// We may be called re-entrantly if it is scrolling while we add content,
 	// for example. This is very bad to allow (we can load one chapter more
-	// than once
+	// than once).
 	if(reentrancy_check) return;
 	reentrancy_check = true;
 	if(document.body.getAttribute("columns") == "true")
@@ -145,6 +189,7 @@ function ensure_sufficient_content() {
 	// are the other way around...
 	load_below();
 	load_above();
+	remove_excess_page_segments();
 	
 	reentrancy_check = false;	
 }
