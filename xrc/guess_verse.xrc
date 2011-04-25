@@ -5,13 +5,23 @@
       <object class="wxBoxSizer">
         <orient>wxVERTICAL</orient>
         <object class="sizeritem">
-          <object class="wxWebControl" name="reference_frame" subclass="gui.reference_display_frame.PlainReferenceDisplayFrame">
-            <size>400,300</size>
+          <object class="wxPanel">
+            <object class="wxBoxSizer">
+              <orient>wxHORIZONTAL</orient>
+              <object class="sizeritem">
+                <object class="wxWebControl" name="reference_frame" subclass="gui.reference_display_frame.PlainReferenceDisplayFrame">
+                </object>
+                <option>1</option>
+                <flag>wxEXPAND|wxGROW</flag>
+                <border>6</border>
+              </object>
+            </object>
             <style>wxSUNKEN_BORDER</style>
           </object>
           <option>1</option>
-          <flag>wxTOP|wxLEFT|wxRIGHT|wxGROW</flag>
+          <flag>wxALL|wxGROW</flag>
           <border>6</border>
+          <minsize>350,200</minsize>
         </object>
         <object class="sizeritem">
           <object class="wxBoxSizer">
