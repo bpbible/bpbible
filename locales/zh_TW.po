@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2011-03-02 23:45+AUS Eastern Daylight Time\n"
+"POT-Creation-Date: 2011-04-25 12:05+AUS Eastern Standard Time\n"
 "PO-Revision-Date: 2009-04-02 12:28+0800\n"
 "Last-Translator: Paulos <paulos@yahoo.cn>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -66,20 +66,20 @@ msgstr "章節數"
 msgid "The text of the heading"
 msgstr "正文標題"
 
-#: backend/book.py:721
+#: backend/book.py:719
 msgid ""
 "Couldn't save cipher key. You will have to set it again when you restart"
 msgstr "保存密鑰出錯，你需要重起BPBible後重新設置"
 
-#: backend/book.py:767
+#: backend/book.py:765
 msgid "commentary"
 msgstr "聖經注釋"
 
-#: backend/book.py:781 bibleframe.py:39 xrc/auifrm_xrc.py:72
+#: backend/book.py:779 bibleframe.py:39 xrc/auifrm_xrc.py:72
 msgid "Bible"
 msgstr "聖經"
 
-#: backend/dictionary.py:306
+#: backend/dictionary.py:327
 msgid "daily devotional"
 msgstr ""
 
@@ -173,15 +173,15 @@ msgstr "標記選中的經文"
 msgid "Copying selected verses..."
 msgstr "複製選中經文..."
 
-#: bibleframe.py:272
+#: bibleframe.py:271
 msgid "Topic management is currently not available due to an error."
 msgstr ""
 
-#: bibleframe.py:273
+#: bibleframe.py:272
 msgid "Error in Topic Management"
 msgstr ""
 
-#: bookframe.py:142 mainframe.py:862
+#: bookframe.py:142 mainframe.py:858
 msgid "Show the %s pane"
 msgstr "顯示%s"
 
@@ -272,11 +272,18 @@ msgid ""
 "BPBible</a>.</p>\n"
 msgstr ""
 
-#: copyverses.py:94 xrc/copyverses_xrc.py:78
+#: config.py:140
+msgid ""
+"<h4>This harmony requires a Bible installed</h4>\n"
+"<p>In order for this harmony to work, you need to have a Bible installed.</"
+"p>\n"
+msgstr ""
+
+#: copyverses.py:95 xrc/copyverses_xrc.py:78
 msgid "Edit Template..."
 msgstr "編輯模板"
 
-#: copyverses.py:148
+#: copyverses.py:149
 msgid "<custom: based on %s>"
 msgstr "<自定義:基於 %s>"
 
@@ -362,41 +369,41 @@ msgstr "原文"
 msgid "Pronunciation"
 msgstr "發音"
 
-#: displayframe.py:254 protocols.py:150
+#: displayframe.py:269 protocols.py:150
 msgid "Don't know how to open this morphology type:"
 msgstr "無法打開morphology類型："
 
-#: displayframe.py:264 protocols.py:160
+#: displayframe.py:279 protocols.py:160
 msgid ""
 "Module %s is not installed, so you cannot view details for this "
 "morphological code"
 msgstr "模塊%s未安裝,所以你不能夠查看morphological code詳細"
 
-#: displayframe.py:433
+#: displayframe.py:448
 msgid "Select all"
 msgstr "選擇所有"
 
-#: displayframe.py:435
+#: displayframe.py:450
 msgid "Select all the text in the frame"
 msgstr "選擇窗口中所有文本"
 
-#: displayframe.py:485
+#: displayframe.py:500
 msgid "the selected word"
 msgstr "選中的詞"
 
-#: displayframe.py:491
+#: displayframe.py:506
 msgid "the selected phrase"
 msgstr "選中的詞組"
 
-#: displayframe.py:504
+#: displayframe.py:519
 msgid "Look up %s in the dictionary"
 msgstr "在字典中查找%s"
 
-#: displayframe.py:525
+#: displayframe.py:540
 msgid "Search for %s in the Bible"
 msgstr "在聖經中查找%s"
 
-#: displayframe.py:527
+#: displayframe.py:542
 msgid "Search for %s in this book"
 msgstr "在本電子書中查找%s"
 
@@ -484,14 +491,14 @@ msgstr "%s 不在四福音合參中"
 msgid "%s verses"
 msgstr "%s 經節"
 
-#: install_manager/install_drop_target.py:33
-#: install_manager/install_drop_target.py:56 module_manager.py:121
-#: module_manager.py:125 search/searchpanel.py:806 templatemanager.py:439
+#: install_manager/install_drop_target.py:34
+#: install_manager/install_drop_target.py:57 module_manager.py:121
+#: module_manager.py:125 search/searchpanel.py:808 templatemanager.py:439
 #: templatemanager.py:452
 msgid "Error"
 msgstr "錯誤"
 
-#: install_manager/install_drop_target.py:38
+#: install_manager/install_drop_target.py:39
 msgid ""
 "An error occurred while trying to read books. Please report this issue:\n"
 " 1. Press Ctrl-C to copy the error text\n"
@@ -505,19 +512,19 @@ msgstr ""
 "3.在打開的網站中點擊 New Issue,然後把詳情填入\n"
 "錯誤信息是："
 
-#: install_manager/install_drop_target.py:45
+#: install_manager/install_drop_target.py:46
 msgid "Error reading books"
 msgstr "讀取錯誤"
 
-#: install_manager/install_drop_target.py:51
+#: install_manager/install_drop_target.py:52
 msgid "The following files do not appear to be installable books:"
 msgstr "您提供的不是電子書格式的文件，不能安裝"
 
-#: install_manager/install_drop_target.py:53
+#: install_manager/install_drop_target.py:54
 msgid "The following file does not appear to be an installable book:"
 msgstr "您提供的不是電子書格式的文件，不能安裝"
 
-#: install_manager/install_drop_target.py:68
+#: install_manager/install_drop_target.py:69
 msgid ""
 "An error occurred while installing modules.\n"
 "Please make sure that the directory exists, and that you have permission to "
@@ -528,11 +535,11 @@ msgstr ""
 "請確認目錄是否存在，和是否有目錄的寫權限.\n"
 "錯誤信息如下："
 
-#: install_manager/install_drop_target.py:81
+#: install_manager/install_drop_target.py:83
 msgid "Extracting %s"
 msgstr "解壓%s"
 
-#: install_manager/install_drop_target.py:82 search/searchpanel.py:962
+#: install_manager/install_drop_target.py:84 search/searchpanel.py:964
 msgid "Preparing"
 msgstr "準備中"
 
@@ -632,75 +639,75 @@ msgstr "縮放"
 msgid "History toolbar"
 msgstr "歷史工具欄"
 
-#: mainframe.py:712
+#: mainframe.py:708
 msgid "Installable books"
 msgstr "可安裝的電子書"
 
-#: mainframe.py:715 versecompare.py:206
+#: mainframe.py:711 versecompare.py:206
 msgid "Choose books"
 msgstr "選擇電子書"
 
-#: mainframe.py:785 xrc/auifrm_xrc.py:44
+#: mainframe.py:781 xrc/auifrm_xrc.py:44
 msgid "&Language"
 msgstr "&語言"
 
-#: mainframe.py:788 xrc/auifrm_xrc.py:45
+#: mainframe.py:784 xrc/auifrm_xrc.py:45
 msgid "&Bible book names"
 msgstr ""
 
-#: mainframe.py:820 xrc/auifrm_xrc.py:49
+#: mainframe.py:816 xrc/auifrm_xrc.py:49
 msgid "&Display"
 msgstr "&顯示"
 
-#: mainframe.py:825 xrc/auifrm_xrc.py:52
+#: mainframe.py:821 xrc/auifrm_xrc.py:52
 msgid "&Windows"
 msgstr "&窗口"
 
-#: mainframe.py:830 xrc/auifrm_xrc.py:51
+#: mainframe.py:826 xrc/auifrm_xrc.py:51
 msgid "Toolbars"
 msgstr "工具欄"
 
-#: mainframe.py:858
+#: mainframe.py:854
 msgid "Show the %s toolbar"
 msgstr "顯示%s工具欄"
 
-#: mainframe.py:879 xrc/auifrm_xrc.py:53
+#: mainframe.py:875 xrc/auifrm_xrc.py:53
 msgid "Debug"
 msgstr "調試"
 
-#: mainframe.py:911
+#: mainframe.py:907
 msgid "Expand cross-references"
 msgstr "打開cross-references"
 
-#: mainframe.py:912
+#: mainframe.py:908
 msgid "Display cross references partially expanded"
 msgstr "展開cross references"
 
-#: mainframe.py:917
+#: mainframe.py:913
 msgid "Topic Tags"
 msgstr "主題標簽"
 
-#: mainframe.py:918
+#: mainframe.py:914
 msgid "Display the topics that each verse is tagged with."
 msgstr "顯示經文打標簽的主題"
 
-#: mainframe.py:1037
+#: mainframe.py:1033
 msgid "BPBible will now quickly restart to change your language."
 msgstr "BPBible將快速的切換到您設置的語言"
 
-#: mainframe.py:1038
+#: mainframe.py:1034
 msgid "Restarting"
 msgstr "重起"
 
-#: mainframe.py:1057
+#: mainframe.py:1053
 msgid "An error occurred on closing:"
 msgstr "關閉的時候發生錯誤"
 
-#: mainframe.py:1069 mainframe.py:1070
+#: mainframe.py:1065 mainframe.py:1066
 msgid "search "
 msgstr "搜索"
 
-#: mainframe.py:1094
+#: mainframe.py:1090
 #, fuzzy
 msgid ""
 "Flexible Bible study software.\n"
@@ -714,37 +721,38 @@ msgstr ""
 "\t\t\tBuilt Using the Sword Project from crosswire.org\n"
 "\t\t\tPython Version: %(sysversion)s\n"
 "\t\t\twxPython Version: %(wxversion)s\n"
-"\t\t\tSWORD Version: %(swversion)s"
+"\t\t\tSWORD Version: %(swversion)s\n"
+"\t\t\tXULRunner Version: %(xulrunner_version)s"
 
-#: mainframe.py:1106
+#: mainframe.py:1102
 msgid "BPBible website"
 msgstr "BPBible 網站"
 
-#: mainframe.py:1108
+#: mainframe.py:1104
 msgid "BPBible development team"
 msgstr "BPBible 開發團隊"
 
-#: mainframe.py:1109
+#: mainframe.py:1105
 msgid "SWORD library developers"
 msgstr "SWORD library 開發人員"
 
-#: mainframe.py:1113
+#: mainframe.py:1109
 msgid "Developers"
 msgstr "開發人員"
 
-#: mainframe.py:1114
+#: mainframe.py:1110
 msgid "Artists"
 msgstr "美術"
 
-#: mainframe.py:1115
+#: mainframe.py:1111
 msgid "Translators"
 msgstr "翻譯"
 
-#: mainframe.py:1117
+#: mainframe.py:1113
 msgid "translator-credits"
 msgstr "translator-credits"
 
-#: mainframe.py:1121
+#: mainframe.py:1117
 msgid ""
 "Icons used are from famfamfam\n"
 "http://www.famfamfam.com/lab/icons/silk\n"
@@ -756,7 +764,7 @@ msgstr ""
 "and the Tango Desktop Project\n"
 "http://tango.freedesktop.org/Tango_Desktop_Project"
 
-#: mainframe.py:1127
+#: mainframe.py:1123
 msgid ""
 "BPBible is licensed under the GPL v2. For more details, refer to the LICENSE."
 "txt file in the application directory"
@@ -955,11 +963,11 @@ msgstr ""
 msgid "Find Book..."
 msgstr "查找電子書..."
 
-#: module_tree.py:137
+#: module_tree.py:136
 msgid "Show information for %s"
 msgstr "查看%s的詳細信息"
 
-#: moduleinfo.py:6
+#: moduleinfo.py:7
 msgid "Book Information"
 msgstr "電子書詳情"
 
@@ -975,7 +983,7 @@ msgstr "讀取電子書..."
 msgid "Path manager"
 msgstr "路徑管理"
 
-#: preview_window.py:11 search/searchpanel.py:885 search/searchpanel.py:919
+#: preview_window.py:11 search/searchpanel.py:887 search/searchpanel.py:921
 #: xrc/copyverses_xrc.py:79 xrc/templatemanager_xrc.py:97
 msgid "Preview"
 msgstr "預覽"
@@ -992,15 +1000,15 @@ msgstr "提示工具"
 msgid "Show this in a tooltip"
 msgstr "在提示工具中顯示"
 
-#: protocol_handlers.py:284
+#: protocol_handlers.py:275
 msgid "You are at the start of this book."
 msgstr ""
 
-#: protocol_handlers.py:285
+#: protocol_handlers.py:276
 msgid "You are at the end of this book."
 msgstr ""
 
-#: protocol_handlers.py:371
+#: protocol_handlers.py:353
 msgid "Click here to unlock this book"
 msgstr ""
 
@@ -1057,155 +1065,155 @@ msgstr "錯誤編碼：無法顯示搜索結果"
 msgid "Could not understand string"
 msgstr "字符串無效"
 
-#: search/searchpanel.py:267 search/searchpanel.py:574
-#: search/searchpanel.py:751 search/searchpanel.py:770
-#: search/searchpanel.py:848 search/searchpanel.py:864
-#: search/searchpanel.py:902
+#: search/searchpanel.py:269 search/searchpanel.py:576
+#: search/searchpanel.py:753 search/searchpanel.py:772
+#: search/searchpanel.py:850 search/searchpanel.py:866
+#: search/searchpanel.py:904
 msgid "%d references found"
 msgstr "找到%d個相關項"
 
-#: search/searchpanel.py:293 xrc/search_xrc.py:142
+#: search/searchpanel.py:295 xrc/search_xrc.py:142
 msgid "&Index"
 msgstr "&索引"
 
-#: search/searchpanel.py:296
+#: search/searchpanel.py:298
 msgid "Unindex"
 msgstr "刪除索引"
 
-#: search/searchpanel.py:318
+#: search/searchpanel.py:320
 msgid "You don't have a current %s, so you cannot search at the moment"
 msgstr "沒有本類%s，無法執行搜索"
 
-#: search/searchpanel.py:325 search/searchpanel.py:362
+#: search/searchpanel.py:327 search/searchpanel.py:364
 msgid "No current version"
 msgstr "沒有當前版本"
 
-#: search/searchpanel.py:336
+#: search/searchpanel.py:338
 msgid "Reading search index..."
 msgstr "讀取搜索索引...."
 
-#: search/searchpanel.py:368
+#: search/searchpanel.py:370
 msgid ""
 "Search index does not exist for book %s. Indexing will make search much "
 "faster. Create Index?"
 msgstr "%s的索引未建，有索引搜索速度會更快，要建索引嗎?"
 
-#: search/searchpanel.py:371
+#: search/searchpanel.py:373
 msgid "Create Index?"
 msgstr "建索引？"
 
-#: search/searchpanel.py:405 search/searchpanel.py:606
-#: search/searchpanel.py:878 search/searchpanel.py:912 xrc/search_xrc.py:140
+#: search/searchpanel.py:407 search/searchpanel.py:608
+#: search/searchpanel.py:880 search/searchpanel.py:914 xrc/search_xrc.py:140
 msgid "&Search"
 msgstr "&搜索"
 
-#: search/searchpanel.py:431 xrc/search_xrc.py:143 xrc/search_xrc.py:158
+#: search/searchpanel.py:433 xrc/search_xrc.py:143 xrc/search_xrc.py:158
 msgid "Search Options"
 msgstr "搜索選項"
 
-#: search/searchpanel.py:570
+#: search/searchpanel.py:572
 msgid "&Stop"
 msgstr "&停止"
 
-#: search/searchpanel.py:643 search/searchpanel.py:718
+#: search/searchpanel.py:645 search/searchpanel.py:720
 msgid "Error in search"
 msgstr "搜索發生錯誤"
 
-#: search/searchpanel.py:648 search/searchpanel.py:723
+#: search/searchpanel.py:650 search/searchpanel.py:725
 msgid "The following words were not found in this %s:"
 msgstr "在%s中找不到您要找的:"
 
-#: search/searchpanel.py:651 search/searchpanel.py:726
+#: search/searchpanel.py:653 search/searchpanel.py:728
 msgid "Unknown word"
 msgstr "未知的詞"
 
-#: search/searchpanel.py:753 search/searchpanel.py:773
-#: search/searchpanel.py:850 search/searchpanel.py:868
+#: search/searchpanel.py:755 search/searchpanel.py:775
+#: search/searchpanel.py:852 search/searchpanel.py:870
 msgid "1 word"
 msgstr "1 個詞"
 
-#: search/searchpanel.py:754 search/searchpanel.py:774
-#: search/searchpanel.py:851 search/searchpanel.py:869
+#: search/searchpanel.py:756 search/searchpanel.py:776
+#: search/searchpanel.py:853 search/searchpanel.py:871
 msgid "%d words"
 msgstr "%d 個詞"
 
-#: search/searchpanel.py:757 search/searchpanel.py:779
+#: search/searchpanel.py:759 search/searchpanel.py:781
 msgid "%d hits"
 msgstr "%d 匹配"
 
-#: search/searchpanel.py:769 search/searchpanel.py:863
-#: search/searchpanel.py:901
+#: search/searchpanel.py:771 search/searchpanel.py:865
+#: search/searchpanel.py:903
 msgid "1 reference found"
 msgstr "找到一個相關項"
 
-#: search/searchpanel.py:778
+#: search/searchpanel.py:780
 msgid "1 hit"
 msgstr "找到1個"
 
-#: search/searchpanel.py:805
+#: search/searchpanel.py:807
 msgid "You cannot search on fields in unindexed search"
 msgstr "不能在未索引處搜索"
 
-#: search/searchpanel.py:885 search/searchpanel.py:919
+#: search/searchpanel.py:887 search/searchpanel.py:921
 msgid "Reference"
 msgstr "相關項"
 
-#: search/searchpanel.py:898
+#: search/searchpanel.py:900
 msgid "%(version)s search - %(numresults)s"
 msgstr "%(version)s search - %(numresults)s"
 
-#: search/searchpanel.py:958
+#: search/searchpanel.py:960
 msgid "Processing %s"
 msgstr "處理%s"
 
-#: search/searchpanel.py:962
+#: search/searchpanel.py:964
 msgid "Indexing %s"
 msgstr "正在為%s建立索引..."
 
-#: search/searchpanel.py:994
+#: search/searchpanel.py:996
 msgid "Writing %s"
 msgstr "寫入完成%s"
 
-#: search/searchpanel.py:1152
+#: search/searchpanel.py:1154
 msgid "Other Book Search"
 msgstr "其它電子書搜索"
 
-#: search/searchpanel.py:1197
+#: search/searchpanel.py:1199
 msgid "Entries"
 msgstr "Entries"
 
-#: search/searchpanel.py:1204
+#: search/searchpanel.py:1206
 #, fuzzy
 msgid "Harmony Search"
 msgstr "四福音合參"
 
-#: search/searchpanel.py:1211
+#: search/searchpanel.py:1213
 msgid "Dictionary Search"
 msgstr "字典搜索"
 
-#: search/searchpanel.py:1252
+#: search/searchpanel.py:1254
 #, fuzzy
 msgid "Daily Devotional Search"
 msgstr "字典搜索"
 
-#: search/searchpanel.py:1259
+#: search/searchpanel.py:1261
 msgid "Commentary Search"
 msgstr "聖經注釋搜索"
 
-#: swlib/pysw.py:119 swlib/pysw.py:658
+#: swlib/pysw.py:118 swlib/pysw.py:657
 msgid "There are only %(chapters)d chapters in %(book)s (given %(given)d)"
 msgstr "%(book)s (只提供 %(given)d)%(chapters)d 章"
 
-#: swlib/pysw.py:137 swlib/pysw.py:669
+#: swlib/pysw.py:136 swlib/pysw.py:668
 msgid ""
 "There are only %(verses)d verses in %(book)s %(chapter)s (given %(given)d)"
 msgstr "只有 %(verses)d 節經文在 %(book)s %(chapter)s (提供 %(given)d)"
 
-#: swlib/pysw.py:843 swlib/pysw.py:1667
+#: swlib/pysw.py:842 swlib/pysw.py:1668
 msgid "Invalid Reference: %s"
 msgstr "無效參考書目：%s"
 
-#: swlib/pysw.py:1655
+#: swlib/pysw.py:1656
 msgid "Invalid empty reference"
 msgstr "無效的空參考書目"
 
@@ -1234,53 +1242,53 @@ msgstr "覆蓋？"
 msgid "Template name is already in use. Try a different name."
 msgstr "已有本模板名，請用其它名字"
 
-#: tooltip.py:268
+#: tooltip.py:288
 msgid "Anchor"
 msgstr "Anchor"
 
-#: tooltip.py:269
+#: tooltip.py:289
 msgid "Don't hide this tooltip"
 msgstr "打開工具提示"
 
-#: tooltip.py:272
+#: tooltip.py:292
 msgid "Copy All"
 msgstr "複製所有"
 
-#: tooltip.py:273
+#: tooltip.py:293
 msgid "Copy tooltip text (with links)"
 msgstr "複製工具提示(和鏈接)"
 
-#: tooltip.py:338
+#: tooltip.py:358
 msgid "Tooltip"
 msgstr "工具提示"
 
-#: tooltip.py:533 tooltip.py:683
+#: tooltip.py:553 tooltip.py:703
 msgid "Sticky Tooltip"
 msgstr "提示工具"
 
-#: tooltip.py:599 tooltip.py:601
+#: tooltip.py:619 tooltip.py:621
 msgid "Stay on top"
 msgstr "總在最上"
 
-#: tooltip.py:730
+#: tooltip.py:750
 msgid "Find"
 msgstr "查找"
 
-#: tooltip.py:732
+#: tooltip.py:752
 msgid "Search for this strong's number in the Bible"
 msgstr "在聖經中查找這個strong's編號"
 
-#: tooltip.py:747
+#: tooltip.py:767
 msgid ""
 "Module %s is not installed, so you cannot view details for this strong's "
 "number"
 msgstr "模塊%s未安裝,所以你不能夠查看strong's number詳細"
 
-#: tooltip.py:809
+#: tooltip.py:829
 msgid "Go to verses"
 msgstr "到這節"
 
-#: tooltip.py:811
+#: tooltip.py:831
 msgid "Open this reference"
 msgstr "打開本參考書目"
 

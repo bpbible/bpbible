@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2011-03-02 23:45+AUS Eastern Daylight Time\n"
+"POT-Creation-Date: 2011-04-25 12:05+AUS Eastern Standard Time\n"
 "PO-Revision-Date: 2010-11-09 09:15+0545\n"
 "Last-Translator: Tim\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -66,20 +66,20 @@ msgstr "पुस्तकमा भएको अध्यायको संख
 msgid "The text of the heading"
 msgstr "शीर्षक"
 
-#: backend/book.py:721
+#: backend/book.py:719
 msgid ""
 "Couldn't save cipher key. You will have to set it again when you restart"
 msgstr "'सिफर' सूचकलाई सञ्‍चित गर्न सकिएन, कृपया फेरि चलाउँदा यसलाई मिलाउनुहोस्।"
 
-#: backend/book.py:767
+#: backend/book.py:765
 msgid "commentary"
 msgstr "टिप्पणी"
 
-#: backend/book.py:781 bibleframe.py:39 xrc/auifrm_xrc.py:72
+#: backend/book.py:779 bibleframe.py:39 xrc/auifrm_xrc.py:72
 msgid "Bible"
 msgstr "बाइबल"
 
-#: backend/dictionary.py:306
+#: backend/dictionary.py:327
 msgid "daily devotional"
 msgstr ""
 
@@ -169,15 +169,15 @@ msgstr "भर्खरै छानिएका पदहरूमा यसल
 msgid "Copying selected verses..."
 msgstr "छानिएका पदहरूको नकल गरिदैँ..."
 
-#: bibleframe.py:272
+#: bibleframe.py:271
 msgid "Topic management is currently not available due to an error."
 msgstr "गलत निर्देशनका कारण शिर्षक व्यवस्थापन अहिले उपलब्ध हुन सकेन।"
 
-#: bibleframe.py:273
+#: bibleframe.py:272
 msgid "Error in Topic Management"
 msgstr "विषय व्यवस्थापनमा खराबी"
 
-#: bookframe.py:142 mainframe.py:862
+#: bookframe.py:142 mainframe.py:858
 msgid "Show the %s pane"
 msgstr "%s फलक देखाउनुहोस्"
 
@@ -269,11 +269,18 @@ msgid ""
 "BPBible</a>.</p>\n"
 msgstr ""
 
-#: copyverses.py:94 xrc/copyverses_xrc.py:78
+#: config.py:140
+msgid ""
+"<h4>This harmony requires a Bible installed</h4>\n"
+"<p>In order for this harmony to work, you need to have a Bible installed.</"
+"p>\n"
+msgstr ""
+
+#: copyverses.py:95 xrc/copyverses_xrc.py:78
 msgid "Edit Template..."
 msgstr "टेमप्लेट संपादन..."
 
-#: copyverses.py:148
+#: copyverses.py:149
 msgid "<custom: based on %s>"
 msgstr "<कस्टम: %s मा आधारित छ>"
 
@@ -355,11 +362,11 @@ msgstr "मौलिक भाषा"
 msgid "Pronunciation"
 msgstr "उच्चारण"
 
-#: displayframe.py:254 protocols.py:150
+#: displayframe.py:269 protocols.py:150
 msgid "Don't know how to open this morphology type:"
 msgstr "यस स्वरूपका शब्दहरू खोल्न जानिएन:"
 
-#: displayframe.py:264 protocols.py:160
+#: displayframe.py:279 protocols.py:160
 msgid ""
 "Module %s is not installed, so you cannot view details for this "
 "morphological code"
@@ -367,31 +374,31 @@ msgstr ""
 "यसको नमूना %s लागू गरिएको छैन, त्यसकारण तपाईं यस स्वरूपका शब्द सूचकहरूको विस्तृत व्याख्या "
 "हेर्न सक्‍नु हुन्‍न"
 
-#: displayframe.py:433
+#: displayframe.py:448
 msgid "Select all"
 msgstr "सबै छान्‍नुहोस्"
 
-#: displayframe.py:435
+#: displayframe.py:450
 msgid "Select all the text in the frame"
 msgstr "फ्रेममा भएका सबै वाक्यहरुलाई छान्‍नुहोस्"
 
-#: displayframe.py:485
+#: displayframe.py:500
 msgid "the selected word"
 msgstr "छानिएको शब्द"
 
-#: displayframe.py:491
+#: displayframe.py:506
 msgid "the selected phrase"
 msgstr "छानिएको वाक्यांश"
 
-#: displayframe.py:504
+#: displayframe.py:519
 msgid "Look up %s in the dictionary"
 msgstr "शब्दकोशमा %s का लागि हेर्नोस्"
 
-#: displayframe.py:525
+#: displayframe.py:540
 msgid "Search for %s in the Bible"
 msgstr "%s बाइबलमा खोज्नुहोस्"
 
-#: displayframe.py:527
+#: displayframe.py:542
 msgid "Search for %s in this book"
 msgstr "%s पुस्तकमा खोज्‍नुहोस्"
 
@@ -477,14 +484,14 @@ msgstr "%s यस मिलापमा छैन"
 msgid "%s verses"
 msgstr "%s पदहरू"
 
-#: install_manager/install_drop_target.py:33
-#: install_manager/install_drop_target.py:56 module_manager.py:121
-#: module_manager.py:125 search/searchpanel.py:806 templatemanager.py:439
+#: install_manager/install_drop_target.py:34
+#: install_manager/install_drop_target.py:57 module_manager.py:121
+#: module_manager.py:125 search/searchpanel.py:808 templatemanager.py:439
 #: templatemanager.py:452
 msgid "Error"
 msgstr "गल्ती (खराबी)"
 
-#: install_manager/install_drop_target.py:38
+#: install_manager/install_drop_target.py:39
 msgid ""
 "An error occurred while trying to read books. Please report this issue:\n"
 " 1. Press Ctrl-C to copy the error text\n"
@@ -498,19 +505,19 @@ msgstr ""
 "३. त्यो वेबसाइट जहाँ क्लिक New Issue भन्‍ने खुल्छ, र त्यसमा विवरणहरू भर्नुहोस्\n"
 " दिइएको गल्ती थियो:  "
 
-#: install_manager/install_drop_target.py:45
+#: install_manager/install_drop_target.py:46
 msgid "Error reading books"
 msgstr "पुस्तकहरू गल्ती पढ्दै"
 
-#: install_manager/install_drop_target.py:51
+#: install_manager/install_drop_target.py:52
 msgid "The following files do not appear to be installable books:"
 msgstr "निम्न फाइलहरू स्थापित हुने पुस्तकहरू जस्तो देखिँदैनन्:"
 
-#: install_manager/install_drop_target.py:53
+#: install_manager/install_drop_target.py:54
 msgid "The following file does not appear to be an installable book:"
 msgstr "निम्न फाइल स्थापित हुने पुस्तक जस्तो देखिँदैन:"
 
-#: install_manager/install_drop_target.py:68
+#: install_manager/install_drop_target.py:69
 msgid ""
 "An error occurred while installing modules.\n"
 "Please make sure that the directory exists, and that you have permission to "
@@ -522,11 +529,11 @@ msgstr ""
 "भनेर पक्‍का गर्नहोस्।\n"
 "देखाइएको गल्ती थियो:"
 
-#: install_manager/install_drop_target.py:81
+#: install_manager/install_drop_target.py:83
 msgid "Extracting %s"
 msgstr "%s निकालिँदै"
 
-#: install_manager/install_drop_target.py:82 search/searchpanel.py:962
+#: install_manager/install_drop_target.py:84 search/searchpanel.py:964
 msgid "Preparing"
 msgstr "तैयारी गर्दै"
 
@@ -626,75 +633,75 @@ msgstr "जूम"
 msgid "History toolbar"
 msgstr "इतिहास उपकरण पट्टि"
 
-#: mainframe.py:712
+#: mainframe.py:708
 msgid "Installable books"
 msgstr "स्थापित (प्रयोग) हुने पुस्तकहरू"
 
-#: mainframe.py:715 versecompare.py:206
+#: mainframe.py:711 versecompare.py:206
 msgid "Choose books"
 msgstr "किताबहरू चुन्‍नुहोस्"
 
-#: mainframe.py:785 xrc/auifrm_xrc.py:44
+#: mainframe.py:781 xrc/auifrm_xrc.py:44
 msgid "&Language"
 msgstr "&भाषा"
 
-#: mainframe.py:788 xrc/auifrm_xrc.py:45
+#: mainframe.py:784 xrc/auifrm_xrc.py:45
 msgid "&Bible book names"
 msgstr "&बाइबल किताबको नामहरू"
 
-#: mainframe.py:820 xrc/auifrm_xrc.py:49
+#: mainframe.py:816 xrc/auifrm_xrc.py:49
 msgid "&Display"
 msgstr "&देखाउनुहोस् (प्रदर्शन)"
 
-#: mainframe.py:825 xrc/auifrm_xrc.py:52
+#: mainframe.py:821 xrc/auifrm_xrc.py:52
 msgid "&Windows"
 msgstr "&झ्यालहरू"
 
-#: mainframe.py:830 xrc/auifrm_xrc.py:51
+#: mainframe.py:826 xrc/auifrm_xrc.py:51
 msgid "Toolbars"
 msgstr "उपकरण पट्टिहरू"
 
-#: mainframe.py:858
+#: mainframe.py:854
 msgid "Show the %s toolbar"
 msgstr "%s उपकरण पट्टि देखाउनुहोस्"
 
-#: mainframe.py:879 xrc/auifrm_xrc.py:53
+#: mainframe.py:875 xrc/auifrm_xrc.py:53
 msgid "Debug"
 msgstr "सच्‍चाउनु"
 
-#: mainframe.py:911
+#: mainframe.py:907
 msgid "Expand cross-references"
 msgstr "अन्तर संदर्भहरू विस्तार गर्नुहोस्"
 
-#: mainframe.py:912
+#: mainframe.py:908
 msgid "Display cross references partially expanded"
 msgstr "अन्तर संदर्भहरू आंशिक रूपमा ठूलो पारिएको देखाउनुहोस्"
 
-#: mainframe.py:917
+#: mainframe.py:913
 msgid "Topic Tags"
 msgstr "विषय ट्याग (तोकिएको विषय)"
 
-#: mainframe.py:918
+#: mainframe.py:914
 msgid "Display the topics that each verse is tagged with."
 msgstr "हरेक पद तोकिएको विषयहरू देखाउनुहोस्।"
 
-#: mainframe.py:1037
+#: mainframe.py:1033
 msgid "BPBible will now quickly restart to change your language."
 msgstr "तपाईंको भाषा बदल्नलाई बि पि बाइबल अब छिटै पूर्ण शुरु हुँदैछ।"
 
-#: mainframe.py:1038
+#: mainframe.py:1034
 msgid "Restarting"
 msgstr "पूर्ण शुरू हुँदै"
 
-#: mainframe.py:1057
+#: mainframe.py:1053
 msgid "An error occurred on closing:"
 msgstr "बन्द गर्न खोज्दा गल्ती हुनगएको छ:"
 
-#: mainframe.py:1069 mainframe.py:1070
+#: mainframe.py:1065 mainframe.py:1066
 msgid "search "
 msgstr "खोजी"
 
-#: mainframe.py:1094
+#: mainframe.py:1090
 #, fuzzy
 msgid ""
 "Flexible Bible study software.\n"
@@ -708,37 +715,38 @@ msgstr ""
 "\t\t\tcrosswire.org बाट स्वर्ड परियोजना उपयोग गरेर बनाएको\n"
 "\t\t\tपाइथोन संस्करण: %(sysversion)s\n"
 "\t\t\twxपाइथोन संस्करण: %(wxversion)s\n"
-"\t\t\tSWORD संस्करण: %(swversion)s"
+"\t\t\tSWORD संस्करण: %(swversion)s\n"
+"\t\t\tXULRunner संस्करण: %(xulrunner_version)s"
 
-#: mainframe.py:1106
+#: mainframe.py:1102
 msgid "BPBible website"
 msgstr "बि पि बाइबल वेबसाइट"
 
-#: mainframe.py:1108
+#: mainframe.py:1104
 msgid "BPBible development team"
 msgstr "बि पि बाइबल निर्माण समुह"
 
-#: mainframe.py:1109
+#: mainframe.py:1105
 msgid "SWORD library developers"
 msgstr "स्वर्ड पुस्तकालय निर्माणकर्ताहरू"
 
-#: mainframe.py:1113
+#: mainframe.py:1109
 msgid "Developers"
 msgstr "निर्माणकर्ताहरू"
 
-#: mainframe.py:1114
+#: mainframe.py:1110
 msgid "Artists"
 msgstr "कलाकारहरू"
 
-#: mainframe.py:1115
+#: mainframe.py:1111
 msgid "Translators"
 msgstr "अनुवादकहरू"
 
-#: mainframe.py:1117
+#: mainframe.py:1113
 msgid "translator-credits"
 msgstr "अनुवादक-श्रेय"
 
-#: mainframe.py:1121
+#: mainframe.py:1117
 msgid ""
 "Icons used are from famfamfam\n"
 "http://www.famfamfam.com/lab/icons/silk\n"
@@ -750,7 +758,7 @@ msgstr ""
 "र टैंगो डेस्कटाँप परियोजना\n"
 "http://tango.freedesktop.org/Tango_Desktop_Project"
 
-#: mainframe.py:1127
+#: mainframe.py:1123
 msgid ""
 "BPBible is licensed under the GPL v2. For more details, refer to the LICENSE."
 "txt file in the application directory"
@@ -948,11 +956,11 @@ msgstr ""
 msgid "Find Book..."
 msgstr "किताब खोज्नुहोस्.."
 
-#: module_tree.py:137
+#: module_tree.py:136
 msgid "Show information for %s"
 msgstr "%s को लागि जानकारी देखाउनुहोस्"
 
-#: moduleinfo.py:6
+#: moduleinfo.py:7
 msgid "Book Information"
 msgstr "किताबको जानकारी"
 
@@ -968,7 +976,7 @@ msgstr "पुस्तकहरू रीडिङ्ग हुँदै..."
 msgid "Path manager"
 msgstr "बाटो व्यवस्थापक"
 
-#: preview_window.py:11 search/searchpanel.py:885 search/searchpanel.py:919
+#: preview_window.py:11 search/searchpanel.py:887 search/searchpanel.py:921
 #: xrc/copyverses_xrc.py:79 xrc/templatemanager_xrc.py:97
 msgid "Preview"
 msgstr "पूर्वदृश्‍य"
@@ -985,15 +993,15 @@ msgstr "टूलटिपमा देखाउनुहोस्"
 msgid "Show this in a tooltip"
 msgstr "यसलाई टूलटिपमा देखाउनुहोस्"
 
-#: protocol_handlers.py:284
+#: protocol_handlers.py:275
 msgid "You are at the start of this book."
 msgstr ""
 
-#: protocol_handlers.py:285
+#: protocol_handlers.py:276
 msgid "You are at the end of this book."
 msgstr ""
 
-#: protocol_handlers.py:371
+#: protocol_handlers.py:353
 msgid "Click here to unlock this book"
 msgstr ""
 
@@ -1051,34 +1059,34 @@ msgstr "अमान्य एनकोडिङ्ग: खोजी कार�
 msgid "Could not understand string"
 msgstr "सार बुझ्न सकिएन"
 
-#: search/searchpanel.py:267 search/searchpanel.py:574
-#: search/searchpanel.py:751 search/searchpanel.py:770
-#: search/searchpanel.py:848 search/searchpanel.py:864
-#: search/searchpanel.py:902
+#: search/searchpanel.py:269 search/searchpanel.py:576
+#: search/searchpanel.py:753 search/searchpanel.py:772
+#: search/searchpanel.py:850 search/searchpanel.py:866
+#: search/searchpanel.py:904
 msgid "%d references found"
 msgstr "%d संदर्भहरू भेटियो"
 
-#: search/searchpanel.py:293 xrc/search_xrc.py:142
+#: search/searchpanel.py:295 xrc/search_xrc.py:142
 msgid "&Index"
 msgstr "&सूची"
 
-#: search/searchpanel.py:296
+#: search/searchpanel.py:298
 msgid "Unindex"
 msgstr "सूचीकृत नगरिएको"
 
-#: search/searchpanel.py:318
+#: search/searchpanel.py:320
 msgid "You don't have a current %s, so you cannot search at the moment"
 msgstr "तपाईंसित अहिले %s छैन, त्यसकारण तपाईं त्‍तकाल खोज्‍न सक्‍नुहुन्‍न"
 
-#: search/searchpanel.py:325 search/searchpanel.py:362
+#: search/searchpanel.py:327 search/searchpanel.py:364
 msgid "No current version"
 msgstr "वर्तमान संस्करण छैन"
 
-#: search/searchpanel.py:336
+#: search/searchpanel.py:338
 msgid "Reading search index..."
 msgstr "खोज सूची रीडिङ्ग हुँदै..."
 
-#: search/searchpanel.py:368
+#: search/searchpanel.py:370
 msgid ""
 "Search index does not exist for book %s. Indexing will make search much "
 "faster. Create Index?"
@@ -1086,124 +1094,124 @@ msgstr ""
 "खोज सूची %s पुस्तकका लागि रहेको छैन। सूचीकृत गर्नाले खोज कार्यलाई छीटो बनाउँछ। सूची "
 "बनाउने हो?"
 
-#: search/searchpanel.py:371
+#: search/searchpanel.py:373
 msgid "Create Index?"
 msgstr "सूची बनाउन चाहनुहुन्छ?"
 
-#: search/searchpanel.py:405 search/searchpanel.py:606
-#: search/searchpanel.py:878 search/searchpanel.py:912 xrc/search_xrc.py:140
+#: search/searchpanel.py:407 search/searchpanel.py:608
+#: search/searchpanel.py:880 search/searchpanel.py:914 xrc/search_xrc.py:140
 msgid "&Search"
 msgstr "&खोजी"
 
-#: search/searchpanel.py:431 xrc/search_xrc.py:143 xrc/search_xrc.py:158
+#: search/searchpanel.py:433 xrc/search_xrc.py:143 xrc/search_xrc.py:158
 msgid "Search Options"
 msgstr "विकल्पहरूको खोजी"
 
-#: search/searchpanel.py:570
+#: search/searchpanel.py:572
 msgid "&Stop"
 msgstr "&रोक्‍नुहोस्"
 
-#: search/searchpanel.py:643 search/searchpanel.py:718
+#: search/searchpanel.py:645 search/searchpanel.py:720
 msgid "Error in search"
 msgstr "खोजी कार्यमा गल्ती"
 
-#: search/searchpanel.py:648 search/searchpanel.py:723
+#: search/searchpanel.py:650 search/searchpanel.py:725
 msgid "The following words were not found in this %s:"
 msgstr "%s मा दिइएका शब्दहरू भेटिएन:"
 
-#: search/searchpanel.py:651 search/searchpanel.py:726
+#: search/searchpanel.py:653 search/searchpanel.py:728
 msgid "Unknown word"
 msgstr "थाहा नभएको शब्द"
 
-#: search/searchpanel.py:753 search/searchpanel.py:773
-#: search/searchpanel.py:850 search/searchpanel.py:868
+#: search/searchpanel.py:755 search/searchpanel.py:775
+#: search/searchpanel.py:852 search/searchpanel.py:870
 msgid "1 word"
 msgstr "१ शब्द"
 
-#: search/searchpanel.py:754 search/searchpanel.py:774
-#: search/searchpanel.py:851 search/searchpanel.py:869
+#: search/searchpanel.py:756 search/searchpanel.py:776
+#: search/searchpanel.py:853 search/searchpanel.py:871
 msgid "%d words"
 msgstr "%d शब्दहरू"
 
-#: search/searchpanel.py:757 search/searchpanel.py:779
+#: search/searchpanel.py:759 search/searchpanel.py:781
 msgid "%d hits"
 msgstr "%d थिचिएको पटक"
 
-#: search/searchpanel.py:769 search/searchpanel.py:863
-#: search/searchpanel.py:901
+#: search/searchpanel.py:771 search/searchpanel.py:865
+#: search/searchpanel.py:903
 msgid "1 reference found"
 msgstr "१ संदर्भ प्राप्‍त भयो"
 
-#: search/searchpanel.py:778
+#: search/searchpanel.py:780
 msgid "1 hit"
 msgstr "१ पटक थिचिएको"
 
-#: search/searchpanel.py:805
+#: search/searchpanel.py:807
 msgid "You cannot search on fields in unindexed search"
 msgstr "सूचीबद्ध नगरिएको कुरा तपाईं यस क्षेत्रमा खोज्‍न सक्‍नुहुन्‍न"
 
-#: search/searchpanel.py:885 search/searchpanel.py:919
+#: search/searchpanel.py:887 search/searchpanel.py:921
 msgid "Reference"
 msgstr "संदर्भ"
 
-#: search/searchpanel.py:898
+#: search/searchpanel.py:900
 msgid "%(version)s search - %(numresults)s"
 msgstr "%(version)s खोजी - %(numresults)s"
 
-#: search/searchpanel.py:958
+#: search/searchpanel.py:960
 msgid "Processing %s"
 msgstr "काम गर्दै %s"
 
-#: search/searchpanel.py:962
+#: search/searchpanel.py:964
 msgid "Indexing %s"
 msgstr "सूचीबद्ध गर्दै %s"
 
-#: search/searchpanel.py:994
+#: search/searchpanel.py:996
 msgid "Writing %s"
 msgstr "लेख्दै %s"
 
-#: search/searchpanel.py:1152
+#: search/searchpanel.py:1154
 msgid "Other Book Search"
 msgstr "अरू किताबको खोज"
 
-#: search/searchpanel.py:1197
+#: search/searchpanel.py:1199
 msgid "Entries"
 msgstr "अभिलेखहरू"
 
-#: search/searchpanel.py:1204
+#: search/searchpanel.py:1206
 #, fuzzy
 msgid "Harmony Search"
 msgstr "मिलाप (उस्तै)"
 
-#: search/searchpanel.py:1211
+#: search/searchpanel.py:1213
 msgid "Dictionary Search"
 msgstr "शब्दकोशको खोज"
 
-#: search/searchpanel.py:1252
+#: search/searchpanel.py:1254
 #, fuzzy
 msgid "Daily Devotional Search"
 msgstr "शब्दकोशको खोज"
 
-#: search/searchpanel.py:1259
+#: search/searchpanel.py:1261
 msgid "Commentary Search"
 msgstr "टिप्पणी खोज"
 
-#: swlib/pysw.py:119 swlib/pysw.py:658
+#: swlib/pysw.py:118 swlib/pysw.py:657
 msgid "There are only %(chapters)d chapters in %(book)s (given %(given)d)"
 msgstr ""
 "तोकिएको पुस्तक %(book)s मा % (chapters)d अध्यायहरू मात्रै (given %(given)d) छन्"
 
-#: swlib/pysw.py:137 swlib/pysw.py:669
+#: swlib/pysw.py:136 swlib/pysw.py:668
 msgid ""
 "There are only %(verses)d verses in %(book)s %(chapter)s (given %(given)d)"
 msgstr ""
 "त्यहाँ मात्र %(verses)d पदहरु भित्र %(book)s %(chapter)s (given %(given)d) छन्"
 
-#: swlib/pysw.py:843 swlib/pysw.py:1667
+#: swlib/pysw.py:842 swlib/pysw.py:1668
 msgid "Invalid Reference: %s"
 msgstr "अनाधिकृत संदर्भ: %s"
 
-#: swlib/pysw.py:1655
+#: swlib/pysw.py:1656
 msgid "Invalid empty reference"
 msgstr "अनाधिकृत रित्तो संदर्भ"
 
@@ -1231,53 +1239,53 @@ msgstr "मेटाएर लेख्ने हो?"
 msgid "Template name is already in use. Try a different name."
 msgstr "टेम्पलेट नाम प्रयोग गरिसकिएको छ। अर्को नाम प्रयास गर्नु होला।"
 
-#: tooltip.py:268
+#: tooltip.py:288
 msgid "Anchor"
 msgstr "लङ्गर (अङ्कुस)"
 
-#: tooltip.py:269
+#: tooltip.py:289
 msgid "Don't hide this tooltip"
 msgstr "यो टूलटिप नलुकाउनुहोस्"
 
-#: tooltip.py:272
+#: tooltip.py:292
 msgid "Copy All"
 msgstr "सबै सार्नुहोस्"
 
-#: tooltip.py:273
+#: tooltip.py:293
 msgid "Copy tooltip text (with links)"
 msgstr "टूलटिप भएका वाक्यहरू (लिङ्कहरूसँग) सार्नुहोस्"
 
-#: tooltip.py:338
+#: tooltip.py:358
 msgid "Tooltip"
 msgstr "टूलटिप"
 
-#: tooltip.py:533 tooltip.py:683
+#: tooltip.py:553 tooltip.py:703
 msgid "Sticky Tooltip"
 msgstr "जोडिएर आउने टूलटिप"
 
-#: tooltip.py:599 tooltip.py:601
+#: tooltip.py:619 tooltip.py:621
 msgid "Stay on top"
 msgstr "शिर्षमा रहने"
 
-#: tooltip.py:730
+#: tooltip.py:750
 msgid "Find"
 msgstr "पत्ता लगाउने"
 
-#: tooltip.py:732
+#: tooltip.py:752
 msgid "Search for this strong's number in the Bible"
 msgstr "बाइबल भित्र यो स्ट्रोङ्गको अङ्कको खोजी गर्नुहोस्"
 
-#: tooltip.py:747
+#: tooltip.py:767
 msgid ""
 "Module %s is not installed, so you cannot view details for this strong's "
 "number"
 msgstr "माँड्‌यूल %s स्थापना भएको छैन, त्यसैले तपाईं यस स्ट्रोङ्गको अङ्कको विवरण हेर्न सक्‍नुहुन्‍न"
 
-#: tooltip.py:809
+#: tooltip.py:829
 msgid "Go to verses"
 msgstr "पदहरूमा जानुहोस्"
 
-#: tooltip.py:811
+#: tooltip.py:831
 msgid "Open this reference"
 msgstr "यो संदर्भ खोल्नुहोस्"
 
