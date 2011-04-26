@@ -187,7 +187,7 @@ def find_passage_study_url(href):
 		print "Unhandled bpbible link", href
 		return
 
-	return p, SW.URL(p.replace(":", '%3A'))
+	return p, SW.URL(p.replace(":", '%3A').replace(' ', '%20').replace('/', '%2F'))
 
 protocol_handler.register_handler("bpbible", on_bpbible_click)
 protocol_handler.register_hover("bpbible", on_bpbible_hover)
