@@ -115,19 +115,8 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.currentverse = ""
 		self.zoomlevel = 0
 
-		self.bible_observers = ObserverList([
-			lambda event: self.bibletext.SetReference(event.ref, ref_to_scroll_to=event.ref_to_scroll_to, settings_changed=event.settings_changed),
-			self.set_title
-		])
-
-		self.all_observers = ObserverList([
-			lambda:self.bible_observers(
-				BibleEvent(ref=self.currentverse, settings_changed=True,
-				source=events.SETTINGS_CHANGED)
-			),
-
-			lambda:self.dictionarytext.reload(),
-		])
+		self.bible_observers = ObserverList()
+		self.bible_observers += self.set_title
 
 		biblemgr.bible.observers += self.bible_version_changed
 		biblemgr.commentary.observers += self.commentary_version_changed
@@ -1141,7 +1130,7 @@ class MainFrame(wx.Frame, AuiLayer):
 		if source != events.HISTORY:
 			self.history.before_navigate()
 
-		self.bible_observers(
+		self.bibletext.HandleBibleEvent(
 			BibleEvent(
 				ref=self.currentverse,
 				settings_changed=settings_changed,
@@ -1151,7 +1140,9 @@ class MainFrame(wx.Frame, AuiLayer):
 		)
 	
 	def refresh_all_pages(self):
-		self.all_observers()
+		self.UpdateBibleUI(events.SETTINGS_CHANGED, settings_changed=True)
+		self.dictionarytext.reload()
+		self.genbooktext.reload()
 	
 	def set_title(self, event):
 		self.SetTitle(config.title_str % dict(name=config.name(), 

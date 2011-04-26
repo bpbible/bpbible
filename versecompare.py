@@ -59,7 +59,7 @@ class VerseCompareFrame(LinkedFrame):
 		self.SetBook(book)
 		#verse_comparison_settings["comparison_modules"] = book.GetModuleList()
 	
-	def SetReference(self, ref, context="", reload=False):
+	def SetReference(self, ref, reload=False):
 		last_reference = verse_comparison_settings["reference"]
 		if VerseList(last_reference).VerseInRange(ref):
 			ref = last_reference
@@ -75,16 +75,16 @@ class VerseCompareFrame(LinkedFrame):
 		][verse_comparison_settings["parallel"]]
 
 		
-		self.SetPage(text_func(ref, context))
+		self.SetPage(text_func(ref))
 
 		self.gui_reference.SetValue(pysw.GetBestRange(ref, userOutput=True))
 		self.gui_reference.currentverse = ref
 		self.update_title()
 	
 
-	def get_parallel_text(self, ref, context):		
+	def get_parallel_text(self, ref):
 		vk = SW.VerseKey()
-		verselist = vk.ParseVerseList(to_str(ref), to_str(context), True)
+		verselist = vk.ParseVerseList(to_str(ref), "", True)
 		
 		items = []
 		text = ["<table border=1 valign=TOP>", "<tr>"]
@@ -156,7 +156,7 @@ class VerseCompareFrame(LinkedFrame):
 
 		return ''.join(text)
 	
-	def get_compare_text(self, ref, context):
+	def get_compare_text(self, ref):
 		text = ""
 		mod = self.book.mod
 		

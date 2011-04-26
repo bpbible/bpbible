@@ -45,6 +45,7 @@ class BibleFrame(VerseKeyedFrame):
 		self.header_bar = header_bar.HeaderBar(self.panel, "Genesis 1")
 		self.header_bar.on_click += lambda chapter: \
 			guiconfig.mainfrm.set_bible_ref(chapter, events.HEADER_BAR)
+		self.last_bible_event = None
 		
 		sizer = wx.BoxSizer(wx.VERTICAL)
 		sizer.Add(self.header_bar, 0, wx.GROW)
@@ -58,6 +59,10 @@ class BibleFrame(VerseKeyedFrame):
 		self.observers = ObserverList()
 		super(BibleFrame, self).setup()
 		self.add_custom_dom_event_listener('ChangeChapter', self.current_chapter_changed)
+
+	def DomContentLoaded(self, event):
+		super(BibleFrame, self).DomContentLoaded(event)
+		self.NewReferenceLoaded()
 	
 	def get_window(self):
 		return self.panel
@@ -322,9 +327,19 @@ class BibleFrame(VerseKeyedFrame):
 		""" % json.dumps(osis_refs))
 
 		return json.loads(osis_refs_on_screen)
+
+	def HandleBibleEvent(self, event):
+		self.last_bible_event = event
+		self.SetReference(event.ref, event.ref_to_scroll_to, event.settings_changed)
+
+	def NewReferenceLoaded(self):
+		"""Only reload all the dependent frames when the Bible window has actually loaded."""
+		if self.last_bible_event:
+			guiconfig.mainfrm.bible_observers(self.last_bible_event)
+			self.last_bible_event = None
 	
 	@guiutil.frozen
-	def SetReference(self, ref, context=None, ref_to_scroll_to=None, settings_changed=False):
+	def SetReference(self, ref, ref_to_scroll_to=None, settings_changed=False):
 		"""Sets reference. This is set up to be an observer of the main frame,
 		so don't call internally. To set verse reference, use notify"""
 		self.reference = GetVerseStr(ref)
@@ -342,9 +357,12 @@ class BibleFrame(VerseKeyedFrame):
 				has_selected_new_verse = self.ExecuteScriptWithResult('select_new_verse("%s")' % ref)
 				has_selected_new_verse = (has_selected_new_verse == "true")
 
-		if not has_selected_new_verse:
+		if has_selected_new_verse:
+			self.NewReferenceLoaded()
+		else:
 			self.OpenURIForCurrentBook("bpbible://content/page/%s/%s" % (self.book.version, self.reference))
 
+		# XXX: Move this?
 		chapter = GetBookChapter(self.reference)
 		self.header_bar.set_current_chapter(
 			pysw.internal_to_user(chapter), chapter

@@ -96,7 +96,7 @@ class GenBookFrame(BookFrame):
 			self.genbooktree.tree.DeleteChildren(self.genbooktree.tree.RootItem)
 			self.genbooktree.value = None
 
-	def SetReference(self, ref, context="", settings_changed=False):
+	def SetReference(self, ref, settings_changed=False):
 		if isinstance(ref, TK):
 			ref = TK(ref)
 		self.reference = ref
@@ -278,7 +278,7 @@ class HarmonyFrame(GenBookFrame):
 			else:
 				self.settings_changed = True
 
-	def SetVerseReference(self, ref, context="", settings_changed=False):
+	def SetVerseReference(self, ref, settings_changed=False):
 		genbook_key = self.book.find_reference(ref)
 		found_reference = (genbook_key is not None)
 		if found_reference:
@@ -287,13 +287,13 @@ class HarmonyFrame(GenBookFrame):
 
 		return found_reference
 
-	def SetReference(self, ref, context="", settings_changed=False):
+	def SetReference(self, ref, settings_changed=False):
 		if biblemgr.bible.mod is None:
 			self.reference = ref
 			self.SetPage(config.HARMONY_UNSUPPORTED_MESSAGE())
 			return
 
-		super(HarmonyFrame, self).SetReference(ref, context, settings_changed)
+		super(HarmonyFrame, self).SetReference(ref, settings_changed)
 
 	def refresh(self):
 		self.SetReference(self.reference)

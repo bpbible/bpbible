@@ -63,7 +63,7 @@ class BookFrame(AUIDisplayFrame):
 
 
 	@guiutil.frozen
-	def SetReference(self, ref, context="", settings_changed=False):
+	def SetReference(self, ref, settings_changed=False):
 		self.reference = ref
 		self.OpenURIForCurrentBook("bpbible://content/page/%s/%s" % (self.book.version, self.reference))
 
@@ -209,6 +209,9 @@ class BookFrame(AUIDisplayFrame):
 		self.update_title(shown)
 		
 	def update_title(self, shown=None):
+		if not self.reference:
+			return
+
 		m = guiconfig.mainfrm
 		p = m.get_pane_for_frame(self)
 		version = self.book.version
@@ -433,7 +436,7 @@ class CommentaryFrame(LinkedFrame):
 		super(CommentaryFrame, self).__init__(parent)
 		self.SetBook(book)
 
-	def SetReference(self, ref, context = None, settings_changed=False):
+	def SetReference(self, ref, settings_changed=False):
 		if self.book.is_personal_commentary:
 			self.reference = ref
 			self.SetPage(config.PERSONAL_COMMENTARY_UNSUPPORTED_MESSAGE())
@@ -546,7 +549,7 @@ class DictionaryFrame(BookFrame):
 		self.SetReference(ref)
 
 	@guiutil.frozen
-	def SetReference(self, ref, context="", settings_changed=False):
+	def SetReference(self, ref, settings_changed=False):
 		if not ref:
 			# Initially, we start with no reference.
 			# Since this causes an exception in the protocol handler,
