@@ -220,9 +220,8 @@ class TooltipBaseMixin(object):
 			return True
 
 		from manage_topics_frame import ManageTopicsFrame
-		from harmony.harmonyframe import HarmonyFrame
 		from guess_verse import GuessVerseFrame
-		window_types_to_ignore = (ManageTopicsFrame, HarmonyFrame, GuessVerseFrame)
+		window_types_to_ignore = (ManageTopicsFrame, GuessVerseFrame)
 
 		focused_window = wx.Window.FindFocus()
 		if not focused_window:
