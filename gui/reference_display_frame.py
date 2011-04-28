@@ -22,8 +22,10 @@ class ReferenceDisplayFrame(DisplayFrameXRC):
 		
 		The additional arguments are passed to Bible.GetReference().
 		"""
+		old_reference = self.reference
 		self.reference = reference
-		self._RefreshUI(*args, **kwargs)
+		if self.reference or old_reference:
+			self._RefreshUI(*args, **kwargs)
 
 	def RefreshUI(self, event):
 		if not event.settings_changed:
