@@ -92,6 +92,7 @@ def defer_till_document_loaded(function_to_decorate):
 class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 	lg_width = 20
 	allow_search = True
+	HAS_STARTUP_COMPLETED = False
 
 	def __init__(self, parent, logical_parent=None):
 		super(DisplayFrame, self).__init__(parent)
@@ -100,6 +101,10 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 		self.handle_links = True
 
 	def DomContentLoaded(self, event):
+		if not DisplayFrame.HAS_STARTUP_COMPLETED:
+			DisplayFrame.HAS_STARTUP_COMPLETED = True
+			wx.CallAfter(guiconfig.mainfrm.SetCursor, wx.StockCursor(wx.CURSOR_ARROW))
+
 		document = self.GetDOMDocument()
 		for event_name, (handler, event_id) in self.custom_dom_event_listeners.iteritems():
 			document.AddEventListener(event_name, self, event_id, True)
