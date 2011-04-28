@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 import os
 import sys
+import glob
+import shutil
+import tempfile
 
 if hasattr(sys, "frozen"):
 	# py2exe may get paths wrong
@@ -129,7 +132,7 @@ class MyApp(wx.App):
 
 	def InitXULRunner(self):
 		dprint(MESSAGE, "Initialising XULRunner engine")
-		wx.wc.WebControl.AddPluginPath("Mozilla Firefox\\Plugins")
+		self.InitProfile()
 		wx.wc.WebControl.InitEngine(xulrunner_path)
 
 		# NOTE: DO NOT move this import into the main import section.
@@ -137,6 +140,25 @@ class MyApp(wx.App):
 		import gui.webconnect_protocol_handler
 		wx.wc.RegisterProtocol("bpbible", gui.webconnect_protocol_handler.MasterProtocolHandler())
 		dprint(MESSAGE, "XULRunner engine initialised")
+
+	def InitProfile(self):
+		# We need to use a random (uniqute) temp file for the profile directory
+		# to prevent a race condition consuming one CPU when two instances of
+		# the app use the same profile directory.
+		profile_path = tempfile.mkdtemp(prefix='bpbp.', suffix='.tmp')
+		dprint(MESSAGE, "Initialising profile directory: " + profile_path)
+		wx.wc.WebControl.SetProfilePath(profile_path)
+
+		# We can't delete the profile directory on process shutdown as
+		# Mozilla is still holding onto references for it.
+		# So instead, we delete old directories on startup.
+		#
+		# Note that this will work with multiple versions of BPBible running
+		# at once, as the other version will not allow the profile to be deleted.
+		old_profile_paths = glob.glob(os.path.join(os.path.dirname(profile_path), 'bpbp.*.tmp'))
+		for path in old_profile_paths:
+			if path != profile_path:
+				shutil.rmtree(path, ignore_errors=True)
 
 	def SetWebPreferences(self):
 		prefs = wx.wc.WebControl.preferences
