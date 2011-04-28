@@ -90,9 +90,8 @@ def defer_till_document_loaded(function_to_decorate):
 	return function
 
 class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
-	lg_width = 20
 	allow_search = True
-	HAS_STARTUP_COMPLETED = False
+	has_startup_completed = False
 
 	def __init__(self, parent, logical_parent=None):
 		super(DisplayFrame, self).__init__(parent)
@@ -101,9 +100,13 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 		self.handle_links = True
 
 	def DomContentLoaded(self, event):
-		if not DisplayFrame.HAS_STARTUP_COMPLETED:
-			DisplayFrame.HAS_STARTUP_COMPLETED = True
-			wx.CallAfter(guiconfig.mainfrm.SetCursor, wx.StockCursor(wx.CURSOR_ARROW))
+		# By default, wxWebConnect will show the spinning busy cursor on startup
+		# and leave it spinning until the mouse is moved.
+		# This forces the cursor to change to the standard cursor after the
+		# first display frame has been fully loaded.
+		if not DisplayFrame.has_startup_completed:
+			DisplayFrame.has_startup_completed = True
+			guiconfig.mainfrm.SetCursor(wx.StockCursor(wx.CURSOR_ARROW))
 
 		document = self.GetDOMDocument()
 		for event_name, (handler, event_id) in self.custom_dom_event_listeners.iteritems():
@@ -130,11 +133,9 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 		self.custom_dom_event_id_counter = 999991
 		
 		self.current_target = None
-		self.mouseout = False
 		
 		self.Bind(wx.wc.EVT_WEB_SHOWCONTEXTMENU, self.show_popup)
 		
-		self.Bind(wx.EVT_LEAVE_WINDOW, self.MouseOut)
 		self.Bind(wx.EVT_ENTER_WINDOW, self.MouseIn)
 		self.Bind(wx.wc.EVT_WEB_OPENURI, self.OnOpenURI)
 		self.Bind(wx.wc.EVT_WEB_DOMCONTENTLOADED, self.DomContentLoaded)
@@ -164,10 +165,6 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 	def __del__(self):
 		DisplayFrameManager.active_display_frames.remove(self)
 	
-	#def KillFocus(self, event):
-	#	self.tooltip.Stop()
-	#	event.Skip()
-
 	def add_custom_dom_event_listener(self, event_name, handler):
 		if not self.custom_dom_event_listeners:
 			self.Bind(wx.wc.EVT_WEB_DOMEVENT, self.DomEventReceived)
@@ -188,20 +185,11 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 	def MouseOut(self, event = None):
 		if event: event.Skip()
 
-		#if(self._tooltip is not None and self.tooltip.timer is not None and 
-		#	self.tooltip.timer.IsRunning()):
-		
-		#	dprint(TOOLTIP, "Stopping on displayframe mouseout")
-		#	self.tooltip.Stop()
-
-		#self.current_target = None
 		self.mouseout = True
 
 	def MouseIn(self, event = None):
 		if event: event.Skip()
 	
-		self.mouseout = False
-
 		### children includes our own tooltip...
 		exceptions = [item for item in self.tooltip.tooltip_children()]
 		exceptions += [item for item in self.tooltip.tooltip_parents()]
@@ -467,9 +455,6 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 				if where_shown & IN_POPUP],
 			is_popup=True)
 		
-		#if osutils.is_gtk():
-		#	self.popup_position = event_object.ScreenToClient(self.popup_position)
-
 		event_object.PopupMenu(menu, self.popup_position)
 
 	def _get_text(self, lookup_text, href, is_search=False):
@@ -704,7 +689,6 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 		self.SetSize((width, height))
 
 		func(width, height, *args, **kwargs)
-		#return width, height
 	
 	@defer_till_document_loaded
 	def copyall(self):
