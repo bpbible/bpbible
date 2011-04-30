@@ -249,7 +249,6 @@ $(document).ready(function(){
 	});
 
 	set_continuous($('body[continuous_scrolling="true"]').length);
-	setup_drag_drop_handler();
 });
 
 function toggle_filler(to) {
@@ -319,92 +318,4 @@ function do_scroll_to_current(start, call_count) {
 	}
 	
 	window.scrollTo(l, t);
-}
-
-$(document).mousedown(function(event) {
-	if (event.which != 3) {
-		return;
-	}
-	window.right_click_word = "";
-	var rangeOffset = event.originalEvent.rangeOffset;
-	var rangeParent = event.originalEvent.rangeParent;
-	if (rangeParent.nodeType !== Node.TEXT_NODE) {
-		return;
-	}
-	var range = document.createRange();
-	var startOffset = rangeOffset;
-	var endOffset = rangeOffset;
-	range.setStart(rangeParent, rangeOffset);
-	range.setEnd(rangeParent, rangeOffset);
-	// XXX: Expand the list of whitespace.  This most definitely doesn't
-	// handle word segmentation systems like Thai.
-	var whitespace = " \t\".,";
-	for (startOffset = rangeOffset - 1; startOffset > 0; startOffset--)	{
-		range.setStart(rangeParent, startOffset);
-		range.setEnd(rangeParent, startOffset + 1);
-		if (whitespace.indexOf(range.toString()) > -1)	{
-			startOffset++;
-			break;
-		}
-	}
-	startOffset = Math.max(startOffset, 0);
-
-	for (endOffset = rangeOffset; endOffset < rangeParent.length; endOffset++)	{
-		try {
-			range.setStart(rangeParent, endOffset);
-			range.setEnd(rangeParent, endOffset + 1);
-		} catch (e)	{
-			break;
-		}
-
-		if (whitespace.indexOf(range.toString()) > -1)	{
-			break;
-		}
-	}
-	range.setStart(rangeParent, startOffset);
-	range.setEnd(rangeParent, endOffset);
-	window.right_click_word = range.toString();
-});
-
-// Drag & Drop support.
-function setup_drag_drop_handler()	{
-	document.body.addEventListener("dragenter", checkDrag, true);
-	document.body.addEventListener("dragover", checkDrag, true);
-	document.body.addEventListener("dragdrop", onDrop, true);
-}
-
-function checkDrag(event)	{
-	var hasFile = event.dataTransfer.types.contains('text/x-moz-url');
-	// XXX: Does effectAllowed and dropEffect do anything?
-	event.dataTransfer.effectAllowed = (hasFile ? 'link': 'none');
-	event.dataTransfer.dropEffect = (hasFile ? 'link': 'none');
-	return hasFile;
-}
-
-var dropped_file_urls = null;
-
-function onDrop(event) {
-	event.stopPropagation();
-	event.preventDefault();
-	var dataTransfer = event.dataTransfer;
-	var count = dataTransfer.mozItemCount;
-	dropped_file_urls = [];
-	for (var index = 0; index < count; index++)	{
-		try	{
-			var fileURL = dataTransfer.mozGetDataAt('text/x-moz-url', index);
-			if (fileURL.indexOf('file:') == 0)	{
-				dropped_file_urls.push(fileURL);
-			}
-		} catch(ex)	{
-			// Do nothing.
-		}
-	}
-	
-	if (dropped_file_urls.length == 0) {
-		return false;
-	}
-
-	var event = document.createEvent("Event");
-	event.initEvent('DropFiles', true, true);
-	document.body.dispatchEvent(event);
 }
