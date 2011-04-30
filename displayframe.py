@@ -503,7 +503,7 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 		return self.ExecuteScriptWithResult('encode_utf8(document.querySelector(\'a[href="%s"]\').textContent)' % href)
 
 	def get_clicked_cell_text(self):
-		return self.ExecuteScriptWithResult('encode_utf8(window.right_click_word)')
+		return self.ExecuteScriptWithResult('window.right_click_word ? encode_utf8(window.right_click_word): ""')
 
 	def make_lookup_text(self, href):
 		update_ui = self._get_text(_("Look up %s in the dictionary"), href)
