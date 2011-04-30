@@ -701,7 +701,7 @@ class MainFrame(wx.Frame, AuiLayer):
 		)
 
 		if fd.ShowModal() == wx.ID_OK:
-			self.drop_target.handle_dropped_files(fd.Paths)
+			self.drop_target.handle_dropped_files(fd.Paths, self)
 			settings["last_book_directory"] = fd.GetDirectory()
 
 		fd.Destroy()
