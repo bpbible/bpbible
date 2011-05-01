@@ -538,7 +538,7 @@ class DictionaryFrame(BookFrame):
 		self.dictionary_list_index = -1
 	
 	def notify(self, ref, source=None):
-		guiconfig.mainfrm.UpdateDictionaryUI(ref)
+		self.UpdateUI(ref)
 
 	def UpdateUI(self, ref=""):
 		if not ref:
@@ -564,7 +564,7 @@ class DictionaryFrame(BookFrame):
 		self.update_title()
 
 	def SetReference_from_string(self, string):
-		wx.CallAfter(guiconfig.mainfrm.UpdateDictionaryUI, string)
+		wx.CallAfter(self.UpdateUI, string)
 
 	def get_reference_textbox(self):
 		return self.dictionary_list.text_entry

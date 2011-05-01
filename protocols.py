@@ -113,7 +113,7 @@ def on_strongs_click(frame, href, url):
 	type = "Strongs"+type #as module is StrongsHebrew or StrongsGreek
 	if biblemgr.dictionary.ModuleExists(type):
 		guiconfig.mainfrm.set_module(type, biblemgr.dictionary)
-		wx.CallAfter(guiconfig.mainfrm.UpdateDictionaryUI, value)
+		wx.CallAfter(guiconfig.mainfrm.dictionarytext.UpdateUI, value)
 
 	if not type or not value: 
 		print "Not type or value", href
@@ -141,7 +141,7 @@ def on_morph_click(frame, href, url):
 	value = url.getPath()
 	if biblemgr.dictionary.ModuleExists(type):
 		guiconfig.mainfrm.set_module(type, biblemgr.dictionary)
-		wx.CallAfter(guiconfig.mainfrm.UpdateDictionaryUI, value)
+		wx.CallAfter(guiconfig.mainfrm.dictionarytext.UpdateUI, value)
 
 def on_morph_hover(frame, href, url, element, x, y):
 	tooltip_config = TextTooltipConfig("", mod=None)

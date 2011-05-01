@@ -379,7 +379,7 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 			type = "Strongs"+type #as module is StrongsHebrew or StrongsGreek
 			if biblemgr.dictionary.ModuleExists(type):
 				guiconfig.mainfrm.set_module(type, biblemgr.dictionary)
-				wx.CallAfter(guiconfig.mainfrm.UpdateDictionaryUI, value)
+				wx.CallAfter(guiconfig.mainfrm.dictionarytext.UpdateUI, value)
 			return
 		if action=="showMorph":
 			type = url.getParameterValue("type") #Hebrew or greek
@@ -394,7 +394,7 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 			type = "Robinson"
 			if biblemgr.dictionary.ModuleExists(type):
 				guiconfig.mainfrm.set_module(type, biblemgr.dictionary)
-				wx.CallAfter(guiconfig.mainfrm.UpdateDictionaryUI, value)
+				wx.CallAfter(guiconfig.mainfrm.dictionarytext.UpdateUI, value)
 
 
 		if action=="showImage":
@@ -515,7 +515,7 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 				text = self.get_clicked_cell_text()
 
 			text = self.strip_text(text)
-			guiconfig.mainfrm.UpdateDictionaryUI(text)
+			guiconfig.mainfrm.dictionarytext.UpdateUI(text)
 
 		assert hasattr(self, "mod"), self
 		font = fonts.get_module_gui_font(self.mod, default_to_None=True)

@@ -1167,6 +1167,10 @@ class GenbookSearchPanel(SearchPanel):
 			'$breadcrumbed_reference</em></small></a> $text'
 		)
 
+	@property
+	def bookframe(self):
+		return guiconfig.mainfrm.genbooktext
+
 	def search_list_format_text(self, text):
 		mod = self.book.mod
 		key = TK(mod.getKey(), mod)
@@ -1209,6 +1213,10 @@ class HarmonySearchPanel(GenbookSearchPanel):
 	def book(self):
 		return biblemgr.harmony
 
+	@property
+	def bookframe(self):
+		return guiconfig.mainfrm.harmony_frame
+
 class DictionarySearchPanel(SearchPanel):
 	id = N_("Dictionary Search")
 	@property
@@ -1222,6 +1230,10 @@ class DictionarySearchPanel(SearchPanel):
 	def search_list_format_text(self, text):
 		assert len(text.split(" - ")), "Can't have ranges in dictionary"
 		return text
+
+	@property
+	def bookframe(self):
+		return guiconfig.mainfrm.dictionarytext
 	
 	def go_to_reference(self, idx):
 		item = self.verselist.results[idx]
@@ -1230,7 +1242,7 @@ class DictionarySearchPanel(SearchPanel):
 		ref_parts = item.split(" - ")
 		reference = ref_parts.pop(0)
 		
-		guiconfig.mainfrm.UpdateDictionaryUI(reference)
+		self.bookframe.UpdateUI(reference)
 	
 	def get_scope(self):
 		return None
@@ -1256,6 +1268,10 @@ class DailyDevotionalSearchPanel(DictionarySearchPanel):
 	@property
 	def book(self):
 		return biblemgr.daily_devotional
+
+	@property
+	def bookframe(self):
+		return guiconfig.mainfrm.daily_devotional_frame
 
 class CommentarySearchPanel(BibleSearchPanel):
 	id = N_("Commentary Search")

@@ -1013,7 +1013,8 @@ class MainFrame(wx.Frame, AuiLayer):
 		
 		self.set_bible_ref(settings["bibleref"] or "Genesis 1:1", 
 			events.LOADING_SETTINGS, userInput=False)
-		self.UpdateDictionaryUI()
+		self.dictionarytext.UpdateUI()
+		self.daily_devotional_frame.UpdateUI()
 		self.version_tree.recreate()
 
 	def restart(self, event=None):
@@ -1123,9 +1124,6 @@ class MainFrame(wx.Frame, AuiLayer):
 	def commentary_version_changed(self, newversion):
 		self.commentarytext.refresh()
 
-	def UpdateDictionaryUI(self, ref=""):
-		self.dictionarytext.UpdateUI(ref)
-
 	def UpdateBibleUI(self, source, settings_changed=False, ref_to_scroll_to=None):
 		if source != events.HISTORY:
 			self.history.before_navigate()
@@ -1143,6 +1141,7 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.UpdateBibleUI(events.SETTINGS_CHANGED, settings_changed=True)
 		self.dictionarytext.reload()
 		self.genbooktext.reload()
+		self.daily_devotional_frame.reload()
 	
 	def set_title(self, event):
 		self.SetTitle(config.title_str % dict(name=config.name(), 
