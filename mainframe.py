@@ -944,7 +944,9 @@ class MainFrame(wx.Frame, AuiLayer):
 		no book window is selected.
 		"""
 		selected_frame = self.get_selected_frame()
-		if selected_frame is None or not isinstance(selected_frame, BookFrame):
+		if (selected_frame is None or
+				(not isinstance(selected_frame, BookFrame)) or
+				(not selected_frame.allow_search)):
 			selected_frame = self.bibletext
 		selected_frame.search()
 
