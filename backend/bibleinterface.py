@@ -237,10 +237,14 @@ class BibleInterface(object):
 		dictionary  = self.dictionary.version
 		commentary  = self.commentary.version
 		genbook     = self.genbook.version
+		harmony     = self.harmony.version
+		daily       = self.daily_devotional.version
 		
 		items = [
 			(self.genbook, genbook),
+			(self.harmony, harmony),
 			(self.dictionary, dictionary), 
+			(self.daily_devotional, daily),
 			(self.commentary, commentary), 
 			
 			# do bible last, so that the others will have been notified of
