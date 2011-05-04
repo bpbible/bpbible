@@ -133,6 +133,7 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 		self.custom_dom_event_id_counter = 999991
 		
 		self.current_target = None
+		self.force_next_uri_to_open = False
 		
 		self.Bind(wx.wc.EVT_WEB_SHOWCONTEXTMENU, self.show_popup)
 		
@@ -648,15 +649,17 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 		"""
 		return None
 
-	def OpenURI(self, uri, flags=wx.wc.WEB_LOAD_NORMAL, post_data=None, grab_focus=False):
+	def OpenURI(self, uri, flags=wx.wc.WEB_LOAD_NORMAL, post_data=None, grab_focus=False, force_uri_open=False):
 		# default to not grab focus
+		self.force_next_uri_to_open = force_uri_open
 		super(DisplayFrame, self).OpenURI(uri, flags, post_data, grab_focus)
 
 	def OnOpenURI(self, event):
 		href = event.GetHref()
 		dprint(WARNING, "Loading HREF", href)
-		if href.startswith("bpbible"):
+		if href.startswith("bpbible") or self.force_next_uri_to_open:
 			self.dom_loaded = False
+			self.force_next_uri_to_open = False
 		else:
 			protocol_handler.on_link_opened(self, href)
 			event.Veto()
