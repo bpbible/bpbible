@@ -425,7 +425,17 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 		guiconfig.mainfrm.set_bible_ref(host, events.LINK_CLICKED)
 
 	def on_char(self, event):
+		if osutils.is_msw():
+			self.force_alt_key_to_work_correctly(event)
 		guiutil.dispatch_keypress(self.get_actions(), event)
+	
+	def force_alt_key_to_work_correctly(self, event):
+		# Under MSW, the menu accelerators (e.g. Alt+F for the file menu) do
+		# not work when a display frame has focus.
+		# Therefore, if we detect any of these combinations we put focus on
+		# the main frame.
+		if event.Modifiers == wx.MOD_ALT:
+			guiconfig.mainfrm.SetFocus()
 
 	def get_menu_items(self, event=None):
 		href = event.GetHref() if event else u""
