@@ -34,7 +34,6 @@ class LazyTopicList(object):
 
 		self.cardinality = 0
 		self.entry_size = 0
-		self.has_new_methods = False
 
 		success = False
 		try:
@@ -74,29 +73,9 @@ class LazyTopicList(object):
 
 			self.entry_size = value
 			
-			if mod and hasattr(mod, "getEntryCount"):
-				self.has_new_methods = True
-				self.mod = mod
-				self.cardinality = mod.getEntryCount()
-				return True
-				
-		
-			p = "%s%s.idx" % (
-				mod.getConfigEntry("PrefixPath"),
-				mod.getConfigEntry("DataPath"))
-
-			f = open(p)
-			
-			# goto end of file
-			f.seek(0, 2)
-			
-			# and find what we are upto
-			self.cardinality = f.tell() / self.entry_size
-
-			f.close()
-			self.topics = [None for x in range(self.cardinality)]
+			self.mod = mod
+			self.cardinality = mod.getEntryCount()
 			return True
-
 	
 	def __len__(self):
 		if not self.entry_size:
@@ -105,36 +84,7 @@ class LazyTopicList(object):
 			return self.cardinality
 	
 	def __getitem__(self, item):
-		if self.has_new_methods:
-			return to_unicode(self.mod.getKeyForEntry(item), self.mod)
-
-		if self.entry_size and self.topics[item] is None:
-			myrange = [x for x in 
-				xrange(item - self.GRAB_AROUND, item + self.GRAB_AROUND + 1)
-				if 0 <= x < self.cardinality]
-		
-			self.mod.setPosition(TOP)
-
-			# go to first item we need to
-			first = myrange.pop(0)
-
-			# ###Important### don't use += on modules, as it changes the
-			# variable (*and* it's thisown flag). Use increment instead.
-			self.mod.increment(first)
-			self.topics[first] = to_unicode(
-				self.mod.getKeyText(), self.mod
-			)
-			
-
-			# and then any additional ones
-			for additional_item in myrange:
-				self.mod.increment(1)
-				self.topics[additional_item] = to_unicode(
-					self.mod.getKeyText(), self.mod
-				)
-				
-
-		return self.topics[item]
+		return to_unicode(self.mod.getKeyForEntry(item), self.mod)
 
 class ListDataWrapper(object):
 	def __init__(self, object):
@@ -145,10 +95,6 @@ class ListDataWrapper(object):
 	
 	def __getitem__(self, item):
 		raise NotImplementedError
-	
-	@property
-	def has_new_methods(self):
-		return self.object.has_new_methods
 	
 	@property
 	def mod(self):

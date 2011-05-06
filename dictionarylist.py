@@ -54,16 +54,9 @@ class DictionaryList(VirtualListBox):
 		self.set_data(self.topics)
 
 	def choose_item(self, text):
-		if self.topics and self.topics.has_new_methods:
-			idx = self.topics.mod.getEntryForKey(
-				to_str(text, self.topics.mod)
-			)
-		else:
-			# get what sword thinks the key should be
-			text = self.book.snap_text(text)
-
-			# then look it up in the list
-			idx = bisect.bisect_left(self._upper_topics, unicode(text))
+		idx = self.topics.mod.getEntryForKey(
+			to_str(text, self.topics.mod)
+		)
 
 		idx = min(len(self.topics)-1, idx)
 		if idx >= 0:
