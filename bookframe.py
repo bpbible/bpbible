@@ -544,7 +544,7 @@ class DictionaryFrame(BookFrame):
 		if not ref:
 			ref = self.dictionary_list.GetValue().upper()
 		else:
-			self.dictionary_list.choose_item(ref)
+			self.dictionary_list.choose_item(ref, update_text_entry_value=True)
 
 		self.SetReference(ref)
 

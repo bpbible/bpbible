@@ -53,7 +53,7 @@ class DictionaryList(VirtualListBox):
 
 		self.set_data(self.topics)
 
-	def choose_item(self, text):
+	def choose_item(self, text, update_text_entry_value=False):
 		idx = self.topics.mod.getEntryForKey(
 			to_str(text, self.topics.mod)
 		)
@@ -62,6 +62,7 @@ class DictionaryList(VirtualListBox):
 		if idx >= 0:
 			self.EnsureVisible(idx)
 			self.Select(idx)
+		return idx
 
 # we want users to be able to view the 29 february even when not in a leap
 # year
@@ -265,11 +266,13 @@ class DictionarySelector(wx.Panel):
 		self.item_to_focus_on = self.text_entry
 		self.change_selected_text(is_user_typing=True)
 
-	def change_selected_text(self, is_user_typing=False):
+	def change_selected_text(self, is_user_typing=False, update_text_entry_value=False):
 		# unbind the selected event so that we don't go into an infinite loop
 		# TODO: check whether this is really necessary
 		self.list.Unbind(wx.EVT_LIST_ITEM_SELECTED)
-		self.list.choose_item(self.GetValue().upper())
+		idx = self.list.choose_item(self.GetValue().upper(), update_text_entry_value=update_text_entry_value)
+		if idx >= 0 and update_text_entry_value:
+			self.text_entry.set_value(self.list.GetItemText(idx))
 		self.list.Bind(wx.EVT_LIST_ITEM_SELECTED, self.on_list)
 		if is_user_typing:
 			self.timer.Start(200, oneShot=True)
@@ -284,12 +287,12 @@ class DictionarySelector(wx.Panel):
 		text = self.list.GetItemText(event.m_itemIndex)
 		self.choose_item(text)
 
-	def choose_item(self, text):
+	def choose_item(self, text, update_text_entry_value=False):
 		# change the value (doesn't fire an event)
 		self.text_entry.set_value(text)
 
 		# scroll to the correct entry, and fire off an item_changed
-		wx.CallAfter(self.change_selected_text)
+		wx.CallAfter(lambda: self.change_selected_text(update_text_entry_value=update_text_entry_value))
 
 	def item_changed(self):
 		self.item_changed_observers()
@@ -301,11 +304,6 @@ class DictionarySelector(wx.Panel):
 
 	def GetValue(self):
 		return self.text_entry.get_value()
-
-	def SetValue(self, text):
-		# make sure we process this properly so that going to a date in a
-		# daily devotional sets the text to proper english text
-		self.list.choose_item(text)
 
 	def set_book(self, book):
 		was_devotion = self.text_entry.is_calendar
