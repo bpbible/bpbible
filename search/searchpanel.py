@@ -10,6 +10,7 @@ from util.unicode import to_unicode, to_str
 from util import string_util
 from backend.verse_template import VerseTemplate
 from backend.bibleinterface import biblemgr
+from backend.dictionary import mmdd_to_date
 from xrc.search_xrc import *
 
 import config
@@ -1228,8 +1229,7 @@ class DictionarySearchPanel(SearchPanel):
 		return index.DictionaryIndex
 
 	def search_list_format_text(self, text):
-		assert len(text.split(" - ")), "Can't have ranges in dictionary"
-		return text
+		return string_util.titlecase(text)
 
 	@property
 	def bookframe(self):
@@ -1272,6 +1272,9 @@ class DailyDevotionalSearchPanel(DictionarySearchPanel):
 	@property
 	def bookframe(self):
 		return guiconfig.mainfrm.daily_devotional_frame
+
+	def search_list_format_text(self, text):
+		return mmdd_to_date(text, abbrev=True) or text
 
 class CommentarySearchPanel(BibleSearchPanel):
 	id = N_("Commentary Search")

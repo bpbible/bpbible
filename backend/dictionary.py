@@ -138,7 +138,7 @@ def date_to_mmdd(date, return_formatted=True):
 		
 	return None
 
-def mmdd_to_date(date):
+def mmdd_to_date(date, abbrev=False):
 	if not is_date_conversion_supported():
 		return None
 
@@ -149,7 +149,8 @@ def mmdd_to_date(date):
 	else:
 		date = datetime.date(2008, month, day)
 
-	return date.strftime("%B ") + str(date.day)
+	month_format = "%b" if abbrev else "%B"
+	return "%s %d" % (date.strftime(month_format), date.day)
 
 		
 class Dictionary(Book):
