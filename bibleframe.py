@@ -404,10 +404,10 @@ class BibleFrame(VerseKeyedFrame):
 				links.each(function()	{
 					linkRange.selectNode(this);
 					if (selectionRange.compareBoundaryPoints(Range.START_TO_START, linkRange) > 0)	{
-						selectionStart = this.getAttribute("reference");
+						selectionStart = this.getAttribute("osisRef");
 					}
 					if (selectionRange.compareBoundaryPoints(Range.END_TO_END, linkRange) > 0)	{
-						selectionEnd = this.getAttribute("reference");
+						selectionEnd = this.getAttribute("osisRef");
 					}
 				});
 				return (selectionStart && selectionEnd) ? selectionStart + " - " + selectionEnd : "";
