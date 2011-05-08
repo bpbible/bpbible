@@ -103,6 +103,10 @@ class MainFrame(wx.Frame, AuiLayer):
 		
 
 		dprint(MESSAGE, "Setting up")
+
+		# Use the standard BPBible title to prevent the title from changing
+		# from "Bible" to "<Reference> - BPBible".
+		self.SetTitle("BPBible")
 	
 		# use this dialog to catch all our errors
 		self.error_dialog = ErrorDialog(self)
