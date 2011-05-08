@@ -31,24 +31,26 @@ function get_current_reference_on_screen()	{
 	var current_reference_top = start.offset().top;
 	var current_reference_bottom = end.offset().top + end.attr('offsetHeight');
 	if (current_reference_top < bottom && current_reference_bottom > top)	{
-		return start.get(0).getAttribute("reference");
+		return start.get(0).getAttribute("osisRef");
 	}
 
-	return get_current_reference_range();
+	var [first, _last] = get_current_reference_range_bounding_elements();
+
+	return first.getAttribute("osisRef");
 }
 
-function get_current_reference_range()	{
+function get_current_reference_range_bounding_elements()	{
 	var top = window.scrollY;
 	var bottom = window.innerHeight + window.scrollY;
 
 	// Don't use chapter numbers
 	var start = $('a.vnumber');
 	var end = $('a.vnumber');
-	var ref1 = null, ref2 = null;
+	var first = null;
 	/* TODO: we can narrow down based on our page segments first... */
 	start.each(function() {
 		if ($(this).offset().top + this.offsetHeight >= top) {
-			ref1 = this.getAttribute("reference");
+			first = this;
 			return false;
 		}
 		return true;
@@ -56,7 +58,6 @@ function get_current_reference_range()	{
 
 	var last = null;
 	$(end).each(function() {
-		//d($(this).offset().top);
 		if ($(this).offset().top >= bottom) {
 			if (!last) d("Not last");
 			return false;
@@ -64,7 +65,13 @@ function get_current_reference_range()	{
 		last = this;
 		return true;
 	});
-	ref2 = last.getAttribute("reference");
+	return [first, last];
+}
+
+function get_current_reference_range()	{
+	var [first, last] = get_current_reference_range_bounding_elements();
+	var ref1 = first.getAttribute("reference");
+	var ref2 = last.getAttribute("reference");
 	
 	if(!ref1 || !ref2) d("Not ref1 or ref2 '" + ref1 + "' '" + ref2 + "'");
 
@@ -166,10 +173,10 @@ function get_current_verse_ref() {
 	return current_verse.attr("osisRef");
 }
 
-function select_new_verse(reference) {
-	d("select_new_verse('" + reference + '")');
+function select_new_verse(osisRef) {
+	d("select_new_verse('" + osisRef + '")');
 	// XXX: Use OSISRefs?
-	var reference_link = $('a.vnumber[reference="' + reference + '"]');
+	var reference_link = $('a.vnumber[osisRef="' + osisRef + '"]');
 	var reference_found = reference_link.length > 0;
 
 	if (reference_found)	{

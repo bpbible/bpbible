@@ -351,8 +351,8 @@ class BibleFrame(VerseKeyedFrame):
 			if settings_changed:
 				self.reference, ref_to_scroll_to = self.GetCurrentReferenceAndPosition()
 			else:
-				ref = pysw.internal_to_user(self.reference)
-				has_selected_new_verse = self.ExecuteScriptWithResult('select_new_verse("%s")' % ref)
+				osisRef = VK(self.reference).getOSISRef()
+				has_selected_new_verse = self.ExecuteScriptWithResult('select_new_verse("%s")' % osisRef)
 				has_selected_new_verse = (has_selected_new_verse == "true")
 
 		if has_selected_new_verse:
