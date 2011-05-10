@@ -175,7 +175,6 @@ function get_current_verse_ref() {
 
 function select_new_verse(osisRef) {
 	d("select_new_verse('" + osisRef + '")');
-	// XXX: Use OSISRefs?
 	var reference_link = $('a.vnumber[osisRef="' + osisRef + '"]');
 	var reference_found = reference_link.length > 0;
 
