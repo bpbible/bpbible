@@ -114,9 +114,9 @@ class GenBookFrame(BookFrame):
 			return
 		
 		self.reference_text = self.reference.text
-		self.OpenURIForCurrentBook("bpbible://content/page/%s%s" % (self.book.version, self.reference_text))
-		
-		self.update_title()
+		# Remove the leading "/" from the key text so that we can construct a
+		# proper URL.
+		self.ChangeReference(self.reference_text[1:], settings_changed)
 	
 	def SetReference_from_string(self, string):
 		key = TK(self.book.mod.getKey(), self.book.mod)

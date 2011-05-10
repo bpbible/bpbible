@@ -3,6 +3,7 @@ from displayframe import AUIDisplayFrame
 from displayframe import IN_BOTH, IN_MENU
 from tooltip import BiblicalPermanentTooltip
 import versetree
+import urllib
 
 
 from swlib.pysw import VK, VerseParsingError
@@ -65,8 +66,20 @@ class BookFrame(AUIDisplayFrame):
 	@guiutil.frozen
 	def SetReference(self, ref, settings_changed=False):
 		self.reference = ref
-		self.OpenURIForCurrentBook("bpbible://content/page/%s/%s" % (self.book.version, self.reference))
+		self.ChangeReference(self.reference, settings_changed)
 
+	def ChangeReference(self, reference, settings_changed=False):
+		has_selected_new_segment = False
+		if self.dom_loaded:
+			# If the settings have changed we want to do a complete reload anyway
+			# (since it could be something that requires a complete reload, such as changing version).
+			if not settings_changed:
+				ref_id = urllib.quote(reference.encode("utf8"))
+				has_selected_new_segment = self.ExecuteScriptWithResult('select_new_segment("%s")' % ref_id)
+				has_selected_new_segment = (has_selected_new_segment == "true")
+
+		if not has_selected_new_segment:
+			self.OpenURIForCurrentBook("bpbible://content/page/%s/%s" % (self.book.version, reference))
 		self.update_title()
 
 	def OpenURIForCurrentBook(self, url):
@@ -558,10 +571,7 @@ class DictionaryFrame(BookFrame):
 			if topics:
 				ref = topics[0].upper()
 
-		self.reference = ref
-
-		self.OpenURIForCurrentBook("bpbible://content/page/%s/%s" % (self.book.version, self.reference))
-		self.update_title()
+		super(DictionaryFrame, self).SetReference(ref, settings_changed=settings_changed)
 
 	def SetReference_from_string(self, string):
 		wx.CallAfter(self.UpdateUI, string)
