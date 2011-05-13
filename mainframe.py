@@ -106,7 +106,7 @@ class MainFrame(wx.Frame, AuiLayer):
 
 		# Use the standard BPBible title to prevent the title from changing
 		# from "Bible" to "<Reference> - BPBible".
-		self.SetTitle("BPBible")
+		self.SetTitle(config.name())
 	
 		# use this dialog to catch all our errors
 		self.error_dialog = ErrorDialog(self)
