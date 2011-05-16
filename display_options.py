@@ -21,12 +21,18 @@ options.add_item("raw", False, item_type=bool)
 options.add_item("show_timing", False, item_type=bool)
 options.add_item("colour_speakers", "off", item_type=str)
 
+all_reload_options = (
+	DO_NOT_RELOAD,
+	RELOAD_BIBLE_FRAMES,
+	RELOAD_ALL_FRAMES
+) = range(3)
+
 class BooleanOptionMenuItem(object):
-	def __init__(self, option_name, menu_text, hint="", force_complete_reload=False, options_section=options):
+	def __init__(self, option_name, menu_text, hint="", reload_options=DO_NOT_RELOAD, options_section=options):
 		self.option_name = option_name
 		self.menu_text = menu_text
 		self.hint = hint
-		self.force_complete_reload = force_complete_reload
+		self.reload_options = reload_options
 		self.options_section = options_section
 
 	def add_to_menu(self, frame, menu):
@@ -41,15 +47,15 @@ class BooleanOptionMenuItem(object):
 
 	def on_option_clicked(self, event):
 		self.options_section[self.option_name] = event.Checked()
-		display_option_changed(self.option_name, self.force_complete_reload)
+		display_option_changed(self.option_name, self.reload_options)
 
 class MultiOptionsMenuItem(object):
-	def __init__(self, option_name, menu_text, _options, force_complete_reload=False, options_section=options, on_option_selected=None):
+	def __init__(self, option_name, menu_text, _options, reload_options=DO_NOT_RELOAD, options_section=options, on_option_selected=None):
 		self.option_name = option_name
 		self.menu_text = menu_text
 		self.options = _options
 		self.options_map = {}
-		self.force_complete_reload = force_complete_reload
+		self.reload_options = reload_options
 		self.options_section = options_section
 		self.on_option_selected = on_option_selected
 
@@ -73,7 +79,7 @@ class MultiOptionsMenuItem(object):
 		self.options_section[self.option_name] = self.options_map[event.Id]
 		if self.on_option_selected is not None:
 			self.on_option_selected()
-		display_option_changed(self.option_name, self.force_complete_reload)
+		display_option_changed(self.option_name, self.reload_options)
 
 def on_headwords_module_changed():
 	from backend.bibleinterface import biblemgr
@@ -82,7 +88,7 @@ def on_headwords_module_changed():
 options_menu = [
 	BooleanOptionMenuItem("columns", N_("Columns")),
 	BooleanOptionMenuItem("verse_per_line", N_("One line per verse"), N_("Display each verse on its own line.")),
-	BooleanOptionMenuItem("continuous_scrolling", N_("Continuous scrolling"), force_complete_reload=True),
+	BooleanOptionMenuItem("continuous_scrolling", N_("Continuous scrolling"), reload_options=RELOAD_ALL_FRAMES),
 	BooleanOptionMenuItem("headings", N_("Headings")),
 	BooleanOptionMenuItem("cross_references", N_("Cross References")),
 	BooleanOptionMenuItem("footnotes", N_("Footnotes")),
@@ -102,23 +108,25 @@ options_menu = [
 		("", N_("Strongs Numbers")),
 	],
 	options_section=filter_settings,
-	force_complete_reload=True,
+	reload_options=RELOAD_BIBLE_FRAMES,
 	on_option_selected=on_headwords_module_changed,
 	),
 ]
 
 debug_options_menu = [
-	BooleanOptionMenuItem("raw", "Output Raw", force_complete_reload=True),
+	BooleanOptionMenuItem("raw", "Output Raw", reload_options=RELOAD_ALL_FRAMES),
 	BooleanOptionMenuItem("show_timing", "Display timing"),
 ]
 
 display_option_changed_observers = ObserverList()
 
-def display_option_changed(option_name, force_complete_reload):
-	if force_complete_reload:
-		guiconfig.mainfrm.UpdateBibleUI(settings_changed=True, source=events.SETTINGS_CHANGED)
-	else:
+def display_option_changed(option_name, reload_options):
+	if reload_options == DO_NOT_RELOAD:
 		display_option_changed_observers(option_name)
+	elif reload_options == RELOAD_BIBLE_FRAMES:
+		guiconfig.mainfrm.UpdateBibleUI(settings_changed=True, source=events.SETTINGS_CHANGED)
+	elif reload_options == RELOAD_ALL_FRAMES:
+		guiconfig.mainfrm.refresh_all_pages()
 
 def all_options():
 	return options.items.keys()

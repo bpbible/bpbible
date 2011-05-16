@@ -59,7 +59,7 @@ class VerseCompareFrame(LinkedFrame):
 		self.SetBook(book)
 		#verse_comparison_settings["comparison_modules"] = book.GetModuleList()
 	
-	def SetReference(self, ref, reload=False):
+	def SetReference(self, ref, reload=False, settings_changed=False):
 		last_reference = verse_comparison_settings["reference"]
 		if VerseList(last_reference).VerseInRange(ref):
 			ref = last_reference

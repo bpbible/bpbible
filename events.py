@@ -24,11 +24,12 @@ sources = (
 	COMMENT_DELETED,
 ) = range(21)
 
-sources_not_to_reload_linked_frames_for = (
+sources_not_to_reload_harmony_for = (
 	DISPLAY_TAGS_TOGGLED,
 	EXPAND_CROSS_REFERENCES_TOGGLED,
-	BIBLE_MODULE_CHANGED,
 )
+sources_not_to_reload_linked_frames_for = \
+	sources_not_to_reload_harmony_for + (BIBLE_MODULE_CHANGED,)
 
 class BibleEvent(object):
 	def __init__(self, ref, settings_changed=False, source=None, ref_to_scroll_to=None):

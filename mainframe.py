@@ -1145,9 +1145,9 @@ class MainFrame(wx.Frame, AuiLayer):
 	
 	def refresh_all_pages(self):
 		self.UpdateBibleUI(events.SETTINGS_CHANGED, settings_changed=True)
-		self.dictionarytext.reload()
-		self.genbooktext.reload()
-		self.daily_devotional_frame.reload()
+		self.dictionarytext.reload(settings_changed=True)
+		self.genbooktext.reload(settings_changed=True)
+		self.daily_devotional_frame.reload(settings_changed=True)
 	
 	def set_title(self, event):
 		self.SetTitle(config.title_str % dict(name=config.name(), 

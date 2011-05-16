@@ -32,8 +32,8 @@ class BookFrame(AUIDisplayFrame):
 		self.reference = ""
 		self.setup()
 
-	def notify(self, ref, source=None):
-		self.SetReference(ref)
+	def notify(self, ref, source=None, settings_changed=False):
+		self.SetReference(ref, settings_changed=settings_changed)
 
 	def SetBook(self, book):
 		self.book = book
@@ -140,11 +140,11 @@ class BookFrame(AUIDisplayFrame):
 		"""Move to previous article"""
 		self.chapter_move(-1)
 	
-	def reload(self, event=None):
+	def reload(self, event=None, settings_changed=False):
 		if event and not event.settings_changed:
 			return
 
-		settings_changed = event and event.settings_changed
+		settings_changed = settings_changed or (event and event.settings_changed)
 		self.SetReference(self.reference, settings_changed=settings_changed)
 
 
@@ -407,7 +407,13 @@ class LinkedFrame(VerseKeyedFrame):
 		ref = self.get_verified(ref)
 		if not ref: return
 		self.SetReference(ref)
+
+	def SetReference(self, ref, settings_changed=False):
 		self.latest_reference = ref
+		# We only call SetReference when we are actually changing the window content.
+		# As a result, we shouldn't have any stored up settings changes.
+		self.settings_changed = False
+		super(LinkedFrame, self).SetReference(ref, settings_changed=settings_changed)
 	
 	def on_link(self, event=None):
 		self.linked = not self.linked
@@ -415,32 +421,31 @@ class LinkedFrame(VerseKeyedFrame):
 			self.notify(guiconfig.mainfrm.currentverse)
 	
 	def on_shown(self, shown=None):
-		if shown:
-			if self.linked and self.latest_reference != self.reference:
-				self.notify(self.latest_reference)
-			elif self.settings_changed:
-				self.refresh()
-				self.settings_changed = False
+		if shown and self.linked:
+			if self.latest_reference != self.reference or self.settings_changed:
+				self.notify(self.latest_reference, settings_changed=self.settings_changed)
 		super(LinkedFrame, self).on_shown(shown)
 
 	def bible_ref_changed(self, event):
-		# only update if we are linked, and it isn't just a settings change
-		if self.linked and not event.settings_changed:
+		"""Logic must cover a few things:
+		1. If the module is not linked, do not change reference.
+		2. If settings have changed (and it's an important change), a forced reload is required.
+		3. If the reference has changed, then we have to change the current
+			reference if it is linked.
+		"""
+		latest_reference = event.ref if self.linked else self.latest_reference
+		settings_changed = event.settings_changed and event.source not in events.sources_not_to_reload_linked_frames_for
+		if self.aui_pane.IsShown():
+			self.SetReference(latest_reference, settings_changed=settings_changed)
+		else:
 			self.latest_reference = event.ref
-			if self.aui_pane.IsShown():
-				self.notify(event.ref)
-
-		elif event.settings_changed and event.source not in events.sources_not_to_reload_linked_frames_for:
-			if self.aui_pane.IsShown():
-				self.refresh()
-			else:
-				self.settings_changed = True
+			self.settings_changed = settings_changed
 
 	def get_window(self):
 		return self.panel
 
 	def refresh(self):
-		self.SetReference(self.reference)
+		self.SetReference(self.latest_reference, settings_changed=True)
 
 class CommentaryFrame(LinkedFrame):
 	id = N_("Commentary")
@@ -550,7 +555,7 @@ class DictionaryFrame(BookFrame):
 		self.dictionary_list.set_book(self.book)
 		self.dictionary_list_index = -1
 	
-	def notify(self, ref, source=None):
+	def notify(self, ref, source=None, settings_changed=False):
 		self.UpdateUI(ref)
 
 	def UpdateUI(self, ref=""):

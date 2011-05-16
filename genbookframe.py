@@ -12,6 +12,7 @@ from util.debug import dprint, WARNING
 from util.unicode import to_unicode
 from protocols import protocol_handler
 from swlib.pysw import SW
+import events
 
 
 import config
@@ -272,7 +273,7 @@ class HarmonyFrame(GenBookFrame):
 			if self.aui_pane.IsShown():
 				self.SetVerseReference(event.ref)
 
-		elif event.settings_changed:
+		elif event.settings_changed and event.source not in events.sources_not_to_reload_harmony_for:
 			if self.aui_pane.IsShown():
 				self.refresh()
 			else:
@@ -296,5 +297,5 @@ class HarmonyFrame(GenBookFrame):
 		super(HarmonyFrame, self).SetReference(ref, settings_changed)
 
 	def refresh(self):
-		self.SetReference(self.reference)
+		self.SetReference(self.reference, settings_changed=True)
 
