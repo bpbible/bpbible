@@ -120,8 +120,12 @@ function create_reference_bar() {
 
 var last_chapter_in_header_bar = null;
 function update_header_bar() {
-	var current_chapter = find_current_chapter();
-	if (current_chapter == last_chapter_in_header_bar) {
+	var current_segment = find_current_segment();
+	var current_chapter = '';
+	if (current_segment)	{
+		current_chapter = current_segment.find('.segment a:first-child').attr('osisRef');
+	}
+	if (!current_segment || current_chapter == last_chapter_in_header_bar) {
 		return;
 	}
 
@@ -131,35 +135,15 @@ function update_header_bar() {
 	document.body.dispatchEvent(event);
 }
 
-function find_current_chapter() {
-	var top = window.scrollY + get_scroll_point().top;
-	var chapter1 = '';
-	var page_segments = $('.page_segment');
-	page_segments.each(function() {
-		if ($(this).offset().top + this.offsetHeight >= top) {
-			chapter1 = this.firstChild.firstChild.getAttribute('osisRef');
-			return false;
-		}
-		return true;
-	});
-	return chapter1;
-}
-
 $(document).ready(function() {
 	highlight_verse();
 	create_reference_bar();
 	$(window).scroll(function() {show_current_reference()});
 	$(window).resize(function() {show_current_reference()});
 	show_current_reference();
-	setup_drag_drop_handler();
-
-/*	var [start, end] = get_current_verse_bounds();
-	scroll_to_current(start);*/
-	
 });
 
 function get_current_verse() {
-	//var current_verse = $("#original_segment a.currentverse");
 	var current_verse = $("a.currentverse");
 	if(current_verse.length != 1) {
 		jsdump("Wrong number of current verses: " + current_verse.length + "\n");

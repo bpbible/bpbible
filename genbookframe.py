@@ -1,14 +1,13 @@
 import wx
-from swlib.pysw import TK, VK, VerseParsingError
-from swlib.pysw import GetVerseStr, GetBestRange
+from swlib.pysw import TK, VerseParsingError
+from swlib.pysw import GetVerseStr
 
 from bookframe import BookFrame
 import genbooktree
 from backend.bibleinterface import biblemgr
 from gui import guiutil
 import versetree
-from util import string_util, noop
-from util.debug import dprint, WARNING
+from util import noop
 from util.unicode import to_unicode
 from protocols import protocol_handler
 from swlib.pysw import SW
@@ -63,6 +62,7 @@ class GenBookFrame(BookFrame):
 	use_quickselector = False
 	def __init__(self, parent, book):
 		self.genbookpanel = wx.Panel(parent)
+		self.do_not_reload_page = False
 		super(GenBookFrame, self).__init__(self.genbookpanel)
 		self.SetBook(book)
 
@@ -117,7 +117,11 @@ class GenBookFrame(BookFrame):
 		self.reference_text = self.reference.text
 		# Remove the leading "/" from the key text so that we can construct a
 		# proper URL.
-		self.ChangeReference(self.reference_text[1:], settings_changed)
+		if self.do_not_reload_page:
+			self.update_title()
+			self.do_not_reload_page = False
+		else:
+			self.ChangeReference(self.reference_text[1:], settings_changed)
 	
 	def SetReference_from_string(self, string):
 		key = TK(self.book.mod.getKey(), self.book.mod)
@@ -177,6 +181,12 @@ class GenBookFrame(BookFrame):
 
 	def get_reference_textbox(self):
 		return self.genbooktree
+
+	def current_segment_changed(self, new_segment_ref):
+		key = TK(self.book.mod.getKey(), self.book.mod)
+		key.text = "/" + new_segment_ref
+		self.do_not_reload_page = True
+		self.go_to_key(key)
 
 class HarmonyFrame(GenBookFrame):
 	id = N_("Harmony")

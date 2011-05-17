@@ -97,6 +97,7 @@ class BookFrame(AUIDisplayFrame):
 		self.book = None
 		
 		super(BookFrame, self).setup()
+		self.add_custom_dom_event_listener('ChangeSegment', self.handle_current_segment_changed_event)
 
 	def get_actions(self):
 		actions = super(BookFrame, self).get_actions()
@@ -147,6 +148,15 @@ class BookFrame(AUIDisplayFrame):
 		settings_changed = settings_changed or (event and event.settings_changed)
 		self.SetReference(self.reference, settings_changed=settings_changed)
 
+	def handle_current_segment_changed_event(self):
+		new_segment_ref = self.ExecuteScriptWithResult('last_segment_shown')
+		if new_segment_ref:
+			new_segment_ref = urllib.unquote(new_segment_ref)
+			print "Changing to new segment", new_segment_ref
+			self.current_segment_changed(new_segment_ref)
+
+	def current_segment_changed(self, new_segment_ref):
+		pass
 
 	def get_menu_items(self, event=None):
 		def set_text():
@@ -467,6 +477,11 @@ class CommentaryFrame(LinkedFrame):
 
 	def get_reference_textbox(self):
 		return self.gui_reference
+
+	def current_segment_changed(self, new_segment_ref):
+		self.gui_reference.SetValue(new_segment_ref)
+		# XXX: Need to set the current reference first...
+		self.update_title()
 		
 class DictionaryFrame(BookFrame):
 	id = N_("Dictionary")
@@ -509,10 +524,10 @@ class DictionaryFrame(BookFrame):
 #		self.dictionary_list = xrc.XRCCTRL(self, 'DictionaryValue')
 		#self.Center()
 	
-	def list_item_changed(self, event=None):
+	def list_item_changed(self, event=None, suppress_reference_change=False):
 		# Only force everything to reload if the list index has changed.
 		dictionary_list_index = self.dictionary_list.list.GetFirstSelected()
-		if dictionary_list_index != self.dictionary_list_index:
+		if dictionary_list_index != self.dictionary_list_index and (not suppress_reference_change):
 			self.dictionary_list_index = dictionary_list_index
 			self.UpdateUI()
 			if self.dictionary_list.item_to_focus_on:
@@ -584,14 +599,7 @@ class DictionaryFrame(BookFrame):
 	def get_reference_textbox(self):
 		return self.dictionary_list.text_entry
 
-#xrc_classes = [DictionaryFrame, CommentaryFrame, BookFrame, BibleFrame]
-#
-#for a in xrc_classes:
-#	exec """class %(name)sXRC(%(name)s):
-#	def __init__(self):
-#		pre = html.PreHtmlWindow()
-#		self.PostCreate(pre)
-#		self.setup()
-#	def LinkClicked(self, link):
-#		%(name)s.LinkClicked(self, link)""" % {"name": a.__name__}
-	
+	def current_segment_changed(self, new_segment_ref):
+		self.dictionary_list.choose_item(new_segment_ref, update_text_entry_value=True, suppress_reference_change=True)
+		self.reference = new_segment_ref
+		self.update_title()

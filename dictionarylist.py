@@ -255,7 +255,7 @@ class DictionarySelector(wx.Panel):
 		self.item_to_focus_on = self.text_entry
 		self.change_selected_text(is_user_typing=True)
 
-	def change_selected_text(self, is_user_typing=False, update_text_entry_value=False):
+	def change_selected_text(self, is_user_typing=False, update_text_entry_value=False, suppress_reference_change=False):
 		# unbind the selected event so that we don't go into an infinite loop
 		# TODO: check whether this is really necessary
 		self.list.Unbind(wx.EVT_LIST_ITEM_SELECTED)
@@ -266,7 +266,7 @@ class DictionarySelector(wx.Panel):
 		if is_user_typing:
 			self.timer.Start(200, oneShot=True)
 		else:
-			self.item_changed()
+			self.item_changed(suppress_reference_change=suppress_reference_change)
 
 	def on_timer(self, event):
 		self.item_changed()
@@ -276,15 +276,15 @@ class DictionarySelector(wx.Panel):
 		text = self.list.GetItemText(event.m_itemIndex)
 		self.choose_item(text)
 
-	def choose_item(self, text, update_text_entry_value=False):
+	def choose_item(self, text, update_text_entry_value=False, suppress_reference_change=False):
 		# change the value (doesn't fire an event)
 		self.text_entry.set_value(text)
 
 		# scroll to the correct entry, and fire off an item_changed
-		wx.CallAfter(lambda: self.change_selected_text(update_text_entry_value=update_text_entry_value))
+		wx.CallAfter(lambda: self.change_selected_text(update_text_entry_value=update_text_entry_value, suppress_reference_change=suppress_reference_change))
 
-	def item_changed(self):
-		self.item_changed_observers()
+	def item_changed(self, suppress_reference_change=False):
+		self.item_changed_observers(suppress_reference_change=suppress_reference_change)
 		if self.item_to_focus_on:
 			self.item_to_focus_on.SetFocus()
 			self.item_to_focus_on = None

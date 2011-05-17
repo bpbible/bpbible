@@ -319,3 +319,18 @@ function do_scroll_to_current(start, call_count) {
 	
 	window.scrollTo(l, t);
 }
+
+function find_current_segment() {
+	var top = window.scrollY + get_scroll_point().top;
+	var current_segment = null;
+	var page_segments = $('.page_segment');
+	page_segments.each(function() {
+		var segment = $(this);
+		if (segment.offset().top + this.offsetHeight >= top) {
+			current_segment = segment;
+			return false;
+		}
+		return true;
+	});
+	return current_segment;
+}
