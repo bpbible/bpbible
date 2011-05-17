@@ -47,7 +47,6 @@ function pick_element(selector, range, before) {
 			done = true;
 			return false;
 		}
-		//if(r == 0) alert("Right on the spot? really?");
 
 		last = this;
 		return true;
@@ -235,9 +234,6 @@ $(document).ready(function(){
 	d("ready!!!!" + window.location.href);
 
 	d(window.top.document.title);
-/*	window.addEventListener( 'pageshow', function(e){ d('!!!!!!!!!!!!!!pageshow fired'); }, false );
-	window.addEventListener( 'pagehide', function(e){ d('!!!!!!!!!!!!!!pagehide fired'); }, false );*/
-
 	// Scroll to current first; if this is big enough and we are far enough
 	// down, we may not have to load content above us.
 
@@ -271,7 +267,6 @@ function toggle_filler(to) {
 
 function continuous_onsize() {ensure_sufficient_content()};
 function set_continuous(to) {
-//	alert("set", to);
 	if (!to) {
 		toggle_filler(false);
 		$(window).unbind('resize', continuous_onsize);
