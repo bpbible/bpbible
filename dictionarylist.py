@@ -1,11 +1,7 @@
-import bisect
-
 import wx
-#import wx.lib.buttons as buttons
 import wx.calendar
 
 from backend.bibleinterface import biblemgr
-from backend.dictionary import ListDataWrapper
 from util.observerlist import ObserverList
 from gui.virtuallist import VirtualListBox
 from gui.guiutil import bmp
@@ -14,8 +10,6 @@ from util.unicode import to_str
 
 from gui import fonts
 import guiconfig
-
-_disabled = False#True
 
 class Upper(object):
 	def __init__(self, object):
@@ -40,16 +34,11 @@ class DictionaryList(VirtualListBox):
 	def set_book(self, book):
 		self.book = book
 		b = wx.BusyInfo("Getting dictionary topic list...")
-		if not _disabled:
-			# TODO: this is broken if we don't have a proper module and get
-			# returned a list...
-			
-			self.topics = book.GetTopics(user_output=True)
-			self._upper_topics = Upper(self.topics)
-			
-		else:
-			self.topics = ["DISABLED"]
-			self._upper_topics = self.topics
+		# TODO: this is broken if we don't have a proper module and get
+		# returned a list...
+		
+		self.topics = book.GetTopics(user_output=True)
+		self._upper_topics = Upper(self.topics)
 
 		self.set_data(self.topics)
 
