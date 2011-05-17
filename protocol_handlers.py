@@ -129,11 +129,11 @@ class PageProtocolHandler(ProtocolHandler):
 				else:
 					c = book.GetChapter(ref)
 
-				ref_id = VK(ref).get_book_chapter()
+				ref_id = VK(ref).get_chapter_osis_ref()
 				
 			else:
 				c = book.GetReference(ref, headings=True)
-				ref_id = ref
+				ref_id = VK(ref).getOSISRef()
 
 
 		elif book.is_dictionary:
@@ -232,9 +232,9 @@ class PageFragmentHandler(PageProtocolHandler):
 						no_more = True
 					else:
 						if book.chapter_view:
-							new_ref = vk.get_book_chapter()
+							new_ref = vk.get_chapter_osis_ref()
 						else:
-							new_ref = vk.text
+							new_ref = vk.getOSISRef()
 				finally:
 					mod.setKey(SW.Key())
 					mod.setSkipConsecutiveLinks(old_mod_skiplinks)

@@ -1,5 +1,4 @@
 import Sword as SW
-import os
 import re
 import sys
 import string
@@ -493,6 +492,9 @@ class VK(SW.VerseKey):#, object):
 
 	def get_book_chapter(self):
 		return u"%s %s" % (self.getBookName(), self.chapter_str())
+
+	def get_chapter_osis_ref(self):
+		return u"%s.%d" % (self.getOSISBookName(), self.Chapter())
 
 	# horrible swig magic...
 	__swig_setmethods__	 = {"text":set_text, "chapter":set_chapter}

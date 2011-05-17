@@ -115,18 +115,21 @@ class GenBookFrame(BookFrame):
 			return
 		
 		self.reference_text = self.reference.text
-		# Remove the leading "/" from the key text so that we can construct a
-		# proper URL.
 		if self.do_not_reload_page:
 			self.update_title()
 			self.do_not_reload_page = False
 		else:
-			self.ChangeReference(self.reference_text[1:], settings_changed)
+			self.ChangeReference(self.reference_text, settings_changed)
 	
 	def SetReference_from_string(self, string):
 		key = TK(self.book.mod.getKey(), self.book.mod)
 		key.text = string
 		self.go_to_key(key)
+
+	def get_ref_id(self, reference):
+		# Remove the leading "/" from the key text so that we can construct a
+		# proper URL.
+		return super(GenBookFrame, self).get_ref_id(reference[1:])
 
 	def update_title(self, shown=None):
 		m = guiconfig.mainfrm

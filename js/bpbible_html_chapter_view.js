@@ -107,7 +107,6 @@ function get_current_reference_range()	{
 
 function show_current_reference() {
 	fill_reference_bar();
-	update_header_bar();
 }
 
 function fill_reference_bar() {
@@ -116,23 +115,6 @@ function fill_reference_bar() {
 
 function create_reference_bar() {
 	$("body").prepend('<div class="reference_bar">This should give the current reference</div>');
-}
-
-var last_chapter_in_header_bar = null;
-function update_header_bar() {
-	var current_segment = find_current_segment();
-	var current_chapter = '';
-	if (current_segment)	{
-		current_chapter = current_segment.find('.segment a:first-child').attr('osisRef');
-	}
-	if (!current_segment || current_chapter == last_chapter_in_header_bar) {
-		return;
-	}
-
-	last_chapter_in_header_bar = current_chapter;
-	var event = document.createEvent("Event");
-	event.initEvent('ChangeChapter', true, true);
-	document.body.dispatchEvent(event);
 }
 
 $(document).ready(function() {

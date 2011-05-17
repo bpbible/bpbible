@@ -315,6 +315,28 @@ function do_scroll_to_current(start, call_count) {
 	window.scrollTo(l, t);
 }
 
+var last_segment_shown = null;
+function update_current_segment_shown() {
+	var current_segment = find_current_segment();
+	var current_segment_ref = '';
+	if (current_segment)	{
+		current_segment_ref = current_segment.children('.segment').attr('ref_id');
+	}
+	if (!current_segment || current_segment_ref == last_segment_shown) {
+		return;
+	}
+
+	last_segment_shown = current_segment_ref;
+	var event = document.createEvent("Event");
+	event.initEvent('ChangeSegment', true, true);
+	document.body.dispatchEvent(event);
+}
+
+$(document).ready(function()	{
+	$(window).scroll(function() {update_current_segment_shown()});
+	$(window).resize(function() {update_current_segment_shown()});
+});
+
 function find_current_segment() {
 	var top = window.scrollY + get_scroll_point().top;
 	var current_segment = null;

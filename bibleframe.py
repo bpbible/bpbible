@@ -57,7 +57,6 @@ class BibleFrame(VerseKeyedFrame):
 	def setup(self):
 		self.observers = ObserverList()
 		super(BibleFrame, self).setup()
-		self.add_custom_dom_event_listener('ChangeChapter', self.current_chapter_changed)
 
 	def DomContentLoaded(self, event):
 		super(BibleFrame, self).DomContentLoaded(event)
@@ -382,13 +381,11 @@ class BibleFrame(VerseKeyedFrame):
 		ref_to_scroll_to = self.ExecuteScriptWithResult('get_current_reference_range_bounding_elements()[0].getAttribute("osisRef")')
 		return (current_reference, ref_to_scroll_to)
 
-	def current_chapter_changed(self):
-		chapterOsisRef = self.ExecuteScriptWithResult('last_chapter_in_header_bar')
-		if chapterOsisRef:
-			chapter = GetBookChapter(chapterOsisRef)
-			self.header_bar.set_current_chapter(
-				pysw.internal_to_user(chapter), chapter
-			)
+	def current_segment_changed(self, new_segment_ref):
+		chapter = GetBookChapter(new_segment_ref)
+		self.header_bar.set_current_chapter(
+			pysw.internal_to_user(chapter), chapter
+		)
 	
 	def GetRangeSelected(self):
 		text = self.ExecuteScriptWithResult("""

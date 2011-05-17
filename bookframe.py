@@ -74,13 +74,15 @@ class BookFrame(AUIDisplayFrame):
 			# If the settings have changed we want to do a complete reload anyway
 			# (since it could be something that requires a complete reload, such as changing version).
 			if not settings_changed:
-				ref_id = urllib.quote(reference.encode("utf8"))
-				has_selected_new_segment = self.ExecuteScriptWithResult('select_new_segment("%s")' % ref_id)
+				has_selected_new_segment = self.ExecuteScriptWithResult('select_new_segment("%s")' % self.get_ref_id(reference))
 				has_selected_new_segment = (has_selected_new_segment == "true")
 
 		if not has_selected_new_segment:
 			self.OpenURIForCurrentBook("bpbible://content/page/%s/%s" % (self.book.version, reference))
 		self.update_title()
+
+	def get_ref_id(self, reference):
+		return urllib.quote(reference.encode("utf8"))
 
 	def OpenURIForCurrentBook(self, url):
 		if self.book.mod is not None:
@@ -152,7 +154,6 @@ class BookFrame(AUIDisplayFrame):
 		new_segment_ref = self.ExecuteScriptWithResult('last_segment_shown')
 		if new_segment_ref:
 			new_segment_ref = urllib.unquote(new_segment_ref)
-			print "Changing to new segment", new_segment_ref
 			self.current_segment_changed(new_segment_ref)
 
 	def current_segment_changed(self, new_segment_ref):
@@ -424,6 +425,10 @@ class LinkedFrame(VerseKeyedFrame):
 		# As a result, we shouldn't have any stored up settings changes.
 		self.settings_changed = False
 		super(LinkedFrame, self).SetReference(ref, settings_changed=settings_changed)
+
+	def get_ref_id(self, reference):
+		osis_ref = VK(reference).getOSISRef()
+		return super(LinkedFrame, self).get_ref_id(osis_ref)
 	
 	def on_link(self, event=None):
 		self.linked = not self.linked
@@ -472,6 +477,9 @@ class CommentaryFrame(LinkedFrame):
 
 		super(CommentaryFrame, self).SetReference(ref, settings_changed=settings_changed)
 
+		self.ChangeCurrentReference(ref)
+
+	def ChangeCurrentReference(self, ref):
 		self.gui_reference.SetValue(pysw.internal_to_user(ref))
 		self.gui_reference.currentverse = ref
 
@@ -479,8 +487,9 @@ class CommentaryFrame(LinkedFrame):
 		return self.gui_reference
 
 	def current_segment_changed(self, new_segment_ref):
-		self.gui_reference.SetValue(new_segment_ref)
-		# XXX: Need to set the current reference first...
+		self.reference = VK(new_segment_ref).getText()
+		self.latest_reference = self.reference
+		self.ChangeCurrentReference(self.reference)
 		self.update_title()
 		
 class DictionaryFrame(BookFrame):
