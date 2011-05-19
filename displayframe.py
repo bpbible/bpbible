@@ -9,20 +9,18 @@ import wx.wc
 
 
 import guiconfig
-import config
 
 
 from swlib.pysw import GetBestRange, SW, VerseList
 from backend.bibleinterface import biblemgr
-from backend.verse_template import SmartVerseTemplate
 from util import osutils, classproperty
 from util.configmgr import config_manager
-from tooltip import tooltip_settings, TextTooltipConfig, BibleTooltipConfig, TooltipDisplayer
+from tooltip import TextTooltipConfig, BibleTooltipConfig, TooltipDisplayer
 from gui.menu import MenuItem, Separator
 from gui.htmlbase import convert_language
 from gui import guiutil
 import display_options
-from util.debug import dprint, WARNING, TOOLTIP, MESSAGE
+from util.debug import dprint, WARNING, MESSAGE
 from protocols import protocol_handler
 # XXX: This is just to force the protocol to be registered.
 import gui.passage_tag
@@ -360,11 +358,6 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 
 		self.current_target = None
 
-	def LinkClicked(self, link, cell):
-		href = link.GetHref()
-
-		protocol_handler.on_link_opened(self, href)
-
 	@staticmethod
 	def on_link_clicked(frame, href, url):
 		host = url.getHostName()
@@ -667,12 +660,15 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 	def OnOpenURI(self, event):
 		href = event.GetHref()
 		dprint(WARNING, "Loading HREF", href)
-		if href.startswith("bpbible") or self.force_next_uri_to_open:
+		if self.allow_url_to_open(href) or self.force_next_uri_to_open:
 			self.dom_loaded = False
 			self.force_next_uri_to_open = False
 		else:
 			protocol_handler.on_link_opened(self, href)
 			event.Veto()
+
+	def allow_url_to_open(self, href):
+		return href.startswith("bpbible") and ("passagestudy.jsp" not in href)
 
 	def change_display_option(self, option_name):
 		if not self.dom_loaded:
