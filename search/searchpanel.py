@@ -453,15 +453,9 @@ class SearchPanel(xrcSearchPanel):
 
 		# Set properties:
 
-		# under gtk, enter in the searchkey should push button...
-		if not osutils.is_msw():
-
-			self.searchkey.Bind(wx.EVT_KEY_UP, 
-			lambda event:event.KeyCode == wx.WXK_RETURN and (self.on_search(),) 
-				or event.Skip())
-
-		#SetWindowStyle(self.searchkey.GetWindowStyle() | \
-		#							  wx.TE_PROCESS_ENTER)
+		self.searchkey.SetWindowStyle(self.searchkey.GetWindowStyle() | \
+									  wx.TE_PROCESS_ENTER)
+		self.searchkey.Bind(wx.EVT_TEXT_ENTER, self.on_search_button)
 		#self.verselist.InsertColumn(0, "Reference")
 		#self.verselist.InsertColumn(1, "Preview")
 		self.set_gui_search_type(search_config["indexed_search"])
