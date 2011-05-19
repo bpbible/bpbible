@@ -16,7 +16,7 @@
 .chapterview a.versenumber {
 	-moz-margin-end: 2px;
 	text-decoration: none;
-	font-size: small;
+	font-size: 80%;
 	vertical-align: 0.32em;
 	line-height: 0;
 	color: hsl(240, 35%, 50%);

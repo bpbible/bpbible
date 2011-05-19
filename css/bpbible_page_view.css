@@ -21,7 +21,7 @@ div.segment > div > p:last-child {
 	margin-bottom: 0px;
 }
 
-div.genbook_key[level$=""] { font-size: small; }
+div.genbook_key[level$=""] { font-size: 80%; }
 div.genbook_key[level="1"] { font-size: 1.5em; }
 div.genbook_key[level="2"] { font-size: 1.3em; }
 div.genbook_key[level="3"] { font-size: 1.17em; }

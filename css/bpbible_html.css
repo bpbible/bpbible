@@ -2,7 +2,7 @@
 /* TODO: Matt 5:2 - <p> comes *before* heading - our text indent goes
  * missing... */
 h2.heading {
-	font-size:large;
+	font-size: 120%;
 	margin-top: 1em;
 	margin-bottom: 0;
 }
@@ -166,7 +166,7 @@ div.indentedline[width="0"] {
 /* Strong's headwords */
 a.strongs_headword {
 	text-decoration: none;
-	font-size: small;
+	font-size: 80%;
 	-moz-user-select: none;
 }
 body[strongs_blocked="false"] a.strongs_headword:before { content: "<" }
@@ -174,7 +174,7 @@ body[strongs_blocked="false"] a.strongs_headword:after { content: ">" }
 
 a.morph {
 	text-decoration: none;
-	font-size: small;
+	font-size: 80%;
 	font-style: italic;
 	-moz-user-select: none;	
 }
