@@ -18,8 +18,16 @@ if os.path.isdir("custom"):
 		if os.path.isfile("custom/%s" % file) and file.endswith(".py"):
 			execfile("custom/%s" % file)
 
-
 from util.debug import dprint, MESSAGE, WARNING, is_debugging
+try:
+	# Faulthandler helps us to find the stack trace when BPBible segmentation
+	# faults.
+	import faulthandler
+	faulthandler.enable()
+except ImportError:
+	dprint(WARNING, "Faulthandler not installed")
+	pass
+
 dprint(MESSAGE, "Importing wx")
 
 import wx
