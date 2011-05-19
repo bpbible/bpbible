@@ -798,7 +798,7 @@ class AuiLayer(object):
 		self.pane_restore_hack()
 		pane = event.GetPane()
 		self.restore_pane_direction(pane)
-		wx.CallAfter(self.update_all_aui_menu_items)
+		wx.CallAfter(self.on_changed)
 	
 	def fix_pane_direction(self, pane):
 		self.maximized_pane_direction = pane.dock_direction
@@ -814,7 +814,7 @@ class AuiLayer(object):
 		# maximizing, then back afterwards
 		pane = event.GetPane()
 		self.fix_pane_direction(pane)
-		wx.CallAfter(self.update_all_aui_menu_items)
+		wx.CallAfter(self.on_changed)
 		 
 
 	def on_pane_close(self, event):
