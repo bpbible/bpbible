@@ -307,7 +307,7 @@ function do_scroll_to_current(start, call_count) {
 	 * element on screen by scrolling it, then wait a bit and try scrolling
 	 * again.
 	 */
-	if ((t + window.innerHeight > document.height) && call_count <= 10) {
+	if ((t + window.innerHeight > $(document).height) && call_count <= 10) {
 		window.setTimeout(do_scroll_to_current, 25, start, call_count + 1);
 		return;
 	}

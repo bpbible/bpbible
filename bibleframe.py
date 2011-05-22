@@ -345,8 +345,6 @@ class BibleFrame(VerseKeyedFrame):
 		# If the settings have changed we want to do a complete reload anyway
 		# (since it could be something that requires a complete reload, such as changing version).
 		if self.dom_loaded:
-			# in the document we keep user verse keys, in here we keep
-			# internal ones. Do conversions as appropriate.
 			if settings_changed:
 				self.reference, ref_to_scroll_to = self.GetCurrentReferenceAndPosition()
 			else:
@@ -359,14 +357,13 @@ class BibleFrame(VerseKeyedFrame):
 		else:
 			self.OpenURIForCurrentBook("bpbible://content/page/%s/%s" % (self.book.version, self.reference))
 
-		# XXX: Move this?
+		if ref_to_scroll_to:
+			self.scroll_to_osis_ref(ref_to_scroll_to)
+
 		chapter = GetBookChapter(self.reference)
 		self.header_bar.set_current_chapter(
 			pysw.internal_to_user(chapter), chapter
 		)
-
-		if ref_to_scroll_to:
-			self.scroll_to_osis_ref(ref_to_scroll_to)
 
 		self.update_title()
 
