@@ -123,3 +123,23 @@ $(document).mousedown(function(event) {
 	range.setEnd(rangeParent, endOffset);
 	window.right_click_word = range.toString();
 });
+
+/*
+When a display option is changed, change the attribute on the body.
+These options are then used in the stylesheet.
+*/
+function change_display_option(option_name, option_value)	{
+	document.body.setAttribute(option_name, option_value);
+
+	// Changing whether different speakers are coloured will never resize the
+	// page or change the display, so we don't want to try to scroll to the
+	// current reference.
+	var resize_page = (option_name !== "colour_speakers");
+
+	// Technically, changing the display options does not actually resize the window.
+	// However, since it can dramatically change the position of the elements on the page,
+	// the effect is the same.
+	if (resize_page && on_resize)	{
+		on_resize();
+	}
+}

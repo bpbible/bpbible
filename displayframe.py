@@ -674,9 +674,7 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 		if not self.dom_loaded:
 			return
 
-		# It would theoretically be possible to do this DOM twiddling through
-		# the WebConnect DOM API.  In practice, I haven't figured out how to.
-		self.Execute("document.body.setAttribute('%s', %s);" %
+		self.Execute("change_display_option('%s', %s);" %
 				(option_name, display_options.get_js_option_value(option_name, quote_string=True)))
 
 	def fonts_changed(self):
