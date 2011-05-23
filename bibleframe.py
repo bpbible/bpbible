@@ -375,7 +375,7 @@ class BibleFrame(VerseKeyedFrame):
 			return ('', None)
 
 		current_reference = GetVerseStr(self.ExecuteScriptWithResult('get_current_reference_on_screen()')) or self.reference
-		ref_to_scroll_to = self.ExecuteScriptWithResult('get_current_reference_range_bounding_elements()[0].getAttribute("osisRef")')
+		ref_to_scroll_to = self.ExecuteScriptWithResult('current_reference_at_top_of_screen')
 		return (current_reference, ref_to_scroll_to)
 
 	def current_segment_changed(self, new_segment_ref):

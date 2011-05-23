@@ -105,11 +105,33 @@ function get_current_reference_range()	{
 	return whole1 + delim + whole2;
 }
 
-function show_current_reference() {
-	fill_reference_bar();
+var current_reference_at_top_of_screen = null;
+var current_window_height, current_window_width;
+
+function on_scroll() {
+	if (current_window_height &&
+		(current_window_height !== window.innerHeight ||
+		current_window_width !== window.innerWidth))
+	{
+		return;
+	}
+
+	var [first, _last] = get_current_reference_range_bounding_elements();
+	current_reference_at_top_of_screen = first.getAttribute("osisRef");
+
+	show_current_reference();
 }
 
-function fill_reference_bar() {
+function on_resize() {
+	if (current_reference_at_top_of_screen)	{
+		window.location.hash = current_reference_at_top_of_screen + "_start";
+	}
+	show_current_reference();
+}
+
+function show_current_reference() {
+	current_window_height = window.innerHeight;
+	current_window_width = window.innerWidth;
 	$("div.reference_bar").text(get_current_reference_range());
 }
 
@@ -120,9 +142,9 @@ function create_reference_bar() {
 $(document).ready(function() {
 	highlight_verse();
 	create_reference_bar();
-	$(window).scroll(function() {show_current_reference()});
-	$(window).resize(function() {show_current_reference()});
-	show_current_reference();
+	$(window).scroll(function() {on_scroll()});
+	$(window).resize(function() {on_resize()});
+	on_scroll();
 });
 
 function get_current_verse() {
