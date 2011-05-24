@@ -357,7 +357,8 @@ class MainFrame(wx.Frame, AuiLayer):
 	
 	def save_data(self):
 		settings["layout"][util.i18n.langid] = self.save_layout()
-		settings["bibleref"] = self.currentverse
+		current_reference, _ref_to_scroll_to = self.bibletext.GetCurrentReferenceAndPosition()
+		settings["bibleref"] = current_reference or self.currentverse
 		settings["bible"] = biblemgr.bible.version
 		settings["commentary"] = biblemgr.commentary.version
 		settings["genbook"] = biblemgr.genbook.version
