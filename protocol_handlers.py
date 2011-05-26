@@ -94,7 +94,7 @@ class PageProtocolHandler(ProtocolHandler):
 						"passage_tag.css",
 						"bpbible://content/quotes_skin/",
 						"bpbible://content/fonts/")
-	standard_scripts = ["jquery-1.3.2.js", "jquery.waitforimages.js", "utils.js"]
+	standard_scripts = ["contrib/jquery-1.3.2.js", "contrib/jquery.waitforimages.js", "utils.js"]
 
 	def _get_document_parts(self, path):
 		module_name, ref = path.split("/", 1)
@@ -106,7 +106,7 @@ class PageProtocolHandler(ProtocolHandler):
 		t = default_timer()
 
 		stylesheets = list(self.bible_stylesheets)
-		scripts = self.standard_scripts + ["highlight.js", "bpbible_html.js", "hyphenate.js", "columns.js"]
+		scripts = self.standard_scripts + ["highlight.js", "bpbible_html.js", "contrib/hyphenate.js", "columns.js"]
 
 		book = biblemgr.get_module_book_wrapper(module_name)
 		assert book, "Module wrapper not found for book " + module_name
