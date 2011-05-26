@@ -94,7 +94,7 @@ class PageProtocolHandler(ProtocolHandler):
 						"passage_tag.css",
 						"bpbible://content/quotes_skin/",
 						"bpbible://content/fonts/")
-	standard_scripts = ["contrib/jquery-1.3.2.js", "contrib/jquery.waitforimages.js", "utils.js"]
+	standard_scripts = ["contrib/jquery-1.6.1.js", "contrib/jquery.waitforimages.js", "utils.js"]
 
 	def _get_document_parts(self, path):
 		module_name, ref = path.split("/", 1)
