@@ -79,9 +79,18 @@ function load_above() {
 	const LOAD_OFFSET = get_scroll_offset() + filler_offset;
 	var ref =  $("#content").children()[0];
 	var ref_height = $(ref).offset().top;
-	while (window.scrollY < LOAD_OFFSET && cnt < 10) {
-		var c = load_text($(".page_segment:first-child")[0], true);
-		if (!c) break;
+	var c;
+
+	function do_load_segment() {
+		if (window.scrollY > LOAD_OFFSET) {
+			return;
+		}
+		c = load_text($(".page_segment:first-child")[0], true);
+		if (!c) return;
+		c.waitForImages(all_images_loaded);
+	}
+
+	function all_images_loaded() {
 		c.prependTo("#content");
 		var diff = $(ref).offset().top - ref_height;
 		if (diff != Math.ceil(diff)) 
@@ -94,9 +103,14 @@ function load_above() {
 		ref_height = $(ref).offset().top;
 		
 		cnt++;
+		if(cnt < 10) {
+			do_load_segment();
+		} else {
+			d("Didn't work\n");
+		}
 	}
 	
-	if(cnt == 10) d("Didn't work\n");
+	do_load_segment();
 }
 
 function load_below() {
