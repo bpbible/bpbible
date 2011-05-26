@@ -536,8 +536,9 @@ class DictionaryFrame(BookFrame):
 	def list_item_changed(self, event=None, suppress_reference_change=False):
 		# Only force everything to reload if the list index has changed.
 		dictionary_list_index = self.dictionary_list.list.GetFirstSelected()
-		if dictionary_list_index != self.dictionary_list_index and (not suppress_reference_change):
-			self.dictionary_list_index = dictionary_list_index
+		index_changed = (dictionary_list_index != self.dictionary_list_index)
+		self.dictionary_list_index = dictionary_list_index
+		if index_changed and not suppress_reference_change:
 			self.UpdateUI()
 			if self.dictionary_list.item_to_focus_on:
 				self.ForceKillFocus()
