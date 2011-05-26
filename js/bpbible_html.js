@@ -1,3 +1,4 @@
+var has_finished_loading_page = false;
 
 function pick_element(selector, range, before) {
 	var last = null;
@@ -322,6 +323,7 @@ function do_scroll_to_current(start, call_count) {
 	 * again.
 	 */
 	if ((t + window.innerHeight > document.body.scrollHeight) && call_count <= 10) {
+		window.scrollTo(l, t);
 		window.setTimeout(do_scroll_to_current, 25, start, call_count + 1);
 		return;
 	}
@@ -329,16 +331,26 @@ function do_scroll_to_current(start, call_count) {
 		d("scroll_to_current called 10 times.");
 	}
 	
+	has_finished_loading_page = true;
 	window.scrollTo(l, t);
 }
 
+/* Call back into Python whenever the current segment changes. */
 var last_segment_shown = null;
 function update_current_segment_shown() {
+	// We shouldn't do anything if we haven't done a scroll to current,
+	// otherwise sometimes it will change briefly to a different reference
+	// and then change back when we scroll to current.
+	if (!has_finished_loading_page)	{
+		return;
+	}
 	var current_segment = find_current_segment();
 	var current_segment_ref = '';
 	if (current_segment)	{
 		current_segment_ref = current_segment.children('.segment').attr('ref_id');
 	}
+
+	// Only call into Python if the current segment has changed.
 	if (!current_segment || current_segment_ref == last_segment_shown) {
 		return;
 	}
