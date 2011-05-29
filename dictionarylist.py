@@ -34,15 +34,15 @@ class DictionaryList(VirtualListBox):
 	def set_book(self, book):
 		self.book = book
 		b = wx.BusyInfo("Getting dictionary topic list...")
-		# TODO: this is broken if we don't have a proper module and get
-		# returned a list...
-		
 		self.topics = book.GetTopics(user_output=True)
 		self._upper_topics = Upper(self.topics)
 
 		self.set_data(self.topics)
 
 	def choose_item(self, text, update_text_entry_value=False):
+		if not self.book.mod:
+			return
+
 		idx = self.topics.mod.getEntryForKey(
 			to_str(text, self.topics.mod)
 		)
