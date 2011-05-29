@@ -48,7 +48,8 @@ class GenBookTree(LazyTreeCombo):
 			tk.Error()
 
 
-			tk.text = old
+			if old:
+				tk.text = old
 			first_child = self.tree.GetFirstChild(root)[0]
 			if first_child:
 				if not ord(tk.Error()) and tk.text:
