@@ -70,7 +70,7 @@ class BookFrame(AUIDisplayFrame):
 
 	def ChangeReference(self, reference, settings_changed=False):
 		has_selected_new_segment = False
-		if self.dom_loaded:
+		if self.IsContentLoaded():
 			# If the settings have changed we want to do a complete reload anyway
 			# (since it could be something that requires a complete reload, such as changing version).
 			if not settings_changed:

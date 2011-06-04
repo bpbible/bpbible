@@ -305,7 +305,7 @@ class BibleFrame(VerseKeyedFrame):
 		return """$('.%(tag_type)s_container[osisRef="%(osisRef)s"] .%(tag_type)s[passageEntryId="%(passage_entry_id)d"]').remove();\n""" % locals()
 
 	def get_verses_on_screen(self, verses):
-		if not self.dom_loaded:
+		if not self.IsContentLoaded():
 			return []
 
 		osis_refs = [VK(verse).getOSISRef() for verse in verses]
@@ -344,7 +344,7 @@ class BibleFrame(VerseKeyedFrame):
 		has_selected_new_verse = False
 		# If the settings have changed we want to do a complete reload anyway
 		# (since it could be something that requires a complete reload, such as changing version).
-		if self.dom_loaded:
+		if self.IsContentLoaded():
 			if settings_changed:
 				self.reference, ref_to_scroll_to = self.GetCurrentReferenceAndPosition()
 			else:
@@ -371,7 +371,7 @@ class BibleFrame(VerseKeyedFrame):
 		self.scroll_to_anchor(osisRef + '_start');
 
 	def GetCurrentReferenceAndPosition(self):
-		if not self.dom_loaded:
+		if not self.IsContentLoaded():
 			return ('', None)
 
 		current_reference = GetVerseStr(self.ExecuteScriptWithResult('get_current_reference_on_screen()')) or self.reference
