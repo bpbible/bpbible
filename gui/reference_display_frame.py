@@ -1,8 +1,7 @@
-import wx
+import json
 from backend.bibleinterface import biblemgr
 from displayframe import DisplayFrameXRC
 from util import overridableproperty
-from backend.verse_template import VerseTemplate
 from swlib.pysw import GetBestRange
 import config
 
@@ -15,6 +14,7 @@ class ReferenceDisplayFrame(DisplayFrameXRC):
 	def __init__(self):
 		self.reference = None
 		self.show_reference_string = False
+		self.has_reference_been_shown = False
 		super(ReferenceDisplayFrame, self).__init__()
 
 	def SetReference(self, reference, *args, **kwargs):
@@ -34,7 +34,7 @@ class ReferenceDisplayFrame(DisplayFrameXRC):
 
 	def _RefreshUI(self, *args, **kwargs):
 		if not self.reference:
-			self.SetPage("")
+			self.ShowReferenceHTML("")
 			return
 
 		template = self.template
@@ -57,7 +57,16 @@ class ReferenceDisplayFrame(DisplayFrameXRC):
 			# interface (or by Sword itself).
 			data = data.replace("<!P>","</p><p>")
 
-		self.SetPage("%s%s" % (reference_string, data))
+		self.ShowReferenceHTML("%s%s" % (reference_string, data))
+
+	def ShowReferenceHTML(self, data):
+		if self.has_reference_been_shown:
+			self.defer_call_till_document_loaded(ReferenceDisplayFrame.Execute,
+				"""$("#original_segment").html(%s);""" %
+					json.dumps(data))
+		else:
+			self.has_reference_been_shown = True
+			self.SetPage(data)
 	
 	@overridableproperty
 	def template(self):

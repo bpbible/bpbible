@@ -407,7 +407,7 @@ class HighlightedDisplayFrame(ReferenceDisplayFrame):
 
 	def _RefreshUI(self):
 		if not self.reference:
-			self.SetPage("")
+			self.ShowReferenceHTML("")
 			return
 		
 		ref_parts = self.reference.split(" - ")
@@ -456,10 +456,7 @@ class HighlightedDisplayFrame(ReferenceDisplayFrame):
 		# XXX: This replace should be done for us by the backend Bible
 		# interface (or by Sword itself).
 		data = data.replace("<!P>","</p><p>")
-		#if not wx.USE_UNICODE:
-		#	#replace common values
-		#	data = ReplaceUnicode(data)
-		self.SetPage("%s" % data)
+		self.ShowReferenceHTML("%s" % data)
 		
 		# don't give error if this doesn't work
 		d = wx.LogNull()
