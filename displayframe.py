@@ -110,16 +110,13 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 		for event_name, (handler, event_id) in self.custom_dom_event_listeners.iteritems():
 			document.AddEventListener(event_name, self, event_id, True)
 
+		self.dom_loaded = True
 		for function, args, kwargs in self.events_to_call_on_document_load:
 			function(self, *args, **kwargs)
 		self.events_to_call_on_document_load = []
 
 	def defer_call_till_document_loaded(self, function, *args, **kwargs):
-		# For some reason, wxWebConnect says that content has been loaded
-		# when the wxWebControl is first constructed.
-		# This causes SetHistoryMaxLength() to crash, so we check the control
-		# has actually been properly constructed.
-		if self.IsOk() and self.IsContentLoaded():
+		if self.dom_loaded:
 			function(self, *args, **kwargs)
 		else:
 			print "Adding item to list of things to execute."
@@ -127,6 +124,7 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 
 	def setup(self):
 		self.handle_links = True
+		self.dom_loaded = False
 		self.events_to_call_on_document_load = []
 		self.custom_dom_event_listeners = {}
 		self.custom_dom_event_id_handlers = {}
@@ -669,6 +667,7 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 		href = event.GetHref()
 		dprint(WARNING, "Loading HREF", href)
 		if self.allow_url_to_open(href) or self.force_next_uri_to_open:
+			self.dom_loaded = False
 			self.force_next_uri_to_open = False
 		else:
 			protocol_handler.on_link_opened(self, href)
@@ -678,14 +677,14 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 		return href.startswith("bpbible") and ("passagestudy.jsp" not in href)
 
 	def change_display_option(self, option_name):
-		if not self.IsContentLoaded():
+		if not self.dom_loaded:
 			return
 
 		self.Execute("change_display_option('%s', %s);" %
 				(option_name, display_options.get_js_option_value(option_name, quote_string=True)))
 
 	def fonts_changed(self):
-		if not self.IsContentLoaded():
+		if not self.dom_loaded:
 			return
 
 		self.Execute("force_stylesheet_reload('bpbible://content/fonts/');")
