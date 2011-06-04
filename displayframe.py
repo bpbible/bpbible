@@ -115,7 +115,11 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 		self.events_to_call_on_document_load = []
 
 	def defer_call_till_document_loaded(self, function, *args, **kwargs):
-		if self.IsContentLoaded():
+		# For some reason, wxWebConnect says that content has been loaded
+		# when the wxWebControl is first constructed.
+		# This causes SetHistoryMaxLength() to crash, so we check the control
+		# has actually been properly constructed.
+		if self.IsOk() and self.IsContentLoaded():
 			function(self, *args, **kwargs)
 		else:
 			print "Adding item to list of things to execute."
@@ -139,7 +143,13 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 		self.Bind(wx.wc.EVT_WEB_MOUSEOVER, self.MouseOverEvent)
 		self.Bind(wx.wc.EVT_WEB_MOUSEOUT, self.MouseOutEvent)
 		self.Bind(wx.EVT_KEY_DOWN, self.on_char)
+		# We don't use favicons, so it causes trouble having wxWebConnect
+		# always trying to fetch favicons from our protocol handler.
 		self.DisableFavIconFetching()
+		# We don't use XULRunner's history, so this essentially disables it.
+		# However, we can't call it until all setup has been completed, since
+		# otherwise the wxWebConnect XRC control hasn't been set up properly.
+		self.defer_call_till_document_loaded(DisplayFrame.SetHistoryMaxLength, 0)
 		
 		hover = protocol_handler.register_hover
 		# TODO: move these out somewhere else
