@@ -174,7 +174,6 @@ class SearchPanel(xrcSearchPanel):
 		self.stop = False
 		self.regexes = []
 		self.fields = []
-		self.do_not_grab_focus = False
 
 		# if search panel is on screen at startup, on_show and set_version will
 		# both be called. Then if there is no index, it will prompt twice.
@@ -202,11 +201,6 @@ class SearchPanel(xrcSearchPanel):
 	def on_list(self, event):
 		item_text = self.verselist.results[event.m_itemIndex]
 		self.versepreview.SetReference(item_text)
-		if self.do_not_grab_focus:
-			self.do_not_grab_focus = False
-		else:
-			self.verselist.SetFocus()
-		self.versepreview.ForceKillFocus()
 	
 	def search_and_show(self, key="", version=None):
 		self.searchkey.SetValue(key)
@@ -399,7 +393,6 @@ class SearchPanel(xrcSearchPanel):
 		elif index == item_count:
 			index = 0
 
-		self.do_not_grab_focus = True
 		self.verselist.SetSelection(index)
 		self.verselist.EnsureVisible(index)
 		self.go_to_reference(index)

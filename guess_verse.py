@@ -1,4 +1,3 @@
-from gui.reference_display_frame import ReferenceDisplayFrame
 from backend.verse_template import VerseTemplate
 from backend.bibleinterface import biblemgr
 from xrc.guess_verse_xrc import xrcGuessVerseFrame
@@ -11,6 +10,12 @@ class GuessVerseFrame(xrcGuessVerseFrame):
 	def __init__(self, parent):
 		super(GuessVerseFrame, self).__init__(parent)
 		
+		# This call makes sure that the reference display frame is loaded
+		# with an empty reference.
+		# This means that all future references displayed will be shown with
+		# Javascript, and so there won't be any focus bugs.
+		self.reference_frame.RefreshUI()
+
 		self.reference_frame.template = VerseTemplate(
 			body=u"$text", headings=""
 		)
@@ -29,11 +34,7 @@ class GuessVerseFrame(xrcGuessVerseFrame):
 			randomnum = random.randint(1, 31102)
 			self.key = VK("Gen 1:%d" % randomnum)
 		self.user_key = UserVK(self.key)
-		item_to_focus_on = wx.Window.FindFocus()
 		self.reference_frame.SetReference(self.key.getText())
-		# Force focus to remain on the correct control after setting the reference.
-		self.reference_frame.ForceKillFocus()
-		item_to_focus_on.SetFocus()
 
 	def on_show_answer(self, event):
 		Tooltip.do_not_show_tooltip = True
