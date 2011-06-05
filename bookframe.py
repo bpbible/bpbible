@@ -610,6 +610,12 @@ class DictionaryFrame(BookFrame):
 		return self.dictionary_list.text_entry
 
 	def current_segment_changed(self, new_segment_ref):
+		# If the current segment changes as a result of the user typing in
+		# the text box, we want to leave the text as they typed it rather
+		# than replacing it with the full name of the current topic.
+		if wx.Window.FindFocus() == self.dictionary_list.text_entry.text:
+			return
+
 		self.dictionary_list.choose_item(new_segment_ref, update_text_entry_value=True, suppress_reference_change=True)
 		self.reference = new_segment_ref
 		self.update_title()
