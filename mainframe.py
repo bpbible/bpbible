@@ -689,7 +689,7 @@ class MainFrame(wx.Frame, AuiLayer):
 		wx.GetApp().ShowInspectionTool()
 
 	def on_error_console(self, event):
-		self.bibletext.Execute("window.open('chrome://global/content/console.xul', '', 'chrome,dialog=no,toolbar,resizable')")
+		self.bibletext.show_error_console()
 	
 	def on_path_manager(self, event):
 		PathManager(self).ShowModal()

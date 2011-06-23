@@ -633,6 +633,12 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 	@defer_till_document_loaded
 	def scroll_to_anchor(self, anchor):
 		self.Execute('window.location.hash = "%s";' % anchor)
+
+	def show_error_console(self):
+		# Show an error console window for the current frame.
+		# The string to run this is a semi-random magic string.
+		# Other ones are possible, but this is useful for debugging.
+		self.Execute("window.open('chrome://global/content/console.xul', '', 'chrome,dialog=no,toolbar,resizable')")
 	
 	def set_mod(self, value):
 		self._mod = value
