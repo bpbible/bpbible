@@ -450,6 +450,11 @@ These files are not part of BPBible.
 Their licenses are as specified in their respective directories.
 
 License for modules in the js/contrib directory
-=======================================
+===============================================
 These files are not part of BPBible.
 Their licenses are as specified in the individual files.
+
+License for XULRunner
+=====================
+XULRunner is released in binary form by the Mozilla project.
+Source is obtainable from the Mozilla project.

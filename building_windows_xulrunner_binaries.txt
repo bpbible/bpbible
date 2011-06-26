@@ -1,0 +1,6 @@
+The binaries used in the Windows build are taken from the binaries included in
+Kirix's WebConnect distribution for Windows.
+All unnecessary files have been removed, including:
+* All exe files.
+* All DLL files not listed in dependentlibs.list
+* Other INI files for these exes and DLLs.
