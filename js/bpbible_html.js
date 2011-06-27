@@ -280,9 +280,17 @@ $(document).ready(function(){
 });
 
 function toggle_filler(to) {
-	/* we keep a friendly blank area around so that we can scroll to the top
-	 * of a chapter before the previous one has loaded and not jump around so
-	 * much */
+	/*
+	 For the Bible window we keep a friendly blank area around so that we can scroll to
+	 the top of a chapter before the previous one has loaded and not jump around so much.
+
+	 We don't do this for windows without any offset at the top to prevent it jumping when the
+	 filler is added and then removed.
+	*/
+	if (get_scroll_point().top == 0)	{
+		return;
+	}
+
 	var oldTop = $("#content").offset().top;
 	if (to) {
 		if (!reached_top && $(".filler").length == 0) {
