@@ -171,7 +171,8 @@ class GenBookFrame(BookFrame):
 
 	def on_genbook_change(self, event):
 		self.SetReference(
-			self.genbooktree.tree.GetPyData(self.genbooktree.popup.value)[0]
+			self.genbooktree.tree.GetPyData(self.genbooktree.popup.value)[0],
+			settings_changed=True
 		)
 
 	def genbook_version_changed(self, newversion):
