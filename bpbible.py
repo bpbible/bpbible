@@ -19,14 +19,21 @@ if os.path.isdir("custom"):
 			execfile("custom/%s" % file)
 
 from util.debug import dprint, MESSAGE, WARNING, is_debugging
-try:
-	# Faulthandler helps us to find the stack trace when BPBible segmentation
-	# faults.
-	import faulthandler
-	faulthandler.enable()
-except ImportError:
-	dprint(WARNING, "Faulthandler not installed")
-	pass
+
+def enable_faulthandler():
+	try:
+		# Faulthandler helps us to find the stack trace when BPBible segmentation faults.
+		import faulthandler
+		faulthandler.enable()
+	except ImportError:
+		dprint(WARNING, "Faulthandler not installed")
+	except AttributeError, e:
+		# Faulthandler encounters an AttributeError when built with Py2exe,
+		# because py2exe is missing the fileno method on standard input and output.
+		# We catch this to prevent a crash.
+		dprint(WARNING, "AttributeError encountered enabling faulthandler.", e)
+
+enable_faulthandler()
 
 dprint(MESSAGE, "Importing wx")
 
