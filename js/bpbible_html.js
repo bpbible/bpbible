@@ -115,7 +115,15 @@ function load_above() {
 }
 
 function load_below() {
-	const LOAD_OFFSET = get_scroll_offset();
+	var LOAD_OFFSET = get_scroll_offset();
+
+	if (!has_finished_loading_page)	{
+		var start_y = get_start_point().offset().top;
+		var offset_y = get_scroll_point().top;
+		var something_y = start_y - offset_y;
+		var min_height = start_y - offset_y + window.innerHeight;
+		LOAD_OFFSET = Math.max(LOAD_OFFSET, min_height - window.scrollY);
+	}
 	
 	var cnt = 0;
 	while (window.scrollMaxY - window.scrollY < LOAD_OFFSET && cnt < 10) {
@@ -125,6 +133,7 @@ function load_below() {
 		var page_segments = $(".page_segment");
 		if (!page_segments.length) alert("No page segments found!!!");
 		var last_page_segment = page_segments[page_segments.length-1];
+		d("Calling load_text");
 		var c = load_text(last_page_segment, false);
 		if (!c) break;
 		c.appendTo("#content");
@@ -150,6 +159,14 @@ function remove_excess_page_segments() {
 			}
 			end_segment_index = index;
 		}
+	}
+
+	// Sometimes none of the segments are actually on the screen, and then it
+	// tries to delete all the final segments.
+	// It should instead do nothing and wait until one of the segments comes
+	// on screen.
+	if (start_segment_index == -1 || end_segment_index == -1)	{
+		return;
 	}
 
 	var MIN_SEGMENTS_TO_LEAVE = 2;
@@ -308,6 +325,7 @@ function scroll_to_current(start) {
 }
 
 function do_scroll_to_current(start, call_count) {
+	has_finished_loading_page = false;
 	// get_start_point define in page_view and chapter_view
 	if(!start) start = get_start_point();
 	// Now scroll down to the right point
@@ -323,7 +341,6 @@ function do_scroll_to_current(start, call_count) {
 	 * again.
 	 */
 	if ((t + window.innerHeight > document.body.scrollHeight) && call_count <= 10) {
-		window.scrollTo(l, t);
 		window.setTimeout(do_scroll_to_current, 25, start, call_count + 1);
 		return;
 	}
