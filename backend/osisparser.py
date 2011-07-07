@@ -291,6 +291,8 @@ class OSISParser(filterutils.ParserBase):
 		if self.strongs_bufs or self.morph_bufs:
 			self.buf += '<span class="strongs-block"><span class="strongs_word">'
 			self.buf += self.u.lastSuspendSegment.c_str() or "&nbsp;"
+			# empty that in case of adjacent words with no space (see issue 210)
+			self.u.lastSuspendSegment.size(0)
 			self.buf += '</span><span class="strongs"><span class="strongs_headwords">'
 			self.buf += "".join(self.strongs_bufs) or "&nbsp;"
 			if self.morph_bufs:
