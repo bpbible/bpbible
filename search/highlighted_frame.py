@@ -458,10 +458,17 @@ class HighlightedDisplayFrame(ReferenceDisplayFrame):
 		data = data.replace("<!P>","</p><p>")
 		self.ShowReferenceHTML("%s" % data)
 		
-		# don't give error if this doesn't work
-		d = wx.LogNull()
-		self.scroll_to_anchor("highlight")
-#		self.ScrollLines(-1)
+		# Scroll to the first highlighted match.
+		# We scroll up one line from the highlight to make sure there is sufficient context,
+		# particularly when displaying a Strong's match in Strong's Blocked mode.
+		# However, we have to make sure that if the match is at the bottom of the page
+		# we don't scroll up a line and half-obscure it.
+		self.ExecuteScriptAfterDocumentLoaded("""
+			window.location.hash = "highlight";
+			if ($(".search_highlight:first").offset().top < window.scrollY + 15)	{
+				window.scrollByLines(-1);
+			}
+		""")
 	
 	def get_frame_for_search(self):
 		for item in guiconfig.mainfrm.frames:

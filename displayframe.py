@@ -423,6 +423,10 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 
 		guiconfig.mainfrm.set_bible_ref(host, events.LINK_CLICKED)
 
+	@defer_till_document_loaded
+	def ExecuteScriptAfterDocumentLoaded(self, script):
+		self.Execute(script)
+
 	def on_char(self, event):
 		if osutils.is_msw():
 			self.force_alt_key_to_work_correctly(event)
@@ -630,9 +634,8 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 	def scroll_to_current(self):
 		self.scroll_to_anchor("current")
 	
-	@defer_till_document_loaded
 	def scroll_to_anchor(self, anchor):
-		self.Execute('window.location.hash = "%s";' % anchor)
+		self.ExecuteScriptAfterDocumentLoaded('window.location.hash = "%s";' % anchor)
 
 	def show_error_console(self):
 		# Show an error console window for the current frame.
