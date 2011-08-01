@@ -456,6 +456,12 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 				self.SelectAll,
 				_("Select all the text in the frame")
 			), IN_BOTH),
+			(MenuItem(
+				_("Copy selection"), 
+				self.CopySelection,
+				enabled=self.CanCopySelection,
+				doc=_("Copy the selected text with links")
+			), IN_BOTH),
 		)
 		return menu_items
 
