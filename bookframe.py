@@ -30,6 +30,7 @@ class BookFrame(AUIDisplayFrame):
 	def __init__(self, parent):
 		super(BookFrame, self).__init__(parent)
 		self.reference = ""
+		self.last_version_used = ""
 		self.setup()
 
 	def notify(self, ref, source=None, settings_changed=False):
@@ -69,6 +70,8 @@ class BookFrame(AUIDisplayFrame):
 		self.ChangeReference(self.reference, settings_changed)
 
 	def ChangeReference(self, reference, settings_changed=False):
+		settings_changed = settings_changed or (self.last_version_used != self.book.version)
+		self.last_version_used = self.book.version
 		has_selected_new_segment = False
 		if self.dom_loaded:
 			# If the settings have changed we want to do a complete reload anyway
