@@ -492,7 +492,7 @@ class Tooltip(TooltipBaseMixin, tooltip_parent):
 						break
 					
 					# don't send a MouseOut if it already is processing one
-					if not item.out_timer.IsRunning():
+					if item.out_timer and (not item.out_timer.IsRunning()):
 						item.MouseOut(None)
 	
 		self.mouse_is_over = False
