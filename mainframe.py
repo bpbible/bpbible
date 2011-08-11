@@ -152,10 +152,7 @@ class MainFrame(wx.Frame, AuiLayer):
 		
 		self.create_searchers()
 		dprint(MESSAGE, "Setting AUI up")
-		
 		self.create_aui_items()
-		self.buffer = wx.TextCtrl(self)
-		self.buffer.Hide()
 		
 		super(MainFrame, self).setup()
 		self.set_aui_items_up()
@@ -391,10 +388,7 @@ class MainFrame(wx.Frame, AuiLayer):
 			
 
 	def copy(self, text):
-		# Under MSW, doesn't like pasting into Word 97 just using clipboard, so
-		# use a text control to do it
-		# TODO: check if this is still true
-		if ( wx.TheClipboard.Open() ):
+		if wx.TheClipboard.Open():
 			if osutils.is_gtk():
 				wx.TheClipboard.UsePrimarySelection(False)
 		
@@ -405,11 +399,6 @@ class MainFrame(wx.Frame, AuiLayer):
 
 		else:
 			dprint(ERROR, "Could not open the clipboard")
-		
-		if osutils.is_msw():
-			self.buffer.ChangeValue(text)
-			self.buffer.SetSelection(-1, -1)
-			self.buffer.Copy()
 
 
 	def create_searchers(self):
