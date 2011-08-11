@@ -251,13 +251,16 @@ class CopyVerseDialog(xrcCopyVerseDialog):
 		return GetBestRange(self.reference.GetValue(), 
 				userInput=True, userOutput=False)
 		
-	def update(self, event=None, ref=None):
+	def update(self, event=None, ref=None, dialog_hidden_mode=False):
 		if event: 
 			event.Skip()
 
-		text = self.GetText(ref or self.get_internal_reference())
-		if not self.formatted: text = text.replace("\n", "<br />")
-		self.preview.SetPage(text, include_stock_stylesheets=False)
+		plain_text = self.GetText(ref or self.get_internal_reference())
+		if (not dialog_hidden_mode) or self.formatted:
+			text = plain_text
+			if not self.formatted: text = text.replace("\n", "<br />")
+			self.preview.SetPage(text, include_stock_stylesheets=False)
+		return plain_text
 
 	def ShowModal(self, text):
 		# set the reference
@@ -294,13 +297,13 @@ class CopyVerseDialog(xrcCopyVerseDialog):
 	def formatted(self):
 		return self.copy_formatted.IsChecked()
 	
-	def copy_verses(self, ref):
+	def copy_verses(self, ref, dialog_hidden_mode=False):
 		print "Updating...", ref
-		self.update(ref=ref)
+		text_to_copy = self.update(ref=ref, dialog_hidden_mode=dialog_hidden_mode)
 		if self.formatted:
 			self.preview.copyall()
 		else:
-			guiutil.copy(self.GetText(ref))
+			guiutil.copy(text_to_copy)
 
 	def GetText(self, ref):
 		print "Getting text for", ref
