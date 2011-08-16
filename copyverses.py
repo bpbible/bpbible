@@ -350,6 +350,19 @@ class CopyVerseDialog(xrcCopyVerseDialog):
 		biblemgr.bible.templatelist.pop()
 		biblemgr.parser_mode = NORMAL_PARSER_MODE
 		return data
+
+	def safely_destroy_dialog(self):
+		"""We need to make sure that the copy has been completed before we destroy the dialog.
+
+		To do this, we make sure of two things:
+		1. The HTML preview window has been loaded if we are using it to copy from.
+		2. The dialog has been open for a sufficient amount of time to allow the copy to complete.
+			This should be a background task that doesn't affect the user (otherwise it sometimes just doesn't copy).
+		"""
+		if self.formatted:
+			self.preview.defer_call_till_document_loaded(lambda cvdpreview: wx.CallLater(5000, self.Destroy))
+		else:
+			self.Destroy()
 	
 
 	#@classmethod
