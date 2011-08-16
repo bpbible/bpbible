@@ -259,7 +259,9 @@ class CopyVerseDialog(xrcCopyVerseDialog):
 		if (not dialog_hidden_mode) or self.formatted:
 			text = plain_text
 			if not self.formatted: text = text.replace("\n", "<br />")
-			self.preview.SetPage(text, include_stock_stylesheets=False)
+			# Have to make sure this doesn't include the placeholder divs and styles,
+			# since they cause boxes to appear around the text when pasted into OpenOffice.
+			self.preview.SetPage(text, include_wrapper_divs=False)
 		return plain_text
 
 	def ShowModal(self, text):

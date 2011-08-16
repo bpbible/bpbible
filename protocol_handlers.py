@@ -22,9 +22,7 @@ BASE_HTML = '''\
 	%(head)s
 </head>
 <body lang="%(lang)s" %(bodyattrs)s>
-	<div id="content" class="%(contentclass)s">
 	%(content)s
-	</div>
 	%(timer)s
 </body></html>'''
 
@@ -36,7 +34,8 @@ class ProtocolHandler(object):
 		return "No content specified"
 	
 	def _get_html(self, module, content, bodyattrs="", timer="", 
-		stylesheets=[], scripts=[], javascript_block="", styles="", contentclass=""):
+		stylesheets=[], scripts=[], javascript_block="", styles="", contentclass="",
+		include_wrapper_divs=True):
 		resources = []
 
 		### Should we keep using the file:/// protocol?
@@ -59,13 +58,15 @@ class ProtocolHandler(object):
 		if javascript_block:
 			resources.append('<script type="text/javascript">%s</script>' % javascript_block)
 
+		if include_wrapper_divs:
+			content = '<div id="content" class="%(contentclass)s">\n%(content)s\n</div>' % locals()
+
 		text = BASE_HTML % dict(
 			lang=module.Lang() if module else "en",
 			head='\n'.join(resources),
 			bodyattrs=bodyattrs, 
 			content=content, 
-			timer=timer,
-			contentclass=contentclass)
+			timer=timer)
 
 		if is_debugging():
 			self.log_generated_html(text)
@@ -188,7 +189,8 @@ class PageProtocolHandler(ProtocolHandler):
 	def get_document(self, path):
 		#print "Getting document", path
 		d = self._get_document_parts(path)
-		d["content"] = '<div class="page_segment" id="original_segment">%s</div>' % d["content"]
+		if d.get("include_wrapper_divs", True):
+			d["content"] = '<div class="page_segment" id="original_segment">%s</div>' % d["content"]
 		d["contentclass"] = "chapterview"
 		return self._get_html(**d)
 
@@ -439,19 +441,20 @@ class FragmentHandler(PageProtocolHandler):
 	upto = 0
 
 	@classmethod
-	def register(cls, text, module, include_stock_stylesheets):
+	def register(cls, text, module, include_wrapper_divs):
 		cls.upto += 1
 		k = str(cls.upto)
-		cls.registered[k] = text, module, include_stock_stylesheets
+		cls.registered[k] = text, module, include_wrapper_divs
 		return "bpbible://content/fragment/%s" % k
 
 	def _get_document_parts(self, path):
-		text, module, include_stock_stylesheets = self.registered.pop(path)
-		stylesheets = self.bible_stylesheets if include_stock_stylesheets else ()
+		text, module, include_wrapper_divs = self.registered.pop(path)
+		stylesheets = self.bible_stylesheets if include_wrapper_divs else ()
 		return dict(module=module, content=text,
 				stylesheets=stylesheets,
 				scripts=self.standard_scripts,
-				bodyattrs=self._get_body_attrs(module))
+				bodyattrs=self._get_body_attrs(module),
+				include_wrapper_divs=include_wrapper_divs)
 
 handlers = {
 	"page": PageProtocolHandler(), 
