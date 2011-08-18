@@ -502,8 +502,7 @@ class MainFrame(wx.Frame, AuiLayer):
 		text = self.bibletext.get_quick_selected()
 		
 		cvd = copyverses.CopyVerseDialog(self)
-		cvd.ShowModal(text)
-		cvd.Destroy()
+		cvd.ShowDialog(text)
 
 
 	def bind_events(self):

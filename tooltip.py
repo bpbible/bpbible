@@ -221,7 +221,8 @@ class TooltipBaseMixin(object):
 
 		from manage_topics_frame import ManageTopicsFrame
 		from guess_verse import GuessVerseFrame
-		window_types_to_ignore = (ManageTopicsFrame, GuessVerseFrame)
+		from copyverses import CopyVerseDialog
+		window_types_to_ignore = (ManageTopicsFrame, GuessVerseFrame, CopyVerseDialog)
 
 		focused_window = wx.Window.FindFocus()
 		if not focused_window:

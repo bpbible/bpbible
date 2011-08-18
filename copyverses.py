@@ -116,7 +116,8 @@ class CopyVerseDialog(xrcCopyVerseDialog):
 			item.SetCaretForeground(text_colour)
 
 		self.wxID_CANCEL.Bind(wx.EVT_BUTTON, 
-					lambda x:self.EndModal(wx.ID_CANCEL))
+					lambda x:self.Destroy())
+		self.wxID_OK.Bind(wx.EVT_BUTTON, self.ok_button_clicked)
 
 		self.gui_save_template.Bind(wx.EVT_BUTTON, self.save_template)
 		self.gui_load_template.Bind(wx.EVT_BUTTON, self.load_template)
@@ -269,7 +270,7 @@ class CopyVerseDialog(xrcCopyVerseDialog):
 				"""$("body").html(%s);""" % json.dumps(text))
 		return plain_text
 
-	def ShowModal(self, text):
+	def ShowDialog(self, text):
 		# set the reference
 		self.reference.SetValue(
 			GetBestRange(text, userInput=False, userOutput=True)
@@ -278,27 +279,26 @@ class CopyVerseDialog(xrcCopyVerseDialog):
 		# update the text
 		self.update()
 
-		ansa = super(CopyVerseDialog, self).ShowModal()
+		super(CopyVerseDialog, self).Show()
 
-		if ansa == wx.ID_OK:
-			self.copy_verses(self.get_internal_reference())
-			if self.is_custom:
-				config_manager["BPBible"]["copy_verse"] = (
-					self.based_on, 
-					dict(
-						header=self.template_panel.header.GetText(),
-						body=self.template_panel.body.GetText(), 
-						footer=self.template_panel.footer.GetText()
-					), self.formatted
-				)
+	def ok_button_clicked(self, event):
+		self.copy_verses(self.get_internal_reference())
+		if self.is_custom:
+			config_manager["BPBible"]["copy_verse"] = (
+				self.based_on, 
+				dict(
+					header=self.template_panel.header.GetText(),
+					body=self.template_panel.body.GetText(), 
+					footer=self.template_panel.footer.GetText()
+				), self.formatted
+			)
 
-			else:
-				config_manager["BPBible"]["copy_verse"] = (
-					self.gui_template_list.StringSelection
-				), None, self.formatted
-			
+		else:
+			config_manager["BPBible"]["copy_verse"] = (
+				self.gui_template_list.StringSelection
+			), None, self.formatted
 
-		return ansa
+		self.Destroy()
 
 	@property
 	def formatted(self):
@@ -355,25 +355,3 @@ class CopyVerseDialog(xrcCopyVerseDialog):
 		biblemgr.bible.templatelist.pop()
 		biblemgr.parser_mode = NORMAL_PARSER_MODE
 		return data
-
-	def safely_destroy_dialog(self):
-		"""We need to make sure that the copy has been completed before we destroy the dialog.
-
-		To do this, we make sure of two things:
-		1. The HTML preview window has been loaded if we are using it to copy from.
-		2. The dialog has been open for a sufficient amount of time to allow the copy to complete.
-			This should be a background task that doesn't affect the user (otherwise it sometimes just doesn't copy).
-		"""
-		if self.formatted:
-			self.preview.defer_call_till_document_loaded(lambda cvdpreview: wx.CallLater(5000, self.Destroy))
-		else:
-			self.Destroy()
-	
-
-	#@classmethod
-	#def show_dialog(cls, parent=None):
-	#	"""Copy verses to other applications"""
-	#	if not parent:
-	#		parent = guiconfig.mainfrm
-	#	return cls(parent).ShowModal()
-	
