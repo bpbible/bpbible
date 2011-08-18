@@ -4,7 +4,7 @@
 
 #TODO: why don't trailing spaces get preserved between restarts?!?
 import wx
-import re
+import json
 
 from xrc.copyverses_xrc import xrcCopyVerseDialog
 from backend.bibleinterface import biblemgr
@@ -18,7 +18,6 @@ import guiconfig
 import config
 from gui import guiutil, fonts
 from util.configmgr import config_manager
-from swlib import pysw
 from swlib.pysw import GetBestRange
 import display_options
 
@@ -124,6 +123,7 @@ class CopyVerseDialog(xrcCopyVerseDialog):
 		self.gui_template_list.Bind(wx.EVT_CHOICE, self.on_template_choice)
 
 		self.preview.book = biblemgr.bible
+		self.has_preview_been_loaded = False
 		
 		#self.panel1instructions.Wrap(300)
 		#s =self.GetSizer()
@@ -252,6 +252,12 @@ class CopyVerseDialog(xrcCopyVerseDialog):
 				userInput=True, userOutput=False)
 		
 	def update(self, event=None, ref=None, dialog_hidden_mode=False):
+		if not self.has_preview_been_loaded:
+			# Have to make sure this doesn't include the placeholder divs and styles,
+			# since they cause boxes to appear around the text when pasted into OpenOffice.
+			self.preview.SetPage("&nbsp;", include_wrapper_divs=False)
+			self.has_preview_been_loaded = True
+
 		if event: 
 			event.Skip()
 
@@ -259,9 +265,8 @@ class CopyVerseDialog(xrcCopyVerseDialog):
 		if (not dialog_hidden_mode) or self.formatted:
 			text = plain_text
 			if not self.formatted: text = text.replace("\n", "<br />")
-			# Have to make sure this doesn't include the placeholder divs and styles,
-			# since they cause boxes to appear around the text when pasted into OpenOffice.
-			self.preview.SetPage(text, include_wrapper_divs=False)
+			self.preview.ExecuteScriptAfterDocumentLoaded(
+				"""$("body").html(%s);""" % json.dumps(text))
 		return plain_text
 
 	def ShowModal(self, text):
