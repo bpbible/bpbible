@@ -92,6 +92,7 @@ class BibleFrame(VerseKeyedFrame):
 					_("Random verse"), 
 					self.random_verse, 
 					accelerator="Ctrl-R",
+					enabled=self.has_module,
 					doc=_("Go to a random verse")
 			), IN_BOTH),
 			(MenuItem(
@@ -122,6 +123,7 @@ class BibleFrame(VerseKeyedFrame):
 				_("Manage Topics"), 
 				self.manage_topics,
 				accelerator="Ctrl+Shift+T",
+				enabled=self.has_module,
 				doc=_("Manages all of the topics and the passages in them.")	
 			), IN_MENU),
 			(MenuItem(
