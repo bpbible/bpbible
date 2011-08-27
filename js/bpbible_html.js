@@ -63,9 +63,14 @@ function get_normalized_selection(){
 	var selection = window.getSelection();
 
 	// We ignore multiple selections At the Moment
-	var range = selection.getRangeAt(0);
-	if(range.collapsed) return null;
-	return range;
+	for (var index = 0; index < selection.rangeCount; index++)	{
+		var range = selection.getRangeAt(index);
+		if (!range.collapsed)	{
+			return range;
+		}
+	}
+
+	return null;
 }
 
 function get_scroll_offset() {
