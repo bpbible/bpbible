@@ -404,6 +404,15 @@ class BibleFrame(VerseKeyedFrame):
 						selectionEnd = this.getAttribute("osisRef");
 					}
 				});
+
+				// If the selection is before the first verse marker (e.g. a chapter number) or after the last verse marker
+				// then we should just use the first/last verse on the page.
+				if (links.length > 0 && !selectionStart)	{
+					selectionStart = links.get(0).getAttribute("osisRef");
+				}
+				if (links.length > 0 && !selectionEnd)	{
+					selectionEnd = links.get(links.length - 1).getAttribute("osisRef");
+				}
 				return (selectionStart && selectionEnd) ? selectionStart + " - " + selectionEnd : "";
 			})();
 		""")

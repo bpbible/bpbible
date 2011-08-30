@@ -62,15 +62,10 @@ function pick_element(selector, range, before) {
 function get_normalized_selection(){
 	var selection = window.getSelection();
 
-	// We ignore multiple selections At the Moment
-	for (var index = 0; index < selection.rangeCount; index++)	{
-		var range = selection.getRangeAt(index);
-		if (!range.collapsed)	{
-			return range;
-		}
-	}
-
-	return null;
+	// We ignore multiple selections at the moment.
+	var range = selection.getRangeAt(0);
+	if(range.collapsed) return null;
+	return range;
 }
 
 function get_scroll_offset() {
