@@ -237,7 +237,8 @@ class OSISParser(filterutils.ParserBase):
 			if (not lemma.startswith("strong:") and 
 				not lemma.startswith("x-Strongs:") and
 				not lemma.startswith("Strong:")):
-				dprint(WARNING, "Could not match lemma", lemma)
+				if lemma:
+					dprint(WARNING, "Could not match lemma", lemma)
 				#self.success = SW.INHERITED
 				continue
 				

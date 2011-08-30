@@ -307,6 +307,9 @@ class MainFrame(wx.Frame, AuiLayer):
 		if settings["options"]:
 			for item, value in settings["options"].iteritems():
 				biblemgr.set_option(item, value)
+
+		for option_name, sword_option_name in display_options.sword_options_map.iteritems():
+			biblemgr.set_option(sword_option_name, display_options.options[option_name])
 				
 		if settings["size"]:
 			self.SetSize(settings["size"])

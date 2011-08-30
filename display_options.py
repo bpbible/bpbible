@@ -21,6 +21,12 @@ options.add_item("raw", False, item_type=bool)
 options.add_item("show_timing", False, item_type=bool)
 options.add_item("colour_speakers", "off", item_type=str)
 
+sword_options_map = dict(
+	strongs_numbers="Strong's Numbers",
+	morphology="Morphological Tags",
+	morph_segmentation="Morpheme Segmentation",
+)
+
 all_reload_options = (
 	DO_NOT_RELOAD,
 	RELOAD_BIBLE_FRAMES,
@@ -92,10 +98,10 @@ options_menu = [
 	BooleanOptionMenuItem("headings", N_("Headings")),
 	BooleanOptionMenuItem("cross_references", N_("Cross References")),
 	BooleanOptionMenuItem("footnotes", N_("Footnotes")),
-	BooleanOptionMenuItem("strongs_numbers", N_("Strongs Numbers")),
+	BooleanOptionMenuItem("strongs_numbers", N_("Strongs Numbers"), reload_options=RELOAD_BIBLE_FRAMES),
 	BooleanOptionMenuItem("strongs_blocked", N_("Strongs Underneath")),
-	BooleanOptionMenuItem("morphology", N_("Morphology")),
-	BooleanOptionMenuItem("morph_segmentation", N_("Morph Segmentation")),
+	BooleanOptionMenuItem("morphology", N_("Morphology"), reload_options=RELOAD_BIBLE_FRAMES),
+	BooleanOptionMenuItem("morph_segmentation", N_("Morph Segmentation"), reload_options=RELOAD_BIBLE_FRAMES),
 	MultiOptionsMenuItem("colour_speakers", N_("Colour code speakers"), [
 		("woc_in_red", N_("Words of Christ in Red")),
 		("coloured_quotes", N_("Colour code by speaker")),
@@ -121,6 +127,10 @@ debug_options_menu = [
 display_option_changed_observers = ObserverList()
 
 def display_option_changed(option_name, reload_options):
+	from backend.bibleinterface import biblemgr
+	if option_name in sword_options_map:
+		biblemgr.set_option(sword_options_map[option_name], options[option_name])
+
 	if reload_options == DO_NOT_RELOAD:
 		display_option_changed_observers(option_name)
 	elif reload_options == RELOAD_BIBLE_FRAMES:
