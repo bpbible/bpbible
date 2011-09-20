@@ -119,7 +119,7 @@ class QuickSelector(quick_selector_class):
 
 		sizer.Add(text, 0, wx.GROW|wx.TOP|wx.LEFT|wx.RIGHT|wx.BOTTOM, 10)
 		sizer.Add(hrule, 0, wx.GROW|wx.LEFT|wx.RIGHT|wx.BOTTOM, 10)
-		sizer.Add(self.panel, 0, wx.GROW|wx.BOTTOM|wx.LEFT|wx.RIGHT, 20)
+		sizer.Add(self.panel, 1, wx.GROW|wx.BOTTOM|wx.LEFT|wx.RIGHT, 20)
 		self.p.Sizer = sizer
 
 		s1 = wx.BoxSizer(wx.HORIZONTAL)
