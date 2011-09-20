@@ -119,7 +119,6 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 		if self.dom_loaded:
 			function(self, *args, **kwargs)
 		else:
-			print "Adding item to list of things to execute."
 			self.events_to_call_on_document_load.append((function, args, kwargs))
 
 	def setup(self):
