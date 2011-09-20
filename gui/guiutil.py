@@ -326,8 +326,16 @@ def bind_event_to_all_children(parent, event, handler,
 		bind_event_to_all_children(child, event, handler, child_filter)
 
 if not hasattr(wx.MouseEvent, "X"):
-	wx.MouseEvent.m_x = wx.MouseEvent.X = property(wx.MouseEvent.GetX, wx.MouseEvent.SetX)
-	wx.MouseEvent.m_y = wx.MouseEvent.Y = property(wx.MouseEvent.GetY, wx.MouseEvent.SetY)
+	# saw this on 2.9.1.x, looks like it has been fixed, but still check for
+	# now
+	wx.MouseEvent.X = property(wx.MouseEvent.GetX, wx.MouseEvent.SetX)
+	wx.MouseEvent.Y = property(wx.MouseEvent.GetY, wx.MouseEvent.SetY)
+
+if not hasattr(wx.MouseEvent, "m_x"):
+	# seeing this on 2.9.2.2 - we should sometime just remove code which
+	# relies on m_x/m_y
+	wx.MouseEvent.m_x = property(wx.MouseEvent.GetX, wx.MouseEvent.SetX)
+	wx.MouseEvent.m_y = property(wx.MouseEvent.GetY, wx.MouseEvent.SetY)
 
 
 def bootstrap_frame(frametype, *args, **kwargs):
