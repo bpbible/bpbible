@@ -36,7 +36,9 @@ class TextPanel(wx.TextCtrl):#PyPanel):
 	style=wx.TE_CENTRE|wx.TE_PROCESS_ENTER|wx.NO_BORDER):
 		super(TextPanel, self).__init__(parent, style=style)
 		self.Bind(wx.EVT_KILL_FOCUS, self.end_parent_modal)
+		self.TopLevelParent.Bind(wx.EVT_KILL_FOCUS, self.end_parent_modal)
 		self.Bind(wx.EVT_CHAR, self.add_letter)
+		self.Bind(wx.EVT_KEY_UP, self.add_letter)
 		self.Bind(wx.EVT_TEXT_ENTER, self.on_enter)
 		self.SetFont(wx.Font(30, wx.SWISS, wx.NORMAL, wx.FONTWEIGHT_BOLD, False))
 		dc = wx.MemoryDC()
@@ -130,7 +132,13 @@ class QuickSelector(quick_selector_class):
 		text.Font = f
 		self.SetSizerAndFit(s1)
 #		self.Size = self.p.BestSize
-		self.SetSize((350, self.p.BestSize[1]))
+		if osutils.is_mac():
+			# on mac it seems to make our textbox to small so descending
+			# letters are chopped off
+			self.SetSize((350, self.BestSize[1]+7))
+		else:
+			self.SetSize((350, self.BestSize[1]))
+
 #		self.SetSize(self.p.BestSize)
 
 		if osutils.is_gtk():
