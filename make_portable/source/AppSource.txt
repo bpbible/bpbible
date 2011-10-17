@@ -1,1 +1,0 @@
-The main app's source code is available from the portable app's homepage mentioned in the help.html file.
