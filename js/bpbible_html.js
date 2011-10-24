@@ -151,7 +151,7 @@ function remove_excess_page_segments() {
 	for (var index = 0; index < page_segments.length; index++)	{
 		var page_segment = $(page_segments.get(index));
 		var segment_top = page_segment.offset().top;
-		var segment_bottom = segment_top + page_segment.attr('offsetHeight');
+		var segment_bottom = segment_top + page_segment.prop('offsetHeight');
 		var is_on_screen = (segment_top < endY && segment_bottom > startY);
 		if (is_on_screen)	{
 			if (start_segment_index == -1)	{
@@ -174,7 +174,7 @@ function remove_excess_page_segments() {
 	for (index = page_segments.length - 1; index > end_segment_index + MIN_SEGMENTS_TO_LEAVE; index--)	{
 		page_segment = $(page_segments.get(index));
 		segment_top = page_segment.offset().top;
-		segment_bottom = segment_top + page_segment.attr('offsetHeight');
+		segment_bottom = segment_top + page_segment.prop('offsetHeight');
 		if (page_segment.offset().top > endY + MIN_PIXELS_TO_LEAVE)	{
 			page_segment.remove();
 		} else {
@@ -185,9 +185,9 @@ function remove_excess_page_segments() {
 	var deleted_items_height = 0;
 	for (index = start_segment_index - MIN_SEGMENTS_TO_LEAVE - 1; index >= 0; index--)	{
 		var page_segment = $(page_segments.get(index));
-		var segment_bottom = page_segment.offset().top + page_segment.attr('offsetHeight');
+		var segment_bottom = page_segment.offset().top + page_segment.prop('offsetHeight');
 		if (segment_bottom < startY - MIN_PIXELS_TO_LEAVE)	{
-			deleted_items_height += page_segment.attr('offsetHeight');
+			deleted_items_height += page_segment.prop('offsetHeight');
 			page_segment.remove();
 		}
 	}
