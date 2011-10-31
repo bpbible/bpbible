@@ -62,6 +62,10 @@ span.divineName, span.small-caps {
 	font-variant: small-caps;
 }
 
+span.overline {
+	text-decoration: overline;
+}
+
 span.crossreference {
 	font-size: 70%;
 }

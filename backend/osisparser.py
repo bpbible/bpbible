@@ -148,6 +148,7 @@ class OSISParser(filterutils.ParserBase):
 			"super": ("<sup>", "</sup>"),
 			"underline": ("<u>", "</u>"),
 			"small-caps": ('<span class="small-caps">', "</span>"),
+			"ol": ('<span class="overline">', "</span>"),
 		}
 		if type not in types:
 			dprint(WARNING, "Unhandled hi type", type)
