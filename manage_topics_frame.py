@@ -1209,7 +1209,8 @@ class PassageDetailsPanel(xrcPassageDetailsPanel):
 		self.passage_preview.SetReference(
 				reference, exclude_topic_tag=self.passage.parent
 			)
-		self.passage_preview.ForceKillFocus()
+		#self.passage_preview.ForceKillFocus()
+		self.passage_preview.SetFocus()
 
 	def _save_passage(self):
 		"""Saves the current passage.

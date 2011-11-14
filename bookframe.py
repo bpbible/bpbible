@@ -543,8 +543,13 @@ class DictionaryFrame(BookFrame):
 		self.dictionary_list_index = dictionary_list_index
 		if index_changed and not suppress_reference_change:
 			self.UpdateUI()
-			if self.dictionary_list.item_to_focus_on:
-				self.ForceKillFocus()
+			# If the user is in the middle of typing, then we don't want to steal focus from them.
+			# Otherwise, we need to steal focus to fix the list problem.
+			self.ForceKillFocus()
+			if self.dictionary_list.item_to_focus_on is not self.dictionary_list.text_entry:
+				self.SetFocus()
+			#if self.dictionary_list.item_to_focus_on:
+			#	self.ForceKillFocus()
 
 	def chapter_move(self, amount):
 		mod = self.book.mod

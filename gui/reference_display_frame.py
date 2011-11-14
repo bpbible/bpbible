@@ -67,6 +67,7 @@ class ReferenceDisplayFrame(DisplayFrameXRC):
 		else:
 			self.has_reference_been_shown = True
 			self.SetPage(data)
+		self.SetFocus()
 	
 	@overridableproperty
 	def template(self):

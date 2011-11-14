@@ -187,12 +187,12 @@ class FontChoiceDialog(xrcFontChoiceDialog):
 						(self.font_face.StringSelection, self.font_size.Value, preview_text)
 				item_to_focus_on = wx.Window.FindFocus()
 				self.preview.SetPage(preview_text)
-				self.preview.ForceKillFocus()
+				#self.preview.ForceKillFocus()
+				self.preview.SetFocus()
 				item_to_focus_on.SetFocus()
 				
 		finally:
 			pass
-			#preview % tuple(guiconfig.get_window_colours()))
 	
 	def ShowModal(self):
 		old_fonts = (

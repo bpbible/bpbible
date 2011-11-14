@@ -285,9 +285,9 @@ class DictionarySelector(wx.Panel):
 
 	def item_changed(self, suppress_reference_change=False):
 		self.item_changed_observers(suppress_reference_change=suppress_reference_change)
-		if self.item_to_focus_on:
+		if self.item_to_focus_on is self.text_entry:
 			self.item_to_focus_on.SetFocus()
-			self.item_to_focus_on = None
+		self.item_to_focus_on = None
 
 
 
