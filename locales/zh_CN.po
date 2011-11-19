@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2011-04-25 12:05+AUS Eastern Standard Time\n"
+"POT-Creation-Date: 2011-11-19 13:58+India Standard Time\n"
 "PO-Revision-Date: 2009-03-31 20:23+0800\n"
 "Last-Translator: Paulos <paulos@yahoo.cn>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -79,7 +79,7 @@ msgstr "圣经注释"
 msgid "Bible"
 msgstr "圣经"
 
-#: backend/dictionary.py:327
+#: backend/dictionary.py:274
 msgid "daily devotional"
 msgstr ""
 
@@ -88,144 +88,144 @@ msgstr ""
 msgid "harmony"
 msgstr "四福音合参"
 
-#: bibleframe.py:69 bookframe.py:160 mainframe.py:250
-#: search/searchpanel.py:157
+#: bibleframe.py:72 bookframe.py:187 mainframe.py:240
+#: search/searchpanel.py:158
 msgid "Search"
 msgstr "搜索"
 
-#: bibleframe.py:74
+#: bibleframe.py:77
 #, fuzzy
 msgid "Go to Reference"
 msgstr "到参考文献"
 
-#: bibleframe.py:77
+#: bibleframe.py:80
 #, fuzzy
 msgid "Go to a reference"
 msgstr "到参考文献"
 
-#: bibleframe.py:80 xrc/guess_verse_xrc.py:69
+#: bibleframe.py:83 xrc/guess_verse_xrc.py:69
 msgid "Guess the Verse"
 msgstr "猜猜是那卷圣经"
 
-#: bibleframe.py:83
+#: bibleframe.py:86
 msgid "Play Guess the Verse"
 msgstr "开始猜"
 
-#: bibleframe.py:89
+#: bibleframe.py:92
 msgid "Random verse"
 msgstr "随机经文"
 
-#: bibleframe.py:92
+#: bibleframe.py:96
 msgid "Go to a random verse"
 msgstr "到随机经文"
 
-#: bibleframe.py:95
+#: bibleframe.py:99
 msgid "Copy verses"
 msgstr "复制经文"
 
-#: bibleframe.py:99
+#: bibleframe.py:103
 msgid "Copy verses to other applications"
 msgstr "复制经文到其它软件"
 
-#: bibleframe.py:103 bibleframe.py:163
+#: bibleframe.py:107 bibleframe.py:168
 msgid "Open sticky tooltip"
 msgstr "打开提示工具"
 
-#: bibleframe.py:106
+#: bibleframe.py:110
 msgid "Open a sticky tooltip with the selected verses"
 msgstr "从选中的经文打开提示工具"
 
-#: bibleframe.py:110
+#: bibleframe.py:114
 msgid "Compare verses"
 msgstr "比较经文"
 
-#: bibleframe.py:113
+#: bibleframe.py:117
 msgid "Open the verse comparison pane to the selected verses"
 msgstr "从选中的经文打开对比窗口"
 
-#: bibleframe.py:119 manage_topics_frame.py:172 xrc/manage_topics_xrc.py:143
+#: bibleframe.py:123 manage_topics_frame.py:172 xrc/manage_topics_xrc.py:143
 msgid "Manage Topics"
 msgstr "管理主题"
 
-#: bibleframe.py:122
+#: bibleframe.py:127
 msgid "Manages all of the topics and the passages in them."
 msgstr "管理所有的主题和段落"
 
-#: bibleframe.py:125
+#: bibleframe.py:130
 msgid "Tag verses"
 msgstr "添加标签"
 
-#: bibleframe.py:129
+#: bibleframe.py:134
 msgid "Tags the currently selected verses."
 msgstr "标记选中的经文"
 
-#: bibleframe.py:133
+#: bibleframe.py:138
 #, fuzzy
 msgid "Add comment to verses"
 msgstr "到这节"
 
-#: bibleframe.py:136
+#: bibleframe.py:141
 #, fuzzy
 msgid "Makes a comment on the currently selected verses."
 msgstr "标记选中的经文"
 
-#: bibleframe.py:200
+#: bibleframe.py:204
 msgid "Copying selected verses..."
 msgstr "复制选中经文..."
 
-#: bibleframe.py:271
+#: bibleframe.py:273
 msgid "Topic management is currently not available due to an error."
 msgstr ""
 
-#: bibleframe.py:272
+#: bibleframe.py:274
 msgid "Error in Topic Management"
 msgstr ""
 
-#: bookframe.py:142 mainframe.py:858
+#: bookframe.py:169 mainframe.py:843
 msgid "Show the %s pane"
 msgstr "显示%s"
 
-#: bookframe.py:144
+#: bookframe.py:171
 msgid "Hide the %s pane"
 msgstr "隐藏%s"
 
-#: bookframe.py:153
+#: bookframe.py:180
 msgid "Shows or hides the pane"
 msgstr "显示或隐藏面板"
 
-#: bookframe.py:162
+#: bookframe.py:189
 msgid "Search in this book"
 msgstr "在本书中搜索"
 
-#: bookframe.py:173
+#: bookframe.py:200
 msgid "Information..."
 msgstr "详细信息..."
 
-#: bookframe.py:176
+#: bookframe.py:203
 msgid "Show information on the current book"
 msgstr "在本书中显示详细信息"
 
-#: bookframe.py:190
+#: bookframe.py:217
 msgid "Search for:"
 msgstr "搜索内容:"
 
-#: bookframe.py:244
+#: bookframe.py:274
 msgid "Go to reference"
 msgstr "到参考文献"
 
-#: bookframe.py:365 genbookframe.py:212
+#: bookframe.py:395 genbookframe.py:227
 msgid "Go to this reference"
 msgstr "到此节圣经"
 
-#: bookframe.py:372 genbookframe.py:219
+#: bookframe.py:402 genbookframe.py:234
 msgid "Link the %s to the Bible"
 msgstr "关联圣经和%s"
 
-#: bookframe.py:430
+#: bookframe.py:469
 msgid "Commentary"
 msgstr "圣经注释"
 
-#: bookframe.py:451
+#: bookframe.py:499
 msgid "Dictionary"
 msgstr "圣经字典"
 
@@ -279,131 +279,171 @@ msgid ""
 "p>\n"
 msgstr ""
 
-#: copyverses.py:95 xrc/copyverses_xrc.py:78
+#: copyverses.py:94 xrc/copyverses_xrc.py:78
 msgid "Edit Template..."
 msgstr "编辑模板"
 
-#: copyverses.py:149
+#: copyverses.py:150
 msgid "<custom: based on %s>"
 msgstr "<自定义:基于 %s>"
 
-#: display_options.py:83
+#: display_options.py:95
 msgid "Columns"
 msgstr ""
 
-#: display_options.py:84
+#: display_options.py:95
+#, fuzzy
+msgid "Display the chapter in more than one column."
+msgstr "在各自行显示每节经文"
+
+#: display_options.py:96
 msgid "Display each verse on its own line."
 msgstr "在各自行显示每节经文"
 
-#: display_options.py:84
+#: display_options.py:96
 msgid "One line per verse"
 msgstr "按节显示"
 
-#: display_options.py:85
+#: display_options.py:97
 msgid "Continuous scrolling"
 msgstr ""
 
-#: display_options.py:86
-#, fuzzy
-msgid "Headings"
-msgstr "&标题"
-
-#: display_options.py:87
-#, fuzzy
-msgid "Cross References"
-msgstr "相关项"
-
-#: display_options.py:88
-#, fuzzy
-msgid "Footnotes"
-msgstr "&页脚"
-
-#: display_options.py:89 display_options.py:102
-#, fuzzy
-msgid "Strongs Numbers"
-msgstr "strong's 编号"
-
-#: display_options.py:90
-#, fuzzy
-msgid "Strongs Underneath"
-msgstr "strong's 编号"
-
-#: display_options.py:91
-msgid "Morphology"
-msgstr ""
-
-#: display_options.py:92
-msgid "Morph Segmentation"
-msgstr ""
-
-#: display_options.py:93
-msgid "Colour code speakers"
-msgstr ""
-
-#: display_options.py:94
-msgid "Words of Christ in Red"
-msgstr ""
-
-#: display_options.py:95
-msgid "Colour code by speaker"
-msgstr ""
-
-#: display_options.py:96
-msgid "Off"
+#: display_options.py:97
+msgid "Show more than one chapter at once."
 msgstr ""
 
 #: display_options.py:98
 #, fuzzy
+msgid "Headings"
+msgstr "&标题"
+
+#: display_options.py:99
+#, fuzzy
+msgid "Cross References"
+msgstr "相关项"
+
+#: display_options.py:99
+msgid "Show cross references in the text."
+msgstr ""
+
+#: display_options.py:100
+#, fuzzy
+msgid "Footnotes"
+msgstr "&页脚"
+
+#: display_options.py:100
+msgid "Show footnotes in the text"
+msgstr ""
+
+#: display_options.py:101 display_options.py:115
+#, fuzzy
+msgid "Strongs Numbers"
+msgstr "strong's 编号"
+
+#: display_options.py:102
+#, fuzzy
+msgid "Strongs Underneath"
+msgstr "strong's 编号"
+
+#: display_options.py:103
+msgid ""
+"Show the Original Language Word underneath the word rather than next to it."
+msgstr ""
+
+#: display_options.py:104
+msgid "Morphology"
+msgstr ""
+
+#: display_options.py:105
+msgid "Morph Segmentation"
+msgstr ""
+
+#: display_options.py:106
+msgid "Colour code speakers"
+msgstr ""
+
+#: display_options.py:107
+msgid "Words of Christ in Red"
+msgstr ""
+
+#: display_options.py:108
+msgid "Colour code by speaker"
+msgstr ""
+
+#: display_options.py:109
+msgid "Off"
+msgstr ""
+
+#: display_options.py:111
+#, fuzzy
 msgid "Strongs Headwords"
 msgstr "Strong's中心词"
 
-#: display_options.py:99
+#: display_options.py:112
 msgid "Transliterated"
 msgstr "音译"
 
-#: display_options.py:100
+#: display_options.py:113
 msgid "Original Language"
 msgstr "原文"
 
-#: display_options.py:101
+#: display_options.py:114
 msgid "Pronunciation"
 msgstr "发音"
 
-#: displayframe.py:269 protocols.py:150
+#: display_options.py:124
+msgid "Output Raw"
+msgstr ""
+
+#: display_options.py:125
+#, fuzzy
+msgid "Display timing"
+msgstr "&显示"
+
+#: displayframe.py:266 protocols.py:150
 msgid "Don't know how to open this morphology type:"
 msgstr "无法打开morphology类型："
 
-#: displayframe.py:279 protocols.py:160
+#: displayframe.py:276 protocols.py:160
 msgid ""
 "Module %s is not installed, so you cannot view details for this "
 "morphological code"
 msgstr "模块%s未安装,所以你不能够查看morphological code详细"
 
-#: displayframe.py:448
+#: displayframe.py:454
 msgid "Select all"
 msgstr "选择所有"
 
-#: displayframe.py:450
+#: displayframe.py:456
 msgid "Select all the text in the frame"
 msgstr "选择窗口中所有文本"
 
-#: displayframe.py:500
+#: displayframe.py:459
+#, fuzzy
+msgid "Copy selection"
+msgstr "复制选中(复制链接)"
+
+#: displayframe.py:462
+msgid "Copy the selected text with links"
+msgstr "复制选中文本和其链接"
+
+#: displayframe.py:509
 msgid "the selected word"
 msgstr "选中的词"
 
-#: displayframe.py:506
+#: displayframe.py:515
 msgid "the selected phrase"
 msgstr "选中的词组"
 
-#: displayframe.py:519
+#: displayframe.py:528
 msgid "Look up %s in the dictionary"
 msgstr "在字典中查找%s"
 
-#: displayframe.py:540
+#: displayframe.py:549
 msgid "Search for %s in the Bible"
 msgstr "在圣经中查找%s"
 
-#: displayframe.py:542
+#: displayframe.py:551
 msgid "Search for %s in this book"
 msgstr "在本电子书中查找%s"
 
@@ -427,33 +467,33 @@ msgstr "以上异常已忽略"
 msgid "Other Books"
 msgstr "其它电子书"
 
-#: genbookframe.py:181 xrc/harmonyfrm_xrc.py:92
+#: genbookframe.py:196
 msgid "Harmony"
 msgstr "四福音合参"
 
-#: genbookframe.py:239
+#: genbookframe.py:254
 #, fuzzy
 msgid "%s is not in this harmony."
 msgstr "%s 不在四福音合参中"
 
-#: guess_verse.py:37
+#: guess_verse.py:42
 #, fuzzy
 msgid "The verse was %s"
 msgstr "经节"
 
-#: guess_verse.py:52
+#: guess_verse.py:57
 msgid "Yes, you are right. The verse was %s"
 msgstr "你对了，经节是%s"
 
-#: guess_verse.py:54
+#: guess_verse.py:59
 msgid "Correct"
 msgstr "正确"
 
-#: guess_verse.py:61
+#: guess_verse.py:66
 msgid "No, you are wrong. Try again."
 msgstr "回答错了，再来一次。"
 
-#: guess_verse.py:62
+#: guess_verse.py:67
 msgid "Try again."
 msgstr "请重试"
 
@@ -479,21 +519,13 @@ msgstr ""
 msgid "Colour:"
 msgstr ""
 
-#: harmony/harmonyframe.py:213
-msgid "Loading harmony"
-msgstr "加载四福音合参"
-
-#: harmony/harmonyframe.py:271
-msgid "%s is not in this harmony"
-msgstr "%s 不在四福音合参中"
-
 #: header_bar.py:38
 msgid "%s verses"
 msgstr "%s 经节"
 
 #: install_manager/install_drop_target.py:34
 #: install_manager/install_drop_target.py:57 module_manager.py:121
-#: module_manager.py:125 search/searchpanel.py:808 templatemanager.py:439
+#: module_manager.py:125 search/searchpanel.py:801 templatemanager.py:439
 #: templatemanager.py:452
 msgid "Error"
 msgstr "错误"
@@ -539,7 +571,7 @@ msgstr ""
 msgid "Extracting %s"
 msgstr "解压%s"
 
-#: install_manager/install_drop_target.py:84 search/searchpanel.py:964
+#: install_manager/install_drop_target.py:84 search/searchpanel.py:957
 msgid "Preparing"
 msgstr "准备中"
 
@@ -567,147 +599,147 @@ msgstr "信息"
 msgid "Cannot read book metadata in file %s"
 msgstr "无法从文件%s读取metadata"
 
-#: mainframe.py:246
+#: mainframe.py:236
 msgid "Go to verse"
 msgstr "到这节圣经"
 
-#: mainframe.py:247
+#: mainframe.py:237
 msgid "Go to this verse"
 msgstr "到本节圣经"
 
-#: mainframe.py:251
+#: mainframe.py:241
 msgid "Search in the current book"
 msgstr "在本电子书中查找"
 
-#: mainframe.py:254 xrc/copyverses_xrc.py:81
+#: mainframe.py:244 xrc/copyverses_xrc.py:81
 msgid "Copy Verses"
 msgstr "复制经文"
 
-#: mainframe.py:255
+#: mainframe.py:245
 msgid "Open the Copy Verses dialog"
 msgstr "打开复制经文对话框"
 
-#: mainframe.py:260
+#: mainframe.py:250
 msgid "Back"
 msgstr "回退"
 
-#: mainframe.py:261
+#: mainframe.py:251
 msgid "Go back a verse"
 msgstr "回退到这节圣经"
 
-#: mainframe.py:264
+#: mainframe.py:254
 msgid "Forward"
 msgstr "前进"
 
-#: mainframe.py:265
+#: mainframe.py:255
 msgid "Go forward a verse"
 msgstr "到这节圣经"
 
-#: mainframe.py:269
+#: mainframe.py:259
 msgid "Zoom In"
 msgstr "放大"
 
-#: mainframe.py:270
+#: mainframe.py:260
 msgid "Make text bigger"
 msgstr "放大文本"
 
-#: mainframe.py:273
+#: mainframe.py:263
 msgid "Default Zoom"
 msgstr "还原"
 
-#: mainframe.py:274
+#: mainframe.py:264
 msgid "Return text to default size"
 msgstr "设置为默认字体"
 
-#: mainframe.py:277
+#: mainframe.py:267
 msgid "Zoom Out"
 msgstr "缩小"
 
-#: mainframe.py:278
+#: mainframe.py:268
 msgid "Make text smaller"
 msgstr "缩小文本"
 
-#: mainframe.py:307
+#: mainframe.py:297
 msgid "Navigation"
 msgstr "导航"
 
-#: mainframe.py:309
+#: mainframe.py:299
 msgid "Zoom"
 msgstr "缩放"
 
-#: mainframe.py:311
+#: mainframe.py:301
 msgid "History toolbar"
 msgstr "历史工具栏"
 
-#: mainframe.py:708
+#: mainframe.py:693
 msgid "Installable books"
 msgstr "可安装的电子书"
 
-#: mainframe.py:711 versecompare.py:206
+#: mainframe.py:696 versecompare.py:209
 msgid "Choose books"
 msgstr "选择电子书"
 
-#: mainframe.py:781 xrc/auifrm_xrc.py:44
+#: mainframe.py:766 xrc/auifrm_xrc.py:44
 msgid "&Language"
 msgstr "&语言"
 
-#: mainframe.py:784 xrc/auifrm_xrc.py:45
+#: mainframe.py:769 xrc/auifrm_xrc.py:45
 msgid "&Bible book names"
 msgstr ""
 
-#: mainframe.py:816 xrc/auifrm_xrc.py:49
+#: mainframe.py:801 xrc/auifrm_xrc.py:49
 msgid "&Display"
 msgstr "&显示"
 
-#: mainframe.py:821 xrc/auifrm_xrc.py:52
+#: mainframe.py:806 xrc/auifrm_xrc.py:52
 msgid "&Windows"
 msgstr "&窗口"
 
-#: mainframe.py:826 xrc/auifrm_xrc.py:51
+#: mainframe.py:811 xrc/auifrm_xrc.py:51
 msgid "Toolbars"
 msgstr "工具栏"
 
-#: mainframe.py:854
+#: mainframe.py:839
 msgid "Show the %s toolbar"
 msgstr "显示%s工具栏"
 
-#: mainframe.py:875 xrc/auifrm_xrc.py:53
+#: mainframe.py:860 xrc/auifrm_xrc.py:53
 msgid "Debug"
 msgstr "调试"
 
-#: mainframe.py:907
+#: mainframe.py:892
 msgid "Expand cross-references"
 msgstr "打开cross-references"
 
-#: mainframe.py:908
+#: mainframe.py:893
 msgid "Display cross references partially expanded"
 msgstr "展开cross references"
 
-#: mainframe.py:913
+#: mainframe.py:898
 msgid "Topic Tags"
 msgstr "主题标签"
 
-#: mainframe.py:914
+#: mainframe.py:899
 msgid "Display the topics that each verse is tagged with."
 msgstr "显示经文打标签的主题"
 
-#: mainframe.py:1033
+#: mainframe.py:1021
 msgid "BPBible will now quickly restart to change your language."
 msgstr "BPBible将快速的切换到您设置的语言"
 
-#: mainframe.py:1034
+#: mainframe.py:1022
 msgid "Restarting"
 msgstr "重起中"
 
-#: mainframe.py:1053
+#: mainframe.py:1041
 msgid "An error occurred on closing:"
 msgstr "关闭的时候发生错误"
 
-#: mainframe.py:1065 mainframe.py:1066
+#: mainframe.py:1053 mainframe.py:1054
 msgid "search "
 msgstr "搜索"
 
-#: mainframe.py:1090
+#: mainframe.py:1078
 #, fuzzy
 msgid ""
 "Flexible Bible study software.\n"
@@ -724,35 +756,35 @@ msgstr ""
 "\t\t\tSWORD Version: %(swversion)s\n"
 "\t\t\tXULRunner Version: %(xulrunner_version)s"
 
-#: mainframe.py:1102
+#: mainframe.py:1090
 msgid "BPBible website"
 msgstr "BPBible 网站"
 
-#: mainframe.py:1104
+#: mainframe.py:1092
 msgid "BPBible development team"
 msgstr "BPBible 开发团队"
 
-#: mainframe.py:1105
+#: mainframe.py:1093
 msgid "SWORD library developers"
 msgstr "SWORD library 开发人员"
 
-#: mainframe.py:1109
+#: mainframe.py:1097
 msgid "Developers"
 msgstr "开发人员"
 
-#: mainframe.py:1110
+#: mainframe.py:1098
 msgid "Artists"
 msgstr "美术"
 
-#: mainframe.py:1111
+#: mainframe.py:1099
 msgid "Translators"
 msgstr "翻译"
 
-#: mainframe.py:1113
+#: mainframe.py:1101
 msgid "translator-credits"
 msgstr "translator-credits"
 
-#: mainframe.py:1117
+#: mainframe.py:1105
 msgid ""
 "Icons used are from famfamfam\n"
 "http://www.famfamfam.com/lab/icons/silk\n"
@@ -764,7 +796,7 @@ msgstr ""
 "and the Tango Desktop Project\n"
 "http://tango.freedesktop.org/Tango_Desktop_Project"
 
-#: mainframe.py:1123
+#: mainframe.py:1111
 msgid ""
 "BPBible is licensed under the GPL v2. For more details, refer to the LICENSE."
 "txt file in the application directory"
@@ -784,15 +816,15 @@ msgstr "&新主题"
 msgid "Add &Passage"
 msgstr "添加&段落"
 
-#: manage_topics_frame.py:323 manage_topics_frame.py:606
+#: manage_topics_frame.py:323 manage_topics_frame.py:607
 msgid "Cu&t"
 msgstr "剪切"
 
-#: manage_topics_frame.py:328 manage_topics_frame.py:612
+#: manage_topics_frame.py:328 manage_topics_frame.py:613
 msgid "&Copy"
 msgstr "&复制"
 
-#: manage_topics_frame.py:333 manage_topics_frame.py:618
+#: manage_topics_frame.py:333 manage_topics_frame.py:619
 msgid "&Paste"
 msgstr "&粘帖"
 
@@ -832,19 +864,19 @@ msgstr "段落"
 msgid "Comment"
 msgstr "评论"
 
-#: manage_topics_frame.py:598
+#: manage_topics_frame.py:599
 msgid "&Open"
 msgstr "&打开"
 
-#: manage_topics_frame.py:625
+#: manage_topics_frame.py:626
 msgid "&Delete"
 msgstr "&删除"
 
-#: manage_topics_frame.py:665
+#: manage_topics_frame.py:666
 msgid "All topics."
 msgstr "所有的主题."
 
-#: manage_topics_frame.py:681
+#: manage_topics_frame.py:682
 msgid ""
 "%d passages selected.\n"
 "\n"
@@ -854,21 +886,21 @@ msgstr ""
 "\n"
 "选中一段后查看."
 
-#: manage_topics_frame.py:686
+#: manage_topics_frame.py:687
 msgid "No items have been selected."
 msgstr "没有选中任何内容"
 
-#: manage_topics_frame.py:1003
+#: manage_topics_frame.py:1004
 #, fuzzy
 msgid "Unordered"
 msgstr "没有索引的"
 
-#: manage_topics_frame.py:1004
+#: manage_topics_frame.py:1005
 #, fuzzy
 msgid "Order by Passage"
 msgstr "添加&段落"
 
-#: manage_topics_frame.py:1251 tag_passage_dialog.py:58
+#: manage_topics_frame.py:1254 tag_passage_dialog.py:58
 msgid "Unrecognised passage `%s'."
 msgstr "未识别的段落 `%s'."
 
@@ -926,44 +958,44 @@ msgstr "解锁码"
 msgid "Couldn't find config file. Error given was:"
 msgstr "未找到配置文件.错误信息如下："
 
-#: module_tree.py:24 module_tree.py:40
+#: module_tree.py:23 module_tree.py:39
 msgid "Bibles"
 msgstr "圣经"
 
-#: module_tree.py:25 module_tree.py:41
+#: module_tree.py:24 module_tree.py:40
 msgid "Commentaries"
 msgstr "圣经注释"
 
-#: module_tree.py:26 module_tree.py:42
+#: module_tree.py:25 module_tree.py:41
 msgid "Dictionaries"
 msgstr "圣经字典"
 
-#: module_tree.py:27 module_tree.py:47
+#: module_tree.py:26 module_tree.py:46
 msgid "Other books"
 msgstr "其它电子书"
 
-#: module_tree.py:28 module_tree.py:33 module_tree.py:46
+#: module_tree.py:27 module_tree.py:32 module_tree.py:45
 msgid "Daily Devotional"
 msgstr ""
 
-#: module_tree.py:29 module_tree.py:36 module_tree.py:43
+#: module_tree.py:28 module_tree.py:35 module_tree.py:42
 #, fuzzy
 msgid "Harmonies"
 msgstr "四福音合参"
 
-#: module_tree.py:34 module_tree.py:44
+#: module_tree.py:33 module_tree.py:43
 msgid "Maps"
 msgstr ""
 
-#: module_tree.py:35 module_tree.py:45
+#: module_tree.py:34 module_tree.py:44
 msgid "Images"
 msgstr ""
 
-#: module_tree.py:56
+#: module_tree.py:55
 msgid "Find Book..."
 msgstr "查找电子书..."
 
-#: module_tree.py:136
+#: module_tree.py:129
 msgid "Show information for %s"
 msgstr "查看%s的详细信息"
 
@@ -983,7 +1015,7 @@ msgstr "读取电子书..."
 msgid "Path manager"
 msgstr "路径管理"
 
-#: preview_window.py:11 search/searchpanel.py:887 search/searchpanel.py:921
+#: preview_window.py:11 search/searchpanel.py:880 search/searchpanel.py:914
 #: xrc/copyverses_xrc.py:79 xrc/templatemanager_xrc.py:97
 msgid "Preview"
 msgstr "预览"
@@ -1000,15 +1032,15 @@ msgstr "在提示工具中显示"
 msgid "Show this in a tooltip"
 msgstr "在提示工具中显示"
 
-#: protocol_handlers.py:275
+#: protocol_handlers.py:277
 msgid "You are at the start of this book."
 msgstr ""
 
-#: protocol_handlers.py:276
+#: protocol_handlers.py:278
 msgid "You are at the end of this book."
 msgstr ""
 
-#: protocol_handlers.py:353
+#: protocol_handlers.py:355
 msgid "Click here to unlock this book"
 msgstr ""
 
@@ -1065,155 +1097,155 @@ msgstr "错误编码：无法显示搜索结果"
 msgid "Could not understand string"
 msgstr "字符串无效"
 
-#: search/searchpanel.py:269 search/searchpanel.py:576
-#: search/searchpanel.py:753 search/searchpanel.py:772
-#: search/searchpanel.py:850 search/searchpanel.py:866
-#: search/searchpanel.py:904
+#: search/searchpanel.py:268 search/searchpanel.py:569
+#: search/searchpanel.py:746 search/searchpanel.py:765
+#: search/searchpanel.py:843 search/searchpanel.py:859
+#: search/searchpanel.py:897
 msgid "%d references found"
 msgstr "找到%d个相关项"
 
-#: search/searchpanel.py:295 xrc/search_xrc.py:142
+#: search/searchpanel.py:294 xrc/search_xrc.py:142
 msgid "&Index"
 msgstr "&索引"
 
-#: search/searchpanel.py:298
+#: search/searchpanel.py:297
 msgid "Unindex"
 msgstr "删除索引"
 
-#: search/searchpanel.py:320
+#: search/searchpanel.py:319
 msgid "You don't have a current %s, so you cannot search at the moment"
 msgstr "没有本类%s，无法执行搜索"
 
-#: search/searchpanel.py:327 search/searchpanel.py:364
+#: search/searchpanel.py:326 search/searchpanel.py:363
 msgid "No current version"
 msgstr "没有当前版本"
 
-#: search/searchpanel.py:338
+#: search/searchpanel.py:337
 msgid "Reading search index..."
 msgstr "读取搜索索引...."
 
-#: search/searchpanel.py:370
+#: search/searchpanel.py:369
 msgid ""
 "Search index does not exist for book %s. Indexing will make search much "
 "faster. Create Index?"
 msgstr "%s的索引未建，有索引搜索速度会更快，要建索引吗?"
 
-#: search/searchpanel.py:373
+#: search/searchpanel.py:372
 msgid "Create Index?"
 msgstr "建索引？"
 
-#: search/searchpanel.py:407 search/searchpanel.py:608
-#: search/searchpanel.py:880 search/searchpanel.py:914 xrc/search_xrc.py:140
+#: search/searchpanel.py:406 search/searchpanel.py:601
+#: search/searchpanel.py:873 search/searchpanel.py:907 xrc/search_xrc.py:140
 msgid "&Search"
 msgstr "&搜索"
 
-#: search/searchpanel.py:433 xrc/search_xrc.py:143 xrc/search_xrc.py:158
+#: search/searchpanel.py:432 xrc/search_xrc.py:143 xrc/search_xrc.py:158
 msgid "Search Options"
 msgstr "搜索选项"
 
-#: search/searchpanel.py:572
+#: search/searchpanel.py:565
 msgid "&Stop"
 msgstr "&停止"
 
-#: search/searchpanel.py:645 search/searchpanel.py:720
+#: search/searchpanel.py:638 search/searchpanel.py:713
 msgid "Error in search"
 msgstr "搜索时发生错误"
 
-#: search/searchpanel.py:650 search/searchpanel.py:725
+#: search/searchpanel.py:643 search/searchpanel.py:718
 msgid "The following words were not found in this %s:"
 msgstr "在%s中找不到您要找的:"
 
-#: search/searchpanel.py:653 search/searchpanel.py:728
+#: search/searchpanel.py:646 search/searchpanel.py:721
 msgid "Unknown word"
 msgstr "未知的词"
 
-#: search/searchpanel.py:755 search/searchpanel.py:775
-#: search/searchpanel.py:852 search/searchpanel.py:870
+#: search/searchpanel.py:748 search/searchpanel.py:768
+#: search/searchpanel.py:845 search/searchpanel.py:863
 msgid "1 word"
 msgstr "1 个词"
 
-#: search/searchpanel.py:756 search/searchpanel.py:776
-#: search/searchpanel.py:853 search/searchpanel.py:871
+#: search/searchpanel.py:749 search/searchpanel.py:769
+#: search/searchpanel.py:846 search/searchpanel.py:864
 msgid "%d words"
 msgstr "%d 个词"
 
-#: search/searchpanel.py:759 search/searchpanel.py:781
+#: search/searchpanel.py:752 search/searchpanel.py:774
 msgid "%d hits"
 msgstr "%d 个匹配"
 
-#: search/searchpanel.py:771 search/searchpanel.py:865
-#: search/searchpanel.py:903
+#: search/searchpanel.py:764 search/searchpanel.py:858
+#: search/searchpanel.py:896
 msgid "1 reference found"
 msgstr "找到一个相关项"
 
-#: search/searchpanel.py:780
+#: search/searchpanel.py:773
 msgid "1 hit"
 msgstr "找到1个"
 
-#: search/searchpanel.py:807
+#: search/searchpanel.py:800
 msgid "You cannot search on fields in unindexed search"
 msgstr "不能在未索引处搜索"
 
-#: search/searchpanel.py:887 search/searchpanel.py:921
+#: search/searchpanel.py:880 search/searchpanel.py:914
 msgid "Reference"
 msgstr "相关项"
 
-#: search/searchpanel.py:900
+#: search/searchpanel.py:893
 msgid "%(version)s search - %(numresults)s"
 msgstr "%(version)s search - %(numresults)s"
 
-#: search/searchpanel.py:960
+#: search/searchpanel.py:953
 msgid "Processing %s"
 msgstr "处理%s"
 
-#: search/searchpanel.py:964
+#: search/searchpanel.py:957
 msgid "Indexing %s"
 msgstr "正在为%s建立索引..."
 
-#: search/searchpanel.py:996
+#: search/searchpanel.py:989
 msgid "Writing %s"
 msgstr "写入完成%s"
 
-#: search/searchpanel.py:1154
+#: search/searchpanel.py:1147
 msgid "Other Book Search"
 msgstr "其它电子书搜索"
 
-#: search/searchpanel.py:1199
+#: search/searchpanel.py:1196
 msgid "Entries"
 msgstr "Entries"
 
-#: search/searchpanel.py:1206
+#: search/searchpanel.py:1203
 #, fuzzy
 msgid "Harmony Search"
 msgstr "四福音合参"
 
-#: search/searchpanel.py:1213
+#: search/searchpanel.py:1214
 msgid "Dictionary Search"
 msgstr "字典搜索"
 
-#: search/searchpanel.py:1254
+#: search/searchpanel.py:1258
 #, fuzzy
 msgid "Daily Devotional Search"
 msgstr "字典搜索"
 
-#: search/searchpanel.py:1261
+#: search/searchpanel.py:1272
 msgid "Commentary Search"
 msgstr "圣经注释搜索"
 
-#: swlib/pysw.py:118 swlib/pysw.py:657
+#: swlib/pysw.py:117 swlib/pysw.py:659
 msgid "There are only %(chapters)d chapters in %(book)s (given %(given)d)"
 msgstr "%(book)s (只提供 %(given)d)%(chapters)d 章"
 
-#: swlib/pysw.py:136 swlib/pysw.py:668
+#: swlib/pysw.py:135 swlib/pysw.py:670
 msgid ""
 "There are only %(verses)d verses in %(book)s %(chapter)s (given %(given)d)"
 msgstr "只有 %(verses)d 节经文在 %(book)s %(chapter)s (提供 %(given)d)"
 
-#: swlib/pysw.py:842 swlib/pysw.py:1668
+#: swlib/pysw.py:844 swlib/pysw.py:1670
 msgid "Invalid Reference: %s"
 msgstr "无效参考书目：%s"
 
-#: swlib/pysw.py:1656
+#: swlib/pysw.py:1658
 msgid "Invalid empty reference"
 msgstr "无效的空参考书目"
 
@@ -1329,23 +1361,23 @@ msgstr "评论"
 msgid "Version Comparison"
 msgstr "圣经版本对比"
 
-#: versecompare.py:194
+#: versecompare.py:197
 msgid "Set books to compare"
 msgstr "设置比较的书"
 
-#: versecompare.py:196
+#: versecompare.py:199
 msgid "Set the books this version comparison will use"
 msgstr "设置为比较书籍"
 
-#: versecompare.py:205
+#: versecompare.py:208
 msgid "Choose books to compare in the verse comparison window"
 msgstr "选择要对比的圣经版本"
 
-#: versecompare.py:229
+#: versecompare.py:232
 msgid "Choose books to compare"
 msgstr "选择要比较的圣经版本"
 
-#: versecompare.py:235
+#: versecompare.py:238
 msgid "View in parallel mode"
 msgstr "并排显示"
 
@@ -1514,10 +1546,6 @@ msgstr "显示标签："
 #: xrc/guess_verse_xrc.py:68
 msgid "&Guess"
 msgstr "&确定"
-
-#: xrc/harmonyfrm_xrc.py:93
-msgid "Find Bible Reference"
-msgstr "查找圣经相关项"
 
 #: xrc/install_module_xrc.py:70
 msgid "Install to:"
@@ -1775,6 +1803,15 @@ msgstr ""
 "使用 $$text 代表经节的内容, $$versenum 代表\n"
 "经节数，$$reference 代表参考"
 
+#~ msgid "Loading harmony"
+#~ msgstr "加载四福音合参"
+
+#~ msgid "%s is not in this harmony"
+#~ msgstr "%s 不在四福音合参中"
+
+#~ msgid "Find Bible Reference"
+#~ msgstr "查找圣经相关项"
+
 #, fuzzy
 #~ msgid "Strongs Blocked"
 #~ msgstr "未锁定"
@@ -1787,12 +1824,6 @@ msgstr ""
 
 #~ msgid "This chapter is empty."
 #~ msgstr "本章为空"
-
-#~ msgid "Copy selection (with links)"
-#~ msgstr "复制选中(复制链接)"
-
-#~ msgid "Copy the selected text with links"
-#~ msgstr "复制选中文本和其链接"
 
 #~ msgid "Copy selection (without links)"
 #~ msgstr "复制选中(不复制链接)"

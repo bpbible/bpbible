@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2011-04-25 12:05+AUS Eastern Standard Time\n"
+"POT-Creation-Date: 2011-11-19 13:58+India Standard Time\n"
 "PO-Revision-Date: 2010-11-09 09:15+0545\n"
 "Last-Translator: Tim\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -79,7 +79,7 @@ msgstr "टिप्पणी"
 msgid "Bible"
 msgstr "बाइबल"
 
-#: backend/dictionary.py:327
+#: backend/dictionary.py:274
 msgid "daily devotional"
 msgstr ""
 
@@ -88,140 +88,140 @@ msgstr ""
 msgid "harmony"
 msgstr "मिलाप (उस्तै)"
 
-#: bibleframe.py:69 bookframe.py:160 mainframe.py:250
-#: search/searchpanel.py:157
+#: bibleframe.py:72 bookframe.py:187 mainframe.py:240
+#: search/searchpanel.py:158
 msgid "Search"
 msgstr "खोजी"
 
-#: bibleframe.py:74
+#: bibleframe.py:77
 msgid "Go to Reference"
 msgstr "संदर्भमा जानुहोस्"
 
-#: bibleframe.py:77
+#: bibleframe.py:80
 msgid "Go to a reference"
 msgstr "यो संदर्भमा जानुहोस्"
 
-#: bibleframe.py:80 xrc/guess_verse_xrc.py:69
+#: bibleframe.py:83 xrc/guess_verse_xrc.py:69
 msgid "Guess the Verse"
 msgstr "पदको अनुमान"
 
-#: bibleframe.py:83
+#: bibleframe.py:86
 msgid "Play Guess the Verse"
 msgstr "पदको अनुमान गर्ने खेल खेल्नुहोस्"
 
-#: bibleframe.py:89
+#: bibleframe.py:92
 msgid "Random verse"
 msgstr "जथाभाबी पद"
 
-#: bibleframe.py:92
+#: bibleframe.py:96
 msgid "Go to a random verse"
 msgstr "जथाभावी पदमा जानुहोस्"
 
-#: bibleframe.py:95
+#: bibleframe.py:99
 msgid "Copy verses"
 msgstr "पदहरूको नकल"
 
-#: bibleframe.py:99
+#: bibleframe.py:103
 msgid "Copy verses to other applications"
 msgstr "अरू प्रयोजनहरुका (एप्लिकेशन) लागि पदहरूको नकल गर्नुहोस्"
 
-#: bibleframe.py:103 bibleframe.py:163
+#: bibleframe.py:107 bibleframe.py:168
 msgid "Open sticky tooltip"
 msgstr "टाँसिने टूलटिप खोल्नुहोस्"
 
-#: bibleframe.py:106
+#: bibleframe.py:110
 msgid "Open a sticky tooltip with the selected verses"
 msgstr "टाँसिने टुलटिपलाई छानिएको पदसित खोल्नुहोस्"
 
-#: bibleframe.py:110
+#: bibleframe.py:114
 msgid "Compare verses"
 msgstr "पदहरूको तुलना गर्नुहोस्"
 
-#: bibleframe.py:113
+#: bibleframe.py:117
 msgid "Open the verse comparison pane to the selected verses"
 msgstr "छानिएका पदहरूको पद तुलना गर्ने फलक खोल्नुहोस्"
 
-#: bibleframe.py:119 manage_topics_frame.py:172 xrc/manage_topics_xrc.py:143
+#: bibleframe.py:123 manage_topics_frame.py:172 xrc/manage_topics_xrc.py:143
 msgid "Manage Topics"
 msgstr "विषयहरुको व्यवशस्थापन"
 
-#: bibleframe.py:122
+#: bibleframe.py:127
 msgid "Manages all of the topics and the passages in them."
 msgstr "त्यसमा भएको सबै शिर्षकहरू र अनुच्छेदहरुको व्यवस्थापन गर्छ।"
 
-#: bibleframe.py:125
+#: bibleframe.py:130
 msgid "Tag verses"
 msgstr "पदहरू ट्याग गर्नुहोस्"
 
-#: bibleframe.py:129
+#: bibleframe.py:134
 msgid "Tags the currently selected verses."
 msgstr "भर्खरै छानिएको पदहरूलाई यसले ट्याग गर्छ।"
 
-#: bibleframe.py:133
+#: bibleframe.py:138
 msgid "Add comment to verses"
 msgstr "पदहरूमा टिप्पणी थप्नुहोस्"
 
-#: bibleframe.py:136
+#: bibleframe.py:141
 msgid "Makes a comment on the currently selected verses."
 msgstr "भर्खरै छानिएका पदहरूमा यसले टिप्पणी गर्छ"
 
-#: bibleframe.py:200
+#: bibleframe.py:204
 msgid "Copying selected verses..."
 msgstr "छानिएका पदहरूको नकल गरिदैँ..."
 
-#: bibleframe.py:271
+#: bibleframe.py:273
 msgid "Topic management is currently not available due to an error."
 msgstr "गलत निर्देशनका कारण शिर्षक व्यवस्थापन अहिले उपलब्ध हुन सकेन।"
 
-#: bibleframe.py:272
+#: bibleframe.py:274
 msgid "Error in Topic Management"
 msgstr "विषय व्यवस्थापनमा खराबी"
 
-#: bookframe.py:142 mainframe.py:858
+#: bookframe.py:169 mainframe.py:843
 msgid "Show the %s pane"
 msgstr "%s फलक देखाउनुहोस्"
 
-#: bookframe.py:144
+#: bookframe.py:171
 msgid "Hide the %s pane"
 msgstr "%s फलक लुकाउनुस्"
 
-#: bookframe.py:153
+#: bookframe.py:180
 msgid "Shows or hides the pane"
 msgstr "फलक लुकाउँछ वा देखाउँछ"
 
-#: bookframe.py:162
+#: bookframe.py:189
 msgid "Search in this book"
 msgstr "यस किताबमा खोज"
 
-#: bookframe.py:173
+#: bookframe.py:200
 msgid "Information..."
 msgstr "जानकारी...."
 
-#: bookframe.py:176
+#: bookframe.py:203
 msgid "Show information on the current book"
 msgstr "यही पुस्तकमा आवश्यक जानकारी देखाउनुहोस्"
 
-#: bookframe.py:190
+#: bookframe.py:217
 msgid "Search for:"
 msgstr "खोजी गर्दै:"
 
-#: bookframe.py:244
+#: bookframe.py:274
 msgid "Go to reference"
 msgstr "संदर्भमा जानुहोस्"
 
-#: bookframe.py:365 genbookframe.py:212
+#: bookframe.py:395 genbookframe.py:227
 msgid "Go to this reference"
 msgstr "यस संदर्भमा जानुहोस्"
 
-#: bookframe.py:372 genbookframe.py:219
+#: bookframe.py:402 genbookframe.py:234
 msgid "Link the %s to the Bible"
 msgstr "बाइबलमा %s लिङ्क गर्नुहोस्"
 
-#: bookframe.py:430
+#: bookframe.py:469
 msgid "Commentary"
 msgstr "टिप्पणी"
 
-#: bookframe.py:451
+#: bookframe.py:499
 msgid "Dictionary"
 msgstr "शब्दकोश"
 
@@ -276,97 +276,128 @@ msgid ""
 "p>\n"
 msgstr ""
 
-#: copyverses.py:95 xrc/copyverses_xrc.py:78
+#: copyverses.py:94 xrc/copyverses_xrc.py:78
 msgid "Edit Template..."
 msgstr "टेमप्लेट संपादन..."
 
-#: copyverses.py:149
+#: copyverses.py:150
 msgid "<custom: based on %s>"
 msgstr "<कस्टम: %s मा आधारित छ>"
 
-#: display_options.py:83
+#: display_options.py:95
 msgid "Columns"
 msgstr ""
 
-#: display_options.py:84
+#: display_options.py:95
+#, fuzzy
+msgid "Display the chapter in more than one column."
+msgstr "हरेक पदलाई आफ्नै पंक्‍तिमा देखाउनुहोस्"
+
+#: display_options.py:96
 msgid "Display each verse on its own line."
 msgstr "हरेक पदलाई आफ्नै पंक्‍तिमा देखाउनुहोस्"
 
-#: display_options.py:84
+#: display_options.py:96
 msgid "One line per verse"
 msgstr "एक पंक्‍ति प्रति पद"
 
-#: display_options.py:85
+#: display_options.py:97
 msgid "Continuous scrolling"
 msgstr ""
 
-#: display_options.py:86
+#: display_options.py:97
+msgid "Show more than one chapter at once."
+msgstr ""
+
+#: display_options.py:98
 msgid "Headings"
 msgstr "शीर्षकहरू"
 
-#: display_options.py:87
+#: display_options.py:99
 msgid "Cross References"
 msgstr "अन्तर-संदर्भ"
 
-#: display_options.py:88
+#: display_options.py:99
+msgid "Show cross references in the text."
+msgstr ""
+
+#: display_options.py:100
 msgid "Footnotes"
 msgstr "फुटनोटस्"
 
-#: display_options.py:89 display_options.py:102
+#: display_options.py:100
+msgid "Show footnotes in the text"
+msgstr ""
+
+#: display_options.py:101 display_options.py:115
 msgid "Strongs Numbers"
 msgstr "स्ट्रोङ्गको संख्याहरू"
 
-#: display_options.py:90
+#: display_options.py:102
 #, fuzzy
 msgid "Strongs Underneath"
 msgstr "स्ट्रोङ्गको संख्याहरू"
 
-#: display_options.py:91
+#: display_options.py:103
+msgid ""
+"Show the Original Language Word underneath the word rather than next to it."
+msgstr ""
+
+#: display_options.py:104
 msgid "Morphology"
 msgstr "Morphologhical ट्यागहरू"
 
-#: display_options.py:92
+#: display_options.py:105
 msgid "Morph Segmentation"
 msgstr "रूपिम विभाजन"
 
-#: display_options.py:93
+#: display_options.py:106
 msgid "Colour code speakers"
 msgstr ""
 
-#: display_options.py:94
+#: display_options.py:107
 msgid "Words of Christ in Red"
 msgstr "ख्रीष्‍टको शब्द रातोमा"
 
-#: display_options.py:95
+#: display_options.py:108
 msgid "Colour code by speaker"
 msgstr ""
 
-#: display_options.py:96
+#: display_options.py:109
 msgid "Off"
 msgstr ""
 
-#: display_options.py:98
+#: display_options.py:111
 #, fuzzy
 msgid "Strongs Headwords"
 msgstr "स्ट्रोङ्गको शीर्ष शब्दहरू"
 
-#: display_options.py:99
+#: display_options.py:112
 msgid "Transliterated"
 msgstr "लिपि रूपान्तर गर्नु"
 
-#: display_options.py:100
+#: display_options.py:113
 msgid "Original Language"
 msgstr "मौलिक भाषा"
 
-#: display_options.py:101
+#: display_options.py:114
 msgid "Pronunciation"
 msgstr "उच्चारण"
 
-#: displayframe.py:269 protocols.py:150
+#: display_options.py:124
+msgid "Output Raw"
+msgstr ""
+
+#: display_options.py:125
+#, fuzzy
+msgid "Display timing"
+msgstr "&देखाउनुहोस् (प्रदर्शन)"
+
+#: displayframe.py:266 protocols.py:150
 msgid "Don't know how to open this morphology type:"
 msgstr "यस स्वरूपका शब्दहरू खोल्न जानिएन:"
 
-#: displayframe.py:279 protocols.py:160
+#: displayframe.py:276 protocols.py:160
 msgid ""
 "Module %s is not installed, so you cannot view details for this "
 "morphological code"
@@ -374,31 +405,40 @@ msgstr ""
 "यसको नमूना %s लागू गरिएको छैन, त्यसकारण तपाईं यस स्वरूपका शब्द सूचकहरूको विस्तृत व्याख्या "
 "हेर्न सक्‍नु हुन्‍न"
 
-#: displayframe.py:448
+#: displayframe.py:454
 msgid "Select all"
 msgstr "सबै छान्‍नुहोस्"
 
-#: displayframe.py:450
+#: displayframe.py:456
 msgid "Select all the text in the frame"
 msgstr "फ्रेममा भएका सबै वाक्यहरुलाई छान्‍नुहोस्"
 
-#: displayframe.py:500
+#: displayframe.py:459
+#, fuzzy
+msgid "Copy selection"
+msgstr "चयन गरिएको सार्नुहोस् (लिङ्क भएकोहरूसँग)"
+
+#: displayframe.py:462
+msgid "Copy the selected text with links"
+msgstr "छानिएका वाक्यहरू लिङ्कसहित सार्नुहोस्"
+
+#: displayframe.py:509
 msgid "the selected word"
 msgstr "छानिएको शब्द"
 
-#: displayframe.py:506
+#: displayframe.py:515
 msgid "the selected phrase"
 msgstr "छानिएको वाक्यांश"
 
-#: displayframe.py:519
+#: displayframe.py:528
 msgid "Look up %s in the dictionary"
 msgstr "शब्दकोशमा %s का लागि हेर्नोस्"
 
-#: displayframe.py:540
+#: displayframe.py:549
 msgid "Search for %s in the Bible"
 msgstr "%s बाइबलमा खोज्नुहोस्"
 
-#: displayframe.py:542
+#: displayframe.py:551
 msgid "Search for %s in this book"
 msgstr "%s पुस्तकमा खोज्‍नुहोस्"
 
@@ -422,32 +462,32 @@ msgstr "माथिको अमिल्दो कुरोलाई छाड
 msgid "Other Books"
 msgstr "अरू किताबहरू"
 
-#: genbookframe.py:181 xrc/harmonyfrm_xrc.py:92
+#: genbookframe.py:196
 msgid "Harmony"
 msgstr "मिलाप (उस्तै)"
 
-#: genbookframe.py:239
+#: genbookframe.py:254
 #, fuzzy
 msgid "%s is not in this harmony."
 msgstr "%s यस मिलापमा छैन"
 
-#: guess_verse.py:37
+#: guess_verse.py:42
 msgid "The verse was %s"
 msgstr "त्यो पद %s थियो"
 
-#: guess_verse.py:52
+#: guess_verse.py:57
 msgid "Yes, you are right. The verse was %s"
 msgstr "हो, तपाईं ठीक हुनुहुन्छ। त्यो पद %s थियो"
 
-#: guess_verse.py:54
+#: guess_verse.py:59
 msgid "Correct"
 msgstr "ठीक"
 
-#: guess_verse.py:61
+#: guess_verse.py:66
 msgid "No, you are wrong. Try again."
 msgstr "होइन, तपाईं गलत हुनहुन्छ। फेरि प्रयास गर्नुहोस्।"
 
-#: guess_verse.py:62
+#: guess_verse.py:67
 msgid "Try again."
 msgstr "फेरि प्रयास गर्नुहोस्।"
 
@@ -472,21 +512,13 @@ msgstr "परिदृश्यको प्रयोग गर्नुहो�
 msgid "Colour:"
 msgstr "रङ्ग:"
 
-#: harmony/harmonyframe.py:213
-msgid "Loading harmony"
-msgstr "मिलाप लोड गरिँदै"
-
-#: harmony/harmonyframe.py:271
-msgid "%s is not in this harmony"
-msgstr "%s यस मिलापमा छैन"
-
 #: header_bar.py:38
 msgid "%s verses"
 msgstr "%s पदहरू"
 
 #: install_manager/install_drop_target.py:34
 #: install_manager/install_drop_target.py:57 module_manager.py:121
-#: module_manager.py:125 search/searchpanel.py:808 templatemanager.py:439
+#: module_manager.py:125 search/searchpanel.py:801 templatemanager.py:439
 #: templatemanager.py:452
 msgid "Error"
 msgstr "गल्ती (खराबी)"
@@ -533,7 +565,7 @@ msgstr ""
 msgid "Extracting %s"
 msgstr "%s निकालिँदै"
 
-#: install_manager/install_drop_target.py:84 search/searchpanel.py:964
+#: install_manager/install_drop_target.py:84 search/searchpanel.py:957
 msgid "Preparing"
 msgstr "तैयारी गर्दै"
 
@@ -561,147 +593,147 @@ msgstr "जानकारी"
 msgid "Cannot read book metadata in file %s"
 msgstr "फाइल %s मा पुस्तकका साङ्केतिक सूचकहरू पढ्न सकिएन"
 
-#: mainframe.py:246
+#: mainframe.py:236
 msgid "Go to verse"
 msgstr "पदमा जानुहोस्"
 
-#: mainframe.py:247
+#: mainframe.py:237
 msgid "Go to this verse"
 msgstr "यस पदमा जानुहोस्"
 
-#: mainframe.py:251
+#: mainframe.py:241
 msgid "Search in the current book"
 msgstr "यही किताबमा खोज्नुहोस्"
 
-#: mainframe.py:254 xrc/copyverses_xrc.py:81
+#: mainframe.py:244 xrc/copyverses_xrc.py:81
 msgid "Copy Verses"
 msgstr "पदहरूको नकल"
 
-#: mainframe.py:255
+#: mainframe.py:245
 msgid "Open the Copy Verses dialog"
 msgstr "पदहरू सार्ने झ्याल खोल्नुहोस्"
 
-#: mainframe.py:260
+#: mainframe.py:250
 msgid "Back"
 msgstr "पछि (पछाड़ि)"
 
-#: mainframe.py:261
+#: mainframe.py:251
 msgid "Go back a verse"
 msgstr "एक पद पछाड़ि जानुहोस्"
 
-#: mainframe.py:264
+#: mainframe.py:254
 msgid "Forward"
 msgstr "अघि (अगाड़ि)"
 
-#: mainframe.py:265
+#: mainframe.py:255
 msgid "Go forward a verse"
 msgstr "एक पद अघि जानुहोस्"
 
-#: mainframe.py:269
+#: mainframe.py:259
 msgid "Zoom In"
 msgstr "जूम गर्नुहोस्"
 
-#: mainframe.py:270
+#: mainframe.py:260
 msgid "Make text bigger"
 msgstr "टेक्स्टलाई ठूलो बनाउनुहोस्"
 
-#: mainframe.py:273
+#: mainframe.py:263
 msgid "Default Zoom"
 msgstr "ड़िफाँल्ट जूम"
 
-#: mainframe.py:274
+#: mainframe.py:264
 msgid "Return text to default size"
 msgstr "टेक्स्टलाई ड़िफाँल्ट आकारमा लैजानुहोस्"
 
-#: mainframe.py:277
+#: mainframe.py:267
 msgid "Zoom Out"
 msgstr "जूम हटाउनुहोस्"
 
-#: mainframe.py:278
+#: mainframe.py:268
 msgid "Make text smaller"
 msgstr "टेक्स्टलाई सानो बनाउनुहोस्"
 
-#: mainframe.py:307
+#: mainframe.py:297
 msgid "Navigation"
 msgstr "परिचालन"
 
-#: mainframe.py:309
+#: mainframe.py:299
 msgid "Zoom"
 msgstr "जूम"
 
-#: mainframe.py:311
+#: mainframe.py:301
 msgid "History toolbar"
 msgstr "इतिहास उपकरण पट्टि"
 
-#: mainframe.py:708
+#: mainframe.py:693
 msgid "Installable books"
 msgstr "स्थापित (प्रयोग) हुने पुस्तकहरू"
 
-#: mainframe.py:711 versecompare.py:206
+#: mainframe.py:696 versecompare.py:209
 msgid "Choose books"
 msgstr "किताबहरू चुन्‍नुहोस्"
 
-#: mainframe.py:781 xrc/auifrm_xrc.py:44
+#: mainframe.py:766 xrc/auifrm_xrc.py:44
 msgid "&Language"
 msgstr "&भाषा"
 
-#: mainframe.py:784 xrc/auifrm_xrc.py:45
+#: mainframe.py:769 xrc/auifrm_xrc.py:45
 msgid "&Bible book names"
 msgstr "&बाइबल किताबको नामहरू"
 
-#: mainframe.py:816 xrc/auifrm_xrc.py:49
+#: mainframe.py:801 xrc/auifrm_xrc.py:49
 msgid "&Display"
 msgstr "&देखाउनुहोस् (प्रदर्शन)"
 
-#: mainframe.py:821 xrc/auifrm_xrc.py:52
+#: mainframe.py:806 xrc/auifrm_xrc.py:52
 msgid "&Windows"
 msgstr "&झ्यालहरू"
 
-#: mainframe.py:826 xrc/auifrm_xrc.py:51
+#: mainframe.py:811 xrc/auifrm_xrc.py:51
 msgid "Toolbars"
 msgstr "उपकरण पट्टिहरू"
 
-#: mainframe.py:854
+#: mainframe.py:839
 msgid "Show the %s toolbar"
 msgstr "%s उपकरण पट्टि देखाउनुहोस्"
 
-#: mainframe.py:875 xrc/auifrm_xrc.py:53
+#: mainframe.py:860 xrc/auifrm_xrc.py:53
 msgid "Debug"
 msgstr "सच्‍चाउनु"
 
-#: mainframe.py:907
+#: mainframe.py:892
 msgid "Expand cross-references"
 msgstr "अन्तर संदर्भहरू विस्तार गर्नुहोस्"
 
-#: mainframe.py:908
+#: mainframe.py:893
 msgid "Display cross references partially expanded"
 msgstr "अन्तर संदर्भहरू आंशिक रूपमा ठूलो पारिएको देखाउनुहोस्"
 
-#: mainframe.py:913
+#: mainframe.py:898
 msgid "Topic Tags"
 msgstr "विषय ट्याग (तोकिएको विषय)"
 
-#: mainframe.py:914
+#: mainframe.py:899
 msgid "Display the topics that each verse is tagged with."
 msgstr "हरेक पद तोकिएको विषयहरू देखाउनुहोस्।"
 
-#: mainframe.py:1033
+#: mainframe.py:1021
 msgid "BPBible will now quickly restart to change your language."
 msgstr "तपाईंको भाषा बदल्नलाई बि पि बाइबल अब छिटै पूर्ण शुरु हुँदैछ।"
 
-#: mainframe.py:1034
+#: mainframe.py:1022
 msgid "Restarting"
 msgstr "पूर्ण शुरू हुँदै"
 
-#: mainframe.py:1053
+#: mainframe.py:1041
 msgid "An error occurred on closing:"
 msgstr "बन्द गर्न खोज्दा गल्ती हुनगएको छ:"
 
-#: mainframe.py:1065 mainframe.py:1066
+#: mainframe.py:1053 mainframe.py:1054
 msgid "search "
 msgstr "खोजी"
 
-#: mainframe.py:1090
+#: mainframe.py:1078
 #, fuzzy
 msgid ""
 "Flexible Bible study software.\n"
@@ -718,35 +750,35 @@ msgstr ""
 "\t\t\tSWORD संस्करण: %(swversion)s\n"
 "\t\t\tXULRunner संस्करण: %(xulrunner_version)s"
 
-#: mainframe.py:1102
+#: mainframe.py:1090
 msgid "BPBible website"
 msgstr "बि पि बाइबल वेबसाइट"
 
-#: mainframe.py:1104
+#: mainframe.py:1092
 msgid "BPBible development team"
 msgstr "बि पि बाइबल निर्माण समुह"
 
-#: mainframe.py:1105
+#: mainframe.py:1093
 msgid "SWORD library developers"
 msgstr "स्वर्ड पुस्तकालय निर्माणकर्ताहरू"
 
-#: mainframe.py:1109
+#: mainframe.py:1097
 msgid "Developers"
 msgstr "निर्माणकर्ताहरू"
 
-#: mainframe.py:1110
+#: mainframe.py:1098
 msgid "Artists"
 msgstr "कलाकारहरू"
 
-#: mainframe.py:1111
+#: mainframe.py:1099
 msgid "Translators"
 msgstr "अनुवादकहरू"
 
-#: mainframe.py:1113
+#: mainframe.py:1101
 msgid "translator-credits"
 msgstr "अनुवादक-श्रेय"
 
-#: mainframe.py:1117
+#: mainframe.py:1105
 msgid ""
 "Icons used are from famfamfam\n"
 "http://www.famfamfam.com/lab/icons/silk\n"
@@ -758,7 +790,7 @@ msgstr ""
 "र टैंगो डेस्कटाँप परियोजना\n"
 "http://tango.freedesktop.org/Tango_Desktop_Project"
 
-#: mainframe.py:1123
+#: mainframe.py:1111
 msgid ""
 "BPBible is licensed under the GPL v2. For more details, refer to the LICENSE."
 "txt file in the application directory"
@@ -778,15 +810,15 @@ msgstr "&नयाँ विषय"
 msgid "Add &Passage"
 msgstr "&अनुच्छेद थप्नुहोस्"
 
-#: manage_topics_frame.py:323 manage_topics_frame.py:606
+#: manage_topics_frame.py:323 manage_topics_frame.py:607
 msgid "Cu&t"
 msgstr "&काट्नुहोस्"
 
-#: manage_topics_frame.py:328 manage_topics_frame.py:612
+#: manage_topics_frame.py:328 manage_topics_frame.py:613
 msgid "&Copy"
 msgstr "&प्रतिलिपि बनाउनुहोस्"
 
-#: manage_topics_frame.py:333 manage_topics_frame.py:618
+#: manage_topics_frame.py:333 manage_topics_frame.py:619
 msgid "&Paste"
 msgstr "&टाँसनुहोस्"
 
@@ -826,19 +858,19 @@ msgstr "अनुच्छेद"
 msgid "Comment"
 msgstr "टीका"
 
-#: manage_topics_frame.py:598
+#: manage_topics_frame.py:599
 msgid "&Open"
 msgstr "&खोल्नुहोस्"
 
-#: manage_topics_frame.py:625
+#: manage_topics_frame.py:626
 msgid "&Delete"
 msgstr "&मेटाउनुस्"
 
-#: manage_topics_frame.py:665
+#: manage_topics_frame.py:666
 msgid "All topics."
 msgstr "सबै विषयहरू"
 
-#: manage_topics_frame.py:681
+#: manage_topics_frame.py:682
 msgid ""
 "%d passages selected.\n"
 "\n"
@@ -848,19 +880,19 @@ msgstr ""
 "\n"
 "हेर्नका लागि अनुच्छेद छान्‍नुहोस्।"
 
-#: manage_topics_frame.py:686
+#: manage_topics_frame.py:687
 msgid "No items have been selected."
 msgstr "कुनै पनि विषयहरू छानिएको छैन।"
 
-#: manage_topics_frame.py:1003
+#: manage_topics_frame.py:1004
 msgid "Unordered"
 msgstr "क्रमबद्ध नगरिएको"
 
-#: manage_topics_frame.py:1004
+#: manage_topics_frame.py:1005
 msgid "Order by Passage"
 msgstr "अनुच्छेदअनुसार क्रम मिलाउनुहोस्"
 
-#: manage_topics_frame.py:1251 tag_passage_dialog.py:58
+#: manage_topics_frame.py:1254 tag_passage_dialog.py:58
 msgid "Unrecognised passage `%s'."
 msgstr "नचिनिएको अनुच्‍छेद '%s'।"
 
@@ -919,44 +951,44 @@ msgstr "सूचक फुक्‍का गर्नुहोस्"
 msgid "Couldn't find config file. Error given was:"
 msgstr "कनफिग फाइल भेट्न सकिएन। दिइएको गल्ती थियो:"
 
-#: module_tree.py:24 module_tree.py:40
+#: module_tree.py:23 module_tree.py:39
 msgid "Bibles"
 msgstr "बाइबलहरू"
 
-#: module_tree.py:25 module_tree.py:41
+#: module_tree.py:24 module_tree.py:40
 msgid "Commentaries"
 msgstr "टिप्पणीहरू"
 
-#: module_tree.py:26 module_tree.py:42
+#: module_tree.py:25 module_tree.py:41
 msgid "Dictionaries"
 msgstr "शब्दकोशहरू"
 
-#: module_tree.py:27 module_tree.py:47
+#: module_tree.py:26 module_tree.py:46
 msgid "Other books"
 msgstr "अन्य पुस्तकहरू"
 
-#: module_tree.py:28 module_tree.py:33 module_tree.py:46
+#: module_tree.py:27 module_tree.py:32 module_tree.py:45
 msgid "Daily Devotional"
 msgstr ""
 
-#: module_tree.py:29 module_tree.py:36 module_tree.py:43
+#: module_tree.py:28 module_tree.py:35 module_tree.py:42
 #, fuzzy
 msgid "Harmonies"
 msgstr "मिलाप (उस्तै)"
 
-#: module_tree.py:34 module_tree.py:44
+#: module_tree.py:33 module_tree.py:43
 msgid "Maps"
 msgstr ""
 
-#: module_tree.py:35 module_tree.py:45
+#: module_tree.py:34 module_tree.py:44
 msgid "Images"
 msgstr ""
 
-#: module_tree.py:56
+#: module_tree.py:55
 msgid "Find Book..."
 msgstr "किताब खोज्नुहोस्.."
 
-#: module_tree.py:136
+#: module_tree.py:129
 msgid "Show information for %s"
 msgstr "%s को लागि जानकारी देखाउनुहोस्"
 
@@ -976,7 +1008,7 @@ msgstr "पुस्तकहरू रीडिङ्ग हुँदै..."
 msgid "Path manager"
 msgstr "बाटो व्यवस्थापक"
 
-#: preview_window.py:11 search/searchpanel.py:887 search/searchpanel.py:921
+#: preview_window.py:11 search/searchpanel.py:880 search/searchpanel.py:914
 #: xrc/copyverses_xrc.py:79 xrc/templatemanager_xrc.py:97
 msgid "Preview"
 msgstr "पूर्वदृश्‍य"
@@ -993,15 +1025,15 @@ msgstr "टूलटिपमा देखाउनुहोस्"
 msgid "Show this in a tooltip"
 msgstr "यसलाई टूलटिपमा देखाउनुहोस्"
 
-#: protocol_handlers.py:275
+#: protocol_handlers.py:277
 msgid "You are at the start of this book."
 msgstr ""
 
-#: protocol_handlers.py:276
+#: protocol_handlers.py:278
 msgid "You are at the end of this book."
 msgstr ""
 
-#: protocol_handlers.py:353
+#: protocol_handlers.py:355
 msgid "Click here to unlock this book"
 msgstr ""
 
@@ -1059,34 +1091,34 @@ msgstr "अमान्य एनकोडिङ्ग: खोजी कार�
 msgid "Could not understand string"
 msgstr "सार बुझ्न सकिएन"
 
-#: search/searchpanel.py:269 search/searchpanel.py:576
-#: search/searchpanel.py:753 search/searchpanel.py:772
-#: search/searchpanel.py:850 search/searchpanel.py:866
-#: search/searchpanel.py:904
+#: search/searchpanel.py:268 search/searchpanel.py:569
+#: search/searchpanel.py:746 search/searchpanel.py:765
+#: search/searchpanel.py:843 search/searchpanel.py:859
+#: search/searchpanel.py:897
 msgid "%d references found"
 msgstr "%d संदर्भहरू भेटियो"
 
-#: search/searchpanel.py:295 xrc/search_xrc.py:142
+#: search/searchpanel.py:294 xrc/search_xrc.py:142
 msgid "&Index"
 msgstr "&सूची"
 
-#: search/searchpanel.py:298
+#: search/searchpanel.py:297
 msgid "Unindex"
 msgstr "सूचीकृत नगरिएको"
 
-#: search/searchpanel.py:320
+#: search/searchpanel.py:319
 msgid "You don't have a current %s, so you cannot search at the moment"
 msgstr "तपाईंसित अहिले %s छैन, त्यसकारण तपाईं त्‍तकाल खोज्‍न सक्‍नुहुन्‍न"
 
-#: search/searchpanel.py:327 search/searchpanel.py:364
+#: search/searchpanel.py:326 search/searchpanel.py:363
 msgid "No current version"
 msgstr "वर्तमान संस्करण छैन"
 
-#: search/searchpanel.py:338
+#: search/searchpanel.py:337
 msgid "Reading search index..."
 msgstr "खोज सूची रीडिङ्ग हुँदै..."
 
-#: search/searchpanel.py:370
+#: search/searchpanel.py:369
 msgid ""
 "Search index does not exist for book %s. Indexing will make search much "
 "faster. Create Index?"
@@ -1094,124 +1126,124 @@ msgstr ""
 "खोज सूची %s पुस्तकका लागि रहेको छैन। सूचीकृत गर्नाले खोज कार्यलाई छीटो बनाउँछ। सूची "
 "बनाउने हो?"
 
-#: search/searchpanel.py:373
+#: search/searchpanel.py:372
 msgid "Create Index?"
 msgstr "सूची बनाउन चाहनुहुन्छ?"
 
-#: search/searchpanel.py:407 search/searchpanel.py:608
-#: search/searchpanel.py:880 search/searchpanel.py:914 xrc/search_xrc.py:140
+#: search/searchpanel.py:406 search/searchpanel.py:601
+#: search/searchpanel.py:873 search/searchpanel.py:907 xrc/search_xrc.py:140
 msgid "&Search"
 msgstr "&खोजी"
 
-#: search/searchpanel.py:433 xrc/search_xrc.py:143 xrc/search_xrc.py:158
+#: search/searchpanel.py:432 xrc/search_xrc.py:143 xrc/search_xrc.py:158
 msgid "Search Options"
 msgstr "विकल्पहरूको खोजी"
 
-#: search/searchpanel.py:572
+#: search/searchpanel.py:565
 msgid "&Stop"
 msgstr "&रोक्‍नुहोस्"
 
-#: search/searchpanel.py:645 search/searchpanel.py:720
+#: search/searchpanel.py:638 search/searchpanel.py:713
 msgid "Error in search"
 msgstr "खोजी कार्यमा गल्ती"
 
-#: search/searchpanel.py:650 search/searchpanel.py:725
+#: search/searchpanel.py:643 search/searchpanel.py:718
 msgid "The following words were not found in this %s:"
 msgstr "%s मा दिइएका शब्दहरू भेटिएन:"
 
-#: search/searchpanel.py:653 search/searchpanel.py:728
+#: search/searchpanel.py:646 search/searchpanel.py:721
 msgid "Unknown word"
 msgstr "थाहा नभएको शब्द"
 
-#: search/searchpanel.py:755 search/searchpanel.py:775
-#: search/searchpanel.py:852 search/searchpanel.py:870
+#: search/searchpanel.py:748 search/searchpanel.py:768
+#: search/searchpanel.py:845 search/searchpanel.py:863
 msgid "1 word"
 msgstr "१ शब्द"
 
-#: search/searchpanel.py:756 search/searchpanel.py:776
-#: search/searchpanel.py:853 search/searchpanel.py:871
+#: search/searchpanel.py:749 search/searchpanel.py:769
+#: search/searchpanel.py:846 search/searchpanel.py:864
 msgid "%d words"
 msgstr "%d शब्दहरू"
 
-#: search/searchpanel.py:759 search/searchpanel.py:781
+#: search/searchpanel.py:752 search/searchpanel.py:774
 msgid "%d hits"
 msgstr "%d थिचिएको पटक"
 
-#: search/searchpanel.py:771 search/searchpanel.py:865
-#: search/searchpanel.py:903
+#: search/searchpanel.py:764 search/searchpanel.py:858
+#: search/searchpanel.py:896
 msgid "1 reference found"
 msgstr "१ संदर्भ प्राप्‍त भयो"
 
-#: search/searchpanel.py:780
+#: search/searchpanel.py:773
 msgid "1 hit"
 msgstr "१ पटक थिचिएको"
 
-#: search/searchpanel.py:807
+#: search/searchpanel.py:800
 msgid "You cannot search on fields in unindexed search"
 msgstr "सूचीबद्ध नगरिएको कुरा तपाईं यस क्षेत्रमा खोज्‍न सक्‍नुहुन्‍न"
 
-#: search/searchpanel.py:887 search/searchpanel.py:921
+#: search/searchpanel.py:880 search/searchpanel.py:914
 msgid "Reference"
 msgstr "संदर्भ"
 
-#: search/searchpanel.py:900
+#: search/searchpanel.py:893
 msgid "%(version)s search - %(numresults)s"
 msgstr "%(version)s खोजी - %(numresults)s"
 
-#: search/searchpanel.py:960
+#: search/searchpanel.py:953
 msgid "Processing %s"
 msgstr "काम गर्दै %s"
 
-#: search/searchpanel.py:964
+#: search/searchpanel.py:957
 msgid "Indexing %s"
 msgstr "सूचीबद्ध गर्दै %s"
 
-#: search/searchpanel.py:996
+#: search/searchpanel.py:989
 msgid "Writing %s"
 msgstr "लेख्दै %s"
 
-#: search/searchpanel.py:1154
+#: search/searchpanel.py:1147
 msgid "Other Book Search"
 msgstr "अरू किताबको खोज"
 
-#: search/searchpanel.py:1199
+#: search/searchpanel.py:1196
 msgid "Entries"
 msgstr "अभिलेखहरू"
 
-#: search/searchpanel.py:1206
+#: search/searchpanel.py:1203
 #, fuzzy
 msgid "Harmony Search"
 msgstr "मिलाप (उस्तै)"
 
-#: search/searchpanel.py:1213
+#: search/searchpanel.py:1214
 msgid "Dictionary Search"
 msgstr "शब्दकोशको खोज"
 
-#: search/searchpanel.py:1254
+#: search/searchpanel.py:1258
 #, fuzzy
 msgid "Daily Devotional Search"
 msgstr "शब्दकोशको खोज"
 
-#: search/searchpanel.py:1261
+#: search/searchpanel.py:1272
 msgid "Commentary Search"
 msgstr "टिप्पणी खोज"
 
-#: swlib/pysw.py:118 swlib/pysw.py:657
+#: swlib/pysw.py:117 swlib/pysw.py:659
 msgid "There are only %(chapters)d chapters in %(book)s (given %(given)d)"
 msgstr ""
 "तोकिएको पुस्तक %(book)s मा % (chapters)d अध्यायहरू मात्रै (given %(given)d) छन्"
 
-#: swlib/pysw.py:136 swlib/pysw.py:668
+#: swlib/pysw.py:135 swlib/pysw.py:670
 msgid ""
 "There are only %(verses)d verses in %(book)s %(chapter)s (given %(given)d)"
 msgstr ""
 "त्यहाँ मात्र %(verses)d पदहरु भित्र %(book)s %(chapter)s (given %(given)d) छन्"
 
-#: swlib/pysw.py:842 swlib/pysw.py:1668
+#: swlib/pysw.py:844 swlib/pysw.py:1670
 msgid "Invalid Reference: %s"
 msgstr "अनाधिकृत संदर्भ: %s"
 
-#: swlib/pysw.py:1656
+#: swlib/pysw.py:1658
 msgid "Invalid empty reference"
 msgstr "अनाधिकृत रित्तो संदर्भ"
 
@@ -1322,23 +1354,23 @@ msgstr "टिप्पणीलाई मेटाउने"
 msgid "Version Comparison"
 msgstr "तुलनात्मक संस्करण"
 
-#: versecompare.py:194
+#: versecompare.py:197
 msgid "Set books to compare"
 msgstr "तुलनाका लागि पुस्तकहरू तय गर्नुहोस्"
 
-#: versecompare.py:196
+#: versecompare.py:199
 msgid "Set the books this version comparison will use"
 msgstr "यस तुलनात्मक संस्करणले प्रयोग गर्ने पुस्तकहरू तय गर"
 
-#: versecompare.py:205
+#: versecompare.py:208
 msgid "Choose books to compare in the verse comparison window"
 msgstr "तुलनात्मक पद झ्यालमा तुलना गर्नका लागि पुस्तकहरू चयन गर्नुहोस्"
 
-#: versecompare.py:229
+#: versecompare.py:232
 msgid "Choose books to compare"
 msgstr "तुलनाका लागि पुस्तकहरू चयन गर्नुहोस्"
 
-#: versecompare.py:235
+#: versecompare.py:238
 msgid "View in parallel mode"
 msgstr "समानान्तर ढाँचामा हेर्न"
 
@@ -1506,10 +1538,6 @@ msgstr "&उत्तर देखाउने"
 #: xrc/guess_verse_xrc.py:68
 msgid "&Guess"
 msgstr "&अनुमान"
-
-#: xrc/harmonyfrm_xrc.py:93
-msgid "Find Bible Reference"
-msgstr "बाइबल संदर्भ खोज्‍ने"
 
 #: xrc/install_module_xrc.py:70
 msgid "Install to:"
@@ -1768,6 +1796,15 @@ msgstr ""
 "पदको वाक्यका लागि $$text , $$versenum \n"
 "पद संख्याका लागि र $$reference संदर्भका लागि प्रयोग गर्नुहोस्"
 
+#~ msgid "Loading harmony"
+#~ msgstr "मिलाप लोड गरिँदै"
+
+#~ msgid "%s is not in this harmony"
+#~ msgstr "%s यस मिलापमा छैन"
+
+#~ msgid "Find Bible Reference"
+#~ msgstr "बाइबल संदर्भ खोज्‍ने"
+
 #, fuzzy
 #~ msgid "Strongs Blocked"
 #~ msgstr "बन्द नगरिएको"
@@ -1780,12 +1817,6 @@ msgstr ""
 
 #~ msgid "This chapter is empty."
 #~ msgstr "यो अध्याय खाली छ।"
-
-#~ msgid "Copy selection (with links)"
-#~ msgstr "चयन गरिएको सार्नुहोस् (लिङ्क भएकोहरूसँग)"
-
-#~ msgid "Copy the selected text with links"
-#~ msgstr "छानिएका वाक्यहरू लिङ्कसहित सार्नुहोस्"
 
 #~ msgid "Copy selection (without links)"
 #~ msgstr "चैन गरिएको सार्नुहोस् (लिङ्कहरू बिना)"
