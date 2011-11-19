@@ -43,7 +43,7 @@ class BooleanOptionMenuItem(object):
 
 	def add_to_menu(self, frame, menu):
 		item = menu.AppendCheckItem(
-			wx.ID_ANY, _(self.menu_text), help=_(self.hint)
+			wx.ID_ANY, _(self.menu_text), help=_(self.hint or self.menu_text)
 		)
 
 		if self.options_section[self.option_name]:
@@ -92,14 +92,15 @@ def on_headwords_module_changed():
 	set_headwords_module_from_conf(biblemgr)
 
 options_menu = [
-	BooleanOptionMenuItem("columns", N_("Columns")),
+	BooleanOptionMenuItem("columns", N_("Columns"), N_("Display the chapter in more than one column.")),
 	BooleanOptionMenuItem("verse_per_line", N_("One line per verse"), N_("Display each verse on its own line.")),
-	BooleanOptionMenuItem("continuous_scrolling", N_("Continuous scrolling"), reload_options=RELOAD_ALL_FRAMES),
-	BooleanOptionMenuItem("headings", N_("Headings")),
-	BooleanOptionMenuItem("cross_references", N_("Cross References")),
-	BooleanOptionMenuItem("footnotes", N_("Footnotes")),
+	BooleanOptionMenuItem("continuous_scrolling", N_("Continuous scrolling"), N_("Show more than one chapter at once."), reload_options=RELOAD_ALL_FRAMES),
+	BooleanOptionMenuItem("headings", N_("Headings"), N_("Show headings in the text.")),
+	BooleanOptionMenuItem("cross_references", N_("Cross References"), N_("Show cross references in the text.")),
+	BooleanOptionMenuItem("footnotes", N_("Footnotes"), N_("Show footnotes in the text")),
 	BooleanOptionMenuItem("strongs_numbers", N_("Strongs Numbers"), reload_options=RELOAD_BIBLE_FRAMES),
-	BooleanOptionMenuItem("strongs_blocked", N_("Strongs Underneath")),
+	BooleanOptionMenuItem("strongs_blocked", N_("Strongs Underneath"),
+		N_("Show the Original Language Word underneath the word rather than next to it.")),
 	BooleanOptionMenuItem("morphology", N_("Morphology"), reload_options=RELOAD_BIBLE_FRAMES),
 	BooleanOptionMenuItem("morph_segmentation", N_("Morph Segmentation"), reload_options=RELOAD_BIBLE_FRAMES),
 	MultiOptionsMenuItem("colour_speakers", N_("Colour code speakers"), [
@@ -120,8 +121,8 @@ options_menu = [
 ]
 
 debug_options_menu = [
-	BooleanOptionMenuItem("raw", "Output Raw", reload_options=RELOAD_ALL_FRAMES),
-	BooleanOptionMenuItem("show_timing", "Display timing"),
+	BooleanOptionMenuItem("raw", N_("Output Raw"), reload_options=RELOAD_ALL_FRAMES),
+	BooleanOptionMenuItem("show_timing", N_("Display timing")),
 ]
 
 display_option_changed_observers = ObserverList()
