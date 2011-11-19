@@ -9,8 +9,7 @@ from util.debug import dprint, ERROR
 
 from moduleinfo import ModuleInfo
 from util import languages
-from wx.lib.customtreectrl import CustomTreeCtrl, \
-	TR_AUTO_CHECK_CHILD, TR_AUTO_CHECK_PARENT, TR_HAS_VARIABLE_ROW_HEIGHT
+import wx.lib.agw.customtreectrl
 
 
 class ModuleTree(FilterableTree):
@@ -167,8 +166,15 @@ class ModuleTree(FilterableTree):
 	
 class PathModuleTree(ModuleTree):
 	def CreateTreeCtrl(self, parent, style):
-		tree = wx.lib.customtreectrl.CustomTreeCtrl(parent, 
-			style=style^wx.TR_LINES_AT_ROOT|TR_AUTO_CHECK_CHILD|TR_AUTO_CHECK_PARENT|TR_HAS_VARIABLE_ROW_HEIGHT|wx.SUNKEN_BORDER)
+		tree = wx.lib.agw.customtreectrl.CustomTreeCtrl(parent, 
+			style=style ^ wx.SUNKEN_BORDER,
+			agwStyle=wx.TR_HAS_BUTTONS |
+					 wx.TR_LINES_AT_ROOT |
+					 wx.TR_HIDE_ROOT |
+					 wx.TR_HAS_VARIABLE_ROW_HEIGHT |
+					 wx.lib.agw.customtreectrl.TR_AUTO_CHECK_CHILD |
+					 wx.lib.agw.customtreectrl.TR_AUTO_CHECK_PARENT
+		)
 
 		#tree.EnableSelectionGradient(False)
 		#tree.EnableSelectionVista(True)
