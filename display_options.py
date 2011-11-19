@@ -131,9 +131,8 @@ def display_option_changed(option_name, reload_options):
 	if option_name in sword_options_map:
 		biblemgr.set_option(sword_options_map[option_name], options[option_name])
 
-	if reload_options == DO_NOT_RELOAD:
-		display_option_changed_observers(option_name)
-	elif reload_options == RELOAD_BIBLE_FRAMES:
+	display_option_changed_observers(option_name)
+	if reload_options == RELOAD_BIBLE_FRAMES:
 		guiconfig.mainfrm.UpdateBibleUI(settings_changed=True, source=events.SETTINGS_CHANGED)
 	elif reload_options == RELOAD_ALL_FRAMES:
 		guiconfig.mainfrm.refresh_all_pages()

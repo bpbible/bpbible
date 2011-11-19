@@ -4,6 +4,8 @@ from displayframe import DisplayFrameXRC
 from util import overridableproperty
 from swlib.pysw import GetBestRange
 import config
+import display_options
+import fonts
 
 class ReferenceDisplayFrame(DisplayFrameXRC):
 	"""This class is a display frame which is able to show references.
@@ -15,6 +17,13 @@ class ReferenceDisplayFrame(DisplayFrameXRC):
 		self.reference = None
 		self.show_reference_string = False
 		self.has_reference_been_shown = False
+		super(ReferenceDisplayFrame, self).__init__()
+		display_options.display_option_changed_observers += self.change_display_option
+		fonts.fonts_changed += self.fonts_changed
+
+	def __del__(self):
+		display_options.display_option_changed_observers -= self.change_display_option
+		fonts.fonts_changed -= self.fonts_changed
 		super(ReferenceDisplayFrame, self).__init__()
 
 	def SetReference(self, reference, *args, **kwargs):
