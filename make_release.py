@@ -151,10 +151,14 @@ def build_src_dist(zip_file):
 
 def build_installer():
 	global portable_build
+	portable_apps_dir = "\\PortableApps"
+	if not os.path.isdir(portable_apps_dir):
+		portable_apps_dir = "C:\\PortableApps"
+
 	if portable_build:
-		upx_path = "\\PortableApps\\PortableApps.comAppCompactor\\App\\bin\\upx.exe"
-		pai_path = "\\PortableApps\\PortableApps.comInstaller\\PortableApps.comInstaller.exe"
-		palg_path = "\\PortableApps\\PortableApps.comLauncher\\PortableApps.comLauncherGenerator.exe"
+		upx_path = os.path.join(portable_apps_dir, "PortableApps.comAppCompactor\\App\\bin\\upx.exe")
+		pai_path = os.path.join(portable_apps_dir, "PortableApps.comInstaller\\PortableApps.comInstaller.exe")
+		palg_path = os.path.join(portable_apps_dir, "PortableApps.comLauncher\\PortableApps.comLauncherGenerator.exe")
 
 		if not (os.path.exists(pai_path) and os.path.exists(palg_path) and os.path.exists(upx_path) and os.path.exists("BPBiblePortable\\Data\\resources\\mods.d")):
 			sys.stderr.write("\n*** UNABLE TO BUILD BPBIBLE PORTABLE ***\n")
