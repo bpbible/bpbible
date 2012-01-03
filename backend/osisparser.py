@@ -278,6 +278,9 @@ class OSISParser(filterutils.ParserBase):
 		if self.strongs_bufs or self.morph_bufs:
 			self.u.suspendLevel += 1
 			self.u.suspendTextPassThru = self.u.suspendLevel
+
+		if xmltag.isEmpty(): 
+			self.end_w(xmltag)
 			
 	
 	def end_w(self, xmltag):
