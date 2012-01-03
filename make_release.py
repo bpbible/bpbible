@@ -215,7 +215,7 @@ def build_installer():
 		# App
 		os.mkdir("BPBiblePortable\\App")
 		# App\readme.txt
-		os.system("copy %s %s" % ("make_portable\\App-readme.txt", "BPBiblePortable\\App"))
+		os.system("copy %s %s" % ("make_portable\\App-readme.txt", "BPBiblePortable\\App\\readme.txt"))
 
 		# App\AppInfo
 		os.mkdir("BPBiblePortable\\App\\AppInfo")
