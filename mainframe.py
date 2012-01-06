@@ -180,6 +180,7 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.drop_target = ModuleDropTarget(self)
 		self.SetDropTarget(self.drop_target)
 		wx.CallAfter(self.Show)
+		wx.CallAfter(self.bibletext.SetFocus)
 		if guiconfig.app.splash:
 			wx.CallAfter(guiconfig.app.splash.Destroy)
 		
