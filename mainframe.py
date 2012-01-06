@@ -184,15 +184,6 @@ class MainFrame(wx.Frame, AuiLayer):
 		if guiconfig.app.splash:
 			wx.CallAfter(guiconfig.app.splash.Destroy)
 		
-		#guiutil.call_after_x(100, self.bibletext.scroll_to_current)
-		
-		# after three goes round the event loop, set timer for 200ms to scroll
-		# to correct place
-		# Under GTK, neglecting to do this will mean that it will scroll to
-		# the top.
-		guiutil.call_after_x(3, wx.CallLater, 200, 
-			self.bibletext.scroll_to_current)
-		
 
 
 
