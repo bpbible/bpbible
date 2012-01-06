@@ -30,7 +30,6 @@ from auilayer import AuiLayer
 
 from util.observerlist import ObserverList
 from util import osutils
-#import mySearchDialog
 import versetree
 import copyverses
 import config
@@ -197,7 +196,7 @@ class MainFrame(wx.Frame, AuiLayer):
 
 	
 	
-		if not guiconfig.use_one_toolbar:# or True:
+		if not guiconfig.use_one_toolbar:
 			toolbars = [
 				wx.ToolBar(self, wx.ID_ANY, style=toolbar_style) 
 				for i in range(3)
@@ -258,11 +257,6 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.tool_zoom_out = self.zoom_toolbar.AddLabelTool(wx.ID_ANY,  
 			_("Zoom Out"), bmp("magifier_zoom_out.png"),
 			shortHelp=_("Make text smaller"))
-			
-		
-		#self.zoom_toolbar = xrc.XRCCTRL(self, "zoom_toolbar")
-		#self.main_toolbar = xrc.XRCCTRL(self, "main_toolbar")
-		#self.history_toolbar = xrc.XRCCTRL(self, "history_toolbar")
 		
 		for toolbar in toolbars:
 			toolbar.Realize()
@@ -362,15 +356,9 @@ class MainFrame(wx.Frame, AuiLayer):
 
 		settings["maximized"], settings["size"] = \
 			self.capture_size(set_back=False)
-
-		#settings["position"] = self.Position
-		
 		
 
 		try:
-		#	if not os.path.exists(config.data_path):
-		#		os.makedirs(config.data_path)
-
 			config_manager.save()
 		
 		except (OSError, EnvironmentError), e:
@@ -463,8 +451,6 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.daily_devotional_frame.has_menu = False
 
 		self.verse_compare = VerseCompareFrame(self, biblemgr.bible)
-		#if settings["verse_comparison_modules"] is not None:
-		#	self.verse_compare.modules = settings["verse_comparison_modules"]
 
 		self.history_pane = wx.Panel(self)
 		self.history_tree = HistoryTree(self.history_pane, self.history)
@@ -982,13 +968,6 @@ class MainFrame(wx.Frame, AuiLayer):
 	def on_char(self, event):
 		# just pass the event on for now
 		self.bibletext.on_char(event)
-		#actions = {
-		#	ord("G"): self.bibletext.go_quickly,
-		#	ord("S"): self.bibletext.search_quickly
-		#}
-		#
-		#print self.FindFocus()
-		#guiutil.dispatch_keypress(actions, event)
 		
 	def setup_frames(self):
 		self.frames = [self.bibletext, self.commentarytext, self.dictionarytext,
@@ -1039,8 +1018,6 @@ class MainFrame(wx.Frame, AuiLayer):
 			# but whatever happens, close
 			self.Destroy()
 
-	#def BibleRefEnterChar(self, event):
-	
 	def BibleRefEnter(self, event=None):
 		if self.bibleref.Value.startswith(_("search ")):
 			self.searchkey = self.bibleref.GetValue()[len(_("search ")):]
@@ -1077,7 +1054,7 @@ class MainFrame(wx.Frame, AuiLayer):
 		info = wx.AboutDialogInfo()
 		info.Name = config.name()
 		info.Version = config.version
-		info.Description = text#, 350, wx.ClientDC(self))
+		info.Description = text
 		info.WebSite = ("bpbible.com", 
 						_("BPBible website"))
 		info.Developers = [
