@@ -320,8 +320,6 @@ if __name__ == '__main__':
 	d=wx.Dialog(None, style=wx.RESIZE_BORDER|wx.DEFAULT_DIALOG_STYLE)
 	biblemgr.dictionary.SetModule("BibleCompanion")
 	l=DictionarySelector(d, biblemgr.dictionary)
-	#button = wx.Button(d, pos=(300, 100), label="TEST")
-	#button.Bind(wx.EVT_BUTTON, lambda x:l.choose_item("METAL"))
 	sizer = wx.BoxSizer(wx.HORIZONTAL)
 	sizer.Add(l, 1, wx.GROW)
 	d.SetSizer(sizer)

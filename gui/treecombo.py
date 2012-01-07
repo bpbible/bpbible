@@ -38,8 +38,6 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
 		self.GetCombo().Bind(wx.EVT_MOUSEWHEEL, self.mousewheel)
 	
 	def mousewheel(self, event):
-		# assert event.WheelRotation
-		
 		if self.GetCombo().IsPopupShown():
 			# if we are shown, scroll the tree.
 			self.tree.ScrollLines(
@@ -182,9 +180,6 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
 
 		self.value = value
 		self.tree.SelectItem(self.value)
-		#if not final:
-		#	self.GetCombo().SetText(text)
-		#else:
 		text = self.combo.format_combo(value)
 		self.text = text
 		
@@ -291,15 +286,7 @@ class TreeCombo(wx.combo.ComboCtrl):
 		
 		event = wx.CommandEvent(wx.wxEVT_COMMAND_TEXT_ENTER, 
 								self.GetId())
-		#event.SetString(text)
 		self.GetEventHandler().ProcessEvent(event)
-		
-		
-		#self.BibleRefEnter()
-			
-		
-		
-		
 	
 	def AddItem(self, item, parent=None):
 		return self.popup.AddItem(item, parent)
@@ -320,14 +307,12 @@ class LazyTreeCombo(TreeCombo):
 		super(LazyTreeCombo, self).__init__(parent, style=style)
 		self.tree.Bind(wx.EVT_TREE_ITEM_EXPANDING, self.Expand)
 		self.Bind(wx.EVT_TEXT, self.OnChoice)
-		#self.data_items = []
 
 	def AddItems(self, item):
 		data, hasExpanded = self.tree.GetPyData(item)
 		if hasExpanded: return
 		self.tree.SetPyData(item, (data, True))
 		for child in data:
-			#self.data_items.append(child)
 			node = self.tree.AppendItem(item, unicode(child))
 			# set data to key, hasexpanded
 			self.tree.SetPyData(node, (child, False))
@@ -350,10 +335,6 @@ class LazyTreeCombo(TreeCombo):
 
 		event.SetString(self.tree.GetItemText(item))
 		self.GetEventHandler().ProcessEvent(event)
-
-		
-		#self.frame.SetReference(self.tree.GetPyData(item)[0])
-		
 
 	def set_value(self, item):
 		super(LazyTreeCombo, self).set_value(item)

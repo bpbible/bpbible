@@ -34,14 +34,6 @@ class FontChoiceDialog(xrcFontChoiceDialog):
 		self.font_face.Clear()
 		self.font_face.AppendItems(names)
 		self.preview.handle_links = False
-
-		#if size is None:
-		#	size = max(wx.NORMAL_FONT.PointSize, 10)
-		#
-		#if font is None:
-		#	font = wx.Font(size, wx.SWISS, wx.NORMAL, wx.NORMAL, False);
-		#
-		#	font = font.FaceName
 		
 		self.on_default_choice()
 	
@@ -176,10 +168,6 @@ class FontChoiceDialog(xrcFontChoiceDialog):
 
 				ref = to_unicode(self.mod.getKeyText(), self.mod)
 				ref = frame.format_ref(self.mod, ref)
-				#if book in (biblemgr.bible, biblemgr.commentary):
-				#	ref = pysw.internal_to_user(ref)
-				#else:
-				#	ref = to_unicode(ref, self.mod)
 				preview_text = u'%s (%s)<br>%s' % (
 					ref, self.mod.Name().decode("utf8"), text.decode("utf8")
 				)

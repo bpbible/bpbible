@@ -197,7 +197,6 @@ class HistoryTree(wx.TreeCtrl):
 	def build_tree(self, history_item=None, tree_item=None):
 		if tree_item is None:
 			tree_item = self.AddRoot("History")
-			#tree_item = self.AppendItem(tree_item, "TES")
 
 		if history_item is None:
 			history_item = self.history.history

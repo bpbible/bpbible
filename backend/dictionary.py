@@ -1,4 +1,3 @@
-#from Sword import *
 from swlib.pysw import SW, TOP
 from backend.book import Book
 from util import classproperty
@@ -162,7 +161,6 @@ class Dictionary(Book):
 	def __init__(self, parent, version):
 		super(Dictionary, self).__init__(parent, version)
 
-		#self.SetModule(version)
 		parent.on_before_reload += self.clear_cache
 
 

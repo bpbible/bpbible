@@ -300,8 +300,6 @@ class BibleInterface(object):
 	reload = set_new_paths		
 			
 	def make_managers(self, path_changed=None):
-		#if hasattr(self, "dictionary"):
-		#	self.dictionary.clear_cache()
 		# turn off logging
 		system_log = SW.Log.getSystemLog()
 		log_level = system_log.getLogLevel()

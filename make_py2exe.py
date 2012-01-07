@@ -91,7 +91,7 @@ if(setup(
 	
 	windows = [
 		{
-			"script":('bpbible.py'),#,'mainfrm.xrc','search.xrc'),
+			"script":('bpbible.py'),
 			"icon_resources":[(1, "graphics/bpbible.ico")],
 			"other_resources": [(24,1,manifest)],
 			"description": "BPBible - Flexible Bible Study",

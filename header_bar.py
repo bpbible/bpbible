@@ -135,10 +135,6 @@ class ChapterItem(wx.Panel):
 		self.Parent.current_target = None
 	
 		self.Parent.tooltip.MouseOut(None)
-		
-		#if (not self.Parent.tooltip.IsShown() or 
-		#	not self.Parent.tooltip.mouse_is_over):
-		#	self.Parent.tooltip.Stop()
 
 	def draw(self):
 		# create a memory dc
@@ -151,7 +147,6 @@ class ChapterItem(wx.Panel):
 		dc.SetFont(self.Font)
 		
 		# get the size of the text
-		# print `self.display`
 		text = self.display
 		text_width, text_height = dc.GetTextExtent(text)
 
@@ -202,8 +197,6 @@ class ChapterItem(wx.Panel):
 		
 		# and set our size
 		self.SetSize((width, height))
-		#self.SetMinSize((width, height))
-		
 	
 	def on_paint(self, event):
 		# paint it on
@@ -251,14 +244,12 @@ class HeaderBar(TooltipDisplayer, wx.Panel):
 		self.item.Position = 0, 0
 		font = self.item.Font
 		font.SetWeight(wx.FONTWEIGHT_BOLD)
-		#font.PointSize += 2
 		self.item.Font = font
 
 		chapter, c, internal = self.get_next_chapter(
 			self.i_current_chapter, dir=0, short=False
 		)
 		
-		# print chapter, internal
 		self.item.set_chapter(chapter, internal)
 		
 		
@@ -340,14 +331,13 @@ class HeaderBar(TooltipDisplayer, wx.Panel):
 				# ones
 				if not items:
 					next_item = ChapterItem(self, internal_text)
-					#, chapter_number)
 					next_item.set_chapter(next_chapter, internal_text)
 					
 
 				# Otherwise, remove the old ones from the list and move on
 				else:
 					next_item = items.pop(0)
-					next_item.set_chapter(next_chapter, internal_text)#, chapter_number)
+					next_item.set_chapter(next_chapter, internal_text)
 
 				# find the item's position
 				break_next = self.position_item(next_item, last_item, is_left)
@@ -394,7 +384,7 @@ class HeaderBar(TooltipDisplayer, wx.Panel):
 if __name__ == '__main__':
 	a = wx.App(0)
 	f = wx.Frame(None)
-	h = HeaderBar(f, "Psalms 150")#Revelation 20")
+	h = HeaderBar(f, "Psalms 150")
 	h.on_click += lambda ref:h.set_current_chapter(ref)
 	f.Fit()
 	f.Show()

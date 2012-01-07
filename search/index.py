@@ -1,20 +1,12 @@
 #TODO check chr(e)tiens in acts 11:26 in frejnd - end of line
-#import psyco
-#psyco.log()
-#psyco.full()
 from backend.bibleinterface import biblemgr
 from backend.verse_template import VerseTemplate
-from util.string_util import ReplaceUnicode, KillTags, remove_amps
-from util.unicode import get_to_unicode
 from util import search_utils
 from util.search_utils import *
 import util
-from swlib.pysw import SW, BookName, VK, TOP
+from swlib.pysw import SW
 from swlib import pysw
-import os
 import re
-import string
-import cPickle
 from util.debug import *
 from search.indexed_text import (
 	IndexedText, VerseIndexedText, DictionaryIndexedText
@@ -117,8 +109,6 @@ class Index(object):
 	def init(self, progress=lambda x:x):	
 		"""Index.init - reindxes index"""
 		self.books=[] # has to stay in order
-		#self.index = [("NULL",0,0)] # reference, start, length
-		#self.text = ""
 		self.statistics = {}
 		self.GenerateIndex(self.version, progress)
 		self.check_for_errors()
@@ -148,9 +138,6 @@ class Index(object):
 	
 	def GenerateIndex(self, mod, progress = lambda x:x):
 		"""Index.GenerateIndex - Collates book indexes"""
-		#text = ""
-		#global text
-		#global index
 		template = VerseTemplate("$text\n")
 		biblemgr.temporary_state(biblemgr.plainstate)
 		log = SW.Log.getSystemLog()
@@ -206,20 +193,6 @@ class Index(object):
 	def GatherStatistics(self):
 		"""Index.GatherStatistics - Gathers statisitics including ranks,
 		occurrences and wordlists for spellchecking"""
-		#idx=collections.defaultdict(lambda:0)
-		#for book in self.books:
-		#	for a in book.text.lower().split(" "):
-		#		idx[a] += 1
-
-		#b=sorted(idx.iteritems(), key=lambda x:x[1], reverse=True)
-		#self.statistics["occurrences"] = b
-
-		#rank={}
-		#for a1, a in enumerate(b):
-		#	rank[a[0]]=a1
-
-		#self.statistics["rank"]=rank
-		#self.statistics["wordlist"] = rank.keys()
 		wordlist = set()
 		letters = set()
 		for book in self.books:

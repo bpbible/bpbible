@@ -387,9 +387,6 @@ class LinkedFrame(VerseKeyedFrame):
 									with_verses=True)
 		self.gui_reference.SetSize((140, -1))
 		
-		#self.gui_reference = wx.TextCtrl(self.toolbar,
-		#		style=wx.TE_PROCESS_ENTER)
-		
 		self.gui_go = self.toolbar.AddTool(wx.ID_ANY,  
 			guiutil.bmp("accept.png"),
 			shortHelpString=_("Go to this reference"))
@@ -502,7 +499,6 @@ class DictionaryFrame(BookFrame):
 		self.dict = wx.Panel(parent)
 		self.dictsplitter = wx.SplitterWindow(self.dict)
 		
-		#self = DictionaryFrame(self.dictsplitter, self)
 		super(DictionaryFrame, self).__init__(self.dictsplitter)
 		self.SetBook(book)
 		self.book.observers += self.dictionary_version_changed
@@ -516,8 +512,6 @@ class DictionaryFrame(BookFrame):
 		self.dictionary_list_index = -1
 		self.dictionary_list.item_changed_observers += self.list_item_changed
 		s = wx.BoxSizer(wx.HORIZONTAL)
-		#s.Add(self.dictionarytext, proportion=1, flag = wx.EXPAND)
-		#s.Add(self.dictionary_list, 0, wx.GROW)
 		self.dictsplitter.SetSashGravity(1)
 		self.dictsplitter.SplitVertically(self,
 						self.dictionary_list)
@@ -532,9 +526,6 @@ class DictionaryFrame(BookFrame):
 		
 		s.Add(self.dictsplitter, 1, wx.GROW)
 		self.dict.SetSizer(s)
-		#self.dict.Fit()
-#		self.dictionary_list = xrc.XRCCTRL(self, 'DictionaryValue')
-		#self.Center()
 	
 	def list_item_changed(self, event=None, suppress_reference_change=False):
 		# Only force everything to reload if the list index has changed.
@@ -560,8 +551,6 @@ class DictionaryFrame(BookFrame):
 		key.Persist(1)
 		key.setText(to_str(self.reference, mod))
 		mod.setKey(key)
-		#while(not ord(self.mod.Error())):
-		#		topics.append(self.mod.getKeyText());
 		mod.increment(amount);
 		ref = to_unicode(mod.getKeyText(), mod)
 		self.notify(ref, source=events.CHAPTER_MOVE)

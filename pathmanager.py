@@ -11,7 +11,6 @@ class PathItem(object):
 	def __init__(self, path):
 		self.name = path
 		self.readonly = False
-		#self.path = path
 	
 	def copy(self, name, readonly=False):
 		return PathItem(name)
@@ -25,7 +24,6 @@ class PathManagerPanel(wx.Panel):
 			copy_text=_("New"))
 		
 		sizer.Add(self.panel, 1, wx.GROW)
-		#panel2 = wx.Panel(self)
 		s = wx.StdDialogButtonSizer()
 		s.AddButton(wx.Button(self, id=wx.ID_OK))
 		s.AddButton(wx.Button(self, id=wx.ID_CANCEL))
@@ -52,7 +50,7 @@ class PathManagerPanel(wx.Panel):
 			name=os.getcwd()
 
 		dlg = wx.DirDialog(self, _("Choose a directory:"),
-						  style=wx.DD_DEFAULT_STYLE, defaultPath=name)#|wx.DD_DIR_MUST_EXIST)
+						  style=wx.DD_DEFAULT_STYLE, defaultPath=name)
 
 		# If the user selects OK, then we process the dialog's data.
 		# This is done by getting the path data from the dialog - BEFORE
@@ -60,8 +58,7 @@ class PathManagerPanel(wx.Panel):
 		ansa = dlg.ShowModal() 
 		if ansa == wx.ID_OK:
 			path = dlg.Path
-			return path#and not self.path_exists(:
-			#self.log.WriteText('You selected: %s\n' % dlg.GetPath())
+			return path
 
 	def on_template_change(self, selection): pass
 

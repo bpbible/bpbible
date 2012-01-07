@@ -79,8 +79,6 @@ class DockArt(wx.aui.PyAuiDockArt):
 		# this space will be able to be right-clicked in to bring up a list of
 		# toolbars
 		self.aui_dock_art.DrawBackground(dc, window, orientation, rect)
-		#dc.SetBrush(wx.BLUE_BRUSH)
-		#dc.DrawEllipseRect(rect)
 		self.parent.rects.append(rect)
 	
 	def DrawBorder(self, dc, rect, pane):
@@ -738,9 +736,6 @@ class AuiLayer(object):
 		if maximized and not pane.IsToolbar() and not pane.IsFloating(): 
 			self.restore_maximized_pane(maximized)
 		assert pane.IsOk(), panel
-		#if not toggle and pane.IsMaximized():
-		#	# restore the pane first
-		#	self.aui_mgr.RestorePane(pane)
 		changed = not (toggle and not maximized and pane.IsShown())
 		if changed:
 			pane.Show(toggle)
@@ -859,12 +854,6 @@ class AuiLayer(object):
 	
 	def default_set_aui_items_up(self):
 		"""Code used to generate perspective"""
-		
-		default_toolbars = self.toolbars
-							#([self.main_toolbar, "Navigation"],
-							#[self.zoom_toolbar, "Zoom"])
-			
-	
 		self.create_items(self.get_aui_items())
-		if not guiconfig.use_one_toolbar: self.create_toolbars(default_toolbars)		
+		if not guiconfig.use_one_toolbar: self.create_toolbars(self.toolbars)		
 	

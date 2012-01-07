@@ -1,7 +1,5 @@
 import wx
 
-import re
-
 from bookframe import LinkedFrame, BookFrame
 import config, guiconfig
 from config import BIBLE_VERSION_PROTOCOL
@@ -14,8 +12,7 @@ from protocols import protocol_handler
 from util import noop
 from util.configmgr import config_manager
 from displayframe import IN_POPUP, process_html_for_module
-from swlib.pysw import GetBestRange, SW, VK, VerseList
-from swlib import pysw
+from swlib.pysw import SW, VerseList, GetBestRange
 from util.unicode import to_str
 
 from util.i18n import N_
@@ -57,7 +54,6 @@ class VerseCompareFrame(LinkedFrame):
 		self.mod = None
 		super(VerseCompareFrame, self).__init__(parent)
 		self.SetBook(book)
-		#verse_comparison_settings["comparison_modules"] = book.GetModuleList()
 	
 	def SetReference(self, ref, reload=False, settings_changed=False):
 		if not ref:
@@ -80,7 +76,7 @@ class VerseCompareFrame(LinkedFrame):
 		
 		self.SetPage(text_func(ref))
 
-		self.gui_reference.SetValue(pysw.GetBestRange(ref, userOutput=True))
+		self.gui_reference.SetValue(GetBestRange(ref, userOutput=True))
 		self.gui_reference.currentverse = ref
 		self.update_title()
 	
@@ -186,7 +182,7 @@ class VerseCompareFrame(LinkedFrame):
 	def update_title(self, shown=None):
 		m = guiconfig.mainfrm
 		p = m.get_pane_for_frame(self)
-		ref = pysw.GetBestRange(self.reference, userOutput=True)
+		ref = GetBestRange(self.reference, userOutput=True)
 		text = "%s - %s" % (self.title, ref)
 		m.set_pane_title(p.name, text)
 		

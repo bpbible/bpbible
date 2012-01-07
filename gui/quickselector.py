@@ -12,7 +12,7 @@ themes = dict(
 	black_green=(10, 0.85, "black", "green"), 
 	
 	grey=(5, 1, "grey", "white"),
-	red=(30, .7, "red", "black"),#(153, 102, 0)),
+	red=(30, .7, "red", "black"),
 )
 
 def set_theme(theme):
@@ -87,8 +87,6 @@ class QuickSelector(quick_selector_class):
                          | wx.FRAME_SHAPED
                          | wx.NO_BORDER
                          | wx.FRAME_NO_TASKBAR
-                         #| wx.STAY_ON_TOP
-			#wx.NO_BORDER|wx.FRAME_SHAPED|wx.FRAME_NO_TASKBAR)
 		)
 		
 		if not self.SetTransparent(opacity * 255):
@@ -178,17 +176,9 @@ class QuickSelector(quick_selector_class):
 		return self.panel.text
 	
 	def pseudo_modal(self, callback):
-		def focus():
-			#self.SetFocus()
-			
-			self.panel.SetFocus()
-			
-		
-		#focus()
 		self.Show()
 		self.Raise()
-		focus()
-		
+		self.panel.SetFocus()
 		
 		self.callback = callback
 	

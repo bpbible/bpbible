@@ -326,8 +326,6 @@ class TooltipBaseMixin(object):
 
 #TODO check how this works under (say) MAC
 tooltip_parent = wx.MiniFrame
-#if osutils.is_gtk():
-#	tooltip_parent = wx.PopupWindow
 
 class Tooltip(TooltipBaseMixin, tooltip_parent):
 	"""A tooltip with some HTML in it.
@@ -477,7 +475,6 @@ class Tooltip(TooltipBaseMixin, tooltip_parent):
 				or self.logical_parent.current_target[0] != self.target):
 				dprint(TOOLTIP, 
 					"Going away as mouse off and not vetoed by mousein")
-				#self.parent.lastcell = ""
 
 				dprint(TOOLTIP, "Stopping children")
 				# hide all our children - this includes ourselves
@@ -530,10 +527,7 @@ class Tooltip(TooltipBaseMixin, tooltip_parent):
 		if self.out_timer:
 			self.out_timer.Stop()
 			
-		#self.Freeze()
-		#self.Show()
 		self.Hide()
-		#self.Thaw()
 
 	def HideTooltip(self):
 		self.Stop()

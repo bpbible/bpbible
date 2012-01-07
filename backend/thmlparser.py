@@ -5,8 +5,7 @@ from util.unicode import to_unicode
 
 class ThMLParser(filterutils.ParserBase):
 	def start_scripRef(self, xmltag):
-		if (#self.u.module.Type() ==  "Biblical Texts" or 
-			not	filterutils.filter_settings["expand_thml_refs"]):
+		if not filterutils.filter_settings["expand_thml_refs"]:
 			# we don't do anything here. This may change when I have a module
 			# to test it on...
 			self.success = SW.INHERITED
@@ -16,15 +15,13 @@ class ThMLParser(filterutils.ParserBase):
 		self.u.suspendTextPassThru = True
 	
 	def end_scripRef(self, xmltag):
-		if (#self.u.module.Type() ==  "Biblical Texts" or 
-			not	filterutils.filter_settings["expand_thml_refs"]):
+		if not filterutils.filter_settings["expand_thml_refs"]:
 		
 			self.success = SW.INHERITED
 			return
 
 		refList = self.scripRef_passage
 		if self.u.module.Type() == "Biblical Texts":
-			#self.success = SW.INHERITED
 			if refList:
 				dprint(MESSAGE, "FOUND ThML reflist in Bible", refList)
 				self.success = SW.INHERITED

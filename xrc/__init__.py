@@ -31,15 +31,6 @@ def XRCCTRL(item, name):
 	if toolbar:
 		ctrl = toolbar.FindWindowById(id)
 		return ctrl
-	
-	#if not hasattr(item, "GetMenuBar"):
-		return ctrl
-		
-	#menubar = item.GetMenuBar()
-	#if menubar:
-	#	ctrl = menubar.FindItem(id)
-		
-	#return ctrl
 
 wx.xrc.XRCCTRL=XRCCTRL
 

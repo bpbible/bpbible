@@ -11,7 +11,6 @@ import guiconfig
 from wx import stc
 from gui.movablelist import MovableListPanel
 from gui import guiutil
-#import wx.lib.mixins.listctrl  as  listmix
 import cPickle as pickle
 
 from util.debug import *
@@ -59,7 +58,7 @@ default_templates = [
 
 
 
-class AutoCompleteList(wx.ListCtrl):#, listmix.ListCtrlAutoWidthMixin):
+class AutoCompleteList(wx.ListCtrl):
 	def __init__(self, parent, style=0):
 		super(AutoCompleteList, self).__init__(parent, style=style)
 		self.selection = None
@@ -78,11 +77,9 @@ class AutoCompleteList(wx.ListCtrl):#, listmix.ListCtrlAutoWidthMixin):
 			self.InsertColumn(idx, a)
 
 		for idx, t in enumerate(items):
-			#key, data = t
 			index = self.InsertStringItem(sys.maxint, t[0])
 			for ind, item in enumerate(t):
 				self.SetStringItem(index, ind, item)
-			#self.SetItemData(index, key)
 
 		self.width = 0;
 		for a in range(len(items[0])):
@@ -90,9 +87,8 @@ class AutoCompleteList(wx.ListCtrl):#, listmix.ListCtrlAutoWidthMixin):
 			self.SetColumnWidth(a, self.GetColumnWidth(a)+5)
 			self.width += self.GetColumnWidth(a)
 		self.width += (self.Size[0] - self.ClientSize[0])			
-		#self.SetColumnWidth(2, 100)
 
-class AutoCompleteTextBox(object):#(wx.TextCtrl):
+class AutoCompleteTextBox(object):
 	splitting = list(string.whitespace + string.punctuation)
 	splitting.remove("$")
 	splitting = "".join(splitting)
@@ -113,7 +109,6 @@ class AutoCompleteTextBox(object):#(wx.TextCtrl):
 		return r
 
 	def __init__(self, textbox, update_func, items = {}):
-		#super(AutoCompleteTextBox, self).__init__(parent)
 		self.update_func = update_func
 		self.textbox = textbox
 		self.autocompleting=False
@@ -190,7 +185,6 @@ class AutoCompleteTextBox(object):#(wx.TextCtrl):
 		word = words[-1]
 
 		if word.strip(self.splitting)[0]=="$":
-			#if not self.autocompleting:
 			self.DisplayPopup(word.strip(self.splitting), point)
 		elif self.autocompleting:
 			self.DismissPopup()
@@ -210,7 +204,7 @@ class AutoCompleteTextBox(object):#(wx.TextCtrl):
 			self.popup.Size=(self.list.width,self.list.Size[-1])
 			self.popup.Show()
 
-		sel = 0 #self.list.GetCount()
+		sel = 0
 		length = len(self.terms.keys())
 		for idx, a in enumerate(reversed(sorted(self.terms.keys()))):
 			if a<word:
@@ -230,9 +224,6 @@ class AutoCompleteTextBox(object):#(wx.TextCtrl):
 				if not parent.Parent:
 					break
 				parent = parent.Parent
-			#event = event.Clone()
-			#event.SetEventObject(parent)
-			#parent.GetEventHandler().ProcessEvent(event)
 			direction = wx.NavigationKeyEvent.IsForward
 			if event.ShiftDown():
 				direction = wx.NavigationKeyEvent.IsBackward
@@ -278,7 +269,6 @@ class AutoCompleteTextBox(object):#(wx.TextCtrl):
 		pos = self.textbox.GetCurrentPos()
 		line_text, column = self.textbox.GetCurLine()
 		text = self.split(line_text[:column])[-1]
-		#text = text.strip(self.splitting)
 		rest = item[len(text):] + " "
 		wx.CallAfter(self.InsertText, item, pos - len(text), pos)
 
@@ -335,8 +325,6 @@ class TemplatePanel(xrcTemplatePanel):
 
 		for field in fields.split():
 			item = getattr(self, field)
-			#setattr(self, field, item)
-			#item.Bind(stc.EVT_STC_CHANGE, self.Update)
 			item.field = field
 			if field in values:
 				item.set_text(values[field])
@@ -377,7 +365,7 @@ class TemplateManager(xrcTemplateManager):
 		self.MinSize = self.Size
 		
 
-		for a in [wx.EVT_KILL_FOCUS,]:#, stc.EVT_STC_MODIFIED]:
+		for a in [wx.EVT_KILL_FOCUS,]:
 			for item in self.template_panel.fields:
 				item.Bind(a, self.change_field)
 		
@@ -409,7 +397,6 @@ class TemplateManager(xrcTemplateManager):
 		if self.movable_list.template.readonly: return
 		assert not self.movable_list.template.readonly
 	
-		#for item in self.fields:
 		item = event.EventObject
 
 		self.movable_list.template[item.field] = item.Text
@@ -424,7 +411,6 @@ class TemplateManager(xrcTemplateManager):
 		for item in self.templates:
 			if item.name == name:
 				return item
-		#assert False, "Template '%s' not found" % name
 			
 	def get_unique_name(self, name="", template=None, overwrite=False):
 		original_name = name
@@ -529,7 +515,6 @@ class TemplateManager(xrcTemplateManager):
 	def return_template(self, template_name):
 		if not self.template_exists(template_name):
 			return None
-		#name = self.get_unique_name(name, self.movable_list.template)
 	
 		return self.get_template(template_number)
 	
@@ -551,9 +536,6 @@ class TemplateManager(xrcTemplateManager):
 			self.movable_list.add_template(template)
 
 		return True
-			#self.templates.append(template)
-
-		#self.fill_templates()
 	
 	def change_template(self, selection):
 		self.movable_list.change_template(selection)

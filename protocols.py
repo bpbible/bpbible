@@ -15,8 +15,6 @@ class ProtocolHandler(object):
 	def __init__(self):
 		self.hover = {}
 		self.protocols = {}
-		#self.hover.name = "hovering"
-		#self.hover.protocols = "opening link"
 		
 	def register_hover(self, protocol, handler):
 		self.hover[protocol] = handler

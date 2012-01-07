@@ -42,8 +42,6 @@ class TreeItem(object):
 		self._text = text
 		self.data = data
 		self.filterable = filterable
-		#if self.parent:
-		#	self.parent.children.append(self)
 	
 	@property
 	def text(self):

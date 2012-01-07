@@ -69,16 +69,10 @@ class MovableListPanel(xrcMovableListPanel):
 		
 		name = self.parent.get_unique_name()
 		if name:
-			#name, values = self.templates[selection]
 			new_template = self.template.copy(name=name, 
 											  readonly=False)
 
 			self.add_template(new_template)
-			
-			#ns = len(self.templates) - 1
-			#self.gui_templates.SetSelection(ns)
-			#self.change_template(ns)
-
 
 	def remove(self, event):
 		if len(self.templates) == 1:
@@ -104,7 +98,7 @@ class MovableListPanel(xrcMovableListPanel):
 		t = self.templates
 		t[selection], t[item] = t[item], t[selection]
 		self.fill_templates()
-		self.gui_templates.SetSelection(item)#set_selection
+		self.gui_templates.SetSelection(item)
 	
 
 	def move(self, direction):	

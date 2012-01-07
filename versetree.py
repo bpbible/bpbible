@@ -12,7 +12,6 @@ class VerseTree(LazyTreeCombo):
 		self.with_verses = with_verses
 		
 		self.tree.Bind(wx.EVT_TREE_ITEM_EXPANDING, self.Expand)
-		#self.Bind(wx.EVT_TEXT, self.OnChoice)
 		
 		wx.CallAfter(self.setup)
 
@@ -23,7 +22,6 @@ class VerseTree(LazyTreeCombo):
 		
 		self.tree.SetPyData(root, (UserVK.books, False))
 		self.AddItems(root)
-		#self.set_value(self.tree.GetFirstChild(root)[0])
 
 	def has_children(self, item):
 		data = self.get_data(item)

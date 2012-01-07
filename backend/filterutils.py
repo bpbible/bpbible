@@ -47,7 +47,6 @@ def get_user_data_desc(filter):
 		def ret(self, buf, token, userdata):
 			u = filter.getData(userdata)
 			retval = func(self, buf, token, u)
-			#filter.updateData(userdata, u)
 			return retval
 		ret.__name__ = func.__name__
 		return ret

@@ -48,14 +48,6 @@ CJK_LANGUAGES = ("zh", "ja", "ko")
 
 # TODO: Sword regex search doesn't work with word boundaries
 
-#class MyThread(threading.Thread):
-#	def __init__(self, dialog):
-#		self.dialog = dialog
-#		threading.Thread.__init__(self)
-#
-#	def run(self):
-#		self.dialog.on_search2()
-
 search_config = config_manager.add_section("Search")
 search_config.add_item("disappear_on_doubleclick", True, item_type=bool)
 
@@ -231,7 +223,6 @@ class SearchPanel(xrcSearchPanel):
 		panel = guiconfig.mainfrm.aui_mgr.GetPane(self.id)
 		if panel.IsFloating():
 			# do resizing to force layout 
-			#panel.window.SetSize(panel.window.GetSize() + (0, 1))		
 			tlw = guiutil.toplevel_parent(panel.window)
 			assert tlw
 			tlw.DefaultItem = self.search_button
@@ -239,11 +230,6 @@ class SearchPanel(xrcSearchPanel):
 
 			tlw.Raise()
 			self.searchkey.SetFocus()
-			
-			#tlw.Sizer.Layout()
-			#tlw.SetSize(panel.floating_size)		
-			
-			
 			
 		else:
 			dprint(WARNING, "NOT FLOATING", panel)
@@ -431,11 +417,6 @@ class SearchPanel(xrcSearchPanel):
 		# XRC doesn't localize the Label
 		self.collapsible_panel.Label = _("Search Options")
 		
-
-		# Do all init here
-		#self.Fit()
-		#self.GetContainingSizer().ContainingWindow.Fit()
-		
 		# Do binding
 		self.Bind(wx.EVT_BUTTON, self.on_search_button, self.search_button)
 		self.Bind(wx.EVT_BUTTON, self.on_close, id=wx.ID_CLOSE)
@@ -454,8 +435,6 @@ class SearchPanel(xrcSearchPanel):
 		self.searchkey.SetWindowStyle(self.searchkey.GetWindowStyle() | \
 									  wx.TE_PROCESS_ENTER)
 		self.searchkey.Bind(wx.EVT_TEXT_ENTER, self.on_search_button)
-		#self.verselist.InsertColumn(0, "Reference")
-		#self.verselist.InsertColumn(1, "Preview")
 		self.set_gui_search_type(search_config["indexed_search"])
 
 		guiutil.add_close_window_esc_accelerator(self, self.on_close)
@@ -682,7 +661,7 @@ class SearchPanel(xrcSearchPanel):
 		"""This is what does the main bit of searching."""
 		assert self._has_index()
 		last_time = [time.time()]
-		def index_callback(value):#, userdata):
+		def index_callback(value):
 			# calling GUI functions here is quite expensive (under linux,
 			# takes twice as long if you do it always), so only do it every
 			# 0.1 seconds
@@ -885,8 +864,6 @@ class SearchPanel(xrcSearchPanel):
 		self.save_results_button.Disable()
 
 		#insert columns
-		#self.verselist.InsertColumn(0, "Reference")
-		#self.verselist.InsertColumn(1, "Preview")
 		self.set_title()
 	
 	def set_title(self):
@@ -1065,7 +1042,7 @@ class SearchList(virtuallist.VirtualListCtrlXRC):
 
 	def get_data(self, idx, col):
 		assert self.parent, "Parentless search list :("
-		template = VerseTemplate(body=u"$text ")#, headings=u"")
+		template = VerseTemplate(body=u"$text ")
 		
 	
 		if col == 0:

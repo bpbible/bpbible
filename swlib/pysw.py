@@ -139,7 +139,7 @@ def set_vk_verse_checked(self, verse):
 			), userOutput=True)
 		)
 
-class VK(SW.VerseKey):#, object):
+class VK(SW.VerseKey):
 	"""VK - a wrapper around VerseKey
 	
 	A VK is a list of consecutive verses. Created like this:
@@ -227,13 +227,8 @@ class VK(SW.VerseKey):#, object):
 			return
 
 		if isinstance(key, basestring):
-			#if not KeyExists(key):
-			#	raise VerseParsingError, key
-			#print key
 			SW.VerseKey.__init__(self, key.encode(self.encoding))
-			#print "TESTING", key
 			if raiseError and self.Error():
-				#print "RAISING ERROR"
 				raise VerseParsingError, key
 			return
 			
@@ -348,7 +343,6 @@ class VK(SW.VerseKey):#, object):
 				length+=1
 				self+=1
 			return length
-		#else
 		return 1
 
 
@@ -372,10 +366,6 @@ class VK(SW.VerseKey):#, object):
 		return 1
 
 	def __iter__(self):
-		#class iterator(object):
-		#	def __iter__(self):return self
-		#	def next(self):
-				
 		if(not self.isBoundSet()):
 			yield self
 			raise StopIteration
@@ -403,7 +393,7 @@ class VK(SW.VerseKey):#, object):
 
 		self.setPosition(TOP)
 		for a in range(key):
-			self+=1#key
+			self+=1
 		if self.Error():
 			raise IndexError, key
 		return self.__class__(self.getText())
@@ -441,18 +431,6 @@ class VK(SW.VerseKey):#, object):
 			return VK(super(VK, self).LowerBound())
 		
 		super(VK, self).LowerBound(SW.VerseKey(to))
-		
-		
-	#def UpperBound(self, to=None):
-	#	if to is not None:
-	#		return self._get(self.UpperBound(to))
-	#	return self._get(self.UpperBound())
-	#
-	#def UpperBound(self, to=None):
-	#	if to is not None:
-	#		return self._get(self.UpperBound(to))
-	#	return self._get(self.UpperBound())
-		
 		
 	def clone(self): return VK(self)
 	def Error(self): 
@@ -673,12 +651,6 @@ def check_vk_bounds(vk):
 				chapter=chapter, given=verse
 			), userOutput=True)
 		)
-	
-
-#	def ParseVerseList(self, range, context="", expand=True):
-#		"""Return a VerseList made from the range"""
-#		result=SW.VerseKey.ParseVerseList(self, range, context, expand)
-#		return VerseList(result)
 
 rev_22_21 = VK("rev 22:21")
 class VerseList(list): 
@@ -944,7 +916,7 @@ class VerseList(list):
 	def getRangeText(self):	
 		return "; ".join(item.text for item in self)
 
-	def VerseInRange(self, verse):#, range, context="", vklist=None):
+	def VerseInRange(self, verse):
 		"""
 		>>> from swlib.pysw import VerseList
 		>>> list = VerseList("Genesis 2:1 - 3")
@@ -979,8 +951,6 @@ class VerseList(list):
 		>>> list.VerseInRange("Genesis 2:1-6")
 		False
 		"""
-		#if not(vklist): #lastrange and range==lastrange):
-		#	vklist=GetVKs(range, context)
 		try:
 			if isinstance(verse, SW.VerseKey):
 				vk = verse
@@ -1279,7 +1249,7 @@ class VerseList(list):
 	
 		return u"VerseList([%s])" % u", ".join(repr(item) for item in self)
 
-	def __str__(self): return self.GetBestRange() #Text()
+	def __str__(self): return self.GetBestRange()
 
 	def clone(self): return VerseList(self)
 
@@ -1658,7 +1628,6 @@ def GetVerseStr(verse, context = "", raiseError=False,
 			raise VerseParsingError, _("Invalid empty reference")
 			
 		return ""
-		#assert verse
 
 	# Parse List (This is for context)
 	verse_split = verse.split(";")[0].split(",")[0]

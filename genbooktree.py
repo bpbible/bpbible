@@ -7,8 +7,6 @@ class GenBookTree(LazyTreeCombo):
 	def __init__(self, parent, book, frame):
 		super(GenBookTree, self).__init__(parent, style=wx.CB_READONLY)
 		self.tree.Bind(wx.EVT_TREE_ITEM_EXPANDING, self.Expand)
-		#self.Bind(wx.EVT_COMBOBOX, self.OnChoice)
-		#self.Bind(wx.EVT_TEXT, self.OnChoice)
 		
 		self.frame = frame
 		wx.CallAfter(self.SetBook, book)

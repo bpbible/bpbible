@@ -13,16 +13,8 @@ class VirtualListCtrl(wx.ListCtrl, ListCtrlAutoWidthMixin):
 		# properly
 		ListCtrlAutoWidthMixin.__init__(self)
 		
-		#self.Size = self.Size[0] + 1, self.Size[1]
 		self.cache = {}
 		
-		
-	
-	#def refresh(self, start, end=None):
-	#	if end is None:
-	#		self.RefreshItem(start)
-	#	else:
-	#		self.RefreshItems(start, end)
 	def set_data(self, columns, data=None, length=None):
 		self.ClearAll()
 		self.cache.clear()
@@ -105,11 +97,6 @@ class VirtualListBox(VirtualListCtrl):
 	def on_cache_hint(self, event):
 		for item in range(event.CacheFrom, event.CacheTo+1):
 			self.get_is_bold(item)
-		
-		
-		
-		#self.Bind(wx.EVT_SIZE, self.on_size)
-		#self.Size = self.Size[0] + 1, self.Size[1]
 	
 	def refresh(self, start, end=None):
 		if end is None:
@@ -135,9 +122,6 @@ class VirtualListBox(VirtualListCtrl):
 	def OnGetItemAttr(self, item):
 		if self.get_is_bold(item):
 			return self.attr1
-
-	#def on_size(self, event):
-	#	self.SetColumnWidth(0, self.ClientSize[0])
 	
 class VirtualListCtrlXRC(VirtualListCtrl):
 	def __init__(self):

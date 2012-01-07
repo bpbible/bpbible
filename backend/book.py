@@ -14,7 +14,6 @@ import display_options
 
 import config
 
-#ERR_OK = '\x00'
 class FileSaveException(Exception):
 	pass
 
@@ -598,7 +597,6 @@ class Book(object):
 
 	def GetChapter(self, ref, specialref="", specialtemplate = None, 
 			context="", raw=False):
-		#vk = self.mod.getKey()
 		self.vk.setText(to_str(ref, self.mod))
 		
 		#get first ref

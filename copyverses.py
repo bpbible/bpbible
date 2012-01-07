@@ -21,18 +21,6 @@ from util.configmgr import config_manager
 from swlib.pysw import GetBestRange
 import display_options
 
-#class CopyVerseDialog(xrcCopyVerseDialog):
-#	def __init__(self, parent, settings):
-#		super(CopyVerseDialog, self).__init__(parent)
-#		self.sizer = wx.BoxSizer(wx.VERTICAL)
-#		panel = wx.Panel(self)
-#		button_sizer = wx.StdDialogButtonSizer()
-#		button_sizer.AddButton(wx.Button(wx.ID_OK))
-#		button_sizer.AddButton(wx.Button(wx.ID_CANCEL))
-#		button_sizer.Realize()
-
-		
-		
 class CopyVerseDialog(xrcCopyVerseDialog):
 	def __init__(self, parent):
 		super(CopyVerseDialog, self).__init__(parent)
@@ -83,9 +71,6 @@ class CopyVerseDialog(xrcCopyVerseDialog):
 			)
 			
 			fields = self.tm.template
-			#self.tm.transfer_from_templatemanager(id)
-			
-				
 
 		# put the template panel in
 		self.template_panel = TemplatePanel(self.tp_holder, fields, False)
@@ -125,14 +110,6 @@ class CopyVerseDialog(xrcCopyVerseDialog):
 
 		self.preview.book = biblemgr.bible
 		self.has_preview_been_loaded = False
-		
-		#self.panel1instructions.Wrap(300)
-		#s =self.GetSizer()
-		#print self.instructions.GetBestSize(), self.instructions.Size
-		#s.Layout()
-		#s.RecalcSizes()
-		#s.Layout()
-		#self.instructions.GetSizer().Layout()
 	
 	def on_text_changed(self, event):
 		# one of our text fields have changed

@@ -40,9 +40,6 @@ class Template(VerseTemplate):
 		self.items[item] = value
 		getattr(self, item).template = value
 	
-	#def items(self):
-	#	return self.items.copy()
-	
 	def keys(self):
 		return self.items.keys()
 	

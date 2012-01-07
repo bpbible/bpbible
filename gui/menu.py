@@ -10,7 +10,6 @@ class MenuItem(object):
 			id=wx.ID_ANY, font=None):
 		self.text = text
 		self.action = action
-		#self.window = window
 
 		if doc is None:
 			self.doc = action.__doc__
