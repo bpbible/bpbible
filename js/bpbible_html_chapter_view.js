@@ -149,9 +149,13 @@ $(document).ready(function() {
 
 function get_current_verse() {
 	var current_verse = $("a.currentverse");
-	if(current_verse.length != 1) {
+	if(current_verse.length === 0) {
+		// Get the first verse in the chapter, not just the chapter marker.
+		// This is a very crude hack.
+		current_verse = $($("#original_segment a.vnumber").get(1));
+	}
+	else if(current_verse.length > 1) {
 		jsdump("Wrong number of current verses: " + current_verse.length + "\n");
-		return current_verse;
 	}
 	return current_verse;
 }
