@@ -53,7 +53,7 @@ class BooleanOptionMenuItem(object):
 
 	def on_option_clicked(self, event):
 		self.options_section[self.option_name] = event.Checked()
-		display_option_changed(self.option_name, self.reload_options)
+		display_option_changed(self.option_name, self.reload_options, self.options_section)
 
 class MultiOptionsMenuItem(object):
 	def __init__(self, option_name, menu_text, _options, reload_options=DO_NOT_RELOAD, options_section=options, on_option_selected=None):
@@ -85,7 +85,7 @@ class MultiOptionsMenuItem(object):
 		self.options_section[self.option_name] = self.options_map[event.Id]
 		if self.on_option_selected is not None:
 			self.on_option_selected()
-		display_option_changed(self.option_name, self.reload_options)
+		display_option_changed(self.option_name, self.reload_options, self.options_section)
 
 def on_headwords_module_changed():
 	from backend.bibleinterface import biblemgr
@@ -127,12 +127,12 @@ debug_options_menu = [
 
 display_option_changed_observers = ObserverList()
 
-def display_option_changed(option_name, reload_options):
+def display_option_changed(option_name, reload_options, options_section):
 	from backend.bibleinterface import biblemgr
 	if option_name in sword_options_map:
-		biblemgr.set_option(sword_options_map[option_name], options[option_name])
+		biblemgr.set_option(sword_options_map[option_name], options_section[option_name])
 
-	display_option_changed_observers(option_name)
+	display_option_changed_observers(option_name, options_section)
 	if reload_options == RELOAD_BIBLE_FRAMES:
 		guiconfig.mainfrm.UpdateBibleUI(settings_changed=True, source=events.SETTINGS_CHANGED)
 	elif reload_options == RELOAD_ALL_FRAMES:
@@ -141,14 +141,14 @@ def display_option_changed(option_name, reload_options):
 def all_options():
 	return options.items.keys()
 
-def get_js_option_value(option, quote_string=False):
-	type = options.item_types[option]
+def get_js_option_value(option, options_section=options, quote_string=False):
+	type = options_section.item_types[option]
 	if type not in (str, bool):
 		raise TypeError("Only bool and str supported at the moment (option: %s)" % option)
 	if type == bool:
-		return "true" if options[option] else "false"
+		return "true" if options_section[option] else "false"
 	else:
-		option_value = options[option].encode("utf8")
+		option_value = options_section[option].encode("utf8")
 		if quote_string:
 			option_value = "'%s'" % option_value
 		return option_value

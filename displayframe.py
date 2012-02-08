@@ -690,12 +690,12 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 	def allow_url_to_open(self, href):
 		return href.startswith("bpbible") and ("passagestudy.jsp" not in href)
 
-	def change_display_option(self, option_name):
+	def change_display_option(self, option_name, options_section):
 		if not self.dom_loaded:
 			return
 
 		self.Execute("change_display_option('%s', %s);" %
-				(option_name, display_options.get_js_option_value(option_name, quote_string=True)))
+				(option_name, display_options.get_js_option_value(option_name, options_section=options_section, quote_string=True)))
 
 	def fonts_changed(self):
 		if not self.dom_loaded:
