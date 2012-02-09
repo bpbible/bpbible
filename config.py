@@ -141,6 +141,9 @@ def HARMONY_UNSUPPORTED_MESSAGE():
 <p>In order for this harmony to work, you need to have a Bible installed.</p>
 """)
 
+def CHAPTER_NOT_IN_MODULE_MESSAGE():
+	return _("""<p style="text-indent: 0;">%s is not in the current book.</p>""")
+
 from util.configmgr import ConfigManager
 bpbible_configuration = ConfigManager("bpbible.conf")
 release_settings = bpbible_configuration.add_section("Release")

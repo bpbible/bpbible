@@ -354,7 +354,7 @@ class BibleFrame(VerseKeyedFrame):
 
 		if has_selected_new_verse:
 			self.NewReferenceLoaded()
-		else:
+		elif self.CheckChapterInBook(ref):
 			self.OpenURIForCurrentBook("bpbible://content/page/%s/%s" % (self.book.version, self.reference))
 
 		if ref_to_scroll_to:

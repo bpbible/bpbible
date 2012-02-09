@@ -251,13 +251,12 @@ class Book(object):
 		mod.SetKey(verselist)
 		verses_left = max_verses
 
-		ERR_OK = chr(0)
 		render_text, render_start, render_end = self.get_rendertext(mod)
 		if render_start: render_start()
 
 		try:
 			incrementer = mod if skip_linked_verses else verselist
-			while incrementer.Error() == ERR_OK:
+			while not self.has_error(incrementer):
 				if verses_left == 0:
 					yield None, None
 					break
@@ -716,6 +715,26 @@ class Book(object):
 			raise FileSaveException(
 				_("Couldn't save cipher key. You will have to set it again when you restart"))
 
+	def has_chapter(self, ref, mod=None):
+		assert self.is_verse_keyed, "Calling has_chapter for non-verse keyed module."
+		module = mod or self.mod
+		vk = VK(ref)
+		if module.hasEntry(vk):
+			return True
+
+		vk.setVerse(1)
+		if module.hasEntry(vk):
+			return True
+
+		module.setKey(vk)
+		try:
+			old_mod_skiplinks = module.getSkipConsecutiveLinks()
+			module.setSkipConsecutiveLinks(True)
+			module.increment()
+			next_vk = VK.castTo(module.getKey())
+			return (next_vk.Book() == vk.Book() and next_vk.Chapter() == vk.Chapter()) and not self.has_error(module)
+		finally:
+			module.setSkipConsecutiveLinks(old_mod_skiplinks)
 		
 	def get_mgr(self, mod):
 		for path, mgr, modules in self.parent.mgrs:
@@ -753,6 +772,11 @@ class Book(object):
 	<pre class='raw'>%s</pre>
 	%s
 </div>""" % (rendered_text, cgi.escape(kt), cgi.escape(rendered_text), headings, cgi.escape(text.decode("utf-8", "replace")), option_filtered)
+
+	@staticmethod
+	def has_error(module):
+		ERR_OK = chr(0)
+		return (module.Error() != ERR_OK)
 				
 class Commentary(Book):
 	type = "Commentaries"

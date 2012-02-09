@@ -352,6 +352,15 @@ class VerseKeyedFrame(BookFrame):
 	def format_ref(self, module, ref):
 		return GetBestRange(ref, userOutput=True)
 
+	def CheckChapterInBook(self, ref):
+		chapter_in_book = self.book.has_chapter(ref)
+		if not chapter_in_book:
+			self.reference = ref
+			chapter_ref = pysw.UserVK(ref).get_book_chapter()
+			self.SetPage(config.CHAPTER_NOT_IN_MODULE_MESSAGE() % chapter_ref)
+
+		return chapter_in_book
+
 
 class LinkedFrame(VerseKeyedFrame):
 	def __init__(self, parent):
@@ -473,6 +482,9 @@ class CommentaryFrame(LinkedFrame):
 		if self.book.is_personal_commentary:
 			self.reference = ref
 			self.SetPage(config.PERSONAL_COMMENTARY_UNSUPPORTED_MESSAGE())
+			return
+
+		elif not self.CheckChapterInBook(ref):
 			return
 
 		super(CommentaryFrame, self).SetReference(ref, settings_changed=settings_changed)
