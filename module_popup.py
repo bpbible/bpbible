@@ -32,21 +32,7 @@ class PopupList(virtuallist.VirtualListBox):
 		module = self.modules[item]
 		key = to_str(self.key, module)
 		k = SW.Key(key)
-		if hasattr(module, "hasEntry"):
-			has_key = module.hasEntry(k)
-			return has_key
-
-		print "No hasKey :(", module.Name()
-		
-		module.setKey(k)
-		
-		is_bold = bool(module.getRawEntry())
-
-		# dictionaries snap to nearest - only give if it is the same
-		if is_bold and isinstance(self.book, (Dictionary, GenBook)):
-			is_bold = module.getKeyText() == key
-
-		return is_bold
+		return module.hasEntry(k)
 
 class ModulePopup(wx.PopupTransientWindow):
 	def __init__(self, parent, event, rect, book, key, style=wx.NO_BORDER):
