@@ -69,7 +69,7 @@ function get_normalized_selection(){
 }
 
 function get_scroll_offset() {
-	return 300;
+	return Math.max(300, window.innerHeight);
 }
 
 var reached_top = false;
