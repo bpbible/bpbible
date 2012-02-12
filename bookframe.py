@@ -353,6 +353,9 @@ class VerseKeyedFrame(BookFrame):
 		return GetBestRange(ref, userOutput=True)
 
 	def CheckChapterInBook(self, ref):
+		if not self.book.mod:
+			return True
+
 		chapter_in_book = self.book.has_chapter(ref)
 		if not chapter_in_book:
 			self.reference = ref

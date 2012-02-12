@@ -718,6 +718,9 @@ class Book(object):
 	def has_chapter(self, ref, mod=None):
 		assert self.is_verse_keyed, "Calling has_chapter for non-verse keyed module."
 		module = mod or self.mod
+		if module is None:
+			return False
+
 		vk = VK(ref)
 		if module.hasEntry(vk):
 			return True
