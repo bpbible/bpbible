@@ -88,10 +88,10 @@ def on_sword_hover(frame, href, url, element, x, y):
 		
 		ref = to_unicode(mod.getKeyText(), mod)
 		ref = f.format_ref(mod, ref)
-		text = mod.RenderText()
+		text = to_unicode(mod.RenderText(), mod)
 
 		tooltip_config.module = mod
-		tooltip_config.text = ("%s (%s)<br>%s" % (
+		tooltip_config.text = (u"%s (%s)<br>%s" % (
 			ref, mod.Name(), text
 		))
 	else:
