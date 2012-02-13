@@ -6,6 +6,7 @@ from util.debug import dprint, WARNING
 from util import string_util
 import datetime
 import display_options
+import locale
 
 current_year = datetime.date.today().year
 
@@ -149,7 +150,8 @@ def mmdd_to_date(date, abbrev=False):
 		date = datetime.date(2008, month, day)
 
 	month_format = "%b" if abbrev else "%B"
-	return "%s %d" % (date.strftime(month_format), date.day)
+	month_name = date.strftime(month_format).decode(locale.getlocale()[1])
+	return u"%s %d" % (month_name, date.day)
 
 		
 class Dictionary(Book):

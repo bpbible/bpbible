@@ -244,7 +244,7 @@ class BookFrame(AUIDisplayFrame):
 		version = self.book.version
 		ref = pysw.internal_to_user(self.reference)
 		
-		text = "%s - %s (%s)" % (self.title, ref, version)
+		text = u"%s - %s (%s)" % (self.title, ref, version)
 		m.set_pane_title(p.name, text)
 	
 	def get_search_panel_for_frame(self):
