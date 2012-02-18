@@ -27,6 +27,11 @@ sword_options_map = dict(
 	morph_segmentation="Morpheme Segmentation",
 )
 
+sword_options_with_fixed_values = dict(
+	Headings=True,
+	Footnotes=True,
+)
+
 all_reload_options = (
 	DO_NOT_RELOAD,
 	RELOAD_BIBLE_FRAMES,
