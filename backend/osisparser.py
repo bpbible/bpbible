@@ -49,7 +49,7 @@ class OSISParser(filterutils.ParserBase):
 	def start_abbr(self, xmltag):
 		exp = xmltag.getAttribute("expansion")
 		if not exp:
-			dprint("WARNING: not exp")
+			dprint(WARNING, "abbr tag does not have expansion attribute.")
 
 		self.write('<abbr title="%s">' % SW.URL.encode(exp).c_str())
 
