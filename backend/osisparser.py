@@ -142,13 +142,20 @@ class OSISParser(filterutils.ParserBase):
 		assert not xmltag.isEmpty(), "Hi cannot be empty"
 		type = xmltag.getAttribute("type")
 		types = {
+			"acrostic": ("<i>", "</i>"),
 			"bold": ("<b>", "</b>"),
+			"b": ("<b>", "</b>"),
+			"x-b": ("<b>", "</b>"),
+			"emphasis": ("<em>", "</em>"),
+			"illuminated": ("<i>", "</i>"),
 			"italic": ("<i>", "</i>"),
+			"line-through": ('<span class="line-through">', "</span>"),
+			"normal": ("", ""),
+			"ol": ('<span class="overline">', "</span>"),
+			"small-caps": ('<span class="small-caps">', "</span>"),
 			"sub": ("<sub>", "</sub>"),
 			"super": ("<sup>", "</sup>"),
 			"underline": ("<u>", "</u>"),
-			"small-caps": ('<span class="small-caps">', "</span>"),
-			"ol": ('<span class="overline">', "</span>"),
 		}
 		if type not in types:
 			dprint(WARNING, "Unhandled hi type", type)

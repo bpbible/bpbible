@@ -66,6 +66,10 @@ span.overline {
 	text-decoration: overline;
 }
 
+span.line-through {
+	text-decoration: line-through;
+}
+
 span.crossreference {
 	font-size: 70%;
 }
