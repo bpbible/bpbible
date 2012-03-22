@@ -30,7 +30,6 @@
                             </object>
                             <object class="sizeritem">
                               <object class="wxComboBox" name="searchkey">
-                                <tooltip>Words to search for</tooltip>
                               </object>
                               <option>1</option>
                               <flag>wxRIGHT|wxALIGN_CENTRE</flag>

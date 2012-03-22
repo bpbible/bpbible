@@ -135,7 +135,6 @@ def __gettext_strings():
     def _(str): pass
     
     _("&Find:")
-    _("Words to search for")
     _("Open the Virtual Keyboard")
     _("&Search")
     _("Search for given words now")
