@@ -735,7 +735,7 @@ class Book(object):
 			module.setSkipConsecutiveLinks(True)
 			module.increment()
 			next_vk = VK.castTo(module.getKey())
-			return (next_vk.Book() == vk.Book() and next_vk.Chapter() == vk.Chapter()) and not self.has_error(module)
+			return (next_vk.Book() == vk.Book() and next_vk.Chapter() == vk.Chapter() and next_vk.Testament() == vk.Testament()) and not self.has_error(module)
 		finally:
 			module.setSkipConsecutiveLinks(old_mod_skiplinks)
 		
