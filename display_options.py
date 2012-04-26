@@ -14,7 +14,7 @@ options.add_item("headings", True, item_type=bool)
 options.add_item("cross_references", True, item_type=bool)
 options.add_item("footnotes", True, item_type=bool)
 options.add_item("strongs_numbers", True, item_type=bool)
-options.add_item("strongs_blocked", True, item_type=bool)
+options.add_item("strongs_position", "underneath", item_type=str)
 options.add_item("morphology", True, item_type=bool)
 options.add_item("morph_segmentation", False, item_type=bool)
 options.add_item("raw", False, item_type=bool)
@@ -74,8 +74,14 @@ class MultiOptionsMenuItem(object):
 		sub_menu = wx.Menu("")
 		current_option = self.options_section[self.option_name]
 	
-		for option_value, menu_text in self.options:
-			item = sub_menu.AppendRadioItem(wx.ID_ANY, _(menu_text))
+		for v in self.options:
+			if len(v) == 3:
+				option_value, menu_text, hint = v
+			else:
+				option_value, menu_text = v
+				hint = ""
+
+			item = sub_menu.AppendRadioItem(wx.ID_ANY, _(menu_text), _(hint))
 			
 			if option_value == current_option:
 				item.Check()
@@ -104,25 +110,28 @@ options_menu = [
 	BooleanOptionMenuItem("cross_references", N_("Cross References"), N_("Show cross references in the text.")),
 	BooleanOptionMenuItem("footnotes", N_("Footnotes"), N_("Show footnotes in the text")),
 	BooleanOptionMenuItem("strongs_numbers", N_("Strongs Numbers"), reload_options=RELOAD_BIBLE_FRAMES),
-	BooleanOptionMenuItem("strongs_blocked", N_("Strongs Underneath"),
-		N_("Show the Original Language Word underneath the word rather than next to it.")),
 	BooleanOptionMenuItem("morphology", N_("Morphology"), reload_options=RELOAD_BIBLE_FRAMES),
 	BooleanOptionMenuItem("morph_segmentation", N_("Morph Segmentation"), reload_options=RELOAD_BIBLE_FRAMES),
-	MultiOptionsMenuItem("colour_speakers", N_("Colour code speakers"), [
-		("woc_in_red", N_("Words of Christ in Red")),
-		("coloured_quotes", N_("Colour code by speaker")),
-		("off", N_("Off")),
+	MultiOptionsMenuItem("strongs_position", N_("Strongs positioning"), [
+		("underneath", N_("Underneath text"), N_("Show the Original Language Word underneath the word.")),
+		("inline", N_("Inline with text"), N_("Show the Original Language Word next to the word.")),
+		("hover", N_("Show on hover"), N_("Show the Original Language Word when the cursor is over the word.")),
+		("click", N_("Show on click"), N_("Show the Original Language Word when the word is selected.")),
 	]),
 	MultiOptionsMenuItem("headwords_module", N_("Strongs Headwords"), [
 		("HeadwordsTransliterated", N_("Transliterated")),
 		("HeadwordsOriginalLang", N_("Original Language")),
 		("HeadwordsPronunciation", N_("Pronunciation")),
 		("", N_("Strongs Numbers")),
-	],
-	options_section=filter_settings,
-	reload_options=RELOAD_BIBLE_FRAMES,
-	on_option_selected=on_headwords_module_changed,
+	], options_section=filter_settings,
+		reload_options=RELOAD_BIBLE_FRAMES,
+		on_option_selected=on_headwords_module_changed,
 	),
+	MultiOptionsMenuItem("colour_speakers", N_("Colour code speakers"), [
+		("woc_in_red", N_("Words of Christ in Red")),
+		("coloured_quotes", N_("Colour code by speaker (ESV only)")),
+		("off", N_("Off")),
+	]),
 ]
 
 debug_options_menu = [

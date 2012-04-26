@@ -11,7 +11,7 @@ import re
 # This is the version of the configuration file, and should be updated
 # whenever there is a need to because the configuration changed (though it
 # might as well be kept roughly in sync with version numbers).
-CONFIG_VERSION = "0.4.2"
+CONFIG_VERSION = "0.5.2"
 	
 class ConfigSection(object):
 	def __init__(self, section):
@@ -171,8 +171,20 @@ class ConfigManager(object):
 			self._upgrade_04_to_041(config_parser)
 		if version_from < SW.Version("0.4.2"):
 			self._upgrade_041_to_042(config_parser)
+		if version_from < SW.Version("0.5.2"):
+			self._upgrade_042_to_052(config_parser)
 			
 
+	def _upgrade_042_to_052(self, config_parser):
+		try:
+			# upgrade strongs_blocked
+			blocked = config_parser.getboolean("Options", "strongs_blocked")
+
+			position = "underneath" if blocked else "inline"
+			config_parser.set("Options", "strongs_position", position)
+		except (NoSectionError, NoOptionError), e:
+			dprint(WARNING, "Error on upgrading", e)
+	
 	def _upgrade_041_to_042(self, config_parser):
 		import config
 		try:

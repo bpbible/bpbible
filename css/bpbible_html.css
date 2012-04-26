@@ -80,7 +80,7 @@ span.crossreference {
  * NOTE: this should be the first background-color in the CSS, so that it
  * doesn't override others
  */
-.highlight, .highlight div {
+.highlight, .highlight div, .highlight p {
 	background-color: hsl(240, 100%, 90%);
 }
 
@@ -177,8 +177,8 @@ a.strongs_headword {
 	font-size: 80%;
 	-moz-user-select: none;
 }
-body[strongs_blocked="false"] a.strongs_headword:before { content: "<" }
-body[strongs_blocked="false"] a.strongs_headword:after { content: ">" }
+body[strongs_position="inline"] a.strongs_headword:before { content: "<" }
+body[strongs_position="inline"] a.strongs_headword:after { content: ">" }
 
 a.morph {
 	text-decoration: none;
@@ -187,17 +187,23 @@ a.morph {
 	-moz-user-select: none;	
 }
 
-body[strongs_blocked="false"] a.morph:before,
-body[strongs_blocked="true"][morphology="true"][strongs_numbers="false"] a.morph:before {
+body[strongs_position="inline"] a.morph:before,
+body[strongs_position="underneath"][morphology="true"][strongs_numbers="false"] a.morph:before,
+body[strongs_position="hover"][morphology="true"][strongs_numbers="false"] a.morph:before 
+{
 	content: "(";
 }
 
-body[strongs_blocked="false"] a.morph:after,
-body[strongs_blocked="true"][morphology="true"][strongs_numbers="false"] a.morph:after {
+body[strongs_position="inline"] a.morph:after,
+body[strongs_position="underneath"][morphology="true"][strongs_numbers="false"] a.morph:after,
+body[strongs_position="hover"][morphology="true"][strongs_numbers="false"] a.morph:after 
+{
 	content: ")";
 }
 
-body[strongs_blocked="true"][strongs_numbers="true"] span.strongs-block * {
+body[strongs_position="underneath"][strongs_numbers="true"] span.strongs-block *,
+body[strongs_position="hover"][strongs_numbers="true"] span.strongs-block *
+{
 	display: inline;
 	line-height: 1em;
 	text-indent: 0;
@@ -205,20 +211,46 @@ body[strongs_blocked="true"][strongs_numbers="true"] span.strongs-block * {
 	white-space: nowrap;
 }
 
-body[strongs_blocked="true"][strongs_numbers="true"] span.strongs * {
+body[strongs_position="underneath"][strongs_numbers="true"] span.strongs *
+{
 	display: inline;
 }
 
-body[strongs_blocked="true"][strongs_numbers="true"] span.strongs {
-/*	margin: auto;*/
+body[strongs_position="hover"][strongs_numbers="true"] span.strongs *
+{
+	display: inline;
+	position: relative;
 }
 
-body[strongs_blocked="true"][strongs_numbers="true"] span.strongs-block:hover {
-/*	background-color: hsl(240, 50%, 90%);*/
+body[strongs_position="hover"][strongs_numbers="true"] span.strongs-block:not(:hover) > span.strongs
+{
+	visibility: hidden;
+}
+
+body[strongs_position="hover"][strongs_numbers="true"] span.strongs-block > span.strongs
+{
+	position: absolute;
+	border: 1px solid #aaa;
+	border-top: 0;
+	-moz-border-radius: 0 0 3px 3px;
+	border-radius: 0 0 3px 3px;
+	z-index: 10;
+	width: auto;
+	padding: 0.1em;
+	margin-top: 1px;
+	margin-left: -2px;
+/*	margin: auto;*/
 	background-color: hsl(240, 50%, 93%);
 }
 
-body[strongs_blocked="true"][strongs_numbers="true"] span.strongs-block {
+body[strongs_position="hover"][strongs_numbers="true"] span.strongs-block > span.strongs *
+{
+	position: relative;
+}
+
+body[strongs_position="underneath"][strongs_numbers="true"] span.strongs-block,
+body[strongs_position="hover"][strongs_numbers="true"] span.strongs-block
+{
 	line-height: 1em;
 	text-indent: 0;	
 
@@ -229,51 +261,85 @@ body[strongs_blocked="true"][strongs_numbers="true"] span.strongs-block {
 	-moz-padding-end: 2px;*/
 }
 
-body[strongs_blocked="true"][strongs_numbers="true"] span.strongs-block > *, 
-body[strongs_blocked="true"][strongs_numbers="true"] span.strongs > * {
+body[strongs_position="hover"][strongs_numbers="true"] span.strongs-block {
+	border: 1px solid transparent;
+}
+
+body[strongs_position="hover"][strongs_numbers="true"] span.strongs-block:hover
+{
+	border: 1px solid #aaa;
+	border-radius: 3px 3px 0 0;
+	-moz-border-radius: 3px 3px 0 0;
+}
+
+body[strongs_position="underneath"][strongs_numbers="true"] span.strongs-block:hover,
+body[strongs_position="hover"][strongs_numbers="true"] span.strongs-block:hover
+{
+/*	background-color: hsl(240, 50%, 90%);*/
+	background-color: hsl(240, 50%, 93%);
+}
+
+body[strongs_position="underneath"][strongs_numbers="true"] span.strongs-block > *,
+body[strongs_position="underneath"][strongs_numbers="true"] span.strongs > *,
+body[strongs_position="hover"][strongs_numbers="true"] span.strongs > *,
+body[strongs_position="hover"][strongs_numbers="true"] span.strongs > *
+{
 	display: table-row-group;
 }
 
-body[strongs_blocked="true"][strongs_numbers="true"] span.strongs-block, 
-body[strongs_blocked="true"][strongs_numbers="true"] span.strongs {
+body[strongs_position="underneath"][strongs_numbers="true"] span.strongs-block,
+body[strongs_position="underneath"][strongs_numbers="true"] span.strongs,
+body[strongs_position="hover"][strongs_numbers="true"] span.strongs-block, 
+body[strongs_position="hover"][strongs_numbers="true"] span.strongs
+{
 	display: inline-table;
 	border-spacing: 1px;
 }
 
-body[strongs_blocked="true"][strongs_numbers="false"][morphology="false"]
-span.strongs {
+body[strongs_position="underneath"][strongs_numbers="false"][morphology="false"] span.strongs,
+body[strongs_position="hover"][strongs_numbers="false"][morphology="false"] span.strongs
+{
 	display: none;
 }
 
-body[strongs_blocked="true"][strongs_numbers="true"] span.strongs {
+body[strongs_position="underneath"][strongs_numbers="true"] span.strongs,
+body[strongs_position="hover"][strongs_numbers="true"] span.strongs
+{
 	width: 100%;
 }
 
-body[strongs_blocked="true"][strongs_numbers="true"] span.strongs > span.strongs_headwords > a.strongs_headword {
+body[strongs_position="underneath"][strongs_numbers="true"] span.strongs > span.strongs_headwords > a.strongs_headword,
+body[strongs_position="hover"][strongs_numbers="true"] span.strongs > span.strongs_headwords > a.strongs_headword
+{
 	display: table-cell;
 	font-size: 80%;
 }
 
-body[strongs_blocked="true"][strongs_numbers="true"] 
-span.strongs > span.strongs_headwords > a.strongs_headword + a.strongs_headword,
-body[strongs_blocked="true"][strongs_numbers="true"][morphology="true"] 
-span.strongs > span.strongs_morph > a.morph + a.morph 
+body[strongs_position="underneath"][strongs_numbers="true"] span.strongs > span.strongs_headwords > a.strongs_headword + a.strongs_headword,
+body[strongs_position="underneath"][strongs_numbers="true"][morphology="true"] span.strongs > span.strongs_morph > a.morph + a.morph,
+body[strongs_position="hover"][strongs_numbers="true"] span.strongs > span.strongs_headwords > a.strongs_headword + a.strongs_headword,
+body[strongs_position="hover"][strongs_numbers="true"][morphology="true"] span.strongs > span.strongs_morph > a.morph + a.morph 
 {
 	padding-left: 0.5em;
 }
 
-body[strongs_blocked="true"][morphology="true"] span.strongs > span.strongs_morph {
+body[strongs_position="underneath"][morphology="true"] span.strongs > span.strongs_morph,
+body[strongs_position="hover"][morphology="true"] span.strongs > span.strongs_morph
+{
 	display: table-footer-group;
 
 }
-body[strongs_blocked="true"][strongs_numbers="true"][morphology="true"] span.strongs > span.strongs_morph > a.morph {
+body[strongs_position="underneath"][strongs_numbers="true"][morphology="true"] span.strongs > span.strongs_morph > a.morph,
+body[strongs_position="hover"][strongs_numbers="true"][morphology="true"] span.strongs > span.strongs_morph > a.morph
+{
 	display: table-cell;
 	font-size: 80%;
 }
 
 /* Below each strong's block, put 1/2em of space */
-body[strongs_blocked="true"][strongs_numbers="true"] span.strongs-block {
-	margin: 0 0 0.5em 0
+body[strongs_position="underneath"][strongs_numbers="true"] span.strongs-block
+{
+	margin: 0 0 0.5em 0;
 }
 
 body[morphology="false"] span.strongs a.morph, body[morphology="false"] span.strongs span.strongs_morph {
@@ -327,7 +393,7 @@ body[columns="true"] .reference_bar {
 /* if we really have blocked strong's, we'd like to be able to turn
  * justification off. However, we can't easily check this at the moment, so we
  * won't worry too much */
-body[columns="true"]/*[strongs_blocked="false"]*/ {
+body[columns="true"]/*[strongs_position="inline"]*/ {
 	text-align: justify;
 }
 
@@ -479,3 +545,4 @@ span.search_highlight, span.search_highlight a {
 	font-weight: bold;
 	color: #008800;
 }
+
