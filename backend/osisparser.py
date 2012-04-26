@@ -223,6 +223,8 @@ class OSISParser(filterutils.ParserBase):
 		elif type == "x-begin-paragraph":
 			self.buf += "<p>"
 			self.blocklevel_start()
+		else:
+			self.buf += "<br />"
 
 	def start_w(self, xmltag):
 		self.strongs_bufs = []
