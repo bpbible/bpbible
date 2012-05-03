@@ -248,6 +248,11 @@ class VK(SW.VerseKey):
 
 		SW.VerseKey.__init__(self, *key)
 
+	@staticmethod
+	def castTo(key):
+		assert isinstance(key, SW.Key), "VK.castTo() called without a SWKey."
+		return VK(key)
+
 	@classproperty
 	def books(cls): return books
 
