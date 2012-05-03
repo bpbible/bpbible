@@ -280,34 +280,31 @@ class Book(object):
 
 				start_verse = end_verse = versekey.Verse()
 				
-				# a patch adds isLinked, not in SWORD trunk yet
-				# if not there, we will only see the first number
-				if hasattr(mod, "isLinked"):
-					# look forwards and backwards to see what the linked verse
-					# number is (e.g. 3-5). Note: currently this won't cross
-					# chapter boundaries
-					vk = versekey.clone()
-					vk = versekey.castTo(vk)
-					vk.thisown=True
-					vk.Headings(0)
-					while(vk.Error() == '\x00' 
-						and vk.Chapter() == versekey.Chapter() 
-						and mod.isLinked(vk, versekey)):
-						end_verse = vk.Verse()
-						vk.increment(1)
+				# look forwards and backwards to see what the linked verse
+				# number is (e.g. 3-5). Note: currently this won't cross
+				# chapter boundaries
+				vk = versekey.clone()
+				vk = versekey.castTo(vk)
+				vk.thisown=True
+				vk.Headings(0)
+				while(vk.Error() == '\x00' 
+					and vk.Chapter() == versekey.Chapter() 
+					and mod.isLinked(vk, versekey)):
+					end_verse = vk.Verse()
+					vk.increment(1)
 				
-					vk.copyFrom(versekey)
-					vk.Headings(0)
+				vk.copyFrom(versekey)
+				vk.Headings(0)
 
-					# hopefully we won't see anything backwards, but it is
-					# possible (i.e. if we start in the middle of a linked
-					# verse
-					while(vk.Error() == '\x00'
-						and vk.Chapter() == versekey.Chapter() 
-						and mod.isLinked(vk, versekey)):				
-						start_verse = vk.Verse()
+				# hopefully we won't see anything backwards, but it is
+				# possible (i.e. if we start in the middle of a linked
+				# verse
+				while(vk.Error() == '\x00'
+					and vk.Chapter() == versekey.Chapter() 
+					and mod.isLinked(vk, versekey)):				
+					start_verse = vk.Verse()
 
-						vk.decrement(1)
+					vk.decrement(1)
 				
 				if start_verse == end_verse:
 					verse = "%d" % start_verse

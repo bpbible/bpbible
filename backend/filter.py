@@ -63,9 +63,8 @@ def make_osis():
 	
 	osis = SW.PyOSISHTMLHREF(osisrenderer)
 	osis.thisown = False
-	if hasattr(osis, "removeTokenSubstitute"):
-		osis.removeTokenSubstitute("lg")
-		osis.removeTokenSubstitute("/lg")
+	osis.removeTokenSubstitute("lg")
+	osis.removeTokenSubstitute("/lg")
 	
 	return osisrenderer, osis
  
