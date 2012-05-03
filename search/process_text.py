@@ -164,7 +164,7 @@ class ParseThML(ParseBase):
 		list = pysw.i_vk.ParseVerseList(ref, self.keytext, True)
 		for item in range(list.Count()):
 			i = list.GetElement(item)
-			k = SW.VerseKey_castTo(i)
+			k = SW.VerseKey.castTo(i)
 			if k and k.isBoundSet():
 				lb = k.LowerBound()
 				ub = k.UpperBound()
