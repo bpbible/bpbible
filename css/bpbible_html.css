@@ -215,11 +215,17 @@ body[strongs_position="underneath"][strongs_numbers="true"] span.strongs *
 }
 
 div.strongs-number-top-filler,
-div.strongs-numbers-popup, 
+div.strongs-numbers-popup,
 div.strongs-word-popup,
-body[strongs_position="underneath"][strongs_numbers="true"] span.strongs-block:hover
+body[strongs_position="underneath"][strongs_numbers="true"] span.strongs-block:hover,
+.same-strongs-hint
 {
 	background-color: hsl(51, 100%, 80%);
+}
+
+.same-strongs-hint {
+	border-radius: 3px;
+	-moz-border-radius: 3px;
 }
 
 div.strongs-number-top-filler,
@@ -230,7 +236,8 @@ div.strongs-word-popup
 	position: absolute;
 }
 
-body[strongs_position="underneath"][strongs_numbers="true"] span.strongs-block
+body[strongs_position="underneath"][strongs_numbers="true"] span.strongs-block,
+body[strongs_position="inline"][strongs_numbers="true"] span.strongs-block
 {
 	border: 1px solid transparent;
 	padding: 1px;
@@ -238,12 +245,14 @@ body[strongs_position="underneath"][strongs_numbers="true"] span.strongs-block
 
 div.strongs-numbers-popup, 
 div.strongs-word-popup,
-body[strongs_position="underneath"][strongs_numbers="true"] span.strongs-block:hover
+body[strongs_position="underneath"][strongs_numbers="true"] span.strongs-block:hover,
+body[strongs_position="inline"][strongs_numbers="true"] span.strongs-block:hover
 {
 	border: 1px solid hsl(51, 100%, 45%);
 }
 
-body[strongs_position="underneath"][strongs_numbers="true"] span.strongs-block:hover
+body[strongs_position="underneath"][strongs_numbers="true"] span.strongs-block:hover,
+body[strongs_position="inline"][strongs_numbers="true"] span.strongs-block:hover
 {
 	-moz-border-radius: 3px;
 	border-radius: 3px;

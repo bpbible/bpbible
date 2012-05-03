@@ -404,10 +404,22 @@ function read_css(t, prop) {
 
 function trunc(x) { return x | 0; }
 
+function hide_sub_strongs_popups() {
+	$(".same-strongs-hint").removeClass("same-strongs-hint");
+}
+
+function show_sub_strongs_popups(elem) {
+	href = elem.getAttribute("href");
+	if (href == "strongs://Greek/3588") return;
+	var links = elems = $('a.strongs_headword[href="' + href + '"]');
+	var blocks = links.parents(".strongs-block").addClass("same-strongs-hint");
+}
+
 function hide_strongs_popup() {
 	$(".current-strongs-word").removeClass("current-strongs-word");
 	$(".strongs-numbers-popup").remove();
 	$(".strongs-word-popup").remove();
+	hide_sub_strongs_popups();
 }
 
 function show_strongs_popup(elem) {
@@ -418,6 +430,10 @@ function show_strongs_popup(elem) {
 	var word_popup = $("<div class='strongs-word-popup'>" + t.find(".strongs_word").html() + "</div>").appendTo(t);
 	var number_popup = $("<div class='strongs-numbers-popup'><span class='strongs'>" + t.find(".strongs").html() + "</span></div>").appendTo(t);
 	var s = number_popup.find(".strongs");
+
+	s.find("span.strongs_headwords > a.strongs_headword").each(function() {
+		show_sub_strongs_popups(this);
+	});
 
 	// don't ask why 2. 3 is too wide (causes wrapping) but 2 doesn't.
 	word_popup.width(trunc(t.width() + (word_popup.outerWidth() - word_popup.width())/2 - 1));
@@ -479,17 +495,36 @@ function on_strongs_off(event) {
 	hide_strongs_popup();
 }
 
+function on_sub_strongs_over(event) {
+	$(this).children("span.strongs").children("span.strongs_headwords").children("a.strongs_headword").each(function() {
+		show_sub_strongs_popups(this);
+	});
+}
+
+function on_sub_strongs_off(event) {
+	hide_sub_strongs_popups();
+}
+
 function set_strongs_method() {
 	$("body").undelegate(".strongs-block", "mouseenter", on_strongs_over);
 	$("body").undelegate(".strongs-block", "mouseleave", on_strongs_off);
 	$("body").unbind("click", on_strongs_click);
+	$("body").delegate('span.strongs-block', "mouseenter", on_sub_strongs_over);
+	$("body").delegate('span.strongs-block', "mouseleave", on_sub_strongs_off);
+
 	hide_strongs_popup();
 	strongs_method = document.body.getAttribute("strongs_position");
+	
 	if (strongs_method == "click") {
 		$("body").bind("click", on_strongs_click);
 	} else if (strongs_method == "hover") {
 		$("body").delegate(".strongs-block", "mouseenter", on_strongs_over);
 		$("body").delegate(".strongs-block", "mouseleave", on_strongs_off);
+	}
+
+	if (strongs_method == "underneath" || strongs_method == "inline") {
+		$("body").delegate('span.strongs-block', "mouseenter", on_sub_strongs_over);
+		$("body").delegate('span.strongs-block', "mouseleave", on_sub_strongs_off);
 	}
 }
 
