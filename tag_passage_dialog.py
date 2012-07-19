@@ -27,7 +27,7 @@ class TagPassageDialog(xrcTagPassageDialog):
 		self._passage_entry = passage_entry
 		self._manager = get_primary_passage_list_manager()
 		self._bindEvents()
-		self.passage_verse_key = VerseList([self._passage_entry.passage])
+		self.passage_verse_key = self._passage_entry.passage
 		passage_str = self.passage_verse_key.GetBestRange(userOutput=True)
 		self.passage_text.Value = passage_str
 		self.comment_text.Value = self._passage_entry.comment
