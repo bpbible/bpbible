@@ -801,3 +801,16 @@ class Bible(Book):
 		return _("Bible")
 
 
+def get_module_css_text_direction(module):
+	dir = "ltr"
+	if module: 
+		dir = {
+			SW.DIRECTION_BIDI: "bidi",
+			SW.DIRECTION_LTR:  "ltr",
+			SW.DIRECTION_RTL:  "rtl",
+		}.get(ord(module.Direction()))
+		if not dir: 
+			print "Unknown text direction"
+			dir = "ltr"
+
+	return dir

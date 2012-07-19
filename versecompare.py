@@ -8,6 +8,7 @@ from gui import guiutil
 
 from gui.menu import MenuItem
 from backend.bibleinterface import biblemgr
+from backend.book import get_module_css_text_direction
 from protocols import protocol_handler
 from util import noop
 from util.configmgr import config_manager
@@ -73,7 +74,6 @@ class VerseCompareFrame(LinkedFrame):
 			self.get_parallel_text
 		][verse_comparison_settings["parallel"]]
 
-		
 		self.SetPage(text_func(ref))
 
 		self.gui_reference.SetValue(GetBestRange(ref, userOutput=True))
@@ -125,7 +125,8 @@ class VerseCompareFrame(LinkedFrame):
 					text.pop() 
 					break
 
-				text.append(u'<td class="parallel_verse" module="%s">' % module.Name())
+				text_direction = get_module_css_text_direction(module)
+				text.append(u'<td class="parallel_verse" module="%s" dir="%s">' % (module.Name(), text_direction))
 				
 				t = ""
 				for heading_dict in headings:

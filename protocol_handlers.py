@@ -1,4 +1,5 @@
 from backend.bibleinterface import biblemgr
+from backend.book import get_module_css_text_direction
 from swlib.pysw import SW, VK
 import os
 import config
@@ -169,20 +170,10 @@ class PageProtocolHandler(ProtocolHandler):
 		for option in all_options():
 			options.append((option, get_js_option_value(option)))
 
-		dir = "ltr"
 		if module: 
 			options.append(("module", module.Name()))
-			dir = {
-				SW.DIRECTION_BIDI: "bidi",
-				SW.DIRECTION_LTR:  "ltr",
-				SW.DIRECTION_RTL:  "rtl",
-			}.get(ord(module.Direction()))
-
-		if not dir: 
-			print "Unknown text direction"
-			dir = "ltr"
-
-		options.append(("dir", dir))
+		
+		options.append(("dir", get_module_css_text_direction(module)))
 		return ' '.join('%s="%s"' % option for option in options)
 	
 	
