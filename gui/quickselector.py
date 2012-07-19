@@ -38,7 +38,11 @@ class TextPanel(wx.TextCtrl):#PyPanel):
 		self.Bind(wx.EVT_KILL_FOCUS, self.end_parent_modal)
 		self.TopLevelParent.Bind(wx.EVT_KILL_FOCUS, self.end_parent_modal)
 		self.Bind(wx.EVT_CHAR, self.add_letter)
-		self.Bind(wx.EVT_KEY_UP, self.add_letter)
+		if osutils.is_mac():
+			# On Windows, this event binding seems unnecessary and caused issue 220
+			# (repeated error message if you typed a wrong reference).
+			# Since it was only added to fix Mac issues, it seems OK to make it Mac specific.
+			self.Bind(wx.EVT_KEY_UP, self.add_letter)
 		self.Bind(wx.EVT_TEXT_ENTER, self.on_enter)
 		self.SetFont(wx.Font(30, wx.SWISS, wx.NORMAL, wx.FONTWEIGHT_BOLD, False))
 		dc = wx.MemoryDC()
