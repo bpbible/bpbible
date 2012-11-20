@@ -97,9 +97,9 @@ class VerseCompareFrame(LinkedFrame):
 					))
 				))
 				
-				text.append(process_html_for_module(item, 
-					u"<th><b><a href='%s:%s'>"
-					"%s</a></b></th>" % (BIBLE_VERSION_PROTOCOL, name, name))
+				text.append(u"<th>%s</th>" % process_html_for_module(item, 
+					u"<b><a href='%s:%s'>"
+					"%s</a></b>" % (BIBLE_VERSION_PROTOCOL, name, name))
 				)
 
 		text.append("</tr>")
