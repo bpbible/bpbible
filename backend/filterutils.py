@@ -172,7 +172,11 @@ class ParserBase(object):
 			word = display_number
 
 		#TODO handle extra...
-		item = '<a class="strongs_headword" href="strongs://%s/%s">%s</a>' % (modlang, number, word)
+
+		# use num to normalize, otherwise NASB/KJV give slightly
+		# different links which throws the strongs highlighting in comparison
+		# window off.
+		item = '<a class="strongs_headword" href="strongs://%s/%s">%s</a>' % (modlang, num, word)
 		strongs_cache[value] = item
 		
 		
