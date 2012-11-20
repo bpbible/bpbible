@@ -495,21 +495,22 @@ div.segment, div.no_more_text.book-start {
 }
 
 /* Styling for the gospel harmony reference tables. */
-table.harmonytable	{
+table.harmonytable, table.parallel_view	{
 	border-collapse: collapse;
 	width: 100%;
 }
 
-table.harmonytable th, table.harmonytable td	{
+table.harmonytable th, table.harmonytable td, table.parallel_view th, table.parallel_view td {
 	border: 1px solid #B0B0B0;
 	padding: 5px;
 }
 
+/* parallel views do not want centered (module name) headings */
 table.harmonytable th {
 	text-align: left;
 }
 
-table.harmonytable td {
+table.harmonytable td, table.parallel_view td {
 	vertical-align: text-top;
 }
 

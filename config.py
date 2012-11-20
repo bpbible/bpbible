@@ -209,12 +209,14 @@ genbook_template = VerseTemplate(
 	body=u"<div class='genbook_entry'><div class='genbook_key' level='$level'>$breadcrumbed_reference</div>$text\n</div>"
 )
 
+compare_verse_number = (verse_number % '').replace("$numbertype", "versenumber")
 
 verse_compare_template = VerseTemplate(
-		u'<a href="nbible:$internal_reference" '
-		u'	style="text-decoration: none; font-size: small; vertical-align: 0.32em; color: hsl(240, 35%, 50%);">'
-		u'		$versenumber</a> $text ',
-	
-	header=u"<p><b>(<a href=\"%s://content/$version\">$version</a>)"
-	u"</b> " % BIBLE_VERSION_PROTOCOL
+	body=compare_verse_number + u" $text\n",
+	header=u"<p><b>(<a href=\"%s://content/$version\">$version</a>)</b>"
+			% BIBLE_VERSION_PROTOCOL
+)
+
+parallel_template = VerseTemplate(
+	body=compare_verse_number + u" $text\n",
 )

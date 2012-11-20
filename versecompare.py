@@ -86,7 +86,7 @@ class VerseCompareFrame(LinkedFrame):
 		verselist = vk.ParseVerseList(to_str(ref), "", True)
 		
 		items = []
-		text = ["<table border=1 valign=TOP>", "<tr>"]
+		text = ["<table class='parallel_view'>", "<tr>"]
 		for item in self.book.GetModules():
 			name = item.Name()
 			if name in verse_comparison_settings["comparison_modules"]:
@@ -110,43 +110,46 @@ class VerseCompareFrame(LinkedFrame):
 
 		rows = []
 		was_clipped = False
-		while True:
-			text.append("<tr>")
-			for module, refs in items:
-				if not refs:
-					text.append("</tr>")
-					break
-				
-				body_dict, headings = refs.pop(0)
+		try:
+			self.book.templatelist.append(config.parallel_template)
+			while True:
+				text.append("<tr>")
+				for module, refs in items:
+					if not refs:
+						text.append("</tr>")
+						break
+					
+					body_dict, headings = refs.pop(0)
 
-				if not body_dict:
-					was_clipped = True
-					# remove opening row
-					text.pop() 
-					break
+					if not body_dict:
+						was_clipped = True
+						# remove opening row
+						text.pop() 
+						break
 
-				text_direction = get_module_css_text_direction(module)
-				text.append(u'<td class="parallel_verse" module="%s" dir="%s">' % (module.Name(), text_direction))
-				
-				t = ""
-				for heading_dict in headings:
+					text_direction = get_module_css_text_direction(module)
+					text.append(u'<td class="parallel_verse" module="%s" dir="%s">' % (module.Name(), text_direction))
+					
+					t = ""
+					for heading_dict in headings:
+						t += biblemgr.bible.templatelist[-1].\
+							headings.safe_substitute(heading_dict)
+					
 					t += biblemgr.bible.templatelist[-1].\
-						headings.safe_substitute(heading_dict)
-				
-				# XXX: Fix nbible reference.
-				t += (u'<a href="nbible:%(internal_reference)s">' 
-					u'<small><sup>%(versenumber)s</sup></small></a> %(text)s' % body_dict)
-				t = process_html_for_module(module, t)
+						body.safe_substitute(body_dict)
+					t = process_html_for_module(module, t)
 
-				text.append(t)
-				
-				text.append("</td>")
-						
-			else:
-				text.append("</tr>")
-				continue
+					text.append(t)
+					
+					text.append("</td>")
+							
+				else:
+					text.append("</tr>")
+					continue
 
-			break
+				break
+		finally:
+			self.book.templatelist.pop()
 
 		text.append("</table>")
 		
