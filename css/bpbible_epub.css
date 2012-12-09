@@ -1,0 +1,735 @@
+/* epub specific */
+
+/*.toc_book, */
+.toc_chapter_link {
+	width: 3em;
+	padding: 0.25em 0.25em;
+	display: block;
+	float: left;
+}
+
+/*.toc_book.even {
+	clear: both;
+}
+
+.toc_book.odd {
+	float:right;
+} */
+
+.intro_bookname {
+	text-size: 150%;
+}
+
+hr.pagebreak {
+	page-break-after: always;
+	clear: both;
+}
+
+/* Note: chapter/verse numbers are no longer links in this ePub */
+
+/* Headings */
+/* TODO: Matt 5:2 - <p> comes *before* heading - our text indent goes
+ * missing... */
+h2.heading {
+	font-size: 120%;
+	margin-top: 1em;
+	margin-bottom: 0;
+}
+body {
+  font-family: sans-serif;     
+}
+h1,h2,h3,h4 {
+  font-family: serif;     
+  color: red;
+}
+/**
+h2.heading[canonical="true"] {
+	font-style: italic;
+}
+
+body[headings="false"] h2.heading {
+	display: none;
+}
+
+body[footnotes="false"] a.footnote:not(.footnote_crossReference),
+body[cross_references="false"] a.footnote.footnote_crossReference {
+	display: none;
+}
+**/
+
+/* Footnotes */
+a.footnote {
+	text-decoration: none;
+	font: 65%/0 sans-serif;
+	vertical-align: 0.55em;	
+}
+
+/* e.g. ESV Gen 1:1 */
+a.footnote.footnote_crossReference {
+	color: hsl(0, 55%, 50%);
+}
+
+/* e.g. ESV Zech 14:7 - Hebrew one */
+a.footnote.footnote_translation {
+	color: hsl(180, 75%, 40%);
+}
+
+/* e.g. ESV Zech 14:21 - or Canaanite */
+a.footnote.footnote_alternative {
+	color: hsl(120, 55%, 50%);
+}
+
+/* e.g. NASB Genesis 1:1 */
+a.footnote.footnote_explanation {
+	color: hsl(240, 55%, 50%);
+}
+
+/* e.g. ESV Ex 16:16 - omer */
+a.footnote.footnote_background {
+	color: hsl(300, 55%, 50%);
+}
+
+/* e.g. ESV Zech 14:6 - Compare Septuagint, ... */
+a.footnote.footnote_variant {
+	color: hsl(60, 55%, 30%);
+}
+
+/* divineName */
+span.divineName, span.small-caps {
+	font-variant: small-caps;
+}
+
+span.overline {
+	text-decoration: overline;
+}
+
+span.line-through {
+	text-decoration: line-through;
+}
+
+span.crossreference {
+	font-size: 70%;
+}
+
+/* block level elements which are children of our inline highlighting span
+ * should get its background colour, but don't unless we use the second
+ * selector... 
+ * NOTE: this should be the first background-color in the CSS, so that it
+ * doesn't override others
+ */
+.highlight, .highlight div, .highlight p {
+	background-color: hsl(240, 100%, 90%);
+}
+
+/* It looks really messy if our superscripted footnotes/versenumbers are
+ * individually highlighted... Usually they are probably
+ * highlighted mostly anyway, just not including the top bits... An exception
+ * is verse numbers in poetry - these look nice not highlighted... */
+.highlight a.footnote, .highlight .versenumber, .highlight .chapternumber {
+/*	background: none; */
+}
+/*.highlight span.strongs-block {
+	background-
+*/	
+
+/* we really want to have the indent of paragraph with a chapter number being
+ * 0 - however, we can't do p < .chapternumber. This hack will have to do
+ * instead... 
+ * TODO: what about if we have pre-chapter content?
+ */
+body > p:first-child /* > .chapternumber*/
+{
+/*	text-indent: 0em;*/
+}
+
+/* Poetry */
+blockquote.lg
+{
+	margin: 0.5em 0em 0.5em 3em;
+}
+
+/**
+[dir="rtl"] blockquote.lg
+{
+	margin: 0.5em 3em 0.5em 0em;
+}
+**/
+
+/* We want our indented lines to behave nicely - wrapped lines should be
+ * indented further. text-indent undoes the wide margin only for the first
+ * line */
+/**
+div.indentedline[width="2"] {
+	-moz-padding-start: 5em;
+	text-indent: -3em;
+}
+div.indentedline[width="4"] {
+	-moz-padding-start: 5em;
+	text-indent: -1em;
+}
+div.indentedline[width="6"] {
+	-moz-padding-start: 7em;
+	text-indent: -1em;
+}
+
+div.indentedline[width="0"] {
+	-moz-padding-start: 5em;
+	text-indent: -5em;
+}
+**/
+
+/* Compress our poetry view if our window is too narrow.
+ * Width corresponds to value in bpbible_chapter_view.css */
+/*@media all and (max-width: 500px) {*/
+	blockquote.lg
+	{
+		margin: 0.5em 0em 0.5em 1.75em;
+	}
+
+/**
+	[dir="rtl"] blockquote.lg
+	{
+		margin: 0.5em 1.75em 0.5em 0em;
+	}
+**/
+	/* We want our indented lines to behave nicely - wrapped lines should be
+	 * indented further. text-indent undoes the wide margin only for the first
+	 * line */
+	/**
+	div.indentedline[width="2"] {
+		-moz-padding-start: 4em;
+		text-indent: -3em;
+	}
+	div.indentedline[width="4"] {
+		-moz-padding-start: 5em;
+		text-indent: -3em;
+	}
+	div.indentedline[width="6"] {
+		-moz-padding-start: 6em;
+		text-indent: -3em;
+	}
+
+	div.indentedline[width="0"] {
+		-moz-padding-start: 3em;
+		text-indent: -3em;
+	}**/
+/*}*/
+/* Strong's headwords */
+a.strongs_headword {
+	text-decoration: none;
+	font-size: 80%;
+	-moz-user-select: none;
+}
+
+/**
+body[strongs_position="inline"] a.strongs_headword:before { content: "<" }
+body[strongs_position="inline"] a.strongs_headword:after { content: ">" }
+**/
+a.morph {
+	text-decoration: none;
+	font-size: 80%;
+	font-style: italic;
+	-moz-user-select: none;	
+}
+
+/**
+body[strongs_position="inline"] a.morph:before,
+body[strongs_position="underneath"][morphology="true"][strongs_numbers="false"] a.morph:before
+{
+	content: "(";
+}
+
+body[strongs_position="inline"] a.morph:after,
+body[strongs_position="underneath"][morphology="true"][strongs_numbers="false"] a.morph:after
+{
+	content: ")";
+}
+
+body[strongs_position="underneath"][strongs_numbers="true"] span.strongs-block *,
+div.strongs-numbers-popup *
+{
+	display: inline;
+	line-height: 1em;
+	text-indent: 0;
+	text-align: center;
+	white-space: nowrap;
+}
+
+body[strongs_position="underneath"][strongs_numbers="true"] span.strongs *
+{
+	display: inline;
+}
+
+div.strongs-number-top-filler,
+div.strongs-numbers-popup,
+div.strongs-word-popup,
+body[strongs_position="underneath"][strongs_numbers="true"] span.strongs-block:hover,
+.same-strongs-hint
+{
+	background-color: hsl(51, 100%, 80%);
+}
+
+.same-strongs-hint {
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+}
+
+div.strongs-number-top-filler,
+div.strongs-numbers-popup, 
+div.strongs-word-popup
+{
+	z-index: 10;
+	position: absolute;
+}
+
+body[strongs_position="underneath"][strongs_numbers="true"] span.strongs-block,
+body[strongs_position="inline"][strongs_numbers="true"] span.strongs-block
+{
+	border: 1px solid transparent;
+	padding: 1px;
+}
+
+div.strongs-numbers-popup, 
+div.strongs-word-popup,
+body[strongs_position="underneath"][strongs_numbers="true"] span.strongs-block:hover,
+body[strongs_position="inline"][strongs_numbers="true"] span.strongs-block:hover
+{
+	border: 1px solid hsl(51, 100%, 45%);
+}
+
+body[strongs_position="underneath"][strongs_numbers="true"] span.strongs-block:hover,
+body[strongs_position="inline"][strongs_numbers="true"] span.strongs-block:hover
+{
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+}
+
+div.strongs-numbers-popup, 
+div.strongs-word-popup
+{
+	padding-left: 2px;
+	padding-right: 1px;
+}
+
+div.strongs-word-popup {
+	border-bottom: 0;
+	-moz-border-radius: 3px 3px 0 0;
+	border-radius: 3px 3px 0 0;
+	padding-top: 2px;
+}
+
+div.strongs-numbers-popup {
+	padding-bottom: 1px;
+}
+
+div.strongs-numbers-popup:not(.extra-long) {
+	border-top: 0;
+	-moz-border-radius: 0 0 3px 3px;
+	border-radius: 0 0 3px 3px;
+}
+
+div.strongs-numbers-popup.extra-long {
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+}
+
+div.strongs-number-top-filler {
+	height: 1px;
+	position: absolute;
+}
+
+body[strongs_position="click"] span.strongs-block,
+body[strongs_position="hover"] span.strongs-block
+{
+**/
+	/* inline-block means we don't have to worry about wrapping with the popped up text */
+/**	display: inline-block;
+	text-indent: 0;
+}
+
+body[strongs_position="click"] span.strongs-block > span.strongs,
+body[strongs_position="hover"] span.strongs-block > span.strongs
+{
+	display: none;
+}
+
+body[strongs_position="underneath"][strongs_numbers="true"] span.strongs-block,
+div.strongs-numbers-popup
+{
+	line-height: 1em;
+	text-indent: 0;	**/
+
+	/* We had a very thin light border to the right of each strongs block -
+	 * but feedback suggested this was too cluttered. Perhaps sometime an
+	 * option here for showing word separation */
+/*	-moz-border-end: solid thin hsl(240, 0%, 75%);	
+	-moz-padding-end: 2px;*/
+/**}
+
+body[strongs_position="underneath"][strongs_numbers="true"] span.strongs-block > *,
+body[strongs_position="underneath"][strongs_numbers="true"] span.strongs > *,
+div.strongs-numbers-popup > span.strongs > *
+{
+	display: table-row-group;
+}
+
+body[strongs_position="underneath"][strongs_numbers="true"] span.strongs-block,
+body[strongs_position="underneath"][strongs_numbers="true"] span.strongs,
+div.strongs-numbers-popup > span.strongs
+{
+	display: inline-table;
+	border-spacing: 1px;
+}
+
+body[strongs_position="underneath"][strongs_numbers="false"][morphology="false"] span.strongs,
+body[strongs_numbers="false"][morphology="false"] div.strongs-numbers-popup > span.strongs
+{
+	display: none;
+}
+
+body[strongs_position="underneath"][strongs_numbers="true"] span.strongs,
+div.strongs-numbers-popup > span.strongs
+{
+	width: 100%;
+}
+
+body[strongs_position="underneath"][strongs_numbers="true"] span.strongs > span.strongs_headwords > a.strongs_headword,
+body[strongs_numbers="true"] div.strongs-numbers-popup > span.strongs > span.strongs_headwords > a.strongs_headword
+{
+	display: table-cell;
+	font-size: 80%;
+}
+
+body[strongs_position="underneath"][strongs_numbers="true"] span.strongs > span.strongs_headwords > a.strongs_headword + a.strongs_headword,
+body[strongs_position="underneath"][strongs_numbers="true"][morphology="true"] span.strongs > span.strongs_morph > a.morph + a.morph,
+body[strongs_numbers="true"][morphology="true"] div.strongs-numbers-popup > span.strongs > span.strongs_morph > a.morph + a.morph
+{
+	padding-left: 0.5em;
+}
+
+body[morphology="true"][strongs="false"] div.strongs-numbers-popup > span.strongs > span.strongs_morph
+{
+	display: table-cell;
+}
+
+body[strongs_position="underneath"][morphology="true"] span.strongs > span.strongs_morph,
+{
+	display: table-row-group;
+}
+
+body[strongs_position="underneath"][strongs_numbers="true"][morphology="true"] span.strongs > span.strongs_morph > a.morph,
+body[morphology="true"] div.strongs-numbers-popup > span.strongs > span.strongs_morph > a.morph
+{
+	display: table-cell;
+	font-size: 80%;
+}**/
+
+/* Below each strong's block, put 1/2em of space */
+/**
+body[strongs_position="underneath"][strongs_numbers="true"] span.strongs-block
+{
+	margin: 0 0 0.5em 0;
+}
+
+body[morphology="false"] span.strongs a.morph, body[morphology="false"] span.strongs span.strongs_morph {
+	display: none;
+}
+
+body[strongs_numbers="false"] a.strongs_headword {
+	display: none;
+}
+
+body[morph_segmentation="true"] span.morphSegmentation {
+**/
+/*	background: green; */
+/**	-moz-margin-start: 1px;
+	-moz-border-start: solid gray 1px;
+}
+
+body[colour_speakers="woc_in_red"] span.WoC {
+	color: red;
+} **/
+
+/* Global style */
+body { 
+	/*line-height: 1.5;*/
+}
+
+/* Options */
+/* if our module is plaintext, we should keep the spaces, etc. But we might as
+ * well wrap it. */
+span.plaintext {
+	white-space: pre-wrap;
+}
+
+div.page_segment {
+	position: relative;
+}
+
+/*SUB, SUP { line-height: 0; } */
+
+div.no_more_text {
+	font-style: italic;
+	color: #888;
+}
+
+div.page_segment[empty] {
+	height: 120px;
+	position: relative;
+}
+
+div.no_more_text.book-start {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+}
+
+div.segment.nocontent {
+	display: none;
+}
+
+div.segment, div.no_more_text.book-start {
+	border-bottom: solid 1px #ddd;
+	padding-bottom: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+/* Styling for the gospel harmony reference tables. */
+table.harmonytable	{
+	border-collapse: collapse;
+	width: 100%;
+}
+
+table.harmonytable th, table.harmonytable td	{
+	border: 1px solid #B0B0B0;
+	padding: 5px;
+}
+
+table.harmonytable th {
+	text-align: left;
+}
+
+table.harmonytable td {
+	vertical-align: text-top;
+}
+
+/* debugging features */
+div.timer, div.debug-raw-details {
+	/*display: none;*/
+}
+
+/* Styling for user comments and passage tags. */
+a.usercomment {
+	text-decoration: none;
+	-moz-user-select: none;
+	vertical-align: super;
+	font-size: 0.75em;
+	line-height: 0.5em;
+}
+
+a.passage_tag {
+	text-decoration: none;
+	-moz-user-select: none;
+	color: black;
+	font: 9pt arial;
+	padding: 0;
+}
+
+a.passage_tag {
+	position: relative;
+	z-index: 1;
+	padding: 1px;
+	display: inline-block;
+	margin-left: 2px;
+	margin-right: 3px;
+	text-indent: 0;
+}
+
+a.passage_tag:before {
+	content: "";
+	display: block;
+	position: absolute;
+	z-index: -1;
+	top: 0;
+	left: 0;
+	right: 0; 
+	bottom: 0;
+}
+
+a.passage_tag div {
+	padding: 0 2px;
+}
+
+/* Styling for the topic tooltip text. */
+h2.topic_title {
+	font-size: 110%;
+	font-weight: bold;
+	margin: 0.3em 0;
+}
+
+div.topic_description {
+	margin-bottom: 6px;
+}
+
+div.topic_passage {
+	padding-left: 20px;
+	text-indent: -20px;
+}
+
+div.topic_passage_text, div.topic_passages p {
+	padding-left: 0px;
+	text-indent: 0px;
+}
+
+/* Styling for the highlighted search frame. */
+span.search_highlight, span.search_highlight a {
+	font-weight: bold;
+	color: #008800;
+}
+
+.versenumber .post_versenumber_space {
+	display: none;
+}
+
+/* Chapter and verse numbers */
+.chapterview .chapternumber, .chapter_link {
+	font-weight: bold;
+/*	text-decoration: none;
+	float: left;
+	display: block;
+	line-height: 130%;
+	font-size: 200%;
+	-moz-margin-end: 3px;
+	color: hsl(240, 35%, 60%); */
+}
+
+/**
+[dir="rtl"] .chapterview .chapternumber {
+	float: right;
+}
+
+**/
+
+.chapterview .versenumber {
+	-moz-margin-end: 2px;
+	/*text-decoration: none;*/
+	font-size: 80%;
+	vertical-align: 0.32em;
+	line-height: 0;
+	color: hsl(240, 35%, 50%);
+	
+}
+
+.chapterview a.currentverse {
+	color: hsl(120, 35%, 50%);
+}
+
+.chapterview a.currentverse.chapternumber, .chapterview .chapternumber:hover {
+	color: hsl(120, 35%, 60%);
+}
+
+/* Verse per line is built into the filters for epub
+.chapterview br.verse_per_line {
+	display: none;
+}
+
+body[verse_per_line="true"] .chapterview br.verse_per_line {
+	display: inline;
+}
+*/
+
+/* Paragraphs */
+.chapterview p {
+	text-indent: 1em;
+	margin-bottom: 1px;
+	margin-top: 1px;	
+}
+
+body[verse_per_line="true"] .chapterview p {
+	text-indent: 0em;
+	margin: 1em 0;
+}
+
+.chapterview blockquote.lg > .versenumber, 
+.chapterview blockquote.lg > span.had_highlight > .versenumber
+{
+	position: relative;
+	float: left;
+	left: -4em;
+	width: 3em;
+	text-align: center;
+	line-height: inherit;
+}
+
+/**
+.chapterview blockquote.lg .chapternumber
+{
+	width: 1.5em;
+	text-align: center;
+	-moz-margin-start: -2em;
+	line-height: 100%;
+	font-size: 150%;
+}
+**/
+
+/**
+[dir="rtl"] .chapterview blockquote.lg > .versenumber,
+[dir="rtl"] .chapterview blockquote.lg > span.had_highlight > .versenumber
+{
+	left: 0em;
+	float: right;
+	right: -4em;
+}**/
+
+/* Compress our poetry view if our window is too narrow.
+ * Width corresponds to value in bpbible_html.css */
+/** @media all and (max-width: 500px) {
+	.chapterview blockquote.lg > .versenumber, 
+	.chapterview blockquote.lg > span.had_highlight > .versenumber
+	{
+		position: relative;
+		float: left;
+		left: -3em;
+		width: 3em;
+		text-align: center;
+		line-height: inherit;
+	}
+
+	.chapterview blockquote.lg .chapternumber
+	{
+		width: 2.1em;
+		text-align: center;
+		-moz-margin-start: -1.9em;
+		line-height: 100%;
+		font-size: 150%;
+	}
+
+	[dir="rtl"] .chapterview blockquote.lg > .versenumber,
+	[dir="rtl"] .chapterview blockquote.lg > span.had_highlight > .versenumber
+	{
+		left: 0em;
+		float: right;
+		right: -3em;
+	}
+}
+*/
+
+.reference_bar {
+	background: rgba(255, 100, 0, 0.95);
+	position: fixed;
+	top: 0;
+	right: 0;
+/*	width: 100%;*/
+	-moz-border-radius-bottomleft: 1em;
+	z-index: 100;
+	text-align: right;
+	height: 1.5em;
+	padding: 0.1em 0.5em;
+}
+
+/**
+body[colour_speakers="coloured_quotes"] .chapterview span.quote {
+	border-bottom: 1px dotted green;
+}
+**/
