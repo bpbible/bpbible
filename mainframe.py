@@ -121,20 +121,9 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.bible_observers = ObserverList()
 		self.bible_observers += self.set_title
 
-		biblemgr.bible.observers += self.bible_version_changed
-		biblemgr.commentary.observers += self.commentary_version_changed
-
-		biblemgr.on_after_reload += self.on_modules_reloaded
-		self.on_close += lambda: \
-			biblemgr.bible.observers.remove(self.bible_version_changed)
-		
-		self.on_close += lambda: \
-			biblemgr.commentary.observers.remove(
-				self.commentary_version_changed
-			)
-		
-		self.on_close += lambda: \
-			biblemgr.on_after_reload.remove(self.on_modules_reloaded)
+		self.add_observer_removed_on_close(biblemgr.bible.observers, self.bible_version_changed)
+		self.add_observer_removed_on_close(biblemgr.commentary.observers, self.commentary_version_changed)
+		self.add_observer_removed_on_close(biblemgr.on_after_reload, self.on_modules_reloaded)
 		
 		self.lost_focus = False
 		self.history = History()
@@ -165,10 +154,16 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.bibleref.SetFocus()
 		
 		for display_frame in (self.bibletext, self.commentarytext, self.dictionarytext, self.genbooktext, self.harmony_frame, self.daily_devotional_frame):
-			display_options.display_option_changed_observers += display_frame.change_display_option
-			fonts.fonts_changed += display_frame.fonts_changed
+			self.add_observer_removed_on_close(
+				display_options.display_option_changed_observers,
+				display_frame.change_display_option
+			)
+			self.add_observer_removed_on_close(
+				fonts.fonts_changed,
+				display_frame.fonts_changed
+			)
 
-		fonts.fonts_changed += self.verse_compare.fonts_changed
+		self.add_observer_removed_on_close(fonts.fonts_changed, self.verse_compare.fonts_changed)
 
 		dprint(MESSAGE, "Setting menus up")
 		self.set_menus_up()
@@ -428,6 +423,10 @@ class MainFrame(wx.Frame, AuiLayer):
 			version_changed()
 			
 		self.bible_observers += self.search_panel.versepreview.RefreshUI
+
+	def add_observer_removed_on_close(self, observerlist, callback):
+		observerlist.add_observer(callback)
+		self.on_close += lambda: observerlist.remove(callback)
 
 	def create_aui_items(self):
 		self.version_tree = ModuleTree(self)
