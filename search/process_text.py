@@ -301,7 +301,12 @@ class ParseOSIS(ParseBase):
 				# normalize it - letter then padding of 4 on number
 				prefix, number, exclamation_mark, extra = match.groups("")
 				number = int(number)
-				p = "%s%04d%s" % (prefix, number, extra.upper())
+
+				# TODO: remove the str here once we have non-strong's numbers
+				# here. For v2.5 of the KJV, this became necessary as the tr
+				# text meant that this came back as unicode, so ' '.join broke
+				# below...
+				p = str("%s%04d%s" % (prefix, number, extra.upper()))
 				#self.strongs_cache[lemma] = p
 				#items.append(self.strongs_cache[lemma])
 				items.append(p)
