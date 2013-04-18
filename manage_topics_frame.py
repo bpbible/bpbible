@@ -343,6 +343,7 @@ class ManageTopicsFrame(xrcManageTopicsFrame):
 				id=item.Id)
 		
 		self.topic_tree.PopupMenu(menu)
+		menu.Destroy()
 
 	def _copy_as_text(self):
 		guiconfig.mainfrm.copy(self._get_current_topic_text())

@@ -115,6 +115,7 @@ class ModuleTree(FilterableTree):
 		menu = wx.Menu()
 		self.add_menu_items(data, menu)
 		self.tree.PopupMenu(menu, event.GetPoint())
+		menu.Destroy()
 	
 	def add_menu_items(self, data, menu):
 		def make_event(module):	

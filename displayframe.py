@@ -475,6 +475,10 @@ class DisplayFrame(TooltipDisplayer, wx.wc.WebControl):
 			is_popup=True)
 		
 		event_object.PopupMenu(menu, self.popup_position)
+	
+		# turns out this should be destroyed
+		# according to [wxPython-dev] Segmentation faults - a theory
+		menu.Destroy()
 
 	def _get_text(self, lookup_text, href, is_search=False):
 		def update_ui(event):
