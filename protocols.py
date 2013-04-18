@@ -98,7 +98,7 @@ def on_sword_hover(frame, href, url, element, x, y):
 		tooltip_config.text = (
 			_("The book '%s' is not installed, "
 				"so you cannot view "
-				"details for this entry (%s)") % (module, key))
+				"details for this entry (%s)") % (module, key.decode("utf8")))
 
 	frame.show_tooltip(tooltip_config)
 
