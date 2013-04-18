@@ -402,8 +402,15 @@ body[colour_speakers="woc_in_red"] span.WoC {
 }
 
 /* Global style */
+/* http://kaikkonendesign.fi/typography/ suggested some of these values */
+h1, h2, h3, h4, h5, h6 {
+	/* color: #800; */
+	line-height: 1.1;
+}
+
 body { 
 	line-height: 1.5;
+	color: #444;
 }
 
 /* Options */
