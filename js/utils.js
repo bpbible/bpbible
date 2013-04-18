@@ -10,14 +10,12 @@ function d(str) {
 function jsdump(str)
 {
 	dump(str);
-/*	Components.classes['@mozilla.org/consoleservice;1']
-			  .getService(Components.interfaces.nsIConsoleService)
-			  .logStringMessage(str);*/
 }
 
 function jserror(str)
 {
-	Components.utils.reportError(str);
+	dump("JSError reported: ");
+	dump(str + "\n");
 }
 
 function read_css(t, prop) {
