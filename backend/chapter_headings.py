@@ -56,7 +56,7 @@ def get_chapter_headings(chapter):
 			for heading, canonical in hs if not heading.startswith("<"))
 
 		headings += ((item, text) for heading, text in re.findall(
-			'(<h2 class="heading" canonical="[^"]*">(.*?)</h2>)', 
+			'(<h2 class="heading(?: canonical)?">(.*?)</h2>)', 
 			content, re.U) if text)
 		
 	biblemgr.restore_state()

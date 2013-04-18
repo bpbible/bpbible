@@ -75,7 +75,7 @@ class OSISParser(filterutils.ParserBase):
 				self.write("<span class='WoC'>")
 
 			# first check to see if we've been given an explicit mark
-			if mark:
+			if mark is not None:
 				self.write(mark)
 			
 			# alternate " and '
@@ -125,7 +125,7 @@ class OSISParser(filterutils.ParserBase):
 			#	print tag.toString()
 
 			# first check to see if we've been given an explicit mark
-			if (mark):
+			if mark is not None:
 				self.write(mark)
 
 			# finally, alternate " and ', if config says we should supply a mark
@@ -443,8 +443,8 @@ class OSISParser(filterutils.ParserBase):
 
 	def start_title(self, xmltag):
 		canonical = xmltag.getAttribute("canonical")
-		canonical = canonical or "false"
-		self.buf += '<h2 class="heading" canonical="%s">' % canonical
+		cls = " canonical" if (canonical and canonical == "true") else ""
+		self.buf += '<h2 class="heading%s">' % cls
 	
 	def end_title(self, xmltag):
 		self.buf += '</h2>'
@@ -525,7 +525,7 @@ class OSISParser(filterutils.ParserBase):
 
 		self.in_indent = True
 		if not self.in_copy_verses_mode:
-			self.buf += '<div class="indentedline" width="%d" source="l">' % indent
+			self.buf += '<div class="indentedline width-%d" source="l">' % indent
 		self.blocklevel_start()
 
 	def end_l(self, xmltag):

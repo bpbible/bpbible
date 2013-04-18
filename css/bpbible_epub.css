@@ -25,25 +25,24 @@ hr.pagebreak {
 	clear: both;
 }
 
+.footnote_marker {
+	font-weight: bold;
+}
+
 /* Note: chapter/verse numbers are no longer links in this ePub */
 
 /* Headings */
 /* TODO: Matt 5:2 - <p> comes *before* heading - our text indent goes
  * missing... */
-h2.heading {
-	font-size: 120%;
+.heading {
+	font-size: 100%;
 	margin-top: 1em;
 	margin-bottom: 0;
 }
 body {
   font-family: sans-serif;     
 }
-h1,h2,h3,h4 {
-  font-family: serif;     
-  color: red;
-}
-/**
-h2.heading[canonical="true"] {
+.heading.canonical {
 	font-style: italic;
 }
 
@@ -51,6 +50,7 @@ body[headings="false"] h2.heading {
 	display: none;
 }
 
+/**
 body[footnotes="false"] a.footnote:not(.footnote_crossReference),
 body[cross_references="false"] a.footnote.footnote_crossReference {
 	display: none;
@@ -60,7 +60,10 @@ body[cross_references="false"] a.footnote.footnote_crossReference {
 /* Footnotes */
 a.footnote {
 	text-decoration: none;
-	font: 65%/0 sans-serif;
+	font: 65%;
+	font-size: 65%;
+	font-family: sans-serif
+	line-height: 0;
 	vertical-align: 0.55em;	
 }
 
@@ -143,12 +146,12 @@ body > p:first-child /* > .chapternumber*/
 }
 
 /* Poetry */
+/**
 blockquote.lg
 {
 	margin: 0.5em 0em 0.5em 3em;
 }
 
-/**
 [dir="rtl"] blockquote.lg
 {
 	margin: 0.5em 3em 0.5em 0em;
@@ -159,20 +162,20 @@ blockquote.lg
  * indented further. text-indent undoes the wide margin only for the first
  * line */
 /**
-div.indentedline[width="2"] {
+div.indentedline.width-2 {
 	-moz-padding-start: 5em;
 	text-indent: -3em;
 }
-div.indentedline[width="4"] {
+div.indentedline.width-4 {
 	-moz-padding-start: 5em;
 	text-indent: -1em;
 }
-div.indentedline[width="6"] {
+div.indentedline.width-6 {
 	-moz-padding-start: 7em;
 	text-indent: -1em;
 }
 
-div.indentedline[width="0"] {
+div.indentedline.width-0 {
 	-moz-padding-start: 5em;
 	text-indent: -5em;
 }
@@ -181,9 +184,18 @@ div.indentedline[width="0"] {
 /* Compress our poetry view if our window is too narrow.
  * Width corresponds to value in bpbible_chapter_view.css */
 /*@media all and (max-width: 500px) {*/
+@media amzn-kf8 {
+	blockquote.lg > * {
+		margin-left: 2em;
+	}
+
+	blockquote.lg .vnumber {
+		margin-left: 0;
+	}
+
 	blockquote.lg
 	{
-		margin: 0.5em 0em 0.5em 1.75em;
+		margin: 0.5em 0em 0.5em 0;
 	}
 
 /**
@@ -195,24 +207,43 @@ div.indentedline[width="0"] {
 	/* We want our indented lines to behave nicely - wrapped lines should be
 	 * indented further. text-indent undoes the wide margin only for the first
 	 * line */
-	/**
-	div.indentedline[width="2"] {
-		-moz-padding-start: 4em;
+	div.indentedline.width-2 {
+		padding-left: 4em;
 		text-indent: -3em;
 	}
-	div.indentedline[width="4"] {
-		-moz-padding-start: 5em;
+	div.indentedline.width-4 {
+		padding-left: 5em;
 		text-indent: -3em;
 	}
-	div.indentedline[width="6"] {
-		-moz-padding-start: 6em;
+	div.indentedline.width-6 {
+		padding-left: 6em;
 		text-indent: -3em;
 	}
 
-	div.indentedline[width="0"] {
-		-moz-padding-start: 3em;
+	div.indentedline.width-0 {
+		padding-left: 3em;
 		text-indent: -3em;
-	}**/
+	}
+
+	/* zwnj seems to break the float and puts versenumber on a line by itself.
+	 * Not good. */
+	.chapterview blockquote.lg > .zwnj {
+		display: none;
+	}
+	.chapterview blockquote.lg > .versenumber/*, 
+	.chapterview blockquote.lg > span.had_highlight > .versenumber*/
+	{
+	/*	background: black; */
+		display: block;
+
+		float: left;
+		width: 2.5em;
+
+		text-align: center;
+		line-height: inherit;
+	}
+}
+
 /*}*/
 /* Strong's headwords */
 a.strongs_headword {
@@ -588,6 +619,8 @@ span.search_highlight, span.search_highlight a {
 	color: #008800;
 }
 
+/* warning: this may break old mobi compilation as it will hide versenumber
+ * rather than just the space...*/
 .versenumber .post_versenumber_space {
 	display: none;
 }
@@ -649,17 +682,6 @@ body[verse_per_line="true"] .chapterview br.verse_per_line {
 body[verse_per_line="true"] .chapterview p {
 	text-indent: 0em;
 	margin: 1em 0;
-}
-
-.chapterview blockquote.lg > .versenumber, 
-.chapterview blockquote.lg > span.had_highlight > .versenumber
-{
-	position: relative;
-	float: left;
-	left: -4em;
-	width: 3em;
-	text-align: center;
-	line-height: inherit;
 }
 
 /**

@@ -1065,10 +1065,10 @@ class SearchList(virtuallist.VirtualListCtrlXRC):
 				)
 			
 			# remove non-canonical headings
-			content = re.sub('<h2 class="heading" canonical="false">.*?</h2>',
+			content = re.sub('<h2 class="heading">.*?</h2>',
 						 '', content)
 			content = re.sub(
-				'<h2 class="heading" canonical="true">(.*?)</h2>', r'\1', 
+				'<h2 class="heading canonical">(.*?)</h2>', r'\1', 
 				content)
 
 			bibletext = string_util.RemoveWhitespace(content)

@@ -375,7 +375,8 @@ class Book(object):
 						heading = render_text(heading).decode("utf8", "replace")
 
 					if not nh:
-						heading = '<h2 class="heading" canonical="%s">%s</h2>\n' % (canonical, heading)
+						cls = " canonical" if (canonical and canonical == "true") else ""
+						heading = '<h2 class="heading%s">%s</h2>\n' % (cls, heading)
 
 					if raw:
 						raw_headings.append(heading)
