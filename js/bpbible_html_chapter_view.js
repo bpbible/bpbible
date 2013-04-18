@@ -1,3 +1,8 @@
+function should_show_reference_bar() {
+	show_reference_bar = document.body.getAttribute("reference_bar");
+	return (show_reference_bar == 'true');
+}
+
 function get_start_point(){
 	return get_current_verse_bounds()[0];
 }
@@ -34,12 +39,12 @@ function get_current_reference_on_screen()	{
 		return start.get(0).getAttribute("osisRef");
 	}
 
-	var [first, _last] = get_current_reference_range_bounding_elements();
+	var first = get_current_reference_range_bounding_elements(true);
 
 	return first.getAttribute("osisRef");
 }
 
-function get_current_reference_range_bounding_elements()	{
+function get_current_reference_range_bounding_elements(first_only)	{
 	var top = window.scrollY;
 	var bottom = window.innerHeight + window.scrollY;
 
@@ -56,6 +61,10 @@ function get_current_reference_range_bounding_elements()	{
 		return true;
 	});
 
+	if (first_only) {
+		return first;
+	}
+
 	var last = null;
 	$(end).each(function() {
 		if ($(this).offset().top >= bottom) {
@@ -69,7 +78,7 @@ function get_current_reference_range_bounding_elements()	{
 }
 
 function get_current_reference_range()	{
-	var [first, last] = get_current_reference_range_bounding_elements();
+	var [first, last] = get_current_reference_range_bounding_elements(false);
 	var ref1 = first.getAttribute("reference");
 	var ref2 = last.getAttribute("reference");
 	
@@ -116,7 +125,7 @@ function on_scroll() {
 		return;
 	}
 
-	var [first, _last] = get_current_reference_range_bounding_elements();
+	var first = get_current_reference_range_bounding_elements(true);
 	current_reference_at_top_of_screen = first.getAttribute("osisRef");
 
 	show_current_reference();
@@ -132,19 +141,39 @@ function on_resize() {
 function show_current_reference() {
 	current_window_height = window.innerHeight;
 	current_window_width = window.innerWidth;
-	$("div.reference_bar").text(get_current_reference_range());
+	if (should_show_reference_bar()) {
+		$("div.reference_bar").text(get_current_reference_range());
+	}
 }
 
 function create_reference_bar() {
 	$("body").prepend('<div class="reference_bar">This should give the current reference</div>');
 }
 
+function destroy_reference_bar() {
+	$("div.reference_bar").remove();
+}
+
 $(document).ready(function() {
 	highlight_verse();
-	create_reference_bar();
+	if (should_show_reference_bar()) {
+		create_reference_bar();
+	}
+
 	$(window).scroll(function() {on_scroll()});
 	$(window).resize(function() {on_resize()});
 	on_scroll();
+
+	$("body").bind("DOMAttrModified", function(event) {
+		if(event.attrName == "reference_bar") {
+			if (should_show_reference_bar()) {
+				create_reference_bar();
+			} else {
+				destroy_reference_bar();
+			}
+			show_current_reference();
+		}
+	});
 });
 
 function get_current_verse() {
@@ -209,4 +238,3 @@ $('body').bind("mouseup", function() {
 	var [start, end] = get_selected_verse_ref();
 	d(start + ' --- ' + end);
 });
-

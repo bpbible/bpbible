@@ -867,13 +867,15 @@ class MainFrame(wx.Frame, AuiLayer):
 		#if options:
 		#	self.options_menu.AppendSeparator()
 
-		cross_references = self.options_menu.AppendCheckItem(
+		cross_references = self.options_menu.InsertCheckItem(
+			7,
 			wx.ID_ANY,
 			_("Expand cross-references"),
 			_("Display cross references partially expanded")
 		)
 		
-		display_tags = self.options_menu.AppendCheckItem(
+		display_tags = self.options_menu.InsertCheckItem(
+			9,
 			wx.ID_ANY,
 			_("Topic Tags"),
 			_("Display the topics that each verse is tagged with.")

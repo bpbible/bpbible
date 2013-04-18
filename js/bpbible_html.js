@@ -386,24 +386,6 @@ function update_current_segment_shown() {
 	document.body.dispatchEvent(event);
 }
 
-function read_css(t, prop) {
-	var v = t.css(prop);
-	if (!v) {
-		d("read_css - value for " + prop + " was undefined: " + v);
-		return 0;
-	}
-		
-	if (v.substr(-2) != "px")
-	{
-		d("read_css - value for " + prop + " didn't end in px: " + v);
-		return 0;
-	} else {
-		return parseInt(v.substr(0, v.length - 2));
-	}
-}
-
-function trunc(x) { return x | 0; }
-
 function relayout() {
 	update_current_segment_shown();
 }

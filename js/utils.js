@@ -20,6 +20,23 @@ function jserror(str)
 	Components.utils.reportError(str);
 }
 
+function read_css(t, prop) {
+	var v = t.css(prop);
+	if (!v) {
+		d("read_css - value for " + prop + " was undefined: " + v);
+		return 0;
+	}
+		
+	if (v.substr(-2) != "px")
+	{
+		d("read_css - value for " + prop + " didn't end in px: " + v);
+		return 0;
+	} else {
+		return parseInt(v.substr(0, v.length - 2));
+	}
+}
+
+function trunc(x) { return x | 0; }
 /*
  Strings which may contain unicode need to be encoded to UTF-8 so that they
  will be correctly converted to Unicode by wxWebConnect's ExecuteScriptWithResult().
@@ -134,12 +151,12 @@ function change_display_option(option_name, option_value)	{
 	// Changing whether different speakers are coloured will never resize the
 	// page or change the display, so we don't want to try to scroll to the
 	// current reference.
-	var resize_page = (option_name !== "colour_speakers");
+	var resize_page = (option_name !== "colour_speakers" && option_name !== "reference_bar");
 
 	// Technically, changing the display options does not actually resize the window.
 	// However, since it can dramatically change the position of the elements on the page,
 	// the effect is the same.
-	if (resize_page && on_resize)	{
+	if (resize_page && typeof on_resize != "undefined")	{
 		on_resize();
 	}
 }

@@ -1,3 +1,8 @@
+function should_highlight_strongs() {
+	highlight_strongs = document.body.getAttribute("highlight_strongs");
+	return (highlight_strongs == 'true');
+}
+
 function hide_sub_strongs_popups() {
 	$(".same-strongs-hint").removeClass("same-strongs-hint");
 }
@@ -25,9 +30,11 @@ function show_strongs_popup(elem) {
 	var number_popup = $("<div class='strongs-numbers-popup'><span class='strongs'>" + t.find(".strongs").html() + "</span></div>").appendTo(t);
 	var s = number_popup.find(".strongs");
 
-	s.find("span.strongs_headwords > a.strongs_headword").each(function() {
-		show_sub_strongs_popups(this);
-	});
+	if (should_highlight_strongs()) {
+		s.find("span.strongs_headwords > a.strongs_headword").each(function() {
+			show_sub_strongs_popups(this);
+		});
+	}
 
 	// don't ask why 2. 3 is too wide (causes wrapping) but 2 doesn't.
 	word_popup.width(trunc(t.width() + (word_popup.outerWidth() - word_popup.width())/2 - 1));
@@ -90,9 +97,11 @@ function on_strongs_off(event) {
 }
 
 function on_sub_strongs_over(event) {
-	$(this).children("span.strongs").children("span.strongs_headwords").children("a.strongs_headword").each(function() {
-		show_sub_strongs_popups(this);
-	});
+	if (should_highlight_strongs()) {
+		$(this).children("span.strongs").children("span.strongs_headwords").children("a.strongs_headword").each(function() {
+			show_sub_strongs_popups(this);
+		});
+	}
 }
 
 function on_sub_strongs_off(event) {
@@ -106,12 +115,28 @@ function relayout_strongs() {
 	}
 }
 
+function set_strongs_highlight() {
+	hide_sub_strongs_popups();
+	$("body").undelegate('span.strongs-block', "mouseenter", on_sub_strongs_over);
+	$("body").undelegate('span.strongs-block', "mouseleave", on_sub_strongs_off);
+	if (should_highlight_strongs()) {
+
+		strongs_method = document.body.getAttribute("strongs_position");
+		if (strongs_method == "underneath" || strongs_method == "inline") {
+			$("body").delegate('span.strongs-block', "mouseenter", on_sub_strongs_over);
+			$("body").delegate('span.strongs-block', "mouseleave", on_sub_strongs_off);
+		}
+		//$("body").delegate('span.strongs-block', "mouseenter", on_sub_strongs_over);
+		//$("body").delegate('span.strongs-block', "mouseleave", on_sub_strongs_off);
+	}
+}
+
 function set_strongs_method() {
+	$("body").unbind("click", on_strongs_click);
 	$("body").undelegate(".strongs-block", "mouseenter", on_strongs_over);
 	$("body").undelegate(".strongs-block", "mouseleave", on_strongs_off);
-	$("body").unbind("click", on_strongs_click);
-	$("body").delegate('span.strongs-block', "mouseenter", on_sub_strongs_over);
-	$("body").delegate('span.strongs-block', "mouseleave", on_sub_strongs_off);
+
+	set_strongs_highlight();
 
 	hide_strongs_popup();
 	strongs_method = document.body.getAttribute("strongs_position");
@@ -122,11 +147,6 @@ function set_strongs_method() {
 		$("body").delegate(".strongs-block", "mouseenter", on_strongs_over);
 		$("body").delegate(".strongs-block", "mouseleave", on_strongs_off);
 	}
-
-	if (strongs_method == "underneath" || strongs_method == "inline") {
-		$("body").delegate('span.strongs-block', "mouseenter", on_sub_strongs_over);
-		$("body").delegate('span.strongs-block', "mouseleave", on_sub_strongs_off);
-	}
 }
 
 $(document).ready(function() {
@@ -134,6 +154,9 @@ $(document).ready(function() {
 	$("body").bind("DOMAttrModified", function(event) {
 		if(event.attrName == "strongs_position") {
 			set_strongs_method();
+		}
+		if(event.attrName == "highlight_strongs") {
+			set_strongs_highlight();
 		}
 	});
 

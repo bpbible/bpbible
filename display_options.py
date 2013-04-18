@@ -15,11 +15,13 @@ options.add_item("cross_references", True, item_type=bool)
 options.add_item("footnotes", True, item_type=bool)
 options.add_item("strongs_numbers", True, item_type=bool)
 options.add_item("strongs_position", "underneath", item_type=str)
+options.add_item("highlight_strongs", True, item_type=bool)
 options.add_item("morphology", True, item_type=bool)
 options.add_item("morph_segmentation", False, item_type=bool)
 options.add_item("raw", False, item_type=bool)
 options.add_item("show_timing", False, item_type=bool)
 options.add_item("colour_speakers", "off", item_type=str)
+options.add_item("reference_bar", False, item_type=bool)
 
 sword_options_map = dict(
 	strongs_numbers="Strong's Numbers",
@@ -37,6 +39,10 @@ all_reload_options = (
 	RELOAD_BIBLE_FRAMES,
 	RELOAD_ALL_FRAMES
 ) = range(3)
+
+class Separator(object):
+	def add_to_menu(self, frame, menu):
+		menu.AppendSeparator()
 
 class BooleanOptionMenuItem(object):
 	def __init__(self, option_name, menu_text, hint="", reload_options=DO_NOT_RELOAD, options_section=options):
@@ -103,16 +109,22 @@ def on_headwords_module_changed():
 	set_headwords_module_from_conf(biblemgr)
 
 options_menu = [
-	BooleanOptionMenuItem("columns", N_("Columns"), N_("Display the chapter in more than one column.")),
 	BooleanOptionMenuItem("verse_per_line", N_("One line per verse"), N_("Display each verse on its own line.")),
 	BooleanOptionMenuItem("continuous_scrolling", N_("Continuous scrolling"), N_("Show more than one chapter at once."), reload_options=RELOAD_ALL_FRAMES),
+	BooleanOptionMenuItem("columns", N_("Columns"), N_("Display the chapter in more than one column.")),
+	BooleanOptionMenuItem("reference_bar", N_("Reference bar")),
+	Separator(),
 	BooleanOptionMenuItem("headings", N_("Headings"), N_("Show headings in the text.")),
-	BooleanOptionMenuItem("cross_references", N_("Cross References"), N_("Show cross references in the text.")),
 	BooleanOptionMenuItem("footnotes", N_("Footnotes"), N_("Show footnotes in the text")),
+	BooleanOptionMenuItem("cross_references", N_("Cross References"), N_("Show cross references in the text.")),
+	MultiOptionsMenuItem("colour_speakers", N_("Colour code speakers"), [
+		("woc_in_red", N_("Words of Christ in Red")),
+		("coloured_quotes", N_("Colour code by speaker (ESV only)")),
+		("off", N_("Off")),
+	]),
+	Separator(),
 	BooleanOptionMenuItem("strongs_numbers", N_("Strongs Numbers"), reload_options=RELOAD_BIBLE_FRAMES),
-	BooleanOptionMenuItem("morphology", N_("Morphology"), reload_options=RELOAD_BIBLE_FRAMES),
-	BooleanOptionMenuItem("morph_segmentation", N_("Morph Segmentation"), reload_options=RELOAD_BIBLE_FRAMES),
-	MultiOptionsMenuItem("strongs_position", N_("Strongs positioning"), [
+	MultiOptionsMenuItem("strongs_position", N_("Strongs Positioning"), [
 		("underneath", N_("Underneath text"), N_("Show the Original Language Word underneath the word.")),
 		("inline", N_("Inline with text"), N_("Show the Original Language Word next to the word.")),
 		("hover", N_("Show on hover"), N_("Show the Original Language Word when the cursor is over the word.")),
@@ -127,11 +139,9 @@ options_menu = [
 		reload_options=RELOAD_BIBLE_FRAMES,
 		on_option_selected=on_headwords_module_changed,
 	),
-	MultiOptionsMenuItem("colour_speakers", N_("Colour code speakers"), [
-		("woc_in_red", N_("Words of Christ in Red")),
-		("coloured_quotes", N_("Colour code by speaker (ESV only)")),
-		("off", N_("Off")),
-	]),
+	BooleanOptionMenuItem("highlight_strongs", N_("Highlight Matching Strongs")),
+	BooleanOptionMenuItem("morphology", N_("Morphology"), reload_options=RELOAD_BIBLE_FRAMES),
+	BooleanOptionMenuItem("morph_segmentation", N_("Morph Segmentation"), reload_options=RELOAD_BIBLE_FRAMES),
 ]
 
 debug_options_menu = [
