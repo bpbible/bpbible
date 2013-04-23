@@ -1,5 +1,5 @@
 #summary Discusses available Mozilla technologies that might help us and whether we should use them or not.
-#labels Development
+#labels Development,Deprecated
 
 = Introduction =
 
