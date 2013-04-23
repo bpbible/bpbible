@@ -1,5 +1,5 @@
 #summary Setting up BPBible with XUL.
-#labels Development
+#labels Development,Deprecated
 
 = Introduction =
 
