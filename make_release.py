@@ -246,8 +246,8 @@ def build_installer():
 		# App\DefaultData
 		os.mkdir("BPBiblePortable\\App\\DefaultData")
 		os.mkdir("BPBiblePortable\\App\\DefaultData\\settings")
-		os.system("copy %s %s" % ("make_portable\\sword.conf", "BPBiblePortable\\DefaultData\\settings"))
-		os.system("copy %s %s" % ("make_portable\\BPBiblePortableSettings.ini", "BPBiblePortable\\DefaultData\\settings"))
+		os.system("copy %s %s" % ("make_portable\\sword.conf", "BPBiblePortable\\App\\DefaultData\\settings"))
+		os.system("copy %s %s" % ("make_portable\\BPBiblePortableSettings.ini", "BPBiblePortable\\App\\DefaultData\\settings"))
 
 		# App\BPBible
 		os.rename("dist", "BPBiblePortable\\App\\BPBible")
