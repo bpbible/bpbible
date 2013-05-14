@@ -20,6 +20,7 @@ BASE_HTML = '''\
                       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="%(lang)s">
 <head>
+	<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
 	%(head)s
 </head>
 <body lang="%(lang)s" %(bodyattrs)s>
@@ -99,6 +100,17 @@ class PageProtocolHandler(ProtocolHandler):
 	standard_scripts = ["contrib/jquery-1.6.1.js", "contrib/jquery.waitforimages.js", "utils.js"]
 	bible_scripts = ["bpbible_strongs.js"]
 
+	def _get_html(self, module, content, bodyattrs="", timer="", 
+		stylesheets=[], scripts=[], javascript_block="", styles="", contentclass="",
+		include_wrapper_divs=True):
+		if not scripts:
+			scripts = self.standard_scripts
+
+		return super(PageProtocolHandler, self)._get_html(
+			module, content, bodyattrs, timer, 
+			stylesheets, scripts, javascript_block, styles, contentclass,
+			include_wrapper_divs)
+
 	def _get_document_parts(self, path):
 		module_name, ref = path.split("/", 1)
 		assert ref, "No reference"
@@ -166,10 +178,13 @@ class PageProtocolHandler(ProtocolHandler):
 			scripts=scripts,
 			timer="<div class='timer'>Time taken: %.3f (ref_id %s)</div>" % (default_timer() - t, ref_id))
 
-	def _get_body_attrs(self, module):
+	def _get_body_attrs(self, module, overrides=None):
 		options = []
 		for option in all_options():
-			options.append((option, get_js_option_value(option)))
+			if overrides and option in overrides:
+				options.append((option, overrides[option]))
+			else:
+				options.append((option, get_js_option_value(option)))
 
 		if module: 
 			options.append(("module", module.Name()))
@@ -423,9 +438,14 @@ body {
 	color: %s
 }
 """ % (bg, textcolour)
-		return dict(module=config.get_module(), content=config.get_text(),
+		text = config.get_text()
+		text = '<div class="segment">%s</div>' % (text)
+		bodyattrs = self._get_body_attrs(config.get_module(),
+			overrides = {"columns": "false"}
+		)
+		return dict(module=config.get_module(), content=text,
 				stylesheets=self.bible_stylesheets,
-				bodyattrs=self._get_body_attrs(config.get_module()),
+				bodyattrs=bodyattrs,
 				styles=style)
 
 class FragmentHandler(PageProtocolHandler):
