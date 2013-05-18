@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: German BPBible v1.5\n"
-"POT-Creation-Date: 2012-02-10 18:06+AUS Eastern Daylight Time\n"
+"POT-Creation-Date: 2013-05-18 12:46+AUS Eastern Standard Time\n"
 "PO-Revision-Date: 2012-03-21 20:41+0100\n"
 "Last-Translator: Michael Markusch <markuschmichael@gmx.de>\n"
 "Language-Team: Markusch <markuschmichael@gmx.de>\n"
@@ -67,21 +67,22 @@ msgstr "Kapitelnummer in diesem Buch"
 msgid "The text of the heading"
 msgstr "Kopfzeile"
 
-#: backend/book.py:716
-msgid "Couldn't save cipher key. You will have to set it again when you restart"
-msgstr "Freigabecode kann nicht gespeichert werden. Bitte versuchen Sie es nach einem Neustart erneut."
+#: backend/book.py:714
+msgid ""
+"Couldn't save cipher key. You will have to set it again when you restart"
+msgstr ""
+"Freigabecode kann nicht gespeichert werden. Bitte versuchen Sie es nach "
+"einem Neustart erneut."
 
-#: backend/book.py:787
+#: backend/book.py:788
 msgid "commentary"
 msgstr "Kommentar"
 
-#: backend/book.py:801
-#: bibleframe.py:39
-#: xrc/auifrm_xrc.py:72
+#: backend/book.py:802 bibleframe.py:39 xrc/auifrm_xrc.py:72
 msgid "Bible"
 msgstr "Bibel"
 
-#: backend/dictionary.py:272
+#: backend/dictionary.py:274
 msgid "daily devotional"
 msgstr "Bibellese"
 
@@ -89,9 +90,7 @@ msgstr "Bibellese"
 msgid "harmony"
 msgstr "Evangelienharmonie"
 
-#: bibleframe.py:72
-#: bookframe.py:187
-#: mainframe.py:231
+#: bibleframe.py:72 bookframe.py:187 mainframe.py:226
 #: search/searchpanel.py:150
 msgid "Search"
 msgstr "Suche"
@@ -104,8 +103,7 @@ msgstr "Gehe zur Referenz"
 msgid "Go to a reference"
 msgstr "Gehe zur Referenz"
 
-#: bibleframe.py:83
-#: xrc/guess_verse_xrc.py:69
+#: bibleframe.py:83 xrc/guess_verse_xrc.py:69
 msgid "Guess the Verse"
 msgstr "Verse raten"
 
@@ -129,8 +127,7 @@ msgstr "Kopiere Verse"
 msgid "Copy verses to other applications"
 msgstr "Kopiere Verse in andere Anwendungen"
 
-#: bibleframe.py:107
-#: bibleframe.py:168
+#: bibleframe.py:107 bibleframe.py:168
 msgid "Open sticky tooltip"
 msgstr "Öffne fixierte Quickinfo"
 
@@ -146,9 +143,7 @@ msgstr "Vergleiche Verse"
 msgid "Open the verse comparison pane to the selected verses"
 msgstr "Öffne das Vergleichsfenster zu ausgewählten Versen"
 
-#: bibleframe.py:123
-#: manage_topics_frame.py:172
-#: xrc/manage_topics_xrc.py:143
+#: bibleframe.py:123 manage_topics_frame.py:172 xrc/manage_topics_xrc.py:143
 msgid "Manage Topics"
 msgstr "Themen verwalten"
 
@@ -184,8 +179,7 @@ msgstr "Die Themenverwaltung ist aufgrund eines Fehlers nicht verfügbar."
 msgid "Error in Topic Management"
 msgstr "Fehler in Themenverwaltung"
 
-#: bookframe.py:169
-#: mainframe.py:821
+#: bookframe.py:169 mainframe.py:823
 msgid "Show the %s pane"
 msgstr "Zeige %s"
 
@@ -217,21 +211,19 @@ msgstr "Suche nach:"
 msgid "Go to reference"
 msgstr "Gehe zur Referenz"
 
-#: bookframe.py:401
-#: genbookframe.py:227
+#: bookframe.py:404 genbookframe.py:227
 msgid "Go to this reference"
 msgstr "Gehe zu dieser Referenz"
 
-#: bookframe.py:408
-#: genbookframe.py:234
+#: bookframe.py:411 genbookframe.py:234
 msgid "Link the %s to the Bible"
 msgstr "Verknüpfe den %s mit der Bibel"
 
-#: bookframe.py:475
+#: bookframe.py:478
 msgid "Commentary"
 msgstr "Kommentar"
 
-#: bookframe.py:508
+#: bookframe.py:511
 msgid "Dictionary"
 msgstr "Wörterbuch"
 
@@ -240,55 +232,71 @@ msgid ""
 "<b>This book is not set.</b><br>\n"
 "This may be because you do not have any of this type of book installed.\n"
 "<p> If you don't have any of this type of book, first download them from <a\n"
-"href=\"http://www.crosswire.org/sword/modules/index.jsp\">http://www.crosswire.org/sword/modules/index.jsp</a>.<br>\n"
+"href=\"http://www.crosswire.org/sword/modules/index.jsp\">http://www."
+"crosswire.org/sword/modules/index.jsp</a>.<br>\n"
 "Then to install them, either drag them onto BPBible, or go <code>File >\n"
 "Install Books...</code> and select the books.\n"
 "<p> If you have already have SWORD books installed, go to <code>File >\n"
-"Set SWORD Paths</code> and add the path where the books are installed to the book search paths.\n"
+"Set SWORD Paths</code> and add the path where the books are installed to the "
+"book search paths.\n"
 msgstr ""
 "<b>Dieses Buch kann nicht genutzt werden.</b><br>\n"
 "Dateien dieses Buches sind nicht installiert.\n"
 "<p> Wenn Sie diese Dateien nicht haben, laden Sie diese von <a\n"
-"href=\"http://www.crosswire.org/sword/modules/index.jsp\">http://www.crosswire.org/sword/modules/index.jsp</a>.<br>\n"
-"Um diese zu installieren, ziehen Sie sie entweder auf die BPBible Anwendung oder gehen Sie auf <code>Datei >\n"
+"href=\"http://www.crosswire.org/sword/modules/index.jsp\">http://www."
+"crosswire.org/sword/modules/index.jsp</a>.<br>\n"
+"Um diese zu installieren, ziehen Sie sie entweder auf die BPBible Anwendung "
+"oder gehen Sie auf <code>Datei >\n"
 "Installiere Bücher...</code> und wählen Sie die entsprechenden Bücher.\n"
-"<p> Sollten Sie SWORD Bücher bereits installiert haben, gehen Sie auf <code>Datei >\n"
-"Setze SWORD Pfade</code> und fügen Sie den Pfad hinzu, in welchem die Bücher für die Suche installiert sind.\n"
+"<p> Sollten Sie SWORD Bücher bereits installiert haben, gehen Sie auf "
+"<code>Datei >\n"
+"Setze SWORD Pfade</code> und fügen Sie den Pfad hinzu, in welchem die Bücher "
+"für die Suche installiert sind.\n"
 
 #: config.py:129
 msgid ""
-"<p><b>[Reference clipped as the maximum verse limit (%d verses) has been exceeded.\n"
+"<p><b>[Reference clipped as the maximum verse limit (%d verses) has been "
+"exceeded.\n"
 "<br>This probably means the reference was invalid]</b>"
 msgstr ""
-"<p><b>[Die angehängte Referenz hat die maximale Anzahl an Versen (%d Verse) erreicht.\n"
+"<p><b>[Die angehängte Referenz hat die maximale Anzahl an Versen (%d Verse) "
+"erreicht.\n"
 "<br>Die Referenz könnte ungültig sein]</b>"
 
 #: config.py:133
 msgid ""
 "<h4>The Personal Commentary is not supported</h4>\n"
-"<p>To make notes on verses, use \"Bible > Topic Management\", \"Bible > Tag Verses\"\n"
+"<p>To make notes on verses, use \"Bible > Topic Management\", \"Bible > Tag "
+"Verses\"\n"
 "and \"Bible > Comment on Verses\".</p>\n"
-"<p>For more information, see the documentation on <a href=\"http://code.google.com/p/bpbible/wiki/UserNotes\">creating and using user notes in BPBible</a>.</p>\n"
+"<p>For more information, see the documentation on <a href=\"http://code."
+"google.com/p/bpbible/wiki/UserNotes\">creating and using user notes in "
+"BPBible</a>.</p>\n"
 msgstr ""
 "<h4>Ein Kommentar wird nicht unterstützt</h4>\n"
-"<p>Für Anmerkungen zu Versen sind folgende Funktionen zu nutzen \"Bibel > Themen verwalten\", \"Bibel > Markiere Verse\"\n"
+"<p>Für Anmerkungen zu Versen sind folgende Funktionen zu nutzen \"Bibel > "
+"Themen verwalten\", \"Bibel > Markiere Verse\"\n"
 "und \"Bibel > Kommentiere Verse\".</p>\n"
-"<p>Weitere Informationen sind in der Dokumentation unter <a href=\"http://code.google.com/p/bpbible/wiki/UserNotes\">Creating and using user notes in BPBible</a>zu finden.</p>\n"
+"<p>Weitere Informationen sind in der Dokumentation unter <a href=\"http://"
+"code.google.com/p/bpbible/wiki/UserNotes\">Creating and using user notes in "
+"BPBible</a>zu finden.</p>\n"
 
 #: config.py:140
 msgid ""
 "<h4>This harmony requires a Bible installed</h4>\n"
-"<p>In order for this harmony to work, you need to have a Bible installed.</p>\n"
+"<p>In order for this harmony to work, you need to have a Bible installed.</"
+"p>\n"
 msgstr ""
 "<h4>Diese Evangelienharmonie benötigt eine installierte Bibel</h4>\n"
-"<p>Um in dieser Evangelienharmonie zu arbeiten, benötigen Sie eine installierte Bibel.</p>\n"
+"<p>Um in dieser Evangelienharmonie zu arbeiten, benötigen Sie eine "
+"installierte Bibel.</p>\n"
 
 #: config.py:145
 msgid "<p style=\"text-indent: 0;\">%s is not in the current book.</p>"
-msgstr "<p style=\"text-indent: 0;\">%s ist nicht im aktuellen Buch enthalten.</p>"
+msgstr ""
+"<p style=\"text-indent: 0;\">%s ist nicht im aktuellen Buch enthalten.</p>"
 
-#: copyverses.py:79
-#: xrc/copyverses_xrc.py:78
+#: copyverses.py:79 xrc/copyverses_xrc.py:78
 msgid "Edit Template..."
 msgstr "Vorlage bearbeiten..."
 
@@ -296,124 +304,170 @@ msgstr "Vorlage bearbeiten..."
 msgid "<custom: based on %s>"
 msgstr "<Anpassung: basiert auf %s>"
 
-#: display_options.py:95
-msgid "Columns"
-msgstr "Spaltenansicht"
-
-#: display_options.py:95
-msgid "Display the chapter in more than one column."
-msgstr "Zeigt das Kapitel in mehreren Spalten an"
-
-#: display_options.py:96
+#: display_options.py:112
 msgid "Display each verse on its own line."
 msgstr "Zeigt jeden Vers in einer Zeile"
 
-#: display_options.py:96
+#: display_options.py:112
 msgid "One line per verse"
 msgstr "Zeilenansicht"
 
-#: display_options.py:97
+#: display_options.py:113
 msgid "Continuous scrolling"
 msgstr "Kontinuierlicher Bildlauf"
 
-#: display_options.py:97
+#: display_options.py:113
 msgid "Show more than one chapter at once."
 msgstr "Zeigt alle Kapitel hintereinander an"
 
-#: display_options.py:98
+#: display_options.py:114
+msgid "Columns"
+msgstr "Spaltenansicht"
+
+#: display_options.py:114
+msgid "Display the chapter in more than one column."
+msgstr "Zeigt das Kapitel in mehreren Spalten an"
+
+#: display_options.py:115
+#, fuzzy
+msgid "Reference bar"
+msgstr "Referenz"
+
+#: display_options.py:117
 msgid "Headings"
 msgstr "Überschriften"
 
-#: display_options.py:98
+#: display_options.py:117
 msgid "Show headings in the text."
 msgstr "Zeige Überschriften im Text"
 
-#: display_options.py:99
-msgid "Cross References"
-msgstr "Querverweise"
-
-#: display_options.py:99
-msgid "Show cross references in the text."
-msgstr "Zeigt die Querverweise im Text an"
-
-#: display_options.py:100
+#: display_options.py:118
 msgid "Footnotes"
 msgstr "Fußnoten"
 
-#: display_options.py:100
+#: display_options.py:118
 msgid "Show footnotes in the text"
 msgstr "Zeigt die Fußnoten im Text an"
 
-#: display_options.py:101
-#: display_options.py:115
-msgid "Strongs Numbers"
-msgstr "Sprachschlüssel"
+#: display_options.py:119
+msgid "Cross References"
+msgstr "Querverweise"
 
-#: display_options.py:102
-msgid "Strongs Underneath"
-msgstr "Sprachbezeichnung unterhalb"
+#: display_options.py:119
+msgid "Show cross references in the text."
+msgstr "Zeigt die Querverweise im Text an"
 
-#: display_options.py:103
-msgid "Show the Original Language Word underneath the word rather than next to it."
-msgstr "Zeigt das Wort der Original-Sprache unterhalb dem jeweiligen Wort an"
-
-#: display_options.py:104
-msgid "Morphology"
-msgstr "Morphologie"
-
-#: display_options.py:105
-msgid "Morph Segmentation"
-msgstr "Morpheme Segmentierung"
-
-#: display_options.py:106
+#: display_options.py:120
 msgid "Colour code speakers"
 msgstr "Aussagen färben"
 
-#: display_options.py:107
+#: display_options.py:121
 msgid "Words of Christ in Red"
 msgstr "Christusworte"
 
-#: display_options.py:108
-msgid "Colour code by speaker"
+#: display_options.py:122
+#, fuzzy
+msgid "Colour code by speaker (ESV only)"
 msgstr "Worte Anderer"
 
-#: display_options.py:109
+#: display_options.py:123
 msgid "Off"
 msgstr "Aus"
 
-#: display_options.py:111
+#: display_options.py:126 display_options.py:137
+msgid "Strongs Numbers"
+msgstr "Sprachschlüssel"
+
+#: display_options.py:127
+msgid "Strongs Positioning"
+msgstr ""
+
+#: display_options.py:128
+#, fuzzy
+msgid "Show the Original Language Word underneath the word."
+msgstr "Zeigt das Wort der Original-Sprache unterhalb dem jeweiligen Wort an"
+
+#: display_options.py:128
+#, fuzzy
+msgid "Underneath text"
+msgstr "Sprachbezeichnung unterhalb"
+
+#: display_options.py:129
+msgid "Inline with text"
+msgstr ""
+
+#: display_options.py:129
+#, fuzzy
+msgid "Show the Original Language Word next to the word."
+msgstr "Zeigt das Wort der Original-Sprache unterhalb dem jeweiligen Wort an"
+
+#: display_options.py:130
+#, fuzzy
+msgid "Show on hover"
+msgstr "&Zeige Antwort"
+
+#: display_options.py:130
+#, fuzzy
+msgid "Show the Original Language Word when the cursor is over the word."
+msgstr "Zeigt das Wort der Original-Sprache unterhalb dem jeweiligen Wort an"
+
+#: display_options.py:131
+#, fuzzy
+msgid "Show on click"
+msgstr "Zeige in Quickinfo"
+
+#: display_options.py:131
+#, fuzzy
+msgid "Show the Original Language Word when the word is selected."
+msgstr "Zeigt das Wort der Original-Sprache unterhalb dem jeweiligen Wort an"
+
+#: display_options.py:133
 msgid "Strongs Headwords"
 msgstr "Stichwörter"
 
-#: display_options.py:112
+#: display_options.py:134
 msgid "Transliterated"
 msgstr "Transliteration"
 
-#: display_options.py:113
+#: display_options.py:135
 msgid "Original Language"
 msgstr "Ursprungssprache"
 
-#: display_options.py:114
+#: display_options.py:136
 msgid "Pronunciation"
 msgstr "Aussprache"
 
-#: display_options.py:124
+#: display_options.py:142
+msgid "Highlight Matching Strongs"
+msgstr ""
+
+#: display_options.py:143
+msgid "Morphology"
+msgstr "Morphologie"
+
+#: display_options.py:144
+msgid "Morph Segmentation"
+msgstr "Morpheme Segmentierung"
+
+#: display_options.py:148
 msgid "Output Raw"
 msgstr "Ausgabe Rohdaten"
 
-#: display_options.py:125
+#: display_options.py:149
 msgid "Display timing"
 msgstr "Zeige Zeitmessung"
 
-#: displayframe.py:266
-#: protocols.py:148
+#: displayframe.py:266 protocols.py:148
 msgid "Don't know how to open this morphology type:"
 msgstr "Der Morphologiemodus kann nicht geöffnet werden:"
 
-#: displayframe.py:276
-#: protocols.py:158
-msgid "Module %s is not installed, so you cannot view details for this morphological code"
-msgstr "Modul %s ist nicht installiert. Details zu den grammatikalischen Bestimmungen können nicht angezeigt werden."
+#: displayframe.py:276 protocols.py:158
+msgid ""
+"Module %s is not installed, so you cannot view details for this "
+"morphological code"
+msgstr ""
+"Modul %s ist nicht installiert. Details zu den grammatikalischen "
+"Bestimmungen können nicht angezeigt werden."
 
 #: displayframe.py:454
 msgid "Select all"
@@ -431,23 +485,23 @@ msgstr "Kopiere Auswahl"
 msgid "Copy the selected text with links"
 msgstr "Kopiere den ausgewählten Text mit Verweisen"
 
-#: displayframe.py:509
+#: displayframe.py:513
 msgid "the selected word"
 msgstr "ausgewähltes Wort"
 
-#: displayframe.py:515
+#: displayframe.py:519
 msgid "the selected phrase"
 msgstr "ausgewählter Ausdruck"
 
-#: displayframe.py:528
+#: displayframe.py:532
 msgid "Look up %s in the dictionary"
 msgstr "Im Wörterbuch %s nachschlagen"
 
-#: displayframe.py:549
+#: displayframe.py:553
 msgid "Search for %s in the Bible"
 msgstr "Suche nach %s in der Bibel"
 
-#: displayframe.py:551
+#: displayframe.py:555
 msgid "Search for %s in this book"
 msgstr "Suche nach %s in diesem Buch"
 
@@ -499,8 +553,7 @@ msgstr "Nein, Sie liegen falsch. Versuchen Sie es erneut."
 msgid "Try again."
 msgstr "Auswertung"
 
-#: gui/movablelist.py:7
-#: xrc/manage_topics_xrc.py:129
+#: gui/movablelist.py:7 xrc/manage_topics_xrc.py:129
 #: xrc/manage_topics_xrc.py:130
 msgid "Copy"
 msgstr "Kopieren"
@@ -526,11 +579,8 @@ msgid "%s verses"
 msgstr "%s Verse"
 
 #: install_manager/install_drop_target.py:34
-#: install_manager/install_drop_target.py:57
-#: module_manager.py:121
-#: module_manager.py:125
-#: search/searchpanel.py:780
-#: templatemanager.py:425
+#: install_manager/install_drop_target.py:57 module_manager.py:121
+#: module_manager.py:125 search/searchpanel.py:780 templatemanager.py:425
 #: templatemanager.py:438
 msgid "Error"
 msgstr "Fehler"
@@ -543,10 +593,12 @@ msgid ""
 " 3. In the website that opens, click New Issue, and fill in the details\n"
 "The error given was:"
 msgstr ""
-"Beim Lesen der Bücher ist ein Fehler aufgetreten. Bitte melden Sie dieses Problem:\n"
+"Beim Lesen der Bücher ist ein Fehler aufgetreten. Bitte melden Sie dieses "
+"Problem:\n"
 "1. Kopieren Sie den Fehlertext (Ctrl+C)\n"
 "2. Wählen Sie im BPBible Menü den Eintrag Hilfe, Problem melden.\n"
-"3. Es öffnet sich eine Website. Klicken Sie auf \"New Issue\" und tragen Sie den kopierten Fehlertext und eine Beschreibung ein."
+"3. Es öffnet sich eine Website. Klicken Sie auf \"New Issue\" und tragen Sie "
+"den kopierten Fehlertext und eine Beschreibung ein."
 
 #: install_manager/install_drop_target.py:46
 msgid "Error reading books"
@@ -563,19 +615,20 @@ msgstr "Die folgende Datei ist keine installierbares Buch:"
 #: install_manager/install_drop_target.py:69
 msgid ""
 "An error occurred while installing modules.\n"
-"Please make sure that the directory exists, and that you have permission to write to the directory.\n"
+"Please make sure that the directory exists, and that you have permission to "
+"write to the directory.\n"
 "The error given was:"
 msgstr ""
 "Während der Installation der Module ist ein Fehler aufgetreten.\n"
-"Prüfen Sie ob das Verzeichnis existiert und ob Sie die notwendigen Zugriffsrechte besitzen.\n"
+"Prüfen Sie ob das Verzeichnis existiert und ob Sie die notwendigen "
+"Zugriffsrechte besitzen.\n"
 "Folgender Fehler trat auf:"
 
 #: install_manager/install_drop_target.py:83
 msgid "Extracting %s"
 msgstr "Extrahiere %s"
 
-#: install_manager/install_drop_target.py:84
-#: search/searchpanel.py:934
+#: install_manager/install_drop_target.py:84 search/searchpanel.py:934
 msgid "Preparing"
 msgstr "Vorbereiten"
 
@@ -591,8 +644,7 @@ msgstr "Wollen Sie wirklich diese Bücher installieren?"
 msgid "Other..."
 msgstr "Andere..."
 
-#: install_manager/install_module.py:57
-#: pathmanager.py:52
+#: install_manager/install_module.py:57 pathmanager.py:52
 msgid "Choose a directory:"
 msgstr "Wählen Sie ein Verzeichnis aus:"
 
@@ -604,156 +656,147 @@ msgstr "Information"
 msgid "Cannot read book metadata in file %s"
 msgstr "Die Metadaten des Buches in der Datei %s können nicht gelesen werden"
 
-#: mainframe.py:227
+#: mainframe.py:222
 msgid "Go to verse"
 msgstr "Gehe zu Vers"
 
-#: mainframe.py:228
+#: mainframe.py:223
 msgid "Go to this verse"
 msgstr "Gehe zu diesem Vers"
 
-#: mainframe.py:232
+#: mainframe.py:227
 msgid "Search in the current book"
 msgstr "Suche in diesem Buch"
 
-#: mainframe.py:235
-#: xrc/copyverses_xrc.py:81
+#: mainframe.py:230 xrc/copyverses_xrc.py:81
 msgid "Copy Verses"
 msgstr "Kopiere Verse"
 
-#: mainframe.py:236
+#: mainframe.py:231
 msgid "Open the Copy Verses dialog"
 msgstr "Öffne den Dialog \"Kopiere Verse\""
 
-#: mainframe.py:241
+#: mainframe.py:236
 msgid "Back"
 msgstr "Zurück"
 
-#: mainframe.py:242
+#: mainframe.py:237
 msgid "Go back a verse"
 msgstr "Gehe einen Vers zurück"
 
-#: mainframe.py:245
+#: mainframe.py:240
 msgid "Forward"
 msgstr "Vorwärts"
 
-#: mainframe.py:246
+#: mainframe.py:241
 msgid "Go forward a verse"
 msgstr "Gehe einen Vers vorwärts"
 
-#: mainframe.py:250
+#: mainframe.py:245
 msgid "Zoom In"
 msgstr "Vergrößern"
 
-#: mainframe.py:251
+#: mainframe.py:246
 msgid "Make text bigger"
 msgstr "Text vergrößern"
 
-#: mainframe.py:254
+#: mainframe.py:249
 msgid "Default Zoom"
 msgstr "Standard"
 
-#: mainframe.py:255
+#: mainframe.py:250
 msgid "Return text to default size"
 msgstr "Wiederherstellen Standardtextgröße"
 
-#: mainframe.py:258
+#: mainframe.py:253
 msgid "Zoom Out"
 msgstr "Verkleinern"
 
-#: mainframe.py:259
+#: mainframe.py:254
 msgid "Make text smaller"
 msgstr "Text verkleinern"
 
-#: mainframe.py:283
+#: mainframe.py:278
 msgid "Navigation"
 msgstr "Navigation Toolbar"
 
-#: mainframe.py:285
+#: mainframe.py:280
 msgid "Zoom"
 msgstr "Zoom Toolbar"
 
-#: mainframe.py:287
+#: mainframe.py:282
 msgid "History toolbar"
 msgstr "Verlauf Toolbar"
 
-#: mainframe.py:671
+#: mainframe.py:673
 msgid "Installable books"
 msgstr "Installierbare Bücher"
 
-#: mainframe.py:674
-#: versecompare.py:205
+#: mainframe.py:676 versecompare.py:209
 msgid "Choose books"
 msgstr "Bücher auswählen"
 
-#: mainframe.py:744
-#: xrc/auifrm_xrc.py:44
+#: mainframe.py:746 xrc/auifrm_xrc.py:44
 msgid "&Language"
 msgstr "&Sprache"
 
-#: mainframe.py:747
-#: xrc/auifrm_xrc.py:45
+#: mainframe.py:749 xrc/auifrm_xrc.py:45
 msgid "&Bible book names"
 msgstr "&Bibelbücher"
 
-#: mainframe.py:779
-#: xrc/auifrm_xrc.py:49
+#: mainframe.py:781 xrc/auifrm_xrc.py:49
 msgid "&Display"
 msgstr "&Ansicht"
 
-#: mainframe.py:784
-#: xrc/auifrm_xrc.py:52
+#: mainframe.py:786 xrc/auifrm_xrc.py:52
 msgid "&Windows"
 msgstr "&Fenster"
 
-#: mainframe.py:789
-#: xrc/auifrm_xrc.py:51
+#: mainframe.py:791 xrc/auifrm_xrc.py:51
 msgid "Toolbars"
 msgstr "Werkzeugkasten"
 
-#: mainframe.py:817
+#: mainframe.py:819
 msgid "Show the %s toolbar"
 msgstr "Werkzeugkasten %s anzeigen"
 
-#: mainframe.py:838
-#: xrc/auifrm_xrc.py:53
+#: mainframe.py:840 xrc/auifrm_xrc.py:53
 msgid "Debug"
 msgstr "Debug"
 
-#: mainframe.py:870
+#: mainframe.py:873
 msgid "Expand cross-references"
 msgstr "Parallelstellen expandieren"
 
-#: mainframe.py:871
+#: mainframe.py:874
 msgid "Display cross references partially expanded"
 msgstr "Zeigt Parallelstellen teilweise expandiert"
 
-#: mainframe.py:876
+#: mainframe.py:880
 msgid "Topic Tags"
 msgstr "Themen markieren"
 
-#: mainframe.py:877
+#: mainframe.py:881
 msgid "Display the topics that each verse is tagged with."
 msgstr "Zeigt die Themen jedes Verses an"
 
-#: mainframe.py:992
+#: mainframe.py:996
 msgid "BPBible will now quickly restart to change your language."
 msgstr "BPBible wird zur Anpassung der Sprache neu gestartet."
 
-#: mainframe.py:993
+#: mainframe.py:997
 msgid "Restarting"
 msgstr "Neustart"
 
-#: mainframe.py:1012
+#: mainframe.py:1016
 msgid "An error occurred on closing:"
 msgstr "Beim Schließen ist ein Fehler aufgetreten:"
 
-#: mainframe.py:1022
-#: mainframe.py:1023
+#: mainframe.py:1026 mainframe.py:1027
 msgid "search "
 msgstr "Suche "
 
-#: mainframe.py:1047
+#: mainframe.py:1051
 msgid ""
 "Flexible Bible study software.\n"
 "\t\t\tBuilt Using the SWORD Project from crosswire.org\n"
@@ -769,35 +812,35 @@ msgstr ""
 "\t\t\tSWORD Version: %(swversion)s\n"
 "\t\t\tXULRunner Version: %(xulrunner_version)s"
 
-#: mainframe.py:1059
+#: mainframe.py:1063
 msgid "BPBible website"
 msgstr "BPBible website"
 
-#: mainframe.py:1061
+#: mainframe.py:1065
 msgid "BPBible development team"
 msgstr "BPBible Entwicklungsteam"
 
-#: mainframe.py:1062
+#: mainframe.py:1066
 msgid "SWORD library developers"
 msgstr "SWORD Entwicklerbibliothek"
 
-#: mainframe.py:1066
+#: mainframe.py:1070
 msgid "Developers"
 msgstr "Entwickler"
 
-#: mainframe.py:1067
+#: mainframe.py:1071
 msgid "Artists"
 msgstr "Künstler"
 
-#: mainframe.py:1068
+#: mainframe.py:1072
 msgid "Translators"
 msgstr "Übersetzer"
 
-#: mainframe.py:1070
+#: mainframe.py:1074
 msgid "translator-credits"
 msgstr "translator-credits"
 
-#: mainframe.py:1074
+#: mainframe.py:1078
 msgid ""
 "Icons used are from famfamfam\n"
 "http://www.famfamfam.com/lab/icons/silk\n"
@@ -809,9 +852,13 @@ msgstr ""
 "und Tango Desktop Project\n"
 "http://tango.freedesktop.org/Tango_Desktop_Project verwendet."
 
-#: mainframe.py:1080
-msgid "BPBible is licensed under the GPL v2. For more details, refer to the LICENSE.txt file in the application directory"
-msgstr "BPBible ist lizenziert unter GPL v2. Für weitere Informationen wird auf die Datei LICENSE.txt im Programmverzeichnis verwiesen."
+#: mainframe.py:1084
+msgid ""
+"BPBible is licensed under the GPL v2. For more details, refer to the LICENSE."
+"txt file in the application directory"
+msgstr ""
+"BPBible ist lizenziert unter GPL v2. Für weitere Informationen wird auf die "
+"Datei LICENSE.txt im Programmverzeichnis verwiesen."
 
 #: manage_topics_frame.py:86
 msgid "Topics"
@@ -825,18 +872,15 @@ msgstr "&Neues Thema"
 msgid "Add &Passage"
 msgstr "&Passage hinzufügen"
 
-#: manage_topics_frame.py:323
-#: manage_topics_frame.py:607
+#: manage_topics_frame.py:323 manage_topics_frame.py:608
 msgid "Cu&t"
 msgstr "&Ausschneiden"
 
-#: manage_topics_frame.py:328
-#: manage_topics_frame.py:613
+#: manage_topics_frame.py:328 manage_topics_frame.py:614
 msgid "&Copy"
 msgstr "&Kopieren"
 
-#: manage_topics_frame.py:333
-#: manage_topics_frame.py:619
+#: manage_topics_frame.py:333 manage_topics_frame.py:620
 msgid "&Paste"
 msgstr "&Einfügen"
 
@@ -844,51 +888,51 @@ msgstr "&Einfügen"
 msgid "Delete &Topic"
 msgstr "Lösche &Thema"
 
-#: manage_topics_frame.py:381
+#: manage_topics_frame.py:382
 msgid "Cannot copy the topic to one of its children."
 msgstr "Dieses Thema kann nicht auf ein untergeordnetes Thema kopiert werden."
 
-#: manage_topics_frame.py:382
+#: manage_topics_frame.py:383
 msgid "Copy Topic"
 msgstr "Kopiere Thema"
 
-#: manage_topics_frame.py:388
+#: manage_topics_frame.py:389
 msgid "Cannot delete the base topic."
 msgstr "Das Hauptthema kann nicht gelöscht werden."
 
-#: manage_topics_frame.py:389
+#: manage_topics_frame.py:390
 msgid "Delete Topic"
 msgstr "Lösche Thema"
 
-#: manage_topics_frame.py:412
+#: manage_topics_frame.py:413
 msgid "Search: %s"
 msgstr "Suche: %s"
 
-#: manage_topics_frame.py:413
+#: manage_topics_frame.py:414
 msgid "Results from the search `%s'."
 msgstr "Ergebnisse von der Suche `%s'."
 
-#: manage_topics_frame.py:446
+#: manage_topics_frame.py:447
 msgid "Passage"
 msgstr "Passage"
 
-#: manage_topics_frame.py:447
+#: manage_topics_frame.py:448
 msgid "Comment"
 msgstr "Kommentar"
 
-#: manage_topics_frame.py:599
+#: manage_topics_frame.py:600
 msgid "&Open"
 msgstr "&Öffnen"
 
-#: manage_topics_frame.py:626
+#: manage_topics_frame.py:627
 msgid "&Delete"
 msgstr "&Löschen"
 
-#: manage_topics_frame.py:666
+#: manage_topics_frame.py:667
 msgid "All topics."
 msgstr "Alle Themen."
 
-#: manage_topics_frame.py:682
+#: manage_topics_frame.py:683
 msgid ""
 "%d passages selected.\n"
 "\n"
@@ -898,20 +942,19 @@ msgstr ""
 "\n"
 "Wählen Sie eine Passage zum Betrachten."
 
-#: manage_topics_frame.py:687
+#: manage_topics_frame.py:688
 msgid "No items have been selected."
 msgstr "Keine Einträge wurden ausgewählt."
 
-#: manage_topics_frame.py:1004
+#: manage_topics_frame.py:1005
 msgid "Unordered"
 msgstr "Unsortiert"
 
-#: manage_topics_frame.py:1005
+#: manage_topics_frame.py:1006
 msgid "Order by Passage"
 msgstr "Sortiert nach Passagen"
 
-#: manage_topics_frame.py:1254
-#: tag_passage_dialog.py:58
+#: manage_topics_frame.py:1255 tag_passage_dialog.py:58
 msgid "Unrecognised passage `%s'."
 msgstr "Unbekannte Passage `%s'."
 
@@ -926,13 +969,16 @@ msgstr "Bücher auswählen"
 #: module_manager.py:34
 msgid ""
 "You are about to delete books.\n"
-"This will completely remove the books and free up the disk space that they used.\n"
-"You cannot undo this operation. Are you sure you want to delete these books?\n"
+"This will completely remove the books and free up the disk space that they "
+"used.\n"
+"You cannot undo this operation. Are you sure you want to delete these "
+"books?\n"
 "Books to be deleted:"
 msgstr ""
 "Sie sind im Begriff Bücher zu löschen.\n"
 "Diese werden unwiderruflich gelöscht.\n"
-"Sie können diese Aktion nicht rückgängig machen. Wollen Sie diese Bücher wirklich löschen?\n"
+"Sie können diese Aktion nicht rückgängig machen. Wollen Sie diese Bücher "
+"wirklich löschen?\n"
 "Zu löschende Bücher:"
 
 #: module_manager.py:40
@@ -965,47 +1011,38 @@ msgstr "Freigabecode"
 
 #: module_manager.py:124
 msgid "Couldn't find config file. Error given was:"
-msgstr "Konfigurationsdatei kann nicht gefunden werden. Folgender Fehler trat auf:"
+msgstr ""
+"Konfigurationsdatei kann nicht gefunden werden. Folgender Fehler trat auf:"
 
-#: module_tree.py:23
-#: module_tree.py:39
+#: module_tree.py:23 module_tree.py:39
 msgid "Bibles"
 msgstr "Bibeln"
 
-#: module_tree.py:24
-#: module_tree.py:40
+#: module_tree.py:24 module_tree.py:40
 msgid "Commentaries"
 msgstr "Kommentare"
 
-#: module_tree.py:25
-#: module_tree.py:41
+#: module_tree.py:25 module_tree.py:41
 msgid "Dictionaries"
 msgstr "Wörterbücher"
 
-#: module_tree.py:26
-#: module_tree.py:46
+#: module_tree.py:26 module_tree.py:46
 msgid "Other books"
 msgstr "Andere Bücher"
 
-#: module_tree.py:27
-#: module_tree.py:32
-#: module_tree.py:45
+#: module_tree.py:27 module_tree.py:32 module_tree.py:45
 msgid "Daily Devotional"
 msgstr "Bibellese"
 
-#: module_tree.py:28
-#: module_tree.py:35
-#: module_tree.py:42
+#: module_tree.py:28 module_tree.py:35 module_tree.py:42
 msgid "Harmonies"
 msgstr "Evangelienharmonie"
 
-#: module_tree.py:33
-#: module_tree.py:43
+#: module_tree.py:33 module_tree.py:43
 msgid "Maps"
 msgstr "Karten"
 
-#: module_tree.py:34
-#: module_tree.py:44
+#: module_tree.py:34 module_tree.py:44
 msgid "Images"
 msgstr "Bilder"
 
@@ -1013,7 +1050,7 @@ msgstr "Bilder"
 msgid "Find Book..."
 msgstr "Suche Bücher..."
 
-#: module_tree.py:129
+#: module_tree.py:130
 msgid "Show information for %s"
 msgstr "Zeige Informationen für %s"
 
@@ -1033,11 +1070,8 @@ msgstr "Einlesen der Bücher..."
 msgid "Path manager"
 msgstr "Pfadmanager"
 
-#: preview_window.py:11
-#: search/searchpanel.py:859
-#: search/searchpanel.py:891
-#: xrc/copyverses_xrc.py:79
-#: xrc/templatemanager_xrc.py:97
+#: preview_window.py:11 search/searchpanel.py:859 search/searchpanel.py:891
+#: xrc/copyverses_xrc.py:79 xrc/templatemanager_xrc.py:97
 msgid "Preview"
 msgstr "Vorschau"
 
@@ -1053,24 +1087,27 @@ msgstr "Zeige in Quickinfo"
 msgid "Show this in a tooltip"
 msgstr "Zeige dies in einer Quickinfo"
 
-#: protocol_handlers.py:277
+#: protocol_handlers.py:284
 msgid "You are at the start of this book."
 msgstr "Beginn des Buches"
 
-#: protocol_handlers.py:278
+#: protocol_handlers.py:285
 msgid "You are at the end of this book."
 msgstr "Ende des Buches"
 
-#: protocol_handlers.py:355
+#: protocol_handlers.py:362
 msgid "Click here to unlock this book"
 msgstr "Klicken Sie hier zur Freigabe des Buches"
 
 #: protocols.py:99
-msgid "The book '%s' is not installed, so you cannot view details for this entry (%s)"
-msgstr "Das Buch '%s' ist nicht installiert, deshalb können für diesen Eintrag (%s) keine Details angezeigt werden."
+msgid ""
+"The book '%s' is not installed, so you cannot view details for this entry (%"
+"s)"
+msgstr ""
+"Das Buch '%s' ist nicht installiert, deshalb können für diesen Eintrag (%s) "
+"keine Details angezeigt werden."
 
-#: search/fields.py:43
-#: search/fields.py:51
+#: search/fields.py:43 search/fields.py:51
 msgid "Invalid strong's number %s."
 msgstr "Ungültiger Sprachschlüssel %s."
 
@@ -1083,8 +1120,12 @@ msgid "A problem was detected with this book while indexing it:"
 msgstr "Ein Problem ist während der Indizierung dieses Buches aufgetreten:"
 
 #: search/index.py:91
-msgid "Check whether there is a newer version of this book which might fix this problem."
-msgstr "Bitte prüfen Sie mit einer neueren Version dieses Buches erneut, dies könnte das Problem beheben."
+msgid ""
+"Check whether there is a newer version of this book which might fix this "
+"problem."
+msgstr ""
+"Bitte prüfen Sie mit einer neueren Version dieses Buches erneut, dies könnte "
+"das Problem beheben."
 
 #: search/index.py:272
 msgid "Couldn't understand book search range '%s'"
@@ -1107,25 +1148,24 @@ msgid "Done"
 msgstr "Erledigt"
 
 #: search/indexed_text.py:128
-msgid "Invalid encoding: Searching may not work or may display the wrong results"
-msgstr "Ungültige Zeichencodierung:  Die Suche funktionierte nicht oder es konnten die falschen Ergebnisse nicht anzeigt werden."
+msgid ""
+"Invalid encoding: Searching may not work or may display the wrong results"
+msgstr ""
+"Ungültige Zeichencodierung:  Die Suche funktionierte nicht oder es konnten "
+"die falschen Ergebnisse nicht anzeigt werden."
 
 #: search/query_parser.py:657
 msgid "Could not understand string"
 msgstr "Fehler in der Eingabe"
 
-#: search/searchpanel.py:254
-#: search/searchpanel.py:548
-#: search/searchpanel.py:725
-#: search/searchpanel.py:744
-#: search/searchpanel.py:822
-#: search/searchpanel.py:838
+#: search/searchpanel.py:254 search/searchpanel.py:548
+#: search/searchpanel.py:725 search/searchpanel.py:744
+#: search/searchpanel.py:822 search/searchpanel.py:838
 #: search/searchpanel.py:874
 msgid "%d references found"
 msgstr "%d Referenzen gefunden"
 
-#: search/searchpanel.py:280
-#: xrc/search_xrc.py:142
+#: search/searchpanel.py:280 xrc/search_xrc.py:141
 msgid "&Index"
 msgstr "&Index"
 
@@ -1135,10 +1175,11 @@ msgstr "Ohne Index"
 
 #: search/searchpanel.py:305
 msgid "You don't have a current %s, so you cannot search at the moment"
-msgstr "Sie haben derzeit keine %s, deshalb können Sie die Suche momentan nicht starten"
+msgstr ""
+"Sie haben derzeit keine %s, deshalb können Sie die Suche momentan nicht "
+"starten"
 
-#: search/searchpanel.py:312
-#: search/searchpanel.py:349
+#: search/searchpanel.py:312 search/searchpanel.py:349
 msgid "No current version"
 msgstr "Keine aktuelle Version"
 
@@ -1147,24 +1188,23 @@ msgid "Reading search index..."
 msgstr "Suchindex lesen..."
 
 #: search/searchpanel.py:355
-msgid "Search index does not exist for book %s. Indexing will make search much faster. Create Index?"
-msgstr "Für das Buch %s existiert kein Suchindex. Ein Index würde die Suche beschleunigen. Möchten Sie einen Index erzeugen?"
+msgid ""
+"Search index does not exist for book %s. Indexing will make search much "
+"faster. Create Index?"
+msgstr ""
+"Für das Buch %s existiert kein Suchindex. Ein Index würde die Suche "
+"beschleunigen. Möchten Sie einen Index erzeugen?"
 
 #: search/searchpanel.py:358
 msgid "Create Index?"
 msgstr "Index erzeugen?"
 
-#: search/searchpanel.py:392
-#: search/searchpanel.py:580
-#: search/searchpanel.py:852
-#: search/searchpanel.py:884
-#: xrc/search_xrc.py:140
+#: search/searchpanel.py:392 search/searchpanel.py:580
+#: search/searchpanel.py:852 search/searchpanel.py:884 xrc/search_xrc.py:139
 msgid "&Search"
 msgstr "&Suche"
 
-#: search/searchpanel.py:418
-#: xrc/search_xrc.py:143
-#: xrc/search_xrc.py:158
+#: search/searchpanel.py:418 xrc/search_xrc.py:142 xrc/search_xrc.py:157
 msgid "Search Options"
 msgstr "Suchoptionen"
 
@@ -1172,42 +1212,33 @@ msgstr "Suchoptionen"
 msgid "&Stop"
 msgstr "&Stop"
 
-#: search/searchpanel.py:617
-#: search/searchpanel.py:692
+#: search/searchpanel.py:617 search/searchpanel.py:692
 msgid "Error in search"
 msgstr "Fehler in der Suche"
 
-#: search/searchpanel.py:622
-#: search/searchpanel.py:697
+#: search/searchpanel.py:622 search/searchpanel.py:697
 msgid "The following words were not found in this %s:"
 msgstr "Die folgenden Wörter wurden in %s nicht gefunden:"
 
-#: search/searchpanel.py:625
-#: search/searchpanel.py:700
+#: search/searchpanel.py:625 search/searchpanel.py:700
 msgid "Unknown word"
 msgstr "Unbekanntes Wort"
 
-#: search/searchpanel.py:727
-#: search/searchpanel.py:747
-#: search/searchpanel.py:824
-#: search/searchpanel.py:842
+#: search/searchpanel.py:727 search/searchpanel.py:747
+#: search/searchpanel.py:824 search/searchpanel.py:842
 msgid "1 word"
 msgstr "1 Wort"
 
-#: search/searchpanel.py:728
-#: search/searchpanel.py:748
-#: search/searchpanel.py:825
-#: search/searchpanel.py:843
+#: search/searchpanel.py:728 search/searchpanel.py:748
+#: search/searchpanel.py:825 search/searchpanel.py:843
 msgid "%d words"
 msgstr "%d Wörter"
 
-#: search/searchpanel.py:731
-#: search/searchpanel.py:753
+#: search/searchpanel.py:731 search/searchpanel.py:753
 msgid "%d hits"
 msgstr "%d Treffer"
 
-#: search/searchpanel.py:743
-#: search/searchpanel.py:837
+#: search/searchpanel.py:743 search/searchpanel.py:837
 #: search/searchpanel.py:873
 msgid "1 reference found"
 msgstr "1 Referenz gefunden"
@@ -1220,8 +1251,7 @@ msgstr "1 Treffer"
 msgid "You cannot search on fields in unindexed search"
 msgstr "Die Suche ohne Index ist auf Feldern nicht möglich "
 
-#: search/searchpanel.py:859
-#: search/searchpanel.py:891
+#: search/searchpanel.py:859 search/searchpanel.py:891
 msgid "Reference"
 msgstr "Referenz"
 
@@ -1265,22 +1295,20 @@ msgstr "Suche Bibellese"
 msgid "Commentary Search"
 msgstr "Suche Kommentar"
 
-#: swlib/pysw.py:117
-#: swlib/pysw.py:637
+#: swlib/pysw.py:117 swlib/pysw.py:642
 msgid "There are only %(chapters)d chapters in %(book)s (given %(given)d)"
 msgstr "Es gibt nur %(chapters)d Kapitel in %(book)s (%(given)d)"
 
-#: swlib/pysw.py:135
-#: swlib/pysw.py:648
-msgid "There are only %(verses)d verses in %(book)s %(chapter)s (given %(given)d)"
+#: swlib/pysw.py:135 swlib/pysw.py:653
+msgid ""
+"There are only %(verses)d verses in %(book)s %(chapter)s (given %(given)d)"
 msgstr "Es gibt nur %(verses)d Verse in %(book)s %(chapter)s (%(given)d)"
 
-#: swlib/pysw.py:816
-#: swlib/pysw.py:1639
+#: swlib/pysw.py:821 swlib/pysw.py:1644
 msgid "Invalid Reference: %s"
 msgstr "Ungültige Referenz: %s"
 
-#: swlib/pysw.py:1628
+#: swlib/pysw.py:1633
 msgid "Invalid empty reference"
 msgstr "Ungültige leere Referenz"
 
@@ -1288,15 +1316,14 @@ msgstr "Ungültige leere Referenz"
 msgid "Tag %s"
 msgstr "Markierung %s"
 
-#: tag_passage_dialog.py:105
-#: tag_passage_dialog.py:113
-#: user_comments.py:66
+#: tag_passage_dialog.py:105 tag_passage_dialog.py:113 user_comments.py:66
 msgid "Comment on %s"
 msgstr "Kommentar %s"
 
 #: templatemanager.py:424
 msgid "Template '%s' is read only. Try a different name."
-msgstr "Die Vorlage '%s' ist schreibgeschützt. Verwenden Sie einen anderen Namen."
+msgstr ""
+"Die Vorlage '%s' ist schreibgeschützt. Verwenden Sie einen anderen Namen."
 
 #: templatemanager.py:431
 msgid "Template '%s' already exists. Overwrite?"
@@ -1308,7 +1335,8 @@ msgstr "Überschreiben?"
 
 #: templatemanager.py:437
 msgid "Template name is already in use. Try a different name."
-msgstr "Der Vorlagenname wird bereits verwendet. Versuchen Sie einen anderen Namen."
+msgstr ""
+"Der Vorlagenname wird bereits verwendet. Versuchen Sie einen anderen Namen."
 
 #: tooltip.py:288
 msgid "Anchor"
@@ -1330,13 +1358,11 @@ msgstr "Kopiere Quickinfo (mit Verweisen)"
 msgid "Tooltip"
 msgstr "Quickinfo"
 
-#: tooltip.py:547
-#: tooltip.py:697
+#: tooltip.py:547 tooltip.py:697
 msgid "Sticky Tooltip"
 msgstr "Fixierte Quickinfo"
 
-#: tooltip.py:613
-#: tooltip.py:615
+#: tooltip.py:613 tooltip.py:615
 msgid "Stay on top"
 msgstr "Setze an erste Stelle"
 
@@ -1349,8 +1375,12 @@ msgid "Search for this strong's number in the Bible"
 msgstr "Suche nach diesem Sprachschlüssel in der Bibel"
 
 #: tooltip.py:761
-msgid "Module %s is not installed, so you cannot view details for this strong's number"
-msgstr "Modul %s ist nicht installiert. Details zum Sprachschlüssel können nicht angezeigt werden."
+msgid ""
+"Module %s is not installed, so you cannot view details for this strong's "
+"number"
+msgstr ""
+"Modul %s ist nicht installiert. Details zum Sprachschlüssel können nicht "
+"angezeigt werden."
 
 #: tooltip.py:823
 msgid "Go to verses"
@@ -1372,10 +1402,8 @@ msgstr "&Bearbeiten"
 msgid "Edit this comment"
 msgstr "Kommentar bearbeiten"
 
-#: user_comments.py:47
-#: xrc/manage_topics_xrc.py:137
-#: xrc/manage_topics_xrc.py:138
-#: xrc/module_manager_xrc.py:67
+#: user_comments.py:47 xrc/manage_topics_xrc.py:137
+#: xrc/manage_topics_xrc.py:138 xrc/module_manager_xrc.py:67
 msgid "Delete"
 msgstr "Löschen"
 
@@ -1391,27 +1419,27 @@ msgstr "Wollen Sie wirklich diesen Kommentar löschen?"
 msgid "Delete Comment"
 msgstr "Lösche Kommentar"
 
-#: versecompare.py:49
+#: versecompare.py:50
 msgid "Version Comparison"
 msgstr "Vergleich"
 
-#: versecompare.py:193
+#: versecompare.py:197
 msgid "Set books to compare"
 msgstr "Bücher zum Vergleich auswählen"
 
-#: versecompare.py:195
+#: versecompare.py:199
 msgid "Set the books this version comparison will use"
 msgstr "Bücher auswählen, die in diesem Vergleich verwendet werden sollen"
 
-#: versecompare.py:204
+#: versecompare.py:208
 msgid "Choose books to compare in the verse comparison window"
 msgstr "Bücher auswählen, die im Vergleichsdialog angezeigt werden sollen"
 
-#: versecompare.py:228
+#: versecompare.py:232
 msgid "Choose books to compare"
 msgstr "Bücher zum Vergleich auswählen"
 
-#: versecompare.py:234
+#: versecompare.py:238
 msgid "View in parallel mode"
 msgstr "Ansicht im Spaltenmodus"
 
@@ -1539,8 +1567,7 @@ msgstr "&Vorlage speichern"
 msgid "&Load Template"
 msgstr "&Vorlage laden"
 
-#: xrc/copyverses_xrc.py:80
-#: xrc/templatemanager_xrc.py:99
+#: xrc/copyverses_xrc.py:80 xrc/templatemanager_xrc.py:99
 msgid "&Cancel"
 msgstr "&Abbrechen"
 
@@ -1564,8 +1591,7 @@ msgstr "Schriftgröße:"
 msgid "Preview:"
 msgstr "Vorschau:"
 
-#: xrc/fontchoice_xrc.py:76
-#: xrc/templatemanager_xrc.py:98
+#: xrc/fontchoice_xrc.py:76 xrc/templatemanager_xrc.py:98
 msgid "&Ok"
 msgstr "&Ok"
 
@@ -1589,29 +1615,27 @@ msgstr "Installiere nach:"
 msgid "Book Installation"
 msgstr "Installation Bücher"
 
-#: xrc/manage_topics_xrc.py:123
-#: xrc/manage_topics_xrc.py:124
+#: xrc/manage_topics_xrc.py:123 xrc/manage_topics_xrc.py:124
 msgid "New topic"
 msgstr "Neues Thema"
 
-#: xrc/manage_topics_xrc.py:125
-#: xrc/manage_topics_xrc.py:126
+#: xrc/manage_topics_xrc.py:125 xrc/manage_topics_xrc.py:126
 msgid "Add passage"
 msgstr "Passage hinzufügen"
 
-#: xrc/manage_topics_xrc.py:127
-#: xrc/manage_topics_xrc.py:128
+#: xrc/manage_topics_xrc.py:127 xrc/manage_topics_xrc.py:128
 msgid "Cut"
 msgstr "Ausschneiden"
 
-#: xrc/manage_topics_xrc.py:131
-#: xrc/manage_topics_xrc.py:132
+#: xrc/manage_topics_xrc.py:131 xrc/manage_topics_xrc.py:132
 msgid "Paste"
 msgstr "Einfügen"
 
 #: xrc/manage_topics_xrc.py:133
 msgid "Copy the topic as text to the clipboard for use in other applications."
-msgstr "Kopiere das Thema als Text in die Zwischenablage zur Nutzung in anderen Anwendungen."
+msgstr ""
+"Kopiere das Thema als Text in die Zwischenablage zur Nutzung in anderen "
+"Anwendungen."
 
 #: xrc/manage_topics_xrc.py:134
 msgid "Export"
@@ -1706,90 +1730,90 @@ msgid "&Find:"
 msgstr "&Suche:"
 
 #: xrc/search_xrc.py:138
-msgid "Words to search for"
-msgstr "Zu suchende Wörter"
-
-#: xrc/search_xrc.py:139
 msgid "Open the Virtual Keyboard"
 msgstr "Virtuelle Tastatur öffnen"
 
-#: xrc/search_xrc.py:141
+#: xrc/search_xrc.py:140
 msgid "Search for given words now"
 msgstr "Suche nach diesen Wörtern"
 
-#: xrc/search_xrc.py:144
+#: xrc/search_xrc.py:143
 msgid "0 references found"
 msgstr "0 Referenzen gefunden"
 
-#: xrc/search_xrc.py:145
+#: xrc/search_xrc.py:144
 msgid "Save Results"
 msgstr "Ergebnisse speichern"
 
-#: xrc/search_xrc.py:146
-msgid "Warning: This book contains invalid XML, so searching on fields may not work or may not display all matches in this book."
-msgstr "Warnung: Dieses Buch enthält ungültiges XML, die Suche auf Feldern funktionierte nicht oder es konnten nicht alle Treffer angezeigt werden."
+#: xrc/search_xrc.py:145
+msgid ""
+"Warning: This book contains invalid XML, so searching on fields may not work "
+"or may not display all matches in this book."
+msgstr ""
+"Warnung: Dieses Buch enthält ungültiges XML, die Suche auf Feldern "
+"funktionierte nicht oder es konnten nicht alle Treffer angezeigt werden."
 
-#: xrc/search_xrc.py:147
+#: xrc/search_xrc.py:146
 msgid "&Close"
 msgstr "&Schließen"
 
-#: xrc/search_xrc.py:148
+#: xrc/search_xrc.py:147
 msgid "Search &Type:"
 msgstr "&Suchmodus:"
 
-#: xrc/search_xrc.py:149
+#: xrc/search_xrc.py:148
 msgid "Indexed"
 msgstr "Index"
 
-#: xrc/search_xrc.py:150
+#: xrc/search_xrc.py:149
 msgid "Unindexed"
 msgstr "Ohne Index"
 
-#: xrc/search_xrc.py:151
+#: xrc/search_xrc.py:150
 msgid "Type of search to use"
 msgstr "Zu verwendender Suchmodus"
 
-#: xrc/search_xrc.py:152
+#: xrc/search_xrc.py:151
 msgid "Proximity:"
 msgstr "Wortabstand:"
 
-#: xrc/search_xrc.py:153
+#: xrc/search_xrc.py:152
 msgid "How close should search terms be to each other"
 msgstr "Definiert den Abstand zwischen den Suchworten"
 
-#: xrc/search_xrc.py:154
+#: xrc/search_xrc.py:153
 msgid "Words"
 msgstr "Wörter"
 
-#: xrc/search_xrc.py:155
+#: xrc/search_xrc.py:154
 msgid "Verses"
 msgstr "Verse"
 
-#: xrc/search_xrc.py:156
+#: xrc/search_xrc.py:155
 msgid "Case sensitive"
 msgstr "Klein-/Großschreibung beachten"
 
-#: xrc/search_xrc.py:157
+#: xrc/search_xrc.py:156
 msgid "Match only if case is same"
 msgstr "Beachtet Klein-/Großschreibung in der Suche"
 
-#: xrc/search_xrc.py:159
+#: xrc/search_xrc.py:158
 msgid "Whole &Bible"
 msgstr "Ganze &Bibel"
 
-#: xrc/search_xrc.py:160
+#: xrc/search_xrc.py:159
 msgid "&Old Testament"
 msgstr "&Altes Testament"
 
-#: xrc/search_xrc.py:161
+#: xrc/search_xrc.py:160
 msgid "&New Testament"
 msgstr "&Neues Testament"
 
-#: xrc/search_xrc.py:163
+#: xrc/search_xrc.py:162
 msgid "Custom &Range:"
 msgstr "Angepasster &Bereich:"
 
-#: xrc/search_xrc.py:164
+#: xrc/search_xrc.py:163
 msgid "Search Range"
 msgstr "Suchbereich"
 
@@ -1836,6 +1860,9 @@ msgid ""
 msgstr ""
 "Verwende $$text für den Verstext, $$versenum für die\n"
 "Versnummer und $$reference für die Referenz"
+
+#~ msgid "Words to search for"
+#~ msgstr "Zu suchende Wörter"
 
 #~ msgid "Loading harmony"
 #~ msgstr "Evangelienharmonie laden"
