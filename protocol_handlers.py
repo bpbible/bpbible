@@ -439,7 +439,7 @@ body {
 }
 """ % (bg, textcolour)
 		text = config.get_text()
-		text = '<div class="segment">%s</div>' % (text)
+		text = '<div class="tooltip_segment">%s</div>' % (text)
 		bodyattrs = self._get_body_attrs(config.get_module(),
 			overrides = {"columns": "false"}
 		)
