@@ -544,7 +544,7 @@ class OSISParser(filterutils.ParserBase):
 			return
 
 		data_path = self.u.module.getConfigEntry("AbsoluteDataPath")
-		img_path = os.path.realpath("%s/%s" % (data_path, src))
+		img_path = 'file:///' + os.path.realpath("%s/%s" % (data_path, src))
 		self.buf += '<img border=0 src="%s" />' % img_path
 			
 	def start_seg(self, xmltag):
