@@ -715,8 +715,12 @@ def separate_words(string, wordlist=None, stemming_data=None, stemmer=None,
 		
 		if not had_non_letter and isinstance(item, Word):
 			word = ''.join(item.items)
+			# We want to exclude words that are guaranteed not to have a result.
+			# Words that are in the word list are allowed.
+			# Also, if we have stemming data, words that have their stem in the stemming data are allowed.
 			if wordlist is not None and word.lower() not in wordlist:
-				yield word
+				if stemming_data is None or stemmer is None or stemmer.stemWord(word.lower()) not in stemming_data:
+					yield word
 
 	badwords = list(check_proper_word(result))
 	if badwords and not cjk:
