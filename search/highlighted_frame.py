@@ -30,6 +30,8 @@ regex = r"""
 	(<a\ class="morph"\ href="morph:// # a morph link and text with brackets
 		([^>]*>.*?</a>) 		 	   
 	)	 							 |
+	(<span\ class="passage_tag_container[^>]*>.*?</span>)| # a passage tag - don't include text
+	(<span\ class="usercomment_container[^>]*>.*?</span>)| # a user comment marker - don't include text
 	
 	(<h2\ class="heading">.*?</h2>)	 | # a heading (not canonical) and contents
 	(<[^>]+>)						 | # any other html tag - not contents
