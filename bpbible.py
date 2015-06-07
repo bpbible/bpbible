@@ -110,7 +110,6 @@ class MyApp(wx.App):
 	
 	def OnInit(self):
 		self.InitXULRunner()
-		self.SetWebPreferences()
 		self.FindXULRunnerVersion()
 		self.ShowSplashScreen()
 		
@@ -174,10 +173,6 @@ class MyApp(wx.App):
 		for path in old_profile_paths:
 			if path != profile_path:
 				shutil.rmtree(path, ignore_errors=True)
-
-	def SetWebPreferences(self):
-		prefs = wx.wc.WebControl.preferences
-		prefs['browser.dom.window.dump.enabled'] = is_debugging()
 
 	def FindXULRunnerVersion(self):
 		"""Find the XULRunner version from the XULRunner platform.ini config file.
