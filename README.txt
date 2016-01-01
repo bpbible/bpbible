@@ -1,8 +1,8 @@
 BPBible
 
 BPBible is a flexible Bible Study tool made using the SWORD project, Python 
-and wxPython. This is the fourth release of the software, so there may be a 
-few problems still hanging around.
+and wxPython.  While there are still rough edges, many people have found it
+useful.
 
 Website: bpbible.com
 
@@ -37,13 +37,13 @@ Running from source
 
 To build from source, you will need to have the following:
 
-1. wxPython 2.8 (preferably at least 2.8.7) 
+1. wxPython 2.8 (preferably at least 2.8.12) 
 2. wxWebConnect with Python bindings (get the latest versions from https://github.com/jonmmorgan/wxwebconnect/ and https://github.com/jonmmorgan/pywebconnect/).
 3. Python 2.6 (though older versions may work)
 4. SWORD 1.6
 5. Windows, Linux or Mac
 
-BPBible works mostly under Mac. Certain features, like the quickselectors, do not appear correctly. Also, users must compile it themselves - there is no binary distribution yet.
+BPBible mostly works under Mac. Certain features, like the quickselectors, do not appear correctly. Also, users must compile it themselves - there is no binary distribution yet.
 
 Using the binaries under Linux
 
