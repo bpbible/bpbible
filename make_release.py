@@ -5,11 +5,9 @@
 # Google Code project.
 
 import getopt
-import getpass
 import httplib
 import os
 import sys
-from contrib import googlecode_upload
 
 make_release = False
 raw_version_number = None
@@ -297,47 +295,9 @@ def upload_release():
 	if not make_release:
 		return
 
-	print "Uploading the release to Google Code."
-	user_name, password = get_credentials()
-	do_upload(user_name, password, installer)
-	do_upload(user_name, password, src_dist)
-
+	print "Not yet able to automate the release to Github."
 	print "Make sure you deprecate old releases."
 	print "Remember to announce the release."
-
-def do_upload(user_name, password, options):
-	if ("Featured" in options.labels) and (is_alpha or is_beta):
-		# Beta releases should not be featured.
-		options.labels.remove("Featured")
-	status, reason, url = googlecode_upload.upload(options.file, "bpbible", user_name, password,
-			options.summary, options.labels)
-
-	# Returns 403 Forbidden instead of 401 Unauthorized for bad
-	# credentials as of 2007-07-17.
-	if status in [httplib.FORBIDDEN, httplib.UNAUTHORIZED]:
-		print "Upload of %s failed: %s" % (options.file, reason)
-	else:
-		print "%s uploaded to %s" % (options.file, url)
-
-def get_credentials():
-	"""Find credentials for Google Code.
-
-	Copied from the Google Code file uploader.
-	"""
-	user_name = None
-	password = None
-
-	if user_name is None:
-		sys.stdout.write('Please enter your googlecode.com username: ')
-		sys.stdout.flush()
-		user_name = sys.stdin.readline().rstrip()
-	if password is None:
-		print 'Please enter your googlecode.com password.'
-		print '** Note that this is NOT your Gmail account password! **'
-		print 'It is the password you use to access Subversion repositories,'
-		print 'and can be found here: http://code.google.com/hosting/settings'
-		password = getpass.getpass()
-	return user_name, password
 
 if __name__ == "__main__":
 	main()
