@@ -5,7 +5,6 @@
 # Google Code project.
 
 import getopt
-import httplib
 import os
 import sys
 
@@ -74,9 +73,7 @@ def handle_args():
 
 handle_args()
 
-svn_base = "https://bpbible.googlecode.com/svn"
-svn_trunk = "%s/trunk" % svn_base
-svn_release_tag = "%s/tags/release-%s" % (svn_base, new_version)
+git_release_tag = "release-%s" % new_version
 
 class DictWrapper(object):
 	def __init__(self, **kwargs):
@@ -134,16 +131,14 @@ def tag_release():
 		return
 
 	print "Tagging the release."
-	os.system("svn cp -m \"Tagged release %(new_version_long_name)s\""
-			" %(svn_trunk)s %(svn_release_tag)s" % globals())
+	os.system("git tag -a -m \"%(new_version_long_name)s\""
+			" %(git_release_tag)s" % globals())
+	print "Don\'t forget to push to the main repository: git push <origin> %(git_release_tag)s" % globals()
 
 def build_src_dist(zip_file):
 	global portable_build
 	print "Building the source distribution."
-	if make_release:
-		os.system("svn export --force %s %s" % (svn_release_tag, src_dist.dir))
-	else:
-		os.system("svn export --force . %s" % src_dist.dir)
+	os.system("git checkout-index -a -f --prefix=%s/" % src_dist.dir)
 	if not portable_build:
 		os.system("zip -r %s %s" % (zip_file, src_dist.dir))
 
