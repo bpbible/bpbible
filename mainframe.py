@@ -538,7 +538,7 @@ class MainFrame(wx.Frame, AuiLayer):
 		self.Bind(wx.EVT_MENU, id = wx.ID_ABOUT, handler = self.AboutClick)
 		
 		web_links = dict(
-			gui_website="http://bpbible.com",
+			gui_website="https://github.com/bpbible/bpbible",
 			gui_documentation="https://github.com/bpbible/bpbible/wiki",
 			gui_issues="https://github.com/bpbible/bpbible/issues",
 			gui_books="https://github.com/bpbible/bpbible/wiki/Installing-Books",
@@ -1059,7 +1059,7 @@ class MainFrame(wx.Frame, AuiLayer):
 		info.Name = config.name()
 		info.Version = config.version
 		info.Description = text
-		info.WebSite = ("bpbible.com", 
+		info.WebSite = ("https://github.com/bpbible/bpbible", 
 						_("BPBible website"))
 		info.Developers = [
 			_("BPBible development team"), 

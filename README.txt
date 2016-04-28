@@ -4,7 +4,7 @@ BPBible is a flexible Bible Study tool made using the SWORD project, Python
 and wxPython.  While there are still rough edges, many people have found it
 useful.
 
-Website: bpbible.com
+Website: https://github.com/bpbible/bpbible
 
 Features
     * Bible application
@@ -95,4 +95,4 @@ the list of available books.
 You can install multiple files at once. Just drag them all onto BPBible, or
 select them all in the file selector.
 
-For more help, or to submit issues, visit the project webpage at bpbible.googlecode.com
+For more help, or to submit issues, visit the project webpage at https://www.github.com/bpbible/bpbible
