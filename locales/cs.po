@@ -1,0 +1,1845 @@
+# Copyright (C) 2011 BPBible
+#
+# Pavel Fric <pavelfric@seznam.cz>, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: Czech BPBible v1.5\n"
+"POT-Creation-Date: 2016-04-29 00:36+AUS Eastern Standard Time\n"
+"PO-Revision-Date: 2013-07-18 11:27+0200\n"
+"Last-Translator: Pavel Fric <pavelfric@seznam.cz>\n"
+"Language-Team: Czech <kde-i18n-doc@kde.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Czech\n"
+"X-Poedit-Country: CZECH REPUBLIC\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
+"X-Language: cs_CZ\n"
+"X-Source-Language: C\n"
+"Language: cs\n"
+"X-Generator: Lokalize 1.4\n"
+
+#: auilayer.py:312
+msgid "Books"
+msgstr "Knihy"
+
+#: auilayer.py:373
+msgid "History"
+msgstr "Historie"
+
+#: backend/book.py:98
+msgid "A $ sign"
+msgstr "Znak $"
+
+#: backend/book.py:99
+msgid "The range of verses"
+msgstr "Rozsah veršů"
+
+#: backend/book.py:100
+msgid "The version this is taken from"
+msgstr "Založeno na této verzi"
+
+#: backend/book.py:101
+msgid "A description of the version"
+msgstr "Popis verze"
+
+#: backend/book.py:105
+msgid "The text of a verse"
+msgstr "Text verše"
+
+#: backend/book.py:106
+msgid "The verse number"
+msgstr "Číslo verše"
+
+#: backend/book.py:107
+msgid "The reference for each verse"
+msgstr "Odkaz pro každý verš"
+
+#: backend/book.py:108
+msgid "The name of the current book"
+msgstr "Název nynější knihy"
+
+#: backend/book.py:109
+msgid "A shorter abbreviation of the book name"
+msgstr "Kratší zkratka názvu knihy"
+
+#: backend/book.py:110
+msgid "The number of the chapter in the book"
+msgstr "Číslo kapitoly v této knize"
+
+#: backend/book.py:114
+msgid "The text of the heading"
+msgstr "Text nadpisu"
+
+#: backend/book.py:714
+msgid ""
+"Couldn't save cipher key. You will have to set it again when you restart"
+msgstr ""
+"Nepodařilo se uložit dešifrovací klíč. Zkuste to, prosím, po opětovném "
+"spuštění znovu."
+
+#: backend/book.py:788
+msgid "commentary"
+msgstr "Poznámky"
+
+#: backend/book.py:802 bibleframe.py:39 xrc/auifrm_xrc.py:72
+msgid "Bible"
+msgstr "Bible"
+
+#: backend/dictionary.py:274
+msgid "daily devotional"
+msgstr "Denní zamyšlení"
+
+#: backend/genbook.py:206
+msgid "harmony"
+msgstr "Evangelická harmonie"
+
+#: bibleframe.py:72 bookframe.py:187 mainframe.py:226
+#: search/searchpanel.py:150
+msgid "Search"
+msgstr "Hledání"
+
+#: bibleframe.py:77
+msgid "Go to Reference"
+msgstr "Jít na odkaz"
+
+#: bibleframe.py:80
+msgid "Go to a reference"
+msgstr "Jít na odkaz"
+
+#: bibleframe.py:83 xrc/guess_verse_xrc.py:69
+msgid "Guess the Verse"
+msgstr "Poradit verš"
+
+#: bibleframe.py:86
+msgid "Play Guess the Verse"
+msgstr "Hrát Poradit verš"
+
+#: bibleframe.py:92
+msgid "Random verse"
+msgstr "Náhodný verš"
+
+#: bibleframe.py:96
+msgid "Go to a random verse"
+msgstr "Jít na náhodný verš"
+
+#: bibleframe.py:99
+msgid "Copy verses"
+msgstr "Kopírovat verše"
+
+#: bibleframe.py:103
+msgid "Copy verses to other applications"
+msgstr "Kopírovat verše do jiných programů"
+
+#: bibleframe.py:107 bibleframe.py:168
+msgid "Open sticky tooltip"
+msgstr "Otevřít upevněnou nástrojovou radu"
+
+#: bibleframe.py:110
+msgid "Open a sticky tooltip with the selected verses"
+msgstr "Otevřít upevněnou nástrojovou radu s vybranými verši"
+
+#: bibleframe.py:114
+msgid "Compare verses"
+msgstr "Porovnat verše"
+
+#: bibleframe.py:117
+msgid "Open the verse comparison pane to the selected verses"
+msgstr "Otevřít srovnávací okno k vybraným veršům"
+
+#: bibleframe.py:123 manage_topics_frame.py:172 xrc/manage_topics_xrc.py:143
+msgid "Manage Topics"
+msgstr "Spravovat témata"
+
+#: bibleframe.py:127
+msgid "Manages all of the topics and the passages in them."
+msgstr "Správa témat a jejich částí."
+
+#: bibleframe.py:130
+msgid "Tag verses"
+msgstr "Označit verše"
+
+#: bibleframe.py:134
+msgid "Tags the currently selected verses."
+msgstr "Označí nyní vybrané verše."
+
+#: bibleframe.py:138
+msgid "Add comment to verses"
+msgstr "Přidat k veršům poznámku"
+
+#: bibleframe.py:141
+msgid "Makes a comment on the currently selected verses."
+msgstr "Vytvoří poznámku k vybraným veršům."
+
+#: bibleframe.py:204
+msgid "Copying selected verses..."
+msgstr "Kopírují se vybrané verše..."
+
+#: bibleframe.py:273
+msgid "Topic management is currently not available due to an error."
+msgstr "Správa témat není nyní kvůli chybě dostupná."
+
+#: bibleframe.py:274
+msgid "Error in Topic Management"
+msgstr "Chyba ve správě témat"
+
+#: bookframe.py:169 mainframe.py:823
+msgid "Show the %s pane"
+msgstr "Ukázat %s"
+
+#: bookframe.py:171
+msgid "Hide the %s pane"
+msgstr "Skrýt %s"
+
+#: bookframe.py:180
+msgid "Shows or hides the pane"
+msgstr "Ukazuje nebo skrývá okno"
+
+#: bookframe.py:189
+msgid "Search in this book"
+msgstr "Hledat v této knize"
+
+#: bookframe.py:200
+msgid "Information..."
+msgstr "Informace..."
+
+#: bookframe.py:203
+msgid "Show information on the current book"
+msgstr "Ukázat informace k vybrané knize"
+
+#: bookframe.py:217
+msgid "Search for:"
+msgstr "Hledat:"
+
+#: bookframe.py:274
+msgid "Go to reference"
+msgstr "Jít na odkaz"
+
+#: bookframe.py:404 genbookframe.py:227
+msgid "Go to this reference"
+msgstr "Jít na tento odkaz"
+
+#: bookframe.py:411 genbookframe.py:234
+msgid "Link the %s to the Bible"
+msgstr "Spojit %s s Biblí"
+
+#: bookframe.py:478
+msgid "Commentary"
+msgstr "Poznámky"
+
+#: bookframe.py:511
+msgid "Dictionary"
+msgstr "Slovník"
+
+#: config.py:118
+msgid ""
+"<b>This book is not set.</b><br>\n"
+"This may be because you do not have any of this type of book installed.\n"
+"<p> If you don't have any of this type of book, first download them from <a\n"
+"href=\"http://www.crosswire.org/sword/modules/index.jsp\">http://www."
+"crosswire.org/sword/modules/index.jsp</a>.<br>\n"
+"Then to install them, either drag them onto BPBible, or go <code>File >\n"
+"Install Books...</code> and select the books.\n"
+"<p> If you have already have SWORD books installed, go to <code>File >\n"
+"Set SWORD Paths</code> and add the path where the books are installed to the "
+"book search paths.\n"
+msgstr ""
+"<b>Tuto knihu nelze použít.</b><br>\n"
+"Soubory této knihy nejsou nainstalovány.\n"
+"<p> Pokud tyto soubory nemáte, nahrajte je z <a\n"
+"href=\"http://www.crosswire.org/sword/modules/index.jsp\">http://www."
+"crosswire.org/sword/modules/index.jsp</a>.<br>\n"
+"Pro jejich instalaci je buď přetáhněte na program BPBible nebo jděte na "
+"<code>Soubor ->\n"
+"Instalovat knihy...</code> a vyberte odpovídající knihy.\n"
+"<p> Pokud již máte knihy SWORD nainstalovány, jděte na <code>Soubor ->\n"
+"nastavte cesty pro SWORD</code> a přidejte cestu, kde jsou knihy "
+"nainstalovány, k cestám pro hledání knih.\n"
+
+#: config.py:129
+msgid ""
+"<p><b>[Reference clipped as the maximum verse limit (%d verses) has been "
+"exceeded.\n"
+"<br>This probably means the reference was invalid]</b>"
+msgstr ""
+"<p><b>[Připojený odkaz dosáhl největšího možného počtu veršů (%d veršů).\n"
+"<br>To zřejmě znamená, že odkaz je neplatný]</b>"
+
+#: config.py:133
+#, fuzzy
+msgid ""
+"<h4>The Personal Commentary is not supported</h4>\n"
+"<p>To make notes on verses, use \"Bible > Topic Management\", \"Bible > Tag "
+"Verses\"\n"
+"and \"Bible > Comment on Verses\".</p>\n"
+"<p>For more information, see the documentation on <a href=\"https://github."
+"com/bpbible/bpbible/wiki/User-Notes\">creating and using user notes in "
+"BPBible</a>.</p>\n"
+msgstr ""
+"<h4>Poznámka není podporována</h4>\n"
+"<p>Pro poznámky k veršům se používají následující funkce \"Bible -> Správa "
+"témat\", \"Bible -> Označit verše\"\n"
+"a \"Bible -> Opatřit verše poznámkou\".</p>\n"
+"<p>Další informace se nacházejí v dokumentaci pod <a href=\"http://code."
+"google.com/p/bpbible/wiki/UserNotes\">creating and using user notes in "
+"BPBible</a> (Vytvoření a používání uživatelských poznámek v BPBible).</p>\n"
+
+#: config.py:140
+msgid ""
+"<h4>This harmony requires a Bible installed</h4>\n"
+"<p>In order for this harmony to work, you need to have a Bible installed.</"
+"p>\n"
+msgstr ""
+"<h4>Tato evangelická harmonie potřebuje, aby byla nainstalována Bible</h4>\n"
+"<p>Aby tato evangelická harmonie pracovala, potřebujete mít nainstalovánu "
+"Bibli.</p>\n"
+
+#: config.py:145
+msgid "<p style=\"text-indent: 0;\">%s is not in the current book.</p>"
+msgstr "<p style=\"text-indent: 0;\">%s není obsažen v nynější knize.</p>"
+
+#: copyverses.py:79 xrc/copyverses_xrc.py:78
+msgid "Edit Template..."
+msgstr "Upravit předlohu..."
+
+#: copyverses.py:127
+msgid "<custom: based on %s>"
+msgstr "<Vlastní: založeno na %s>"
+
+#: display_options.py:112
+msgid "Display each verse on its own line."
+msgstr "Zobrazuje každý verš na jeho vlastním řádku."
+
+#: display_options.py:112
+msgid "One line per verse"
+msgstr "Řádkový pohled"
+
+#: display_options.py:113
+msgid "Continuous scrolling"
+msgstr "Plynulý tok obrazu"
+
+#: display_options.py:113
+msgid "Show more than one chapter at once."
+msgstr "Ukázat všechny kapitoly za sebou"
+
+#: display_options.py:114
+msgid "Columns"
+msgstr "Sloupce"
+
+#: display_options.py:114
+msgid "Display the chapter in more than one column."
+msgstr "Zobrazit kapitolu ve více sloupcích"
+
+#: display_options.py:115
+msgid "Reference bar"
+msgstr "Pruh s odkazy"
+
+#: display_options.py:117
+msgid "Headings"
+msgstr "Nadpisy"
+
+#: display_options.py:117
+msgid "Show headings in the text."
+msgstr "Ukázat nadpisy v textu"
+
+#: display_options.py:118
+msgid "Footnotes"
+msgstr "Poznámky pod čarou"
+
+#: display_options.py:118
+msgid "Show footnotes in the text"
+msgstr "Ukázat poznámky pod čarou v textu"
+
+#: display_options.py:119
+msgid "Cross References"
+msgstr "Křížové odkazy"
+
+#: display_options.py:119
+msgid "Show cross references in the text."
+msgstr "Ukázat křížové odkazy v textu"
+
+#: display_options.py:120
+msgid "Colour code speakers"
+msgstr "Obarvit výroky"
+
+#: display_options.py:121
+msgid "Words of Christ in Red"
+msgstr "Ježíšova slova v červené barvě"
+
+#: display_options.py:122
+msgid "Colour code by speaker (ESV only)"
+msgstr "Obarvit výroky (pouze ESV)"
+
+#: display_options.py:123
+msgid "Off"
+msgstr "Vypnuto"
+
+#: display_options.py:126 display_options.py:137
+msgid "Strongs Numbers"
+msgstr "Jazykový klíč (Strongova čísla)"
+
+#: display_options.py:127
+msgid "Strongs Positioning"
+msgstr "Umístění jazykového klíče (Strongova čísla)"
+
+#: display_options.py:128
+msgid "Show the Original Language Word underneath the word."
+msgstr "Ukázat slovo původního jazyka pod nynějším slovem"
+
+#: display_options.py:128
+msgid "Underneath text"
+msgstr "Označení jazyka pod textem"
+
+#: display_options.py:129
+msgid "Inline with text"
+msgstr "V řadě s textem"
+
+#: display_options.py:129
+msgid "Show the Original Language Word next to the word."
+msgstr "Ukázat slovo původního jazyka vedle nynějšího slova"
+
+#: display_options.py:130
+msgid "Show on hover"
+msgstr "Ukázat při přejetí"
+
+#: display_options.py:130
+msgid "Show the Original Language Word when the cursor is over the word."
+msgstr "Ukázat slovo původního jazyka, když je ukazovátko nad slovem"
+
+#: display_options.py:131
+msgid "Show on click"
+msgstr "Ukázat při klepnutí"
+
+#: display_options.py:131
+msgid "Show the Original Language Word when the word is selected."
+msgstr "Ukázat slovo původního jazyka, když je slovo vybráno"
+
+#: display_options.py:133
+msgid "Strongs Headwords"
+msgstr "Hesla"
+
+#: display_options.py:134
+msgid "Transliterated"
+msgstr "Přepis"
+
+#: display_options.py:135
+msgid "Original Language"
+msgstr "Původní jazyk"
+
+#: display_options.py:136
+msgid "Pronunciation"
+msgstr "Výslovnost"
+
+#: display_options.py:142
+msgid "Highlight Matching Strongs"
+msgstr "Zvýraznit odpovídající jazykový klíč"
+
+#: display_options.py:143
+msgid "Morphology"
+msgstr "Tvarosloví"
+
+#: display_options.py:144
+msgid "Morph Segmentation"
+msgstr "Členění morfémů"
+
+#: display_options.py:148
+msgid "Output Raw"
+msgstr "Vydat surová data"
+
+#: display_options.py:149
+msgid "Display timing"
+msgstr "Zobrazit měření času"
+
+#: displayframe.py:266 protocols.py:148
+msgid "Don't know how to open this morphology type:"
+msgstr "Režim tvarosloví nelze otevřít:"
+
+#: displayframe.py:276 protocols.py:158
+msgid ""
+"Module %s is not installed, so you cannot view details for this "
+"morphological code"
+msgstr ""
+"Modul %s není nainstalován. Podrobnosti k mluvnickým určením nelze ukázat."
+
+#: displayframe.py:454
+msgid "Select all"
+msgstr "Vybrat vše"
+
+#: displayframe.py:456
+msgid "Select all the text in the frame"
+msgstr "Vybrat všechen text v této oblasti"
+
+#: displayframe.py:459
+msgid "Copy selection"
+msgstr "Kopírovat výběr"
+
+#: displayframe.py:462
+msgid "Copy the selected text with links"
+msgstr "Kopírovat vybraný text s odkazy"
+
+#: displayframe.py:513
+msgid "the selected word"
+msgstr "Vybrané slovo"
+
+#: displayframe.py:519
+msgid "the selected phrase"
+msgstr "Vybraný výraz"
+
+#: displayframe.py:532
+msgid "Look up %s in the dictionary"
+msgstr "Vyhledat %s ve slovníku"
+
+#: displayframe.py:553
+msgid "Search for %s in the Bible"
+msgstr "Hledat %s v Bibli"
+
+#: displayframe.py:555
+msgid "Search for %s in this book"
+msgstr "Hledat %s v této knize"
+
+#: error_handling.py:26
+msgid "&Details >>"
+msgstr "&Podrobnosti >>"
+
+#: error_handling.py:26
+msgid "<< &Details"
+msgstr "<< &Podrobnosti"
+
+#: error_handling.py:75
+msgid "An error has occurred."
+msgstr "Vyskytla se chyba."
+
+#: error_handling.py:83
+msgid "Above exception was ignored"
+msgstr "Výjimka nahoře byla přehlížena"
+
+#: genbookframe.py:61
+msgid "Other Books"
+msgstr "Jiné knihy"
+
+#: genbookframe.py:196
+msgid "Harmony"
+msgstr "Evangelická harmonie"
+
+#: genbookframe.py:254
+msgid "%s is not in this harmony."
+msgstr "%s není v této evangelické harmonii."
+
+#: guess_verse.py:42
+msgid "The verse was %s"
+msgstr "Verš je %s"
+
+#: guess_verse.py:57
+msgid "Yes, you are right. The verse was %s"
+msgstr "Ano, máte pravdu. Verš byl %s"
+
+#: guess_verse.py:59
+msgid "Correct"
+msgstr "Správně"
+
+#: guess_verse.py:66
+msgid "No, you are wrong. Try again."
+msgstr "Ne, nemáte pravdu. Zkuste to znovu."
+
+#: guess_verse.py:67
+msgid "Try again."
+msgstr "Zkuste to znovu."
+
+#: gui/movablelist.py:7 xrc/manage_topics_xrc.py:129
+#: xrc/manage_topics_xrc.py:130
+msgid "Copy"
+msgstr "Kopírovat"
+
+#: gui/passage_tag.py:167
+msgid "Expand"
+msgstr "Rozbalit"
+
+#: gui/passage_tag.py:169
+msgid "Expand all of the passages in this topic"
+msgstr "Rozbalit všechny úryvky v tomto tématu"
+
+#: gui/passage_tag.py:558
+msgid "Use Parent Look:"
+msgstr "Standardní formátování:"
+
+#: gui/passage_tag.py:559
+msgid "Colour:"
+msgstr "Barva:"
+
+#: header_bar.py:38
+msgid "%s verses"
+msgstr "%s verše"
+
+#: install_manager/install_drop_target.py:34
+#: install_manager/install_drop_target.py:57 module_manager.py:121
+#: module_manager.py:125 search/searchpanel.py:780 templatemanager.py:425
+#: templatemanager.py:438
+msgid "Error"
+msgstr "Chyba"
+
+#: install_manager/install_drop_target.py:39
+msgid ""
+"An error occurred while trying to read books. Please report this issue:\n"
+" 1. Press Ctrl-C to copy the error text\n"
+" 2. In the BPBible menu, select Help > Report a problem.\n"
+" 3. In the website that opens, click New Issue, and fill in the details\n"
+"The error given was:"
+msgstr ""
+"Při čtení knih se vyskytla chyba. Nahlašte, prosím, tento problém:\n"
+"1. Zkopírujte text se zprávou o chybě (Ctrl+C)\n"
+"2. V hlavní nabídce BPBible zvolte položku Nápověda -> Ohlásit problém.\n"
+"3. Otevře se internetová stránka. Klepněte na \"New Issue\" (nový problém) a "
+"vložte zkopírovaný text se zprávou o chybě a popis potíží."
+
+#: install_manager/install_drop_target.py:46
+msgid "Error reading books"
+msgstr "Při čtení knih se vyskytla chyba"
+
+#: install_manager/install_drop_target.py:52
+msgid "The following files do not appear to be installable books:"
+msgstr "Následující soubory nejsou instalovatelnými knihami:"
+
+#: install_manager/install_drop_target.py:54
+msgid "The following file does not appear to be an installable book:"
+msgstr "Následující soubor není instalovatelnou knihou:"
+
+#: install_manager/install_drop_target.py:69
+msgid ""
+"An error occurred while installing modules.\n"
+"Please make sure that the directory exists, and that you have permission to "
+"write to the directory.\n"
+"The error given was:"
+msgstr ""
+"Při instalaci modulu se vyskytla chyba.\n"
+"Ujistěte se, prosím, že adresář existuje a že máte nezbytná přístupová práva "
+"pro zápis do tohoto adresáře.\n"
+"Vyskytla se následující chyba:"
+
+#: install_manager/install_drop_target.py:83
+msgid "Extracting %s"
+msgstr "Vytahuje se %s"
+
+#: install_manager/install_drop_target.py:84 search/searchpanel.py:934
+msgid "Preparing"
+msgstr "Připravuje se"
+
+#: install_manager/install_module.py:34
+msgid "Are you sure you want to install this book?"
+msgstr "Opravdu chcete nainstalovat tuto knihu?"
+
+#: install_manager/install_module.py:38
+msgid "Are you sure you want to install these books?"
+msgstr "Opravdu chcete nainstalovat tyto knihy?"
+
+#: install_manager/install_module.py:48
+msgid "Other..."
+msgstr "Jiné..."
+
+#: install_manager/install_module.py:57 pathmanager.py:52
+msgid "Choose a directory:"
+msgstr "Vybrat adresář:"
+
+#: install_manager/install_module.py:89
+msgid "Information"
+msgstr "Informace"
+
+#: install_manager/zipinstaller.py:40
+msgid "Cannot read book metadata in file %s"
+msgstr "Popisná data ke knize v souboru %s nelze přečíst"
+
+#: mainframe.py:222
+msgid "Go to verse"
+msgstr "Jít na verš"
+
+#: mainframe.py:223
+msgid "Go to this verse"
+msgstr "Jít na tento verš"
+
+#: mainframe.py:227
+msgid "Search in the current book"
+msgstr "Hledat v této knize"
+
+#: mainframe.py:230 xrc/copyverses_xrc.py:81
+msgid "Copy Verses"
+msgstr "Kopírovat verše"
+
+#: mainframe.py:231
+msgid "Open the Copy Verses dialog"
+msgstr "Otevřít dialog Kopírovat verše"
+
+#: mainframe.py:236
+msgid "Back"
+msgstr "Zpět"
+
+#: mainframe.py:237
+msgid "Go back a verse"
+msgstr "Jít o jeden verš zpět"
+
+#: mainframe.py:240
+msgid "Forward"
+msgstr "Vpřed"
+
+#: mainframe.py:241
+msgid "Go forward a verse"
+msgstr "Jít o jeden verš vpřed"
+
+#: mainframe.py:245
+msgid "Zoom In"
+msgstr "Přiblížit"
+
+#: mainframe.py:246
+msgid "Make text bigger"
+msgstr "Zvětšit text"
+
+#: mainframe.py:249
+msgid "Default Zoom"
+msgstr "Výchozí zvětšení"
+
+#: mainframe.py:250
+msgid "Return text to default size"
+msgstr "Obnovit výchozí velikost textu"
+
+#: mainframe.py:253
+msgid "Zoom Out"
+msgstr "Oddálit"
+
+#: mainframe.py:254
+msgid "Make text smaller"
+msgstr "Zmenšit text"
+
+#: mainframe.py:278
+msgid "Navigation"
+msgstr "Pohyb"
+
+#: mainframe.py:280
+msgid "Zoom"
+msgstr "Zvětšení"
+
+#: mainframe.py:282
+msgid "History toolbar"
+msgstr "Nástrojový pruh historie"
+
+#: mainframe.py:673
+msgid "Installable books"
+msgstr "Instalovatelné knihy"
+
+#: mainframe.py:676 versecompare.py:209
+msgid "Choose books"
+msgstr "Vybrat knihy"
+
+#: mainframe.py:746 xrc/auifrm_xrc.py:44
+msgid "&Language"
+msgstr "&Jazyk"
+
+#: mainframe.py:749 xrc/auifrm_xrc.py:45
+msgid "&Bible book names"
+msgstr "Knihy &Bible"
+
+#: mainframe.py:781 xrc/auifrm_xrc.py:49
+msgid "&Display"
+msgstr "&Pohled"
+
+#: mainframe.py:786 xrc/auifrm_xrc.py:52
+msgid "&Windows"
+msgstr "&Okna"
+
+#: mainframe.py:791 xrc/auifrm_xrc.py:51
+msgid "Toolbars"
+msgstr "Nástrojové pruhy"
+
+#: mainframe.py:819
+msgid "Show the %s toolbar"
+msgstr "Ukázat pruh s nástroji %s"
+
+#: mainframe.py:840 xrc/auifrm_xrc.py:53
+msgid "Debug"
+msgstr "Ladění"
+
+#: mainframe.py:873
+msgid "Expand cross-references"
+msgstr "Rozbalit křížové odkazy"
+
+#: mainframe.py:874
+msgid "Display cross references partially expanded"
+msgstr "Zobrazit křížové odkazy částečně rozbalené"
+
+#: mainframe.py:880
+msgid "Topic Tags"
+msgstr "Označit témata"
+
+#: mainframe.py:881
+msgid "Display the topics that each verse is tagged with."
+msgstr "Zobrazuje témata každého verše"
+
+#: mainframe.py:996
+msgid "BPBible will now quickly restart to change your language."
+msgstr "BPBible bude nyní znovu spuštěn, aby se změnil jazyk rozhraní."
+
+#: mainframe.py:997
+msgid "Restarting"
+msgstr "Nové spuštění"
+
+#: mainframe.py:1016
+msgid "An error occurred on closing:"
+msgstr "Při zavření se vyskytla chyba:"
+
+#: mainframe.py:1026 mainframe.py:1027
+msgid "search "
+msgstr "Hledání "
+
+#: mainframe.py:1051
+msgid ""
+"Flexible Bible study software.\n"
+"\t\t\tBuilt Using the SWORD Project from crosswire.org\n"
+"\t\t\tPython Version: %(sysversion)s\n"
+"\t\t\twxPython Version: %(wxversion)s\n"
+"\t\t\tSWORD Version: %(swversion)s\n"
+"\t\t\tXULRunner Version: %(xulrunner_version)s"
+msgstr ""
+"Pružný program pro studium Bible.\n"
+"\t\t\tPoužívá projektSWORD z crosswire.org\n"
+"\t\t\tVerze Pythonu: %(sysversion)s\n"
+"\t\t\tVerze wxPythonu: %(wxversion)s\n"
+"\t\t\tVerze SWORD: %(swversion)s\n"
+"\t\t\tVerze XULRunner: %(xulrunner_version)s"
+
+#: mainframe.py:1063
+msgid "BPBible website"
+msgstr "Stránky BPBible"
+
+#: mainframe.py:1065
+msgid "BPBible development team"
+msgstr "Skupina vývojářů BPBible"
+
+#: mainframe.py:1066
+msgid "SWORD library developers"
+msgstr "Vývojáři knihovny SWORD"
+
+#: mainframe.py:1070
+msgid "Developers"
+msgstr "Vývojáři"
+
+#: mainframe.py:1071
+msgid "Artists"
+msgstr "Umělci"
+
+#: mainframe.py:1072
+msgid "Translators"
+msgstr "Překladatelé"
+
+#: mainframe.py:1074
+msgid "translator-credits"
+msgstr "www.fripohled.blogspot.com"
+
+#: mainframe.py:1078
+msgid ""
+"Icons used are from famfamfam\n"
+"http://www.famfamfam.com/lab/icons/silk\n"
+"and the Tango Desktop Project\n"
+"http://tango.freedesktop.org/Tango_Desktop_Project"
+msgstr ""
+"Byly použity ikony z famfamfam\n"
+"http://www.famfamfam.com/lab/icons/silk\n"
+"a Tango Desktop Project\n"
+"http://tango.freedesktop.org/Tango_Desktop_Project."
+
+#: mainframe.py:1084
+msgid ""
+"BPBible is licensed under the GPL v2. For more details, refer to the LICENSE."
+"txt file in the application directory"
+msgstr ""
+"Program BPBible je licencován pod GPL v2. Další informace hledejte v souboru "
+"LICENSE.txt v adresáři s programem."
+
+#: manage_topics_frame.py:86
+msgid "Topics"
+msgstr "Témata"
+
+#: manage_topics_frame.py:311
+msgid "&New Topic"
+msgstr "&Nové téma"
+
+#: manage_topics_frame.py:316
+msgid "Add &Passage"
+msgstr "&Přidat úryvek"
+
+#: manage_topics_frame.py:323 manage_topics_frame.py:608
+msgid "Cu&t"
+msgstr "Vyj&mout"
+
+#: manage_topics_frame.py:328 manage_topics_frame.py:614
+msgid "&Copy"
+msgstr "&Kopírovat"
+
+#: manage_topics_frame.py:333 manage_topics_frame.py:620
+msgid "&Paste"
+msgstr "&Vložit"
+
+#: manage_topics_frame.py:340
+msgid "Delete &Topic"
+msgstr "Smazat &téma"
+
+#: manage_topics_frame.py:382
+msgid "Cannot copy the topic to one of its children."
+msgstr "Toto téma nelze kopírovat do jemu podřízenému tématu."
+
+#: manage_topics_frame.py:383
+msgid "Copy Topic"
+msgstr "Kopírovat téma"
+
+#: manage_topics_frame.py:389
+msgid "Cannot delete the base topic."
+msgstr "Hlavní téma nelze smazat."
+
+#: manage_topics_frame.py:390
+msgid "Delete Topic"
+msgstr "Smazat téma"
+
+#: manage_topics_frame.py:413
+msgid "Search: %s"
+msgstr "Hledání: %s"
+
+#: manage_topics_frame.py:414
+msgid "Results from the search `%s'."
+msgstr "Výsledky hledání `%s'."
+
+#: manage_topics_frame.py:447
+msgid "Passage"
+msgstr "Úryvek"
+
+#: manage_topics_frame.py:448
+msgid "Comment"
+msgstr "Poznámka"
+
+#: manage_topics_frame.py:600
+msgid "&Open"
+msgstr "&Otevřít"
+
+#: manage_topics_frame.py:627
+msgid "&Delete"
+msgstr "S&mazat"
+
+#: manage_topics_frame.py:667
+msgid "All topics."
+msgstr "Všechna témata."
+
+#: manage_topics_frame.py:683
+msgid ""
+"%d passages selected.\n"
+"\n"
+"Select a passage to view it."
+msgstr ""
+"Vybráno %d úryvků.\n"
+"\n"
+"Vyberte úryvek k prohlížení."
+
+#: manage_topics_frame.py:688
+msgid "No items have been selected."
+msgstr "Nebyly vybrány žádné položky."
+
+#: manage_topics_frame.py:1005
+msgid "Unordered"
+msgstr "Neseřazeno"
+
+#: manage_topics_frame.py:1006
+msgid "Order by Passage"
+msgstr "Seřazeno podle úryvků"
+
+#: manage_topics_frame.py:1255 tag_passage_dialog.py:58
+msgid "Unrecognised passage `%s'."
+msgstr "Nerozpoznaný úryvek `%s'."
+
+#: module_manager.py:30
+msgid "Please select some books to delete"
+msgstr "Vyberte, prosím, nějaké knihy, které se mají smazat"
+
+#: module_manager.py:31
+msgid "Select books"
+msgstr "Vybrat knihy"
+
+#: module_manager.py:34
+msgid ""
+"You are about to delete books.\n"
+"This will completely remove the books and free up the disk space that they "
+"used.\n"
+"You cannot undo this operation. Are you sure you want to delete these "
+"books?\n"
+"Books to be deleted:"
+msgstr ""
+"Chystáte se smazat knihy.\n"
+"Tyto budou neodvolatelně smazány.\n"
+"Tento krok nelze vrátit zpět. Opravdu chcete smazat tyto knihy?\n"
+"Knihy ke smazání:"
+
+#: module_manager.py:40
+msgid "Confirm book deletion"
+msgstr "Potvrdit smazání knih"
+
+#: module_manager.py:95
+msgid "Please select a book to unlock"
+msgstr "Vyberte, prosím, knihu k odemknutí"
+
+#: module_manager.py:96
+msgid "Select a book"
+msgstr "Vyberte knihu"
+
+#: module_manager.py:105
+msgid "This book is not locked at all, and doesn't need to be unlocked"
+msgstr "Tato kniha není zamknuta. Odemknutí není nutné."
+
+#: module_manager.py:106
+msgid "Not locked"
+msgstr "Nezamknuto"
+
+#: module_manager.py:111
+msgid "Unlock code for %s"
+msgstr "Odemykací kód %s"
+
+#: module_manager.py:112
+msgid "Unlock code"
+msgstr "Kód pro odemknutí"
+
+#: module_manager.py:124
+msgid "Couldn't find config file. Error given was:"
+msgstr ""
+"Nepodařilo se najít soubor s nastavením. Vyskytla se následující chyba:"
+
+#: module_tree.py:23 module_tree.py:39
+msgid "Bibles"
+msgstr "Bible"
+
+#: module_tree.py:24 module_tree.py:40
+msgid "Commentaries"
+msgstr "Poznámky"
+
+#: module_tree.py:25 module_tree.py:41
+msgid "Dictionaries"
+msgstr "Slovníky"
+
+#: module_tree.py:26 module_tree.py:46
+msgid "Other books"
+msgstr "Jiné knihy"
+
+#: module_tree.py:27 module_tree.py:32 module_tree.py:45
+msgid "Daily Devotional"
+msgstr "Denní zamyšlení"
+
+#: module_tree.py:28 module_tree.py:35 module_tree.py:42
+msgid "Harmonies"
+msgstr "Evangelická harmonie"
+
+#: module_tree.py:33 module_tree.py:43
+msgid "Maps"
+msgstr "Mapy"
+
+#: module_tree.py:34 module_tree.py:44
+msgid "Images"
+msgstr "Obrázky"
+
+#: module_tree.py:55
+msgid "Find Book..."
+msgstr "Hledají se knihy..."
+
+#: module_tree.py:130
+msgid "Show information for %s"
+msgstr "Ukázat informace o %s"
+
+#: moduleinfo.py:7
+msgid "Book Information"
+msgstr "Informace o knize"
+
+#: pathmanager.py:24
+msgid "New"
+msgstr "Nový"
+
+#: pathmanager.py:66
+msgid "Reading books..."
+msgstr "Čtou se knihy..."
+
+#: pathmanager.py:71
+msgid "Path manager"
+msgstr "Správce cesty"
+
+#: preview_window.py:11 search/searchpanel.py:859 search/searchpanel.py:891
+#: xrc/copyverses_xrc.py:79 xrc/templatemanager_xrc.py:97
+msgid "Preview"
+msgstr "Náhled"
+
+#: preview_window.py:35
+msgid "Move over a link to see a preview for it"
+msgstr "Přejet nad odkazem pro zobrazení náhledu"
+
+#: preview_window.py:56
+msgid "Show in tooltip"
+msgstr "Ukázat v nástrojové radě"
+
+#: preview_window.py:57
+msgid "Show this in a tooltip"
+msgstr "Toto ukázat v nástrojové radě"
+
+#: protocol_handlers.py:284
+msgid "You are at the start of this book."
+msgstr "Začátek knihy"
+
+#: protocol_handlers.py:285
+msgid "You are at the end of this book."
+msgstr "Konec knihy"
+
+#: protocol_handlers.py:362
+msgid "Click here to unlock this book"
+msgstr "Zde klepněte pro odemknutí knihy"
+
+#: protocols.py:99
+msgid ""
+"The book '%s' is not installed, so you cannot view details for this entry (%"
+"s)"
+msgstr ""
+"Kniha '%s' není nainstalována, proto nelze k tomuto záznamu ukázat žádné "
+"podrobnosti (%s)"
+
+#: search/fields.py:43 search/fields.py:51
+msgid "Invalid strong's number %s."
+msgstr "Neplatný jazykový klíč %s."
+
+#: search/fields.py:120
+msgid "In finding references, the reference must all be in one book"
+msgstr "Při hledání odkazů musí být všechny v jedné knize"
+
+#: search/index.py:89
+msgid "A problem was detected with this book while indexing it:"
+msgstr "Při rejstříkování této knihy se vyskytly potíže:"
+
+#: search/index.py:91
+msgid ""
+"Check whether there is a newer version of this book which might fix this "
+"problem."
+msgstr ""
+"Prověřte, zda je novější verze této knihy, která tento problém napravuje"
+
+#: search/index.py:272
+msgid "Couldn't understand book search range '%s'"
+msgstr "Rozsah hledání '%s' není jednoznačný."
+
+#: search/index.py:347
+msgid ""
+"There seems to be an error in your regular expression.\n"
+"The error message given was: %s"
+msgstr ""
+"Zdá se, že v označení (regulárním výrazu) je nějaká chyba.\n"
+"Vyskytlo se toto hlášení o chybě: %s"
+
+#: search/index.py:362
+msgid "You cannot search on the field %r"
+msgstr "Hledání v poli %r není možné"
+
+#: search/index.py:377
+msgid "Done"
+msgstr "Hotovo"
+
+#: search/indexed_text.py:128
+msgid ""
+"Invalid encoding: Searching may not work or may display the wrong results"
+msgstr ""
+"Neplatné kódování znaků: Hledání nepracuje nebo může zobrazit špatné "
+"výsledky."
+
+#: search/query_parser.py:657
+msgid "Could not understand string"
+msgstr "Chyba v zadání"
+
+#: search/searchpanel.py:254 search/searchpanel.py:548
+#: search/searchpanel.py:725 search/searchpanel.py:744
+#: search/searchpanel.py:822 search/searchpanel.py:838
+#: search/searchpanel.py:874
+msgid "%d references found"
+msgstr "Nalezeno %d odkazů"
+
+#: search/searchpanel.py:280 xrc/search_xrc.py:141
+msgid "&Index"
+msgstr "&Rejstřík"
+
+#: search/searchpanel.py:283
+msgid "Unindex"
+msgstr "Bez rejstříku"
+
+#: search/searchpanel.py:305
+msgid "You don't have a current %s, so you cannot search at the moment"
+msgstr "Teď nemáte žádné %s, proto nyní nemůžete vyhledávat"
+
+#: search/searchpanel.py:312 search/searchpanel.py:349
+msgid "No current version"
+msgstr "Žádná nynější verze"
+
+#: search/searchpanel.py:323
+msgid "Reading search index..."
+msgstr "Čte se rejstřík hledání..."
+
+#: search/searchpanel.py:355
+msgid ""
+"Search index does not exist for book %s. Indexing will make search much "
+"faster. Create Index?"
+msgstr ""
+"Für das Buch %s existiert kein Suchindex. Ein Index würde die Suche "
+"beschleunigen. Möchten Sie einen Index erzeugen?"
+
+#: search/searchpanel.py:358
+msgid "Create Index?"
+msgstr "Vytvořit rejstřík?"
+
+#: search/searchpanel.py:392 search/searchpanel.py:580
+#: search/searchpanel.py:852 search/searchpanel.py:884 xrc/search_xrc.py:139
+msgid "&Search"
+msgstr "&Hledat"
+
+#: search/searchpanel.py:418 xrc/search_xrc.py:142 xrc/search_xrc.py:157
+msgid "Search Options"
+msgstr "Volby pro hledání"
+
+#: search/searchpanel.py:544
+msgid "&Stop"
+msgstr "&Zastavit"
+
+#: search/searchpanel.py:617 search/searchpanel.py:692
+msgid "Error in search"
+msgstr "Chyba při hledání"
+
+#: search/searchpanel.py:622 search/searchpanel.py:697
+msgid "The following words were not found in this %s:"
+msgstr "Následující slova nebyla v %s nalezena:"
+
+#: search/searchpanel.py:625 search/searchpanel.py:700
+msgid "Unknown word"
+msgstr "Neznámé slovo"
+
+#: search/searchpanel.py:727 search/searchpanel.py:747
+#: search/searchpanel.py:824 search/searchpanel.py:842
+msgid "1 word"
+msgstr "1 slovo"
+
+#: search/searchpanel.py:728 search/searchpanel.py:748
+#: search/searchpanel.py:825 search/searchpanel.py:843
+msgid "%d words"
+msgstr "%d slov"
+
+#: search/searchpanel.py:731 search/searchpanel.py:753
+msgid "%d hits"
+msgstr "%d nálezů"
+
+#: search/searchpanel.py:743 search/searchpanel.py:837
+#: search/searchpanel.py:873
+msgid "1 reference found"
+msgstr "Nalezen 1 odkaz"
+
+#: search/searchpanel.py:752
+msgid "1 hit"
+msgstr "1 nález"
+
+#: search/searchpanel.py:779
+msgid "You cannot search on fields in unindexed search"
+msgstr "Hledání v polích není bez rejstříku možné"
+
+#: search/searchpanel.py:859 search/searchpanel.py:891
+msgid "Reference"
+msgstr "Odkaz"
+
+#: search/searchpanel.py:870
+msgid "%(version)s search - %(numresults)s"
+msgstr "%(version)s hledání - %(numresults)s"
+
+#: search/searchpanel.py:930
+msgid "Processing %s"
+msgstr "Zpracovává se %s"
+
+#: search/searchpanel.py:934
+msgid "Indexing %s"
+msgstr "Rejstříkuje se %s"
+
+#: search/searchpanel.py:966
+msgid "Writing %s"
+msgstr "Zapisuje se %s"
+
+#: search/searchpanel.py:1124
+msgid "Other Book Search"
+msgstr "Hledání ostatních knih"
+
+#: search/searchpanel.py:1173
+msgid "Entries"
+msgstr "Záznamy"
+
+#: search/searchpanel.py:1180
+msgid "Harmony Search"
+msgstr "Hledání evangelické harmonie"
+
+#: search/searchpanel.py:1191
+msgid "Dictionary Search"
+msgstr "Hledání slovníku"
+
+#: search/searchpanel.py:1235
+msgid "Daily Devotional Search"
+msgstr "Hledání denního zamyšlení"
+
+#: search/searchpanel.py:1249
+msgid "Commentary Search"
+msgstr "Hledání poznámky"
+
+#: swlib/pysw.py:117 swlib/pysw.py:642
+msgid "There are only %(chapters)d chapters in %(book)s (given %(given)d)"
+msgstr "Je jen %(chapters)d kapitol v %(book)s (%(given)d)"
+
+#: swlib/pysw.py:135 swlib/pysw.py:653
+msgid ""
+"There are only %(verses)d verses in %(book)s %(chapter)s (given %(given)d)"
+msgstr "Je jen %(verses)d veršů v %(book)s %(chapter)s (%(given)d)"
+
+#: swlib/pysw.py:821 swlib/pysw.py:1644
+msgid "Invalid Reference: %s"
+msgstr "Neplatný odkaz: %s"
+
+#: swlib/pysw.py:1633
+msgid "Invalid empty reference"
+msgstr "Neplatný prázdný odkaz"
+
+#: tag_passage_dialog.py:35
+msgid "Tag %s"
+msgstr "Značka %s"
+
+#: tag_passage_dialog.py:105 tag_passage_dialog.py:113 user_comments.py:66
+msgid "Comment on %s"
+msgstr "Poznámka %s"
+
+#: templatemanager.py:424
+msgid "Template '%s' is read only. Try a different name."
+msgstr "Předloha '%s' je jen pro čtení. Použijte jiný název."
+
+#: templatemanager.py:431
+msgid "Template '%s' already exists. Overwrite?"
+msgstr "Předloha '%s' už existuje. Přejete si ji přepsat?"
+
+#: templatemanager.py:432
+msgid "Overwrite?"
+msgstr "Přepsat?"
+
+#: templatemanager.py:437
+msgid "Template name is already in use. Try a different name."
+msgstr "Název předlohy se už používá. Zkuste jiný název."
+
+#: tooltip.py:288
+msgid "Anchor"
+msgstr "Kotva"
+
+#: tooltip.py:289
+msgid "Don't hide this tooltip"
+msgstr "Neskrývat tuto nástrojovou radu"
+
+#: tooltip.py:292
+msgid "Copy All"
+msgstr "Kopírovat vše"
+
+#: tooltip.py:293
+msgid "Copy tooltip text (with links)"
+msgstr "Kopírovat text nástrojové rady (s odkazy)"
+
+#: tooltip.py:356
+msgid "Tooltip"
+msgstr "Nástrojová rada"
+
+#: tooltip.py:547 tooltip.py:697
+msgid "Sticky Tooltip"
+msgstr "Upevněná nástrojová rada"
+
+#: tooltip.py:613 tooltip.py:615
+msgid "Stay on top"
+msgstr "Zůstat na prvním místě"
+
+#: tooltip.py:744
+msgid "Find"
+msgstr "Najít"
+
+#: tooltip.py:746
+msgid "Search for this strong's number in the Bible"
+msgstr "Hledat tento jazykový klíč v Bibli"
+
+#: tooltip.py:761
+msgid ""
+"Module %s is not installed, so you cannot view details for this strong's "
+"number"
+msgstr ""
+"Modul %s není nainstalován. Podrobnosti k jazykovému klíči nelze ukázat."
+
+#: tooltip.py:823
+msgid "Go to verses"
+msgstr "Jít na verš"
+
+#: tooltip.py:825
+msgid "Open this reference"
+msgstr "Otevřít tento odkaz"
+
+#: topic_selector.py:124
+msgid "None"
+msgstr "Žádný"
+
+#: user_comments.py:42
+msgid "Edit"
+msgstr "Upravit"
+
+#: user_comments.py:44
+msgid "Edit this comment"
+msgstr "Upravit tuto poznámku"
+
+#: user_comments.py:47 xrc/manage_topics_xrc.py:137
+#: xrc/manage_topics_xrc.py:138 xrc/module_manager_xrc.py:67
+msgid "Delete"
+msgstr "Smazat"
+
+#: user_comments.py:49
+msgid "Delete this comment"
+msgstr "Smazat tuto poznámku"
+
+#: user_comments.py:84
+msgid "Are you sure you want to delete this comment?"
+msgstr "Opravdu chcete smazat tuto poznámku?"
+
+#: user_comments.py:85
+msgid "Delete Comment"
+msgstr "Smazat poznámku"
+
+#: versecompare.py:50
+msgid "Version Comparison"
+msgstr "Srovnání verzí"
+
+#: versecompare.py:197
+msgid "Set books to compare"
+msgstr "Nastavit knihy k porovnání"
+
+#: versecompare.py:199
+msgid "Set the books this version comparison will use"
+msgstr "Nastavit knihy, jež se mají použít při tomto porovnávání"
+
+#: versecompare.py:208
+msgid "Choose books to compare in the verse comparison window"
+msgstr "Vybrat knihy, jež se mají ukázat v okně pro porovnávání veršů"
+
+#: versecompare.py:232
+msgid "Choose books to compare"
+msgstr "Vybrat knihy k porovnání"
+
+#: versecompare.py:238
+msgid "View in parallel mode"
+msgstr "Zobrazit ve sloupcovém režimu"
+
+#: xrc/auifrm_xrc.py:40
+msgid "&Set Sword Paths..."
+msgstr "&Nastavit cesty Sword..."
+
+#: xrc/auifrm_xrc.py:41
+msgid "Install books..."
+msgstr "Nainstalovat knihy..."
+
+#: xrc/auifrm_xrc.py:42
+msgid "Manage books..."
+msgstr "Spravovat knihy..."
+
+#: xrc/auifrm_xrc.py:43
+msgid "Set fonts..."
+msgstr "Nastavit písma..."
+
+#: xrc/auifrm_xrc.py:46
+msgid "&Exit"
+msgstr "&Ukončit"
+
+#: xrc/auifrm_xrc.py:47
+msgid "Quit this program"
+msgstr "Ukončit program"
+
+#: xrc/auifrm_xrc.py:48
+msgid "&File"
+msgstr "&Soubor"
+
+#: xrc/auifrm_xrc.py:50
+msgid "Default Layout"
+msgstr "Výchozí rozvržení"
+
+#: xrc/auifrm_xrc.py:54
+msgid "Html Ide"
+msgstr "Html Ide"
+
+#: xrc/auifrm_xrc.py:55
+msgid "WI"
+msgstr "WI"
+
+#: xrc/auifrm_xrc.py:56
+msgid "Error Console"
+msgstr "Okno s chybami"
+
+#: xrc/auifrm_xrc.py:57
+msgid "gather"
+msgstr "Sbírat"
+
+#: xrc/auifrm_xrc.py:58
+msgid "diff"
+msgstr "Rozdíly"
+
+#: xrc/auifrm_xrc.py:59
+msgid "confirm"
+msgstr "Potvrdit"
+
+#: xrc/auifrm_xrc.py:60
+msgid "compile"
+msgstr "Přeložit"
+
+#: xrc/auifrm_xrc.py:61
+msgid "Restart"
+msgstr "Spustit znovu"
+
+#: xrc/auifrm_xrc.py:62
+msgid "Locale"
+msgstr "Jazyk"
+
+#: xrc/auifrm_xrc.py:63
+msgid "Reload"
+msgstr "Nahrát znovu"
+
+#: xrc/auifrm_xrc.py:64
+msgid "Reload w/ chrome"
+msgstr "Nahrát znovu w/ chrome"
+
+#: xrc/auifrm_xrc.py:65
+msgid "&Help"
+msgstr "&Nápověda"
+
+#: xrc/auifrm_xrc.py:66
+msgid "BPBible Website"
+msgstr "Stránky BPBible"
+
+#: xrc/auifrm_xrc.py:67
+msgid "Documentation..."
+msgstr "Dokumentace..."
+
+#: xrc/auifrm_xrc.py:68
+msgid "Report a problem..."
+msgstr "Nahlásit potíže..."
+
+#: xrc/auifrm_xrc.py:69
+msgid "Download books..."
+msgstr "Stáhnout knihy..."
+
+#: xrc/auifrm_xrc.py:70
+msgid "&About..."
+msgstr "&O programu..."
+
+#: xrc/auifrm_xrc.py:71
+msgid "Show about dialog"
+msgstr "Ukázat dialog O programu"
+
+#: xrc/copyverses_xrc.py:73
+msgid "&Reference"
+msgstr "&Odkaz:"
+
+#: xrc/copyverses_xrc.py:74
+msgid "&Template"
+msgstr "&Předloha:"
+
+#: xrc/copyverses_xrc.py:75
+msgid "Copy formatted"
+msgstr "Kopírovat formátované"
+
+#: xrc/copyverses_xrc.py:76
+msgid "&Save template"
+msgstr "&Uložit předlohu"
+
+#: xrc/copyverses_xrc.py:77
+msgid "&Load Template"
+msgstr "&Nahrát předlohu"
+
+#: xrc/copyverses_xrc.py:80 xrc/templatemanager_xrc.py:99
+msgid "&Cancel"
+msgstr "Z&rušit"
+
+#: xrc/fontchoice_xrc.py:71
+msgid "Use default font"
+msgstr "Použít výchozí písmo"
+
+#: xrc/fontchoice_xrc.py:72
+msgid "Use this font in the user interface"
+msgstr "Písmo uživatelského rozhraní"
+
+#: xrc/fontchoice_xrc.py:73
+msgid "Font:"
+msgstr "Písmo:"
+
+#: xrc/fontchoice_xrc.py:74
+msgid "Font size:"
+msgstr "Velikost písma::"
+
+#: xrc/fontchoice_xrc.py:75
+msgid "Preview:"
+msgstr "Náhled:"
+
+#: xrc/fontchoice_xrc.py:76 xrc/templatemanager_xrc.py:98
+msgid "&Ok"
+msgstr "&OK"
+
+#: xrc/fontchoice_xrc.py:77
+msgid "Font Choice"
+msgstr "Vybrat písmo"
+
+#: xrc/guess_verse_xrc.py:67
+msgid "&Show answer"
+msgstr "&Ukázat odpověď"
+
+#: xrc/guess_verse_xrc.py:68
+msgid "&Guess"
+msgstr "&Vyhodnotit"
+
+#: xrc/install_module_xrc.py:70
+msgid "Install to:"
+msgstr "Nainstalovat do:"
+
+#: xrc/install_module_xrc.py:71
+msgid "Book Installation"
+msgstr "Instalace knih"
+
+#: xrc/manage_topics_xrc.py:123 xrc/manage_topics_xrc.py:124
+msgid "New topic"
+msgstr "Nové téma"
+
+#: xrc/manage_topics_xrc.py:125 xrc/manage_topics_xrc.py:126
+msgid "Add passage"
+msgstr "Přidat úryvek"
+
+#: xrc/manage_topics_xrc.py:127 xrc/manage_topics_xrc.py:128
+msgid "Cut"
+msgstr "Vyjmout"
+
+#: xrc/manage_topics_xrc.py:131 xrc/manage_topics_xrc.py:132
+msgid "Paste"
+msgstr "Vložit"
+
+#: xrc/manage_topics_xrc.py:133
+msgid "Copy the topic as text to the clipboard for use in other applications."
+msgstr "Kopírovat téma jako text do schránky pro užití v jiných programech."
+
+#: xrc/manage_topics_xrc.py:134
+msgid "Export"
+msgstr "Vyvést"
+
+#: xrc/manage_topics_xrc.py:135
+msgid "Sorts the topic in passage order"
+msgstr "Třídí téma podle pořadí úryvků"
+
+#: xrc/manage_topics_xrc.py:136
+msgid "Sort"
+msgstr "Třídit"
+
+#: xrc/manage_topics_xrc.py:139
+msgid "Undo previous action"
+msgstr "Vrátit předchozí krok zpět"
+
+#: xrc/manage_topics_xrc.py:140
+msgid "Undo"
+msgstr "Zpět"
+
+#: xrc/manage_topics_xrc.py:141
+msgid "Redoes the last undone action"
+msgstr "Zopakovat poslední krok vrácený zpět"
+
+#: xrc/manage_topics_xrc.py:142
+msgid "Redo"
+msgstr "Znovu"
+
+#: xrc/manage_topics_xrc.py:144
+msgid "Name:"
+msgstr "Název:"
+
+#: xrc/manage_topics_xrc.py:145
+msgid "Show tags"
+msgstr "Ukázat značky"
+
+#: xrc/manage_topics_xrc.py:146
+msgid "Appearance:"
+msgstr "Vzhled:"
+
+#: xrc/manage_topics_xrc.py:147
+msgid "Description:"
+msgstr "Popis:"
+
+#: xrc/manage_topics_xrc.py:148
+msgid "Passage:"
+msgstr "Úryvek:"
+
+#: xrc/manage_topics_xrc.py:149
+msgid "Comment:"
+msgstr "Poznámka:"
+
+#: xrc/module_manager_xrc.py:68
+msgid "Unlock"
+msgstr "Odemknout"
+
+#: xrc/module_manager_xrc.py:69
+msgid "Manage books"
+msgstr "Spravovat knihy"
+
+#: xrc/movablelist_xrc.py:71
+msgid "Move item to top"
+msgstr "Posunout položku na první místo"
+
+#: xrc/movablelist_xrc.py:72
+msgid "Move item up"
+msgstr "Posunout položku nahoru"
+
+#: xrc/movablelist_xrc.py:73
+msgid "Move item down"
+msgstr "Posunout položku dolů"
+
+#: xrc/movablelist_xrc.py:74
+msgid "Move item to bottom"
+msgstr "Posunout položku na poslední místo"
+
+#: xrc/movablelist_xrc.py:75
+msgid "Add a new item"
+msgstr "Přidat novou položku"
+
+#: xrc/movablelist_xrc.py:76
+msgid "Edit this item"
+msgstr "Upravit tuto položku"
+
+#: xrc/movablelist_xrc.py:77
+msgid "Remove this item"
+msgstr "Odstranit tuto položku"
+
+#: xrc/search_xrc.py:137
+msgid "&Find:"
+msgstr "&Najít:"
+
+#: xrc/search_xrc.py:138
+msgid "Open the Virtual Keyboard"
+msgstr "Otevřít virtuální klávesnici"
+
+#: xrc/search_xrc.py:140
+msgid "Search for given words now"
+msgstr "Hledat tato slova"
+
+#: xrc/search_xrc.py:143
+msgid "0 references found"
+msgstr "Nalezeno 0 odkazů"
+
+#: xrc/search_xrc.py:144
+msgid "Save Results"
+msgstr "Uložit výsledky"
+
+#: xrc/search_xrc.py:145
+msgid ""
+"Warning: This book contains invalid XML, so searching on fields may not work "
+"or may not display all matches in this book."
+msgstr ""
+"Varování: Tato kniha obsahuje neplatné XML, hledání v polích nepracovalo, "
+"nebo se nepodařilo ukázat všechny nálezy v této knize."
+
+#: xrc/search_xrc.py:146
+msgid "&Close"
+msgstr "&Zavřít"
+
+#: xrc/search_xrc.py:147
+msgid "Search &Type:"
+msgstr "&Typ hledání:"
+
+#: xrc/search_xrc.py:148
+msgid "Indexed"
+msgstr "Rejstřík"
+
+#: xrc/search_xrc.py:149
+msgid "Unindexed"
+msgstr "Bez rejstříku"
+
+#: xrc/search_xrc.py:150
+msgid "Type of search to use"
+msgstr "Typ hledání, který se použije"
+
+#: xrc/search_xrc.py:151
+msgid "Proximity:"
+msgstr "Blízkost slov:"
+
+#: xrc/search_xrc.py:152
+msgid "How close should search terms be to each other"
+msgstr "Určuje vzdálenost mezi hledanými slovy"
+
+#: xrc/search_xrc.py:153
+msgid "Words"
+msgstr "Slova"
+
+#: xrc/search_xrc.py:154
+msgid "Verses"
+msgstr "Verše"
+
+#: xrc/search_xrc.py:155
+msgid "Case sensitive"
+msgstr "Rozlišovat velká a malá písmena"
+
+#: xrc/search_xrc.py:156
+msgid "Match only if case is same"
+msgstr "Při hledání dbát na psaní velkých/malých písmen"
+
+#: xrc/search_xrc.py:158
+msgid "Whole &Bible"
+msgstr "Celá &Bible"
+
+#: xrc/search_xrc.py:159
+msgid "&Old Testament"
+msgstr "&Starý zákon"
+
+#: xrc/search_xrc.py:160
+msgid "&New Testament"
+msgstr "&Nový zákon"
+
+#: xrc/search_xrc.py:162
+msgid "Custom &Range:"
+msgstr "Vlastní &rozsah:"
+
+#: xrc/search_xrc.py:163
+msgid "Search Range"
+msgstr "Rozsah vyhledávání"
+
+#: xrc/tag_passage_dialog_xrc.py:67
+msgid "&Passage:"
+msgstr "&Úryvek:"
+
+#: xrc/tag_passage_dialog_xrc.py:68
+msgid "&Tag: "
+msgstr "&Značka: "
+
+#: xrc/tag_passage_dialog_xrc.py:69
+msgid "&Comment:"
+msgstr "&Poznámka:"
+
+#: xrc/tag_passage_dialog_xrc.py:70
+msgid "Tag Passage"
+msgstr "Označit úryvek"
+
+#: xrc/templatemanager_xrc.py:96
+msgid "Template Manager"
+msgstr "Správa předloh"
+
+#: xrc/templatemanager_xrc.py:100
+msgid "&Header"
+msgstr "&Záhlaví"
+
+#: xrc/templatemanager_xrc.py:101
+msgid "&Body"
+msgstr "&Tělo textu"
+
+#: xrc/templatemanager_xrc.py:103
+msgid "&Footer"
+msgstr "&Zápatí"
+
+#: xrc/templatemanager_xrc.py:105
+msgid "&Headings"
+msgstr "&Nadpisy"
+
+#: xrc/templatemanager_xrc.py:107
+msgid ""
+"Use $$text for the text of a verse, $$versenumber for the\n"
+"verse number and $$range for the reference."
+msgstr ""
+"Použít $$text pro text verše, $$versenum pro\n"
+"číslo verše a $$reference pro odkaz"
