@@ -2,13 +2,12 @@
 
 BPBible is a flexible Bible Study tool made using the SWORD project, Python and wxPython.  It is absolutely free and designed to be easy to use.
 
-Find the [latest release here](https://github.com/bpbible/bpbible/releases/), and more documentation on [our
-wiki](https://github.com/bpbible/bpbible/wiki/).
+Find the [latest release here](https://github.com/bpbible/bpbible/releases/), and more documentation on [our wiki](https://github.com/bpbible/bpbible/wiki/).
 
 ![BPBible main window](https://github.com/bpbible/bpbible/wiki/screenshots/bpbible_book_selector_dropdown.png)
 
 The main BPBible window when changing the currently selected Bible.
-For more screenshots, see [here](wiki/Screenshots).
+For more screenshots, see [here](https://github.com/bpbible/bpbible/wiki/Screenshots).
 
 ## Features
 * **Bible application**: BPBible has many of the features you would expect in a Bible application - Bible, Commentary, and Dictionary support, Bible Search, Scripture tooltips, etc.
