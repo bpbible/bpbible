@@ -11,7 +11,7 @@ For more screenshots, see [here](https://github.com/bpbible/bpbible/wiki/Screens
 
 ## Features
 * **Bible application**: BPBible has many of the features you would expect in a Bible application - Bible, Commentary, and Dictionary support, Bible Search, Scripture tooltips, etc.
-* **Cross verse searching**: BPBible uses a proximity based search, rather than a verse-based search.  This means that a search can cross verse boundaries, giving a more natural search. It also supports regular expressions and phrases.
+* **Cross verse searching**: BPBible uses a proximity based search, rather than a verse-based search.  This means that a search can cross verse boundaries, giving a more natural search. It also supports regular expressions and phrases. [More info](https://github.com/bpbible/bpbible/wiki/Search).
 * **Flexible layout**: BPBible lets you rearrange your layout, and will remember your layout for you.
 * **Good module support**: Due to the use of the SWORD libraries, BPBible can read many different Bibles and other books.  The main module repository is hosted by [CrossWire](http://www.crosswire.org/sword/modules/index.jsp).  More info on how to [install these books in BPBible](https://github.com/bpbible/bpbible/wiki/Installing-Books).
 * **User Notes and Topic Management**: BPBible supports taking notes on a passage, as well as collecting all the passages related to a topic into a list and then organising and commenting on those passages.  [More info](https://github.com/bpbible/bpbible/wiki/User-Notes).
